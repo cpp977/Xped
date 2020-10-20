@@ -1,0 +1,22 @@
+[
+{
+  "directory": "/home/user/Nextcloud/postdoc/code/ED/src",
+  "command": "/usr/bin/c++   -O2 -g -DNDEBUG -o CMakeFiles/run.dir/main.cpp.o -c /home/user/Nextcloud/postdoc/code/ED/src/main.cpp",
+  "file": "/home/user/Nextcloud/postdoc/code/ED/src/main.cpp"
+},
+{
+  "directory": "/home/user/Nextcloud/postdoc/code/ED/src",
+  "command": "/usr/bin/c++   -O2 -g -DNDEBUG -o CMakeFiles/run.dir/Basis.cpp.o -c /home/user/Nextcloud/postdoc/code/ED/src/Basis.cpp",
+  "file": "/home/user/Nextcloud/postdoc/code/ED/src/Basis.cpp"
+},
+{
+  "directory": "/home/user/Nextcloud/postdoc/code/ED/src",
+  "command": "/usr/bin/c++   -O2 -g -DNDEBUG -o CMakeFiles/run.dir/EDSolver.cpp.o -c /home/user/Nextcloud/postdoc/code/ED/src/EDSolver.cpp",
+  "file": "/home/user/Nextcloud/postdoc/code/ED/src/EDSolver.cpp"
+},
+{
+  "directory": "/home/user/Nextcloud/postdoc/code/ED/src",
+  "command": "/usr/bin/c++   -O2 -g -DNDEBUG -o CMakeFiles/run.dir/models/Heisenberg.cpp.o -c /home/user/Nextcloud/postdoc/code/ED/src/models/Heisenberg.cpp",
+  "file": "/home/user/Nextcloud/postdoc/code/ED/src/models/Heisenberg.cpp"
+}
+]

@@ -1,0 +1,1 @@
+/usr/bin/c++ -O2 -g -DNDEBUG CMakeFiles/run.dir/main.cpp.o CMakeFiles/run.dir/Basis.cpp.o CMakeFiles/run.dir/EDSolver.cpp.o CMakeFiles/run.dir/models/Heisenberg.cpp.o -o run 

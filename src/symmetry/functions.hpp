@@ -4,6 +4,35 @@
 #include "SU2Wrappers.hpp"
 #include "qarray.hpp"
 
+#include <boost/rational.hpp>
+
+namespace util {
+        /**Calculates mod N ensuring the result is positive for positive N*/
+#ifndef POSMOD_FUNCTION
+#define POSMOD_FUNCTION
+        template<int N>
+        inline int posmod (int x)
+        {
+                return (x%N+N)%N;
+        }
+
+        inline int posmod (int x, int N)
+        {
+                return (x%N+N)%N;
+        }
+#endif
+
+        /**Prints a boost fraction in such a way, that a "1" in the denominator is omitted.*/
+        std::string print_frac_nice (boost::rational<int> r)
+        {
+                std::stringstream ss;
+                if (r.denominator()==1) {ss << r.numerator();}
+                else {ss << r;}
+                return ss.str();
+        }
+
+}
+
 namespace Sym
 {
 	// Crazy that this enum needs to be here, because it is also in DmrgTypedefs.h. But without this, it doesn't compile...
@@ -26,15 +55,15 @@ namespace Sym
 		{
 			if (Symmetry::kind()[q] == KIND::S or Symmetry::kind()[q] == KIND::Salt or Symmetry::kind()[q] == KIND::T)
 			{
-                                ss << qnum[q];
+                                ss << util::print_frac_nice(boost::rational<int>(qnum[q]-1,2));
 			}
 			else if (Symmetry::kind()[q] == KIND::M)
 			{
-                                ss << qnum[q];
+                                ss << util::print_frac_nice(boost::rational<int>(qnum[q],2));
 			}
 			else if (Symmetry::kind()[q] == KIND::Z2)
 			{
-				std::string parity = "evn";//(std::posmod<2>(qnum[q])==0)? "evn":"odd";
+				std::string parity = util::posmod<2>(qnum[q]==0)? "evn":"odd";
 				ss << parity;
 			}
 			else

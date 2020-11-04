@@ -91,10 +91,12 @@ public:
 	size_t inner_dim( const qType& q ) const;
         /**Computes the total number with which the sector with quantum number \p q begins.*/
 	size_t outer_num( const qType& q ) const;
+        /**Computes the total number with which the sector with quantum number \p q begins and takes into account the dimension of each irrep.*/
+	size_t full_outer_num( const qType& q ) const;
 	///\}
 	
-	size_t leftOffset(const FusionTree<depth, Symmetry>& tree, const std::array<size_t,depth>& plain) const;
-        size_t rightOffset(const FusionTree<depth, Symmetry>& tree, const std::array<size_t,depth>& plain) const;
+	size_t leftOffset(const FusionTree<depth, Symmetry>& tree, const std::array<size_t,depth>& plain=std::array<std::size_t,depth>()) const;
+        size_t rightOffset(const FusionTree<depth, Symmetry>& tree, const std::array<size_t,depth>& plain=std::array<std::size_t,depth>()) const;
 	
 	/**Insert the quantum number \p q with dimension \p inner_dim into the basis.*/
 	void push_back( const qType& q, const size_t& inner_dim);
@@ -108,7 +110,7 @@ public:
 	 * Returns the tensor product basis, already properly sorted with respect to the resulting irreps.
 	 * This function also saves the history of the combination process for later use. See leftOffset() and rightOffset().
 	 */
-	Qbasis<Symmetry,depth+1> combine (const Qbasis<Symmetry,1>& other, bool FLIP=false) const;
+	Qbasis<Symmetry,depth+1> combine (const Qbasis<Symmetry,1>& other, bool CONJ=false) const;
 		
 	/**Adds to bases together.*/
 	Qbasis<Symmetry, depth> add (const Qbasis<Symmetry, depth>& other) const;
@@ -276,6 +278,18 @@ outer_num(const qType& q) const
 
 template<typename Symmetry, std::size_t depth>
 size_t Qbasis<Symmetry,depth>::
+full_outer_num(const qType& q) const
+{
+        size_t out=0ul;
+        for (const auto& [p,num,plain]:data_) {
+                if (q==p) {return out;}
+                else {out += plain.dim()*Symmetry::degeneracy(p);}
+        }
+        return out;
+}
+
+template<typename Symmetry, std::size_t depth>
+size_t Qbasis<Symmetry,depth>::
 inner_dim(const size_t& num_in) const
 {
 	for(const auto& elem : data_)
@@ -291,7 +305,6 @@ size_t Qbasis<Symmetry,depth>::
 leftOffset(const FusionTree<depth, Symmetry>& tree, const std::array<size_t,depth>& plain) const
 {
 	assert( trees.size() == data_.size() and "The history for this basis is not defined properly");
-
 	auto it = trees.find(tree.q_coupled);
 	assert( it != trees.end() and "The history for this basis is not defined properly");
 
@@ -370,7 +383,7 @@ template<typename Symmetry, std::size_t depth>
 bool Qbasis<Symmetry,depth>::
 operator==( const Qbasis<Symmetry,depth>& other ) const
 {
-	return (this->data_ == other.data_);
+	return (this->data_ == other.data_) and (this->trees == other.trees);
 }
 
 template<typename Symmetry, std::size_t depth>
@@ -406,7 +419,7 @@ add( const Qbasis<Symmetry,depth>& other ) const
 
 template<typename Symmetry, std::size_t depth>
 Qbasis<Symmetry,depth+1> Qbasis<Symmetry,depth>::
-combine (const Qbasis<Symmetry,1>& other, bool FLIP) const
+combine (const Qbasis<Symmetry,1>& other, bool CONJ) const
 {
 	Qbasis<Symmetry, depth+1> out;
 	//build the history of the combination. Data is relevant for MultipedeQ contractions which include a fuse of two leg.
@@ -416,9 +429,9 @@ combine (const Qbasis<Symmetry,1>& other, bool FLIP) const
 		for(const auto& elem2 : other.data_)
 		{
 			auto [q2,num2,plain2] = elem2;
-			if (FLIP)
+			if (CONJ)
 			{
-				q2 = Symmetry::flip(q2);
+				q2 = Symmetry::conj(q2);
 			}
 			auto plain = plain1.combine(plain2);
 			auto qVec = Symmetry::reduceSilent(q1,q2);
@@ -450,7 +463,7 @@ combine (const Qbasis<Symmetry,1>& other, bool FLIP) const
 	for ( auto it=out.trees.begin(); it!=out.trees.end(); it++ )
 	{
 		std::vector<std::size_t> index_sort((it->second).size());
-		std::iota(index_sort.begin(),index_sort.end(),0);
+		std::iota(index_sort.begin(),index_sort.end(),0ul);
 		std::sort (index_sort.begin(), index_sort.end(),
 				   [&] (std::size_t n1, std::size_t n2)
 				   {

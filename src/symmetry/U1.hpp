@@ -7,6 +7,8 @@
 #include <unordered_set>
 /// \endcond
 
+#include <unsupported/Eigen/CXX11/Tensor>
+
 namespace Sym{
 
 /** \class U1
@@ -16,15 +18,15 @@ namespace Sym{
   *
   * \describe_Scalar
   */
-template<typename Kind, typename Scalar=double>
+template<typename Kind, typename Scalar_=double>
 class U1
 {
 public:
-	typedef Scalar Scalar_;
+	typedef Scalar_ Scalar;
 	
 	static constexpr size_t Nq=1;
 	
-	static constexpr bool HAS_CGC = false;
+        static constexpr bool HAS_MULTIPLICITIES = false;
 	static constexpr bool NON_ABELIAN = false;
 	static constexpr bool ABELIAN = true;
 	static constexpr bool IS_TRIVIAL = false;
@@ -49,7 +51,7 @@ public:
 	inline static std::string name() { return "U1"; }
 	inline static constexpr std::array<KIND,Nq> kind() { return {Kind::name}; }
 
-	inline static qType flip( const qType& q ) { return {-q[0]}; }
+	inline static qType conj( const qType& q ) { return {-q[0]}; }
 	inline static int degeneracy( const qType& q ) { return 1; }
 	
 	inline static int spinorFactor() { return +1; }
@@ -73,9 +75,11 @@ public:
 	 */
 	static std::vector<qType> reduceSilent( const std::vector<qType>& ql, const std::vector<qType>& qr, bool UNIQUE = false);
 	
-	static vector<tuple<qarray<1>,size_t,qarray<1>,size_t,qarray<1> > > tensorProd ( const std::vector<qType>& ql, const std::vector<qType>& qr );
+	static std::vector<std::tuple<qarray<1>,size_t,qarray<1>,size_t,qarray<1> > > tensorProd ( const std::vector<qType>& ql, const std::vector<qType>& qr );
 	///@}
 
+        std::size_t multiplicity (const qType& q1, const qType& q2, const qType& q3) {return triangle(q1,q2,q3) ? 1ul : 0ul;}
+        
 	///@{
 	/**
 	 * Various coeffecients, all resulting from contractions or traces of the Clebsch-Gordon coefficients.
@@ -83,56 +87,24 @@ public:
 	 *       Here we return simply 1, because the algorithm only allows valid combinations of quantumnumbers,
 	 *       for which the Kronecker deltas are not necessary.  
 	 */
-	inline static Scalar coeff_unity();
 	inline static Scalar coeff_dot(const qType& q1);
-	inline static Scalar coeff_rightOrtho(const qType& q1, const qType& q2);
-	inline static Scalar coeff_leftSweep(const qType& q1, const qType& q2);
-	
-	inline static double coeff_leftSweep2(const qType& q1, const qType& q2, const qType& q3) { return 1.; }
-	inline static double coeff_leftSweep3(const qType& q1, const qType& q2, const qType& q3) { return 1.; }
-	inline static Scalar coeff_swapPhase(const qType& q1, const qType& q2, const qType& q3);
-	inline static Scalar coeff_adjoint(const qType& q1, const qType& q2, const qType& q3);
-	inline static Scalar coeff_splitAA(const qType& q1, const qType& q2, const qType& q3);
-	
-	inline static Scalar coeff_3j(const qType& q1, const qType& q2, const qType& q3,
-								  int        q1_z, int        q2_z,        int q3_z);
-	inline static Scalar coeff_CGC(const qType& q1, const qType& q2, const qType& q3,
-								   int        q1_z, int        q2_z,        int q3_z);
 
+	inline static Scalar coeff_3j(const qType& q1, const qType& q2, const qType& q3,
+                                      int        q1_z, int        q2_z,        int q3_z);
+        
+        static Eigen::Tensor<Scalar_, 3> CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t multiplicity);
+        
 	inline static Scalar coeff_6j(const qType& q1, const qType& q2, const qType& q3,
-								  const qType& q4, const qType& q5, const qType& q6);
-	inline static Scalar coeff_Apair(const qType& q1, const qType& q2, const qType& q3,
-									 const qType& q4, const qType& q5, const qType& q6);
-	static Scalar coeff_splitAA(const qType& q1, const qType& q2, const qType& q3,
-								const qType& q4, const qType& q5, const qType& q6);
-	inline static Scalar coeff_prod(const qType& q1, const qType& q2, const qType& q3,
-									const qType& q4, const qType& q5, const qType& q6);
-	static Scalar coeff_MPOprod6(const qType& q1, const qType& q2, const qType& q3,
-								 const qType& q4, const qType& q5, const qType& q6);
-	static Scalar coeff_twoSiteGate(const qType& q1, const qType& q2, const qType& q3,
-									const qType& q4, const qType& q5, const qType& q6);
+                                      const qType& q4, const qType& q5, const qType& q6);
 	
 	inline static Scalar coeff_9j(const qType& q1, const qType& q2, const qType& q3,
-								  const qType& q4, const qType& q5, const qType& q6,
-								  const qType& q7, const qType& q8, const qType& q9);
-	inline static Scalar coeff_tensorProd(const qType& q1, const qType& q2, const qType& q3,
-										  const qType& q4, const qType& q5, const qType& q6,
-										  const qType& q7, const qType& q8, const qType& q9);
-	inline static Scalar coeff_MPOprod9(const qType& q1, const qType& q2, const qType& q3,
-										const qType& q4, const qType& q5, const qType& q6,
-										const qType& q7, const qType& q8, const qType& q9);
-	inline static Scalar coeff_buildL(const qType& q1, const qType& q2, const qType& q3,
-									  const qType& q4, const qType& q5, const qType& q6,
-									  const qType& q7, const qType& q8, const qType& q9);
-	inline static Scalar coeff_buildR(const qType& q1, const qType& q2, const qType& q3,
-									  const qType& q4, const qType& q5, const qType& q6,
-									  const qType& q7, const qType& q8, const qType& q9);
-	inline static Scalar coeff_HPsi(const qType& q1, const qType& q2, const qType& q3,
-									const qType& q4, const qType& q5, const qType& q6,
-									const qType& q7, const qType& q8, const qType& q9);
-	inline static Scalar coeff_AW(const qType& q1, const qType& q2, const qType& q3,
-								  const qType& q4, const qType& q5, const qType& q6,
-								  const qType& q7, const qType& q8, const qType& q9);
+                                      const qType& q4, const qType& q5, const qType& q6,
+                                      const qType& q7, const qType& q8, const qType& q9);
+
+        static Scalar coeff_swap(const qType& ql, const qType& qr, const qType& qf) {return triangle(ql,qr,qf) ? Scalar(1.) : Scalar(0.);};
+        static Scalar coeff_recouple(const qType& q1, const qType& q2, const qType& q3, const qType& Q,
+                                     const qType& Q12, const qType& Q23) {return coeff_6j(q1,q2,Q12,
+                                                                                          q3,Q,Q23);};
 	///@}
 
 	/** 
@@ -151,12 +123,13 @@ public:
 	static bool validate( const std::array<qType,M>& qs );
 
 	static bool triangle( const std::array<qType,3>& qs );
+        static bool triangle( const qType& q1, const qType& q2, const qType& q3 ) {return triangle({{q1,q2,q3}});}
 	static bool pair( const std::array<qType,2>& qs );
 
 };
 	
-template<typename Kind, typename Scalar>
-std::vector<typename U1<Kind,Scalar>::qType> U1<Kind,Scalar>::
+template<typename Kind, typename Scalar_>
+std::vector<typename U1<Kind,Scalar_>::qType> U1<Kind,Scalar_>::
 reduceSilent( const qType& ql, const qType& qr )
 {
 	std::vector<qType> vout;
@@ -164,8 +137,8 @@ reduceSilent( const qType& ql, const qType& qr )
 	return vout;
 }
 
-template<typename Kind, typename Scalar>
-std::vector<typename U1<Kind,Scalar>::qType> U1<Kind,Scalar>::
+template<typename Kind, typename Scalar_>
+std::vector<typename U1<Kind,Scalar_>::qType> U1<Kind,Scalar_>::
 reduceSilent( const qType& ql, const qType& qm, const qType& qr )
 {
 	std::vector<qType> vout;
@@ -173,11 +146,11 @@ reduceSilent( const qType& ql, const qType& qm, const qType& qr )
 	return vout;
 }
 
-template<typename Kind, typename Scalar>
-std::vector<typename U1<Kind,Scalar>::qType> U1<Kind,Scalar>::
+template<typename Kind, typename Scalar_>
+std::vector<typename U1<Kind,Scalar_>::qType> U1<Kind,Scalar_>::
 reduceSilent( const std::vector<qType>& ql, const qType& qr )
 {
-	std::vector<typename U1<Kind,Scalar>::qType> vout;
+	std::vector<typename U1<Kind,Scalar_>::qType> vout;
 	for (std::size_t q=0; q<ql.size(); q++)
 	{
 		vout.push_back({ql[q][0]+qr[0]});
@@ -185,8 +158,8 @@ reduceSilent( const std::vector<qType>& ql, const qType& qr )
 	return vout;
 }
 
-template<typename Kind, typename Scalar>
-std::vector<typename U1<Kind,Scalar>::qType> U1<Kind,Scalar>::
+template<typename Kind, typename Scalar_>
+std::vector<typename U1<Kind,Scalar_>::qType> U1<Kind,Scalar_>::
 reduceSilent( const std::vector<qType>& ql, const std::vector<qType>& qr, bool UNIQUE )
 {
 	if (UNIQUE)
@@ -214,162 +187,44 @@ reduceSilent( const std::vector<qType>& ql, const std::vector<qType>& qr, bool U
 	}
 }
 
-template<typename Kind, typename Scalar>
-vector<tuple<qarray<1>,size_t,qarray<1>,size_t,qarray<1> > > U1<Kind,Scalar>::
-tensorProd ( const std::vector<qType>& ql, const std::vector<qType>& qr )
-{
-//	std::unordered_map<qarray3<1>,std::size_t> dout;
-//	size_t i=0;
-//	for (std::size_t q=0; q<ql.size(); q++)
-//	for (std::size_t p=0; p<qr.size(); p++)
-//	{
-//		dout.insert(make_pair(qarray3<1>{ql[q], qr[p], qarray<1>{ql[q][0]+qr[p][0]}}, i));
-//		++i;
-//	}
-//	return dout;
-	
-	vector<tuple<qarray<1>,size_t,qarray<1>,size_t,qarray<1> > > out;
-	for (std::size_t q=0; q<ql.size(); q++)
-	for (std::size_t p=0; p<qr.size(); p++)
-	{
-		out.push_back(make_tuple(ql[q], q, qr[p], p, qarray<1>{ql[q][0]+qr[p][0]}));
-	}
-	return out;
-}
-
-template<typename Kind, typename Scalar>
-Scalar U1<Kind,Scalar>::
-coeff_unity()
-{
-	Scalar out = Scalar(1.);
-	return out;
-}
-
-template<typename Kind, typename Scalar>
-Scalar U1<Kind,Scalar>::
+template<typename Kind, typename Scalar_>
+Scalar_ U1<Kind,Scalar_>::
 coeff_dot(const qType& q1)
 {
 	Scalar out = Scalar(1.);
 	return out;
 }
 
-template<typename Kind, typename Scalar>
-Scalar U1<Kind,Scalar>::
-coeff_rightOrtho(const qType& q1, const qType& q2)
+template<typename Kind, typename Scalar_>
+Eigen::Tensor<Scalar_, 3> U1<Kind,Scalar_>::
+CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t multiplicity)
 {
-	Scalar out = Scalar(1.);
-	return out;
+        Eigen::Tensor<Scalar, 3> T(1,1,1);
+        if (triangle(q1,q2,q3)) {T(0,0,0) = 1.;}
+        else {T(0,0,0) = 0.;}
+        return T;
 }
 
-template<typename Kind, typename Scalar>
-Scalar U1<Kind,Scalar>::
-coeff_leftSweep(const qType& q1, const qType& q2)
-{
-	Scalar out = Scalar(1.);
-	return out;
-}
-
-template<typename Kind, typename Scalar>
-Scalar U1<Kind,Scalar>::
-coeff_swapPhase(const qType& q1, const qType& q2, const qType& q3)
-{
-	Scalar out = Scalar(1.);
-	return out;
-}
-
-template<typename Kind, typename Scalar>
-Scalar U1<Kind,Scalar>::
-coeff_adjoint(const qType& q1, const qType& q2, const qType& q3)
-{
-	Scalar out = Scalar(1.);
-	return out;
-}
-
-template<typename Kind, typename Scalar>
-Scalar U1<Kind,Scalar>::
-coeff_splitAA(const qType& q1, const qType& q2, const qType& q3)
-{
-	Scalar out = Scalar(1.);
-	return out;
-}
-
-template<typename Kind, typename Scalar>
-Scalar U1<Kind,Scalar>::
+template<typename Kind, typename Scalar_>
+Scalar_ U1<Kind,Scalar_>::
 coeff_3j(const qType& q1, const qType& q2, const qType& q3,
-		 int        q1_z, int        q2_z,        int q3_z)
+          int        q1_z, int        q2_z,        int q3_z)
 {
-	return Scalar(1.);
+        if (triangle(q1,q2,q3)) {return Scalar(1.);}
+        else {return Scalar(0.);}
 }
 
-template<typename Kind, typename Scalar>
-Scalar U1<Kind,Scalar>::
-coeff_CGC(const qType& q1, const qType& q2, const qType& q3,
-		  int        q1_z, int        q2_z,        int q3_z)
-{
-	return Scalar(1.);
-}
-
-template<typename Kind, typename Scalar>
-Scalar U1<Kind,Scalar>::
+template<typename Kind, typename Scalar_>
+Scalar_ U1<Kind,Scalar_>::
 coeff_6j(const qType& q1, const qType& q2, const qType& q3,
-		 const qType& q4, const qType& q5, const qType& q6)
+         const qType& q4, const qType& q5, const qType& q6)
 {
-	// std::cout << "q1=" << q1 << " q2=" << q2 << " q3=" << q3 << " q4=" << q4 << " q5=" << q5 << " q6=" << q6 << std::endl;
-	// assert(-q1[0] + q2[0] + q3[0] == 0 and "ERROR in U1-symmetry flow equations (6j symbol).");
-	// assert(-q1[0] + q5[0] + q6[0] == 0 and "ERROR in U1-symmetry flow equations (6j symbol).");
-	// assert(+q4[0] + q2[0] - q6[0] == 0 and "ERROR in U1-symmetry flow equations (6j symbol).");
-	// assert(+q4[0] + q5[0] - q3[0] == 0 and "ERROR in U1-symmetry flow equations (6j symbol).");
-
-	return Scalar(1.);
+        if (triangle(q1,q2,q3) and triangle(q1,q6,q5) and triangle(q2,q4,q6) and triangle(q3,q4,q5)) {return Scalar(1.);}
+        return Scalar(0.);
 }
 
-template<typename Kind, typename Scalar>
-Scalar U1<Kind,Scalar>::
-coeff_Apair(const qType& q1, const qType& q2, const qType& q3,
-			const qType& q4, const qType& q5, const qType& q6)
-{
-	Scalar out = Scalar(1.);
-	return out;
-}
-
-template<typename Kind, typename Scalar>
-Scalar U1<Kind,Scalar>::
-coeff_splitAA(const qType& q1, const qType& q2, const qType& q3,
-			  const qType& q4, const qType& q5, const qType& q6)
-{
-	Scalar out = Scalar(1.);
-	return out;
-}
-
-template<typename Kind, typename Scalar>
-Scalar U1<Kind,Scalar>::
-coeff_prod(const qType& q1, const qType& q2, const qType& q3,
-		   const qType& q4, const qType& q5, const qType& q6)
-{
-	Scalar out = Scalar(1.);
-	return out;
-}
-
-template<typename Kind, typename Scalar>
-Scalar U1<Kind,Scalar>::
-coeff_MPOprod6(const qType& q1, const qType& q2, const qType& q3,
-			   const qType& q4, const qType& q5, const qType& q6)
-{
-	Scalar out = Scalar(1.);
-	return out;
-}
-
-template<typename Kind, typename Scalar>
-Scalar U1<Kind,Scalar>::
-coeff_twoSiteGate(const qType& q1, const qType& q2, const qType& q3,
-				  const qType& q4, const qType& q5, const qType& q6)
-{
-	Scalar out = Scalar(1.);
-	return out;
-}
-
-template<typename Kind, typename Scalar>
-Scalar U1<Kind,Scalar>::
+template<typename Kind, typename Scalar_>
+Scalar_ U1<Kind,Scalar_>::
 coeff_9j(const qType& q1, const qType& q2, const qType& q3,
 		 const qType& q4, const qType& q5, const qType& q6,
 		 const qType& q7, const qType& q8, const qType& q9)
@@ -382,75 +237,10 @@ coeff_9j(const qType& q1, const qType& q2, const qType& q3,
 	// if (q7[0] + q8[0] - q9[0] != 0) {return 0.;}
 	return Scalar(1.);
 }
-	
-template<typename Kind, typename Scalar>
-Scalar U1<Kind,Scalar>::
-coeff_buildR(const qType& q1, const qType& q2, const qType& q3,
-			 const qType& q4, const qType& q5, const qType& q6,
-			 const qType& q7, const qType& q8, const qType& q9)
-{
-	// std::cout << "q1=" << q1 << " q2=" << q2 << " q3=" << q3 << " q4=" << q4 << " q5=" << q5 << " q6=" << q6 << " q7=" << q7 << " q8=" << q8 << " q9=" << q9 << std::endl;
-	// assert(-q1[0] + q4[0] + q7[0] == 0 and "ERROR in U1-symmetry flow equations (9j-symbol).");
-	// assert(-q2[0] + q5[0] + q8[0] == 0 and "ERROR in U1-symmetry flow equations (9j-symbol).");
-	// assert(-q3[0] + q6[0] + q9[0] == 0 and "ERROR in U1-symmetry flow equations (9j-symbol).");
-	// assert(+q4[0] + q5[0] - q6[0] == 0 and "ERROR in U1-symmetry flow equations (9j-symbol).");
-	// assert(-q7[0] + q8[0] + q9[0] == 0 and "ERROR in U1-symmetry flow equations (9j-symbol).");
-	return Scalar(1.);
-}
 
-template<typename Kind, typename Scalar>
-Scalar U1<Kind,Scalar>::
-coeff_buildL(const qType& q1, const qType& q2, const qType& q3,
-			 const qType& q4, const qType& q5, const qType& q6,
-			 const qType& q7, const qType& q8, const qType& q9)
-{
-	Scalar out = Scalar(1.);
-	return out;
-}
-
-template<typename Kind, typename Scalar>
-Scalar U1<Kind,Scalar>::
-coeff_tensorProd(const qType& q1, const qType& q2, const qType& q3,
-			 const qType& q4, const qType& q5, const qType& q6,
-			 const qType& q7, const qType& q8, const qType& q9)
-{
-	Scalar out = Scalar(1.);
-	return out;
-}
-
-template<typename Kind, typename Scalar>
-Scalar U1<Kind,Scalar>::
-coeff_MPOprod9(const qType& q1, const qType& q2, const qType& q3,
-			   const qType& q4, const qType& q5, const qType& q6,
-			   const qType& q7, const qType& q8, const qType& q9)
-{
-	Scalar out = Scalar(1.);
-	return out;
-}
-
-template<typename Kind, typename Scalar>
-Scalar U1<Kind,Scalar>::
-coeff_HPsi(const qType& q1, const qType& q2, const qType& q3,
-		   const qType& q4, const qType& q5, const qType& q6,
-		   const qType& q7, const qType& q8, const qType& q9)
-{
-	Scalar out = Scalar(1.);
-	return out;
-}
-
-template<typename Kind, typename Scalar>
-Scalar U1<Kind,Scalar>::
-coeff_AW(const qType& q1, const qType& q2, const qType& q3,
-		 const qType& q4, const qType& q5, const qType& q6,
-		 const qType& q7, const qType& q8, const qType& q9)
-{
-	Scalar out = Scalar(1.);
-	return out;
-}
-
-template<typename Kind, typename Scalar>
+template<typename Kind, typename Scalar_>
 template<std::size_t M>
-bool U1<Kind,Scalar>::
+bool U1<Kind,Scalar_>::
 compare ( const std::array<U1<Kind,Scalar>::qType,M>& q1, const std::array<U1<Kind,Scalar>::qType,M>& q2 )
 {
 	for (std::size_t m=0; m<M; m++)
@@ -461,8 +251,8 @@ compare ( const std::array<U1<Kind,Scalar>::qType,M>& q1, const std::array<U1<Ki
 	return false;
 }
 
-template<typename Kind, typename Scalar>
-bool U1<Kind,Scalar>::
+template<typename Kind, typename Scalar_>
+bool U1<Kind,Scalar_>::
 triangle ( const std::array<U1<Kind,Scalar>::qType,3>& qs )
 {
 	//check the triangle rule for U1 quantum numbers
@@ -470,8 +260,8 @@ triangle ( const std::array<U1<Kind,Scalar>::qType,3>& qs )
 	return false;
 }
 
-template<typename Kind, typename Scalar>
-bool U1<Kind,Scalar>::
+template<typename Kind, typename Scalar_>
+bool U1<Kind,Scalar_>::
 pair ( const std::array<U1<Kind,Scalar>::qType,2>& qs )
 {
 	//check if two quantum numbers fulfill the flow equations: simply qin = qout
@@ -479,9 +269,9 @@ pair ( const std::array<U1<Kind,Scalar>::qType,2>& qs )
 	return false;
 }
 
-template<typename Kind, typename Scalar>
+template<typename Kind, typename Scalar_>
 template<std::size_t M>
-bool U1<Kind,Scalar>::
+bool U1<Kind,Scalar_>::
 validate ( const std::array<U1<Kind,Scalar>::qType,M>& qs )
 {
 	if constexpr( M == 1 ) { return true; }

@@ -11,6 +11,8 @@
 #include <boost/rational.hpp>
 /// \endcond
 
+#include <unsupported/Eigen/CXX11/Tensor>
+
 #include "qarray.hpp"
 #include "functions.hpp"
 #include "SU2Wrappers.hpp"
@@ -28,16 +30,16 @@ namespace Sym{
  *       Currently, only the gsl-implementation can be used, but any library which calculates the symbols can be included.
  *       Just add a wrapper in SU2Wrappers.h.
  */
-template<typename Kind, typename Scalar=double>
+template<typename Kind, typename Scalar_=double>
 class SU2
 {
 public:
-	typedef Scalar Scalar_;
+	typedef Scalar_ Scalar;
 
 	static constexpr std::size_t Nq=1;
 	
-	static constexpr bool HAS_CGC = false;
 	static constexpr bool NON_ABELIAN = true;
+        static constexpr bool HAS_MULTIPLICITIES = false;
 	static constexpr bool ABELIAN = false;
 	static constexpr bool IS_TRIVIAL = false;
 	static constexpr bool IS_MODULAR = false;
@@ -61,7 +63,7 @@ public:
 	inline static constexpr qType qvacuum() { return {1}; }
 	inline static constexpr std::array<qType,1> lowest_qs() { return std::array<qType,1> {{ qarray<1>(std::array<int,1>{{2}}) }}; }
 	
-	inline static qType flip( const qType& q ) { return q; }
+	inline static qType conj( const qType& q ) { return q; }
 	inline static int degeneracy( const qType& q ) { return q[0]; }
 
 	inline static int spinorFactor() { return -1; }
@@ -85,10 +87,9 @@ public:
 	 *            Better: Put an option for unique or non-unique irreps in the return vector.
 	 */
 	static std::vector<qType> reduceSilent( const std::vector<qType>& ql, const std::vector<qType>& qr, bool UNIQUE=false);
-
-	static std::vector<std::tuple<qarray<1>,size_t,qarray<1>,size_t,qarray<1> > > tensorProd ( const std::vector<qType>& ql, const std::vector<qType>& qr );
 	///@}
-	
+
+        std::size_t multiplicity (const qType& q1, const qType& q2, const qType& q3) {return triangle(q1,q2,q3) ? 1ul : 0ul;}
 	///@{
 	/**
 	 * Various coeffecients, all resulting from contractions or traces of the Clebsch-Gordon coefficients.
@@ -97,53 +98,22 @@ public:
 	
 	static Scalar coeff_dot(const qType& q1);
 	
-	static Scalar coeff_rightOrtho(const qType& q1, const qType& q2);
-	static Scalar coeff_leftSweep(const qType& q1, const qType& q2);
-	
-	static Scalar coeff_swapPhase(const qType& q1, const qType& q2, const qType& q3);
-	static Scalar coeff_leftSweep2(const qType& q1, const qType& q2, const qType& q3);
-	static Scalar coeff_leftSweep3(const qType& q1, const qType& q2, const qType& q3);
-	static Scalar coeff_adjoint(const qType& q1, const qType& q2, const qType& q3);
-	static Scalar coeff_splitAA(const qType& q1, const qType& q2, const qType& q3);
 	static Scalar coeff_3j(const qType& q1, const qType& q2, const qType& q3,
-						   int        q1_z, int        q2_z,        int q3_z);
-	static Scalar coeff_CGC(const qType& q1, const qType& q2, const qType& q3,
-							int        q1_z, int        q2_z,        int q3_z);
+                               int        q1_z, int        q2_z,        int q3_z);
+        
+	static Eigen::Tensor<Scalar_, 3> CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t multiplicity);
 
 	static Scalar coeff_6j(const qType& q1, const qType& q2, const qType& q3,
-						   const qType& q4, const qType& q5, const qType& q6);
-	static Scalar coeff_Apair(const qType& q1, const qType& q2, const qType& q3,
-							  const qType& q4, const qType& q5, const qType& q6);
-	static Scalar coeff_splitAA(const qType& q1, const qType& q2, const qType& q3,
-								const qType& q4, const qType& q5, const qType& q6);
-	static Scalar coeff_prod(const qType& q1, const qType& q2, const qType& q3,
-							 const qType& q4, const qType& q5, const qType& q6);
-	static Scalar coeff_MPOprod6(const qType& q1, const qType& q2, const qType& q3,
-								 const qType& q4, const qType& q5, const qType& q6);
-	static Scalar coeff_twoSiteGate(const qType& q1, const qType& q2, const qType& q3,
-									const qType& q4, const qType& q5, const qType& q6);
+                               const qType& q4, const qType& q5, const qType& q6);
 	
 	static Scalar coeff_9j(const qType& q1, const qType& q2, const qType& q3,
-						   const qType& q4, const qType& q5, const qType& q6,
-						   const qType& q7, const qType& q8, const qType& q9);
-	static Scalar coeff_tensorProd(const qType& q1, const qType& q2, const qType& q3,
-								   const qType& q4, const qType& q5, const qType& q6,
-								   const qType& q7, const qType& q8, const qType& q9);
-	static Scalar coeff_MPOprod9(const qType& q1, const qType& q2, const qType& q3,
-								 const qType& q4, const qType& q5, const qType& q6,
-								 const qType& q7, const qType& q8, const qType& q9);
-	static Scalar coeff_buildL(const qType& q1, const qType& q2, const qType& q3,
-							   const qType& q4, const qType& q5, const qType& q6,
-							   const qType& q7, const qType& q8, const qType& q9);
-	static Scalar coeff_buildR(const qType& q1, const qType& q2, const qType& q3,
-							   const qType& q4, const qType& q5, const qType& q6,
-							   const qType& q7, const qType& q8, const qType& q9);
-	static Scalar coeff_HPsi(const qType& q1, const qType& q2, const qType& q3,
-							 const qType& q4, const qType& q5, const qType& q6,
-							 const qType& q7, const qType& q8, const qType& q9);
-	static Scalar coeff_AW(const qType& q1, const qType& q2, const qType& q3,
-						   const qType& q4, const qType& q5, const qType& q6,
-						   const qType& q7, const qType& q8, const qType& q9);
+                               const qType& q4, const qType& q5, const qType& q6,
+                               const qType& q7, const qType& q8, const qType& q9);
+
+        static Scalar coeff_swap(const qType& ql, const qType& qr, const qType& qf) {return triangle(ql,qr,qf) ? phase<Scalar>((ql[0]+qr[0]-qf[0]-1) / 2) : Scalar(0.);};
+        static Scalar coeff_recouple(const qType& q1, const qType& q2, const qType& q3, const qType& Q,
+                                     const qType& Q12, const qType& Q23) {return std::sqrt(Q12[0]*Q23[0])*phase<Scalar>((q1[0]+q2[0]+q3[0]+Q[0]) / 2.)*coeff_6j(q1,q2,Q12,
+                                                                                                                                                                q3,Q,Q23);};
 	///@}
 
 	/** 
@@ -155,18 +125,17 @@ public:
 
 	/** 
 	 * This function checks if the array \p qs contains quantum-numbers which match together, with respect to the flow equations.
-	 * \todo2 Write multiple functions, for different sizes of the array and rename them, to have a more clear interface.
-	 *        Example: For 3-array: triangular(...) or something similar.
 	 */
 	template<std::size_t M>
 	static bool validate( const std::array<qType,M>& qs );
 
 	static bool triangle( const std::array<qType,3>& qs );
+        static bool triangle( const qType& q1, const qType& q2, const qType& q3 ) {return triangle({{q1,q2,q3}});}
 	static bool pair( const std::array<qType,2>& qs );
 };
 
-template<typename Kind, typename Scalar>
-std::vector<typename SU2<Kind,Scalar>::qType> SU2<Kind,Scalar>::
+template<typename Kind, typename Scalar_>
+std::vector<typename SU2<Kind,Scalar_>::qType> SU2<Kind,Scalar_>::
 reduceSilent( const qType& ql, const qType& qr )
 {
 	std::vector<qType> vout;
@@ -176,19 +145,19 @@ reduceSilent( const qType& ql, const qType& qr )
 	return vout;
 }
 
-template<typename Kind, typename Scalar>
-std::vector<typename SU2<Kind,Scalar>::qType> SU2<Kind,Scalar>::
+template<typename Kind, typename Scalar_>
+std::vector<typename SU2<Kind,Scalar_>::qType> SU2<Kind,Scalar_>::
 reduceSilent( const qType& ql, const qType& qm, const qType& qr )
 {
 	auto qtmp = reduceSilent(ql,qm);
 	return reduceSilent(qtmp,qr);
 }
 
-template<typename Kind, typename Scalar>
-std::vector<typename SU2<Kind,Scalar>::qType> SU2<Kind,Scalar>::
+template<typename Kind, typename Scalar_>
+std::vector<typename SU2<Kind,Scalar_>::qType> SU2<Kind,Scalar_>::
 reduceSilent( const std::vector<qType>& ql, const qType& qr )
 {
-	std::vector<typename SU2<Kind,Scalar>::qType> vout;
+	std::vector<typename SU2<Kind,Scalar_>::qType> vout;
 	for (std::size_t q=0; q<ql.size(); q++)
 	{
 		int qmin = std::abs(ql[q][0]-qr[0]) +1;
@@ -198,8 +167,8 @@ reduceSilent( const std::vector<qType>& ql, const qType& qr )
 	return vout;
 }
 
-template<typename Kind, typename Scalar>
-std::vector<typename SU2<Kind,Scalar>::qType> SU2<Kind,Scalar>::
+template<typename Kind, typename Scalar_>
+std::vector<typename SU2<Kind,Scalar_>::qType> SU2<Kind,Scalar_>::
 reduceSilent( const std::vector<qType>& ql, const std::vector<qType>& qr, bool UNIQUE )
 {
 	if (UNIQUE)
@@ -232,120 +201,16 @@ reduceSilent( const std::vector<qType>& ql, const std::vector<qType>& qr, bool U
 	}
 }
 
-template<typename Kind, typename Scalar>
-std::vector<std::tuple<qarray<1>,size_t,qarray<1>,size_t,qarray<1> > > SU2<Kind,Scalar>::
-tensorProd ( const std::vector<qType>& ql, const std::vector<qType>& qr )
-{
-//	std::unordered_map<qarray3<1>,std::size_t> dout;
-//	size_t j=0;
-//	for (std::size_t q1=0; q1<ql.size(); q1++)
-//	for (std::size_t q2=0; q2<qr.size(); q2++)
-//	{
-//		int qmin = std::abs(ql[q1][0]-qr[q2][0]) +1;
-//		int qmax = std::abs(ql[q1][0]+qr[q2][0]) -1;
-//		for ( int i=qmin; i<=qmax; i+=2 )
-//		{
-//			dout.insert(make_pair(qarray3<1>{ql[q1], qr[q2], qarray<1>{i}}, j));
-//			++j;
-//			
-//		}
-//	}
-//	return dout;
-	
-        std::vector<std::tuple<qarray<1>,size_t,qarray<1>,size_t,qarray<1> > > out;
-	
-	for (std::size_t q1=0; q1<ql.size(); q1++)
-	for (std::size_t q2=0; q2<qr.size(); q2++)
-	{
-		int qmin = std::abs(ql[q1][0]-qr[q2][0]) + 1;
-		int qmax = std::abs(ql[q1][0]+qr[q2][0]) - 1;
-		for (int i=qmin; i<=qmax; i+=2)
-		{
-			out.push_back(std::make_tuple(ql[q1], q1, qr[q2], q2, qarray<1>{i}));
-		}
-	}
-	return out;
-}
-
-template<typename Kind, typename Scalar>
-Scalar SU2<Kind,Scalar>::
-coeff_unity()
-{
-	Scalar out = Scalar(1.);
-	return out;
-}
-
-template<typename Kind, typename Scalar>
-Scalar SU2<Kind,Scalar>::
+template<typename Kind, typename Scalar_>
+Scalar_ SU2<Kind,Scalar_>::
 coeff_dot(const qType& q1)
 {
 	Scalar out = static_cast<Scalar>(q1[0]);
 	return out;
 }
 
-template<typename Kind, typename Scalar>
-Scalar SU2<Kind,Scalar>::
-coeff_rightOrtho(const qType& q1, const qType& q2)
-{
-	Scalar out = static_cast<Scalar>(q1[0]) / static_cast<Scalar>(q2[0]);
-	return out;
-}
-
-template<typename Kind, typename Scalar>
-Scalar SU2<Kind,Scalar>::
-coeff_leftSweep(const qType& q1, const qType& q2)
-{
-	Scalar out = std::sqrt(static_cast<Scalar>(q1[0]) / static_cast<Scalar>(q2[0]));
-	return out;
-}
-
-template<typename Kind, typename Scalar>
-Scalar SU2<Kind,Scalar>::
-coeff_leftSweep2(const qType& q1, const qType& q2, const qType& q3)
-{
-	Scalar out = phase<Scalar>((q1[0]-q2[0]+q3[0]-1) / 2) *
-		std::sqrt(static_cast<Scalar>(q1[0])) / std::sqrt(static_cast<Scalar>(q2[0]));
-	return out;
-}
-
-template<typename Kind, typename Scalar>
-Scalar SU2<Kind,Scalar>::
-coeff_leftSweep3(const qType& q1, const qType& q2, const qType& q3)
-{
-	Scalar out = phase<Scalar>((q1[0]-q2[0]-q3[0]-1) / 2) *
-		std::sqrt(static_cast<Scalar>(q1[0])) / std::sqrt(static_cast<Scalar>(q2[0]));
-	return out;
-}
-
-template<typename Kind, typename Scalar>
-Scalar SU2<Kind,Scalar>::
-coeff_swapPhase(const qType& q1, const qType& q2, const qType& q3)
-{
-	Scalar out = phase<Scalar>((q1[0]+q2[0]-q3[0]-3) /2);
-	return out;
-}
-
-template<typename Kind, typename Scalar>
-Scalar SU2<Kind,Scalar>::
-coeff_adjoint(const qType& q1, const qType& q2, const qType& q3)
-{
-	Scalar out = phase<Scalar>((q3[0]+q1[0]-q2[0]-1) / 2) *
-		std::sqrt(static_cast<Scalar>(q1[0])) / std::sqrt(static_cast<Scalar>(q2[0]));
-	return out;
-}
-
-template<typename Kind, typename Scalar>
-Scalar SU2<Kind,Scalar>::
-coeff_splitAA(const qType& q1, const qType& q2, const qType& q3)
-{
-	Scalar out = phase<Scalar>((q1[0]-q2[0]-q3[0]-3) / 2) *
-		std::sqrt(static_cast<Scalar>(q1[0])) / std::sqrt(static_cast<Scalar>(q2[0]));
-	// Scalar out = std::sqrt(static_cast<Scalar>(q1[0])) / std::sqrt(static_cast<Scalar>(q2[0]));
-	return out;
-}
-
-template<typename Kind, typename Scalar>
-Scalar SU2<Kind,Scalar>::
+template<typename Kind, typename Scalar_>
+Scalar_ SU2<Kind,Scalar_>::
 coeff_3j(const qType& q1, const qType& q2, const qType& q3,
 		 int        q1_z, int        q2_z,        int q3_z)
 {
@@ -354,181 +219,52 @@ coeff_3j(const qType& q1, const qType& q2, const qType& q3,
 	return out;
 }
 
-template<typename Kind, typename Scalar>
-Scalar SU2<Kind,Scalar>::
-coeff_CGC(const qType& q1, const qType& q2, const qType& q3,
-		  int        q1_z, int        q2_z,        int q3_z)
+template<typename Kind, typename Scalar_>
+Eigen::Tensor<Scalar_, 3> SU2<Kind,Scalar_>::
+CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t multiplicity)
 {
-	// Scalar out = coupling_3j(q1[0], q2[0], q3[0],
-	// 						 q1_z , q2_z , -q3_z) *
-	// 	phase<Scalar>((-q1[0]+q2[0]-q3_z-2)/2) * sqrt(q3[0]);
-	Scalar out = coupling_3j(q1[0], q2[0], q3[0],
-							 q1_z , q2_z , -q3_z) *
-		phase<Scalar>((q1[0]-q2[0]+q3_z)/2) * sqrt(q3[0]);
+        Eigen::Tensor<Scalar_, 3> T(degeneracy(q1),degeneracy(q2),degeneracy(q3));
+        for (int i_q1m=0; i_q1m<degeneracy(q1); i_q1m++)
+        for (int i_q2m=0; i_q2m<degeneracy(q2); i_q2m++)
+        for (int i_q3m=0; i_q3m<degeneracy(q3); i_q3m++)
+                {
+                        int q1_2m = 2*i_q1m - (q1[0]-1);
+                        int q2_2m = 2*i_q2m - (q2[0]-1);
+                        int q3_2m = 2*i_q3m - (q3[0]-1);
+                        T(i_q1m,i_q2m,i_q3m) = coupling_3j(q1[0], q2[0], q3[0],
+                                                             q1_2m , q2_2m , -q3_2m) *
+                                phase<Scalar>((q1[0]-q2[0]+q3_2m)/2) * sqrt(q3[0]);
+                }
 
-	return out;
+	return T;
 }
 
-template<typename Kind, typename Scalar>
-Scalar SU2<Kind,Scalar>::
+template<typename Kind, typename Scalar_>
+Scalar_ SU2<Kind,Scalar_>::
 coeff_6j(const qType& q1, const qType& q2, const qType& q3,
 		 const qType& q4, const qType& q5, const qType& q6)
 {
 	Scalar out = coupling_6j(q1[0],q2[0],q3[0],
-							 q4[0],q5[0],q6[0]);
+                                 q4[0],q5[0],q6[0]);
 	return out;
 }
 
-template<typename Kind, typename Scalar>
-Scalar SU2<Kind,Scalar>::
-coeff_Apair(const qType& q1, const qType& q2, const qType& q3,
-			const qType& q4, const qType& q5, const qType& q6)
-{	
-	Scalar out = coupling_6j(q1[0],q2[0],q3[0],q4[0],q5[0],q6[0])*
-		std::sqrt(static_cast<Scalar>(q3[0]*q6[0]))
-		*phase<Scalar>((q1[0]+q2[0]+q4[0]+q5[0]-4)/2);
-	return out;
-}
-
-template<typename Kind, typename Scalar>
-Scalar SU2<Kind,Scalar>::
-coeff_splitAA(const qType& q1, const qType& q2, const qType& q3,
-			  const qType& q4, const qType& q5, const qType& q6)
-{	
-	Scalar out = coupling_6j(q1[0],q2[0],q3[0],q4[0],q5[0],q6[0])*
-		std::sqrt(static_cast<Scalar>(q2[0]*q3[0]))
-		*phase<Scalar>((q1[0]+q5[0]+q6[0]-3)/2);
-	return out;
-}
-
-template<typename Kind, typename Scalar>
-Scalar SU2<Kind,Scalar>::
-coeff_prod(const qType& q1, const qType& q2, const qType& q3,
-		   const qType& q4, const qType& q5, const qType& q6)
-{	
-	Scalar out = coupling_6j(q1[0],q2[0],q3[0],q4[0],q5[0],q6[0])*
-		std::sqrt(static_cast<Scalar>(q3[0]*q6[0]))*
-		phase<Scalar>((q1[0]+q5[0]+q6[0]-3)/2);
-	return out;
-}
-
-template<typename Kind, typename Scalar>
-Scalar SU2<Kind,Scalar>::
-coeff_MPOprod6(const qType& q1, const qType& q2, const qType& q3,
-			   const qType& q4, const qType& q5, const qType& q6)
-{	
-	Scalar out = coupling_6j(q1[0],q2[0],q3[0],q4[0],q5[0],q6[0])*
-		std::sqrt(static_cast<Scalar>(q3[0]*q6[0]))*
-		phase<Scalar>((q1[0]+q2[0]+q4[0]+q5[0]-4)/2);
-	return out;
-}
-
-template<typename Kind, typename Scalar>
-Scalar SU2<Kind,Scalar>::
-coeff_twoSiteGate(const qType& q1, const qType& q2, const qType& q3,
-			   const qType& q4, const qType& q5, const qType& q6)
-{
-	Scalar out = coupling_6j(q1[0],q2[0],q3[0],q4[0],q5[0],q6[0])*
-		std::sqrt(static_cast<Scalar>(q3[0]*q6[0]))
-		*phase<Scalar>((q1[0]+q2[0]+q4[0]+q5[0]-4)/2);
-	return out;
-}
-
-template<typename Kind, typename Scalar>
-Scalar SU2<Kind,Scalar>::
+template<typename Kind, typename Scalar_>
+Scalar_ SU2<Kind,Scalar_>::
 coeff_9j(const qType& q1, const qType& q2, const qType& q3,
 		 const qType& q4, const qType& q5, const qType& q6,
 		 const qType& q7, const qType& q8, const qType& q9)
 {
 	Scalar out = coupling_9j(q1[0],q2[0],q3[0],
-							 q4[0],q5[0],q6[0],
-							 q7[0],q8[0],q9[0]);
+                                 q4[0],q5[0],q6[0],
+                                 q7[0],q8[0],q9[0]);
 	return out;
 }
 
-template<typename Kind, typename Scalar>
-Scalar SU2<Kind,Scalar>::
-coeff_tensorProd(const qType& q1, const qType& q2, const qType& q3,
-                 const qType& q4, const qType& q5, const qType& q6,
-                 const qType& q7, const qType& q8, const qType& q9)
-{
-	Scalar out = coupling_9j(q1[0],q2[0],q3[0],
-							 q4[0],q5[0],q6[0],
-							 q7[0],q8[0],q9[0])*
-		std::sqrt(static_cast<Scalar>(q7[0]*q8[0]*q3[0]*q6[0]));
-	return out;
-}
-
-template<typename Kind, typename Scalar>
-Scalar SU2<Kind,Scalar>::
-coeff_MPOprod9(const qType& q1, const qType& q2, const qType& q3,
-			   const qType& q4, const qType& q5, const qType& q6,
-			   const qType& q7, const qType& q8, const qType& q9)
-{
-	Scalar out = coupling_9j(q1[0],q2[0],q3[0],
-							 q4[0],q5[0],q6[0],
-							 q7[0],q8[0],q9[0]) *
-		std::sqrt(static_cast<Scalar>(q7[0]*q8[0]*q3[0]*q6[0]));
-	return out;
-}
-
-template<typename Kind, typename Scalar>
-Scalar SU2<Kind,Scalar>::
-coeff_buildL(const qType& q1, const qType& q2, const qType& q3,
-			 const qType& q4, const qType& q5, const qType& q6,
-			 const qType& q7, const qType& q8, const qType& q9)
-{
-	Scalar out = coupling_9j(q1[0],q2[0],q3[0],
-							 q4[0],q5[0],q6[0],
-							 q7[0],q8[0],q9[0]) *
-		std::sqrt(static_cast<Scalar>(q7[0]*q8[0]*q3[0]*q6[0]));
-   	return out;
-}
-
-template<typename Kind, typename Scalar>
-Scalar SU2<Kind,Scalar>::
-coeff_buildR(const qType& q1, const qType& q2, const qType& q3,
-			 const qType& q4, const qType& q5, const qType& q6,
-			 const qType& q7, const qType& q8, const qType& q9)
-{
-	Scalar out = coupling_9j(q1[0],q2[0],q3[0],
-							 q4[0],q5[0],q6[0],
-							 q7[0],q8[0],q9[0]) *
-		std::sqrt(static_cast<Scalar>(q7[0]*q8[0]*q3[0]*q6[0])) *
-		static_cast<Scalar>(q9[0]) / static_cast<Scalar>(q7[0]);
-	return out;
-}
-
-template<typename Kind, typename Scalar>
-Scalar SU2<Kind,Scalar>::
-coeff_HPsi(const qType& q1, const qType& q2, const qType& q3,
-		   const qType& q4, const qType& q5, const qType& q6,
-		   const qType& q7, const qType& q8, const qType& q9)
-{
-	Scalar out = coupling_9j(q1[0],q2[0],q3[0],
-							 q4[0],q5[0],q6[0],
-							 q7[0],q8[0],q9[0]) *
-		std::sqrt(static_cast<Scalar>(q7[0]*q8[0]*q3[0]*q6[0]));
-	return out;
-}
-
-template<typename Kind, typename Scalar>
-Scalar SU2<Kind,Scalar>::
-coeff_AW(const qType& q1, const qType& q2, const qType& q3,
-		 const qType& q4, const qType& q5, const qType& q6,
-		 const qType& q7, const qType& q8, const qType& q9)
-{
-	Scalar out =  coupling_9j(q1[0],q2[0],q3[0],
-							  q4[0],q5[0],q6[0],
-							  q7[0],q8[0],q9[0]) *
-		std::sqrt(static_cast<Scalar>(q7[0]*q8[0]*q3[0]*q6[0]));
-	return out;
-}
-
-template<typename Kind, typename Scalar>
+template<typename Kind, typename Scalar_>
 template<std::size_t M>
-bool SU2<Kind,Scalar>::
-compare ( const std::array<SU2<Kind,Scalar>::qType,M>& q1, const std::array<SU2<Kind,Scalar>::qType,M>& q2 )
+bool SU2<Kind,Scalar_>::
+compare ( const std::array<SU2<Kind,Scalar_>::qType,M>& q1, const std::array<SU2<Kind,Scalar_>::qType,M>& q2 )
 {
 	for (std::size_t m=0; m<M; m++)
 	{
@@ -538,8 +274,8 @@ compare ( const std::array<SU2<Kind,Scalar>::qType,M>& q1, const std::array<SU2<
 	return false;
 }
 
-template<typename Kind, typename Scalar>
-bool SU2<Kind,Scalar>::
+template<typename Kind, typename Scalar_>
+bool SU2<Kind,Scalar_>::
 triangle ( const std::array<SU2<Kind,Scalar>::qType,3>& qs )
 {
 	//check the triangle rule for angular momenta, but remark that we use the convention q=2S+1
@@ -547,8 +283,8 @@ triangle ( const std::array<SU2<Kind,Scalar>::qType,3>& qs )
 	return false;
 }
 
-template<typename Kind, typename Scalar>
-bool SU2<Kind,Scalar>::
+template<typename Kind, typename Scalar_>
+bool SU2<Kind,Scalar_>::
 pair ( const std::array<SU2<Kind,Scalar>::qType,2>& qs )
 {
 	//check if two quantum numbers fulfill the flow equations: simply qin = qout
@@ -556,9 +292,9 @@ pair ( const std::array<SU2<Kind,Scalar>::qType,2>& qs )
 	return false;
 }
 
-template<typename Kind, typename Scalar>
+template<typename Kind, typename Scalar_>
 template<std::size_t M>
-bool SU2<Kind,Scalar>::
+bool SU2<Kind,Scalar_>::
 validate ( const std::array<SU2<Kind,Scalar>::qType,M>& qs )
 {
 	if constexpr( M == 1 ) { return true; }

@@ -1,7 +1,7 @@
 dist: trusty
 sudo: require
 
-language: cpp
+language: c++
 compiler: gcc
 
 os: linux
@@ -10,6 +10,7 @@ os: linux
           sources:
             - ubuntu-toolchain-r-test
           packages:
+            - gcc-8
             - g++-8
             - cmake
       env:

@@ -8,6 +8,7 @@ before_install:
 
 script:
   - mkdir build
+  - cd build
   - cmake ../
   - make install
   - ./tests/basis_test

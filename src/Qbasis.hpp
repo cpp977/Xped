@@ -11,6 +11,7 @@
 /// \endcond
 
 #include "hash/hash.hpp"
+#include "util/Random.hpp"
 #include "Basis.hpp"
 #include "symmetry/functions.hpp"
 #include "FusionTree.hpp"
@@ -102,7 +103,9 @@ public:
 	void push_back( const qType& q, const size_t& inner_dim);
 
         void push_back( const qType& q, const size_t& inner_dim, const std::vector<FusionTree<depth,Symmetry> >& tree);
-	
+
+        void setRandom(const std::size_t& fullSize, const std::size_t& max_sectorSize=5ul);
+        
 	/**Completely clear the basis.*/
 	void clear() {data_.clear(); trees.clear(); curr_dim=0;}
 		
@@ -177,11 +180,15 @@ push_back(const qType& q, const size_t& inner_dim)
 	}
 	else //append to quantumnumber if it is there
 	{
-		std::get<2>(*it).add(Basis(inner_dim));
+		std::get<2>(*it) = std::get<2>(*it).add(Basis(inner_dim));
 		for (auto loop=it++; loop==data_.end(); loop++)
 		{
 			std::get<1>(*loop) += inner_dim;
 		}
+                for (auto& [p,tree] : trees) {
+                        if (p != q) {continue;}
+                        tree[0].dim += inner_dim;
+                }
 	}
 	curr_dim += inner_dim;
 }
@@ -204,6 +211,22 @@ push_back(const qType& q, const size_t& inner_dim, const std::vector<FusionTree<
                 assert(false);
 	}
 	curr_dim += inner_dim;
+}
+
+template<typename Symmetry, std::size_t depth>
+void Qbasis<Symmetry,depth>::
+setRandom(const std::size_t& fullSize, const std::size_t& max_sectorSize)
+{
+        clear();
+        static_assert(depth == 1);
+        std::size_t current_size=0;
+        std::size_t count=0;
+        while (fullDim() < fullSize) {
+                qType q = Symmetry::random_q();
+                std::size_t inner_dim = static_cast<std::size_t>(util::random::threadSafeRandUniform<int,int>(1,std::min(max_sectorSize,fullSize-fullDim())));
+                if ((fullDim() + Symmetry::degeneracy(q)*inner_dim) <= fullSize) {push_back(q,inner_dim);}
+
+        }
 }
 
 template<typename Symmetry, std::size_t depth>
@@ -306,6 +329,8 @@ leftOffset(const FusionTree<depth, Symmetry>& tree, const std::array<size_t,dept
 {
 	assert( trees.size() == data_.size() and "The history for this basis is not defined properly");
 	auto it = trees.find(tree.q_coupled);
+        // cout << tree.draw() << endl;
+        // cout << this->printTrees() << endl;
 	assert( it != trees.end() and "The history for this basis is not defined properly");
 
 	size_t out=0;
@@ -350,7 +375,6 @@ template<typename Symmetry, std::size_t depth>
 void Qbasis<Symmetry,depth>::
 sort ()
 {
-
 	std::vector<std::size_t> index_sort(data_.size());
 	std::iota(index_sort.begin(),index_sort.end(),0);
 	std::sort (index_sort.begin(), index_sort.end(),
@@ -438,23 +462,20 @@ combine (const Qbasis<Symmetry,1>& other, bool CONJ) const
 			for (const auto& q: qVec)
 			{
                                 for (auto& thisTree : this->tree(q1))
-                                for (const auto& otherTree : other.tree(q2))
-                                        {
-                                                auto totalTree = thisTree.enlarge(otherTree);
-                                                totalTree.q_coupled = q;
-                                                auto it = out.trees.find(q);
-                                                if( it==out.trees.end() )
-                                                        {
-                                                                std::vector<FusionTree<depth+1,Symmetry> > tree(1,totalTree);
-                                                                out.trees.insert(std::make_pair(q,tree));
-                                                        }
-                                                else
-                                                        {
-                                                                auto it_tree = std::find(it->second.begin(), it->second.end(), totalTree);
-                                                                if (it_tree == it->second.end()) {it->second.push_back(totalTree);}
-                                                                else {continue;}
-                                                        }
+                                for (const auto& otherTree : other.tree(q2)) {
+                                        auto totalTree = thisTree.enlarge(otherTree);
+                                        totalTree.q_coupled = q;
+                                        auto it = out.trees.find(q);
+                                        if( it==out.trees.end() ) {
+                                                std::vector<FusionTree<depth+1,Symmetry> > tree(1,totalTree);
+                                                out.trees.insert(std::make_pair(q,tree));
                                         }
+                                        else {
+                                                auto it_tree = std::find(it->second.begin(), it->second.end(), totalTree);
+                                                if (it_tree == it->second.end()) {it->second.push_back(totalTree);}
+                                                else {continue;}
+                                        }
+                                }
 			}
 		}
 	}

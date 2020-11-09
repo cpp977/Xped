@@ -1,6 +1,8 @@
 #ifndef LABEL_DUMMIES_H
 #define LABEL_DUMMIES_H
 
+#include "functions.hpp"
+
 namespace Sym{
 	
 	struct SpinSU2

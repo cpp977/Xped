@@ -9,6 +9,8 @@
 
 #include <unsupported/Eigen/CXX11/Tensor>
 
+#include "../util/Random.hpp"
+
 namespace Sym{
 
 /** \class U1
@@ -55,7 +57,8 @@ public:
 	inline static int degeneracy( const qType& q ) { return 1; }
 	
 	inline static int spinorFactor() { return +1; }
-	
+
+        inline static qType random_q() { int qval = util::random::threadSafeRandUniform<int,int>(-20,20,false); qType out = {qval}; return out; }
 	///@{
 	/**
 	 * Calculate the irreps of the tensor product of \p ql and \p qr.

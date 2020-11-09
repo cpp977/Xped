@@ -61,7 +61,9 @@ namespace Sym{
 		inline static int degeneracy( const qType& q ) { return 1; }
 
 		inline static int spinorFactor() { return +1; }
-		
+
+                inline static qType random_q() { return {}; }
+                
 		inline static std::vector<qType> reduceSilent( const qType& ql, const qType& qr) { return {{}}; }
 		inline static std::vector<qType> reduceSilent( const qType& ql, const qType& qm, const qType& qr) { return {{}}; }
 		inline static std::vector<qType> reduceSilent( const std::vector<qType>& ql, const qType& qr) { return {{}}; }

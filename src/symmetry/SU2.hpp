@@ -16,6 +16,7 @@
 #include "qarray.hpp"
 #include "functions.hpp"
 #include "SU2Wrappers.hpp"
+#include "../util/Random.hpp"
 
 namespace Sym{
 
@@ -67,6 +68,9 @@ public:
 	inline static int degeneracy( const qType& q ) { return q[0]; }
 
 	inline static int spinorFactor() { return -1; }
+
+        inline static qType random_q() { int qval = util::random::threadSafeRandUniform<int,int>(1,20,false); qType out = {qval}; return out; }
+        
 	///@{
 	/** 
 	 * Calculate the irreps of the tensor product of \p ql and \p qr.

@@ -2,6 +2,9 @@ language: cpp
 compiler: gcc
 dist: bionic
 
+install:
+  - sudo apt-get install libeigen3-dev
+
 script:
   - mkdir build
   - cd build

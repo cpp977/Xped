@@ -4,7 +4,8 @@ dist: bionic
 
 install:
   - sudo apt-get install libeigen3-dev
-  - sudo apt-get install gsl
+  - sudo apt-get install libgsl-dev
+  - sudo apt-get install libgslcblas0
   - sudo apt-get install libboost-all-dev
   
 

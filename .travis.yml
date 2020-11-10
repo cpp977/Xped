@@ -11,13 +11,12 @@ install:
   - sudo apt install -qq libboost-all-dev
   - sudo apt install -qq doctest-dev
 env:
-  - CC=gcc-8 
-  - CXX=g++-8
+  - CC=gcc-8 && CXX=g++-8
 
 script:
-  - mkdir build
-  - cd build
-  - cmake ../
+  - mkdir ../build
+  - cd ../build
+  - cmake ../Tensor/
   - cmake --build . -- VERBOSE=1
   - ./tests/basis_test
   - ./tests/tree_test

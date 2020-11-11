@@ -1,0 +1,4 @@
+build:
+  machine:
+    version:
+      ubuntu-2004:202010-01

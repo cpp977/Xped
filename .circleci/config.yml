@@ -1,4 +1,16 @@
-build:
-  machine:
-    version:
-      ubuntu-2004:202010-01
+version: 2.1
+jobs:
+    build:
+        machine:
+            version:
+
+                ubuntu-2004:202010-01
+        steps:
+            g++ --version
+            mkdir build && cd build
+            cmake ../
+            
+workflows:
+    build_and_test:
+        jobs:
+            - build

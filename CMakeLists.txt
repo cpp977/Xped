@@ -51,7 +51,7 @@ message(${TOOLS_INCLUDE_DIR})
 ExternalProject_Add(
         TOOLS
         PREFIX ${TOOLS_ROOT}
-        GIT_REPOSITORY "https://cpp977@github.com/cpp977/TOOLS.git"
+        GIT_REPOSITORY "https://cpp977:A*u1t5o!s@github.com/cpp977/TOOLS.git"
         GIT_SHALLOW ON
         TIMEOUT 10
         UPDATE_COMMAND ${GIT_EXECUTABLE} pull

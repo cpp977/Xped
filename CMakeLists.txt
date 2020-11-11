@@ -46,7 +46,6 @@ ExternalProject_Add(
 
 set(TOOLS_ROOT ${CMAKE_BINARY_DIR}/thirdparty/tools)
 set(TOOLS_INCLUDE_DIR ${TOOLS_ROOT}/src/TOOLS)
-message(${TOOLS_INCLUDE_DIR})
 
 ExternalProject_Add(
         TOOLS

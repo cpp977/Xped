@@ -62,6 +62,24 @@ ExternalProject_Add(
         USES_TERMINAL_DOWNLOAD ON
 )
 
+set(EIGEN_ROOT ${CMAKE_BINARY_DIR}/thirdparty/eigen)
+set(EIGEN_INCLUDE_DIR ${EIGEN_ROOT}/src/Eigen)
+
+ExternalProject_Add(
+        Eigen
+        PREFIX ${EIGEN_ROOT}
+        GIT_REPOSITORY "https://gitlab.com/libeigen/eigen"
+        GIT_SHALLOW ON
+        TIMEOUT 10
+        CONFIGURE_COMMAND "" 
+        BUILD_COMMAND ""
+        INSTALL_COMMAND "" 
+        TEST_COMMAND ""
+        LOG_DOWNLOAD ON
+        LOG_MERGED_STDOUTERR ON
+        USES_TERMINAL_DOWNLOAD ON
+)
+
 # Link this 'library' to use the warnings specified in CompilerWarnings.cmake
 add_library(project_warnings INTERFACE)
 

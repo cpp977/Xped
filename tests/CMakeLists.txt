@@ -3,8 +3,8 @@ find_package(GSL REQUIRED)
 find_package(Boost REQUIRED)
 find_package(doctest REQUIRED)
 
-include_directories(/home/user/Nextcloud/postdoc/code/dmrg/TOOLS/ /home/user/__LIBS__/cpp-text-table)
-include(/home/user/__LIBS__/doctest/scripts/cmake/doctest.cmake)
+include_directories(${TOOLS_INCLUDE_DIR} ${TEXTTABLE_INCLUDE_DIR})
+#include(/home/user/__LIBS__/doctest/scripts/cmake/doctest.cmake)
 
 enable_testing()
 
@@ -15,14 +15,16 @@ file(GLOB SOURCES "./*.hpp"
 add_library(test_suite OBJECT driver.cpp ${SOURCES})
 
 add_executable(tree_test tree.cpp $<TARGET_OBJECTS:test_suite>)
+add_dependencies(tree_test TextTable TOOLS)
 target_link_libraries (tree_test Eigen3::Eigen GSL::gsl GSL::gslcblas doctest::doctest)
-doctest_discover_tests(tree_test)
-#add_test(NAME tree_test COMMAND tree_test)
+#doctest_discover_tests(tree_test)
+add_test(NAME tree_test COMMAND tree_test)
 
 add_executable(basis_test basis.cpp $<TARGET_OBJECTS:test_suite>)
+add_dependencies(basis_test TextTable TOOLS)
 target_link_libraries (basis_test Eigen3::Eigen GSL::gsl GSL::gslcblas doctest::doctest)
-doctest_discover_tests(basis_test)
-#add_test(NAME basis_test COMMAND basis_test )
+#doctest_discover_tests(basis_test)
+add_test(NAME basis_test COMMAND basis_test )
 
 #add_executable(test_suite driver.cpp basis.cpp ${SOURCES})
 

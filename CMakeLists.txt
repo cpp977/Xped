@@ -22,6 +22,47 @@ endif()
 
 add_compile_options(-fmax-errors=5)
 
+find_package(Git REQUIRED)
+
+include(ExternalProject)
+
+set(TEXTTABLE_ROOT ${CMAKE_BINARY_DIR}/thirdparty/texttable)
+set(TEXTTABLE_INCLUDE_DIR ${TEXTTABLE_ROOT}/src/TextTable)
+
+ExternalProject_Add(
+        TextTable
+        PREFIX ${TEXTTABLE_ROOT}
+        GIT_REPOSITORY "https://github.com/haarcuba/cpp-text-table.git"
+        GIT_SHALLOW ON
+        TIMEOUT 10
+        UPDATE_COMMAND ${GIT_EXECUTABLE} pull
+        CONFIGURE_COMMAND ""
+        BUILD_COMMAND ""
+        INSTALL_COMMAND ""
+        LOG_DOWNLOAD ON
+        LOG_MERGED_STDOUTERR ON
+        USES_TERMINAL_DOWNLOAD ON
+)
+
+set(TOOLS_ROOT ${CMAKE_BINARY_DIR}/thirdparty/tools)
+set(TOOLS_INCLUDE_DIR ${TOOLS_ROOT}/src/TOOLS)
+message(${TOOLS_INCLUDE_DIR})
+
+ExternalProject_Add(
+        TOOLS
+        PREFIX ${TOOLS_ROOT}
+        GIT_REPOSITORY "https://cpp977@github.com/cpp977/TOOLS.git"
+        GIT_SHALLOW ON
+        TIMEOUT 10
+        UPDATE_COMMAND ${GIT_EXECUTABLE} pull
+        CONFIGURE_COMMAND ""
+        BUILD_COMMAND ""
+        INSTALL_COMMAND ""
+        LOG_DOWNLOAD ON
+        LOG_MERGED_STDOUTERR ON
+        USES_TERMINAL_DOWNLOAD ON
+)
+
 # Link this 'library' to use the warnings specified in CompilerWarnings.cmake
 add_library(project_warnings INTERFACE)
 

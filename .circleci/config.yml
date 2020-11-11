@@ -6,9 +6,10 @@ jobs:
 
           
         steps:
-            g++ --version
-            mkdir build && cd build
-            cmake ../
+            - checkout
+            - run: g++ --version
+            - run: mkdir build && cd build
+            - run: cmake ../
             
 workflows:
     build_and_test:

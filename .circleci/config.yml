@@ -8,8 +8,11 @@ jobs:
         steps:
             - checkout
             - run: g++ --version
+            - run: pwd
             - run: ls -la
-            - run: mkdir build && cd build
+            - run: mkdir ../build
+            - run: cd ../build
+            - run: pwd
             - run: ls -la
             - run: cmake ../Tensor
             

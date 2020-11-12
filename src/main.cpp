@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
         // typedef Sym::U1<Sym::SpinU1> Symmetry;
         typedef Sym::SU2<Sym::SpinSU2> Symmetry;
         // typedef Sym::U0 Symmetry;
-        Qbasis<Symmetry,1> B, C, D; B.setRandom()
+        Qbasis<Symmetry,1> B, C, D; B.setRandom();
         B.push_back({1},2);
         B.push_back({3},1);
         cout << B.printTrees() << endl;
@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
         // cout << Bfourth << endl;
 
         Tensor<4,0,Symmetry> t({{B,C,D,B}},{{}}); t.setRandom();
-        std::cout << "norm=" << t.normSquared() << std::endl;
+        std::cout << "norm=" << t.aquaredNorm() << std::endl;
         auto tplain = t.plainTensor();
         std::cout << "norm plain=" << tplain.contract(tplain,Eigen::array<Eigen::IndexPair<Eigen::Index>, 4>{{Eigen::IndexPair<Eigen::Index>(0,0),
                                                                                                                       Eigen::IndexPair<Eigen::Index>(1,1),

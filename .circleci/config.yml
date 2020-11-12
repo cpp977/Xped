@@ -8,7 +8,9 @@ jobs:
         steps:
             - checkout
             - run: g++ --version
+            - run: ls -la
             - run: mkdir build && cd build
+            - run: ls -la
             - run: cmake ../Tensor
             
 workflows:

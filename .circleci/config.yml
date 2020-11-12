@@ -9,7 +9,7 @@ jobs:
             - checkout
             - run: g++ --version
             - run: mkdir build && cd build
-            - run: cmake ../
+            - run: cmake ../Tensor
             
 workflows:
     build_and_test:

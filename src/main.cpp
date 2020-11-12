@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
         // typedef Sym::U1<Sym::SpinU1> Symmetry;
         typedef Sym::SU2<Sym::SpinSU2> Symmetry;
         // typedef Sym::U0 Symmetry;
-        Qbasis<Symmetry,1> B, C, D; B.setRandom();
+        Qbasis<Symmetry,1> B, C, D;
         B.push_back({1},2);
         B.push_back({3},1);
         cout << B.printTrees() << endl;

@@ -29,15 +29,16 @@ int main(int argc, char *argv[])
         // typedef Sym::U1<Sym::SpinU1> Symmetry;
         typedef Sym::SU2<Sym::SpinSU2> Symmetry;
         // typedef Sym::U0 Symmetry;
-        Qbasis<Symmetry,1> B, C, D;
-        // B.push_back({1},2);
+        Qbasis<Symmetry,1> B, C, D; B.setRandom()
+        B.push_back({1},2);
         B.push_back({3},1);
         cout << B.printTrees() << endl;
         // B.push_back({3},1);
         C.push_back({1},2);
-        // C.push_back({2},1);
+        C.push_back({2},1);
         // C.push_back({3},1);
         D.push_back({3},1);
+        D.push_back({2},1);
         cout << B << endl;
         cout << "B.dim()=" << B.dim() << ", B.fullDim()=" << B.fullDim() << endl;
 
@@ -54,58 +55,59 @@ int main(int argc, char *argv[])
         // cout << std::boolalpha << (Bfourth.fullDim() == B.fullDim()*B.fullDim()*B.fullDim()*B.fullDim()) << endl;
         // cout << Bfourth << endl;
 
-        Tensor<2,1,Symmetry> t({{B,C}},{{D}}); t.setRandom();
+        Tensor<4,0,Symmetry> t({{B,C,D,B}},{{}}); t.setRandom();
         std::cout << "norm=" << t.normSquared() << std::endl;
         auto tplain = t.plainTensor();
-        std::cout << "norm plain=" << tplain.contract(tplain,Eigen::array<Eigen::IndexPair<Eigen::Index>, 3>{{Eigen::IndexPair<Eigen::Index>(0,0),
+        std::cout << "norm plain=" << tplain.contract(tplain,Eigen::array<Eigen::IndexPair<Eigen::Index>, 4>{{Eigen::IndexPair<Eigen::Index>(0,0),
                                                                                                                       Eigen::IndexPair<Eigen::Index>(1,1),
-                                                                                                                      Eigen::IndexPair<Eigen::Index>(2,2)}}) << endl;
-        Permutation<2> p(std::array<std::size_t,2>{{1,0}});
-        Permutation<1> ptriv(std::array<std::size_t,1>{{0}});
-        std::array<std::size_t,3> ptot = {{1,0,2}};
+                                                                                                                      Eigen::IndexPair<Eigen::Index>(2,2),
+                                                                                                                      Eigen::IndexPair<Eigen::Index>(3,3)}}) << endl;
+        Permutation<4> p(std::array<std::size_t,4>{{2,0,3,1}});
+        Permutation<0> ptriv(std::array<std::size_t,0>{{}});
+        std::array<std::size_t,4> ptot = {{2,0,3,1}};
         auto tp = t.permute(p,ptriv);
-        std::cout << t.print(true) << std::endl;//< endl << tp << endl << endl;;
+        // std::cout << t.print(true) << std::endl;//< endl << tp << endl << endl;;
 
         auto tplainp = tp.plainTensor();
-        Eigen::Tensor<double,3> tplainshuffle = tplain.shuffle(ptot);
+        Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(ptot);
 
-        // auto check = tplainshuffle - tplainp;
+        auto check = tplainshuffle - tplainp;
         // // cout << tplain << endl;
         // std::cout << "total tensor dims="; for (const auto& d:tplain.dimensions()) {std::cout << d << " ";} std::cout << endl;
         // // std::cout << tplain.contract(tplain,Eigen::array<Eigen::IndexPair<Eigen::Index>, 3>{{Eigen::IndexPair<Eigen::Index>(0,0),
         // //                                                                                              Eigen::IndexPair<Eigen::Index>(1,1),
         // //                                                                                              Eigen::IndexPair<Eigen::Index>(2,2)}}) << endl;
         // // std::cout << tplain << endl;
-        // std::cout << check.contract(check,Eigen::array<Eigen::IndexPair<Eigen::Index>, 3>{{Eigen::IndexPair<Eigen::Index>(0,0),
-        //                                                                                            Eigen::IndexPair<Eigen::Index>(1,1),
-        //                                                                                            Eigen::IndexPair<Eigen::Index>(2,2)}}) << endl;
-        //                                                                                             // Eigen::IndexPair<Eigen::Index>(3,3)}}) << endl;
-        std::cout << "tplain:" << endl;
-        auto it_block = tplain.data();
-        for (Eigen::Index k=0; k<tplain.dimensions()[2]; k++)        
-        {
-                Eigen::Map<Eigen::MatrixXd> Mp(it_block, tplain.dimensions()[0], tplain.dimensions()[1]);
-                std::cout << "[:,:," << k << "]:" << endl << std::fixed << Mp << endl;
-                it_block += tplain.dimensions()[0] * tplain.dimensions()[1];
-        }
+        std::cout << "check=" << check.contract(check,Eigen::array<Eigen::IndexPair<Eigen::Index>, 4>{{Eigen::IndexPair<Eigen::Index>(0,0),
+                                                                                                               Eigen::IndexPair<Eigen::Index>(1,1),
+                                                                                                               Eigen::IndexPair<Eigen::Index>(2,2),
+                                                                                                               Eigen::IndexPair<Eigen::Index>(3,3)}}) << endl;
+        // std::cout << "tplain:" << endl;
+        // auto it_block = tplain.data();
+        // for (Eigen::Index k=0; k<tplain.dimensions()[2]; k++)        
+        // {
+        //         Eigen::Map<Eigen::MatrixXd> Mp(it_block, tplain.dimensions()[0], tplain.dimensions()[1]);
+        //         std::cout << "[:,:," << k << "]:" << endl << std::fixed << Mp << endl;
+        //         it_block += tplain.dimensions()[0] * tplain.dimensions()[1];
+        // }
 
-        std::cout << endl << "tplain shuffle:" << endl;
-        auto it_blocks = tplainshuffle.data();
-        for (Eigen::Index k=0; k<tplainshuffle.dimensions()[2]; k++)        
-        {
-                Eigen::Map<Eigen::MatrixXd> Mp(it_blocks, tplainshuffle.dimensions()[0], tplainshuffle.dimensions()[1]);
-                std::cout << "[:,:," << k << "]:" << endl << std::fixed << Mp << endl;
-                it_blocks += tplainshuffle.dimensions()[0] * tplainshuffle.dimensions()[1];
-        }
+        // std::cout << endl << "tplain shuffle:" << endl;
+        // auto it_blocks = tplainshuffle.data();
+        // for (Eigen::Index k=0; k<tplainshuffle.dimensions()[2]; k++)        
+        // {
+        //         Eigen::Map<Eigen::MatrixXd> Mp(it_blocks, tplainshuffle.dimensions()[0], tplainshuffle.dimensions()[1]);
+        //         std::cout << "[:,:," << k << "]:" << endl << std::fixed << Mp << endl;
+        //         it_blocks += tplainshuffle.dimensions()[0] * tplainshuffle.dimensions()[1];
+        // }
 
-        std::cout << endl << "tplain fancy:" << endl;
-        auto it_blockf = tplainp.data();
-        for (Eigen::Index k=0; k<tplainp.dimensions()[2]; k++)        
-        {
-                Eigen::Map<Eigen::MatrixXd> Mp(it_blockf, tplainp.dimensions()[0], tplainp.dimensions()[1]);
-                std::cout << "[:,:," << k << "]:" << endl << std::fixed << Mp << endl;
-                it_blockf += tplainp.dimensions()[0] * tplainp.dimensions()[1];
-        }
+        // std::cout << endl << "tplain fancy:" << endl;
+        // auto it_blockf = tplainp.data();
+        // for (Eigen::Index k=0; k<tplainp.dimensions()[2]; k++)        
+        // {
+        //         Eigen::Map<Eigen::MatrixXd> Mp(it_blockf, tplainp.dimensions()[0], tplainp.dimensions()[1]);
+        //         std::cout << "[:,:," << k << "]:" << endl << std::fixed << Mp << endl;
+        //         it_blockf += tplainp.dimensions()[0] * tplainp.dimensions()[1];
+        // }
         // cout << std::fixed << tplainp << endl << endl << tplainshuffle << endl << endl << tplain << endl;
 
         // //std::cout << p.print() << std::endl << p.inverse().print() << endl;

@@ -9,6 +9,8 @@
 #include <unsupported/Eigen/CXX11/Tensor>
 #include <unsupported/Eigen/KroneckerProduct>
 
+#include "NestedLoopIterator.h"
+
 #include "FusionTree.hpp"
 #include "Qbasis.hpp"
 
@@ -55,6 +57,33 @@ namespace util{
                 if constexpr (std::is_same<MatrixType_,Eigen::MatrixXd>::value) {ss << mat; return ss.str();}
                 else if constexpr (std::is_same<MatrixType_,Eigen::SparseMatrix<double> >::value) {ss << mat; return ss.str();}
                 else if constexpr (std::is_same<MatrixType_,Eigen::DiagonalMatrix<double,-1> >::value) {ss << mat.toDenseMatrix(); return ss.str();}
+        }
+
+        template<typename TensorType>
+        TensorType tensorProd(const TensorType& T1, const TensorType& T2)
+        {
+                std::array<Eigen::Index, T1.NumIndices> dims;
+                for (std::size_t i=0; i<T1.rank(); i++) {
+                        dims[i] = T1.dimensions()[i]*T2.dimensions()[i];
+                }
+                TensorType res(dims); res.setZero();
+                std::array<Eigen::Index, T1.NumIndices> extents = T2.dimensions();
+
+                std::vector<std::size_t> vec_dims; for (const auto& d:T1.dimensions()) {vec_dims.push_back(d);}
+                NestedLoopIterator Nelly(T1.rank(), vec_dims);
+        
+                for (std::size_t i = Nelly.begin(); i!=Nelly.end(); i++) {
+                        std::vector<std::size_t> indices;
+                        for (std::size_t j=0; j<T1.rank(); j++) {indices.push_back(Nelly(j));}
+                        std::array<Eigen::Index, T1.NumIndices> offsets;
+                        for (std::size_t i=0; i<T1.rank(); i++) {
+                                offsets[i] = indices[i] * T2.dimensions()[i];
+                        }
+        
+                        res.slice(offsets,extents) = T1(indices) * T2;
+                        ++Nelly;
+                }
+                return res;
         }
 }
 
@@ -113,12 +142,12 @@ public:
 
         Scalar trace() const;
 
-        Scalar normSquared() const {
+        Scalar squaredNorm() const {
                 return (*this * this->adjoint()).trace();
         }
 
         Scalar norm() const {
-                return std::sqrt(normSquared());
+                return std::sqrt(squaredNorm());
         }
 
         // template<std::size_t NewRank, std::size_t NewCoRank>
@@ -306,24 +335,7 @@ permute(const Permutation<Rank>& p_domain, const Permutation<CoRank>& p_codomain
                                 if (std::abs(coeff_domain*coeff_codomain) < 1.e-10) {continue;}
 
                                 auto tensor = this->subBlock(domain_tree,codomain_tree);
-                                std::cout << "before shuffle:" << endl;
-                                auto it_block = tensor.data();
-                                for (Eigen::Index k=0; k<tensor.dimensions()[2]; k++)        
-                                        {
-                                                Eigen::Map<Eigen::MatrixXd> Mp(it_block, tensor.dimensions()[0], tensor.dimensions()[1]);
-                                                std::cout << "[:,:," << k << "]:" << endl << std::fixed << Mp << endl;
-                                                it_block += (tensor.dimensions()[0]*tensor.dimensions()[1]);
-                                        }
-
                                 TensorType Tshuffle = tensor.shuffle(total_p);
-                                std::cout << endl << "after shuffle:" << endl;
-                                auto it_blockS = Tshuffle.data();
-                                for (Eigen::Index k=0; k<Tshuffle.dimensions()[2]; k++)        
-                                        {
-                                                Eigen::Map<Eigen::MatrixXd> Mp(it_blockS, Tshuffle.dimensions()[0], Tshuffle.dimensions()[1]);
-                                                std::cout << "[:,:," << k << "]:" << endl << std::fixed << Mp << endl;
-                                                it_blockS += (Tshuffle.dimensions()[0]*Tshuffle.dimensions()[1]);
-                                        }
                                 
                                 auto it = out.dict.find(sector[i]);
                                 if (it == out.dict.end()) {
@@ -464,7 +476,6 @@ plainTensor () const
                                 Symmetry::degeneracy(sorted_sector[i])*sorted_block[i].rows(), Symmetry::degeneracy(sorted_sector[i])*sorted_block[i].cols()) =
                         Eigen::kroneckerProduct (sorted_block[i], MatrixType::Identity(Symmetry::degeneracy(sorted_sector[i]),Symmetry::degeneracy(sorted_sector[i])));
         }
-        cout << "inner_mat:" << endl << inner_mat << endl << endl;
         Eigen::TensorMap<Eigen::Tensor<Scalar, 2> > map(inner_mat.data(), sorted_domain.fullDim(), sorted_codomain.fullDim());
         Eigen::Tensor<Scalar, 2> inner_tensor(map);
         
@@ -480,33 +491,32 @@ plainTensor () const
                                 uncoupled_dim *= sorted_uncoupled_domain[i].inner_dim(tree.q_uncoupled[i]);
                         }
                         MatrixType id(uncoupled_dim,uncoupled_dim); id.setIdentity();
-                        
-                        auto T=tree.asTensor();
-                        auto tdims = T.dimensions();
-                        Eigen::Index product=1;
-                        for (std::size_t i=0; i<Rank; i++) {product *= tdims[i];}
-                        Eigen::Tensor<Scalar,2> Tmat = T.reshape(std::array<Eigen::Index,2>{{product,tdims[Rank]}});
-                        Eigen::Map<MatrixType> M(Tmat.data(),product,tdims[Rank]);
-                        MatrixType total = Eigen::kroneckerProduct(M,id);
-                        Eigen::TensorMap<Eigen::Tensor<Scalar,2> > Tfull_mat(total.data(),total.rows(), total.cols());
-                        cout << "Tfull matrix:" << endl << Tfull_mat << endl << endl;
+                        Eigen::TensorMap<Eigen::Tensor<Scalar,2> > Tid_mat(id.data(),id.rows(), id.cols());
                         std::array<std::size_t, Rank+1> dims;
                         for (std::size_t i=0; i<Rank; i++) {
-                                dims[i] = sorted_uncoupled_domain[i].inner_dim(tree.q_uncoupled[i])*Symmetry::degeneracy(tree.q_uncoupled[i]);
+                                dims[i] = sorted_uncoupled_domain[i].inner_dim(tree.q_uncoupled[i]);
                         }
-                        dims[Rank] = uncoupled_dim*Symmetry::degeneracy(tree.q_coupled);
+                        dims[Rank] = uncoupled_dim;
+                        Eigen::Tensor<Scalar,Rank+1> Tid = Tid_mat.reshape(dims);
                         
-                        Eigen::Tensor<Scalar,Rank+1> Tfull = Tfull_mat.reshape(dims);
+                        auto T=tree.asTensor();
+                        // auto tdims = T.dimensions();
+                        // Eigen::Index product=1;
+                        // for (std::size_t i=0; i<Rank; i++) {product *= tdims[i];}
+                        // Eigen::Tensor<Scalar,2> Tmat = T.reshape(std::array<Eigen::Index,2>{{product,tdims[Rank]}});
+                        // Eigen::Map<MatrixType> M(Tmat.data(),product,tdims[Rank]);
+                        // MatrixType total = Eigen::kroneckerProduct(id,M);
+                        // Eigen::TensorMap<Eigen::Tensor<Scalar,2> > Tfull_mat(total.data(),total.rows(), total.cols());
+                        // cout << "Tfull matrix:" << endl << Tfull_mat << endl << endl;
+                        // std::array<std::size_t, Rank+1> dims;
+                        // for (std::size_t i=0; i<Rank; i++) {
+                        //         dims[i] = sorted_uncoupled_domain[i].inner_dim(tree.q_uncoupled[i])*Symmetry::degeneracy(tree.q_uncoupled[i]);
+                        // }
+                        // dims[Rank] = uncoupled_dim*Symmetry::degeneracy(tree.q_coupled);
+                        
+                        Eigen::Tensor<Scalar,Rank+1> Tfull = util::tensorProd(Tid,T); //Tfull_mat.reshape(dims);
                         // Tfull.setZero(); Tfull(0,0,0) = 1.; Tfull(0,1,1) = 1.; Tfull(1,0,2) = 1.; Tfull(1,1,3) = 1.; Tfull(0,2,4) = 1.; Tfull(1,2,5) = 1.;
-                        
-                        std::cout << endl << "Tfull:" << endl;
-                        auto it_blockf = Tfull.data();
-                        for (Eigen::Index k=0; k<Tfull.dimensions()[2]; k++) {
-                                Eigen::Map<Eigen::MatrixXd> Mp(it_blockf, Tfull.dimensions()[0], Tfull.dimensions()[1]);
-                                std::cout << "[:,:," << k << "]:" << endl << std::fixed << Mp << endl;
-                                it_blockf += Tfull.dimensions()[0] * Tfull.dimensions()[1];
-                        }
-                        
+                                                
                         std::array<std::size_t, Rank+1> offsets;
                         for (std::size_t i=0; i<Rank; i++) {
                                 offsets[i] = sorted_uncoupled_domain[i].full_outer_num(tree.q_uncoupled[i]);
@@ -520,15 +530,6 @@ plainTensor () const
                         extents[Rank] = Tfull.dimensions()[Rank];
                         unitary_domain.slice(offsets,extents) += Tfull; //+= or =?
                 }
-        }
-
-        std::cout << "unitary domain:" << endl;
-        auto it_block = unitary_domain.data();
-        for (Eigen::Index k=0; k<unitary_domain.dimensions()[2]; k++)        
-        {
-                Eigen::Map<Eigen::MatrixXd> Mp(it_block, unitary_domain.dimensions()[0], unitary_domain.dimensions()[1]);
-                std::cout << "[:,:," << k << "]:" << endl << std::fixed << Mp << endl;
-                it_block += (unitary_domain.dimensions()[0]*unitary_domain.dimensions()[1]);
         }
         
         Eigen::array<Eigen::Index,CoRank+1> dims_codomain;
@@ -544,24 +545,31 @@ plainTensor () const
                                 uncoupled_dim *= sorted_uncoupled_codomain[i].inner_dim(tree.q_uncoupled[i]);
                         }
                         MatrixType id(uncoupled_dim,uncoupled_dim); id.setIdentity();
-                        
-                        auto T=tree.asTensor();
-                        auto tdims = T.dimensions();
-                        Eigen::Index product=1;
-                        for (std::size_t i=0; i<CoRank; i++) {product *= tdims[i];}
-                        Eigen::Tensor<Scalar,2> Tmat = T.reshape(std::array<Eigen::Index,2>{{product,tdims[CoRank]}});
-                        Eigen::Map<MatrixType> M(Tmat.data(),product,tdims[CoRank]);
-                        MatrixType total = Eigen::kroneckerProduct(M,id);
-
-                        Eigen::TensorMap<Eigen::Tensor<Scalar,2> > Tfull_mat(total.data(),total.rows(), total.cols());
-
+                        Eigen::TensorMap<Eigen::Tensor<Scalar,2> > Tid_mat(id.data(),id.rows(), id.cols());
                         std::array<std::size_t, CoRank+1> dims;
                         for (std::size_t i=0; i<CoRank; i++) {
-                                dims[i] = sorted_uncoupled_codomain[i].inner_dim(tree.q_uncoupled[i])*Symmetry::degeneracy(tree.q_uncoupled[i]);
+                                dims[i] = sorted_uncoupled_codomain[i].inner_dim(tree.q_uncoupled[i]);
                         }
-                        dims[CoRank] = uncoupled_dim*Symmetry::degeneracy(tree.q_coupled);
+                        dims[CoRank] = uncoupled_dim;
+                        Eigen::Tensor<Scalar,CoRank+1> Tid = Tid_mat.reshape(dims);
+                        auto T=tree.asTensor();
                         
-                        Eigen::Tensor<Scalar,CoRank+1> Tfull = Tfull_mat.reshape(dims);
+                        // auto tdims = T.dimensions();
+                        // Eigen::Index product=1;
+                        // for (std::size_t i=0; i<CoRank; i++) {product *= tdims[i];}
+                        // Eigen::Tensor<Scalar,2> Tmat = T.reshape(std::array<Eigen::Index,2>{{product,tdims[CoRank]}});
+                        // Eigen::Map<MatrixType> M(Tmat.data(),product,tdims[CoRank]);
+                        // MatrixType total = Eigen::kroneckerProduct(M,id);
+
+                        // Eigen::TensorMap<Eigen::Tensor<Scalar,2> > Tfull_mat(total.data(),total.rows(), total.cols());
+
+                        // std::array<std::size_t, CoRank+1> dims;
+                        // for (std::size_t i=0; i<CoRank; i++) {
+                        //         dims[i] = sorted_uncoupled_codomain[i].inner_dim(tree.q_uncoupled[i])*Symmetry::degeneracy(tree.q_uncoupled[i]);
+                        // }
+                        // dims[CoRank] = uncoupled_dim*Symmetry::degeneracy(tree.q_coupled);
+                        
+                        Eigen::Tensor<Scalar,CoRank+1> Tfull = util::tensorProd(Tid,T); //Tfull_mat.reshape(dims);
                         std::array<std::size_t, CoRank+1> offsets;
                         for (std::size_t i=0; i<CoRank; i++) {
                                 offsets[i] = sorted_uncoupled_codomain[i].full_outer_num(tree.q_uncoupled[i]);

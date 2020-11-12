@@ -7,6 +7,7 @@ jobs:
         steps:
             - checkout
             - run: g++ --version
+            - run: sudo apt-get update
             - run: sudo apt-get install libgsl-dev
             - run: sudo apt-get install libboost-all-dev
             - run: mkdir ../build

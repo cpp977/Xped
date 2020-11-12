@@ -3,18 +3,14 @@ jobs:
     build:
         machine:
             image: ubuntu-2004:202010-01
-
-          
+            
         steps:
             - checkout
             - run: g++ --version
             - run: pwd
             - run: ls -la
             - run: mkdir ../build
-            - run: cd ../build
-            - run: pwd
-            - run: ls -la
-            - run: cmake ../Tensor
+            - run: cd ../build && cmake ../project
             
 workflows:
     build_and_test:

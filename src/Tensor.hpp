@@ -315,10 +315,10 @@ permute(const Permutation<Rank>& p_domain, const Permutation<CoRank>& p_codomain
         std::copy(pi_codomain_shifted.begin(), pi_codomain_shifted.end(), it_total);
         self out;
         out.uncoupled_codomain = uncoupled_codomain;
-        p_domain.apply(out.uncoupled_codomain);
+        p_codomain.apply(out.uncoupled_codomain);
         
         out.uncoupled_domain = uncoupled_domain;
-        p_codomain.apply(out.uncoupled_domain);
+        p_domain.apply(out.uncoupled_domain);
 
         out.domain = util::build_FusionTree(out.uncoupled_domain);
         out.codomain = util::build_FusionTree(out.uncoupled_codomain);

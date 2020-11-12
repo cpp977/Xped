@@ -19,5 +19,3 @@ script:
   - cd ../build
   - cmake ../Tensor/
   - cmake --build . -- VERBOSE=1
-  - ./tests/basis_test
-  - ./tests/tree_test

@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
         // cout << Bfourth << endl;
 
         Tensor<4,0,Symmetry> t({{B,C,D,B}},{{}}); t.setRandom();
-        std::cout << "norm=" << t.aquaredNorm() << std::endl;
+        std::cout << "norm=" << t.squaredNorm() << std::endl;
         auto tplain = t.plainTensor();
         std::cout << "norm plain=" << tplain.contract(tplain,Eigen::array<Eigen::IndexPair<Eigen::Index>, 4>{{Eigen::IndexPair<Eigen::Index>(0,0),
                                                                                                                       Eigen::IndexPair<Eigen::Index>(1,1),

@@ -131,6 +131,7 @@ public:
         void setRandom();
         void setZero();
         void setIdentity();
+        void setConstant(const Scalar& val);
 
         //Apply the basis transformation of domain and codomain to the block matrizes to get a plain array/tensor
         TensorType plainTensor() const;
@@ -234,6 +235,24 @@ setIdentity()
         block.resize(sector.size());
         for (size_t i=0; i<sector.size(); i++) {
                 MatrixType mat(domain.inner_dim(sector[i]), codomain.inner_dim(sector[i])); mat.setIdentity();
+                block[i] = mat;
+        }
+}
+
+template<std::size_t Rank, std::size_t CoRank, typename Symmetry, typename MatrixType_, typename TensorType_>
+void Tensor<Rank, CoRank, Symmetry, MatrixType_, TensorType_>::
+setConstant(const Scalar& val )
+{
+        std::unordered_set<qType> uniqueController;
+        for (const auto& [q,dim,plain]: domain) {
+                if ( auto it=uniqueController.find(q); it == uniqueController.end() and codomain.IS_PRESENT(q)) {
+                        sector.push_back(q); uniqueController.insert(q);
+                        dict.insert(std::make_pair(q,sector.size()-1));
+                }
+        }
+        block.resize(sector.size());
+        for (size_t i=0; i<sector.size(); i++) {
+                MatrixType mat(domain.inner_dim(sector[i]), codomain.inner_dim(sector[i])); mat.setConstant(val);
                 block[i] = mat;
         }
 }

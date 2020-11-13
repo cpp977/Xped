@@ -72,6 +72,37 @@ TEST_CASE("Testing the transformation to plain Tensor.") {
         }
 }
 
+TEST_CASE("Testing the SU(2)-Pauli matrices.") {
+        typedef Sym::SU2<Sym::SpinSU2> Symmetry;
+        Qbasis<Symmetry,1> B, C;
+        B.push_back({2},1);
+        C.push_back({3},1);
+
+        std::array<Eigen::Matrix<double,2,2>,3 > pauli_vec;
+        //1./sqrt(2.)sp
+        pauli_vec[0] << 0., 0.,
+                1./std::sqrt(2.), 0.;
+        //szy
+        pauli_vec[1] << -0.5, 0.,
+                0., 0.5;
+        //-1./sqrt(2.)*sm
+        pauli_vec[2] << 0., -1./std::sqrt(2.),
+                0., 0.;
+        
+        //set t to the reduced Pauli tensor
+        Tensor<2,1,Symmetry> t({{B,C}},{{B}}); t.setConstant(std::sqrt(3.)/2.);
+        //transform to plain tensor and check against pauli_vec
+        auto tplain = t.plainTensor();
+        for (Eigen::Index j=0; j<tplain.dimensions()[1]; j++) {
+                Eigen::Matrix<double,2,2> pauli;
+                for (Eigen::Index k=0; k<tplain.dimensions()[2]; k++)
+                        for (Eigen::Index i=0; i<tplain.dimensions()[0]; i++) {
+                                pauli(i,k) = tplain(i,j,k);
+                        }
+                CHECK((pauli-pauli_vec[j]).norm() == doctest::Approx(0.));
+        }
+}
+
 TEST_CASE("Testing the permutation within the domain.") {
         SUBCASE("SU2") {
                 typedef Sym::SU2<Sym::SpinSU2> Symmetry;

@@ -29,59 +29,17 @@ int main(int argc, char *argv[])
         // typedef Sym::U1<Sym::SpinU1> Symmetry;
         typedef Sym::SU2<Sym::SpinSU2> Symmetry;
         // typedef Sym::U0 Symmetry;
-        Qbasis<Symmetry,1> B, C, D;
-        B.push_back({1},2);
-        B.push_back({3},1);
-        cout << B.printTrees() << endl;
-        // B.push_back({3},1);
-        C.push_back({1},2);
-        C.push_back({2},1);
-        // C.push_back({3},1);
-        D.push_back({3},1);
-        D.push_back({2},1);
-        cout << B << endl;
-        cout << "B.dim()=" << B.dim() << ", B.fullDim()=" << B.fullDim() << endl;
+        Qbasis<Symmetry,1> B, C;
+        B.push_back({2},1);
+        C.push_back({3},1);
 
-        auto Bsq = B.combine(C);
-        
-        // auto map = Bsq.tree({})[0].swap(0);
-        cout << std::boolalpha << (Bsq.fullDim() == B.fullDim()*C.fullDim()) << endl;
-        // cout << Bsq << endl;
-        auto Bcube = Bsq.combine(B);
-        // cout << Bcube.printTrees() << endl;
-        // cout << std::boolalpha << (Bcube.fullDim() == B.fullDim()*B.fullDim()*B.fullDim()) << endl;
-        auto Bfourth = Bcube.combine(C);
-        // cout << Bfourth.printTrees() << endl;
-        // cout << std::boolalpha << (Bfourth.fullDim() == B.fullDim()*B.fullDim()*B.fullDim()*B.fullDim()) << endl;
-        // cout << Bfourth << endl;
 
-        Tensor<4,0,Symmetry> t({{B,C,D,B}},{{}}); t.setRandom();
-        std::cout << "norm=" << t.squaredNorm() << std::endl;
-        auto tplain = t.plainTensor();
-        std::cout << "norm plain=" << tplain.contract(tplain,Eigen::array<Eigen::IndexPair<Eigen::Index>, 4>{{Eigen::IndexPair<Eigen::Index>(0,0),
-                                                                                                                      Eigen::IndexPair<Eigen::Index>(1,1),
-                                                                                                                      Eigen::IndexPair<Eigen::Index>(2,2),
-                                                                                                                      Eigen::IndexPair<Eigen::Index>(3,3)}}) << endl;
-        Permutation<4> p(std::array<std::size_t,4>{{2,0,3,1}});
-        Permutation<0> ptriv(std::array<std::size_t,0>{{}});
-        std::array<std::size_t,4> ptot = {{2,0,3,1}};
-        auto tp = t.permute(p,ptriv);
-        // std::cout << t.print(true) << std::endl;//< endl << tp << endl << endl;;
-
-        auto tplainp = tp.plainTensor();
-        Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(ptot);
-
-        auto check = tplainshuffle - tplainp;
-        // // cout << tplain << endl;
-        // std::cout << "total tensor dims="; for (const auto& d:tplain.dimensions()) {std::cout << d << " ";} std::cout << endl;
-        // // std::cout << tplain.contract(tplain,Eigen::array<Eigen::IndexPair<Eigen::Index>, 3>{{Eigen::IndexPair<Eigen::Index>(0,0),
-        // //                                                                                              Eigen::IndexPair<Eigen::Index>(1,1),
-        // //                                                                                              Eigen::IndexPair<Eigen::Index>(2,2)}}) << endl;
-        // // std::cout << tplain << endl;
-        std::cout << "check=" << check.contract(check,Eigen::array<Eigen::IndexPair<Eigen::Index>, 4>{{Eigen::IndexPair<Eigen::Index>(0,0),
-                                                                                                               Eigen::IndexPair<Eigen::Index>(1,1),
-                                                                                                               Eigen::IndexPair<Eigen::Index>(2,2),
-                                                                                                               Eigen::IndexPair<Eigen::Index>(3,3)}}) << endl;
+        auto BC = B.combine(C);
+        for (const auto& t1: BC.tree({2}))
+                for (const auto& t2: B.tree({2})) {
+                        cout << t1.draw() << endl << t2.draw() << endl;
+                        // auto [coeffs, bended_trees] = bend_right(t1,t2);
+                }
         // std::cout << "tplain:" << endl;
         // auto it_block = tplain.data();
         // for (Eigen::Index k=0; k<tplain.dimensions()[2]; k++)        

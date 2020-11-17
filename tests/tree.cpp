@@ -225,4 +225,78 @@ TEST_CASE("Testing the permutation.") {
         }
 }
 
+TEST_CASE("Testing the turn operation for FusionTree pairs.") {
+        SUBCASE("SU2") {
+                typedef Sym::SU2<Sym::SpinSU2> Symmetry;
+                Qbasis<Symmetry,1> B, C; B.setRandom(100); C.setRandom(100);
+                Qbasis<Symmetry,1> D, E; D.setRandom(100); E.setRandom(100);
+        
+                auto BC = B.combine(C);
+                auto DE = B.combine(C);
+                for (const auto& [q, num, plain] : BC) {
+                        if (DE.NOT_PRESENT(q)) {continue;}
+                        for (const auto& t1: BC.tree({q}))
+                                for (const auto& t2: DE.tree({q})) {
+                                        for (const auto& [trees1,coeff1] : treepair::turn<-2>(t1,t2)) {
+                                                auto [t1p,t2p] = trees1;
+                                                for (const auto& [trees2,coeff2] : treepair::turn<+4>(t1p,t2p)) {
+                                                        auto [t1pp,t2pp] = trees2;
+                                                        for (const auto& [trees3,coeff3] : treepair::turn<-2>(t1pp,t2pp)) {
+                                                                auto [t1ppp,t2ppp] = trees3;
+                                                                CHECK(coeff1*coeff2*coeff3 == doctest::Approx(1.));
+                                                        }
+                                                }               
+                                        }
+                                }
+                }
+        }
+        SUBCASE("U1") {
+                typedef Sym::U1<Sym::SpinU1> Symmetry;
+                Qbasis<Symmetry,1> B, C; B.setRandom(100); C.setRandom(100);
+                Qbasis<Symmetry,1> D, E; D.setRandom(100); E.setRandom(100);
+        
+                auto BC = B.combine(C);
+                auto DE = B.combine(C);
+                for (const auto& [q, num, plain] : BC) {
+                        if (DE.NOT_PRESENT(q)) {continue;}
+                        for (const auto& t1: BC.tree({q}))
+                                for (const auto& t2: DE.tree({q})) {
+                                        for (const auto& [trees1,coeff1] : treepair::turn<-2>(t1,t2)) {
+                                                auto [t1p,t2p] = trees1;
+                                                for (const auto& [trees2,coeff2] : treepair::turn<+4>(t1p,t2p)) {
+                                                        auto [t1pp,t2pp] = trees2;
+                                                        for (const auto& [trees3,coeff3] : treepair::turn<-2>(t1pp,t2pp)) {
+                                                                auto [t1ppp,t2ppp] = trees3;
+                                                                CHECK(coeff1*coeff2*coeff3 == doctest::Approx(1.));
+                                                        }
+                                                }               
+                                        }
+                                }
+                }
+        }
+        SUBCASE("U0") {
+                typedef Sym::U0 Symmetry;
+                Qbasis<Symmetry,1> B, C; B.setRandom(100); C.setRandom(100);
+                Qbasis<Symmetry,1> D, E; D.setRandom(100); E.setRandom(100);
+        
+                auto BC = B.combine(C);
+                auto DE = B.combine(C);
+                for (const auto& [q, num, plain] : BC) {
+                        if (DE.NOT_PRESENT(q)) {continue;}
+                        for (const auto& t1: BC.tree({q}))
+                                for (const auto& t2: DE.tree({q})) {
+                                        for (const auto& [trees1,coeff1] : treepair::turn<-2>(t1,t2)) {
+                                                auto [t1p,t2p] = trees1;
+                                                for (const auto& [trees2,coeff2] : treepair::turn<+4>(t1p,t2p)) {
+                                                        auto [t1pp,t2pp] = trees2;
+                                                        for (const auto& [trees3,coeff3] : treepair::turn<-2>(t1pp,t2pp)) {
+                                                                auto [t1ppp,t2ppp] = trees3;
+                                                                CHECK(coeff1*coeff2*coeff3 == doctest::Approx(1.));
+                                                        }
+                                                }               
+                                        }
+                                }
+                }
+        }
+}
 TEST_SUITE_END();

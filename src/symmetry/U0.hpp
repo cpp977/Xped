@@ -77,10 +77,13 @@ namespace Sym{
 		
 		inline static double coeff_dot(const qType& q1) { return 1.; }
 
+                static Scalar coeff_FS(const qType& q1) {return 1.;}
+                
                 inline static Scalar coeff_3j(const qType& q1, const qType& q2, const qType& q3,
                                               int        q1_z, int        q2_z,        int q3_z) {return 1.;}
                 
                 static Eigen::Tensor<Scalar, 3> CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t multiplicity) {Eigen::Tensor<Scalar,3> T(1,1,1); T(0,0,0) = 1.; return T;}
+                static Scalar coeff_turn(const qType& ql, const qType& qr, const qType& qf) {return Scalar(1.);}
                 
 		inline static double coeff_6j(const qType& q1, const qType& q2, const qType& q3,
                                               const qType& q4, const qType& q5, const qType& q6) { return 1.; }

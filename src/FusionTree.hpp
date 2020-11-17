@@ -28,7 +28,7 @@ struct FusionTree
         std::size_t dim;
         std::array<qType, util::inter_dim(Rank)> q_intermediates;
         std::array<size_t, util::mult_dim(Rank)> multiplicities=std::array<size_t, util::mult_dim(Rank)>(); //only for non-Abelian symmetries with outermultiplicity.
-        std::array<bool, Rank> IS_DUAL;
+        std::array<bool, Rank> IS_DUAL{};
 
         bool operator< (const FusionTree<Rank,Symmetry>& other) const
         {
@@ -104,7 +104,7 @@ struct FusionTree
                 }
                 std::string coupled;
                 coupled = print_aligned(q_coupled);
-                return printTree<Rank>(uncoupled, intermediates, coupled, multiplicities);
+                return printTree<Rank>(uncoupled, intermediates, coupled, multiplicities, IS_DUAL);
         }
 
         std::string print() const
@@ -241,6 +241,106 @@ struct FusionTree
                 }
         }
 };
+
+//                           _
+//   c                 c     b
+//   |                  \   /
+//   |                   \ /
+//  / \   ---> coeff*     |
+// /   \                  |
+//a     b                 a
+namespace treepair {
+        template<std::size_t Rank, std::size_t CoRank, typename Symmetry>
+        std::unordered_map<std::pair<FusionTree<Rank+1, Symmetry>, FusionTree<CoRank-1, Symmetry> >, typename Symmetry::Scalar>
+        turn_right(const FusionTree<Rank, Symmetry>& t1, const FusionTree<CoRank, Symmetry>& t2)
+        {
+                static_assert(CoRank>0);
+                assert(t1.q_coupled == t2.q_coupled);
+                        
+                FusionTree<Rank+1, Symmetry> t1p;
+                std::copy(t1.q_uncoupled.begin(), t1.q_uncoupled.end(), t1p.q_uncoupled.begin());
+                t1p.q_uncoupled.back() = Symmetry::conj(t2.q_uncoupled.back());
+                std::copy(t1.q_intermediates.begin(), t1.q_intermediates.end(), t1p.q_intermediates.begin());
+                if (Rank+1 > 2) {t1p.q_intermediates.back() = t1.q_coupled;}
+                std::copy(t1.IS_DUAL.begin(), t1.IS_DUAL.end(), t1p.IS_DUAL.begin());
+                t1p.IS_DUAL.back() = !t2.IS_DUAL.back();
+                
+                if (CoRank == 1) {t1p.q_coupled = Symmetry::qvacuum();}
+                else if (CoRank == 2) {t1p.q_coupled = t2.q_uncoupled[0];}
+                else {t1p.q_coupled = t2.q_intermediates.back();}
+                
+                FusionTree<CoRank-1, Symmetry> t2p;
+                std::copy(t2.q_uncoupled.begin(), t2.q_uncoupled.end()-1, t2p.q_uncoupled.begin());
+                std::copy(t2.IS_DUAL.begin(), t2.IS_DUAL.end()-1, t2p.IS_DUAL.begin());
+                std::copy(t2.q_intermediates.begin(), t2.q_intermediates.end()-1, t2p.q_intermediates.begin());
+                if (CoRank == 1) {t2p.q_coupled = Symmetry::qvacuum();}
+                else if (CoRank == 2) {t2p.q_coupled = t2.q_uncoupled[0];}
+                else {t2p.q_coupled = t2.q_intermediates.back();}
+                
+                typename Symmetry::qType a;
+                if (CoRank == 1) {a = Symmetry::qvacuum();}
+                else if (CoRank == 2) {a = t2.q_uncoupled[0];}
+                else {a = t2.q_intermediates.back();}
+                typename Symmetry::qType b = t2.q_uncoupled.back();
+                typename Symmetry::qType c = t2.q_coupled;
+                auto coeff = Symmetry::coeff_turn(a,b,c);
+                if (t2.IS_DUAL.back()) {coeff *= Symmetry::coeff_FS(Symmetry::conj(b));}
+                std::unordered_map<std::pair<FusionTree<Rank+1, Symmetry>, FusionTree<CoRank-1, Symmetry> >, typename Symmetry::Scalar> out;
+                out.insert(std::make_pair(std::make_pair(t1p,t2p),coeff));
+                return out;
+        }
+        
+        template<std::size_t Rank, std::size_t CoRank, typename Symmetry>
+        std::unordered_map<std::pair<FusionTree<Rank-1, Symmetry>, FusionTree<CoRank+1, Symmetry> >, typename Symmetry::Scalar>
+        turn_left(const FusionTree<Rank, Symmetry>& t1, const FusionTree<CoRank, Symmetry>& t2)
+        {
+                auto tmp = turn_right(t2,t1);
+                std::unordered_map<std::pair<FusionTree<Rank-1, Symmetry>, FusionTree<CoRank+1, Symmetry> >, typename Symmetry::Scalar> out;
+                for (const auto& [trees,coeff] : tmp) {
+                        auto [t1p,t2p] = trees;
+                        out.insert(std::make_pair(std::make_pair(t2p,t1p), coeff));
+                }
+                return out;
+        }
+
+        template<int shift, std::size_t Rank, std::size_t CoRank, typename Symmetry>
+        std::unordered_map<std::pair<FusionTree<Rank-shift, Symmetry>, FusionTree<CoRank+shift, Symmetry> >, typename Symmetry::Scalar>
+        turn (const FusionTree<Rank, Symmetry>& t1, const FusionTree<CoRank, Symmetry>& t2)
+        {
+                if constexpr (shift > 0) {static_assert(shift <= static_cast<int>(Rank));}
+                else if constexpr (shift < 0) {static_assert(std::abs(shift) <= static_cast<int>(CoRank));}
+                if constexpr (shift == 0) {
+                        std::unordered_map<std::pair<FusionTree<Rank, Symmetry>, FusionTree<CoRank, Symmetry> >, typename Symmetry::Scalar> out;
+                        out.insert(std::make_pair(std::make_pair(t1,t2),1.));
+                        return out;
+                }
+                else {
+                        constexpr std::size_t newRank = Rank-shift;
+                        constexpr std::size_t newCoRank = CoRank+shift;
+                        std::unordered_map<std::pair<FusionTree<newRank, Symmetry>, FusionTree<newCoRank, Symmetry> >, typename Symmetry::Scalar> out;
+                        if constexpr (shift>0) {
+                                for (const auto& [trees1,coeff1] : turn_left(t1,t2)) {
+                                        auto [t1p,t2p] = trees1;
+                                        for (const auto& [trees2, coeff2] : turn<shift-1>(t1p,t2p)) {
+                                                auto [t1pp,t2pp] = trees2;
+                                                out.insert(std::make_pair(std::make_pair(t1pp,t2pp),coeff1*coeff2));
+                                        }
+                                }
+                                return out;
+                        }
+                        else {
+                                for (const auto& [trees1,coeff1] : turn_right(t1,t2)) {
+                                        auto [t1p,t2p] = trees1;
+                                        for (const auto& [trees2, coeff2] : turn<shift+1>(t1p,t2p)) {
+                                                auto [t1pp,t2pp] = trees2;
+                                                out.insert(std::make_pair(std::make_pair(t1pp,t2pp),coeff1*coeff2));
+                                        }
+                                }
+                                return out;
+                        }
+                }
+        }
+}
 
 template<std::size_t depth, typename Symmetry>
 std::ostream& operator<<(std::ostream& os, const FusionTree<depth,Symmetry> &tree)

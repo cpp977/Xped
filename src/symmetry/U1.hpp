@@ -92,10 +92,14 @@ public:
 	 */
 	inline static Scalar coeff_dot(const qType& q1);
 
+        static Scalar coeff_FS(const qType& q1) {return 1.;}
+
 	inline static Scalar coeff_3j(const qType& q1, const qType& q2, const qType& q3,
                                       int        q1_z, int        q2_z,        int q3_z);
         
         static Eigen::Tensor<Scalar_, 3> CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t multiplicity);
+
+        static Scalar coeff_turn(const qType& ql, const qType& qr, const qType& qf) {return triangle(ql,qr,qf) ? Scalar(1.) : Scalar(0.);}
         
 	inline static Scalar coeff_6j(const qType& q1, const qType& q2, const qType& q3,
                                       const qType& q4, const qType& q5, const qType& q6);

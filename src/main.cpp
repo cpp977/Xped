@@ -28,18 +28,29 @@ int main(int argc, char *argv[])
 	ArgParser args(argc,argv);
         // typedef Sym::U1<Sym::SpinU1> Symmetry;
         typedef Sym::SU2<Sym::SpinSU2> Symmetry;
+        constexpr int shift = -2;
         // typedef Sym::U0 Symmetry;
-        Qbasis<Symmetry,1> B, C;
-        B.push_back({2},1);
-        C.push_back({3},1);
-
-
+        Qbasis<Symmetry,1> B, C; B.setRandom(100); C.setRandom(100);
+        Qbasis<Symmetry,1> D, E; D.setRandom(100); E.setRandom(100);
+        
         auto BC = B.combine(C);
-        for (const auto& t1: BC.tree({2}))
-                for (const auto& t2: B.tree({2})) {
+        auto DE = B.combine(C);
+        for (const auto& [q, num, plain] : BC) {
+                if (DE.NOT_PRESENT(q)) {continue;}
+                for (const auto& t1: BC.tree({q}))
+                for (const auto& t2: DE.tree({q})) {
                         cout << t1.draw() << endl << t2.draw() << endl;
-                        // auto [coeffs, bended_trees] = bend_right(t1,t2);
+                        for (const auto& [trees,coeff] : treepair::turn<shift>(t1,t2)) {
+                                auto [t1p,t2p] = trees;
+                                cout << t1p.draw() << endl << t2p.draw() << endl << "coeff=" << coeff << endl;
+                                for (const auto& [retrees,recoeff] : treepair::turn<-shift>(t1p,t2p)) {
+                                        auto [t1pp,t2pp] = retrees;
+                                        cout << t1pp.draw() << endl << t2pp.draw() << endl << "coeff=" << recoeff << ", coeff*coeff=" << coeff*recoeff << endl;
+                                        assert(std::abs(coeff*recoeff-1.) < 1.e-12);
+                                }               
+                        }
                 }
+        }
         // std::cout << "tplain:" << endl;
         // auto it_block = tplain.data();
         // for (Eigen::Index k=0; k<tplain.dimensions()[2]; k++)        

@@ -67,8 +67,6 @@ public:
 	inline static qType conj( const qType& q ) { return q; }
 	inline static int degeneracy( const qType& q ) { return q[0]; }
 
-	inline static int spinorFactor() { return -1; }
-
         inline static qType random_q() { int qval = util::random::threadSafeRandUniform<int,int>(1,20,false); qType out = {qval}; return out; }
         
 	///@{
@@ -101,11 +99,16 @@ public:
 	inline static Scalar coeff_unity();
 	
 	static Scalar coeff_dot(const qType& q1);
+
+        static Scalar coeff_FS(const qType& q1) {return (q1[0]%2 == 0) ? -1. : 1.;}
 	
 	static Scalar coeff_3j(const qType& q1, const qType& q2, const qType& q3,
                                int        q1_z, int        q2_z,        int q3_z);
         
 	static Eigen::Tensor<Scalar_, 3> CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t multiplicity);
+
+        static Scalar coeff_turn(const qType& ql, const qType& qr, const qType& qf) {return std::sqrt(qr[0]) * coeff_recouple(ql,qr,SU2<Kind,Scalar>::conj(qr),
+                                                                                                                              ql, qf, SU2<Kind,Scalar>::qvacuum());}
 
 	static Scalar coeff_6j(const qType& q1, const qType& q2, const qType& q3,
                                const qType& q4, const qType& q5, const qType& q6);
@@ -114,10 +117,10 @@ public:
                                const qType& q4, const qType& q5, const qType& q6,
                                const qType& q7, const qType& q8, const qType& q9);
 
-        static Scalar coeff_swap(const qType& ql, const qType& qr, const qType& qf) {return triangle(ql,qr,qf) ? phase<Scalar>((ql[0]+qr[0]-qf[0]-1) / 2) : Scalar(0.);};
+        static Scalar coeff_swap(const qType& ql, const qType& qr, const qType& qf) {return triangle(ql,qr,qf) ? phase<Scalar>((ql[0]+qr[0]-qf[0]-1) / 2) : Scalar(0.);}
         static Scalar coeff_recouple(const qType& q1, const qType& q2, const qType& q3, const qType& Q,
                                      const qType& Q12, const qType& Q23) {return std::sqrt(Q12[0]*Q23[0])*phase<Scalar>((q1[0]+q2[0]+q3[0]+Q[0]) / 2.)*coeff_6j(q1,q2,Q12,
-                                                                                                                                                                q3,Q,Q23);};
+                                                                                                                                                                q3,Q,Q23);}
 	///@}
 
 	/** 

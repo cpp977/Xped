@@ -78,6 +78,8 @@ namespace Sym{
 		inline static double coeff_dot(const qType& q1) { return 1.; }
 
                 static Scalar coeff_FS(const qType& q1) {return 1.;}
+
+                static Eigen::Tensor<Scalar, 2> one_j_tensor(const qType& q1) {Eigen::Tensor<Scalar,2> T(1,1); T(0,0) = 1.; return T;}
                 
                 inline static Scalar coeff_3j(const qType& q1, const qType& q2, const qType& q3,
                                               int        q1_z, int        q2_z,        int q3_z) {return 1.;}

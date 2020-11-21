@@ -94,6 +94,8 @@ public:
 
         static Scalar coeff_FS(const qType& q1) {return 1.;}
 
+        static Eigen::Tensor<Scalar_, 2> one_j_tensor(const qType& q1);
+        
 	inline static Scalar coeff_3j(const qType& q1, const qType& q2, const qType& q3,
                                       int        q1_z, int        q2_z,        int q3_z);
         
@@ -203,6 +205,14 @@ coeff_dot(const qType& q1)
 }
 
 template<typename Kind, typename Scalar_>
+Eigen::Tensor<Scalar_, 2> U1<Kind,Scalar_>::
+one_j_tensor(const qType& q1)
+{
+        Eigen::Tensor<Scalar, 2> T(1,1); T(0,0) = 1;
+        return T;
+}
+
+template<typename Kind, typename Scalar_>
 Eigen::Tensor<Scalar_, 3> U1<Kind,Scalar_>::
 CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t multiplicity)
 {
@@ -252,8 +262,9 @@ compare ( const std::array<U1<Kind,Scalar>::qType,M>& q1, const std::array<U1<Ki
 {
 	for (std::size_t m=0; m<M; m++)
 	{
-		if (q1[m][0] > q2[m][0]) { return false; }
-		else if (q1[m][0] < q2[m][0]) {return true; }
+		if (std::abs(q1[m][0]) > std::abs(q2[m][0])) {return false;}
+		else if (std::abs(q1[m][0] < q2[m][0])) {return true;}
+                else if (q1[m][0] < 0) {return false;}
 	}
 	return false;
 }

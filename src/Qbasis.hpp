@@ -96,7 +96,7 @@ public:
 	size_t full_outer_num( const qType& q ) const;
 	///\}
 	
-	size_t leftOffset(const FusionTree<depth, Symmetry>& tree, const std::array<size_t,depth>& plain=std::array<std::size_t,depth>()) const;
+	size_t leftOffset(const FusionTree<depth, Symmetry>& tree, bool PRINT=false, const std::array<size_t,depth>& plain=std::array<std::size_t,depth>()) const;
         size_t rightOffset(const FusionTree<depth, Symmetry>& tree, const std::array<size_t,depth>& plain=std::array<std::size_t,depth>()) const;
 	
 	/**Insert the quantum number \p q with dimension \p inner_dim into the basis.*/
@@ -117,6 +117,8 @@ public:
 		
 	/**Adds to bases together.*/
 	Qbasis<Symmetry, depth> add (const Qbasis<Symmetry, depth>& other) const;
+
+        Qbasis<Symmetry, depth> conj () const;
 	
 	/**Prints the basis.*/
 	std::string print() const;
@@ -153,6 +155,7 @@ private:
 	std::unordered_map<qType,std::vector<FusionTree<depth, Symmetry> > > trees;
 
         bool IS_SORTED_=false;
+        bool CONJ = false;
 };
 
 template<typename Symmetry, std::size_t depth>
@@ -166,7 +169,7 @@ push_back(const qType& q, const size_t& inner_dim)
 		Basis plain_basis(inner_dim);
 		auto entry = std::make_tuple(q,curr_dim,plain_basis);
                 if constexpr (depth == 1) {
-                        FusionTree<1,Symmetry> trivial; trivial.q_uncoupled[0] = q; trivial.q_coupled = q; trivial.IS_DUAL[0] = false; trivial.dim = inner_dim;
+                        FusionTree<1,Symmetry> trivial; trivial.q_uncoupled[0] = q; trivial.q_coupled = q; trivial.IS_DUAL[0] = false; trivial.dims[0] = inner_dim; trivial.dim = inner_dim;
                         std::vector<FusionTree<1,Symmetry> > tree(1,trivial); 
                         trees.insert(std::make_pair(q,tree));
                 }
@@ -188,6 +191,7 @@ push_back(const qType& q, const size_t& inner_dim)
                 for (auto& [p,tree] : trees) {
                         if (p != q) {continue;}
                         tree[0].dim += inner_dim;
+                        tree[0].dims[0] += inner_dim;
                 }
 	}
 	curr_dim += inner_dim;
@@ -325,21 +329,23 @@ inner_dim(const size_t& num_in) const
 
 template<typename Symmetry, std::size_t depth>
 size_t Qbasis<Symmetry,depth>::
-leftOffset(const FusionTree<depth, Symmetry>& tree, const std::array<size_t,depth>& plain) const
+leftOffset(const FusionTree<depth, Symmetry>& tree, bool PRINT, const std::array<size_t,depth>& plain) const
 {
 	assert( trees.size() == data_.size() and "The history for this basis is not defined properly");
 	auto it = trees.find(tree.q_coupled);
-        // cout << tree.draw() << endl;
+        // if (PRINT) {cout << "tree:" << endl << tree.draw() << endl;}
         // cout << this->printTrees() << endl;
 	assert( it != trees.end() and "The history for this basis is not defined properly");
-
+        // cout << tree.draw() << endl;
 	size_t out=0;
 
 	for( const auto& i: it->second )
 	{
+                // if (PRINT) {cout << "i:" << endl << i.draw() << endl;}
 		if(i != tree) { out+=i.dim; }
 		if(i == tree)
 		{
+                        if (PRINT) {cout << "breaking the loop in leftOffset" << endl;}
                         //maybe some code for plain
 			break;
 		}
@@ -382,7 +388,8 @@ sort ()
 				   {
 					   qarray<Symmetry::Nq> q1 = std::get<0>(data_[n1]);
 					   qarray<Symmetry::Nq> q2 = std::get<0>(data_[n2]);
-					   return Symmetry::compare(std::array{q1},std::array{q2});
+                                           if (CONJ) {return Symmetry::compare(std::array{Symmetry::conj(q1)},std::array{Symmetry::conj(q2)});}
+                                           else {return Symmetry::compare(std::array{q1},std::array{q2});}
 				   }
 		);
 	auto new_data_ = data_;
@@ -439,6 +446,29 @@ add( const Qbasis<Symmetry,depth>& other ) const
 	}
 	out.sort();
 	return out;
+}
+
+template<typename Symmetry, std::size_t depth>
+Qbasis<Symmetry,depth> Qbasis<Symmetry,depth>::
+conj() const
+{
+        static_assert(depth == 1);
+        Qbasis<Symmetry,depth> out;
+        out.CONJ = !this->CONJ;
+        for (const auto& [q,num,plain] : data_) {
+                auto oldtrees = tree(q);
+                assert(oldtrees.size() == 1);
+                std::vector<FusionTree<depth, Symmetry> > trees;
+                FusionTree<depth, Symmetry> tree;
+                tree.q_uncoupled[0] = Symmetry::conj(q);
+                tree.q_coupled = Symmetry::conj(q);
+                tree.IS_DUAL[0] = !oldtrees[0].IS_DUAL[0];
+                tree.dims[0] = oldtrees[0].dims[0];
+                tree.dim = oldtrees[0].dim;
+                trees.push_back(tree);
+                out.push_back(Symmetry::conj(q), plain.dim(), trees);
+        }
+        return out;
 }
 
 template<typename Symmetry, std::size_t depth>

@@ -26,10 +26,13 @@ struct FusionTree
         std::array<qType, Rank> q_uncoupled;
         qType q_coupled;
         std::size_t dim;
+        std::array<size_t, Rank> dims;
         std::array<qType, util::inter_dim(Rank)> q_intermediates;
         std::array<size_t, util::mult_dim(Rank)> multiplicities=std::array<size_t, util::mult_dim(Rank)>(); //only for non-Abelian symmetries with outermultiplicity.
         std::array<bool, Rank> IS_DUAL{};
 
+        void computeDim() {dim = std::accumulate(dims.begin(), dims.end(), 1ul, std::multiplies<std::size_t>());}
+        
         bool operator< (const FusionTree<Rank,Symmetry>& other) const
         {
                 if (Symmetry::compare(q_uncoupled,other.q_uncoupled)) return true;
@@ -40,7 +43,7 @@ struct FusionTree
                                 else {
                                         if (q_intermediates != other.q_intermediates) {return false;}
                                         else {
-                                                if (q_coupled < other.q_coupled) return true;
+                                                if (Symmetry::compare(std::array{q_coupled}, std::array{other.q_coupled})) return true;
                                                 else {
                                                         if (q_coupled != other.q_coupled) {return false;}
                                                         else {
@@ -61,7 +64,8 @@ struct FusionTree
                         q_uncoupled == other.q_uncoupled and
                         q_intermediates == other.q_intermediates and
                         multiplicities == other.multiplicities and
-                        q_coupled == other.q_coupled;
+                        q_coupled == other.q_coupled and
+                        IS_DUAL == other.IS_DUAL;
         }
 
         bool operator!= (const FusionTree<Rank,Symmetry>& other) const {return !this->operator==(other);}
@@ -118,25 +122,26 @@ struct FusionTree
         }
 
         Eigen::Tensor<Scalar,Rank+1> asTensor() const {
-                if constexpr (Rank == 0) { Eigen::Tensor<Scalar,Rank+1> out(1); out(0)=1.; return out; }
+                Eigen::Tensor<Scalar,Rank+1> out;
+                if constexpr (Rank == 0) {out = Eigen::Tensor<Scalar,Rank+1>(1); out(0)=1.;}
                 else if constexpr (Rank == 1) {
-                        Eigen::Tensor<Scalar,Rank+1> out(Symmetry::degeneracy(q_uncoupled[0]), Symmetry::degeneracy(q_coupled)); out.setZero();
+                        out = Eigen::Tensor<Scalar,Rank+1>(Symmetry::degeneracy(q_uncoupled[0]), Symmetry::degeneracy(q_coupled)); out.setZero();
                         for (std::size_t i=0; i<Symmetry::degeneracy(q_uncoupled[0]); i++) {out(i,i) = 1.;}
-                        return out;
+
                 }
                 else if constexpr (Rank == 2) {
-                        return Symmetry::CGC(q_uncoupled[0], q_uncoupled[1], q_coupled, multiplicities[0]);
+                        out = Symmetry::CGC(q_uncoupled[0], q_uncoupled[1], q_coupled, multiplicities[0]);
                 }
                 else if constexpr (Rank == 3) {
                         auto vertex1 = Symmetry::CGC(q_uncoupled[0], q_uncoupled[1], q_intermediates[0], multiplicities[0]);
                         auto vertex2 = Symmetry::CGC(q_intermediates[0], q_uncoupled[2], q_coupled, multiplicities[1]);
-                        return vertex1.contract(vertex2, Eigen::array<Eigen::IndexPair<Eigen::Index>, 1>{{Eigen::IndexPair<Eigen::Index>(2,0)}});
+                        out = vertex1.contract(vertex2, Eigen::array<Eigen::IndexPair<Eigen::Index>, 1>{{Eigen::IndexPair<Eigen::Index>(2,0)}});
                 }
                 else if constexpr (Rank == 4) {
                         auto vertex1 = Symmetry::CGC(q_uncoupled[0], q_uncoupled[1], q_intermediates[0], multiplicities[0]);
                         auto vertex2 = Symmetry::CGC(q_intermediates[0], q_uncoupled[2], q_intermediates[1], multiplicities[1]);
                         auto vertex3 = Symmetry::CGC(q_intermediates[1], q_uncoupled[3], q_coupled, multiplicities[2]);
-                        return (vertex1.contract(vertex2, Eigen::array<Eigen::IndexPair<Eigen::Index>, 1>{{Eigen::IndexPair<Eigen::Index>(2,0)}}))
+                        out = (vertex1.contract(vertex2, Eigen::array<Eigen::IndexPair<Eigen::Index>, 1>{{Eigen::IndexPair<Eigen::Index>(2,0)}}))
                                 .contract(vertex3,Eigen::array<Eigen::IndexPair<Eigen::Index>, 1>{{Eigen::IndexPair<Eigen::Index>(3,0)}});
                 }
                 else if constexpr (Rank == 5) {
@@ -144,23 +149,39 @@ struct FusionTree
                         auto vertex2 = Symmetry::CGC(q_intermediates[0], q_uncoupled[2], q_intermediates[1], multiplicities[1]);
                         auto vertex3 = Symmetry::CGC(q_intermediates[1], q_uncoupled[3], q_intermediates[2], multiplicities[2]);
                         auto vertex4 = Symmetry::CGC(q_intermediates[2], q_uncoupled[4], q_coupled, multiplicities[3]);
-                        return (vertex1.contract(vertex2, Eigen::array<Eigen::IndexPair<Eigen::Index>, 1>{{Eigen::IndexPair<Eigen::Index>(2,0)}}))
+                        out = (vertex1.contract(vertex2, Eigen::array<Eigen::IndexPair<Eigen::Index>, 1>{{Eigen::IndexPair<Eigen::Index>(2,0)}}))
                                 .contract(vertex3,Eigen::array<Eigen::IndexPair<Eigen::Index>, 1>{{Eigen::IndexPair<Eigen::Index>(3,0)}})
                                           .contract(vertex4,Eigen::array<Eigen::IndexPair<Eigen::Index>, 1>{{Eigen::IndexPair<Eigen::Index>(4,0)}});
                 }
                 else {  assert(false); }
+                for (std::size_t i=0; i<Rank; i++) {
+                        if (IS_DUAL[i]) {
+                                Eigen::Tensor<Scalar, Rank+1> tmp = Symmetry::one_j_tensor(q_uncoupled[i]).contract(out, Eigen::array<Eigen::IndexPair<Eigen::Index>, 1>{{Eigen::IndexPair<Eigen::Index>(1,i)}});
+                                out = tmp;
+                                std::array<Eigen::Index, Rank+1> shuffle_dims; std::iota(shuffle_dims.begin(), shuffle_dims.end(), 0);
+                                for (std::size_t j=0; j<i; j++) {
+                                        shuffle_dims[j]++;
+                                }
+                                shuffle_dims[i] = 0;
+                                Eigen::Tensor<Scalar, Rank+1> tmp2 = out.shuffle(shuffle_dims);
+                                out = tmp2;
+                        }
+                }
+                return out;
         }
         
         FusionTree<Rank+1, Symmetry> enlarge(const FusionTree<1, Symmetry>& other) const
         {
                 FusionTree<Rank+1, Symmetry> out;
-                out.dim = this->dim * other.dim;
+                std::copy(dims.begin(), dims.end(), out.dims.begin());
+                out.dims[Rank] = other.dims[0];
+                out.computeDim();
                 std::copy(this->q_uncoupled.begin(), this->q_uncoupled.end(), out.q_uncoupled.begin());
                 out.q_uncoupled[Rank] = other.q_uncoupled[0];
                 std::copy(this->q_intermediates.begin(), this->q_intermediates.end(), out.q_intermediates.begin());
                 if (out.q_intermediates.size() > 0) {out.q_intermediates[out.q_intermediates.size()-1] = this->q_coupled;}
-
-
+                std::copy(IS_DUAL.begin(), IS_DUAL.end(), out.IS_DUAL.begin());
+                out.IS_DUAL[Rank] = other.IS_DUAL[0];
                 std::copy(this->multiplicities.begin(), this->multiplicities.end(), out.multiplicities.begin());
                 return out;
         }
@@ -171,11 +192,13 @@ struct FusionTree
                 std::unordered_map<FusionTree<Rank, Symmetry>, typename Symmetry::Scalar> out; out.insert(std::make_pair(*this, 1.));
                 for (const auto& pos:p.decompose()) {
                         for (const auto& [tree,coeff] : out) {
-                                auto tmp2 = tree.swap(pos);
-                                for (const auto& [tree2,coeff2] : tmp2) {
+                                for (const auto& [tree2,coeff2] : tree.swap(pos)) {
                                         auto it = tmp.find(tree2);
                                         if (it == tmp.end()) {tmp.insert(std::make_pair(tree2, coeff*coeff2));}
-                                        else (tmp[tree2] += coeff*coeff2);
+                                        else {
+                                                if (std::abs(tmp[tree2] + coeff*coeff2) < mynumeric_limits<Scalar>::epsilon()) {tmp.erase(tree2);}
+                                                else {tmp[tree2] += coeff*coeff2;}
+                                        };
                                 }
                         }
                         out = tmp;
@@ -188,29 +211,31 @@ struct FusionTree
         {
                 assert(pos < Rank-1 and "Invalid position for swap.");
                 std::unordered_map<FusionTree<Rank, Symmetry>, typename Symmetry::Scalar> out;
-                if (pos == 0) //easy case
-                        {
-                                if constexpr (Symmetry::HAS_MULTIPLICITIES) {
-                                        assert(false and "Not implemented.");
-                                }
-                                else {
-                                        auto ql = q_uncoupled[0];
-                                        auto qr = q_uncoupled[1];
-                                        auto qf = (Rank == 2) ? q_coupled : q_intermediates[0];
-                                        FusionTree<Rank, Symmetry> tree;
-                                        tree.q_coupled = q_coupled;
-                                        tree.q_uncoupled = q_uncoupled;
-                                        std::swap(tree.q_uncoupled[0], tree.q_uncoupled[1]);
-                                        tree.IS_DUAL = IS_DUAL;
-                                        std::swap(tree.IS_DUAL[0], tree.IS_DUAL[1]);
-                                        tree.q_intermediates = q_intermediates;
-                                        tree.multiplicities = multiplicities;
-                                        tree.dim = dim;
-                                        
-                                        out.insert(std::make_pair(tree,Symmetry::coeff_swap(ql,qr,qf)));
-                                        return out;
-                                }
+                if (pos == 0) {
+                        if constexpr (Symmetry::HAS_MULTIPLICITIES) {
+                                assert(false and "Not implemented.");
                         }
+                        else {
+                                auto ql = q_uncoupled[0];
+                                auto qr = q_uncoupled[1];
+                                auto qf = (Rank == 2) ? q_coupled : q_intermediates[0];
+                                FusionTree<Rank, Symmetry> tree;
+                                tree.q_coupled = q_coupled;
+                                tree.q_uncoupled = q_uncoupled;
+                                std::swap(tree.q_uncoupled[0], tree.q_uncoupled[1]);
+                                tree.IS_DUAL = IS_DUAL;
+                                std::swap(tree.IS_DUAL[0], tree.IS_DUAL[1]);
+                                tree.dims = dims;
+                                std::swap(tree.dims[0], tree.dims[1]);
+                                tree.dim = dim;
+                                tree.q_intermediates = q_intermediates;
+                                tree.multiplicities = multiplicities;
+                                Scalar coeff = Symmetry::coeff_swap(ql,qr,qf);
+                                if (std::abs(coeff) < mynumeric_limits<typename Symmetry::Scalar>::epsilon()) {return out;}
+                                out.insert(std::make_pair(tree,coeff));
+                                return out;
+                        }
+                }
                 if constexpr (Symmetry::HAS_MULTIPLICITIES) {
                         assert(false and "Not implemented.");
                 }
@@ -226,30 +251,39 @@ struct FusionTree
                         std::swap(tree.q_uncoupled[pos], tree.q_uncoupled[pos+1]);
                         tree.IS_DUAL = IS_DUAL;
                         std::swap(tree.IS_DUAL[pos], tree.IS_DUAL[pos+1]);
+                        tree.dims = dims;
+                        std::swap(tree.dims[pos], tree.dims[pos+1]);
+                        tree.dim = dim;
                         tree.q_intermediates = q_intermediates;
                         tree.multiplicities = multiplicities;
-                        tree.dim = dim;
-                        for (const auto& Q31: Symmetry::reduceSilent(q3,q1))
-                                {
-                                        tree.q_intermediates[pos-1] = Q31;                                        
-                                        // auto cgc = Symmetry::coeff_swap(Q12,q3,Q) * std::conj(Symmetry::coeff_recouple(q1,q3,q2,Q,Q13,Q12)) * Symmetry::coeff_swap(q1,q3,Q13);
-                                        auto cgc = Symmetry::coeff_swap(Q12,q3,Q) * Symmetry::coeff_recouple(q3,q1,q2,Q,Q31,Q12) * Symmetry::coeff_swap(q3,q1,Q31);
-                                        if (std::abs(cgc) < mynumeric_limits<typename Symmetry::Scalar>::epsilon()) {continue;}
-                                        out.insert(std::make_pair(tree,cgc));
-                                }
+                        for (const auto& Q31: Symmetry::reduceSilent(q3,q1)) {
+                                tree.q_intermediates[pos-1] = Q31;                                        
+                                // auto cgc = Symmetry::coeff_swap(Q12,q3,Q) * std::conj(Symmetry::coeff_recouple(q1,q3,q2,Q,Q13,Q12)) * Symmetry::coeff_swap(q1,q3,Q13);
+                                auto cgc = Symmetry::coeff_swap(Q12,q3,Q) * Symmetry::coeff_recouple(q3,q1,q2,Q,Q31,Q12) * Symmetry::coeff_swap(q3,q1,Q31);
+                                if (std::abs(cgc) < mynumeric_limits<typename Symmetry::Scalar>::epsilon()) {continue;}
+                                out.insert(std::make_pair(tree,cgc));
+                        }
                         return out;
                 }
         }
 };
 
-//                           _
-//   c                 c     b
-//   |                  \   /
-//   |                   \ /
-//  / \   ---> coeff*     |
-// /   \                  |
-//a     b                 a
+template<std::size_t depth, typename Symmetry>
+std::ostream& operator<<(std::ostream& os, const FusionTree<depth,Symmetry> &tree)
+{
+	os << tree.print();
+	return os;
+}
+
 namespace treepair {
+        //                           ☐
+        //                           _
+        //   c                 c     b
+        //   |                  \   /
+        //   |                   \ /
+        //  / \   ---> coeff*     |
+        // /   \                  |
+        //a     b                 a
         template<std::size_t Rank, std::size_t CoRank, typename Symmetry>
         std::unordered_map<std::pair<FusionTree<Rank+1, Symmetry>, FusionTree<CoRank-1, Symmetry> >, typename Symmetry::Scalar>
         turn_right(const FusionTree<Rank, Symmetry>& t1, const FusionTree<CoRank, Symmetry>& t2)
@@ -264,11 +298,13 @@ namespace treepair {
                 if (Rank+1 > 2) {t1p.q_intermediates.back() = t1.q_coupled;}
                 std::copy(t1.IS_DUAL.begin(), t1.IS_DUAL.end(), t1p.IS_DUAL.begin());
                 t1p.IS_DUAL.back() = !t2.IS_DUAL.back();
-                
                 if (CoRank == 1) {t1p.q_coupled = Symmetry::qvacuum();}
                 else if (CoRank == 2) {t1p.q_coupled = t2.q_uncoupled[0];}
                 else {t1p.q_coupled = t2.q_intermediates.back();}
-                
+                std::copy(t1.dims.begin(), t1.dims.end(), t1p.dims.begin());
+                t1p.dims.back() = t2.dims.back();
+                t1p.computeDim();
+                                
                 FusionTree<CoRank-1, Symmetry> t2p;
                 std::copy(t2.q_uncoupled.begin(), t2.q_uncoupled.end()-1, t2p.q_uncoupled.begin());
                 std::copy(t2.IS_DUAL.begin(), t2.IS_DUAL.end()-1, t2p.IS_DUAL.begin());
@@ -276,6 +312,8 @@ namespace treepair {
                 if (CoRank == 1) {t2p.q_coupled = Symmetry::qvacuum();}
                 else if (CoRank == 2) {t2p.q_coupled = t2.q_uncoupled[0];}
                 else {t2p.q_coupled = t2.q_intermediates.back();}
+                std::copy(t2.dims.begin(), t2.dims.end()-1, t2p.dims.begin());
+                t2p.computeDim();
                 
                 typename Symmetry::qType a;
                 if (CoRank == 1) {a = Symmetry::qvacuum();}
@@ -286,6 +324,7 @@ namespace treepair {
                 auto coeff = Symmetry::coeff_turn(a,b,c);
                 if (t2.IS_DUAL.back()) {coeff *= Symmetry::coeff_FS(Symmetry::conj(b));}
                 std::unordered_map<std::pair<FusionTree<Rank+1, Symmetry>, FusionTree<CoRank-1, Symmetry> >, typename Symmetry::Scalar> out;
+                if (std::abs(coeff) < mynumeric_limits<typename Symmetry::Scalar>::epsilon()) {return out;}
                 out.insert(std::make_pair(std::make_pair(t1p,t2p),coeff));
                 return out;
         }
@@ -307,6 +346,7 @@ namespace treepair {
         std::unordered_map<std::pair<FusionTree<Rank-shift, Symmetry>, FusionTree<CoRank+shift, Symmetry> >, typename Symmetry::Scalar>
         turn (const FusionTree<Rank, Symmetry>& t1, const FusionTree<CoRank, Symmetry>& t2)
         {
+                assert(t1.q_coupled == t2.q_coupled);
                 if constexpr (shift > 0) {static_assert(shift <= static_cast<int>(Rank));}
                 else if constexpr (shift < 0) {static_assert(std::abs(shift) <= static_cast<int>(CoRank));}
                 if constexpr (shift == 0) {
@@ -340,12 +380,53 @@ namespace treepair {
                         }
                 }
         }
-}
 
-template<std::size_t depth, typename Symmetry>
-std::ostream& operator<<(std::ostream& os, const FusionTree<depth,Symmetry> &tree)
-{
-	os << tree.print();
-	return os;
-}
+        template<int shift, std::size_t Rank, std::size_t CoRank, typename Symmetry>
+        std::unordered_map<std::pair<FusionTree<Rank-shift, Symmetry>, FusionTree<CoRank+shift, Symmetry> >, typename Symmetry::Scalar>
+        permute (const FusionTree<Rank, Symmetry>& t1, const FusionTree<CoRank, Symmetry>& t2, const Permutation<Rank+CoRank>& p)
+        {
+                assert(t1.q_coupled == t2.q_coupled);
+                //transform the permutation. Needed because turn<>() reverses the order of the FusionTree.
+                std::array<std::size_t,Rank+CoRank> pi_id; std::iota(pi_id.begin(),pi_id.end(),0ul);
+                for (std::size_t i=0; i<CoRank; i++) {
+                        pi_id[i+Rank] = (CoRank-1) - i + Rank;
+                }
+                constexpr std::size_t newRank = Rank-shift;
+                constexpr std::size_t newCoRank = CoRank+shift;
+                std::array<std::size_t,Rank+CoRank> pi_tmp;
+                for (std::size_t i=0; i<Rank+CoRank; i++) {
+                        pi_tmp[i] = pi_id[p.pi[i]];
+                }
+                std::array<std::size_t,Rank+CoRank> pi_corrected;
+                std::copy(pi_tmp.begin(), pi_tmp.begin()+newRank, pi_corrected.begin());
+                for (std::size_t i=0; i<newCoRank; i++) {
+                        pi_corrected[i+newRank] = pi_tmp[(newCoRank-1) - i + newRank];
+                }
+                Permutation<Rank+CoRank> p_corrected(pi_corrected);
+
+                constexpr int reshift = CoRank + shift;
+                std::unordered_map<std::pair<FusionTree<Rank-shift, Symmetry>, FusionTree<CoRank+shift, Symmetry> >, typename Symmetry::Scalar> out;
+                for (const auto& [trees,coeff1] : turn<-static_cast<int>(CoRank)>(t1,t2)) {
+                        auto [t1p,trivial] = trees;
+                        for (const auto& [t1pp,coeff2] : t1p.permute(p_corrected)) {
+                                for (const auto& [trees_final,coeff3] : turn<reshift>(t1pp,trivial)) {
+                                        if (auto it = out.find(trees_final); it == out.end()) {
+                                                out.insert(std::make_pair(trees_final,coeff1*coeff2*coeff3));
+                                        }
+                                        else {
+                                                out[trees_final] += coeff1*coeff2*coeff3;
+                                        }
+                                }
+                        }
+                }
+                std::size_t zero_count=0ul;
+                for (const auto& [trees, coeff]:out) {
+                        if (std::abs(coeff) < 1.e-9) {zero_count++;}
+                }
+                if (zero_count>0) {cout << "permute pair operation created #=" << zero_count << " 0s." << endl;}
+
+                return out;
+        }
+} //end namespace treepair
+
 #endif

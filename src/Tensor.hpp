@@ -112,7 +112,10 @@ public:
         Tensor() {};
 
         Tensor(const std::array<Qbasis<Symmetry,1>,Rank> basis_domain, const std::array<Qbasis<Symmetry,1>,CoRank> basis_codomain);
-                
+
+        constexpr std::size_t rank() const {return Rank;}
+        constexpr std::size_t corank() const {return CoRank;}
+        
         typedef typename Symmetry::qType qType;
         typedef typename MatrixType::Scalar Scalar;
 
@@ -151,10 +154,10 @@ public:
                 return std::sqrt(squaredNorm());
         }
 
-        // template<std::size_t NewRank, std::size_t NewCoRank>
-        // Tensor<NewRank,NewCoRank,Symmetry,MatrixType_,TensorType_> permute(const std::array<std::size_t,NewRank>& new_domain, const std::array<std::size_t,NewCoRank>& new_codomain) const;
-
         self permute(const Permutation<Rank>& p_domain, const Permutation<CoRank>& p_codomain) const;
+        
+        template<int shift>
+        Tensor<Rank-shift,CoRank+shift,Symmetry,MatrixType_,TensorType_> permute(const Permutation<Rank+CoRank>& p) const;
         
         std::vector<FusionTree<Rank,Symmetry> > domain_trees(const qType &q) const {return domain.tree(q);}
         std::vector<FusionTree<CoRank,Symmetry> > codomain_trees(const qType &q) const {return codomain.tree(q);}
@@ -382,6 +385,90 @@ permute(const Permutation<Rank>& p_domain, const Permutation<CoRank>& p_codomain
         return out;
 }
 
+template<std::size_t Rank, std::size_t CoRank, typename Symmetry, typename MatrixType_, typename TensorType_>
+template<int shift>
+Tensor<Rank-shift, CoRank+shift, Symmetry, MatrixType_, TensorType_> Tensor<Rank, CoRank, Symmetry, MatrixType_, TensorType_>::
+permute(const Permutation<Rank+CoRank>& p) const
+{
+        constexpr std::size_t newRank = Rank-shift;
+        constexpr std::size_t newCoRank = CoRank+shift;
+        Tensor<newRank, newCoRank, Symmetry, MatrixType_, TensorType_> out;
+        // cout << "old domain:" << endl;
+        // for (std::size_t i=0; i<Rank; i++) {
+        //         cout << uncoupled_domain[i] << endl;
+        // }
+        // cout << endl << "old codomain:" << endl;
+        // for (std::size_t i=0; i<CoRank; i++) {
+        //         cout << uncoupled_codomain[i] << endl;
+        // }
+        // cout << endl << "new domain:" << endl;
+        for (std::size_t i=0; i<newRank; i++) {
+                if (p.pi[i] > Rank-1) {
+                        out.uncoupled_domain[i] = uncoupled_codomain[p.pi[i]-Rank].conj();
+                }
+                else {
+                        out.uncoupled_domain[i] = uncoupled_domain[p.pi[i]];
+                }
+                // cout << out.uncoupled_domain[i] << endl;
+
+        }
+
+        // cout << "new codomain:" << endl;
+        for (std::size_t i=0; i<newCoRank; i++) {
+                if (p.pi[i+newRank] > Rank-1) {
+                        out.uncoupled_codomain[i] = uncoupled_codomain[p.pi[i+newRank]-Rank];                        
+                }
+                else {
+                        out.uncoupled_codomain[i] = uncoupled_domain[p.pi[i+newRank]].conj();
+                }
+                // cout << out.uncoupled_codomain[i] << endl;
+
+        }
+        
+        out.domain = util::build_FusionTree(out.uncoupled_domain);
+        // cout << out.domain << endl << out.domain.printTrees() << endl;
+        out.codomain = util::build_FusionTree(out.uncoupled_codomain);
+        // cout << out.codomain << endl << out.codomain.printTrees() << endl;
+
+        for (size_t i=0; i<sector.size(); i++) {
+                auto domain_trees = domain.tree(sector[i]);
+                auto codomain_trees = codomain.tree(sector[i]);
+                for (const auto& domain_tree:domain_trees)
+                for (const auto& codomain_tree:codomain_trees) {
+                        // cout << "processing domain tree:" << endl << domain_tree.draw() << endl << "and codomain tree:" << endl << codomain_tree.draw() << endl; 
+                        for (const auto& [permuted_trees, coeff] : treepair::permute<shift>(domain_tree, codomain_tree, p)) {
+                                if (std::abs(coeff) < 1.e-10) {continue;}
+                                
+                                auto [permuted_domain_tree, permuted_codomain_tree] = permuted_trees;
+                                // cout << "permuted domain tree:" << endl << permuted_domain_tree.draw() << endl << "and codomain tree:" << endl << permuted_codomain_tree.draw() << endl; 
+                                assert(permuted_domain_tree.q_coupled == permuted_codomain_tree.q_coupled);
+                                
+                                auto tensor = this->subBlock(domain_tree,codomain_tree);
+                                TensorType Tshuffle = tensor.shuffle(p.pi);
+                                
+                                auto it = out.dict.find(permuted_domain_tree.q_coupled);
+                                if (it == out.dict.end()) {
+                                        MatrixType mat(out.domain.inner_dim(permuted_domain_tree.q_coupled), out.codomain.inner_dim(permuted_domain_tree.q_coupled)); mat.setZero();
+                                        // cout << "insert new mat with size (" << mat.rows() << "x" << mat.cols() << ")" << endl;
+                                        auto leftOffd = out.domain.leftOffset(permuted_domain_tree);
+                                        auto leftOffc = out.codomain.leftOffset(permuted_codomain_tree);
+                                        
+                                        // cout << "fill block at pos=(" << leftOffd << "," << leftOffc << ") with size (" << permuted_domain_tree.dim << "x" << permuted_codomain_tree.dim << ")" <<  endl;
+                                        mat.block(leftOffd, leftOffc, permuted_domain_tree.dim, permuted_codomain_tree.dim) =
+                                                coeff * Eigen::Map<MatrixType>(Tshuffle.data(),permuted_domain_tree.dim, permuted_codomain_tree.dim);
+                                        out.push_back(permuted_domain_tree.q_coupled, mat);
+                                }
+                                else {
+                                        // cout << "fill existing mat, block at pos=(" << out.domain.leftOffset(permuted_domain_tree) << "," << out.codomain.leftOffset(permuted_codomain_tree) << ") with size (" << permuted_domain_tree.dim << "x" << permuted_codomain_tree.dim << ")" <<  endl;
+                                        out.block[it->second].block(out.domain.leftOffset(permuted_domain_tree), out.codomain.leftOffset(permuted_codomain_tree),
+                                                                    permuted_domain_tree.dim, permuted_codomain_tree.dim) +=
+                                                coeff * Eigen::Map<MatrixType>(Tshuffle.data(),permuted_domain_tree.dim, permuted_codomain_tree.dim);
+                                }
+                        }
+                }
+        }
+        return out;
+}
 // template<std::size_t Rank, std::size_t CoRank, typename Symmetry, typename MatrixType_, typename TensorType_>
 // MatrixType_& Tensor<Rank, CoRank, Symmetry, MatrixType_>::
 // operator() (const FusionTree<Rank,Symmetry>& f1, const FusionTree<CoRank,Symmetry>& f2)
@@ -495,12 +582,14 @@ plainTensor () const
                                 Symmetry::degeneracy(sorted_sector[i])*sorted_block[i].rows(), Symmetry::degeneracy(sorted_sector[i])*sorted_block[i].cols()) =
                         Eigen::kroneckerProduct (sorted_block[i], MatrixType::Identity(Symmetry::degeneracy(sorted_sector[i]),Symmetry::degeneracy(sorted_sector[i])));
         }
+        // cout << "inner_mat:" << endl << std::fixed << inner_mat << endl;
         Eigen::TensorMap<Eigen::Tensor<Scalar, 2> > map(inner_mat.data(), sorted_domain.fullDim(), sorted_codomain.fullDim());
         Eigen::Tensor<Scalar, 2> inner_tensor(map);
         
         Eigen::array<Eigen::Index,Rank+1> dims_domain;
         for (size_t i=0; i<Rank; i++) {dims_domain[i] = sorted_uncoupled_domain[i].fullDim();}
         dims_domain[Rank] = sorted_domain.fullDim();
+        // cout << "dims domain: "; for (const auto& d:dims_domain) {cout << d << " ";} cout << endl;
         Eigen::Tensor<Scalar, Rank+1> unitary_domain(dims_domain); unitary_domain.setZero();
 
         for (const auto& [q,num,plain] : sorted_domain) {
@@ -548,17 +637,21 @@ plainTensor () const
                         }
                         extents[Rank] = Tfull.dimensions()[Rank];
                         unitary_domain.slice(offsets,extents) += Tfull; //+= or =?
+                        // cout << "unitary_domain:" << endl << unitary_domain << endl;
                 }
         }
         
         Eigen::array<Eigen::Index,CoRank+1> dims_codomain;
         for (size_t i=0; i<CoRank; i++) {dims_codomain[i] = sorted_uncoupled_codomain[i].fullDim();}
         dims_codomain[CoRank] = sorted_codomain.fullDim();
+        // cout << "dims codomain: "; for (const auto& d:dims_codomain) {cout << d << " ";} cout << endl;
         Eigen::Tensor<Scalar, CoRank+1> unitary_codomain(dims_codomain); unitary_codomain.setZero();
 
 
         for (const auto& [q,num,plain] : sorted_codomain) {
+                // cout << "codomain: q_coupled=" << Sym::format<Symmetry>(q) << endl;
                 for (const auto& tree: sorted_codomain.tree(q)) {
+                        // cout << "tree:" << endl << tree.draw() << endl;
                         std::size_t uncoupled_dim=1;
                         for (std::size_t i=0; i<CoRank; i++) {
                                 uncoupled_dim *= sorted_uncoupled_codomain[i].inner_dim(tree.q_uncoupled[i]);
@@ -594,15 +687,37 @@ plainTensor () const
                                 offsets[i] = sorted_uncoupled_codomain[i].full_outer_num(tree.q_uncoupled[i]);
                         }
                         offsets[CoRank] = sorted_codomain.full_outer_num(q) + sorted_codomain.leftOffset(tree)*Symmetry::degeneracy(q);
-                        
                         std::array<std::size_t, CoRank+1> extents;
                         for (std::size_t i=0; i<CoRank; i++) {
                                 extents[i] = sorted_uncoupled_codomain[i].inner_dim(tree.q_uncoupled[i]) * Symmetry::degeneracy(tree.q_uncoupled[i]);
                         }
                         extents[CoRank] = Tfull.dimensions()[CoRank];
+                        // if constexpr (CoRank == 2) {
+                        //         // cout << "Tfull" << endl;
+                        //         auto it_block = Tfull.data();
+                        //         // for (Eigen::Index l=0; l<tplain.dimensions()[3]; l++)
+                        //         for (Eigen::Index k=0; k<Tfull.dimensions()[2]; k++) {
+                        //                 Eigen::Map<Eigen::MatrixXd> Mp(it_block, Tfull.dimensions()[0], Tfull.dimensions()[1]);
+                        //                 std::cout << "[:,:," << k << "]:" << endl << std::fixed << Mp << endl;
+                        //                 it_block += Tfull.dimensions()[0] * Tfull.dimensions()[1];
+                        //         }
+                        // }
+                        // cout << "offsets="; for (const auto& o:offsets) {cout << o << " ";} cout << endl;
+                        // cout << "outer num=" << sorted_codomain.full_outer_num(q) << ", leftOff=" << sorted_codomain.leftOffset(tree) << endl;
+                        // cout << "extents="; for (const auto& o:extents) {cout << o << " ";} cout << endl;
                         unitary_codomain.slice(offsets,extents) = Tfull;
                 }
         }
+        // if constexpr (CoRank == 2) {
+        //         auto it_block = unitary_codomain.data();
+        //         // for (Eigen::Index l=0; l<tplain.dimensions()[3]; l++)
+        //         for (Eigen::Index k=0; k<unitary_codomain.dimensions()[2]; k++) {
+        //                 Eigen::Map<Eigen::MatrixXd> Mp(it_block, unitary_codomain.dimensions()[0], unitary_codomain.dimensions()[1]);
+        //                 std::cout << "[:,:," << k << "]:" << endl << std::fixed << Mp << endl;
+        //                 it_block += unitary_codomain.dimensions()[0] * unitary_codomain.dimensions()[1];
+        //         }
+        // }
+
                         
         Eigen::array<Eigen::Index,Rank+CoRank> dims_result;
         for (size_t i=0; i<Rank; i++) {dims_result[i] = sorted_uncoupled_domain[i].fullDim();}
@@ -623,8 +738,8 @@ std::string Tensor<Rank, CoRank, Symmetry, MatrixType_, TensorType_>::
 print(bool PRINT_MATRICES) const
 {
         std::stringstream ss;
-        ss << "domain:" << endl << domain << endl << "with trees:" << endl << domain.printTrees() << endl;
-        ss << "codomain:" << endl << codomain << endl << "with trees:" << endl << codomain.printTrees() << endl;
+        ss << "domain:" << endl << domain << endl;// << "with trees:" << endl << domain.printTrees() << endl;
+        ss << "codomain:" << endl << codomain << endl;// << "with trees:" << endl << codomain.printTrees() << endl;
         for (size_t i=0; i<sector.size(); i++) {
                 ss << "Sector with QN=" << sector[i] << endl;
                 if (PRINT_MATRICES) { ss << util::print_matrix(block[i]) << endl;}

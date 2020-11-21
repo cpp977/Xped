@@ -101,7 +101,9 @@ public:
 	static Scalar coeff_dot(const qType& q1);
 
         static Scalar coeff_FS(const qType& q1) {return (q1[0]%2 == 0) ? -1. : 1.;}
-	
+
+        static Eigen::Tensor<Scalar_, 2> one_j_tensor(const qType& q1);
+
 	static Scalar coeff_3j(const qType& q1, const qType& q2, const qType& q3,
                                int        q1_z, int        q2_z,        int q3_z);
         
@@ -214,6 +216,19 @@ coeff_dot(const qType& q1)
 {
 	Scalar out = static_cast<Scalar>(q1[0]);
 	return out;
+}
+
+template<typename Kind, typename Scalar_>
+Eigen::Tensor<Scalar_, 2> SU2<Kind,Scalar_>::
+one_j_tensor(const qType& q1)
+{
+        auto tmp = CGC(q1, q1, qvacuum(), 0);
+        Eigen::Tensor<Scalar_, 2> out(degeneracy(q1), degeneracy(q1)); out.setZero();
+        for (Eigen::Index i=0; i<degeneracy(q1); i++)
+        for (Eigen::Index j=0; j<degeneracy(q1); j++) {
+                out(i,j) = std::sqrt(degeneracy(q1))*tmp(i,j,0);
+        }
+        return out;
 }
 
 template<typename Kind, typename Scalar_>

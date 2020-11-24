@@ -250,9 +250,9 @@ CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t multipl
         for (int i_q2m=0; i_q2m<degeneracy(q2); i_q2m++)
         for (int i_q3m=0; i_q3m<degeneracy(q3); i_q3m++)
                 {
-                        int q1_2m = 2*i_q1m - (q1[0]-1);
-                        int q2_2m = 2*i_q2m - (q2[0]-1);
-                        int q3_2m = 2*i_q3m - (q3[0]-1);
+                        int q1_2m = -(2*i_q1m - (q1[0]-1));
+                        int q2_2m = -(2*i_q2m - (q2[0]-1));
+                        int q3_2m = -(2*i_q3m - (q3[0]-1));
                         T(i_q1m,i_q2m,i_q3m) = coupling_3j(q1[0], q2[0], q3[0],
                                                              q1_2m , q2_2m , -q3_2m) *
                                 phase<Scalar>((q1[0]-q2[0]+q3_2m)/2) * sqrt(q3[0]);

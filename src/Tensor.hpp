@@ -73,7 +73,7 @@ namespace util{
                 NestedLoopIterator Nelly(T1.rank(), vec_dims);
         
                 for (std::size_t i = Nelly.begin(); i!=Nelly.end(); i++) {
-                        std::vector<std::size_t> indices;
+                        std::vector<Eigen::Index> indices;
                         for (std::size_t j=0; j<T1.rank(); j++) {indices.push_back(Nelly(j));}
                         std::array<Eigen::Index, T1.NumIndices> offsets;
                         for (std::size_t i=0; i<T1.rank(); i++) {
@@ -90,9 +90,9 @@ namespace util{
 template<std::size_t Rank, std::size_t CoRank, typename Symmetry, typename MatrixType_=Eigen::MatrixXd, typename TensorType_=Eigen::Tensor<double,Rank+CoRank> >
 class Tensor
 {
-        template<std::size_t Rank_, std::size_t CoRank_, std::size_t MiddleRank, typename Symmetry_, typename MatrixType__, typename TensorType__>
-        friend Tensor<Rank_, CoRank_, Symmetry_, MatrixType__, TensorType__>
-        operator*(const Tensor<Rank_,MiddleRank,Symmetry_,MatrixType__,TensorType__> &T1, const Tensor<MiddleRank,CoRank_,Symmetry_,MatrixType__,TensorType__> &T2);
+        template<std::size_t Rank_, std::size_t CoRank_, std::size_t MiddleRank, typename Symmetry_, typename MatrixType__, typename TensorType1__, typename TensorType2__>
+        friend Tensor<Rank_, CoRank_, Symmetry_, MatrixType__, Eigen::Tensor<typename MatrixType__::Scalar, Rank_+CoRank_> >
+        operator*(const Tensor<Rank_,MiddleRank,Symmetry_,MatrixType__,TensorType1__> &T1, const Tensor<MiddleRank,CoRank_,Symmetry_,MatrixType__,TensorType2__> &T2);
 
         template<std::size_t Rank_, std::size_t CoRank_, typename Symmetry_, typename MatrixType__, typename TensorType__>
         friend Tensor<Rank_, CoRank_, Symmetry_, MatrixType__, TensorType__>
@@ -107,6 +107,8 @@ class Tensor
 public:
         typedef MatrixType_ MatrixType;
         typedef TensorType_ TensorType;
+        typedef typename Symmetry::qType qType;
+        typedef typename MatrixType::Scalar Scalar;
 
         /**Does nothing.*/
         Tensor() {};
@@ -115,11 +117,10 @@ public:
 
         constexpr std::size_t rank() const {return Rank;}
         constexpr std::size_t corank() const {return CoRank;}
-        
-        typedef typename Symmetry::qType qType;
-        typedef typename MatrixType::Scalar Scalar;
 
-        // Eigen::Map<MatrixType> operator() (const FusionTree<Rank,Symmetry>& f1, const FusionTree<CoRank,Symmetry>& f2) const;
+        const std::vector<qType> sectors() const {return sector;}
+
+        const MatrixType operator() (const qType& q_coupled) const {auto it = dict.find(q_coupled); assert(it != dict.end()); return block[it->second];}
         //Eigen::TensorMap<TensorType> operator() (const FusionTree<Rank,Symmetry>& f1, const FusionTree<CoRank,Symmetry>& f2);
         //Eigen::TensorMap<TensorType> operator() (const FusionTree<Rank,Symmetry>& f1, const FusionTree<CoRank,Symmetry>& f2) const;
 
@@ -600,7 +601,7 @@ plainTensor () const
                         }
                         MatrixType id(uncoupled_dim,uncoupled_dim); id.setIdentity();
                         Eigen::TensorMap<Eigen::Tensor<Scalar,2> > Tid_mat(id.data(),id.rows(), id.cols());
-                        std::array<std::size_t, Rank+1> dims;
+                        std::array<Eigen::Index, Rank+1> dims;
                         for (std::size_t i=0; i<Rank; i++) {
                                 dims[i] = sorted_uncoupled_domain[i].inner_dim(tree.q_uncoupled[i]);
                         }
@@ -625,13 +626,13 @@ plainTensor () const
                         Eigen::Tensor<Scalar,Rank+1> Tfull = util::tensorProd(Tid,T); //Tfull_mat.reshape(dims);
                         // Tfull.setZero(); Tfull(0,0,0) = 1.; Tfull(0,1,1) = 1.; Tfull(1,0,2) = 1.; Tfull(1,1,3) = 1.; Tfull(0,2,4) = 1.; Tfull(1,2,5) = 1.;
                                                 
-                        std::array<std::size_t, Rank+1> offsets;
+                        std::array<Eigen::Index, Rank+1> offsets;
                         for (std::size_t i=0; i<Rank; i++) {
                                 offsets[i] = sorted_uncoupled_domain[i].full_outer_num(tree.q_uncoupled[i]);
                         }
                         offsets[Rank] = sorted_domain.full_outer_num(q) + sorted_domain.leftOffset(tree)*Symmetry::degeneracy(q);
                         
-                        std::array<std::size_t, Rank+1> extents;
+                        std::array<Eigen::Index, Rank+1> extents;
                         for (std::size_t i=0; i<Rank; i++) {
                                 extents[i] = sorted_uncoupled_domain[i].inner_dim(tree.q_uncoupled[i]) * Symmetry::degeneracy(tree.q_uncoupled[i]);
                         }
@@ -652,13 +653,13 @@ plainTensor () const
                 // cout << "codomain: q_coupled=" << Sym::format<Symmetry>(q) << endl;
                 for (const auto& tree: sorted_codomain.tree(q)) {
                         // cout << "tree:" << endl << tree.draw() << endl;
-                        std::size_t uncoupled_dim=1;
+                        Eigen::Index uncoupled_dim=1;
                         for (std::size_t i=0; i<CoRank; i++) {
                                 uncoupled_dim *= sorted_uncoupled_codomain[i].inner_dim(tree.q_uncoupled[i]);
                         }
                         MatrixType id(uncoupled_dim,uncoupled_dim); id.setIdentity();
                         Eigen::TensorMap<Eigen::Tensor<Scalar,2> > Tid_mat(id.data(),id.rows(), id.cols());
-                        std::array<std::size_t, CoRank+1> dims;
+                        std::array<Eigen::Index, CoRank+1> dims;
                         for (std::size_t i=0; i<CoRank; i++) {
                                 dims[i] = sorted_uncoupled_codomain[i].inner_dim(tree.q_uncoupled[i]);
                         }
@@ -682,12 +683,12 @@ plainTensor () const
                         // dims[CoRank] = uncoupled_dim*Symmetry::degeneracy(tree.q_coupled);
                         
                         Eigen::Tensor<Scalar,CoRank+1> Tfull = util::tensorProd(Tid,T); //Tfull_mat.reshape(dims);
-                        std::array<std::size_t, CoRank+1> offsets;
+                        std::array<Eigen::Index, CoRank+1> offsets;
                         for (std::size_t i=0; i<CoRank; i++) {
                                 offsets[i] = sorted_uncoupled_codomain[i].full_outer_num(tree.q_uncoupled[i]);
                         }
                         offsets[CoRank] = sorted_codomain.full_outer_num(q) + sorted_codomain.leftOffset(tree)*Symmetry::degeneracy(q);
-                        std::array<std::size_t, CoRank+1> extents;
+                        std::array<Eigen::Index, CoRank+1> extents;
                         for (std::size_t i=0; i<CoRank; i++) {
                                 extents[i] = sorted_uncoupled_codomain[i].inner_dim(tree.q_uncoupled[i]) * Symmetry::degeneracy(tree.q_uncoupled[i]);
                         }
@@ -738,8 +739,8 @@ std::string Tensor<Rank, CoRank, Symmetry, MatrixType_, TensorType_>::
 print(bool PRINT_MATRICES) const
 {
         std::stringstream ss;
-        ss << "domain:" << endl << domain << endl;// << "with trees:" << endl << domain.printTrees() << endl;
-        ss << "codomain:" << endl << codomain << endl;// << "with trees:" << endl << codomain.printTrees() << endl;
+        ss << "domain:" << endl << domain << endl << "with trees:" << endl << domain.printTrees() << endl;
+        ss << "codomain:" << endl << codomain << endl << "with trees:" << endl << codomain.printTrees() << endl;
         for (size_t i=0; i<sector.size(); i++) {
                 ss << "Sector with QN=" << sector[i] << endl;
                 if (PRINT_MATRICES) { ss << util::print_matrix(block[i]) << endl;}
@@ -754,22 +755,32 @@ std::ostream& operator<<(std::ostream& os, const Tensor<Rank, CoRank, Symmetry, 
 	return os;
 }
 
-template<std::size_t Rank, std::size_t CoRank, std::size_t MiddleRank, typename Symmetry, typename MatrixType_, typename TensorType_>
-Tensor<Rank, CoRank, Symmetry, MatrixType_, TensorType_>
-operator* (const Tensor<Rank,MiddleRank,Symmetry,MatrixType_,TensorType_> &T1, const Tensor<MiddleRank,CoRank,Symmetry,MatrixType_,TensorType_> &T2)
+template<std::size_t Rank, std::size_t CoRank, std::size_t MiddleRank, typename Symmetry, typename MatrixType_, typename TensorType1_, typename TensorType2_>
+Tensor<Rank, CoRank, Symmetry, MatrixType_, Eigen::Tensor<typename MatrixType_::Scalar, Rank+CoRank>>
+operator* (const Tensor<Rank,MiddleRank,Symmetry,MatrixType_,TensorType1_> &T1, const Tensor<MiddleRank,CoRank,Symmetry,MatrixType_,TensorType2_> &T2)
 {
         assert(T1.codomain == T2.domain);
-        Tensor<Rank, CoRank, Symmetry, MatrixType_, TensorType_> Tout;
+        Tensor<Rank, CoRank, Symmetry, MatrixType_, Eigen::Tensor<typename MatrixType_::Scalar, Rank+CoRank>> Tout;
         Tout.domain = T1.domain;
         Tout.codomain = T2.codomain;
         Tout.uncoupled_domain = T1.uncoupled_domain;
         Tout.uncoupled_codomain = T2.uncoupled_codomain;
-        Tout.sector = T1.sector;
-        Tout.dict = T1.dict;
-        Tout.block.resize(Tout.sector.size());
-        for (size_t i=0; i<T1.sector.size(); i++){
+        // Tout.sector = T1.sector;
+        // Tout.dict = T1.dict;
+        // Tout.block.resize(Tout.sector.size());
+        std::unordered_set<typename Symmetry::qType> uniqueController;
+        for (size_t i=0; i<T1.sector.size(); i++) {
+                uniqueController.insert(T1.sector[i]);
                 auto it = T2.dict.find(T1.sector[i]);
-                Tout.block[i] = T1.block[i] * T2.block[it->second];
+                if (it == T2.dict.end()) {continue;}
+                Tout.push_back(T1.sector[i], T1.block[i] * T2.block[it->second]);
+                // Tout.block[i] = T1.block[i] * T2.block[it->second];
+        }
+        for (size_t i=0; i<T2.sector.size(); i++) {
+                if (auto it=uniqueController.find(T2.sector[i]); it != uniqueController.end()) {continue;}
+                auto it = T1.dict.find(T2.sector[i]);
+                if (it == T1.dict.end()) {continue;}
+                Tout.push_back(T2.sector[i], T2.block[i] * T1.block[it->second]);
         }
         return Tout;
 }

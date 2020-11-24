@@ -260,13 +260,19 @@ template<std::size_t M>
 bool U1<Kind,Scalar_>::
 compare ( const std::array<U1<Kind,Scalar>::qType,M>& q1, const std::array<U1<Kind,Scalar>::qType,M>& q2 )
 {
-	for (std::size_t m=0; m<M; m++)
+        for (std::size_t m=0; m<M; m++)
 	{
-		if (std::abs(q1[m][0]) > std::abs(q2[m][0])) {return false;}
-		else if (std::abs(q1[m][0] < q2[m][0])) {return true;}
-                else if (q1[m][0] < 0) {return false;}
+		if (q1[m][0] > q2[m][0]) { return false; }
+		else if (q1[m][0] < q2[m][0]) {return true; }
 	}
 	return false;
+	// for (std::size_t m=0; m<M; m++)
+	// {
+	// 	if (std::abs(q1[m][0]) > std::abs(q2[m][0])) {return false;}
+	// 	else if (std::abs(q1[m][0] < q2[m][0])) {return true;}
+        //         else if (q1[m][0] < 0) {return false;}
+	// }
+	// return false;
 }
 
 template<typename Kind, typename Scalar_>

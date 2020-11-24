@@ -585,7 +585,7 @@ printTrees() const
 		out << it->second.size() << " Fusion trees for Q=" << it->first << std::endl;
 		for(const auto& i: it->second)
 		{
-                        out << i << std::endl;
+                        out << i.draw() << std::endl;
 		}
 		out << std::endl << "******************************************************************************************" << std::endl;;
 	}

@@ -7,7 +7,7 @@
 
 #include <TextTable.h>
 
-#define HELPERS_IO_TABLE
+#include "macros.h"
 
 using std::size_t;
 using std::cout;
@@ -15,6 +15,31 @@ using std::endl;
 using std::string;
 
 #include "ArgParser.h"
+// #include "lru/lru.hpp"
+
+// template<std::size_t Rank, typename Symmetry> struct FusionTree;
+// template<std::size_t N> struct Permutation;
+
+// template<int shift, std::size_t Rank, std::size_t CoRank, typename Symmetry>
+// struct CacheManager
+// {
+//         typedef FusionTree<CoRank, Symmetry> CoTree;
+//         typedef FusionTree<CoRank+shift, Symmetry> NewCoTree;
+//         typedef FusionTree<Rank, Symmetry> Tree;
+//         typedef FusionTree<Rank-shift, Symmetry> NewTree;
+//         typedef typename Symmetry::Scalar Scalar;
+        
+//         typedef LRU::Cache<std::tuple<Tree, CoTree, Permutation<Rank+CoRank> >, std::unordered_map<std::pair<NewTree, NewCoTree >, Scalar> >  CacheType;
+//         CacheManager(std::size_t cache_size) {
+//                 cache = CacheType(cache_size);
+//                 cache.monitor();
+//         }
+//         CacheType cache;
+// };
+
+// template<int shift, std::size_t Rank, std::size_t CoRank, typename Symmetry>
+// CacheManager<shift, Rank, CoRank, Symmetry> tree_cache(100);
+
 #include "../src/Qbasis.hpp"
 #include "../src/symmetry/kind_dummies.hpp"
 #include "../src/symmetry/SU2.hpp"
@@ -409,6 +434,25 @@ TEST_CASE("Testing the general permutation of legs.") {
                                                                                                                                      Eigen::IndexPair<Eigen::Index>(3,3)}});
                         CHECK(zero() == doctest::Approx(0.));
                 }
+                // std::cout << "shift=-2, total hits=" << tree_cache<-2,2,2,Symmetry>.cache.stats().total_hits() << endl; // Hits for any key
+                // std::cout << "shift=-2, total misses=" << tree_cache<-2,2,2,Symmetry>.cache.stats().total_misses() << endl; // Misses for any key
+                // std::cout << "shift=-2, hit rate=" << tree_cache<-2,2,2,Symmetry>.cache.stats().hit_rate() << endl; // Hit rate in [0, 1]
+
+                // std::cout << "shift=-1, total hits=" << tree_cache<-1,2,2,Symmetry>.cache.stats().total_hits() << endl; // Hits for any key
+                // std::cout << "shift=-1, total misses=" << tree_cache<-1,2,2,Symmetry>.cache.stats().total_misses() << endl; // Misses for any key
+                // std::cout << "shift=-1, hit rate=" << tree_cache<-1,2,2,Symmetry>.cache.stats().hit_rate() << endl; // Hit rate in [0, 1]
+
+                // std::cout << "shift=0, total hits=" << tree_cache<0,2,2,Symmetry>.cache.stats().total_hits() << endl; // Hits for any key
+                // std::cout << "shift=0, total misses=" << tree_cache<0,2,2,Symmetry>.cache.stats().total_misses() << endl; // Misses for any key
+                // std::cout << "shift=0, hit rate=" << tree_cache<0,2,2,Symmetry>.cache.stats().hit_rate() << endl; // Hit rate in [0, 1]
+
+                // std::cout << "shift=1, total hits=" << tree_cache<1,2,2,Symmetry>.cache.stats().total_hits() << endl; // Hits for any key
+                // std::cout << "shift=1, total misses=" << tree_cache<1,2,2,Symmetry>.cache.stats().total_misses() << endl; // Misses for any key
+                // std::cout << "shift=1, hit rate=" << tree_cache<1,2,2,Symmetry>.cache.stats().hit_rate() << endl; // Hit rate in [0, 1]
+
+                // std::cout << "shift=2, total hits=" << tree_cache<2,2,2,Symmetry>.cache.stats().total_hits() << endl; // Hits for any key
+                // std::cout << "shift=2, total misses=" << tree_cache<2,2,2,Symmetry>.cache.stats().total_misses() << endl; // Misses for any key
+                // std::cout << "shift=2, hit rate=" << tree_cache<2,2,2,Symmetry>.cache.stats().hit_rate() << endl; // Hit rate in [0, 1]
         }
 
         SUBCASE("U1") {

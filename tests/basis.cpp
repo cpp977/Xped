@@ -10,9 +10,9 @@ using std::cout;
 using std::endl;
 using std::string;
 
-#define HELPERS_IO_TABLE
-
 #include "TextTable.h"
+
+#include "macros.h"
 
 #include "../src/Qbasis.hpp"
 #include "../src/symmetry/kind_dummies.hpp"

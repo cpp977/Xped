@@ -11,7 +11,8 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # set(CMAKE_CXX_FLAGS "-Wall -Wextra")
 set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g")
-set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+set(CMAKE_CXX_FLAGS_PROFILE "-pg -O2")
+set(CMAKE_CXX_FLAGS_RELEASE "-O3 -ftemplate-backtrace-limit=0")
 
 if(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
   option(ENABLE_BUILD_WITH_TIME_TRACE "Enable -ftime-trace to generate time tracing .json files on clang" OFF)
@@ -35,7 +36,8 @@ ExternalProject_Add(
         GIT_REPOSITORY "https://github.com/haarcuba/cpp-text-table.git"
         GIT_SHALLOW ON
         TIMEOUT 10
-        UPDATE_COMMAND ${GIT_EXECUTABLE} pull
+#        UPDATE_COMMAND ${GIT_EXECUTABLE} pull
+        UPDATE_COMMAND ""
         CONFIGURE_COMMAND ""
         BUILD_COMMAND ""
         INSTALL_COMMAND ""
@@ -53,7 +55,8 @@ ExternalProject_Add(
         GIT_REPOSITORY "https://cpp977:A*u1t5o!s@github.com/cpp977/TOOLS.git"
         GIT_SHALLOW ON
         TIMEOUT 10
-        UPDATE_COMMAND ${GIT_EXECUTABLE} pull
+#        UPDATE_COMMAND ${GIT_EXECUTABLE} pull
+        UPDATE_COMMAND ""
         CONFIGURE_COMMAND ""
         BUILD_COMMAND ""
         INSTALL_COMMAND ""
@@ -71,6 +74,26 @@ ExternalProject_Add(
         GIT_REPOSITORY "https://gitlab.com/libeigen/eigen"
         GIT_SHALLOW ON
         TIMEOUT 10
+        UPDATE_COMMAND ""
+        CONFIGURE_COMMAND "" 
+        BUILD_COMMAND ""
+        INSTALL_COMMAND "" 
+        TEST_COMMAND ""
+        LOG_DOWNLOAD ON
+        LOG_MERGED_STDOUTERR ON
+        USES_TERMINAL_DOWNLOAD ON
+)
+
+set(LRUCACHE_ROOT ${CMAKE_BINARY_DIR}/thirdparty/lru)
+set(LRUCACHE_INCLUDE_DIR ${LRUCACHE_ROOT}/src/lru_cache/include)
+
+ExternalProject_Add(
+        lru_cache
+        PREFIX ${LRUCACHE_ROOT}
+        GIT_REPOSITORY "https://github.com/goldsborough/lru-cache"
+        GIT_SHALLOW ON
+        TIMEOUT 10
+        UPDATE_COMMAND ""
         CONFIGURE_COMMAND "" 
         BUILD_COMMAND ""
         INSTALL_COMMAND "" 

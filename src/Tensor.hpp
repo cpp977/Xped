@@ -394,15 +394,6 @@ permute(const Permutation<Rank+CoRank>& p) const
         constexpr std::size_t newRank = Rank-shift;
         constexpr std::size_t newCoRank = CoRank+shift;
         Tensor<newRank, newCoRank, Symmetry, MatrixType_, TensorType_> out;
-        // cout << "old domain:" << endl;
-        // for (std::size_t i=0; i<Rank; i++) {
-        //         cout << uncoupled_domain[i] << endl;
-        // }
-        // cout << endl << "old codomain:" << endl;
-        // for (std::size_t i=0; i<CoRank; i++) {
-        //         cout << uncoupled_codomain[i] << endl;
-        // }
-        // cout << endl << "new domain:" << endl;
         for (std::size_t i=0; i<newRank; i++) {
                 if (p.pi[i] > Rank-1) {
                         out.uncoupled_domain[i] = uncoupled_codomain[p.pi[i]-Rank].conj();
@@ -410,11 +401,9 @@ permute(const Permutation<Rank+CoRank>& p) const
                 else {
                         out.uncoupled_domain[i] = uncoupled_domain[p.pi[i]];
                 }
-                // cout << out.uncoupled_domain[i] << endl;
 
         }
 
-        // cout << "new codomain:" << endl;
         for (std::size_t i=0; i<newCoRank; i++) {
                 if (p.pi[i+newRank] > Rank-1) {
                         out.uncoupled_codomain[i] = uncoupled_codomain[p.pi[i+newRank]-Rank];                        
@@ -422,26 +411,21 @@ permute(const Permutation<Rank+CoRank>& p) const
                 else {
                         out.uncoupled_codomain[i] = uncoupled_domain[p.pi[i+newRank]].conj();
                 }
-                // cout << out.uncoupled_codomain[i] << endl;
-
         }
         
         out.domain = util::build_FusionTree(out.uncoupled_domain);
-        // cout << out.domain << endl << out.domain.printTrees() << endl;
         out.codomain = util::build_FusionTree(out.uncoupled_codomain);
-        // cout << out.codomain << endl << out.codomain.printTrees() << endl;
 
         for (size_t i=0; i<sector.size(); i++) {
                 auto domain_trees = domain.tree(sector[i]);
                 auto codomain_trees = codomain.tree(sector[i]);
                 for (const auto& domain_tree:domain_trees)
                 for (const auto& codomain_tree:codomain_trees) {
-                        // cout << "processing domain tree:" << endl << domain_tree.draw() << endl << "and codomain tree:" << endl << codomain_tree.draw() << endl; 
                         for (const auto& [permuted_trees, coeff] : treepair::permute<shift>(domain_tree, codomain_tree, p)) {
                                 if (std::abs(coeff) < 1.e-10) {continue;}
                                 
                                 auto [permuted_domain_tree, permuted_codomain_tree] = permuted_trees;
-                                // cout << "permuted domain tree:" << endl << permuted_domain_tree.draw() << endl << "and codomain tree:" << endl << permuted_codomain_tree.draw() << endl; 
+  
                                 assert(permuted_domain_tree.q_coupled == permuted_codomain_tree.q_coupled);
                                 
                                 auto tensor = this->subBlock(domain_tree,codomain_tree);
@@ -450,17 +434,14 @@ permute(const Permutation<Rank+CoRank>& p) const
                                 auto it = out.dict.find(permuted_domain_tree.q_coupled);
                                 if (it == out.dict.end()) {
                                         MatrixType mat(out.domain.inner_dim(permuted_domain_tree.q_coupled), out.codomain.inner_dim(permuted_domain_tree.q_coupled)); mat.setZero();
-                                        // cout << "insert new mat with size (" << mat.rows() << "x" << mat.cols() << ")" << endl;
                                         auto leftOffd = out.domain.leftOffset(permuted_domain_tree);
                                         auto leftOffc = out.codomain.leftOffset(permuted_codomain_tree);
                                         
-                                        // cout << "fill block at pos=(" << leftOffd << "," << leftOffc << ") with size (" << permuted_domain_tree.dim << "x" << permuted_codomain_tree.dim << ")" <<  endl;
                                         mat.block(leftOffd, leftOffc, permuted_domain_tree.dim, permuted_codomain_tree.dim) =
                                                 coeff * Eigen::Map<MatrixType>(Tshuffle.data(),permuted_domain_tree.dim, permuted_codomain_tree.dim);
                                         out.push_back(permuted_domain_tree.q_coupled, mat);
                                 }
                                 else {
-                                        // cout << "fill existing mat, block at pos=(" << out.domain.leftOffset(permuted_domain_tree) << "," << out.codomain.leftOffset(permuted_codomain_tree) << ") with size (" << permuted_domain_tree.dim << "x" << permuted_codomain_tree.dim << ")" <<  endl;
                                         out.block[it->second].block(out.domain.leftOffset(permuted_domain_tree), out.codomain.leftOffset(permuted_codomain_tree),
                                                                     permuted_domain_tree.dim, permuted_codomain_tree.dim) +=
                                                 coeff * Eigen::Map<MatrixType>(Tshuffle.data(),permuted_domain_tree.dim, permuted_codomain_tree.dim);

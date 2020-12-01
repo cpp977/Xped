@@ -7,7 +7,7 @@
 
 #include <TextTable.h>
 
-#define HELPERS_IO_TABLE
+#include "macros.h"
 
 using std::cout;
 using std::endl;
@@ -15,6 +15,34 @@ using std::size_t;
 using std::string;
 
 #include "ArgParser.h"
+
+#include "lru/lru.hpp"
+
+#define CACHE_PERMUTE_OUTPUT
+
+template<std::size_t Rank, typename Symmetry> struct FusionTree;
+template<std::size_t N> struct Permutation;
+
+template<int shift, std::size_t Rank, std::size_t CoRank, typename Symmetry>
+struct CacheManager
+{
+        typedef FusionTree<CoRank, Symmetry> CoTree;
+        typedef FusionTree<CoRank+shift, Symmetry> NewCoTree;
+        typedef FusionTree<Rank, Symmetry> Tree;
+        typedef FusionTree<Rank-shift, Symmetry> NewTree;
+        typedef typename Symmetry::Scalar Scalar;
+        
+        typedef LRU::Cache<std::tuple<Tree, CoTree, Permutation<Rank+CoRank> >, std::unordered_map<std::pair<NewTree, NewCoTree >, Scalar> >  CacheType;
+        CacheManager(std::size_t cache_size) {
+                cache = CacheType(cache_size);
+                cache.monitor();
+        }
+        CacheType cache;
+};
+
+template<int shift, std::size_t Rank, std::size_t CoRank, typename Symmetry>
+CacheManager<shift, Rank, CoRank, Symmetry> tree_cache(100);
+
 #include "Qbasis.hpp"
 #include "symmetry/SU2.hpp"
 #include "symmetry/U0.hpp"
@@ -63,6 +91,10 @@ int main(int argc, char* argv[])
         // auto test2 = test.permute<0>(p2);
         // cout << outerprod << endl;
         cout << "r=" << prod.rank() << ", cr=" << prod.corank() << endl;
+        std::cout << "total hits=" << tree_cache<-1,1,2,Symmetry>.cache.stats().total_hits() << endl; // Hits for any key
+        std::cout << "total misses=" << tree_cache<-1,1,2,Symmetry>.cache.stats().total_misses() << endl; // Misses for any key
+        std::cout << "hit rate=" << tree_cache<-1,1,2,Symmetry>.cache.stats().hit_rate() << endl; // Hit rate in [0, 1]
+
         // auto tplain = prod.adjoint().plainTensor();
         // for (Eigen::Index k=0; k<tplain.dimensions()[2]; k++) {
         //         Eigen::Matrix<double,-1,-1> pauli(Dloc,Dloc);

@@ -3,6 +3,8 @@
 
 #include <unsupported/Eigen/CXX11/Tensor>
 
+#include "lru/lru.hpp"
+
 #include "hash/hash.hpp"
 #include "numeric_limits.h"
 #include "Permutations.h"
@@ -70,6 +72,17 @@ struct FusionTree
 
         bool operator!= (const FusionTree<Rank,Symmetry>& other) const {return !this->operator==(other);}
 
+        friend std::size_t hash_value(const FusionTree<Rank,Symmetry>& tree)
+        {
+                size_t seed = 0;
+                boost::hash_combine(seed, tree.q_uncoupled);
+                boost::hash_combine(seed, tree.q_coupled);
+                boost::hash_combine(seed, tree.q_intermediates);
+                boost::hash_combine(seed, tree.IS_DUAL);
+                boost::hash_combine(seed, tree.multiplicities);
+                return seed;
+        }
+        
         std::string draw() const {
                 auto print_aligned = [](const qType& q, std::size_t alignment=4) -> std::string {
                         std::stringstream ss;
@@ -381,10 +394,17 @@ namespace treepair {
                 }
         }
 
+        //
         template<int shift, std::size_t Rank, std::size_t CoRank, typename Symmetry>
         std::unordered_map<std::pair<FusionTree<Rank-shift, Symmetry>, FusionTree<CoRank+shift, Symmetry> >, typename Symmetry::Scalar>
         permute (const FusionTree<Rank, Symmetry>& t1, const FusionTree<CoRank, Symmetry>& t2, const Permutation<Rank+CoRank>& p)
+        //        LRU::Cache<std::tuple<FusionTree<Rank, Symmetry>, FusionTree<CoRank, Symmetry>, Permutation<Rank+CoRank> >, std::unordered_map<std::pair<FusionTree<Rank-shift, Symmetry>, FusionTree<CoRank+shift, Symmetry> >, typename Symmetry::Scalar> >& cache)
         {
+#ifdef CACHE_PERMUTE_OUTPUT
+                if (tree_cache<shift, Rank, CoRank, Symmetry>.cache.contains(std::make_tuple(t1,t2,p))) {
+                        return tree_cache<shift, Rank, CoRank, Symmetry>.cache.lookup(std::make_tuple(t1,t2,p));
+                }
+#endif
                 assert(t1.q_coupled == t2.q_coupled);
                 //transform the permutation. Needed because turn<>() reverses the order of the FusionTree.
                 std::array<std::size_t,Rank+CoRank> pi_id; std::iota(pi_id.begin(),pi_id.end(),0ul);
@@ -424,9 +444,20 @@ namespace treepair {
                         if (std::abs(coeff) < 1.e-9) {zero_count++;}
                 }
                 if (zero_count>0) {cout << "permute pair operation created #=" << zero_count << " 0s." << endl;}
-
+#ifdef CACHE_PERMUTE_OUTPUT
+                tree_cache<shift, Rank, CoRank, Symmetry>.cache.emplace(std::make_tuple(t1,t2,p), out);
+#endif
                 return out;
         }
+        
+        // template<int shift, std::size_t Rank, std::size_t CoRank, typename Symmetry>
+        // std::unordered_map<std::pair<FusionTree<Rank-shift, Symmetry>, FusionTree<CoRank+shift, Symmetry> >, typename Symmetry::Scalar>
+        // permute (const FusionTree<Rank, Symmetry>& t1, const FusionTree<CoRank, Symmetry>& t2, const Permutation<Rank+CoRank>& p)
+        // {
+        //         LRU::Cache<std::tuple<FusionTree<Rank, Symmetry>, FusionTree<CoRank, Symmetry>, Permutation<Rank+CoRank> >, std::unordered_map<std::pair<FusionTree<Rank-shift, Symmetry>, FusionTree<CoRank+shift, Symmetry> >, typename Symmetry::Scalar> > cache(100);
+        //         cache.monitor();
+        //         return permute<shift>(t1,t2,p,cache);
+        // }
 } //end namespace treepair
 
 #endif

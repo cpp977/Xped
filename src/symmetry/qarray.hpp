@@ -9,6 +9,8 @@
 #include <limits>
 /// \endcond
 
+#include <boost/functional/hash.hpp>
+
 #include "NestedLoopIterator.h"
 #include "JoinArray.h"
 
@@ -46,6 +48,16 @@ struct qarray
 		for(size_t i=0; i<Nq; i++) { dists[i] = abs(this->data[i] - other[i]); }
 		return *std::max_element(std::begin(dists), std::end(dists));
 	}
+
+        friend std::size_t hash_value(const qarray<Nq>& qin)
+        {
+                std::size_t seed = 0;
+                for (size_t q=0; q<Nq; ++q) {
+                        boost::hash_combine(seed, qin.data[q]);
+                }
+                
+                return seed;
+        }
 };
 
 template<size_t Nq> using qarray2 = std::array<qarray<Nq>,2>;

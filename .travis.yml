@@ -17,5 +17,5 @@ env:
 script:
   - mkdir ../build
   - cd ../build
-  - cmake ../Tensor/
+  - cmake ../Multiped/
   - cmake --build . -- VERBOSE=1

@@ -137,6 +137,10 @@ namespace Sym
 	 */
 	void initialize(int maxJ=1, std::string f_3j="", std::string f_6j="", std::string f_9j="")
 	{
+                std::ignore = maxJ;
+                std::ignore = f_3j;
+                std::ignore = f_6j;
+                std::ignore = f_9j;
 #ifdef USE_WIG_SU2_COEFFS
 		wig_table_init(2*maxJ,9);
 		wig_temp_init(2*maxJ);
@@ -154,6 +158,7 @@ namespace Sym
 
 	void finalize(bool PRINT_STATS=false)
 	{
+                std::ignore = PRINT_STATS;
 #ifdef USE_WIG_SU2_COEFFS
 		wig_temp_free();
 		wig_table_free();

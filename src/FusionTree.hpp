@@ -139,7 +139,7 @@ struct FusionTree
                 if constexpr (Rank == 0) {out = Eigen::Tensor<Scalar,Rank+1>(1); out(0)=1.;}
                 else if constexpr (Rank == 1) {
                         out = Eigen::Tensor<Scalar,Rank+1>(Symmetry::degeneracy(q_uncoupled[0]), Symmetry::degeneracy(q_coupled)); out.setZero();
-                        for (std::size_t i=0; i<Symmetry::degeneracy(q_uncoupled[0]); i++) {out(i,i) = 1.;}
+                        for (std::size_t i=0; i<static_cast<std::size_t>(Symmetry::degeneracy(q_uncoupled[0])); i++) {out(i,i) = 1.;}
 
                 }
                 else if constexpr (Rank == 2) {

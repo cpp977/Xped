@@ -16,9 +16,11 @@ using std::string;
 
 #include "ArgParser.h"
 
-#include "lru/lru.hpp"
 
-#define CACHE_PERMUTE_OUTPUT
+// #define CACHE_PERMUTE_OUTPUT
+
+#ifdef CACHE_PERMUTE_OUTPUT
+#include "lru/lru.hpp"
 
 template<std::size_t Rank, typename Symmetry> struct FusionTree;
 template<std::size_t N> struct Permutation;
@@ -42,6 +44,7 @@ struct CacheManager
 
 template<int shift, std::size_t Rank, std::size_t CoRank, typename Symmetry>
 CacheManager<shift, Rank, CoRank, Symmetry> tree_cache(100);
+#endif
 
 #include "Qbasis.hpp"
 #include "symmetry/SU2.hpp"
@@ -91,9 +94,9 @@ int main(int argc, char* argv[])
         // auto test2 = test.permute<0>(p2);
         // cout << outerprod << endl;
         cout << "r=" << prod.rank() << ", cr=" << prod.corank() << endl;
-        std::cout << "total hits=" << tree_cache<-1,1,2,Symmetry>.cache.stats().total_hits() << endl; // Hits for any key
-        std::cout << "total misses=" << tree_cache<-1,1,2,Symmetry>.cache.stats().total_misses() << endl; // Misses for any key
-        std::cout << "hit rate=" << tree_cache<-1,1,2,Symmetry>.cache.stats().hit_rate() << endl; // Hit rate in [0, 1]
+        // std::cout << "total hits=" << tree_cache<-1,1,2,Symmetry>.cache.stats().total_hits() << endl; // Hits for any key
+        // std::cout << "total misses=" << tree_cache<-1,1,2,Symmetry>.cache.stats().total_misses() << endl; // Misses for any key
+        // std::cout << "hit rate=" << tree_cache<-1,1,2,Symmetry>.cache.stats().hit_rate() << endl; // Hit rate in [0, 1]
 
         // auto tplain = prod.adjoint().plainTensor();
         // for (Eigen::Index k=0; k<tplain.dimensions()[2]; k++) {

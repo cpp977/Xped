@@ -16,12 +16,13 @@ using std::string;
 
 #include "ArgParser.h"
 
-#define CACHE_PERMUTE_OUTPUT 1
-
-#include "lru/lru.hpp"
-
 template<std::size_t Rank, typename Symmetry> struct FusionTree;
 template<std::size_t N> struct Permutation;
+
+// #define CACHE_PERMUTE_OUTPUT 1
+
+#ifdef CACHE_PERMUTE_OUTPUT
+#include "lru/lru.hpp"
 
 template<int shift, std::size_t Rank, std::size_t CoRank, typename Symmetry>
 struct CacheManager
@@ -42,6 +43,7 @@ struct CacheManager
 
 template<int shift, std::size_t Rank, std::size_t CoRank, typename Symmetry>
 CacheManager<shift, Rank, CoRank, Symmetry> tree_cache(100);
+#endif
 
 #include "../src/Qbasis.hpp"
 #include "../src/symmetry/kind_dummies.hpp"

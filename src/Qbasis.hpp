@@ -96,7 +96,7 @@ public:
 	size_t full_outer_num( const qType& q ) const;
 	///\}
 	
-	size_t leftOffset(const FusionTree<depth, Symmetry>& tree, bool PRINT=false, const std::array<size_t,depth>& plain=std::array<std::size_t,depth>()) const;
+	size_t leftOffset(const FusionTree<depth, Symmetry>& tree, const std::array<size_t,depth>& plain=std::array<std::size_t,depth>()) const;
         size_t rightOffset(const FusionTree<depth, Symmetry>& tree, const std::array<size_t,depth>& plain=std::array<std::size_t,depth>()) const;
 	
 	/**Insert the quantum number \p q with dimension \p inner_dim into the basis.*/
@@ -223,8 +223,6 @@ setRandom(const std::size_t& fullSize, const std::size_t& max_sectorSize)
 {
         clear();
         static_assert(depth == 1);
-        std::size_t current_size=0;
-        std::size_t count=0;
         while (fullDim() < fullSize) {
                 qType q = Symmetry::random_q();
                 std::size_t inner_dim = static_cast<std::size_t>(util::random::threadSafeRandUniform<int,int>(1,std::min(max_sectorSize,fullSize-fullDim())));
@@ -329,23 +327,19 @@ inner_dim(const size_t& num_in) const
 
 template<typename Symmetry, std::size_t depth>
 size_t Qbasis<Symmetry,depth>::
-leftOffset(const FusionTree<depth, Symmetry>& tree, bool PRINT, const std::array<size_t,depth>& plain) const
+leftOffset(const FusionTree<depth, Symmetry>& tree, const std::array<size_t,depth>& plain) const
 {
 	assert( trees.size() == data_.size() and "The history for this basis is not defined properly");
 	auto it = trees.find(tree.q_coupled);
-        // if (PRINT) {cout << "tree:" << endl << tree.draw() << endl;}
-        // cout << this->printTrees() << endl;
 	assert( it != trees.end() and "The history for this basis is not defined properly");
-        // cout << tree.draw() << endl;
 	size_t out=0;
 
 	for( const auto& i: it->second )
 	{
-                // if (PRINT) {cout << "i:" << endl << i.draw() << endl;}
 		if(i != tree) { out+=i.dim; }
 		if(i == tree)
 		{
-                        if (PRINT) {cout << "breaking the loop in leftOffset" << endl;}
+                        plain.size(); //supresses gcc warning
                         //maybe some code for plain
 			break;
 		}
@@ -370,6 +364,7 @@ rightOffset(const FusionTree<depth, Symmetry>& tree, const std::array<size_t,dep
 		if(i != tree and SWITCH==true) { out+=i.dim; }
 		if(i == tree)
 		{
+                        plain.size(); //supresses gcc warning
                         //some code for plain size
                         SWITCH=true;
 		}
@@ -487,7 +482,7 @@ combine (const Qbasis<Symmetry,1>& other, bool CONJ) const
 			{
 				q2 = Symmetry::conj(q2);
 			}
-			auto plain = plain1.combine(plain2);
+			// auto plain = plain1.combine(plain2);
 			auto qVec = Symmetry::reduceSilent(q1,q2);
 			for (const auto& q: qVec)
 			{

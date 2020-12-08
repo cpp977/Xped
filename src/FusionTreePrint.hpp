@@ -70,7 +70,7 @@ std::string printTree<3>(const std::array<std::string,3>& uncoupled, const std::
 };
 
 template<>
-std::string printTree<2>(const std::array<std::string,2>& uncoupled, const std::array<std::string,0>& intermediates, const std::string& coupled, const std::array<std::string,1>& multiplicities, const std::array<bool,2> IS_DUAL)
+std::string printTree<2>(const std::array<std::string,2>& uncoupled, const std::array<std::string,0>&, const std::string& coupled, const std::array<std::string,1>& multiplicities, const std::array<bool,2> IS_DUAL)
 {
         std::stringstream ss;
         if (IS_DUAL[0] and !IS_DUAL[1])      {ss << "  ☐" << endl;}
@@ -87,7 +87,7 @@ std::string printTree<2>(const std::array<std::string,2>& uncoupled, const std::
 };
 
 template<>
-std::string printTree<1>(const std::array<std::string,1>& uncoupled, const std::array<std::string,0>& intermediates, const std::string& coupled, const std::array<std::string,0>& multiplicities, const std::array<bool,1> IS_DUAL)
+std::string printTree<1>(const std::array<std::string,1>& uncoupled, const std::array<std::string,0>&, const std::string& coupled, const std::array<std::string,0>&, const std::array<bool,1> IS_DUAL)
 {
         assert(uncoupled[0] == coupled);
         std::stringstream ss;
@@ -102,7 +102,7 @@ std::string printTree<1>(const std::array<std::string,1>& uncoupled, const std::
 };
 
 template<>
-std::string printTree<0>(const std::array<std::string,0>& uncoupled, const std::array<std::string,0>& intermediates, const std::string& coupled, const std::array<std::string,0>& multiplicities, const std::array<bool,0> IS_DUAL)
+std::string printTree<0>(const std::array<std::string,0>&, const std::array<std::string,0>&, const std::string&, const std::array<std::string,0>&, const std::array<bool,0>)
 {
         std::stringstream ss;
         ss << "0\n";

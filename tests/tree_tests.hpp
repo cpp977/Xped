@@ -74,7 +74,7 @@ void test_tree_pair_turn(const Qbasis<Symmetry,1>& B, const Qbasis<Symmetry,1>& 
                                 for (const auto& [trees,coeff] : treepair::turn<shift>(t1,t2)) {
                                         auto [t1p,t2p] = trees;
                                         for (const auto& [retrees,recoeff] : treepair::turn<-shift>(t1p,t2p)) {
-                                                auto [t1pp,t2pp] = retrees;
+                                                // auto [t1pp,t2pp] = retrees;
                                                 auto it = check.find(retrees);
                                                 if (it == check.end()) {check.insert(std::make_pair(retrees, coeff*recoeff));}
                                                 else (check[retrees] += coeff*recoeff);
@@ -106,7 +106,7 @@ void test_tree_pair_permute(const Qbasis<Symmetry,1>& B, const Qbasis<Symmetry,1
                                         for (const auto& [trees,coeff] : treepair::permute<shift>(t1,t2,p)) {
                                                 auto [t1p,t2p] = trees;
                                                 for (const auto& [retrees,recoeff] : treepair::permute<-shift>(t1p,t2p,p.inverse())) {
-                                                        auto [t1pp,t2pp] = retrees;
+                                                        // auto [t1pp,t2pp] = retrees;
                                                         auto it = check.find(retrees);
                                                         if (it == check.end()) {check.insert(std::make_pair(retrees, coeff*recoeff));}
                                                         else (check[retrees] += coeff*recoeff);

@@ -62,21 +62,22 @@ namespace util{
         template<typename TensorType>
         TensorType tensorProd(const TensorType& T1, const TensorType& T2)
         {
-                std::array<Eigen::Index, T1.NumIndices> dims;
-                for (std::size_t i=0; i<T1.rank(); i++) {
+                typedef typename TensorType::Index Index;
+                std::array<Index, T1.NumIndices> dims;
+                for (Index i=0; i<T1.rank(); i++) {
                         dims[i] = T1.dimensions()[i]*T2.dimensions()[i];
                 }
                 TensorType res(dims); res.setZero();
-                std::array<Eigen::Index, T1.NumIndices> extents = T2.dimensions();
+                std::array<Index, T1.NumIndices> extents = T2.dimensions();
 
                 std::vector<std::size_t> vec_dims; for (const auto& d:T1.dimensions()) {vec_dims.push_back(d);}
                 NestedLoopIterator Nelly(T1.rank(), vec_dims);
         
                 for (std::size_t i = Nelly.begin(); i!=Nelly.end(); i++) {
-                        std::vector<Eigen::Index> indices;
-                        for (std::size_t j=0; j<T1.rank(); j++) {indices.push_back(Nelly(j));}
-                        std::array<Eigen::Index, T1.NumIndices> offsets;
-                        for (std::size_t i=0; i<T1.rank(); i++) {
+                        std::vector<Index> indices;
+                        for (Index j=0; j<T1.rank(); j++) {indices.push_back(Nelly(j));}
+                        std::array<Index, T1.NumIndices> offsets;
+                        for (Index i=0; i<T1.rank(); i++) {
                                 offsets[i] = indices[i] * T2.dimensions()[i];
                         }
         
@@ -331,7 +332,7 @@ template<std::size_t Rank, std::size_t CoRank, typename Symmetry, typename Matri
 Tensor<Rank, CoRank, Symmetry, MatrixType_, TensorType_> Tensor<Rank, CoRank, Symmetry, MatrixType_, TensorType_>::
 permute(const Permutation<Rank>& p_domain, const Permutation<CoRank>& p_codomain) const
 {
-        std::array<std::size_t,Rank+CoRank> total_p;
+        std::array<Eigen::Index,Rank+CoRank> total_p;
         auto it_total = std::copy(p_domain.pi.begin(), p_domain.pi.end(), total_p.begin());
         auto pi_codomain_shifted = p_codomain.pi;
         std::for_each(pi_codomain_shifted.begin(), pi_codomain_shifted.end(), [] (std::size_t& elem) {return elem+=Rank;});
@@ -429,7 +430,7 @@ permute(const Permutation<Rank+CoRank>& p) const
                                 assert(permuted_domain_tree.q_coupled == permuted_codomain_tree.q_coupled);
                                 
                                 auto tensor = this->subBlock(domain_tree,codomain_tree);
-                                TensorType Tshuffle = tensor.shuffle(p.pi);
+                                TensorType Tshuffle = tensor.shuffle(p.template pi_as_index<Eigen::Index>());
                                 
                                 auto it = out.dict.find(permuted_domain_tree.q_coupled);
                                 if (it == out.dict.end()) {

@@ -230,7 +230,7 @@ TEST_CASE("Testing the permutation within the domain.") {
                 auto tp = t.permute(p,ptriv);
 
                 auto tplain = t.plainTensor();
-                std::array<std::size_t,4> ptot = {{2,0,3,1}};
+                std::array<Eigen::Index,4> ptot = {{2,0,3,1}};
                 Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(ptot);
 
                 auto tplainp = tp.plainTensor();
@@ -255,7 +255,7 @@ TEST_CASE("Testing the permutation within the domain.") {
                 auto tp = t.permute(p,ptriv);
 
                 auto tplain = t.plainTensor();
-                std::array<std::size_t,4> ptot = {{2,0,3,1}};
+                std::array<Eigen::Index,4> ptot = {{2,0,3,1}};
                 Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(ptot);
 
                 auto tplainp = tp.plainTensor();
@@ -280,7 +280,7 @@ TEST_CASE("Testing the permutation within the domain.") {
                 auto tp = t.permute(p,ptriv);
 
                 auto tplain = t.plainTensor();
-                std::array<std::size_t,4> ptot = {{2,0,3,1}};
+                std::array<Eigen::Index,4> ptot = {{2,0,3,1}};
                 Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(ptot);
 
                 auto tplainp = tp.plainTensor();
@@ -307,7 +307,7 @@ TEST_CASE("Testing the permutation within the codomain.") {
                 auto tp = t.permute(ptriv,p);
 
                 auto tplain = t.plainTensor();
-                std::array<std::size_t,4> ptot = {{2,0,3,1}};
+                std::array<Eigen::Index,4> ptot = {{2,0,3,1}};
                 Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(ptot);
 
                 auto tplainp = tp.plainTensor();
@@ -332,7 +332,7 @@ TEST_CASE("Testing the permutation within the codomain.") {
                 auto tp = t.permute(ptriv,p);
 
                 auto tplain = t.plainTensor();
-                std::array<std::size_t,4> ptot = {{2,0,3,1}};
+                std::array<Eigen::Index,4> ptot = {{2,0,3,1}};
                 Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(ptot);
 
                 auto tplainp = tp.plainTensor();
@@ -357,7 +357,7 @@ TEST_CASE("Testing the permutation within the codomain.") {
                 auto tp = t.permute(ptriv,p);
 
                 auto tplain = t.plainTensor();
-                std::array<std::size_t,4> ptot = {{2,0,3,1}};
+                std::array<Eigen::Index,4> ptot = {{2,0,3,1}};
                 Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(ptot);
 
                 auto tplainp = tp.plainTensor();
@@ -382,7 +382,7 @@ TEST_CASE("Testing the general permutation of legs.") {
                 for (const auto& p : Permutation<4>::all()) {
                         auto tp = t.permute<+2>(p);
                         auto tplainp = tp.plainTensor();
-                        Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p.pi);
+                        Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p.template pi_as_index<Eigen::Index>());
                         auto check = tplainshuffle - tplainp;
                         Eigen::Tensor<double,0> zero = check.contract(check,Eigen::array<Eigen::IndexPair<Eigen::Index>, 4>{{Eigen::IndexPair<Eigen::Index>(0,0),
                                                                                                                                      Eigen::IndexPair<Eigen::Index>(1,1),
@@ -393,7 +393,7 @@ TEST_CASE("Testing the general permutation of legs.") {
                 for (const auto& p : Permutation<4>::all()) {
                         auto tp = t.permute<+1>(p);
                         auto tplainp = tp.plainTensor();
-                        Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p.pi);
+                        Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p.template pi_as_index<Eigen::Index>());
                         auto check = tplainshuffle - tplainp;
                         Eigen::Tensor<double,0> zero = check.contract(check,Eigen::array<Eigen::IndexPair<Eigen::Index>, 4>{{Eigen::IndexPair<Eigen::Index>(0,0),
                                                                                                                                      Eigen::IndexPair<Eigen::Index>(1,1),
@@ -404,7 +404,7 @@ TEST_CASE("Testing the general permutation of legs.") {
                 for (const auto& p : Permutation<4>::all()) {
                         auto tp = t.permute<0>(p);
                         auto tplainp = tp.plainTensor();
-                        Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p.pi);
+                        Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p.template pi_as_index<Eigen::Index>());
                         auto check = tplainshuffle - tplainp;
                         Eigen::Tensor<double,0> zero = check.contract(check,Eigen::array<Eigen::IndexPair<Eigen::Index>, 4>{{Eigen::IndexPair<Eigen::Index>(0,0),
                                                                                                                                      Eigen::IndexPair<Eigen::Index>(1,1),
@@ -415,7 +415,7 @@ TEST_CASE("Testing the general permutation of legs.") {
                 for (const auto& p : Permutation<4>::all()) {
                         auto tp = t.permute<-1>(p);
                         auto tplainp = tp.plainTensor();
-                        Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p.pi);
+                        Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p.template pi_as_index<Eigen::Index>());
                         auto check = tplainshuffle - tplainp;
                         Eigen::Tensor<double,0> zero = check.contract(check,Eigen::array<Eigen::IndexPair<Eigen::Index>, 4>{{Eigen::IndexPair<Eigen::Index>(0,0),
                                                                                                                                      Eigen::IndexPair<Eigen::Index>(1,1),
@@ -426,7 +426,7 @@ TEST_CASE("Testing the general permutation of legs.") {
                 for (const auto& p : Permutation<4>::all()) {
                         auto tp = t.permute<-2>(p);
                         auto tplainp = tp.plainTensor();
-                        Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p.pi);
+                        Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p.template pi_as_index<Eigen::Index>());
                         auto check = tplainshuffle - tplainp;
                         Eigen::Tensor<double,0> zero = check.contract(check,Eigen::array<Eigen::IndexPair<Eigen::Index>, 4>{{Eigen::IndexPair<Eigen::Index>(0,0),
                                                                                                                                      Eigen::IndexPair<Eigen::Index>(1,1),
@@ -464,7 +464,7 @@ TEST_CASE("Testing the general permutation of legs.") {
                 for (const auto& p : Permutation<4>::all()) {
                         auto tp = t.permute<+2>(p);
                         auto tplainp = tp.plainTensor();
-                        Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p.pi);
+                        Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p.template pi_as_index<Eigen::Index>());
                         auto check = tplainshuffle - tplainp;
                         Eigen::Tensor<double,0> zero = check.contract(check,Eigen::array<Eigen::IndexPair<Eigen::Index>, 4>{{Eigen::IndexPair<Eigen::Index>(0,0),
                                                                                                                                      Eigen::IndexPair<Eigen::Index>(1,1),
@@ -475,7 +475,7 @@ TEST_CASE("Testing the general permutation of legs.") {
                 for (const auto& p : Permutation<4>::all()) {
                         auto tp = t.permute<+1>(p);
                         auto tplainp = tp.plainTensor();
-                        Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p.pi);
+                        Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p.template pi_as_index<Eigen::Index>());
                         auto check = tplainshuffle - tplainp;
                         Eigen::Tensor<double,0> zero = check.contract(check,Eigen::array<Eigen::IndexPair<Eigen::Index>, 4>{{Eigen::IndexPair<Eigen::Index>(0,0),
                                                                                                                                      Eigen::IndexPair<Eigen::Index>(1,1),
@@ -486,7 +486,7 @@ TEST_CASE("Testing the general permutation of legs.") {
                 for (const auto& p : Permutation<4>::all()) {
                         auto tp = t.permute<0>(p);
                         auto tplainp = tp.plainTensor();
-                        Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p.pi);
+                        Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p.template pi_as_index<Eigen::Index>());
                         auto check = tplainshuffle - tplainp;
                         Eigen::Tensor<double,0> zero = check.contract(check,Eigen::array<Eigen::IndexPair<Eigen::Index>, 4>{{Eigen::IndexPair<Eigen::Index>(0,0),
                                                                                                                                      Eigen::IndexPair<Eigen::Index>(1,1),
@@ -497,7 +497,7 @@ TEST_CASE("Testing the general permutation of legs.") {
                 for (const auto& p : Permutation<4>::all()) {
                         auto tp = t.permute<-1>(p);
                         auto tplainp = tp.plainTensor();
-                        Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p.pi);
+                        Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p.template pi_as_index<Eigen::Index>());
                         auto check = tplainshuffle - tplainp;
                         Eigen::Tensor<double,0> zero = check.contract(check,Eigen::array<Eigen::IndexPair<Eigen::Index>, 4>{{Eigen::IndexPair<Eigen::Index>(0,0),
                                                                                                                                      Eigen::IndexPair<Eigen::Index>(1,1),
@@ -508,7 +508,7 @@ TEST_CASE("Testing the general permutation of legs.") {
                 for (const auto& p : Permutation<4>::all()) {
                         auto tp = t.permute<-2>(p);
                         auto tplainp = tp.plainTensor();
-                        Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p.pi);
+                        Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p.template pi_as_index<Eigen::Index>());
                         auto check = tplainshuffle - tplainp;
                         Eigen::Tensor<double,0> zero = check.contract(check,Eigen::array<Eigen::IndexPair<Eigen::Index>, 4>{{Eigen::IndexPair<Eigen::Index>(0,0),
                                                                                                                                      Eigen::IndexPair<Eigen::Index>(1,1),
@@ -531,7 +531,7 @@ TEST_CASE("Testing the general permutation of legs.") {
                 for (const auto& p : Permutation<4>::all()) {
                         auto tp = t.permute<+2>(p);
                         auto tplainp = tp.plainTensor();
-                        Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p.pi);
+                        Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p.template pi_as_index<Eigen::Index>());
                         auto check = tplainshuffle - tplainp;
                         Eigen::Tensor<double,0> zero = check.contract(check,Eigen::array<Eigen::IndexPair<Eigen::Index>, 4>{{Eigen::IndexPair<Eigen::Index>(0,0),
                                                                                                                                      Eigen::IndexPair<Eigen::Index>(1,1),
@@ -542,7 +542,7 @@ TEST_CASE("Testing the general permutation of legs.") {
                 for (const auto& p : Permutation<4>::all()) {
                         auto tp = t.permute<+1>(p);
                         auto tplainp = tp.plainTensor();
-                        Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p.pi);
+                        Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p.template pi_as_index<Eigen::Index>());
                         auto check = tplainshuffle - tplainp;
                         Eigen::Tensor<double,0> zero = check.contract(check,Eigen::array<Eigen::IndexPair<Eigen::Index>, 4>{{Eigen::IndexPair<Eigen::Index>(0,0),
                                                                                                                                      Eigen::IndexPair<Eigen::Index>(1,1),
@@ -553,7 +553,7 @@ TEST_CASE("Testing the general permutation of legs.") {
                 for (const auto& p : Permutation<4>::all()) {
                         auto tp = t.permute<0>(p);
                         auto tplainp = tp.plainTensor();
-                        Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p.pi);
+                        Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p.template pi_as_index<Eigen::Index>());
                         auto check = tplainshuffle - tplainp;
                         Eigen::Tensor<double,0> zero = check.contract(check,Eigen::array<Eigen::IndexPair<Eigen::Index>, 4>{{Eigen::IndexPair<Eigen::Index>(0,0),
                                                                                                                                      Eigen::IndexPair<Eigen::Index>(1,1),
@@ -564,7 +564,7 @@ TEST_CASE("Testing the general permutation of legs.") {
                 for (const auto& p : Permutation<4>::all()) {
                         auto tp = t.permute<-1>(p);
                         auto tplainp = tp.plainTensor();
-                        Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p.pi);
+                        Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p.template pi_as_index<Eigen::Index>());
                         auto check = tplainshuffle - tplainp;
                         Eigen::Tensor<double,0> zero = check.contract(check,Eigen::array<Eigen::IndexPair<Eigen::Index>, 4>{{Eigen::IndexPair<Eigen::Index>(0,0),
                                                                                                                                      Eigen::IndexPair<Eigen::Index>(1,1),
@@ -575,7 +575,7 @@ TEST_CASE("Testing the general permutation of legs.") {
                 for (const auto& p : Permutation<4>::all()) {
                         auto tp = t.permute<-2>(p);
                         auto tplainp = tp.plainTensor();
-                        Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p.pi);
+                        Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p.template pi_as_index<Eigen::Index>());
                         auto check = tplainshuffle - tplainp;
                         Eigen::Tensor<double,0> zero = check.contract(check,Eigen::array<Eigen::IndexPair<Eigen::Index>, 4>{{Eigen::IndexPair<Eigen::Index>(0,0),
                                                                                                                                      Eigen::IndexPair<Eigen::Index>(1,1),

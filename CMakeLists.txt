@@ -9,10 +9,10 @@ add_library(project_options INTERFACE)
 target_compile_features(project_options INTERFACE cxx_std_17)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-# set(CMAKE_CXX_FLAGS "-Wall -Wextra")
+set(CMAKE_CXX_FLAGS "-Wall -Wextra")
 set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g")
 set(CMAKE_CXX_FLAGS_PROFILE "-pg -O2")
-set(CMAKE_CXX_FLAGS_RELEASE "-O3 -ftemplate-backtrace-limit=0")
+set(CMAKE_CXX_FLAGS_RELEASE "-O3 -Wno-sign-compare")
 
 if(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
   option(ENABLE_BUILD_WITH_TIME_TRACE "Enable -ftime-trace to generate time tracing .json files on clang" OFF)
@@ -22,6 +22,7 @@ if(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
 endif()
 
 add_compile_options(-fmax-errors=5)
+add_compile_options(-Wno-type-limits)
 
 find_package(Git REQUIRED)
 

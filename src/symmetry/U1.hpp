@@ -54,7 +54,7 @@ public:
 	inline static constexpr std::array<KIND,Nq> kind() { return {Kind::name}; }
 
 	inline static qType conj( const qType& q ) { return {-q[0]}; }
-	inline static int degeneracy( const qType& q ) { return 1; }
+	inline static int degeneracy( const qType& ) { return 1; }
 	
 	inline static int spinorFactor() { return +1; }
 
@@ -92,14 +92,14 @@ public:
 	 */
 	inline static Scalar coeff_dot(const qType& q1);
 
-        static Scalar coeff_FS(const qType& q1) {return 1.;}
+        static Scalar coeff_FS(const qType&) {return 1.;}
 
-        static Eigen::Tensor<Scalar_, 2> one_j_tensor(const qType& q1);
+        static Eigen::Tensor<Scalar_, 2> one_j_tensor(const qType&);
         
 	inline static Scalar coeff_3j(const qType& q1, const qType& q2, const qType& q3,
                                       int        q1_z, int        q2_z,        int q3_z);
         
-        static Eigen::Tensor<Scalar_, 3> CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t multiplicity);
+        static Eigen::Tensor<Scalar_, 3> CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t);
 
         static Scalar coeff_turn(const qType& ql, const qType& qr, const qType& qf) {return triangle(ql,qr,qf) ? Scalar(1.) : Scalar(0.);}
         
@@ -206,7 +206,7 @@ coeff_dot(const qType& q1)
 
 template<typename Kind, typename Scalar_>
 Eigen::Tensor<Scalar_, 2> U1<Kind,Scalar_>::
-one_j_tensor(const qType& q1)
+one_j_tensor(const qType&)
 {
         Eigen::Tensor<Scalar, 2> T(1,1); T(0,0) = 1;
         return T;
@@ -214,7 +214,7 @@ one_j_tensor(const qType& q1)
 
 template<typename Kind, typename Scalar_>
 Eigen::Tensor<Scalar_, 3> U1<Kind,Scalar_>::
-CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t multiplicity)
+CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t)
 {
         Eigen::Tensor<Scalar, 3> T(1,1,1);
         if (triangle(q1,q2,q3)) {T(0,0,0) = 1.;}

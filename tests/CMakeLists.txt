@@ -15,7 +15,7 @@ file(GLOB SOURCES "./*.hpp"
 add_library(test_suite OBJECT driver.cpp ${SOURCES})
 
 add_executable(basis_test basis.cpp $<TARGET_OBJECTS:test_suite>)
-add_dependencies(basis_test TextTable TOOLS)
+add_dependencies(basis_test TextTable TOOLS Eigen lru_cache)
 target_link_libraries (basis_test GSL::gsl GSL::gslcblas doctest::doctest)
 #doctest_discover_tests(basis_test)
 add_test(NAME basis_test COMMAND basis_test )

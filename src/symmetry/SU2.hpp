@@ -107,7 +107,7 @@ public:
 	static Scalar coeff_3j(const qType& q1, const qType& q2, const qType& q3,
                                int        q1_z, int        q2_z,        int q3_z);
         
-	static Eigen::Tensor<Scalar_, 3> CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t multiplicity);
+	static Eigen::Tensor<Scalar_, 3> CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t);
 
         static Scalar coeff_turn(const qType& ql, const qType& qr, const qType& qf) {return std::sqrt(qr[0]) * coeff_recouple(ql,qr,SU2<Kind,Scalar>::conj(qr),
                                                                                                                               ql, qf, SU2<Kind,Scalar>::qvacuum());}
@@ -243,7 +243,7 @@ coeff_3j(const qType& q1, const qType& q2, const qType& q3,
 
 template<typename Kind, typename Scalar_>
 Eigen::Tensor<Scalar_, 3> SU2<Kind,Scalar_>::
-CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t multiplicity)
+CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t)
 {
         Eigen::Tensor<Scalar_, 3> T(degeneracy(q1),degeneracy(q2),degeneracy(q3));
         for (int i_q1m=0; i_q1m<degeneracy(q1); i_q1m++)

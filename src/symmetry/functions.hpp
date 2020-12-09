@@ -107,8 +107,7 @@ namespace Sym
 	std::vector<std::pair<std::size_t,std::size_t> >
 	split(const typename Symmetry::qType Q,
 		  const std::vector<typename Symmetry::qType>& ql,
-		  const std::vector<typename Symmetry::qType> qr,
-		  bool INDEX)
+		  const std::vector<typename Symmetry::qType> qr)
 	{
 		std::vector<std::pair<std::size_t,std::size_t> > vout;
 		for (std::size_t q1=0; q1<ql.size(); q1++)

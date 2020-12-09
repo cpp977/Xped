@@ -12,6 +12,20 @@ file(GLOB SOURCES "./*.cpp"
                   "./*.hpp"
                   "symmetry/*.hpp"
                   "hash/*.hpp")
-add_executable(run main.cpp ${SOURCES})
-add_dependencies(run TextTable TOOLS Eigen lru_cache)
-target_link_libraries (run GSL::gsl GSL::gslcblas)
+add_executable(run
+               main.cpp
+               ${SOURCES})
+               
+add_dependencies(run
+                 TextTable
+                 TOOLS
+                 Eigen)
+if(ENABLE_LRU_CACHE)
+add_dependencies(run lru_cache)
+endif()
+
+target_link_libraries (run
+                       project_options
+                       project_warnings
+                       GSL::gsl
+                       GSL::gslcblas)

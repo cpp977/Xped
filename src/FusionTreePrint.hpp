@@ -1,5 +1,6 @@
 template<std::size_t Rank>
 std::string printTree(const std::array<std::string,Rank>& uncoupled, const std::array<std::string,util::inter_dim(Rank)>& intermediates, const std::string& coupled, const std::array<std::string,util::mult_dim(Rank)>& multiplicities, const std::array<bool,Rank> IS_DUAL) {
+        uncoupled.size(); intermediates.size(); multiplicities.size(); IS_DUAL.size(); coupled.length();
         return "";
 }
 

@@ -90,14 +90,14 @@ public:
 	 *       Here we return simply 1, because the algorithm only allows valid combinations of quantumnumbers,
 	 *       for which the Kronecker deltas are not necessary.  
 	 */
-	inline static Scalar coeff_dot(const qType& q1);
+	inline static Scalar coeff_dot(const qType&);
 
         static Scalar coeff_FS(const qType&) {return 1.;}
 
         static Eigen::Tensor<Scalar_, 2> one_j_tensor(const qType&);
         
 	inline static Scalar coeff_3j(const qType& q1, const qType& q2, const qType& q3,
-                                      int        q1_z, int        q2_z,        int q3_z);
+                                      int            , int            , int );
         
         static Eigen::Tensor<Scalar_, 3> CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t);
 
@@ -106,9 +106,9 @@ public:
 	inline static Scalar coeff_6j(const qType& q1, const qType& q2, const qType& q3,
                                       const qType& q4, const qType& q5, const qType& q6);
 	
-	inline static Scalar coeff_9j(const qType& q1, const qType& q2, const qType& q3,
-                                      const qType& q4, const qType& q5, const qType& q6,
-                                      const qType& q7, const qType& q8, const qType& q9);
+	inline static Scalar coeff_9j(const qType&, const qType&, const qType&,
+                                      const qType&, const qType&, const qType&,
+                                      const qType&, const qType&, const qType&);
 
         static Scalar coeff_swap(const qType& ql, const qType& qr, const qType& qf) {return triangle(ql,qr,qf) ? Scalar(1.) : Scalar(0.);};
         static Scalar coeff_recouple(const qType& q1, const qType& q2, const qType& q3, const qType& Q,
@@ -198,7 +198,7 @@ reduceSilent( const std::vector<qType>& ql, const std::vector<qType>& qr, bool U
 
 template<typename Kind, typename Scalar_>
 Scalar_ U1<Kind,Scalar_>::
-coeff_dot(const qType& q1)
+coeff_dot(const qType&)
 {
 	Scalar out = Scalar(1.);
 	return out;
@@ -225,7 +225,7 @@ CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t)
 template<typename Kind, typename Scalar_>
 Scalar_ U1<Kind,Scalar_>::
 coeff_3j(const qType& q1, const qType& q2, const qType& q3,
-          int        q1_z, int        q2_z,        int q3_z)
+         int            , int            , int )
 {
         if (triangle(q1,q2,q3)) {return Scalar(1.);}
         else {return Scalar(0.);}
@@ -242,9 +242,9 @@ coeff_6j(const qType& q1, const qType& q2, const qType& q3,
 
 template<typename Kind, typename Scalar_>
 Scalar_ U1<Kind,Scalar_>::
-coeff_9j(const qType& q1, const qType& q2, const qType& q3,
-		 const qType& q4, const qType& q5, const qType& q6,
-		 const qType& q7, const qType& q8, const qType& q9)
+coeff_9j(const qType&, const qType&, const qType&,
+		 const qType&, const qType&, const qType&,
+		 const qType&, const qType&, const qType&)
 {
 	// std::cout << "q1=" << q1 << " q2=" << q2 << " q3=" << q3 << " q4=" << q4 << " q5=" << q5 << " q6=" << q6 << " q7=" << q7 << " q8=" << q8 << " q9=" << q9 << std::endl;
 	// if (q1[0] + q4[0] - q7[0] != 0) {return 0.;}

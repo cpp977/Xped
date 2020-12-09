@@ -19,8 +19,6 @@ using std::string;
 template<std::size_t Rank, typename Symmetry> struct FusionTree;
 template<std::size_t N> struct Permutation;
 
-// #define CACHE_PERMUTE_OUTPUT 1
-
 #ifdef CACHE_PERMUTE_OUTPUT
 #include "lru/lru.hpp"
 

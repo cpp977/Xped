@@ -63,20 +63,20 @@ namespace util{
         TensorType tensorProd(const TensorType& T1, const TensorType& T2)
         {
                 typedef typename TensorType::Index Index;
-                std::array<Index, T1.NumIndices> dims;
+                std::array<Index, TensorType::NumIndices> dims;
                 for (Index i=0; i<T1.rank(); i++) {
                         dims[i] = T1.dimensions()[i]*T2.dimensions()[i];
                 }
                 TensorType res(dims); res.setZero();
-                std::array<Index, T1.NumIndices> extents = T2.dimensions();
+                std::array<Index, TensorType::NumIndices> extents = T2.dimensions();
 
                 std::vector<std::size_t> vec_dims; for (const auto& d:T1.dimensions()) {vec_dims.push_back(d);}
                 NestedLoopIterator Nelly(T1.rank(), vec_dims);
         
                 for (std::size_t i = Nelly.begin(); i!=Nelly.end(); i++) {
-                        std::vector<Index> indices;
-                        for (Index j=0; j<T1.rank(); j++) {indices.push_back(Nelly(j));}
-                        std::array<Index, T1.NumIndices> offsets;
+                        std::array<Index, TensorType::NumIndices> indices;
+                        for (Index j=0; j<T1.rank(); j++) {indices[j] = Nelly(j);}
+                        std::array<Index, TensorType::NumIndices> offsets;
                         for (Index i=0; i<T1.rank(); i++) {
                                 offsets[i] = indices[i] * T2.dimensions()[i];
                         }

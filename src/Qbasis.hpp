@@ -277,7 +277,6 @@ size_t Qbasis<Symmetry,depth>::
 inner_num(const size_t& outer_num) const
 {
 	assert( outer_num < dim() and "The number is larger than the size of this basis." );
-	size_t check = outer_num;
 	for (const auto& [qVal,num,plain] : data_)
 	{
                 if (outer_num >= num and outer_num < num+plain.size()) {return outer_num - num;}
@@ -420,7 +419,7 @@ add( const Qbasis<Symmetry,depth>& other ) const
 	Qbasis out;
 	for(const auto& [q1,num1,plain1] : this->data_)
 	{
-		auto it_other = std::find_if(other.data_.begin(), other.data_.end(), [q1] (std::tuple<qType,size_t,Basis> entry) { return std::get<0>(entry) == q1; });
+		auto it_other = std::find_if(other.data_.begin(), other.data_.end(), [q1=q1] (std::tuple<qType,size_t,Basis> entry) { return std::get<0>(entry) == q1; });
 		if (it_other != other.data_.end())
 		{
 			out.push_back(q1,plain1.add(std::get<2>(*it_other)).dim());
@@ -433,7 +432,7 @@ add( const Qbasis<Symmetry,depth>& other ) const
 	
 	for(const auto& [q2,num2,plain2] : other.data_)
 	{
-		auto it_this = std::find_if(data_.begin(), data_.end(), [q2] (std::tuple<qType,size_t,Basis> entry) { return std::get<0>(entry) == q2; });
+		auto it_this = std::find_if(data_.begin(), data_.end(), [q2=q2] (std::tuple<qType,size_t,Basis> entry) { return std::get<0>(entry) == q2; });
 		if (it_this == data_.end())
 		{
 			out.push_back(q2,plain2.dim());

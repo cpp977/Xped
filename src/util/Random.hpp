@@ -5,7 +5,7 @@
 #include <thread>
 
 namespace util::random {
-        template<typename Scalar, typename RealScalar> Scalar threadSafeRandUniform (RealScalar min, RealScalar max, bool SEED=false) {};
+        template<typename Scalar, typename RealScalar> Scalar threadSafeRandUniform (RealScalar, RealScalar, bool=false) {};
 
         template<>
         double threadSafeRandUniform<double,double> (double min, double max, bool SEED)

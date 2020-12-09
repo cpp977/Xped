@@ -104,7 +104,7 @@ namespace Sym{
                         
 		inline static bool pair( const std::array<qType,2>&) { return true; }
 
-		template<std::size_t M> inline static bool validate( const std::array<qType,M>& qs ) { return true; }
+		template<std::size_t M> inline static bool validate( const std::array<qType,M>& ) { return true; }
 	};
 
 } //end namespace Sym

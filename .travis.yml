@@ -1,21 +1,28 @@
 language: cpp
-compiler: gcc
+
 dist: bionic
+
+matrix:
+  include:
+    - compiler: gcc
+      env: COMPILER=g++
+    - compiler: clang
+      env: COMPILER=clang++
 
 install:
   - sudo apt update -qq
-  - sudo apt install -qq gcc-8
-  - sudo apt install -qq g++-8
   - sudo apt install -qq libeigen3-dev
   - sudo apt install -qq libgsl-dev
   - sudo apt install -qq libgslcblas0
   - sudo apt install -qq libboost-all-dev
   - sudo apt install -qq doctest-dev
-env:
-  - CC=gcc-8 && CXX=g++-8
+  
+before_script:
+  - export CXX=$COMPILER
+  - cmake --version
 
 script:
   - mkdir ../build
   - cd ../build
-  - cmake ../Multiped/
-  - cmake --build . -- VERBOSE=1
+  - cmake ../Multiped/ -DCMAKE_CXX_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Release
+  - cmake --build .

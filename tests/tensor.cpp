@@ -15,30 +15,33 @@ using std::endl;
 using std::string;
 
 #include "ArgParser.h"
-// #include "lru/lru.hpp"
 
-// template<std::size_t Rank, typename Symmetry> struct FusionTree;
-// template<std::size_t N> struct Permutation;
+#ifdef CACHE_PERMUTE_OUTPUT
+#include "lru/lru.hpp"
 
-// template<int shift, std::size_t Rank, std::size_t CoRank, typename Symmetry>
-// struct CacheManager
-// {
-//         typedef FusionTree<CoRank, Symmetry> CoTree;
-//         typedef FusionTree<CoRank+shift, Symmetry> NewCoTree;
-//         typedef FusionTree<Rank, Symmetry> Tree;
-//         typedef FusionTree<Rank-shift, Symmetry> NewTree;
-//         typedef typename Symmetry::Scalar Scalar;
+template<std::size_t Rank, typename Symmetry> struct FusionTree;
+template<std::size_t N> struct Permutation;
+
+template<int shift, std::size_t Rank, std::size_t CoRank, typename Symmetry>
+struct CacheManager
+{
+        typedef FusionTree<CoRank, Symmetry> CoTree;
+        typedef FusionTree<CoRank+shift, Symmetry> NewCoTree;
+        typedef FusionTree<Rank, Symmetry> Tree;
+        typedef FusionTree<Rank-shift, Symmetry> NewTree;
+        typedef typename Symmetry::Scalar Scalar;
         
-//         typedef LRU::Cache<std::tuple<Tree, CoTree, Permutation<Rank+CoRank> >, std::unordered_map<std::pair<NewTree, NewCoTree >, Scalar> >  CacheType;
-//         CacheManager(std::size_t cache_size) {
-//                 cache = CacheType(cache_size);
-//                 cache.monitor();
-//         }
-//         CacheType cache;
-// };
+        typedef LRU::Cache<std::tuple<Tree, CoTree, Permutation<Rank+CoRank> >, std::unordered_map<std::pair<NewTree, NewCoTree >, Scalar> >  CacheType;
+        CacheManager(std::size_t cache_size) {
+                cache = CacheType(cache_size);
+                cache.monitor();
+        }
+        CacheType cache;
+};
 
-// template<int shift, std::size_t Rank, std::size_t CoRank, typename Symmetry>
-// CacheManager<shift, Rank, CoRank, Symmetry> tree_cache(100);
+template<int shift, std::size_t Rank, std::size_t CoRank, typename Symmetry>
+CacheManager<shift, Rank, CoRank, Symmetry> tree_cache(100);
+#endif
 
 #include "../src/Qbasis.hpp"
 #include "../src/symmetry/kind_dummies.hpp"
@@ -58,48 +61,96 @@ TEST_SUITE_BEGIN("Tensor");
 TEST_CASE("Testing the transformation to plain Tensor.") {
         SUBCASE("SU2") {
                 typedef Sym::SU2<Sym::SpinSU2> Symmetry;
-
                 Qbasis<Symmetry,1> B,C,D,E; B.setRandom(10); C.setRandom(10); D.setRandom(10), E.setRandom(10);
-                Tensor<2,2,Symmetry> t({{B,C}},{{D,E}}); t.setRandom();
-                auto tplain = t.plainTensor();
-                Eigen::Tensor<double,0> norm_ = tplain.contract(tplain,Eigen::array<Eigen::IndexPair<Eigen::Index>, 4>{{Eigen::IndexPair<Eigen::Index>(0,0),
-                                                                                                                                Eigen::IndexPair<Eigen::Index>(1,1),
-                                                                                                                                Eigen::IndexPair<Eigen::Index>(2,2),
-                                                                                                                                Eigen::IndexPair<Eigen::Index>(3,3)}});
-                double norm = norm_();
-                CHECK(t.squaredNorm() == doctest::Approx(norm));
+                test_tensor_transformation_to_plain(B,C);
         }
 
         SUBCASE("U1") {
                 typedef Sym::U1<Sym::SpinU1> Symmetry;
-
                 Qbasis<Symmetry,1> B,C,D,E; B.setRandom(10); C.setRandom(10); D.setRandom(10), E.setRandom(10);
-                Tensor<2,2,Symmetry> t({{B,C}},{{D,E}}); t.setRandom();
-                auto tplain = t.plainTensor();
-                Eigen::Tensor<double,0> norm_ = tplain.contract(tplain,Eigen::array<Eigen::IndexPair<Eigen::Index>, 4>{{Eigen::IndexPair<Eigen::Index>(0,0),
-                                                                                                                                Eigen::IndexPair<Eigen::Index>(1,1),
-                                                                                                                                Eigen::IndexPair<Eigen::Index>(2,2),
-                                                                                                                                Eigen::IndexPair<Eigen::Index>(3,3)}});
-                double norm = norm_();
-                CHECK(t.squaredNorm() == doctest::Approx(norm));
+                test_tensor_transformation_to_plain(B,C);
         }
 
         SUBCASE("U0") {
                 typedef Sym::U0 Symmetry;
-
                 Qbasis<Symmetry,1> B,C,D,E; B.setRandom(10); C.setRandom(10); D.setRandom(10), E.setRandom(10);
-                Tensor<2,2,Symmetry> t({{B,C}},{{D,E}}); t.setRandom();
-                auto tplain = t.plainTensor();
-                Eigen::Tensor<double,0> norm_ = tplain.contract(tplain,Eigen::array<Eigen::IndexPair<Eigen::Index>, 4>{{Eigen::IndexPair<Eigen::Index>(0,0),
-                                                                                                                                Eigen::IndexPair<Eigen::Index>(1,1),
-                                                                                                                                Eigen::IndexPair<Eigen::Index>(2,2),
-                                                                                                                                Eigen::IndexPair<Eigen::Index>(3,3)}});
-                double norm = norm_();
-                CHECK(t.squaredNorm() == doctest::Approx(norm));
+                test_tensor_transformation_to_plain(B,C);
         }
 }
 
-TEST_CASE("Testing the SU(2)-Pauli matrices.") {
+TEST_CASE("Testing the permutation within the domain.") {
+        SUBCASE("SU2") {
+                typedef Sym::SU2<Sym::SpinSU2> Symmetry;
+                Qbasis<Symmetry,1> B,C,D,E; B.setRandom(6); C.setRandom(6); D.setRandom(6), E.setRandom(6);
+                test_tensor_permute_within_domain(B,C,D,E);
+        }
+
+        SUBCASE("U1") {
+                typedef Sym::U1<Sym::SpinU1> Symmetry;
+                Qbasis<Symmetry,1> B,C,D,E; B.setRandom(4); C.setRandom(4); D.setRandom(4), E.setRandom(4);
+                test_tensor_permute_within_domain(B,C,D,E);
+        }
+
+        SUBCASE("U0") {
+                typedef Sym::U0 Symmetry;
+                Qbasis<Symmetry,1> B,C,D,E; B.setRandom(3); C.setRandom(3); D.setRandom(3), E.setRandom(3);
+                test_tensor_permute_within_domain(B,C,D,E);
+        }
+}
+
+TEST_CASE("Testing the permutation within the codomain.") {
+        SUBCASE("SU2") {
+                typedef Sym::SU2<Sym::SpinSU2> Symmetry;
+                Qbasis<Symmetry,1> B,C,D,E; B.setRandom(10); C.setRandom(6); D.setRandom(6), E.setRandom(6);
+                test_tensor_permute_within_codomain(B,C,D,E);
+        }
+
+        SUBCASE("U1") {
+                typedef Sym::U1<Sym::SpinU1> Symmetry;
+                Qbasis<Symmetry,1> B,C,D,E; B.setRandom(4); C.setRandom(4); D.setRandom(4), E.setRandom(4);
+                test_tensor_permute_within_codomain(B,C,D,E);
+        }
+
+        SUBCASE("U0") {
+                typedef Sym::U0 Symmetry;
+                Qbasis<Symmetry,1> B,C,D,E; B.setRandom(3); C.setRandom(3); D.setRandom(3), E.setRandom(3);
+                test_tensor_permute_within_codomain(B,C,D,E);
+        }
+}
+
+TEST_CASE("Testing the general permutation of legs.") {
+        SUBCASE("SU2") {
+                typedef Sym::SU2<Sym::SpinSU2> Symmetry;
+                Qbasis<Symmetry,1> B,C; B.setRandom(5); C.setRandom(5);
+                test_tensor_permute<-2>(B,C);
+                test_tensor_permute<-1>(B,C);
+                test_tensor_permute<+0>(B,C);
+                test_tensor_permute<+1>(B,C);
+                test_tensor_permute<+2>(B,C);                
+        }
+
+        SUBCASE("U1") {
+                typedef Sym::U1<Sym::SpinU1> Symmetry;
+                Qbasis<Symmetry,1> B,C; B.setRandom(4); C.setRandom(4);
+                test_tensor_permute<-2>(B,C);
+                test_tensor_permute<-1>(B,C);
+                test_tensor_permute<+0>(B,C);
+                test_tensor_permute<+1>(B,C);
+                test_tensor_permute<+2>(B,C);
+        }
+
+        SUBCASE("U0") {
+                typedef Sym::U0 Symmetry;
+                Qbasis<Symmetry,1> B,C; B.setRandom(3); C.setRandom(3);
+                test_tensor_permute<-2>(B,C);
+                test_tensor_permute<-1>(B,C);
+                test_tensor_permute<+0>(B,C);
+                test_tensor_permute<+1>(B,C);
+                test_tensor_permute<+2>(B,C);
+        }
+}
+
+TEST_CASE("Testing operations with SU(2)-spin matrices.") {
         typedef Sym::SU2<Sym::SpinSU2> Symmetry;
 
         //loop over different S
@@ -218,376 +269,4 @@ TEST_CASE("Testing the SU(2)-Pauli matrices.") {
         }
 }
 
-TEST_CASE("Testing the permutation within the domain.") {
-        SUBCASE("SU2") {
-                typedef Sym::SU2<Sym::SpinSU2> Symmetry;
-
-                Qbasis<Symmetry,1> B,C,D,E; B.setRandom(10); C.setRandom(10); D.setRandom(10), E.setRandom(10);
-                Tensor<4,0,Symmetry> t({{B,C,D,E}},{{}}); t.setRandom();
-
-                Permutation<4> p(std::array<std::size_t,4>{{2,0,3,1}});
-                Permutation<0> ptriv(std::array<std::size_t,0>{{}});
-                auto tp = t.permute(p,ptriv);
-
-                auto tplain = t.plainTensor();
-                std::array<Eigen::Index,4> ptot = {{2,0,3,1}};
-                Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(ptot);
-
-                auto tplainp = tp.plainTensor();
-                auto check = tplainshuffle - tplainp;
-
-                Eigen::Tensor<double,0> zero_ = check.contract(check,Eigen::array<Eigen::IndexPair<Eigen::Index>, 4>{{Eigen::IndexPair<Eigen::Index>(0,0),
-                                                                                                                              Eigen::IndexPair<Eigen::Index>(1,1),
-                                                                                                                              Eigen::IndexPair<Eigen::Index>(2,2),
-                                                                                                                              Eigen::IndexPair<Eigen::Index>(3,3)}});
-                double zero = zero_();
-                CHECK(zero == doctest::Approx(0.));
-        }
-
-        SUBCASE("U1") {
-                typedef Sym::U1<Sym::SpinU1> Symmetry;
-
-                Qbasis<Symmetry,1> B,C,D,E; B.setRandom(10); C.setRandom(10); D.setRandom(10), E.setRandom(10);
-                Tensor<4,0,Symmetry> t({{B,C,D,E}},{{}}); t.setRandom();
-
-                Permutation<4> p(std::array<std::size_t,4>{{2,0,3,1}});
-                Permutation<0> ptriv(std::array<std::size_t,0>{{}});
-                auto tp = t.permute(p,ptriv);
-
-                auto tplain = t.plainTensor();
-                std::array<Eigen::Index,4> ptot = {{2,0,3,1}};
-                Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(ptot);
-
-                auto tplainp = tp.plainTensor();
-                auto check = tplainshuffle - tplainp;
-
-                Eigen::Tensor<double,0> zero_ = check.contract(check,Eigen::array<Eigen::IndexPair<Eigen::Index>, 4>{{Eigen::IndexPair<Eigen::Index>(0,0),
-                                                                                                                              Eigen::IndexPair<Eigen::Index>(1,1),
-                                                                                                                              Eigen::IndexPair<Eigen::Index>(2,2),
-                                                                                                                              Eigen::IndexPair<Eigen::Index>(3,3)}});
-                double zero = zero_();
-                CHECK(zero == doctest::Approx(0.));
-        }
-
-        SUBCASE("U0") {
-                typedef Sym::U0 Symmetry;
-
-                Qbasis<Symmetry,1> B,C,D,E; B.setRandom(10); C.setRandom(10); D.setRandom(10), E.setRandom(10);
-                Tensor<4,0,Symmetry> t({{B,C,D,E}},{{}}); t.setRandom();
-
-                Permutation<4> p(std::array<std::size_t,4>{{2,0,3,1}});
-                Permutation<0> ptriv(std::array<std::size_t,0>{{}});
-                auto tp = t.permute(p,ptriv);
-
-                auto tplain = t.plainTensor();
-                std::array<Eigen::Index,4> ptot = {{2,0,3,1}};
-                Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(ptot);
-
-                auto tplainp = tp.plainTensor();
-                auto check = tplainshuffle - tplainp;
-
-                Eigen::Tensor<double,0> zero_ = check.contract(check,Eigen::array<Eigen::IndexPair<Eigen::Index>, 4>{{Eigen::IndexPair<Eigen::Index>(0,0),
-                                                                                                                              Eigen::IndexPair<Eigen::Index>(1,1),
-                                                                                                                              Eigen::IndexPair<Eigen::Index>(2,2),
-                                                                                                                              Eigen::IndexPair<Eigen::Index>(3,3)}});
-                double zero = zero_();
-                CHECK(zero == doctest::Approx(0.));
-        }
-}
-
-TEST_CASE("Testing the permutation within the codomain.") {
-        SUBCASE("SU2") {
-                typedef Sym::SU2<Sym::SpinSU2> Symmetry;
-
-                Qbasis<Symmetry,1> B,C,D,E; B.setRandom(5); C.setRandom(5); D.setRandom(5), E.setRandom(5);
-                Tensor<0,4,Symmetry> t({{}},{{B,C,D,E}}); t.setRandom();
-
-                Permutation<4> p(std::array<std::size_t,4>{{2,0,3,1}});
-                Permutation<0> ptriv(std::array<std::size_t,0>{{}});
-                auto tp = t.permute(ptriv,p);
-
-                auto tplain = t.plainTensor();
-                std::array<Eigen::Index,4> ptot = {{2,0,3,1}};
-                Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(ptot);
-
-                auto tplainp = tp.plainTensor();
-                auto check = tplainshuffle - tplainp;
-
-                Eigen::Tensor<double,0> zero_ = check.contract(check,Eigen::array<Eigen::IndexPair<Eigen::Index>, 4>{{Eigen::IndexPair<Eigen::Index>(0,0),
-                                                                                                                              Eigen::IndexPair<Eigen::Index>(1,1),
-                                                                                                                              Eigen::IndexPair<Eigen::Index>(2,2),
-                                                                                                                              Eigen::IndexPair<Eigen::Index>(3,3)}});
-                double zero = zero_();
-                CHECK(zero == doctest::Approx(0.));
-        }
-
-        SUBCASE("U1") {
-                typedef Sym::U1<Sym::SpinU1> Symmetry;
-
-                Qbasis<Symmetry,1> B,C,D,E; B.setRandom(4); C.setRandom(4); D.setRandom(4), E.setRandom(4);
-                Tensor<0,4,Symmetry> t({{}},{{B,C,D,E}}); t.setRandom();
-
-                Permutation<4> p(std::array<std::size_t,4>{{2,0,3,1}});
-                Permutation<0> ptriv(std::array<std::size_t,0>{{}});
-                auto tp = t.permute(ptriv,p);
-
-                auto tplain = t.plainTensor();
-                std::array<Eigen::Index,4> ptot = {{2,0,3,1}};
-                Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(ptot);
-
-                auto tplainp = tp.plainTensor();
-                auto check = tplainshuffle - tplainp;
-
-                Eigen::Tensor<double,0> zero_ = check.contract(check,Eigen::array<Eigen::IndexPair<Eigen::Index>, 4>{{Eigen::IndexPair<Eigen::Index>(0,0),
-                                                                                                                              Eigen::IndexPair<Eigen::Index>(1,1),
-                                                                                                                              Eigen::IndexPair<Eigen::Index>(2,2),
-                                                                                                                              Eigen::IndexPair<Eigen::Index>(3,3)}});
-                double zero = zero_();
-                CHECK(zero == doctest::Approx(0.));
-        }
-
-        SUBCASE("U0") {
-                typedef Sym::U0 Symmetry;
-
-                Qbasis<Symmetry,1> B,C,D,E; B.setRandom(3); C.setRandom(3); D.setRandom(3), E.setRandom(3);
-                Tensor<0,4,Symmetry> t({{}},{{B,C,D,E}}); t.setRandom();
-
-                Permutation<4> p(std::array<std::size_t,4>{{2,0,3,1}});
-                Permutation<0> ptriv(std::array<std::size_t,0>{{}});
-                auto tp = t.permute(ptriv,p);
-
-                auto tplain = t.plainTensor();
-                std::array<Eigen::Index,4> ptot = {{2,0,3,1}};
-                Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(ptot);
-
-                auto tplainp = tp.plainTensor();
-                auto check = tplainshuffle - tplainp;
-
-                Eigen::Tensor<double,0> zero_ = check.contract(check,Eigen::array<Eigen::IndexPair<Eigen::Index>, 4>{{Eigen::IndexPair<Eigen::Index>(0,0),
-                                                                                                                              Eigen::IndexPair<Eigen::Index>(1,1),
-                                                                                                                              Eigen::IndexPair<Eigen::Index>(2,2),
-                                                                                                                              Eigen::IndexPair<Eigen::Index>(3,3)}});
-                double zero = zero_();
-                CHECK(zero == doctest::Approx(0.));
-        }
-}
-
-TEST_CASE("Testing the general permutation of legs.") {
-        SUBCASE("SU2") {
-                typedef Sym::SU2<Sym::SpinSU2> Symmetry;
-                Qbasis<Symmetry,1> B,C; B.setRandom(5); C.setRandom(5);
-                
-                Tensor<2,2,Symmetry> t({{B,C}},{{B,C}}); t.setRandom();
-                auto tplain = t.plainTensor();
-                for (const auto& p : Permutation<4>::all()) {
-                        auto tp = t.permute<+2>(p);
-                        auto tplainp = tp.plainTensor();
-                        Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p.template pi_as_index<Eigen::Index>());
-                        auto check = tplainshuffle - tplainp;
-                        Eigen::Tensor<double,0> zero = check.contract(check,Eigen::array<Eigen::IndexPair<Eigen::Index>, 4>{{Eigen::IndexPair<Eigen::Index>(0,0),
-                                                                                                                                     Eigen::IndexPair<Eigen::Index>(1,1),
-                                                                                                                                     Eigen::IndexPair<Eigen::Index>(2,2),
-                                                                                                                                     Eigen::IndexPair<Eigen::Index>(3,3)}});
-                        CHECK(zero() == doctest::Approx(0.));
-                }
-                for (const auto& p : Permutation<4>::all()) {
-                        auto tp = t.permute<+1>(p);
-                        auto tplainp = tp.plainTensor();
-                        Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p.template pi_as_index<Eigen::Index>());
-                        auto check = tplainshuffle - tplainp;
-                        Eigen::Tensor<double,0> zero = check.contract(check,Eigen::array<Eigen::IndexPair<Eigen::Index>, 4>{{Eigen::IndexPair<Eigen::Index>(0,0),
-                                                                                                                                     Eigen::IndexPair<Eigen::Index>(1,1),
-                                                                                                                                     Eigen::IndexPair<Eigen::Index>(2,2),
-                                                                                                                                     Eigen::IndexPair<Eigen::Index>(3,3)}});
-                        CHECK(zero() == doctest::Approx(0.));
-                }
-                for (const auto& p : Permutation<4>::all()) {
-                        auto tp = t.permute<0>(p);
-                        auto tplainp = tp.plainTensor();
-                        Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p.template pi_as_index<Eigen::Index>());
-                        auto check = tplainshuffle - tplainp;
-                        Eigen::Tensor<double,0> zero = check.contract(check,Eigen::array<Eigen::IndexPair<Eigen::Index>, 4>{{Eigen::IndexPair<Eigen::Index>(0,0),
-                                                                                                                                     Eigen::IndexPair<Eigen::Index>(1,1),
-                                                                                                                                     Eigen::IndexPair<Eigen::Index>(2,2),
-                                                                                                                                     Eigen::IndexPair<Eigen::Index>(3,3)}});
-                        CHECK(zero() == doctest::Approx(0.));
-                }
-                for (const auto& p : Permutation<4>::all()) {
-                        auto tp = t.permute<-1>(p);
-                        auto tplainp = tp.plainTensor();
-                        Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p.template pi_as_index<Eigen::Index>());
-                        auto check = tplainshuffle - tplainp;
-                        Eigen::Tensor<double,0> zero = check.contract(check,Eigen::array<Eigen::IndexPair<Eigen::Index>, 4>{{Eigen::IndexPair<Eigen::Index>(0,0),
-                                                                                                                                     Eigen::IndexPair<Eigen::Index>(1,1),
-                                                                                                                                     Eigen::IndexPair<Eigen::Index>(2,2),
-                                                                                                                                     Eigen::IndexPair<Eigen::Index>(3,3)}});
-                        CHECK(zero() == doctest::Approx(0.));
-                }
-                for (const auto& p : Permutation<4>::all()) {
-                        auto tp = t.permute<-2>(p);
-                        auto tplainp = tp.plainTensor();
-                        Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p.template pi_as_index<Eigen::Index>());
-                        auto check = tplainshuffle - tplainp;
-                        Eigen::Tensor<double,0> zero = check.contract(check,Eigen::array<Eigen::IndexPair<Eigen::Index>, 4>{{Eigen::IndexPair<Eigen::Index>(0,0),
-                                                                                                                                     Eigen::IndexPair<Eigen::Index>(1,1),
-                                                                                                                                     Eigen::IndexPair<Eigen::Index>(2,2),
-                                                                                                                                     Eigen::IndexPair<Eigen::Index>(3,3)}});
-                        CHECK(zero() == doctest::Approx(0.));
-                }
-                // std::cout << "shift=-2, total hits=" << tree_cache<-2,2,2,Symmetry>.cache.stats().total_hits() << endl; // Hits for any key
-                // std::cout << "shift=-2, total misses=" << tree_cache<-2,2,2,Symmetry>.cache.stats().total_misses() << endl; // Misses for any key
-                // std::cout << "shift=-2, hit rate=" << tree_cache<-2,2,2,Symmetry>.cache.stats().hit_rate() << endl; // Hit rate in [0, 1]
-
-                // std::cout << "shift=-1, total hits=" << tree_cache<-1,2,2,Symmetry>.cache.stats().total_hits() << endl; // Hits for any key
-                // std::cout << "shift=-1, total misses=" << tree_cache<-1,2,2,Symmetry>.cache.stats().total_misses() << endl; // Misses for any key
-                // std::cout << "shift=-1, hit rate=" << tree_cache<-1,2,2,Symmetry>.cache.stats().hit_rate() << endl; // Hit rate in [0, 1]
-
-                // std::cout << "shift=0, total hits=" << tree_cache<0,2,2,Symmetry>.cache.stats().total_hits() << endl; // Hits for any key
-                // std::cout << "shift=0, total misses=" << tree_cache<0,2,2,Symmetry>.cache.stats().total_misses() << endl; // Misses for any key
-                // std::cout << "shift=0, hit rate=" << tree_cache<0,2,2,Symmetry>.cache.stats().hit_rate() << endl; // Hit rate in [0, 1]
-
-                // std::cout << "shift=1, total hits=" << tree_cache<1,2,2,Symmetry>.cache.stats().total_hits() << endl; // Hits for any key
-                // std::cout << "shift=1, total misses=" << tree_cache<1,2,2,Symmetry>.cache.stats().total_misses() << endl; // Misses for any key
-                // std::cout << "shift=1, hit rate=" << tree_cache<1,2,2,Symmetry>.cache.stats().hit_rate() << endl; // Hit rate in [0, 1]
-
-                // std::cout << "shift=2, total hits=" << tree_cache<2,2,2,Symmetry>.cache.stats().total_hits() << endl; // Hits for any key
-                // std::cout << "shift=2, total misses=" << tree_cache<2,2,2,Symmetry>.cache.stats().total_misses() << endl; // Misses for any key
-                // std::cout << "shift=2, hit rate=" << tree_cache<2,2,2,Symmetry>.cache.stats().hit_rate() << endl; // Hit rate in [0, 1]
-        }
-
-        SUBCASE("U1") {
-                typedef Sym::U1<Sym::SpinU1> Symmetry;
-                Qbasis<Symmetry,1> B,C; B.setRandom(4); C.setRandom(4);
-                
-                Tensor<2,2,Symmetry> t({{B,C}},{{B,C}}); t.setRandom();
-                auto tplain = t.plainTensor();
-                for (const auto& p : Permutation<4>::all()) {
-                        auto tp = t.permute<+2>(p);
-                        auto tplainp = tp.plainTensor();
-                        Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p.template pi_as_index<Eigen::Index>());
-                        auto check = tplainshuffle - tplainp;
-                        Eigen::Tensor<double,0> zero = check.contract(check,Eigen::array<Eigen::IndexPair<Eigen::Index>, 4>{{Eigen::IndexPair<Eigen::Index>(0,0),
-                                                                                                                                     Eigen::IndexPair<Eigen::Index>(1,1),
-                                                                                                                                     Eigen::IndexPair<Eigen::Index>(2,2),
-                                                                                                                                     Eigen::IndexPair<Eigen::Index>(3,3)}});
-                        CHECK(zero() == doctest::Approx(0.));
-                }
-                for (const auto& p : Permutation<4>::all()) {
-                        auto tp = t.permute<+1>(p);
-                        auto tplainp = tp.plainTensor();
-                        Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p.template pi_as_index<Eigen::Index>());
-                        auto check = tplainshuffle - tplainp;
-                        Eigen::Tensor<double,0> zero = check.contract(check,Eigen::array<Eigen::IndexPair<Eigen::Index>, 4>{{Eigen::IndexPair<Eigen::Index>(0,0),
-                                                                                                                                     Eigen::IndexPair<Eigen::Index>(1,1),
-                                                                                                                                     Eigen::IndexPair<Eigen::Index>(2,2),
-                                                                                                                                     Eigen::IndexPair<Eigen::Index>(3,3)}});
-                        CHECK(zero() == doctest::Approx(0.));
-                }
-                for (const auto& p : Permutation<4>::all()) {
-                        auto tp = t.permute<0>(p);
-                        auto tplainp = tp.plainTensor();
-                        Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p.template pi_as_index<Eigen::Index>());
-                        auto check = tplainshuffle - tplainp;
-                        Eigen::Tensor<double,0> zero = check.contract(check,Eigen::array<Eigen::IndexPair<Eigen::Index>, 4>{{Eigen::IndexPair<Eigen::Index>(0,0),
-                                                                                                                                     Eigen::IndexPair<Eigen::Index>(1,1),
-                                                                                                                                     Eigen::IndexPair<Eigen::Index>(2,2),
-                                                                                                                                     Eigen::IndexPair<Eigen::Index>(3,3)}});
-                        CHECK(zero() == doctest::Approx(0.));
-                }
-                for (const auto& p : Permutation<4>::all()) {
-                        auto tp = t.permute<-1>(p);
-                        auto tplainp = tp.plainTensor();
-                        Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p.template pi_as_index<Eigen::Index>());
-                        auto check = tplainshuffle - tplainp;
-                        Eigen::Tensor<double,0> zero = check.contract(check,Eigen::array<Eigen::IndexPair<Eigen::Index>, 4>{{Eigen::IndexPair<Eigen::Index>(0,0),
-                                                                                                                                     Eigen::IndexPair<Eigen::Index>(1,1),
-                                                                                                                                     Eigen::IndexPair<Eigen::Index>(2,2),
-                                                                                                                                     Eigen::IndexPair<Eigen::Index>(3,3)}});
-                        CHECK(zero() == doctest::Approx(0.));
-                }
-                for (const auto& p : Permutation<4>::all()) {
-                        auto tp = t.permute<-2>(p);
-                        auto tplainp = tp.plainTensor();
-                        Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p.template pi_as_index<Eigen::Index>());
-                        auto check = tplainshuffle - tplainp;
-                        Eigen::Tensor<double,0> zero = check.contract(check,Eigen::array<Eigen::IndexPair<Eigen::Index>, 4>{{Eigen::IndexPair<Eigen::Index>(0,0),
-                                                                                                                                     Eigen::IndexPair<Eigen::Index>(1,1),
-                                                                                                                                     Eigen::IndexPair<Eigen::Index>(2,2),
-                                                                                                                                     Eigen::IndexPair<Eigen::Index>(3,3)}});
-                        CHECK(zero() == doctest::Approx(0.));
-                }
-        //         test_tensor_permute<-2>(B,C);
-        //         test_tensor_permute<-1>(B,C);
-        //         test_tensor_permute<+0>(B,C);
-        //         test_tensor_permute<+1>(B,C);
-        //         test_tensor_permute<+2>(B,C);
-        }
-
-        SUBCASE("U0") {
-                typedef Sym::U0 Symmetry;
-                Qbasis<Symmetry,1> B,C; B.setRandom(3); C.setRandom(3);
-                Tensor<2,2,Symmetry> t({{B,C}},{{B,C}}); t.setRandom();
-                auto tplain = t.plainTensor();
-                for (const auto& p : Permutation<4>::all()) {
-                        auto tp = t.permute<+2>(p);
-                        auto tplainp = tp.plainTensor();
-                        Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p.template pi_as_index<Eigen::Index>());
-                        auto check = tplainshuffle - tplainp;
-                        Eigen::Tensor<double,0> zero = check.contract(check,Eigen::array<Eigen::IndexPair<Eigen::Index>, 4>{{Eigen::IndexPair<Eigen::Index>(0,0),
-                                                                                                                                     Eigen::IndexPair<Eigen::Index>(1,1),
-                                                                                                                                     Eigen::IndexPair<Eigen::Index>(2,2),
-                                                                                                                                     Eigen::IndexPair<Eigen::Index>(3,3)}});
-                        CHECK(zero() == doctest::Approx(0.));
-                }
-                for (const auto& p : Permutation<4>::all()) {
-                        auto tp = t.permute<+1>(p);
-                        auto tplainp = tp.plainTensor();
-                        Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p.template pi_as_index<Eigen::Index>());
-                        auto check = tplainshuffle - tplainp;
-                        Eigen::Tensor<double,0> zero = check.contract(check,Eigen::array<Eigen::IndexPair<Eigen::Index>, 4>{{Eigen::IndexPair<Eigen::Index>(0,0),
-                                                                                                                                     Eigen::IndexPair<Eigen::Index>(1,1),
-                                                                                                                                     Eigen::IndexPair<Eigen::Index>(2,2),
-                                                                                                                                     Eigen::IndexPair<Eigen::Index>(3,3)}});
-                        CHECK(zero() == doctest::Approx(0.));
-                }
-                for (const auto& p : Permutation<4>::all()) {
-                        auto tp = t.permute<0>(p);
-                        auto tplainp = tp.plainTensor();
-                        Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p.template pi_as_index<Eigen::Index>());
-                        auto check = tplainshuffle - tplainp;
-                        Eigen::Tensor<double,0> zero = check.contract(check,Eigen::array<Eigen::IndexPair<Eigen::Index>, 4>{{Eigen::IndexPair<Eigen::Index>(0,0),
-                                                                                                                                     Eigen::IndexPair<Eigen::Index>(1,1),
-                                                                                                                                     Eigen::IndexPair<Eigen::Index>(2,2),
-                                                                                                                                     Eigen::IndexPair<Eigen::Index>(3,3)}});
-                        CHECK(zero() == doctest::Approx(0.));
-                }
-                for (const auto& p : Permutation<4>::all()) {
-                        auto tp = t.permute<-1>(p);
-                        auto tplainp = tp.plainTensor();
-                        Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p.template pi_as_index<Eigen::Index>());
-                        auto check = tplainshuffle - tplainp;
-                        Eigen::Tensor<double,0> zero = check.contract(check,Eigen::array<Eigen::IndexPair<Eigen::Index>, 4>{{Eigen::IndexPair<Eigen::Index>(0,0),
-                                                                                                                                     Eigen::IndexPair<Eigen::Index>(1,1),
-                                                                                                                                     Eigen::IndexPair<Eigen::Index>(2,2),
-                                                                                                                                     Eigen::IndexPair<Eigen::Index>(3,3)}});
-                        CHECK(zero() == doctest::Approx(0.));
-                }
-                for (const auto& p : Permutation<4>::all()) {
-                        auto tp = t.permute<-2>(p);
-                        auto tplainp = tp.plainTensor();
-                        Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p.template pi_as_index<Eigen::Index>());
-                        auto check = tplainshuffle - tplainp;
-                        Eigen::Tensor<double,0> zero = check.contract(check,Eigen::array<Eigen::IndexPair<Eigen::Index>, 4>{{Eigen::IndexPair<Eigen::Index>(0,0),
-                                                                                                                                     Eigen::IndexPair<Eigen::Index>(1,1),
-                                                                                                                                     Eigen::IndexPair<Eigen::Index>(2,2),
-                                                                                                                                     Eigen::IndexPair<Eigen::Index>(3,3)}});
-                        CHECK(zero() == doctest::Approx(0.));
-                }
-        //         test_tensor_permute<-2>(B,C);
-        //         test_tensor_permute<-1>(B,C);
-        //         test_tensor_permute<+0>(B,C);
-        //         test_tensor_permute<+1>(B,C);
-        //         test_tensor_permute<+2>(B,C);
-        }
-}
 TEST_SUITE_END();

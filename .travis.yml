@@ -5,6 +5,12 @@ dist: bionic
 matrix:
   include:
     - compiler: gcc
+      addons:
+        apt:
+          sources:
+            - dluxen/cmake-backports
+          packages:
+            - cmake3
       env: COMPILER=g++
            USE_LIBCXX=OFF
     - compiler: clang
@@ -12,8 +18,10 @@ matrix:
         apt:
           sources:
             - ubuntu-toolchain-r-test
+            - dluxen/cmake-backports
           packages:
             - libc++-dev
+            - cmake3
       env: COMPILER=clang++
            USE_LIBCXX=ON
     - compiler: clang
@@ -21,8 +29,10 @@ matrix:
         apt:
           sources:
             - ubuntu-toolchain-r-test
+            - dluxen/cmake-backports
           packages:
             - libc++-dev
+            - cmake3
       env: COMPILER=clang++
            USE_LIBCXX=OFF
 

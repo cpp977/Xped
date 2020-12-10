@@ -7,7 +7,13 @@ include(cmake/StandardProjectSettings.cmake)
 
 #define options
 option(ENABLE_LRU_CACHE "Use lru cache library from github." OFF)
-
+option(USE_LIBCXX "Use libc++ from llvm." OFF)
+if(NOT CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
+ if(USE_LIBCXX)
+  message( FATAL_ERROR "It is only possible to use libc++ in combination with clang")
+ endif()
+endif()
+   
 # Link this 'library' to set the c++ standard / compile-time options requested
 add_library(project_options INTERFACE)
 

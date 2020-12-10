@@ -19,6 +19,25 @@ ExternalProject_Add(
         USES_TERMINAL_DOWNLOAD ON
 )
 
+set(DOCTEST_ROOT ${CMAKE_BINARY_DIR}/thirdparty/doctest)
+set(DOCTEST_INCLUDE_DIR ${DOCTEST_ROOT}/src/doctest)
+
+ExternalProject_Add(
+        doctest
+        PREFIX ${DOCTEST_ROOT}
+        GIT_REPOSITORY "https://github.com/onqtam/doctest"
+        GIT_SHALLOW ON
+        TIMEOUT 10
+#        UPDATE_COMMAND ${GIT_EXECUTABLE} pull
+        UPDATE_COMMAND ""
+        CONFIGURE_COMMAND ""
+        BUILD_COMMAND ""
+        INSTALL_COMMAND ""
+        LOG_DOWNLOAD ON
+        LOG_MERGED_STDOUTERR ON
+        USES_TERMINAL_DOWNLOAD ON
+)
+
 set(TOOLS_ROOT ${CMAKE_BINARY_DIR}/thirdparty/tools)
 set(TOOLS_INCLUDE_DIR ${TOOLS_ROOT}/src/TOOLS)
 

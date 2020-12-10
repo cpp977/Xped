@@ -6,6 +6,7 @@ matrix:
   include:
     - compiler: gcc
       env: COMPILER=g++
+           USE_LIBCXX=OFF
     - compiler: clang
       addons:
         apt:
@@ -14,14 +15,22 @@ matrix:
           packages:
             - libc++-dev
       env: COMPILER=clang++
+           USE_LIBCXX=ON
+    - compiler: clang
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - libc++-dev
+      env: COMPILER=clang++
+           USE_LIBCXX=OFF
 
 install:
   - sudo apt update -qq
-  - sudo apt install -qq libeigen3-dev
   - sudo apt install -qq libgsl-dev
   - sudo apt install -qq libgslcblas0
   - sudo apt install -qq libboost-all-dev
-  - sudo apt install -qq doctest-dev
   
 before_script:
   - export CXX=$COMPILER
@@ -30,5 +39,5 @@ before_script:
 script:
   - mkdir ../build
   - cd ../build
-  - cmake ../Multiped/ -DCMAKE_CXX_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Release
+  - cmake ../Multiped/ -DCMAKE_CXX_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Release -DENABLE_LIBCXX=$USE_LIBCXX
   - cmake --build . -- VERBOSE=1

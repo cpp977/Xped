@@ -40,5 +40,5 @@ before_script:
 script:
   - mkdir ../build
   - cd ../build
-  - cmake ../Multiped/ -DCMAKE_CXX_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Release -DENABLE_LIBCXX=$USE_LIBCXX
+  - cmake ../Multiped/ -DCMAKE_CXX_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Release -DUSE_LIBCXX=$USE_LIBCXX
   - cmake --build . -- VERBOSE=1

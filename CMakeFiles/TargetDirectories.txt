@@ -1,7 +1,0 @@
-/home/user/Nextcloud/postdoc/code/ED/CMakeFiles/rebuild_cache.dir
-/home/user/Nextcloud/postdoc/code/ED/CMakeFiles/edit_cache.dir
-/home/user/Nextcloud/postdoc/code/ED/src/CMakeFiles/rebuild_cache.dir
-/home/user/Nextcloud/postdoc/code/ED/src/CMakeFiles/edit_cache.dir
-/home/user/Nextcloud/postdoc/code/ED/src/CMakeFiles/run.dir
-/home/user/Nextcloud/postdoc/code/ED/src/models/CMakeFiles/rebuild_cache.dir
-/home/user/Nextcloud/postdoc/code/ED/src/models/CMakeFiles/edit_cache.dir

@@ -10,19 +10,19 @@ jobs:
             - run: sudo apt-get install libboost-all-dev
             - run: sudo apt-get install doctest-dev
             - run: sudo apt-get install lcov
-            - run: git clone https://cpp977:A*u1t5o!s@github.com/cpp977/Multiped
-            - run: mkdir build
-            - run: cd build && cmake ../Multiped -DCMAKE_BUILD_TYPE=Debug -DENABLE_COVERAGE=ON
-            - run: cd build && cmake --build .
+            - run: cd .. && git clone https://cpp977:A*u1t5o!s@github.com/cpp977/Multiped
+            - run: cd .. && mkdir build
+            - run: cd ../build && cmake ../Multiped -DCMAKE_BUILD_TYPE=Debug -DENABLE_COVERAGE=ON
+            - run: cd ../build && cmake --build .
             - run: 
-                command: cd build/tests && ctest
+                command: cd ../build/tests && ctest
                 no_output_timeout: 2h
-            - run: cd build/tests && lcov --capture --directory . --output-file coverage.info
-            - run: cd build/tests && lcov --remove coverage.info '/usr/*' --output-file coverage.info # filter system-files
-            - run: cd build/tests && lcov --remove coverage.info '/home/circleci/build/thirdparty/*' --output-file coverage.info # filter system-files
-            - run: cd build/tests && lcov --list coverage.info # debug info
-            - run: cd build/tests && cat coverage.info
-            - run: cd build/tests && bash <(curl -s https://codecov.io/bash) -f coverage.info -t 6604ed1a-6dd1-4021-8450-93cb22163632 || echo "Codecov did not collect coverage reports"
+            - run: cd ../build/tests && lcov --capture --directory . --output-file coverage.info
+            - run: cd ../build/tests && lcov --remove coverage.info '/usr/*' --output-file coverage.info # filter system-files
+            - run: cd ../build/tests && lcov --remove coverage.info '/home/circleci/build/thirdparty/*' --output-file coverage.info # filter system-files
+            - run: cd ../build/tests && lcov --list coverage.info # debug info
+            - run: cd ../build/tests && cat coverage.info
+            - run: cd ../build/tests && bash <(curl -s https://codecov.io/bash) -f coverage.info -t 6604ed1a-6dd1-4021-8450-93cb22163632 || echo "Codecov did not collect coverage reports"
             
 workflows:
     build_and_test:

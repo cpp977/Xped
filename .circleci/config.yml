@@ -15,7 +15,7 @@ jobs:
             - run: cd ../build && cmake ../project -DCMAKE_BUILD_TYPE=Debug -DENABLE_COVERAGE=ON
             - run: cd ../build && cmake --build .
             - run: 
-                command: . cd ../build/tests && ctest
+                command: cd ../build/tests && ctest
                 no_output_timeout: 2h
             - run: cd ../build/tests && lcov --capture --directory . --output-file coverage.info
             - run: cd ../build/tests && lcov --remove coverage.info '/usr/*' --output-file coverage.info # filter system-files

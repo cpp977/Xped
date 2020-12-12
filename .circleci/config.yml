@@ -12,7 +12,7 @@ jobs:
             - run: sudo apt-get install doctest-dev
             - run: sudo apt-get install lcov
             - run: mkdir ../build
-            - run: cd ../build && cmake ../project
+            - run: cd ../build && cmake ../project -DCMAKE_BUILD_TYPE=Debug -DENABLE_COVERAGE=ON
             - run: cd ../build && cmake --build .
             - run: cd ../build/tests && ctest
             - run: cd ../build/tests && lcov --capture --directory . --output-file coverage.info

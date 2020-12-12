@@ -27,8 +27,8 @@ jobs:
             - run: cd ../build/tests && lcov --list coverage.info # debug info
             - run: cd ../build/tests && cat coverage.info
             - codecov/upload:
-              file: {{ ../build/tests/coverage.info }}
-              token: 6604ed1a-6dd1-4021-8450-93cb22163632
+                file: ../build/tests/coverage.info
+                token: 6604ed1a-6dd1-4021-8450-93cb22163632
             
 workflows:
     build_and_test:

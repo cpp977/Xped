@@ -14,7 +14,7 @@ jobs:
             - run: sudo apt-get install libboost-all-dev
             - run: sudo apt-get install doctest-dev
             - run: sudo apt-get install lcov
-            - run: cd .. && git clone https://cpp977:A*u1t5o!s@github.com/cpp977/Multiped
+            - checkout
             - run: cd .. && mkdir build
             - run: cd ../build && cmake ../Multiped -DCMAKE_BUILD_TYPE=Debug -DENABLE_COVERAGE=ON
             - run: cd ../build && cmake --build .

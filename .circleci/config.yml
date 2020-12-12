@@ -10,6 +10,7 @@ jobs:
             - run: sudo apt-get install libgsl-dev
             - run: sudo apt-get install libboost-all-dev
             - run: sudo apt-get install doctest-dev
+            - run: sudo apt-get install lcov
             - run: mkdir ../build
             - run: cd ../build && cmake ../project
             - run: cd ../build && cmake --build .

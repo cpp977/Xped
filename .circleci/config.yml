@@ -16,7 +16,7 @@ jobs:
             - run: sudo apt-get install lcov
             - checkout
             - run: cd .. && mkdir build
-            - run: cd ../build && cmake ../Multiped -DCMAKE_BUILD_TYPE=Debug -DENABLE_COVERAGE=ON
+            - run: cd ../build && cmake ../project -DCMAKE_BUILD_TYPE=Debug -DENABLE_COVERAGE=ON
             - run: cd ../build && cmake --build .
             - run: 
                 command: cd ../build/tests && ctest

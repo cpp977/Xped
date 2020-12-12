@@ -13,9 +13,12 @@ jobs:
             - run: mkdir ../build
             - run: cd ../build && cmake ../project
             - run: cd ../build && cmake --build .
-            - run: cd ../build/tests && ./basis_test
-            - run: cd ../build/tests && ./tree_test
-            - run: cd ../build/tests && ./tensor_test 
+            - run: cd ../build/tests && ctest
+            - run: cd ../build/tests && lcov --capture --directory . --output-file coverage.info
+            - run: cd ../build/tests && lcov --remove coverage.info '/usr/*' --output-file coverage.info # filter system-files
+            - run: cd ../build/tests && lcov --list coverage.info # debug info
+            - run: cd ../build/tests && bash <(curl -s https://codecov.io/bash) -t 6604ed1a-6dd1-4021-8450-93cb22163632
+            
             
 workflows:
     build_and_test:

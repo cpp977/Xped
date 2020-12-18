@@ -119,7 +119,9 @@ public:
 	Qbasis<Symmetry, depth> add (const Qbasis<Symmetry, depth>& other) const;
 
         Qbasis<Symmetry, depth> conj () const;
-	
+
+        Qbasis<Symmetry, 1> forgetHistory() const;
+        
 	/**Prints the basis.*/
 	std::string print() const;
 	
@@ -440,6 +442,17 @@ add( const Qbasis<Symmetry,depth>& other ) const
 	}
 	out.sort();
 	return out;
+}
+
+template<typename Symmetry, std::size_t depth>
+Qbasis<Symmetry,1> Qbasis<Symmetry,depth>::
+forgetHistory() const
+{
+        Qbasis<Symmetry,1> out;
+        for (const auto& [q,num,plain]:data_) {
+                out.push_back(q,plain.dim());
+        }
+        return out;
 }
 
 template<typename Symmetry, std::size_t depth>

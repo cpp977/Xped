@@ -5,6 +5,8 @@ project(Multiped CXX)
 
 include(cmake/StandardProjectSettings.cmake)
 
+include(cmake/PreventInSourceBuilds.cmake)
+
 #define options
 option(ENABLE_LRU_CACHE "Use lru cache library from github." OFF)
 option(USE_LIBCXX "Use libc++ from llvm." OFF)

@@ -16,9 +16,19 @@
 #include "qarray.hpp"
 #include "functions.hpp"
 #include "SU2Wrappers.hpp"
+#include "SymBase.hpp"
 #include "../util/Random.hpp"
 
 namespace Sym{
+
+template<typename Kind, typename Scalar_> struct SU2;
+        
+template <typename Kind_, typename Scalar__> 
+struct SymTraits<SU2<Kind_, Scalar__> > {
+        constexpr static int Nq = 1;
+        typedef qarray<Nq> qType;
+        typedef Scalar__ Scalar;
+};
 
 /** 
  * \class SU2
@@ -28,15 +38,15 @@ namespace Sym{
  *
  * \describe_Scalar
  * \note An implementation for the basic \f$(3n)j\f$ symbols is used from SU2Wrappers.h.
- *       Currently, only the gsl-implementation can be used, but any library which calculates the symbols can be included.
+ *       Currently, the gsl-implementation and the wig3j/fastwig3j library can be used, but other libraries which calculates the symbols can be included.
  *       Just add a wrapper in SU2Wrappers.h.
  */
 template<typename Kind, typename Scalar_=double>
-class SU2
+struct SU2 : public SymBase<SU2<Kind, Scalar_> >
 {
-public:
 	typedef Scalar_ Scalar;
-
+        typedef SymBase<SU2<Kind, Scalar> > Base;
+        
 	static constexpr std::size_t Nq=1;
 	
 	static constexpr bool NON_ABELIAN = true;
@@ -69,35 +79,16 @@ public:
 
         inline static qType random_q() { int qval = util::random::threadSafeRandUniform<int,int>(1,20,false); qType out = {qval}; return out; }
         
-	///@{
 	/** 
 	 * Calculate the irreps of the tensor product of \p ql and \p qr.
 	 */
-	static std::vector<qType> reduceSilent(const qType& ql, const qType& qr);
+	static std::vector<qType> basis_combine(const qType& ql, const qType& qr);
 	
-	static std::vector<qType> reduceSilent(const qType& ql, const qType& qm, const qType& qr);
-	
-	/** 
-	 * Calculate the irreps of the tensor product of all entries of \p ql with \p qr.
-	 * \warning : Returns not only unique irreps.
-	 *            Not sure, if we should return only the unique values here. Probably, that should be at least added as an option.
-	 */
-	static std::vector<qType> reduceSilent( const std::vector<qType>& ql, const qType& qr);
-	/** 
-	 * Calculate the irreps of the tensor product of all entries of \p ql with all entries of \p qr.
-	 * \warning : Returns only unique irreps.
-	 *            Better: Put an option for unique or non-unique irreps in the return vector.
-	 */
-	static std::vector<qType> reduceSilent( const std::vector<qType>& ql, const std::vector<qType>& qr, bool UNIQUE=false);
-	///@}
-
         std::size_t multiplicity (const qType& q1, const qType& q2, const qType& q3) {return triangle(q1,q2,q3) ? 1ul : 0ul;}
 	///@{
 	/**
 	 * Various coeffecients, all resulting from contractions or traces of the Clebsch-Gordon coefficients.
-	 */
-	inline static Scalar coeff_unity();
-	
+	 */	
 	static Scalar coeff_dot(const qType& q1);
 
         static Scalar coeff_FS(const qType& q1) {return (q1[0]%2 == 0) ? -1. : 1.;}
@@ -106,11 +97,10 @@ public:
 
 	static Scalar coeff_3j(const qType& q1, const qType& q2, const qType& q3,
                                int        q1_z, int        q2_z,        int q3_z);
+
+        static Scalar coeff_turn(const qType& ql, const qType& qr, const qType& qf) {return triangle(ql,qr,qf) ? coeff_swap(ql,qr,qf)*std::sqrt(static_cast<Scalar>(qf[0])/static_cast<Scalar>(ql[0])) : Scalar(0.);}
         
 	static Eigen::Tensor<Scalar_, 3> CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t);
-
-        static Scalar coeff_turn(const qType& ql, const qType& qr, const qType& qf) {return std::sqrt(qr[0]) * coeff_recouple(ql,qr,SU2<Kind,Scalar>::conj(qr),
-                                                                                                                              ql, qf, SU2<Kind,Scalar>::qvacuum());}
 
 	static Scalar coeff_6j(const qType& q1, const qType& q2, const qType& q3,
                                const qType& q4, const qType& q5, const qType& q6);
@@ -118,96 +108,26 @@ public:
 	static Scalar coeff_9j(const qType& q1, const qType& q2, const qType& q3,
                                const qType& q4, const qType& q5, const qType& q6,
                                const qType& q7, const qType& q8, const qType& q9);
-
-        static Scalar coeff_swap(const qType& ql, const qType& qr, const qType& qf) {return triangle(ql,qr,qf) ? phase<Scalar>((ql[0]+qr[0]-qf[0]-1) / 2) : Scalar(0.);}
+        
         static Scalar coeff_recouple(const qType& q1, const qType& q2, const qType& q3, const qType& Q,
                                      const qType& Q12, const qType& Q23) {return std::sqrt(Q12[0]*Q23[0])*phase<Scalar>((q1[0]+q2[0]+q3[0]+Q[0]) / 2.)*coeff_6j(q1,q2,Q12,
                                                                                                                                                                 q3,Q,Q23);}
+
+        static Scalar coeff_swap(const qType& ql, const qType& qr, const qType& qf) {return triangle(ql,qr,qf) ? phase<Scalar>((ql[0]+qr[0]-qf[0]-1) / 2) : Scalar(0.);}
 	///@}
 
-	/** 
-	 * This function defines a strict order for arrays of quantum-numbers.
-	 * \note The implementation is arbritary, as long as it defines a strict order.
-	 */
-	template<std::size_t M>
-	static bool compare ( const std::array<qType,M>& q1, const std::array<qType,M>& q2 );
-
-	/** 
-	 * This function checks if the array \p qs contains quantum-numbers which match together, with respect to the flow equations.
-	 */
-	template<std::size_t M>
-	static bool validate( const std::array<qType,M>& qs );
-
-	static bool triangle( const std::array<qType,3>& qs );
-        static bool triangle( const qType& q1, const qType& q2, const qType& q3 ) {return triangle({{q1,q2,q3}});}
-	static bool pair( const std::array<qType,2>& qs );
+        static bool triangle (const qType& q1, const qType& q2, const qType& q3);
 };
 
 template<typename Kind, typename Scalar_>
 std::vector<typename SU2<Kind,Scalar_>::qType> SU2<Kind,Scalar_>::
-reduceSilent( const qType& ql, const qType& qr )
+basis_combine( const qType& ql, const qType& qr )
 {
 	std::vector<qType> vout;
 	int qmin = std::abs(ql[0]-qr[0]) +1;
 	int qmax = std::abs(ql[0]+qr[0]) -1;
 	for ( int i=qmin; i<=qmax; i+=2 ) { vout.push_back({i}); }
 	return vout;
-}
-
-template<typename Kind, typename Scalar_>
-std::vector<typename SU2<Kind,Scalar_>::qType> SU2<Kind,Scalar_>::
-reduceSilent( const qType& ql, const qType& qm, const qType& qr )
-{
-	auto qtmp = reduceSilent(ql,qm);
-	return reduceSilent(qtmp,qr);
-}
-
-template<typename Kind, typename Scalar_>
-std::vector<typename SU2<Kind,Scalar_>::qType> SU2<Kind,Scalar_>::
-reduceSilent( const std::vector<qType>& ql, const qType& qr )
-{
-	std::vector<typename SU2<Kind,Scalar_>::qType> vout;
-	for (std::size_t q=0; q<ql.size(); q++)
-	{
-		int qmin = std::abs(ql[q][0]-qr[0]) +1;
-		int qmax = std::abs(ql[q][0]+qr[0]) -1;
-		for ( int i=qmin; i<=qmax; i+=2 ) { vout.push_back({i}); }
-	}
-	return vout;
-}
-
-template<typename Kind, typename Scalar_>
-std::vector<typename SU2<Kind,Scalar_>::qType> SU2<Kind,Scalar_>::
-reduceSilent( const std::vector<qType>& ql, const std::vector<qType>& qr, bool UNIQUE )
-{
-	if (UNIQUE)
-	{
-		std::unordered_set<qType> uniqueControl;
-		std::vector<qType> vout;
-		for (std::size_t q1=0; q1<ql.size(); q1++)
-		for (std::size_t q2=0; q2<qr.size(); q2++)
-		{
-			int qmin = std::abs(ql[q1][0]-qr[q2][0]) +1;
-			int qmax = std::abs(ql[q1][0]+qr[q2][0]) -1;
-			for ( int i=qmin; i<=qmax; i+=2 )
-			{
-				if( auto it = uniqueControl.find({i}) == uniqueControl.end() ) {uniqueControl.insert({i}); vout.push_back({i});}
-			}
-		}
-		return vout;
-	}
-	else
-	{
-		std::vector<qType> vout;
-		for (std::size_t q1=0; q1<ql.size(); q1++)
-		for (std::size_t q2=0; q2<qr.size(); q2++)
-		{
-			int qmin = std::abs(ql[q1][0]-qr[q2][0]) +1;
-			int qmax = std::abs(ql[q1][0]+qr[q2][0]) -1;
-			for ( int i=qmin; i<=qmax; i+=2 ) { vout.push_back({i}); }
-		}
-		return vout;
-	}
 }
 
 template<typename Kind, typename Scalar_>
@@ -284,56 +204,12 @@ coeff_9j(const qType& q1, const qType& q2, const qType& q3,
 }
 
 template<typename Kind, typename Scalar_>
-template<std::size_t M>
 bool SU2<Kind,Scalar_>::
-compare ( const std::array<SU2<Kind,Scalar_>::qType,M>& q1, const std::array<SU2<Kind,Scalar_>::qType,M>& q2 )
-{
-	for (std::size_t m=0; m<M; m++)
-	{
-		if (q1[m][0] > q2[m][0]) { return false; }
-		else if (q1[m][0] < q2[m][0]) {return true; }
-	}
-	return false;
-}
-
-template<typename Kind, typename Scalar_>
-bool SU2<Kind,Scalar_>::
-triangle ( const std::array<SU2<Kind,Scalar>::qType,3>& qs )
+triangle (const qType& q1, const qType& q2, const qType& q3)
 {
 	//check the triangle rule for angular momenta, but remark that we use the convention q=2S+1
-	if (qs[2][0]-1 >= abs(qs[0][0]-qs[1][0]) and qs[2][0]-1 <= qs[0][0]+qs[1][0]-2) { return true;}
+	if (q3[0]-1 >= abs(q1[0]-q2[0]) and q3[0]-1 <= q1[0]+q2[0]-2) { return true;}
 	return false;
-}
-
-template<typename Kind, typename Scalar_>
-bool SU2<Kind,Scalar_>::
-pair ( const std::array<SU2<Kind,Scalar>::qType,2>& qs )
-{
-	//check if two quantum numbers fulfill the flow equations: simply qin = qout
-	if (qs[0] == qs[1]) {return true;}
-	return false;
-}
-
-template<typename Kind, typename Scalar_>
-template<std::size_t M>
-bool SU2<Kind,Scalar_>::
-validate ( const std::array<SU2<Kind,Scalar>::qType,M>& qs )
-{
-	if constexpr( M == 1 ) { return true; }
-	else if constexpr( M == 2 ) { return SU2<Kind,Scalar>::pair(qs); }
-	else if constexpr( M==3 ) { return SU2<Kind,Scalar>::triangle(qs); }
-	else { cout << "This should not be printed out!" << endl; return true; }
-		// std::vector<SU2<Kind,Scalar>::qType> decomp = SU2<Kind,Scalar>::reduceSilent(qs[0],qs[1]);
-		// for (std::size_t i=2; i<M; i++)
-		// {
-		// 	decomp = SU2<Kind,Scalar>::reduceSilent(decomp,qs[i]);
-		// }
-		// for (std::size_t i=0; i<decomp.size(); i++)
-		// {
-		// 	if ( decomp[i] == SU2<Kind,Scalar>::qvacuum() ) { return true; }
-		// }
-		// return false;
-	// }
 }
 
 } //end namespace Sym

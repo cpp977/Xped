@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        copmiler: [g++, clang++]
+        compiler: [g++, clang++]
         LIBCXX: [ON, OFF]
         exclude:
           # excludes libcxx for g++

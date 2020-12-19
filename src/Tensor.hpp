@@ -550,7 +550,7 @@ plainTensor () const
 	std::sort (index_sort.begin(), index_sort.end(), [this] (std::size_t n1, std::size_t n2) {
                 qarray<Symmetry::Nq> q1 = sector[n1];
                 qarray<Symmetry::Nq> q2 = sector[n2];
-                return Symmetry::compare(std::array{q1},std::array{q2});
+                return Symmetry::compare(q1,q2);
         });
 
         auto sorted_sector = sector;

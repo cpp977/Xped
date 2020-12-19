@@ -56,14 +56,14 @@ jobs:
       run: |
         lcov --capture --directory . --output-file coverage.info
         lcov --remove coverage.info '/usr/*' --output-file coverage.info # filter system-files
-        lcov --remove coverage.info '../thirdparty/*' --output-file coverage.info # filter system-files
+        lcov --remove coverage.info '${{runner.workspace}}/build/thirdparty/*' --output-file coverage.info # filter system-files
         lcov --list coverage.info # debug info
         
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
-        file: ${{runner.workspace}}/build/tests/coverage.xml
+        file: ${{runner.workspace}}/build/tests/coverage.info
         directory: ${{runner.workspace}}/build/tests
         flags: unittests
         name: coverage

@@ -47,7 +47,7 @@ struct FusionTree
                                 else {
                                         if (q_intermediates != other.q_intermediates) {return false;}
                                         else {
-                                                if (Symmetry::compare(std::array{q_coupled}, std::array{other.q_coupled})) return true;
+                                                if (Symmetry::compare(q_coupled, other.q_coupled)) return true;
                                                 else {
                                                         if (q_coupled != other.q_coupled) {return false;}
                                                         else {

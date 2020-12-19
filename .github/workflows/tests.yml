@@ -4,7 +4,7 @@ on: [push]
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
-  BUILD_TYPE: Release
+  BUILD_TYPE: Debug
 
 jobs:
   build:
@@ -16,10 +16,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
     - run: sudo apt update -qq
     - run: sudo apt install -qq libgsl-dev
     - run: sudo apt install -qq libgslcblas0
     - run: sudo apt install -qq libboost-all-dev
+    - run: sudo apt install -qq lcov
+      
     - name: Create Build Environment
       # Some projects don't allow in-source building, so create a separate build directory
       # We'll use this as our working directory for all subsequent commands
@@ -33,7 +36,7 @@ jobs:
       # Note the current convention is to use the -S and -B options here to specify source 
       # and build directories, but this is only available with CMake 3.13 and higher.  
       # The CMake binaries on the Github Actions machines are (as of this writing) 3.12
-      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DENABLE_COVERAGE=ON
 
     - name: Build
       working-directory: ${{runner.workspace}}/build
@@ -47,3 +50,22 @@ jobs:
       # Execute tests defined by the CMake configuration.  
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
       run: ctest -C $BUILD_TYPE
+      
+    - name: Generate coverage report
+      working-directory: ${{runner.workspace}}/build/tests
+      run: |
+        lcov --capture --directory . --output-file coverage.info
+        lcov --remove coverage.info '/usr/*' --output-file coverage.info # filter system-files
+        lcov --remove coverage.info '../thirdparty/*' --output-file coverage.info # filter system-files
+        lcov --list coverage.info # debug info
+        
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        file: ${{runner.workspace}}/build/tests/coverage.xml
+        directory: ${{runner.workspace}}/build/tests
+        flags: unittests
+        name: coverage
+        fail_ci_if_error: true
+        verbose: true

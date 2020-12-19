@@ -384,7 +384,7 @@ sort ()
 				   {
 					   qarray<Symmetry::Nq> q1 = std::get<0>(data_[n1]);
 					   qarray<Symmetry::Nq> q2 = std::get<0>(data_[n2]);
-                                           if (CONJ) {return Symmetry::compare(std::array{Symmetry::conj(q1)},std::array{Symmetry::conj(q2)});}
+                                           if (CONJ) {return Symmetry::compare(Symmetry::conj(q1),Symmetry::conj(q2));}
                                            else {return Symmetry::compare(q1, q2);}
 				   }
 		);

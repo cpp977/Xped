@@ -56,24 +56,28 @@ CacheManager<shift, Rank, CoRank, Symmetry> tree_cache(100);
 
 #include "tensor_tests.hpp"
 
+constexpr std::size_t SU2_TENSOR_SIZE=12;
+constexpr std::size_t U1_TENSOR_SIZE=10;
+constexpr std::size_t U0_TENSOR_SIZE=5;
+
 TEST_SUITE_BEGIN("Tensor");
 
 TEST_CASE("Testing the transformation to plain Tensor.") {
         SUBCASE("SU2") {
                 typedef Sym::SU2<Sym::SpinSU2> Symmetry;
-                Qbasis<Symmetry,1> B,C,D,E; B.setRandom(10); C.setRandom(10); D.setRandom(10), E.setRandom(10);
+                Qbasis<Symmetry,1> B,C,D,E; B.setRandom(SU2_TENSOR_SIZE); C.setRandom(SU2_TENSOR_SIZE); D.setRandom(SU2_TENSOR_SIZE), E.setRandom(SU2_TENSOR_SIZE);
                 test_tensor_transformation_to_plain(B,C);
         }
 
         SUBCASE("U1") {
                 typedef Sym::U1<Sym::SpinU1> Symmetry;
-                Qbasis<Symmetry,1> B,C,D,E; B.setRandom(10); C.setRandom(10); D.setRandom(10), E.setRandom(10);
+                Qbasis<Symmetry,1> B,C,D,E; B.setRandom(U1_TENSOR_SIZE); C.setRandom(U1_TENSOR_SIZE); D.setRandom(U1_TENSOR_SIZE), E.setRandom(U1_TENSOR_SIZE);
                 test_tensor_transformation_to_plain(B,C);
         }
 
         SUBCASE("U0") {
                 typedef Sym::U0 Symmetry;
-                Qbasis<Symmetry,1> B,C,D,E; B.setRandom(10); C.setRandom(10); D.setRandom(10), E.setRandom(10);
+                Qbasis<Symmetry,1> B,C,D,E; B.setRandom(U0_TENSOR_SIZE); C.setRandom(U0_TENSOR_SIZE); D.setRandom(U0_TENSOR_SIZE), E.setRandom(U0_TENSOR_SIZE);
                 test_tensor_transformation_to_plain(B,C);
         }
 }
@@ -81,19 +85,19 @@ TEST_CASE("Testing the transformation to plain Tensor.") {
 TEST_CASE("Testing the permutation within the domain.") {
         SUBCASE("SU2") {
                 typedef Sym::SU2<Sym::SpinSU2> Symmetry;
-                Qbasis<Symmetry,1> B,C,D,E; B.setRandom(6); C.setRandom(6); D.setRandom(6), E.setRandom(6);
+                Qbasis<Symmetry,1> B,C,D,E; B.setRandom(SU2_TENSOR_SIZE); C.setRandom(SU2_TENSOR_SIZE); D.setRandom(SU2_TENSOR_SIZE), E.setRandom(SU2_TENSOR_SIZE);
                 test_tensor_permute_within_domain(B,C,D,E);
         }
 
         SUBCASE("U1") {
                 typedef Sym::U1<Sym::SpinU1> Symmetry;
-                Qbasis<Symmetry,1> B,C,D,E; B.setRandom(4); C.setRandom(4); D.setRandom(4), E.setRandom(4);
+                Qbasis<Symmetry,1> B,C,D,E; B.setRandom(U1_TENSOR_SIZE); C.setRandom(U1_TENSOR_SIZE); D.setRandom(U1_TENSOR_SIZE), E.setRandom(U1_TENSOR_SIZE);
                 test_tensor_permute_within_domain(B,C,D,E);
         }
 
         SUBCASE("U0") {
                 typedef Sym::U0 Symmetry;
-                Qbasis<Symmetry,1> B,C,D,E; B.setRandom(3); C.setRandom(3); D.setRandom(3), E.setRandom(3);
+                Qbasis<Symmetry,1> B,C,D,E; B.setRandom(U0_TENSOR_SIZE); C.setRandom(U0_TENSOR_SIZE); D.setRandom(U0_TENSOR_SIZE), E.setRandom(U0_TENSOR_SIZE);
                 test_tensor_permute_within_domain(B,C,D,E);
         }
 }
@@ -101,19 +105,19 @@ TEST_CASE("Testing the permutation within the domain.") {
 TEST_CASE("Testing the permutation within the codomain.") {
         SUBCASE("SU2") {
                 typedef Sym::SU2<Sym::SpinSU2> Symmetry;
-                Qbasis<Symmetry,1> B,C,D,E; B.setRandom(10); C.setRandom(6); D.setRandom(6), E.setRandom(6);
+                Qbasis<Symmetry,1> B,C,D,E; B.setRandom(SU2_TENSOR_SIZE); C.setRandom(SU2_TENSOR_SIZE); D.setRandom(SU2_TENSOR_SIZE), E.setRandom(SU2_TENSOR_SIZE);
                 test_tensor_permute_within_codomain(B,C,D,E);
         }
 
         SUBCASE("U1") {
                 typedef Sym::U1<Sym::SpinU1> Symmetry;
-                Qbasis<Symmetry,1> B,C,D,E; B.setRandom(4); C.setRandom(4); D.setRandom(4), E.setRandom(4);
+                Qbasis<Symmetry,1> B,C,D,E; B.setRandom(U1_TENSOR_SIZE); C.setRandom(U1_TENSOR_SIZE); D.setRandom(U1_TENSOR_SIZE), E.setRandom(U1_TENSOR_SIZE);
                 test_tensor_permute_within_codomain(B,C,D,E);
         }
 
         SUBCASE("U0") {
                 typedef Sym::U0 Symmetry;
-                Qbasis<Symmetry,1> B,C,D,E; B.setRandom(3); C.setRandom(3); D.setRandom(3), E.setRandom(3);
+                Qbasis<Symmetry,1> B,C,D,E; B.setRandom(U0_TENSOR_SIZE); C.setRandom(U0_TENSOR_SIZE); D.setRandom(U0_TENSOR_SIZE), E.setRandom(U0_TENSOR_SIZE);
                 test_tensor_permute_within_codomain(B,C,D,E);
         }
 }
@@ -121,7 +125,7 @@ TEST_CASE("Testing the permutation within the codomain.") {
 TEST_CASE("Testing the general permutation of legs.") {
         SUBCASE("SU2") {
                 typedef Sym::SU2<Sym::SpinSU2> Symmetry;
-                Qbasis<Symmetry,1> B,C; B.setRandom(5); C.setRandom(5);
+                Qbasis<Symmetry,1> B,C; B.setRandom(SU2_TENSOR_SIZE); C.setRandom(SU2_TENSOR_SIZE);
                 test_tensor_permute<-2>(B,C);
                 test_tensor_permute<-1>(B,C);
                 test_tensor_permute<+0>(B,C);
@@ -131,7 +135,7 @@ TEST_CASE("Testing the general permutation of legs.") {
 
         SUBCASE("U1") {
                 typedef Sym::U1<Sym::SpinU1> Symmetry;
-                Qbasis<Symmetry,1> B,C; B.setRandom(4); C.setRandom(4);
+                Qbasis<Symmetry,1> B,C; B.setRandom(U1_TENSOR_SIZE); C.setRandom(U1_TENSOR_SIZE);
                 test_tensor_permute<-2>(B,C);
                 test_tensor_permute<-1>(B,C);
                 test_tensor_permute<+0>(B,C);
@@ -141,7 +145,7 @@ TEST_CASE("Testing the general permutation of legs.") {
 
         SUBCASE("U0") {
                 typedef Sym::U0 Symmetry;
-                Qbasis<Symmetry,1> B,C; B.setRandom(3); C.setRandom(3);
+                Qbasis<Symmetry,1> B,C; B.setRandom(U0_TENSOR_SIZE); C.setRandom(U0_TENSOR_SIZE);
                 test_tensor_permute<-2>(B,C);
                 test_tensor_permute<-1>(B,C);
                 test_tensor_permute<+0>(B,C);

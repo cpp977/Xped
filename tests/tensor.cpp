@@ -56,8 +56,8 @@ CacheManager<shift, Rank, CoRank, Symmetry> tree_cache(100);
 
 #include "tensor_tests.hpp"
 
-constexpr std::size_t SU2_TENSOR_SIZE=12;
-constexpr std::size_t U1_TENSOR_SIZE=10;
+constexpr std::size_t SU2_TENSOR_SIZE=10;
+constexpr std::size_t U1_TENSOR_SIZE=8;
 constexpr std::size_t U0_TENSOR_SIZE=5;
 
 TEST_SUITE_BEGIN("Tensor");

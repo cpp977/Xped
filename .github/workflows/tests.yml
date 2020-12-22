@@ -16,11 +16,7 @@ jobs:
     strategy:
       matrix:
         compiler: [g++, clang++]
-        LIBCXX: [ON, OFF]
-        exclude:
-          # excludes libcxx for g++
-          - compiler: g++
-            LIBCXX: ON
+        LIBCXX: [OFF]
     steps:
     - uses: actions/checkout@v2
 

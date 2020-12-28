@@ -319,18 +319,18 @@ namespace treepair {
                 else {t1p.q_coupled = t2.q_intermediates.back();}
                 std::copy(t1.dims.begin(), t1.dims.end(), t1p.dims.begin());
                 t1p.dims.back() = t2.dims.back();
-                t1p.computeDim();
-                                
+                t1p.computeDim();                
                 FusionTree<CoRank-1, Symmetry> t2p;
                 std::copy(t2.q_uncoupled.begin(), t2.q_uncoupled.end()-1, t2p.q_uncoupled.begin());
                 std::copy(t2.IS_DUAL.begin(), t2.IS_DUAL.end()-1, t2p.IS_DUAL.begin());
-                std::copy(t2.q_intermediates.begin(), t2.q_intermediates.end()-1, t2p.q_intermediates.begin());
+		if constexpr (CoRank > 2) {
+                	std::copy(t2.q_intermediates.begin(), t2.q_intermediates.end()-1, t2p.q_intermediates.begin());
+		}
                 if (CoRank == 1) {t2p.q_coupled = Symmetry::qvacuum();}
                 else if (CoRank == 2) {t2p.q_coupled = t2.q_uncoupled[0];}
                 else {t2p.q_coupled = t2.q_intermediates.back();}
                 std::copy(t2.dims.begin(), t2.dims.end()-1, t2p.dims.begin());
                 t2p.computeDim();
-                
                 typename Symmetry::qType a;
                 if (CoRank == 1) {a = Symmetry::qvacuum();}
                 else if (CoRank == 2) {a = t2.q_uncoupled[0];}

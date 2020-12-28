@@ -14,9 +14,14 @@ jobs:
     # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         compiler: [g++, clang++]
-        LIBCXX: [OFF]
+        LIBCXX: [ON, OFF]
+        exclude:
+          # excludes libcxx for g++
+          - compiler: g++
+            LIBCXX: ON
     steps:
     - uses: actions/checkout@v2
 
@@ -57,6 +62,7 @@ jobs:
       run: ctest -C $BUILD_TYPE
       
     - name: Generate coverage report
+      if: ${{ matrix.compiler }} == 'g++'
       working-directory: ${{runner.workspace}}/build/tests
       run: |
         lcov --capture --directory . --output-file coverage.info
@@ -65,6 +71,7 @@ jobs:
         lcov --list coverage.info # debug info
         
     - name: Upload coverage to Codecov
+      if: ${{ matrix.compiler }} == 'g++'
       uses: codecov/codecov-action@v1
       with:
         token: ${{ secrets.CODECOV_TOKEN }}

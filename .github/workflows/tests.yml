@@ -62,7 +62,7 @@ jobs:
       run: ctest -C $BUILD_TYPE
       
     - name: Generate coverage report
-      if: ${{ matrix.compiler }} == 'g++'
+      if: matrix.compiler == 'g++'
       working-directory: ${{runner.workspace}}/build/tests
       run: |
         lcov --capture --directory . --output-file coverage.info
@@ -71,7 +71,7 @@ jobs:
         lcov --list coverage.info # debug info
         
     - name: Upload coverage to Codecov
-      if: ${{ matrix.compiler }} == 'g++'
+      if: matrix.compiler == 'g++'
       uses: codecov/codecov-action@v1
       with:
         token: ${{ secrets.CODECOV_TOKEN }}

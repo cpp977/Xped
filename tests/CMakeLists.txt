@@ -13,6 +13,7 @@ file(GLOB SOURCES "./*.hpp"
                   "hash/*.hpp")
 
 add_library(test_suite OBJECT driver.cpp ${SOURCES})
+add_dependencies(test_suite doctest)
 target_link_libraries (test_suite project_options project_warnings)
 
 add_executable(basis_test basis.cpp $<TARGET_OBJECTS:test_suite>)

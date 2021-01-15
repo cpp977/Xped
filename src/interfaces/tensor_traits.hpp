@@ -123,7 +123,7 @@ struct tensortraits<EigenTensorLib>
                 return res;
         }
 
-        // methods
+        // methods rvalue
         template<typename Scalar, int Rank1, int Rank2, std::size_t Ncon>
         static Ttype<Scalar, Rank1+Rank2-2ul*Ncon> contract(const Ttype<Scalar, Rank1>& T1,
                                                             const Ttype<Scalar, Rank2>& T2,
@@ -137,9 +137,9 @@ struct tensortraits<EigenTensorLib>
                 return Ttype<Scalar, Rank1>(T.shuffle(dims));
         }
 
-        // template<typename Scalar, int Rank>
-        // static Ttype<Scalar, Rank> shuffle(const Ttype<Scalar, Rank>& T, const std::array<Indextype<Scalar,Rank>, Rank>& dims) {
-        //         return Ttype<Scalar, Rank>(T.shuffle(dims));
-        // }
+        template<typename Scalar, int Rank>
+        static Ttype<Scalar, Rank>& slice(Ttype<Scalar, Rank>& T, const std::array<Indextype<Scalar,Rank>, Rank>& offsets, const std::array<Indextype<Scalar,Rank>, Rank>& extents) {
+                return T.slice(offsets, extents);
+        }
 };
 #endif

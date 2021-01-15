@@ -708,7 +708,7 @@ plainTensor () const
                         }
                         dims[Rank] = uncoupled_dim;
                         typename Ttraits::template Ttype<Scalar,Rank+1> Tid = Tid_mat.reshape(dims);
-                        typename Ttraits::template Ttype<Scalar,Rank+1> Tid = Ttraits::reshape(Tid_mat, dims);
+                        // typename Ttraits::template Ttype<Scalar,Rank+1> Tid = Ttraits::reshape(Tid_mat, dims);
                         // Eigen::Tensor<Scalar,Rank+1> Tid = Tid_mat.reshape(dims);
                         
                         auto T=tree.template asTensor<TensorLib>();
@@ -770,8 +770,8 @@ plainTensor () const
                                 dims[i] = sorted_uncoupled_codomain[i].inner_dim(tree.q_uncoupled[i]);
                         }
                         dims[CoRank] = uncoupled_dim;
-                        // typename Ttraits::template Ttype<Scalar,CoRank+1> Tid = Tid_mat.reshape(dims);
-                        typename Ttraits::template Ttype<Scalar,CoRank+1> Tid = Ttraits::reshape(Tid_mat,dims);
+                        typename Ttraits::template Ttype<Scalar,CoRank+1> Tid = Tid_mat.reshape(dims);
+                        // typename Ttraits::template Ttype<Scalar,CoRank+1> Tid = Ttraits::reshape(Tid_mat,dims);
                         // Eigen::Tensor<Scalar,CoRank+1> Tid = Tid_mat.reshape(dims);
                         auto T=tree.template asTensor<TensorLib>();
                         

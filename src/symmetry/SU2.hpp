@@ -11,8 +11,7 @@
 #include <boost/rational.hpp>
 /// \endcond
 
-#include <unsupported/Eigen/CXX11/Tensor>
-
+#include "../interfaces/tensor_traits.hpp"
 #include "qarray.hpp"
 #include "functions.hpp"
 #include "SU2Wrappers.hpp"
@@ -93,14 +92,16 @@ struct SU2 : public SymBase<SU2<Kind, Scalar_> >
 
         static Scalar coeff_FS(const qType& q1) {return (q1[0]%2 == 0) ? -1. : 1.;}
 
-        static Eigen::Tensor<Scalar_, 2> one_j_tensor(const qType& q1);
+        template<typename TensorLib>
+        static typename tensortraits<TensorLib>::template Ttype<Scalar_,2> one_j_tensor(const qType& q1);
 
 	static Scalar coeff_3j(const qType& q1, const qType& q2, const qType& q3,
                                int        q1_z, int        q2_z,        int q3_z);
 
         static Scalar coeff_turn(const qType& ql, const qType& qr, const qType& qf) {return triangle(ql,qr,qf) ? coeff_swap(ql,qr,qf)*std::sqrt(static_cast<Scalar>(qf[0])/static_cast<Scalar>(ql[0])) : Scalar(0.);}
-        
-	static Eigen::Tensor<Scalar_, 3> CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t);
+
+        template<typename TensorLib>
+	static typename tensortraits<TensorLib>::template Ttype<Scalar_,3> CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t);
 
 	static Scalar coeff_6j(const qType& q1, const qType& q2, const qType& q3,
                                const qType& q4, const qType& q5, const qType& q6);
@@ -139,13 +140,14 @@ coeff_dot(const qType& q1)
 }
 
 template<typename Kind, typename Scalar_>
-Eigen::Tensor<Scalar_, 2> SU2<Kind,Scalar_>::
+template<typename TensorLib>
+typename tensortraits<TensorLib>::template Ttype<Scalar_,2> SU2<Kind,Scalar_>::
 one_j_tensor(const qType& q1)
 {
-        auto tmp = CGC(q1, q1, qvacuum(), 0);
-        Eigen::Tensor<Scalar_, 2> out(degeneracy(q1), degeneracy(q1)); out.setZero();
-        for (Eigen::Index i=0; i<degeneracy(q1); i++)
-        for (Eigen::Index j=0; j<degeneracy(q1); j++) {
+        auto tmp = CGC<TensorLib>(q1, q1, qvacuum(), 0);
+        typename tensortraits<TensorLib>::template Ttype<Scalar_,2> out(degeneracy(q1), degeneracy(q1)); tensortraits<TensorLib>::setZero(out);
+        for (typename tensortraits<TensorLib>::template Indextype<Scalar_,2> i=0; i<degeneracy(q1); i++)
+        for (typename tensortraits<TensorLib>::template Indextype<Scalar_,2> j=0; j<degeneracy(q1); j++) {
                 out(i,j) = std::sqrt(degeneracy(q1))*tmp(i,j,0);
         }
         return out;
@@ -162,10 +164,11 @@ coeff_3j(const qType& q1, const qType& q2, const qType& q3,
 }
 
 template<typename Kind, typename Scalar_>
-Eigen::Tensor<Scalar_, 3> SU2<Kind,Scalar_>::
+template<typename TensorLib>
+typename tensortraits<TensorLib>::template Ttype<Scalar_,3> SU2<Kind,Scalar_>::
 CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t)
 {
-        Eigen::Tensor<Scalar_, 3> T(degeneracy(q1),degeneracy(q2),degeneracy(q3));
+        typename tensortraits<TensorLib>::template Ttype<Scalar_,3> out(degeneracy(q1),degeneracy(q2),degeneracy(q3));
         for (int i_q1m=0; i_q1m<degeneracy(q1); i_q1m++)
         for (int i_q2m=0; i_q2m<degeneracy(q2); i_q2m++)
         for (int i_q3m=0; i_q3m<degeneracy(q3); i_q3m++)
@@ -173,12 +176,12 @@ CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t)
                         int q1_2m = -(2*i_q1m - (q1[0]-1));
                         int q2_2m = -(2*i_q2m - (q2[0]-1));
                         int q3_2m = -(2*i_q3m - (q3[0]-1));
-                        T(i_q1m,i_q2m,i_q3m) = coupling_3j(q1[0], q2[0], q3[0],
+                        out(i_q1m,i_q2m,i_q3m) = coupling_3j(q1[0], q2[0], q3[0],
                                                              q1_2m , q2_2m , -q3_2m) *
                                 phase<Scalar>((q1[0]-q2[0]+q3_2m)/2) * sqrt(q3[0]);
                 }
 
-	return T;
+	return out;
 }
 
 template<typename Kind, typename Scalar_>

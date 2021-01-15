@@ -21,7 +21,7 @@ namespace std
                         return seed;
                 }
         };
-
+        
         /**Hashes an array of quantum numbers using boost's \p hash_combine.*/
         template<size_t Nq, size_t Nlegs>
         struct hash<array<qarray<Nq>,Nlegs> >

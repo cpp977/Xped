@@ -77,6 +77,15 @@ public:
 	qType getQ( const size_t& num ) const;
 
         ///\{
+        std::vector<qType> qs() const {std::vector<qType> out; for (auto triple:data_) {out.push_back(std::get<0>(triple));} return out;}
+        std::unordered_set<qType> unordered_qs() const {std::set<qType> out; for (auto triple:data_) {out.insert(std::get<0>(triple));} return out;}
+        ///\}
+
+        ///\{
+        std::vector<std::size_t> dims() const {std::vector<std::size_t> out; for (auto triple:data_) {out.push_back(std::get<2>(triple).dim());} return out;}
+        ///\}
+        
+        ///\{
 	/**Checks whether states with quantum number \p q are in the basis. Returns true if the state is present.*/
 	bool IS_PRESENT( const qType& q ) const {return cfind(q) != data_.end();}
         /**Checks whether states with quantum number \p q are not in the basis. Returns true if the state is absent.*/
@@ -95,7 +104,16 @@ public:
         /**Computes the total number with which the sector with quantum number \p q begins and takes into account the dimension of each irrep.*/
 	size_t full_outer_num( const qType& q ) const;
 	///\}
-	
+
+        void remove(const qType& q);
+
+        qType maxQ() const {auto qs=this->qs(); return *std::max_element(qs.begin(), qs.end());}
+        qType minQ() const {auto qs=this->qs(); return *std::min_element(qs.begin(), qs.end());}
+        // template<typename Iterator>
+        // void remove(Iterator& begin, Iterator& end);
+
+        void truncate(const std::unordered_set<qType>& qs, const std::size_t& M);
+        
 	size_t leftOffset(const FusionTree<depth, Symmetry>& tree, const std::array<size_t,depth>& plain=std::array<std::size_t,depth>()) const;
         size_t rightOffset(const FusionTree<depth, Symmetry>& tree, const std::array<size_t,depth>& plain=std::array<std::size_t,depth>()) const;
 	
@@ -115,9 +133,12 @@ public:
 	 */
 	Qbasis<Symmetry,depth+1> combine (const Qbasis<Symmetry,1>& other, bool CONJ=false) const;
 		
-	/**Adds to bases together.*/
+	/**Adds two bases together.*/
 	Qbasis<Symmetry, depth> add (const Qbasis<Symmetry, depth>& other) const;
 
+        /**Returns the intersection of this and \p other.*/
+	Qbasis<Symmetry, depth> intersection (const Qbasis<Symmetry, depth>& other) const;
+        
         Qbasis<Symmetry, depth> conj () const;
 
         Qbasis<Symmetry, 1> forgetHistory() const;
@@ -375,6 +396,67 @@ rightOffset(const FusionTree<depth, Symmetry>& tree, const std::array<size_t,dep
 
 template<typename Symmetry, std::size_t depth>
 void Qbasis<Symmetry,depth>::
+remove (const qType& Q)
+{
+        auto it = find(Q);
+        if (it != data_.end()) {
+                auto dimQ = std::get<2>(*it).dim();
+                data_.erase(it);
+                for (auto loop=it++; loop==data_.end(); loop++) {
+                        std::get<1>(*loop) -= dimQ;
+                }
+        }
+        trees.erase(Q);
+        // std::get<2>(*it) = std::get<2>(*it).add(Basis(inner_dim));
+        // for (auto& [p,tree] : trees) {
+        //         if (p != q) {continue;}
+        //         tree[0].dim += inner_dim;
+        //         tree[0].dims[0] += inner_dim;
+        // }
+}
+
+// template<typename Iterator>
+// template<typename Symmetry, std::size_t depth>
+// void Qbasis<Symmetry,depth>::
+// remove (Iterator& begin, Iterator& end)
+// {
+//         for(auto it=begin, it != end; it++) {
+//                 remove(*it);
+//         }
+// }
+
+template<typename Symmetry, std::size_t depth>
+void Qbasis<Symmetry,depth>::
+truncate (const std::unordered_set<qType>& qs, const std::size_t& M)
+{
+        static_assert(depth == 1, "Cannot truncate a Qbasis with a depth != 1.");
+        if (qs.size() < Nq()) {
+                for (const auto& q:this->qs()) {
+                        if (auto it=qs.find(q); it == qs.end()) {remove(q);}
+                }
+        }
+        if (M < dim()) {
+                assert(M >= Nq() and "Cannot truncate basis down and keep at least one state per block");
+                size_t D = M / Nq();
+                size_t D_remainder = M%Nq();
+
+                for (size_t i=0; i<this->Nq(); i++) {
+                        std::size_t Deff = (std::get<0>(data_[i]) == Symmetry::qvacuum()) ? D+D_remainder : D;
+                        if (std::get<2>(data_[i]).dim() > Deff) {
+                                std::get<2>(data_[i]) = Basis(Deff);
+                                auto it = trees.find(std::get<0>(data_[i]));
+                                assert(it->second.size() == 1);
+                                it->second[0].dims[0] = Deff;
+                                it->second[0].dim = Deff; 
+                        }
+                        auto dims = this->dims();
+                        std::get<1>(data_[i]) = std::accumulate(dims.begin(), dims.begin()+i, 0ul);
+                }
+        }
+}
+        
+template<typename Symmetry, std::size_t depth>
+void Qbasis<Symmetry,depth>::
 sort ()
 {
 	std::vector<std::size_t> index_sort(data_.size());
@@ -415,7 +497,7 @@ operator==( const Qbasis<Symmetry,depth>& other ) const
 
 template<typename Symmetry, std::size_t depth>
 Qbasis<Symmetry,depth> Qbasis<Symmetry,depth>::
-add( const Qbasis<Symmetry,depth>& other ) const
+add (const Qbasis<Symmetry,depth>& other) const
 {
 	std::unordered_set<qType> uniqueController;
 	Qbasis out;
@@ -442,6 +524,20 @@ add( const Qbasis<Symmetry,depth>& other ) const
 	}
 	out.sort();
 	return out;
+}
+
+template<typename Symmetry, std::size_t depth>
+Qbasis<Symmetry,depth> Qbasis<Symmetry,depth>::
+intersection (const Qbasis<Symmetry,depth>& other) const
+{
+	Qbasis out;
+        for (const auto& triple : this->data_) {
+                if (auto it = other.cfind(std::get<0>(triple)); it != other.cend()) {
+                        auto dim = std::min(std::get<2>(triple).dim(), std::get<2>(*it).dim());
+                        out.push_back(std::get<0>(triple),dim);
+                }
+        }
+        return out;
 }
 
 template<typename Symmetry, std::size_t depth>
@@ -555,7 +651,7 @@ std::string Qbasis<Symmetry,depth>::
 print() const
 {
 	std::stringstream out;
-#ifdef HELPERS_IO_TABLE
+#ifdef TOOLS_IO_TABLE
 	TextTable t( '-', '|', '+' );
 	t.add("Q");
 	t.add("Dim(Q)");

@@ -7,8 +7,7 @@
 #include <unordered_set>
 /// \endcond
 
-#include <unsupported/Eigen/CXX11/Tensor>
-
+#include "../interfaces/tensor_traits.hpp"
 #include "../util/Random.hpp"
 
 #include "SymBase.hpp"
@@ -87,11 +86,15 @@ struct U1 : public SymBase<U1<Kind, Scalar_> >
 
         static Scalar coeff_FS(const qType&) {return 1.;}
 
-        static Eigen::Tensor<Scalar_, 2> one_j_tensor(const qType&) {Eigen::Tensor<Scalar, 2> T(1,1); T(0,0) = 1; return T;}
+        template<typename TensorLib>
+        static typename tensortraits<TensorLib>::template Ttype<Scalar_,2> one_j_tensor(const qType&) {
+                typename tensortraits<TensorLib>::template Ttype<Scalar_,2> T(1,1); T(0,0) = 1; return T;
+        }
         
 	inline static Scalar coeff_3j (const qType& q1, const qType& q2, const qType& q3, int, int, int) {return triangle(q1,q2,conj(q3)) ? Scalar(1.) : Scalar(0.);}
-        
-        static Eigen::Tensor<Scalar_, 3> CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t);
+
+        template<typename TensorLib>
+        static typename tensortraits<TensorLib>::template Ttype<Scalar_,3> CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t);
 
         static Scalar coeff_turn(const qType& ql, const qType& qr, const qType& qf) {return triangle(ql,qr,qf) ? Scalar(1.) : Scalar(0.);}
         
@@ -122,10 +125,11 @@ basis_combine( const qType& ql, const qType& qr )
 }
 
 template<typename Kind, typename Scalar_>
-Eigen::Tensor<Scalar_, 3> U1<Kind,Scalar_>::
+template<typename TensorLib>
+typename tensortraits<TensorLib>::template Ttype<Scalar_,3> U1<Kind,Scalar_>::
 CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t)
 {
-        Eigen::Tensor<Scalar, 3> T(1,1,1);
+        typename tensortraits<TensorLib>::template Ttype<Scalar_,3> T(1,1,1);
         if (triangle(q1,q2,q3)) {T(0,0,0) = 1.;}
         else {T(0,0,0) = 0.;}
         return T;

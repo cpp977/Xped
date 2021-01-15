@@ -5,8 +5,7 @@
 #include <cstddef>
 /// \endcond
 
-#include <unsupported/Eigen/CXX11/Tensor>
-
+#include "../interfaces/tensor_traits.hpp"
 #include "qarray.hpp"
 
 namespace Sym{
@@ -68,12 +67,16 @@ struct U0 : SymBase<U0>
 
         inline static Scalar coeff_FS(const qType&) {return 1.;}
 
-        inline static Eigen::Tensor<Scalar, 2> one_j_tensor(const qType&) {Eigen::Tensor<Scalar,2> T(1,1); T(0,0) = 1.; return T;}
+        template<typename TensorLib>
+        inline static typename tensortraits<TensorLib>::template Ttype<Scalar,2> one_j_tensor(const qType&) {typename tensortraits<TensorLib>::template Ttype<Scalar,2> T(1,1); T(0,0) = 1.; return T;}
                 
         inline static Scalar coeff_3j(const qType&, const qType&, const qType&,
                                       int         , int         ,        int) {return 1.;}
-                
-        inline static Eigen::Tensor<Scalar, 3> CGC(const qType&, const qType&, const qType&, const std::size_t) {Eigen::Tensor<Scalar,3> T(1,1,1); T(0,0,0) = 1.; return T;}
+
+        template<typename TensorLib>
+        inline static typename tensortraits<TensorLib>::template Ttype<Scalar,3> CGC(const qType&, const qType&, const qType&, const std::size_t) {
+                static typename tensortraits<TensorLib>::template Ttype<Scalar,3> T(1,1,1); T(0,0,0) = 1.; return T;
+        }
                 
         inline static double coeff_6j(const qType&, const qType&, const qType&,
                                       const qType&, const qType&, const qType&) { return 1.; }

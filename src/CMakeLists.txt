@@ -1,6 +1,7 @@
 add_subdirectory(util)
 add_subdirectory(symmetry)
 add_subdirectory(hash)
+add_subdirectory(interfaces)
 
 #find_package (Eigen3 REQUIRED NO_MODULE)
 find_package(GSL REQUIRED)
@@ -11,7 +12,9 @@ include_directories(${TOOLS_INCLUDE_DIR} ${TEXTTABLE_INCLUDE_DIR} ${EIGEN_INCLUD
 file(GLOB SOURCES "./*.cpp"	
                   "./*.hpp"
                   "symmetry/*.hpp"
-                  "hash/*.hpp")
+                  "hash/*.hpp"
+                  "interfaces/*.hpp")
+                  
 add_executable(run
                main.cpp
                ${SOURCES})

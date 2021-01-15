@@ -24,12 +24,12 @@ struct SymBase
                 return vout;        
         }
 
-        static std::vector<qType> reduceSilent( const std::vector<qType>& ql, const std::vector<qType>& qr) {
-        	std::vector<qType> vout;
+        static std::set<qType> reduceSilent( const std::vector<qType>& ql, const std::vector<qType>& qr) {
+        	std::set<qType> vout;
                 for (const auto& q: ql) {
                         for (const auto& p: qr) {
                                 for (const auto& qmerge:Derived::basis_combine(q,p)) {
-                                        vout.push_back(qmerge);
+                                        vout.insert(qmerge);
                                 }
                         }
                 }
@@ -41,8 +41,20 @@ struct SymBase
                 return reduceSilent(qtmp,qr);
         }
 
-        static std::unordered_set<qType> reduceSilent(const std::unordered_set<qType>& ql, const std::vector<qType>& qr) {
-                std::unordered_set<qType> out;
+        static std::set<qType> reduceSilent(const std::set<qType>& ql, const std::vector<qType>& qr) {
+                std::set<qType> out;
+                for (const auto q : ql) {
+                        for (const auto& p : qr) {
+                                for (const auto qp : Derived::basis_combine(q,p)) {
+                                        out.insert(qp);
+                                }
+                        }
+                }
+                return out;
+        }
+        
+        static std::set<qType> reduceSilent(const std::unordered_set<qType>& ql, const std::vector<qType>& qr) {
+                std::set<qType> out;
                 for (const auto q : ql) {
                         for (const auto& p : qr) {
                                 for (const auto qp : Derived::basis_combine(q,p)) {

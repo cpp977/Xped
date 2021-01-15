@@ -1,11 +1,11 @@
 #ifndef FUSIONTREE_H_
 #define FUSIONTREE_H_
 
-#include <unsupported/Eigen/CXX11/Tensor>
-
 #ifdef CACHE_PERMUTE_OUTPUT
 #include "lru/lru.hpp"
 #endif
+
+#include "interfaces/tensor_traits.hpp"
 
 #include "hash/hash.hpp"
 #include "numeric_limits.h"
@@ -137,49 +137,61 @@ struct FusionTree
                 return ss.str();
         }
 
-        Eigen::Tensor<Scalar,Rank+1> asTensor() const {
-                Eigen::Tensor<Scalar,Rank+1> out;
-                if constexpr (Rank == 0) {out = Eigen::Tensor<Scalar,Rank+1>(1); out(0)=1.;}
+        template<typename TensorLib_>
+        typename tensortraits<TensorLib_>::template Ttype<Scalar,Rank+1> asTensor() const {
+                typedef typename tensortraits<TensorLib_>::template Ttype<Scalar,Rank+1> TensorType;
+                typedef typename tensortraits<TensorLib_>::template Indextype<Scalar,Rank+1> IndexType;
+                TensorType out;
+                if constexpr (Rank == 0) {out = TensorType(1); out(0)=1.;}
                 else if constexpr (Rank == 1) {
-                        out = Eigen::Tensor<Scalar,Rank+1>(Symmetry::degeneracy(q_uncoupled[0]), Symmetry::degeneracy(q_coupled)); out.setZero();
+                        out = TensorType(Symmetry::degeneracy(q_uncoupled[0]), Symmetry::degeneracy(q_coupled)); tensortraits<TensorLib_>::setZero(out);
                         for (std::size_t i=0; i<static_cast<std::size_t>(Symmetry::degeneracy(q_uncoupled[0])); i++) {out(i,i) = 1.;}
 
                 }
                 else if constexpr (Rank == 2) {
-                        out = Symmetry::CGC(q_uncoupled[0], q_uncoupled[1], q_coupled, multiplicities[0]);
+                        out = Symmetry::template CGC<TensorLib_>(q_uncoupled[0], q_uncoupled[1], q_coupled, multiplicities[0]);
                 }
                 else if constexpr (Rank == 3) {
-                        auto vertex1 = Symmetry::CGC(q_uncoupled[0], q_uncoupled[1], q_intermediates[0], multiplicities[0]);
-                        auto vertex2 = Symmetry::CGC(q_intermediates[0], q_uncoupled[2], q_coupled, multiplicities[1]);
-                        out = vertex1.contract(vertex2, Eigen::array<Eigen::IndexPair<Eigen::Index>, 1>{{Eigen::IndexPair<Eigen::Index>(2,0)}});
+                        auto vertex1 = Symmetry::template CGC<TensorLib_>(q_uncoupled[0], q_uncoupled[1], q_intermediates[0], multiplicities[0]);
+                        auto vertex2 = Symmetry::template CGC<TensorLib_>(q_intermediates[0], q_uncoupled[2], q_coupled, multiplicities[1]);
+                        out = tensortraits<TensorLib_>::template contract(vertex1, vertex2, std::array<std::pair<IndexType, IndexType>, 1>{{std::make_pair(2,0)}});
                 }
                 else if constexpr (Rank == 4) {
-                        auto vertex1 = Symmetry::CGC(q_uncoupled[0], q_uncoupled[1], q_intermediates[0], multiplicities[0]);
-                        auto vertex2 = Symmetry::CGC(q_intermediates[0], q_uncoupled[2], q_intermediates[1], multiplicities[1]);
-                        auto vertex3 = Symmetry::CGC(q_intermediates[1], q_uncoupled[3], q_coupled, multiplicities[2]);
-                        out = (vertex1.contract(vertex2, Eigen::array<Eigen::IndexPair<Eigen::Index>, 1>{{Eigen::IndexPair<Eigen::Index>(2,0)}}))
-                                .contract(vertex3,Eigen::array<Eigen::IndexPair<Eigen::Index>, 1>{{Eigen::IndexPair<Eigen::Index>(3,0)}});
+                        auto vertex1 = Symmetry::template CGC<TensorLib_>(q_uncoupled[0], q_uncoupled[1], q_intermediates[0], multiplicities[0]);
+                        auto vertex2 = Symmetry::template CGC<TensorLib_>(q_intermediates[0], q_uncoupled[2], q_intermediates[1], multiplicities[1]);
+                        auto vertex3 = Symmetry::template CGC<TensorLib_>(q_intermediates[1], q_uncoupled[3], q_coupled, multiplicities[2]);
+                        out = tensortraits<TensorLib_>::template contract(tensortraits<TensorLib_>::template contract(vertex1, vertex2, std::array<std::pair<IndexType, IndexType>, 1>{{std::make_pair(2,0)}}),
+                                                                          vertex3, std::array<std::pair<IndexType, IndexType>, 1>{{std::make_pair(3,0)}});
+                        // out = (vertex1.contract(vertex2, Eigen::array<Eigen::IndexPair<Eigen::Index>, 1>{{Eigen::IndexPair<Eigen::Index>(2,0)}}))
+                        //         .contract(vertex3,Eigen::array<Eigen::IndexPair<Eigen::Index>, 1>{{Eigen::IndexPair<Eigen::Index>(3,0)}});
                 }
                 else if constexpr (Rank == 5) {
-                        auto vertex1 = Symmetry::CGC(q_uncoupled[0], q_uncoupled[1], q_intermediates[0], multiplicities[0]);
-                        auto vertex2 = Symmetry::CGC(q_intermediates[0], q_uncoupled[2], q_intermediates[1], multiplicities[1]);
-                        auto vertex3 = Symmetry::CGC(q_intermediates[1], q_uncoupled[3], q_intermediates[2], multiplicities[2]);
-                        auto vertex4 = Symmetry::CGC(q_intermediates[2], q_uncoupled[4], q_coupled, multiplicities[3]);
-                        out = (vertex1.contract(vertex2, Eigen::array<Eigen::IndexPair<Eigen::Index>, 1>{{Eigen::IndexPair<Eigen::Index>(2,0)}}))
-                                .contract(vertex3,Eigen::array<Eigen::IndexPair<Eigen::Index>, 1>{{Eigen::IndexPair<Eigen::Index>(3,0)}})
-                                          .contract(vertex4,Eigen::array<Eigen::IndexPair<Eigen::Index>, 1>{{Eigen::IndexPair<Eigen::Index>(4,0)}});
+                        auto vertex1 = Symmetry::template CGC<TensorLib_>(q_uncoupled[0], q_uncoupled[1], q_intermediates[0], multiplicities[0]);
+                        auto vertex2 = Symmetry::template CGC<TensorLib_>(q_intermediates[0], q_uncoupled[2], q_intermediates[1], multiplicities[1]);
+                        auto vertex3 = Symmetry::template CGC<TensorLib_>(q_intermediates[1], q_uncoupled[3], q_intermediates[2], multiplicities[2]);
+                        auto vertex4 = Symmetry::template CGC<TensorLib_>(q_intermediates[2], q_uncoupled[4], q_coupled, multiplicities[3]);
+                        out = tensortraits<TensorLib_>::template contract(
+                              tensortraits<TensorLib_>::template contract(
+                              tensortraits<TensorLib_>::template contract(vertex1, vertex2, std::array<std::pair<IndexType, IndexType>, 1>{{std::make_pair(2,0)}}),
+                                                                          vertex3, std::array<std::pair<IndexType, IndexType>, 1>{{std::make_pair(3,0)}}),
+                                                                          vertex4, std::array<std::pair<IndexType, IndexType>, 1>{{std::make_pair(4,0)}});
+                        
+                        // out = (vertex1.contract(vertex2, Eigen::array<Eigen::IndexPair<Eigen::Index>, 1>{{Eigen::IndexPair<Eigen::Index>(2,0)}}))
+                        //         .contract(vertex3,Eigen::array<Eigen::IndexPair<Eigen::Index>, 1>{{Eigen::IndexPair<Eigen::Index>(3,0)}})
+                        //                   .contract(vertex4,Eigen::array<Eigen::IndexPair<Eigen::Index>, 1>{{Eigen::IndexPair<Eigen::Index>(4,0)}});
                 }
                 else {  assert(false); }
                 for (std::size_t i=0; i<Rank; i++) {
                         if (IS_DUAL[i]) {
-                                Eigen::Tensor<Scalar, Rank+1> tmp = Symmetry::one_j_tensor(q_uncoupled[i]).contract(out, Eigen::array<Eigen::IndexPair<Eigen::Index>, 1>{{Eigen::IndexPair<Eigen::Index>(1,i)}});
+                                TensorType tmp = tensortraits<TensorLib_>::template contract(Symmetry::template one_j_tensor<TensorLib_>(q_uncoupled[i]),
+                                                                                             out, std::array<std::pair<IndexType, IndexType>, 1>{{std::make_pair(1,i)}});
                                 out = tmp;
-                                std::array<Eigen::Index, Rank+1> shuffle_dims; std::iota(shuffle_dims.begin(), shuffle_dims.end(), 0);
+                                std::array<IndexType, Rank+1> shuffle_dims; std::iota(shuffle_dims.begin(), shuffle_dims.end(), 0);
                                 for (std::size_t j=0; j<i; j++) {
                                         shuffle_dims[j]++;
                                 }
                                 shuffle_dims[i] = 0;
-                                Eigen::Tensor<Scalar, Rank+1> tmp2 = out.shuffle(shuffle_dims);
+                                TensorType tmp2 = tensortraits<TensorLib_>::template shuffle(out, shuffle_dims);
                                 out = tmp2;
                         }
                 }

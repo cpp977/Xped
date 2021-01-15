@@ -24,6 +24,8 @@ function(set_project_options project_name)
       -std=c++17
       -O3
       -DNDEBUG
+      -march=native
+      -m64
       -ferror-limit=5
       -fcolor-diagnostics
   )
@@ -32,6 +34,8 @@ function(set_project_options project_name)
       -stdlib=${USED_LIBCXX}
       -O0
       -g
+      -march=native
+      -m64
       -ferror-limit=5
       -fcolor-diagnostics
   )
@@ -40,6 +44,8 @@ function(set_project_options project_name)
       -stdlib=${USED_LIBCXX}
       -O2
       -pg
+      -march=native
+      -m64
       -ferror-limit=5
       -fcolor-diagnostics
   )
@@ -64,6 +70,8 @@ function(set_project_options project_name)
       -std=c++17
       -O3
       -DNDEBUG
+      -march=native
+      -m64
       -fmax-errors=5
       -fdiagnostics-color=always
   )
@@ -71,6 +79,8 @@ function(set_project_options project_name)
       -std=c++17
       -O0
       -g
+      -march=native
+      -m64
       -fmax-errors=5
       -fdiagnostics-color=always
   )
@@ -78,6 +88,8 @@ function(set_project_options project_name)
       -std=c++17
       -O2
       -pg
+      -march=native
+      -m64
       -fmax-errors=5
       -fdiagnostics-color=always
   )

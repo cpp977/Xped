@@ -700,15 +700,15 @@ plainTensor () const
                                 uncoupled_dim *= sorted_uncoupled_domain[i].inner_dim(tree.q_uncoupled[i]);
                         }
                         MatrixType id(uncoupled_dim,uncoupled_dim); id.setIdentity();
-                        typename Ttraits::template Maptype<Scalar,2> Tid_mat(id.data(),id.rows(), id.cols());
+                        typename Ttraits::template Ttype<Scalar,2> Tid_mat = Ttraits::construct(Ttraits::Map(id.data(),std::array<IndexType,2>{id.rows(), id.cols()}));
                         // Eigen::TensorMap<Eigen::Tensor<Scalar,2> > Tid_mat(id.data(),id.rows(), id.cols());
                         std::array<IndexType, Rank+1> dims;
                         for (std::size_t i=0; i<Rank; i++) {
                                 dims[i] = sorted_uncoupled_domain[i].inner_dim(tree.q_uncoupled[i]);
                         }
                         dims[Rank] = uncoupled_dim;
-                        typename Ttraits::template Ttype<Scalar,Rank+1> Tid = Tid_mat.reshape(dims);
-                        // typename Ttraits::template Ttype<Scalar,Rank+1> Tid = Ttraits::reshape(Tid_mat, dims);
+                        // typename Ttraits::template Ttype<Scalar,Rank+1> Tid = Tid_mat.reshape(dims);
+                        typename Ttraits::template Ttype<Scalar,Rank+1> Tid = Ttraits::reshape(Tid_mat, dims);
                         // Eigen::Tensor<Scalar,Rank+1> Tid = Tid_mat.reshape(dims);
                         
                         auto T=tree.template asTensor<TensorLib>();
@@ -740,8 +740,8 @@ plainTensor () const
                                 extents[i] = sorted_uncoupled_domain[i].inner_dim(tree.q_uncoupled[i]) * Symmetry::degeneracy(tree.q_uncoupled[i]);
                         }
                         extents[Rank] = Ttraits::dimensions(Tfull)[Rank];
-                        unitary_domain.slice(offsets,extents) += Tfull; //+= or =?
-                        // Ttraits::slice(unitary_domain, offsets, extents) += Tfull;
+                        // unitary_domain.slice(offsets,extents) += Tfull; //+= or =?
+                        Ttraits::slice(unitary_domain, offsets, extents) += Tfull;
                         // cout << "unitary_domain:" << endl << unitary_domain << endl;
                 }
         }
@@ -763,14 +763,16 @@ plainTensor () const
                                 uncoupled_dim *= sorted_uncoupled_codomain[i].inner_dim(tree.q_uncoupled[i]);
                         }
                         MatrixType id(uncoupled_dim,uncoupled_dim); id.setIdentity();
-                        typename Ttraits::template Maptype<Scalar,2> Tid_mat(id.data(),id.rows(), id.cols());
+                        typename Ttraits::template Ttype<Scalar,2> Tid_mat = Ttraits::construct(Ttraits::Map(id.data(),std::array<IndexType,2>{id.rows(), id.cols()}));
+                        // typename Ttraits::template Maptype<Scalar,2> Tid_mat(id.data(),id.rows(), id.cols());
                         // Eigen::TensorMap<Eigen::Tensor<Scalar,2> > Tid_mat(id.data(),id.rows(), id.cols());
                         std::array<IndexType, CoRank+1> dims;
                         for (std::size_t i=0; i<CoRank; i++) {
                                 dims[i] = sorted_uncoupled_codomain[i].inner_dim(tree.q_uncoupled[i]);
                         }
                         dims[CoRank] = uncoupled_dim;
-                        typename Ttraits::template Ttype<Scalar,CoRank+1> Tid = Tid_mat.reshape(dims);
+                        typename Ttraits::template Ttype<Scalar,CoRank+1> Tid = Ttraits::reshape(Tid_mat, dims);
+                        // typename Ttraits::template Ttype<Scalar,CoRank+1> Tid = Tid_mat.reshape(dims);
                         // typename Ttraits::template Ttype<Scalar,CoRank+1> Tid = Ttraits::reshape(Tid_mat,dims);
                         // Eigen::Tensor<Scalar,CoRank+1> Tid = Tid_mat.reshape(dims);
                         auto T=tree.template asTensor<TensorLib>();
@@ -815,7 +817,8 @@ plainTensor () const
                         // cout << "offsets="; for (const auto& o:offsets) {cout << o << " ";} cout << endl;
                         // cout << "outer num=" << sorted_codomain.full_outer_num(q) << ", leftOff=" << sorted_codomain.leftOffset(tree) << endl;
                         // cout << "extents="; for (const auto& o:extents) {cout << o << " ";} cout << endl;
-                        unitary_codomain.slice(offsets,extents) = Tfull;
+                        Ttraits::slice(unitary_codomain, offsets, extents) += Tfull;
+                        // unitary_codomain.slice(offsets,extents) = Tfull;
                 }
         }
         // if constexpr (CoRank == 2) {

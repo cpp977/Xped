@@ -137,9 +137,20 @@ struct tensortraits<EigenTensorLib>
                 return Ttype<Scalar, Rank1>(T.shuffle(dims));
         }
 
-        template<typename Scalar, int Rank>
-        static Ttype<Scalar, Rank>& slice(Ttype<Scalar, Rank>& T, const std::array<Indextype<Scalar,Rank>, Rank>& offsets, const std::array<Indextype<Scalar,Rank>, Rank>& extents) {
+        template<typename Scalar, int Rank1, std::size_t Rank2>
+        static Ttype<Scalar,Rank2> reshape(const Ttype<Scalar, Rank1>& T, const std::array<Indextype<Scalar,Rank1>, Rank2>& dims) {
+                return T.reshape(dims);
+        }
+
+        //methods lvalue
+        template<typename Scalar, int Rank1, std::size_t Rank2>
+        static auto slice(Ttype<Scalar, Rank1>& T, const std::array<Indextype<Scalar,Rank1>, Rank2>& offsets, const std::array<Indextype<Scalar,Rank1>, Rank2>& extents) {
                 return T.slice(offsets, extents);
+        }
+
+        template<typename Scalar, int Rank1, std::size_t Rank2>
+        static auto reshape(Ttype<Scalar, Rank1>& T, const std::array<Indextype<Scalar,Rank1>, Rank2>& dims) {
+                return T.reshape(dims);
         }
 };
 #endif

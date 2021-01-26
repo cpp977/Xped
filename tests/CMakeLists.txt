@@ -3,7 +3,7 @@ find_package(GSL REQUIRED)
 find_package(Boost REQUIRED)
 #find_package(doctest REQUIRED)
 
-include_directories(${TOOLS_INCLUDE_DIR} ${TEXTTABLE_INCLUDE_DIR} ${DOCTEST_INCLUDE_DIR} ${EIGEN_INCLUDE_DIR} ${LRUCACHE_INCLUDE_DIR})
+include_directories(${TOOLS_INCLUDE_DIR} ${TEXTTABLE_INCLUDE_DIR} ${DOCTEST_INCLUDE_DIR} ${EIGEN_INCLUDE_DIR} ${LRUCACHE_INCLUDE_DIR} ${SEQ_INCLUDE_DIR} ${ARRAY_INCLUDE_DIR})
 #include(/home/user/__LIBS__/doctest/scripts/cmake/doctest.cmake)
 
 enable_testing()
@@ -17,7 +17,7 @@ add_dependencies(test_suite doctest)
 target_link_libraries (test_suite project_options project_warnings)
 
 add_executable(basis_test basis.cpp $<TARGET_OBJECTS:test_suite>)
-add_dependencies(basis_test TextTable TOOLS Eigen doctest)
+add_dependencies(basis_test TextTable TOOLS Eigen doctest seq array)
 if(ENABLE_LRU_CACHE)
 add_dependencies(basis_test lru_cache)
 endif()
@@ -26,7 +26,7 @@ target_link_libraries (basis_test project_options project_warnings GSL::gsl GSL:
 add_test(NAME basis_test COMMAND basis_test )
 
 add_executable(tree_test tree.cpp $<TARGET_OBJECTS:test_suite>)
-add_dependencies(tree_test TextTable TOOLS Eigen doctest)
+add_dependencies(tree_test TextTable TOOLS Eigen doctest seq array)
 if(ENABLE_LRU_CACHE)
 add_dependencies(tree_test lru_cache)
 endif()
@@ -35,7 +35,7 @@ target_link_libraries (tree_test project_options project_warnings GSL::gsl GSL::
 add_test(NAME tree_test COMMAND tree_test)
 
 add_executable(tensor_test tensor.cpp $<TARGET_OBJECTS:test_suite>)
-add_dependencies(tensor_test TextTable TOOLS Eigen doctest)
+add_dependencies(tensor_test TextTable TOOLS Eigen doctest seq array)
 if(ENABLE_LRU_CACHE)
 add_dependencies(tensor_test lru_cache)
 endif()

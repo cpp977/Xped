@@ -45,7 +45,7 @@ find_package(Git REQUIRED)
 include(cmake/addGitLibs.cmake)
 
 # enable cache system
-#include(cmake/Cache.cmake)
+include(cmake/Cache.cmake)
 
 # sanitizer options if supported by compiler
 include(cmake/Sanitizers.cmake)

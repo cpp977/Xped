@@ -3,6 +3,7 @@
 
 #include <random>
 #include <thread>
+#include <complex>
 
 namespace util::random {
         template<typename Scalar, typename RealScalar> Scalar threadSafeRandUniform (RealScalar, RealScalar, bool=false) {};

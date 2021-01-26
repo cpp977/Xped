@@ -144,10 +144,13 @@ template<typename TensorLib>
 typename tensortraits<TensorLib>::template Ttype<Scalar_,2> SU2<Kind,Scalar_>::
 one_j_tensor(const qType& q1)
 {
+        typedef typename tensortraits<TensorLib>::Indextype IndexType;
         auto tmp = CGC<TensorLib>(q1, q1, qvacuum(), 0);
-        typename tensortraits<TensorLib>::template Ttype<Scalar_,2> out(degeneracy(q1), degeneracy(q1)); tensortraits<TensorLib>::setZero(out);
-        for (typename tensortraits<TensorLib>::template Indextype<Scalar_,2> i=0; i<degeneracy(q1); i++)
-        for (typename tensortraits<TensorLib>::template Indextype<Scalar_,2> j=0; j<degeneracy(q1); j++) {
+        //typename tensortraits<TensorLib>::template Ttype<Scalar_,2> out(degeneracy(q1), degeneracy(q1)); 
+        auto out = tensortraits<TensorLib>::template construct<Scalar>(std::array<IndexType,2>{degeneracy(q1), degeneracy(q1)}); tensortraits<TensorLib>::template setZero<Scalar,2>(out);
+
+        for (IndexType i=0; i<degeneracy(q1); i++)
+        for (IndexType j=0; j<degeneracy(q1); j++) {
                 out(i,j) = std::sqrt(degeneracy(q1))*tmp(i,j,0);
         }
         return out;
@@ -168,7 +171,9 @@ template<typename TensorLib>
 typename tensortraits<TensorLib>::template Ttype<Scalar_,3> SU2<Kind,Scalar_>::
 CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t)
 {
-        typename tensortraits<TensorLib>::template Ttype<Scalar_,3> out(degeneracy(q1),degeneracy(q2),degeneracy(q3));
+        typedef typename tensortraits<TensorLib>::Indextype IndexType;
+        // typename tensortraits<TensorLib>::template Ttype<Scalar_,3> out(degeneracy(q1),degeneracy(q2),degeneracy(q3));
+        auto out = tensortraits<TensorLib>::template construct<Scalar>(std::array<IndexType,3>{degeneracy(q1), degeneracy(q2), degeneracy(q3)});
         for (int i_q1m=0; i_q1m<degeneracy(q1); i_q1m++)
         for (int i_q2m=0; i_q2m<degeneracy(q2); i_q2m++)
         for (int i_q3m=0; i_q3m<degeneracy(q3); i_q3m++)

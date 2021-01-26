@@ -7,7 +7,7 @@ add_subdirectory(interfaces)
 find_package(GSL REQUIRED)
 find_package(Boost REQUIRED)
 
-include_directories(${TOOLS_INCLUDE_DIR} ${TEXTTABLE_INCLUDE_DIR} ${EIGEN_INCLUDE_DIR} ${LRUCACHE_INCLUDE_DIR})
+include_directories(${TOOLS_INCLUDE_DIR} ${TEXTTABLE_INCLUDE_DIR} ${EIGEN_INCLUDE_DIR} ${LRUCACHE_INCLUDE_DIR} ${SEQ_INCLUDE_DIR} ${ARRAY_INCLUDE_DIR})
 
 file(GLOB SOURCES "./*.cpp"	
                   "./*.hpp"
@@ -22,7 +22,9 @@ add_executable(run
 add_dependencies(run
                  TextTable
                  TOOLS
-                 Eigen)
+                 Eigen
+                 seq
+                 array)
 if(ENABLE_LRU_CACHE)
 add_dependencies(run lru_cache)
 endif()

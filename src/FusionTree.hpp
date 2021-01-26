@@ -139,12 +139,15 @@ struct FusionTree
 
         template<typename TensorLib_>
         typename tensortraits<TensorLib_>::template Ttype<Scalar,Rank+1> asTensor() const {
+                static_assert(Rank<=5);
                 typedef typename tensortraits<TensorLib_>::template Ttype<Scalar,Rank+1> TensorType;
-                typedef typename tensortraits<TensorLib_>::template Indextype<Scalar,Rank+1> IndexType;
+                typedef typename tensortraits<TensorLib_>::Indextype IndexType;
                 TensorType out;
                 if constexpr (Rank == 0) {out = TensorType(1); out(0)=1.;}
                 else if constexpr (Rank == 1) {
-                        out = TensorType(Symmetry::degeneracy(q_uncoupled[0]), Symmetry::degeneracy(q_coupled)); tensortraits<TensorLib_>::setZero(out);
+                        out = tensortraits<TensorLib_>::template construct<Scalar>(std::array<IndexType,2>{Symmetry::degeneracy(q_uncoupled[0]), Symmetry::degeneracy(q_coupled)});
+                        // out = TensorType(Symmetry::degeneracy(q_uncoupled[0]), Symmetry::degeneracy(q_coupled));
+                        tensortraits<TensorLib_>::template setZero<Scalar,2>(out);
                         for (std::size_t i=0; i<static_cast<std::size_t>(Symmetry::degeneracy(q_uncoupled[0])); i++) {out(i,i) = 1.;}
 
                 }
@@ -154,48 +157,119 @@ struct FusionTree
                 else if constexpr (Rank == 3) {
                         auto vertex1 = Symmetry::template CGC<TensorLib_>(q_uncoupled[0], q_uncoupled[1], q_intermediates[0], multiplicities[0]);
                         auto vertex2 = Symmetry::template CGC<TensorLib_>(q_intermediates[0], q_uncoupled[2], q_coupled, multiplicities[1]);
-                        out = tensortraits<TensorLib_>::template contract(vertex1, vertex2, std::array<std::pair<IndexType, IndexType>, 1>{{std::make_pair(2,0)}});
+                        out = tensortraits<TensorLib_>::template contract<Scalar,3,3,2,0>(vertex1, vertex2);
                 }
                 else if constexpr (Rank == 4) {
                         auto vertex1 = Symmetry::template CGC<TensorLib_>(q_uncoupled[0], q_uncoupled[1], q_intermediates[0], multiplicities[0]);
                         auto vertex2 = Symmetry::template CGC<TensorLib_>(q_intermediates[0], q_uncoupled[2], q_intermediates[1], multiplicities[1]);
                         auto vertex3 = Symmetry::template CGC<TensorLib_>(q_intermediates[1], q_uncoupled[3], q_coupled, multiplicities[2]);
-                        out = tensortraits<TensorLib_>::template contract(tensortraits<TensorLib_>::template contract(vertex1, vertex2, std::array<std::pair<IndexType, IndexType>, 1>{{std::make_pair(2,0)}}),
-                                                                          vertex3, std::array<std::pair<IndexType, IndexType>, 1>{{std::make_pair(3,0)}});
-                        // out = (vertex1.contract(vertex2, Eigen::array<Eigen::IndexPair<Eigen::Index>, 1>{{Eigen::IndexPair<Eigen::Index>(2,0)}}))
-                        //         .contract(vertex3,Eigen::array<Eigen::IndexPair<Eigen::Index>, 1>{{Eigen::IndexPair<Eigen::Index>(3,0)}});
+                        out = tensortraits<TensorLib_>::template contract<Scalar,4,3,3,0>(tensortraits<TensorLib_>::template contract<Scalar,3,3,2,0>(vertex1, vertex2),vertex3);
                 }
                 else if constexpr (Rank == 5) {
                         auto vertex1 = Symmetry::template CGC<TensorLib_>(q_uncoupled[0], q_uncoupled[1], q_intermediates[0], multiplicities[0]);
                         auto vertex2 = Symmetry::template CGC<TensorLib_>(q_intermediates[0], q_uncoupled[2], q_intermediates[1], multiplicities[1]);
                         auto vertex3 = Symmetry::template CGC<TensorLib_>(q_intermediates[1], q_uncoupled[3], q_intermediates[2], multiplicities[2]);
                         auto vertex4 = Symmetry::template CGC<TensorLib_>(q_intermediates[2], q_uncoupled[4], q_coupled, multiplicities[3]);
-                        out = tensortraits<TensorLib_>::template contract(
-                              tensortraits<TensorLib_>::template contract(
-                              tensortraits<TensorLib_>::template contract(vertex1, vertex2, std::array<std::pair<IndexType, IndexType>, 1>{{std::make_pair(2,0)}}),
-                                                                          vertex3, std::array<std::pair<IndexType, IndexType>, 1>{{std::make_pair(3,0)}}),
-                                                                          vertex4, std::array<std::pair<IndexType, IndexType>, 1>{{std::make_pair(4,0)}});
+                        out = tensortraits<TensorLib_>::template contract<Scalar,5,3,4,0>(
+                              tensortraits<TensorLib_>::template contract<Scalar,4,3,3,0>(
+                              tensortraits<TensorLib_>::template contract<Scalar,3,3,2,0>(vertex1, vertex2),vertex3),vertex4);
                         
                         // out = (vertex1.contract(vertex2, Eigen::array<Eigen::IndexPair<Eigen::Index>, 1>{{Eigen::IndexPair<Eigen::Index>(2,0)}}))
                         //         .contract(vertex3,Eigen::array<Eigen::IndexPair<Eigen::Index>, 1>{{Eigen::IndexPair<Eigen::Index>(3,0)}})
                         //                   .contract(vertex4,Eigen::array<Eigen::IndexPair<Eigen::Index>, 1>{{Eigen::IndexPair<Eigen::Index>(4,0)}});
                 }
                 else {  assert(false); }
-                for (std::size_t i=0; i<Rank; i++) {
-                        if (IS_DUAL[i]) {
-                                TensorType tmp = tensortraits<TensorLib_>::template contract(Symmetry::template one_j_tensor<TensorLib_>(q_uncoupled[i]),
-                                                                                             out, std::array<std::pair<IndexType, IndexType>, 1>{{std::make_pair(1,i)}});
+                if constexpr (Rank == 0) {return out;} //0
+                else {
+                        if (IS_DUAL[0]) {
+                                TensorType tmp = tensortraits<TensorLib_>::template contract<Scalar,2,Rank+1,1,0>(Symmetry::template one_j_tensor<TensorLib_>(q_uncoupled[0]),out);
                                 out = tmp;
-                                std::array<IndexType, Rank+1> shuffle_dims; std::iota(shuffle_dims.begin(), shuffle_dims.end(), 0);
-                                for (std::size_t j=0; j<i; j++) {
-                                        shuffle_dims[j]++;
-                                }
-                                shuffle_dims[i] = 0;
-                                TensorType tmp2 = tensortraits<TensorLib_>::template shuffle(out, shuffle_dims);
+                                // std::array<IndexType, Rank+1> shuffle_dims; std::iota(shuffle_dims.begin(), shuffle_dims.end(), 0);
+                                // for (std::size_t j=0; j<0; j++) {
+                                //         shuffle_dims[j]++;
+                                // }
+                                // shuffle_dims[0] = 0;
+                                TensorType tmp2 = tensortraits<TensorLib_>::template shuffle<Scalar,Rank+1>(out,seq::make<IndexType,Rank+1>{});
                                 out = tmp2;
                         }
+                        if constexpr (Rank == 1) {return out;} //1
+                        else {
+                                if (IS_DUAL[1]) {
+                                        TensorType tmp = tensortraits<TensorLib_>::template contract<Scalar,2,Rank+1,1,1>(Symmetry::template one_j_tensor<TensorLib_>(q_uncoupled[1]),out);
+                                        out = tmp;
+                                        // std::array<IndexType, Rank+1> shuffle_dims; std::iota(shuffle_dims.begin(), shuffle_dims.end(), 0);
+                                        // for (std::size_t j=0; j<1; j++) {
+                                        //         shuffle_dims[j]++;
+                                        // }
+                                        // shuffle_dims[1] = 0;
+                                        TensorType tmp2 = tensortraits<TensorLib_>::template shuffle<Scalar,Rank+1>(out,seq::concat<seq::iseq<IndexType,1,0>, seq::make<IndexType,Rank+1-2,2> >{});
+                                        out = tmp2;
+                                }       
+
+                                if constexpr (Rank == 2) {return out;}
+                                else {
+                                        if (IS_DUAL[2]) {
+                                                TensorType tmp = tensortraits<TensorLib_>::template contract<Scalar,2,Rank+1,1,2>(Symmetry::template one_j_tensor<TensorLib_>(q_uncoupled[2]),out);
+                                                out = tmp;
+                                                // std::array<IndexType, Rank+1> shuffle_dims; std::iota(shuffle_dims.begin(), shuffle_dims.end(), 0);
+                                                // for (std::size_t j=0; j<2; j++) {
+                                                //         shuffle_dims[j]++;
+                                                // }
+                                                // shuffle_dims[2] = 0;
+                                                TensorType tmp2 =
+                                                        tensortraits<TensorLib_>::template shuffle<Scalar,Rank+1>(out, seq::concat<seq::iseq<IndexType,1,2,0>, seq::make<IndexType,Rank+1-3,3> >{});
+                                                out = tmp2;
+                                        }
+                                        if constexpr (Rank == 3) {return out;}
+                                        else {
+                                                if (IS_DUAL[3]) {
+                                                        TensorType tmp = tensortraits<TensorLib_>::template contract<Scalar,2,Rank+1,1,3>(Symmetry::template one_j_tensor<TensorLib_>(q_uncoupled[3]),out);
+                                                        out = tmp;
+                                                        // std::array<IndexType, Rank+1> shuffle_dims; std::iota(shuffle_dims.begin(), shuffle_dims.end(), 0);
+                                                        // for (std::size_t j=0; j<3; j++) {
+                                                        //         shuffle_dims[j]++;
+                                                        // }
+                                                        // shuffle_dims[3] = 0;
+                                                        TensorType tmp2 = tensortraits<TensorLib_>::template
+                                                                shuffle<Scalar,Rank+1>(out, seq::concat<seq::iseq<IndexType,1,2,3,0>, seq::make<IndexType,Rank+1-4,4> >{});
+                                                        out = tmp2;
+                                                }
+                                                if constexpr (Rank == 4) {return out;}
+                                                else {
+                                                        if (IS_DUAL[4]) {
+                                                                TensorType tmp = tensortraits<TensorLib_>::template contract<Scalar,2,Rank+1,1,4>(Symmetry::template one_j_tensor<TensorLib_>(q_uncoupled[4]),out);
+                                                                out = tmp;
+                                                                // std::array<IndexType, Rank+1> shuffle_dims; std::iota(shuffle_dims.begin(), shuffle_dims.end(), 0);
+                                                                // for (std::size_t j=0; j<4; j++) {
+                                                                //         shuffle_dims[j]++;
+                                                                // }
+                                                                // shuffle_dims[4] = 0;
+                                                                TensorType tmp2 = tensortraits<TensorLib_>::template
+                                                                        shuffle<Scalar,Rank+1>(out, seq::concat<seq::iseq<IndexType,1,2,3,4,0>, seq::make<IndexType,Rank+1-5,5> >{});
+                                                                out = tmp2;
+                                                        }
+                                                        if constexpr (Rank == 5) {return out;}
+                                                        // else {static_assert(false);}
+                                                }
+                                        }
+                                }
+                        }
                 }
-                return out;
+                // for (std::size_t i=0; i<Rank; i++) {
+                //         if (IS_DUAL[i]) {
+                //                 TensorType tmp = tensortraits<TensorLib_>::template contract(Symmetry::template one_j_tensor<TensorLib_>(q_uncoupled[i]),
+                //                                                                              out, std::array<std::pair<IndexType, IndexType>, 1>{{std::make_pair(1,i)}});
+                //                 out = tmp;
+                //                 std::array<IndexType, Rank+1> shuffle_dims; std::iota(shuffle_dims.begin(), shuffle_dims.end(), 0);
+                //                 for (std::size_t j=0; j<i; j++) {
+                //                         shuffle_dims[j]++;
+                //                 }
+                //                 shuffle_dims[i] = 0;
+                //                 TensorType tmp2 = tensortraits<TensorLib_>::template shuffle(out, shuffle_dims);
+                //                 out = tmp2;
+                //         }
+                // }
+                // return out;
         }
         
         FusionTree<Rank+1, Symmetry> enlarge(const FusionTree<1, Symmetry>& other) const

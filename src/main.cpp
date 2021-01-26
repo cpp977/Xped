@@ -49,6 +49,8 @@ template<int shift, std::size_t Rank, std::size_t CoRank, typename Symmetry>
 CacheManager<shift, Rank, CoRank, Symmetry> tree_cache(100);
 #endif
 
+#include "interfaces/tensor_traits.hpp"
+
 #include "Qbasis.hpp"
 #include "symmetry/SU2.hpp"
 #include "symmetry/U0.hpp"
@@ -59,7 +61,6 @@ CacheManager<shift, Rank, CoRank, Symmetry> tree_cache(100);
 // #include "Mps.hpp"
 // #include "MpsAlgebra.hpp"
 
-#include "interfaces/tensor_traits.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -105,6 +106,7 @@ int main(int argc, char* argv[])
         // // Mps<Symmetry> Psi(L,qloc,Qtot,Minit,Qinit);
         // // cout << construct.info("Time for constructor") << endl;
         Tensor<2,1,Symmetry> T({{in, qloc_}}, {{out}}); T.setRandom();
+        auto X = T.permute<1,1,0,2>();
         // for (std::size_t i=0; i<reps; i++) {
         //         auto Ap = T.template permute<1>({{0,2,1}});
         // }

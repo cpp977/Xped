@@ -43,6 +43,9 @@ template<int shift, std::size_t Rank, std::size_t CoRank, typename Symmetry>
 CacheManager<shift, Rank, CoRank, Symmetry> tree_cache(100);
 #endif
 
+
+#include "../src/interfaces/tensor_traits.hpp"
+
 #include "../src/Qbasis.hpp"
 #include "../src/symmetry/kind_dummies.hpp"
 #include "../src/symmetry/SU2.hpp"
@@ -199,10 +202,10 @@ TEST_CASE("Testing operations with SU(2)-spin matrices.") {
                 
                 //transform to plain tensor and check against pauli_vec1
                 auto tplain = s1.adjoint().plainTensor();
-                for (Eigen::Index k=0; k<tplain.dimensions()[2]; k++) {
+                for (Eigen::Index k=0; k<tensortraits<M_TENSORLIB>::dimensions<double,3>(tplain)[2]; k++) {
                         Eigen::Matrix<double,-1,-1> pauli(twoS1+1,twoS1+1);
-                        for (Eigen::Index j=0; j<tplain.dimensions()[1]; j++)
-                                for (Eigen::Index i=0; i<tplain.dimensions()[0]; i++) {
+                        for (Eigen::Index j=0; j<tensortraits<M_TENSORLIB>::dimensions<double,3>(tplain)[1]; j++)
+                                for (Eigen::Index i=0; i<tensortraits<M_TENSORLIB>::dimensions<double,3>(tplain)[0]; i++) {
                                         pauli(i,j) = tplain(i,j,k);
                                 }
                         CHECK((pauli-pauli_vec1[k]).norm() == doctest::Approx(0.));
@@ -210,13 +213,13 @@ TEST_CASE("Testing operations with SU(2)-spin matrices.") {
 
                 //build the product to QN K=0
                 Tensor<2,1,Symmetry> couple1({{C,one}},{{C}}); couple1.setConstant(1.);
-                auto prod1 = (s1.adjoint().permute<-1>({{0,1,2}}) * couple1.permute<+1>({{0,2,1}})).permute<0>({{0,3,1,2}}) * s1;
+                auto prod1 = (s1.adjoint().permute<-1,0,1,2>() * couple1.permute<+1,0,2,1>()).permute<0,0,3,1,2>() * s1;
                 //transform to plain tensor and check against S^2
                 auto check1 = prod1.plainTensor();
-                for (Eigen::Index j=0; j<check1.dimensions()[1]; j++) {
+                for (Eigen::Index j=0; j<tensortraits<M_TENSORLIB>::dimensions<double,3>(check1)[1]; j++) {
                         Eigen::Matrix<double,-1,-1> diag(twoS1+1,twoS1+1);
-                        for (Eigen::Index k=0; k<check1.dimensions()[2]; k++)
-                                for (Eigen::Index i=0; i<check1.dimensions()[0]; i++) {
+                        for (Eigen::Index k=0; k<tensortraits<M_TENSORLIB>::dimensions<double,3>(check1)[2]; k++)
+                                for (Eigen::Index i=0; i<tensortraits<M_TENSORLIB>::dimensions<double,3>(check1)[0]; i++) {
                                         diag(i,k) = check1(i,j,k);
                                 }
                         CHECK((diag-S1*(S1+1.)*Eigen::Matrix<double,-1,-1>::Identity(twoS1+1,twoS1+1)).norm() == doctest::Approx(0.));
@@ -224,26 +227,26 @@ TEST_CASE("Testing operations with SU(2)-spin matrices.") {
 
                 //build the product to QN K=1
                 Tensor<2,1,Symmetry> couple3({{C,three}},{{C}}); couple3.setConstant(1.);
-                auto prod3 = (s1.adjoint().permute<-1>({{0,1,2}}) * couple3.permute<+1>({{0,2,1}})).permute<0>({{0,3,1,2}}) * s1;
+                auto prod3 = (s1.adjoint().permute<-1,0,1,2>() * couple3.permute<+1,0,2,1>()).permute<0,0,3,1,2>() * s1;
                 //transform to plain tensor and check against SxS
                 auto check3 = prod3.adjoint().plainTensor();
-                for (Eigen::Index k=0; k<check3.dimensions()[2]; k++) {
+                for (Eigen::Index k=0; k<tensortraits<M_TENSORLIB>::dimensions<double,3>(check3)[2]; k++) {
                         Eigen::Matrix<double,-1,-1> mat(twoS1+1,twoS1+1);
-                        for (Eigen::Index j=0; j<check3.dimensions()[1]; j++)
-                                for (Eigen::Index i=0; i<check3.dimensions()[0]; i++) {
+                        for (Eigen::Index j=0; j<tensortraits<M_TENSORLIB>::dimensions<double,3>(check3)[1]; j++)
+                                for (Eigen::Index i=0; i<tensortraits<M_TENSORLIB>::dimensions<double,3>(check3)[0]; i++) {
                                         mat(i,j) = check3(i,j,k);
                                 }
                         CHECK((mat-std::sqrt(0.5)*pauli_vec1[k]).norm() == doctest::Approx(0.));
                 }
                 //build the product to QN K=2
                 Tensor<2,1,Symmetry> couple5({{C,five}},{{C}}); couple5.setConstant(1.);
-                auto prod5 = (s1.adjoint().permute<-1>({{0,1,2}}) * couple5.permute<+1>({{0,2,1}})).permute<0>({{0,3,1,2}}) * s1;
+                auto prod5 = (s1.adjoint().permute<-1,0,1,2>() * couple5.permute<+1,0,2,1>()).permute<0,0,3,1,2>() * s1;
                 //transform to plain tensor and check against SxS
                 auto check5 = prod5.adjoint().plainTensor();
-                for (Eigen::Index k=0; k<check5.dimensions()[2]; k++) {
+                for (Eigen::Index k=0; k<tensortraits<M_TENSORLIB>::dimensions<double,3>(check5)[2]; k++) {
                         Eigen::Matrix<double,-1,-1> mat(twoS1+1,twoS1+1);
-                        for (Eigen::Index j=0; j<check5.dimensions()[1]; j++)
-                                for (Eigen::Index i=0; i<check5.dimensions()[0]; i++) {
+                        for (Eigen::Index j=0; j<tensortraits<M_TENSORLIB>::dimensions<double,3>(check5)[1]; j++)
+                                for (Eigen::Index i=0; i<tensortraits<M_TENSORLIB>::dimensions<double,3>(check5)[0]; i++) {
                                         mat(i,j) = check5(i,j,k);
                                 }
                         Eigen::MatrixXd pauli(twoS1+1,twoS1+1); pauli.setZero();
@@ -263,7 +266,7 @@ TEST_CASE("Testing operations with SU(2)-spin matrices.") {
                         Tensor<2,1,Symmetry> s2({{B2,C}},{{B2}}); s2.setConstant(std::sqrt(S2*(S2+1.)));
 
                         //build the outer product to QN K=0 between s1 and s2
-                        auto outerprod1 = (((s1.adjoint().permute<-1>({{0,1,2}}) * couple1.permute<+1>({{0,2,1}})).permute<-1>({{0,1,3,2}})) * s2.permute<+1>({{1,2,0}})).permute<0>({{0,4,2,1,3}});
+                        auto outerprod1 = (((s1.adjoint().permute<-1,0,1,2>() * couple1.permute<+1,0,2,1>()).permute<-1,0,1,3,2>()) * s2.permute<+1,1,2,0>()).permute<0,0,4,2,1,3>();
                         for (const auto& q : outerprod1.sectors()) {
                                 CHECK(outerprod1(q).size() == 1);
                                 double Stot = 0.5*(q[0]-1.);

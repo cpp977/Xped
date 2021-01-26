@@ -156,4 +156,10 @@ if(ENABLE_LRU_CACHE)
 target_compile_definitions(${project_name} INTERFACE CACHE_PERMUTE_OUTPUT=1)
 endif()
 
+if(USE_EIGEN_TENSOR)
+target_compile_definitions(${project_name} INTERFACE XPED_USE_EIGEN_TENSOR_LIB=1)
+elseif (USE_ARRAY_TENSOR)
+target_compile_definitions(${project_name} INTERFACE XPED_USE_ARRAY_TENSOR_LIB=1)
+endif()
+
 endfunction()

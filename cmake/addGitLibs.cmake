@@ -19,6 +19,44 @@ ExternalProject_Add(
         USES_TERMINAL_DOWNLOAD ON
 )
 
+set(SEQ_ROOT ${CMAKE_BINARY_DIR}/thirdparty/seq)
+set(SEQ_INCLUDE_DIR ${SEQ_ROOT}/src/seq)
+
+ExternalProject_Add(
+        seq
+        PREFIX ${SEQ_ROOT}
+        GIT_REPOSITORY "https://github.com/integricho/seq.git"
+        GIT_SHALLOW ON
+        TIMEOUT 10
+#        UPDATE_COMMAND ${GIT_EXECUTABLE} pull
+        UPDATE_COMMAND ""
+        CONFIGURE_COMMAND ""
+        BUILD_COMMAND ""
+        INSTALL_COMMAND ""
+        LOG_DOWNLOAD ON
+        LOG_MERGED_STDOUTERR ON
+        USES_TERMINAL_DOWNLOAD ON
+)
+
+set(ARRAY_ROOT ${CMAKE_BINARY_DIR}/thirdparty/array)
+set(ARRAY_INCLUDE_DIR ${ARRAY_ROOT}/src)
+
+ExternalProject_Add(
+        array
+        PREFIX ${ARRAY_ROOT}
+        GIT_REPOSITORY "https://github.com/dsharlet/array.git"
+        GIT_SHALLOW ON
+        TIMEOUT 10
+#        UPDATE_COMMAND ${GIT_EXECUTABLE} pull
+        UPDATE_COMMAND ""
+        CONFIGURE_COMMAND ""
+        BUILD_COMMAND ""
+        INSTALL_COMMAND ""
+        LOG_DOWNLOAD ON
+        LOG_MERGED_STDOUTERR ON
+        USES_TERMINAL_DOWNLOAD ON
+)
+
 set(DOCTEST_ROOT ${CMAKE_BINARY_DIR}/thirdparty/doctest)
 set(DOCTEST_INCLUDE_DIR ${DOCTEST_ROOT}/src/doctest)
 

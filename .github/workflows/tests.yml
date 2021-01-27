@@ -16,12 +16,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        compiler: [g++, clang++]
+        compiler: [g++-10, clang++]
         LIBCXX: [ON, OFF]
         TENSOR_LIB: [USE_EIGEN_TENSOR, USE_ARRAY_TENSOR]
         exclude:
           # excludes libcxx for g++
-          - compiler: g++
+          - compiler: g++-10
             LIBCXX: ON
             
     steps:
@@ -30,6 +30,9 @@ jobs:
     - run: sudo apt install -qq libgsl-dev
     - run: sudo apt install -qq libgslcblas0
     - run: sudo apt install -qq libboost-all-dev
+    - run: sudo add-apt-repository ppa:ubuntu-toolchain-r/ppa
+    - run: sudo apt update
+    - run: sudo apt install g++-10
     - run: sudo apt install -qq lcov
       
     - name: Create Build Environment

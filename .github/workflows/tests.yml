@@ -26,13 +26,12 @@ jobs:
             
     steps:
     - uses: actions/checkout@v2
+    - run: sudo add-apt-repository ppa:ubuntu-toolchain-r/ppa
     - run: sudo apt update -qq
     - run: sudo apt install -qq libgsl-dev
     - run: sudo apt install -qq libgslcblas0
     - run: sudo apt install -qq libboost-all-dev
-    - run: sudo add-apt-repository ppa:ubuntu-toolchain-r/ppa
-    - run: sudo apt update
-    - run: sudo apt install g++-10
+    - run: sudo apt install -qq g++-10
     - run: sudo apt install -qq lcov
       
     - name: Create Build Environment
@@ -56,7 +55,7 @@ jobs:
       working-directory: ${{runner.workspace}}/build
       shell: bash
       # Execute the build.  You can specify a specific target with "--target <NAME>"
-      run: cmake --build . --config $BUILD_TYPE -- -j2 VERBOSE=1
+      run: cmake --build . --config $BUILD_TYPE -- -j2
 
     - name: Test
       working-directory: ${{runner.workspace}}/build/tests

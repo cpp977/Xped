@@ -14,6 +14,7 @@ jobs:
     # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
     runs-on: ubuntu-20.04
     strategy:
+      fail-fast: false
       matrix:
         compiler: [g++, clang++]
         LIBCXX: [ON, OFF]
@@ -50,4 +51,4 @@ jobs:
       working-directory: ${{runner.workspace}}/build
       shell: bash
       # Execute the build.  You can specify a specific target with "--target <NAME>"
-      run: cmake --build . --config $BUILD_TYPE -- -j2
+      run: cmake --build . --config $BUILD_TYPE -- -j2 VERBOSE=1

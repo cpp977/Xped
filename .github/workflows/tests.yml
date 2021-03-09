@@ -23,6 +23,8 @@ jobs:
           # excludes libcxx for g++
           - compiler: g++-10
             LIBCXX: ON
+          - compiler: clang++
+            TENSOR_LIB: USE_ARRAY_TENSOR
             
     steps:
     - uses: actions/checkout@v2

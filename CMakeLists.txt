@@ -23,6 +23,9 @@ add_library(project_options INTERFACE)
 include(cmake/CompilerOptions.cmake)
 set_project_options(project_options)
 
+set(CMAKE_CXX_FLAGS_RELEASE "")
+message("CMAKE_CXX_FLAGS_RELEASE is ${CMAKE_CXX_FLAGS_RELEASE}")
+
 # target_compile_features(project_options INTERFACE cxx_std_17)
 
 # Link this 'library' to use the warnings specified in CompilerWarnings.cmake

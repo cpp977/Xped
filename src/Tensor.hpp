@@ -116,7 +116,9 @@ public:
         //Eigen::TensorMap<TensorType> operator() (const FusionTree<Rank,Symmetry>& f1, const FusionTree<CoRank,Symmetry>& f2) const;
 
         // Eigen::TensorMap<TensorType> view(const FusionTree<Rank,Symmetry>& f1, const FusionTree<CoRank,Symmetry>& f2);
-        // Eigen::TensorMap<const TensorType> view(const FusionTree<Rank,Symmetry>& f1, const FusionTree<CoRank,Symmetry>& f2) const;
+        auto view(const FusionTree<Rank,Symmetry>& f1, const FusionTree<CoRank,Symmetry>& f2) const;
+
+        auto view(const FusionTree<Rank,Symmetry>& f1, const FusionTree<CoRank,Symmetry>& f2, std::size_t block_number);
 
         TensorType subBlock(const FusionTree<Rank,Symmetry>& f1, const FusionTree<CoRank,Symmetry>& f2) const;
         // MatrixType& operator() (const FusionTree<Rank,Symmetry>& f1, const FusionTree<CoRank,Symmetry>& f2);
@@ -381,32 +383,22 @@ permute_impl(seq::iseq<std::size_t, pds...> pd, seq::iseq<std::size_t, pcs...> p
                 for (const auto& codomain_tree:codomain_trees) {
                         auto permuted_domain_trees = domain_tree.permute(p_domain);
                         auto permuted_codomain_trees = codomain_tree.permute(p_codomain);
+                        auto tensor = this->view(domain_tree,codomain_tree);
+                        auto Tshuffle = Ttraits::template shuffle_view<decltype(tensor), pds..., pcs...>(tensor);
                         for (const auto& [permuted_domain_tree, coeff_domain]:permuted_domain_trees)
                         for (const auto& [permuted_codomain_tree, coeff_codomain]:permuted_codomain_trees) {
                                 if (std::abs(coeff_domain*coeff_codomain) < 1.e-10) {continue;}
 
-                                auto tensor = this->subBlock(domain_tree,codomain_tree);
-                                TensorType Tshuffle = Ttraits::template shuffle<Scalar, Rank+CoRank, pds..., pcs...>(tensor);
-                                
                                 auto it = out.dict.find(sector[i]);
                                 if (it == out.dict.end()) {
                                         MatrixType mat(out.domain.inner_dim(sector[i]), out.codomain.inner_dim(sector[i])); mat.setZero();
-                                        // MatrixType tmp = coeff_domain*coeff_codomain* Eigen::Map<MatrixType>(Tshuffle.data(),domain_tree.dim, codomain_tree.dim);
-                                        // std::size_t i1 = out.domain.leftOffset(permuted_domain_tree);
-                                        // std::size_t i2 = out.codomain.leftOffset(permuted_codomain_tree);
-                                        // mat.block(i1, i2, permuted_domain_tree.dim, permuted_codomain_tree.dim) =
-                                        //         tmp;
-                                        mat.block(out.domain.leftOffset(permuted_domain_tree), out.codomain.leftOffset(permuted_codomain_tree), permuted_domain_tree.dim, permuted_codomain_tree.dim) =
-                                                coeff_domain*coeff_codomain * Eigen::Map<MatrixType>(Tshuffle.data(),domain_tree.dim, codomain_tree.dim);
                                         out.push_back(sector[i], mat);
+                                        auto t = out.view(permuted_domain_tree,permuted_codomain_tree,i);
+                                        Ttraits::template addScale<Scalar,Rank+CoRank>(Tshuffle, t, coeff_domain*coeff_codomain);
                                 }
                                 else {
-                                        // auto tensor = this->subBlock(domain_tree,codomain_tree);
-                                        // TensorType Tshuffle = tensor.shuffle(total_p);
-
-                                        out.block[it->second].block(out.domain.leftOffset(permuted_domain_tree), out.codomain.leftOffset(permuted_codomain_tree),
-                                                                    permuted_domain_tree.dim, permuted_codomain_tree.dim) +=
-                                                coeff_domain*coeff_codomain * Eigen::Map<MatrixType>(Tshuffle.data(),domain_tree.dim, codomain_tree.dim);
+                                        auto t = out.view(permuted_domain_tree,permuted_codomain_tree,it->second);
+                                        Ttraits::template addScale<Scalar,Rank+CoRank>(Tshuffle, t, coeff_domain*coeff_codomain);
                                 }
                         }
                 }
@@ -451,31 +443,24 @@ permute_impl(seq::iseq<std::size_t, ps...> per) const
                 auto codomain_trees = codomain.tree(sector[i]);
                 for (const auto& domain_tree:domain_trees)
                 for (const auto& codomain_tree:codomain_trees) {
+                        auto tensor = this->view(domain_tree,codomain_tree);
+                        auto Tshuffle = Ttraits::template shuffle_view<decltype(tensor), ps...>(tensor);
                         for (const auto& [permuted_trees, coeff] : treepair::permute<shift>(domain_tree, codomain_tree, p)) {
                                 if (std::abs(coeff) < 1.e-10) {continue;}
                                 
-                                auto [permuted_domain_tree, permuted_codomain_tree] = permuted_trees;
-  
+                                auto [permuted_domain_tree, permuted_codomain_tree] = permuted_trees;  
                                 assert(permuted_domain_tree.q_coupled == permuted_codomain_tree.q_coupled);
-                                
-                                auto tensor = this->subBlock(domain_tree,codomain_tree);
-                                TensorType Tshuffle = Ttraits::template shuffle<Scalar, Rank+CoRank, ps...>(tensor);
-                                // TensorType Tshuffle = tensor.shuffle(p.template pi_as_index<IndexType>());
                                 
                                 auto it = out.dict.find(permuted_domain_tree.q_coupled);
                                 if (it == out.dict.end()) {
                                         MatrixType mat(out.domain.inner_dim(permuted_domain_tree.q_coupled), out.codomain.inner_dim(permuted_domain_tree.q_coupled)); mat.setZero();
-                                        auto leftOffd = out.domain.leftOffset(permuted_domain_tree);
-                                        auto leftOffc = out.codomain.leftOffset(permuted_codomain_tree);
-                                        
-                                        mat.block(leftOffd, leftOffc, permuted_domain_tree.dim, permuted_codomain_tree.dim) =
-                                                coeff * Eigen::Map<MatrixType>(Tshuffle.data(),permuted_domain_tree.dim, permuted_codomain_tree.dim);
                                         out.push_back(permuted_domain_tree.q_coupled, mat);
+                                        auto t = out.view(permuted_domain_tree,permuted_codomain_tree, out.block.size()-1);
+                                        Ttraits::template addScale<Scalar,Rank+CoRank>(Tshuffle, t, coeff);
                                 }
                                 else {
-                                        out.block[it->second].block(out.domain.leftOffset(permuted_domain_tree), out.codomain.leftOffset(permuted_codomain_tree),
-                                                                    permuted_domain_tree.dim, permuted_codomain_tree.dim) +=
-                                                coeff * Eigen::Map<MatrixType>(Tshuffle.data(),permuted_domain_tree.dim, permuted_codomain_tree.dim);
+                                        auto t = out.view(permuted_domain_tree,permuted_codomain_tree,it->second);
+                                        Ttraits::template addScale<Scalar,Rank+CoRank>(Tshuffle, t, coeff);
                                 }
                         }
                 }
@@ -494,7 +479,6 @@ permute() const
                                                   
         if constexpr (seq::filter<util::constFct::isGreaterOrEqual<Rank>, p_codomain>::size() == p_codomain::size() and
                       seq::filter<util::constFct::isSmaller<Rank>, p_domain>::size() == p_domain::size() and shift == 0) {
-                // return permute_impl(seq::take<Rank,s>{}, seq::map<util::constFct::shift<Rank>, seq::after<Rank,s> >{});
                 return permute_impl(seq::take<Rank,s>{}, seq::after<Rank,s>{});
         }
         else {
@@ -628,55 +612,108 @@ tSVD(size_t maxKeep, EpsScalar eps_svd, double &truncWeight, double &entropy, st
 //         return block[it->second].block(left_offset_domain, left_offset_codomain, f1.dim, f2.dim);
 // }
 
-// template<std::size_t Rank, std::size_t CoRank, typename Symmetry, typename MatrixType_, typename TensorLib_>
-// Eigen::TensorMap<TensorLib_> Tensor<Rank, CoRank, Symmetry, MatrixType_, TensorLib_>::
-// view (const FusionTree<Rank,Symmetry>& f1, const FusionTree<CoRank,Symmetry>& f2)
-// {
-//         if(f1.q_coupled != f2.q_coupled) {assert(false);}
+template<std::size_t Rank, std::size_t CoRank, typename Symmetry, typename MatrixType_, typename TensorLib_>
+auto Tensor<Rank, CoRank, Symmetry, MatrixType_, TensorLib_>::
+view (const FusionTree<Rank,Symmetry>& f1, const FusionTree<CoRank,Symmetry>& f2) const
+{
+        if(f1.q_coupled != f2.q_coupled) {assert(false);}
         
-//         const auto left_offset_domain = domain.leftOffset(f1);
-//         const auto left_offset_codomain = codomain.leftOffset(f2);
-//         const auto it = dict.find(f1.q_coupled);
-//         std::array<std::size_t,Rank+CoRank> dims;
-//         for (size_t i=0; i<Rank; i++) {dims[i] = uncoupled_domain[i].inner_dim(f1.q_uncoupled[i]);}
-//         for (size_t i=0; i<CoRank; i++) {dims[i+Rank] = uncoupled_codomain[i].inner_dim(f2.q_uncoupled[i]);}
-//         Eigen::TensorMap<TensorType> tensorview(block[it->second].block(left_offset_domain, left_offset_codomain, f1.dim, f2.dim).data(), dims);
-//         return tensorview;
-//         //return Eigen::TensorMap<TensorType>(block[it->second].block(left_offset_domain, left_offset_codomain, f1.dim, f2.dim).data(), dims);
-// }
+        const auto it = dict.find(f1.q_coupled);
+        
+        std::array<std::size_t,Rank+CoRank> dims;
+        for (size_t i=0; i<Rank; i++) {dims[i] = uncoupled_domain[i].inner_dim(f1.q_uncoupled[i]);}
+        for (size_t i=0; i<CoRank; i++) {dims[i+Rank] = uncoupled_codomain[i].inner_dim(f2.q_uncoupled[i]);}
 
-// template<std::size_t Rank, std::size_t CoRank, typename Symmetry, typename MatrixType_, typename TensorLib_>
-// Eigen::TensorMap<const TensorLib_> Tensor<Rank, CoRank, Symmetry, MatrixType_, TensorLib_>::
-// view (const FusionTree<Rank,Symmetry>& f1, const FusionTree<CoRank,Symmetry>& f2) const
-// {
-//         if(f1.q_coupled != f2.q_coupled) {assert(false);}
+        IndexType left_offset_domain = domain.leftOffset(f1);
+        IndexType left_offset_codomain = codomain.leftOffset(f2);
+
+#ifdef XPED_USE_EIGEN_TENSOR_LIB
+        Eigen::TensorMap<const Eigen::Tensor<double, 2>> tmat(block[it->second].data(),{block[it->second].rows(),block[it->second].cols()});
+        return tmat.slice(std::array<Eigen::Index,2>{left_offset_domain, left_offset_codomain}, std::array<Eigen::Index,2>{static_cast<Eigen::Index>(f1.dim), static_cast<Eigen::Index>(f2.dim)}).reshape(dims);
+#endif
         
-//         const auto left_offset_domain = domain.leftOffset(f1);
-//         const auto left_offset_codomain = codomain.leftOffset(f2);
-//         const auto it = dict.find(f1.q_coupled);
-//         std::array<std::size_t,Rank+CoRank> dims;
-//         for (size_t i=0; i<Rank; i++) {dims[i] = uncoupled_domain[i].inner_dim(f1.q_uncoupled[i]);}
-//         for (size_t i=0; i<CoRank; i++) {dims[i+Rank] = uncoupled_codomain[i].inner_dim(f2.q_uncoupled[i]);}
-//         // std::cout << "matrix subblock is:" << endl << block[it->second].block(left_offset_domain, left_offset_codomain, f1.dim, f2.dim) << endl;
-//         // return Eigen::TensorMap<const TensorType>(block[it->second].block(left_offset_domain, left_offset_codomain, f1.dim, f2.dim).data(), dims);
-//         Eigen::TensorMap<const TensorType> tensorview(block[it->second].block(left_offset_domain, left_offset_codomain, f1.dim, f2.dim).data(), dims);
-//         TensorType T(tensorview);
-//         return tensorview;
-// }
+#ifdef XPED_USE_ARRAY_TENSOR_LIB
+        nda::dim<-9,-9,1> first_dim; first_dim.set_extent(dims[0]);
+        std::array<nda::dim<-9,-9,-9>,Rank+CoRank-1> shape_data;
+        for (size_t i=1; i<Rank; i++) {
+                shape_data[i-1].set_extent(dims[i]);
+                shape_data[i-1].set_stride(std::accumulate(dims.begin(), dims.begin()+i, 1ul, std::multiplies<Scalar>()));
+        }
+        size_t start = (Rank>0) ? 0ul : 1ul;
+        double stride_correction = (Rank>0) ? block[it->second].rows() : 1.;
+        for (size_t i=start; i<CoRank; i++) {
+                shape_data[i+Rank-1].set_extent(dims[i+Rank]);
+                shape_data[i+Rank-1].set_stride(stride_correction*std::accumulate(dims.begin()+Rank, dims.begin()+Rank+i, 1ul, std::multiplies<Scalar>()));
+        }
+        auto dims_tuple = std::tuple_cat(std::make_tuple(first_dim), Ttraits::as_tuple(shape_data));
+        
+        nda::dense_shape<Rank+CoRank> block_shape(dims_tuple);
+
+        const auto total_offset = left_offset_codomain*block[it->second].rows() + left_offset_domain;
+        TensorcMapType out(block[it->second].data()+total_offset, block_shape);
+        return out;
+#endif
+}
+
+template<std::size_t Rank, std::size_t CoRank, typename Symmetry, typename MatrixType_, typename TensorLib_>
+auto Tensor<Rank, CoRank, Symmetry, MatrixType_, TensorLib_>::
+view (const FusionTree<Rank,Symmetry>& f1, const FusionTree<CoRank,Symmetry>& f2, std::size_t block_number)
+{
+        assert(block_number < sector.size());
+        assert(f1.q_coupled == f2.q_coupled);
+        assert(sector[block_number] == f1.q_coupled);
+        std::array<Eigen::Index,Rank+CoRank> dims;
+        for (size_t i=0; i<Rank; i++) {dims[i] = uncoupled_domain[i].inner_dim(f1.q_uncoupled[i]);}
+        for (size_t i=0; i<CoRank; i++) {dims[i+Rank] = uncoupled_codomain[i].inner_dim(f2.q_uncoupled[i]);}
+
+        IndexType left_offset_domain = domain.leftOffset(f1);
+        IndexType left_offset_codomain = codomain.leftOffset(f2);
+
+#ifdef XPED_USE_EIGEN_TENSOR_LIB
+        Eigen::TensorMap<Eigen::Tensor<double, 2>> tmat(block[block_number].data(),{block[block_number].rows(),block[block_number].cols()});
+        return tmat.slice(std::array<Eigen::Index,2>{left_offset_domain, left_offset_codomain}, std::array<Eigen::Index,2>{static_cast<Eigen::Index>(f1.dim), static_cast<Eigen::Index>(f2.dim)}).reshape(dims);
+#endif
+        
+#ifdef XPED_USE_ARRAY_TENSOR_LIB
+        nda::dim<-9,-9,1> first_dim; first_dim.set_extent(dims[0]);
+        std::array<nda::dim<-9,-9,-9>,Rank+CoRank-1> shape_data;
+        for (size_t i=1; i<Rank; i++) {
+                shape_data[i-1].set_extent(dims[i]);
+                shape_data[i-1].set_stride(std::accumulate(dims.begin(), dims.begin()+i, 1ul, std::multiplies<Scalar>()));
+        }
+        size_t start = (Rank>0) ? 0ul : 1ul;
+        double stride_correction = (Rank>0) ? block[block_number].rows() : 1.;
+        for (size_t i=start; i<CoRank; i++) {
+                shape_data[i+Rank-1].set_extent(dims[i+Rank]);
+                shape_data[i+Rank-1].set_stride(stride_correction*std::accumulate(dims.begin()+Rank, dims.begin()+Rank+i, 1ul, std::multiplies<Scalar>()));
+        }
+        auto dims_tuple = std::tuple_cat(std::make_tuple(first_dim), Ttraits::as_tuple(shape_data));
+        
+        nda::dense_shape<Rank+CoRank> block_shape(dims_tuple);
+
+        const auto total_offset = left_offset_codomain*block[block_number].rows() + left_offset_domain;
+        TensorMapType out(block[block_number].data()+total_offset, block_shape);
+        return out;
+#endif
+}
 
 template<std::size_t Rank, std::size_t CoRank, typename Symmetry, typename MatrixType_, typename TensorLib_>
 typename tensortraits<TensorLib_>::template Ttype<typename MatrixType_::Scalar, Rank+CoRank> Tensor<Rank, CoRank, Symmetry, MatrixType_, TensorLib_>::
 subBlock (const FusionTree<Rank,Symmetry>& f1, const FusionTree<CoRank,Symmetry>& f2) const
 {
         if(f1.q_coupled != f2.q_coupled) {assert(false);}
+
         
         const auto left_offset_domain = domain.leftOffset(f1);
         const auto left_offset_codomain = codomain.leftOffset(f2);
         const auto it = dict.find(f1.q_coupled);
         std::array<IndexType, Rank+CoRank> dims;
+                
         for (size_t i=0; i<Rank; i++) {dims[i] = uncoupled_domain[i].inner_dim(f1.q_uncoupled[i]);}
         for (size_t i=0; i<CoRank; i++) {dims[i+Rank] = uncoupled_codomain[i].inner_dim(f2.q_uncoupled[i]);}
+
         MatrixType submatrix = block[it->second].block(left_offset_domain, left_offset_codomain, f1.dim, f2.dim);
+        // std::cout << "from subblock:" << std::endl << submatrix << std::endl;
         TensorcMapType tensorview = Ttraits::cMap(submatrix.data(), dims);
         TensorType T = Ttraits::template construct<Scalar,Rank+CoRank>(tensorview);
         return T;
@@ -725,7 +762,6 @@ plainTensor () const
         dims_domain[Rank] = sorted_domain.fullDim();
         // cout << "dims domain: "; for (const auto& d:dims_domain) {cout << d << " ";} cout << endl;
         typename Ttraits::template Ttype<Scalar,Rank+1> unitary_domain = Ttraits::template construct<Scalar>(dims_domain); Ttraits::template setZero<Scalar,Rank+1>(unitary_domain);
-        // Eigen::Tensor<Scalar, Rank+1> unitary_domain(dims_domain); unitary_domain.setZero();
 
         for (const auto& [q,num,plain] : sorted_domain) {
                 for (const auto& tree: sorted_domain.tree(q)) {
@@ -735,34 +771,16 @@ plainTensor () const
                         }
                         MatrixType id(uncoupled_dim,uncoupled_dim); id.setIdentity();
                         typename Ttraits::template cTtype<Scalar,2> Tid_mat = Ttraits::template construct<Scalar,2>(Ttraits::Map(id.data(),std::array<IndexType,2>{id.rows(), id.cols()}));
-                        // Eigen::TensorMap<Eigen::Tensor<Scalar,2> > Tid_mat(id.data(),id.rows(), id.cols());
+
                         std::array<IndexType, Rank+1> dims;
                         for (std::size_t i=0; i<Rank; i++) {
                                 dims[i] = sorted_uncoupled_domain[i].inner_dim(tree.q_uncoupled[i]);
                         }
                         dims[Rank] = uncoupled_dim;
-                        // typename Ttraits::template Ttype<Scalar,Rank+1> Tid = Tid_mat.reshape(dims);
                         typename Ttraits::template Ttype<Scalar,Rank+1> Tid = Ttraits::template reshape<Scalar, 2>(Tid_mat, dims);
-                        // Eigen::Tensor<Scalar,Rank+1> Tid = Tid_mat.reshape(dims);
                         
                         auto T=tree.template asTensor<TensorLib>();
-                        // auto tdims = T.dimensions();
-                        // Eigen::Index product=1;
-                        // for (std::size_t i=0; i<Rank; i++) {product *= tdims[i];}
-                        // Eigen::Tensor<Scalar,2> Tmat = T.reshape(std::array<Eigen::Index,2>{{product,tdims[Rank]}});
-                        // Eigen::Map<MatrixType> M(Tmat.data(),product,tdims[Rank]);
-                        // MatrixType total = Eigen::kroneckerProduct(id,M);
-                        // Eigen::TensorMap<Eigen::Tensor<Scalar,2> > Tfull_mat(total.data(),total.rows(), total.cols());
-                        // cout << "Tfull matrix:" << endl << Tfull_mat << endl << endl;
-                        // std::array<std::size_t, Rank+1> dims;
-                        // for (std::size_t i=0; i<Rank; i++) {
-                        //         dims[i] = sorted_uncoupled_domain[i].inner_dim(tree.q_uncoupled[i])*Symmetry::degeneracy(tree.q_uncoupled[i]);
-                        // }
-                        // dims[Rank] = uncoupled_dim*Symmetry::degeneracy(tree.q_coupled);
                         typename Ttraits::template Ttype<Scalar,Rank+1> Tfull = Ttraits::template tensorProd<Scalar,Rank+1>(Tid,T);
-                        // Eigen::Tensor<Scalar,Rank+1> Tfull = Ttraits::tensorProd(Tid,T); //Tfull_mat.reshape(dims);
-                        // Tfull.setZero(); Tfull(0,0,0) = 1.; Tfull(0,1,1) = 1.; Tfull(1,0,2) = 1.; Tfull(1,1,3) = 1.; Tfull(0,2,4) = 1.; Tfull(1,2,5) = 1.;
-                                                
                         std::array<IndexType, Rank+1> offsets;
                         for (std::size_t i=0; i<Rank; i++) {
                                 offsets[i] = sorted_uncoupled_domain[i].full_outer_num(tree.q_uncoupled[i]);
@@ -777,7 +795,8 @@ plainTensor () const
                         Ttraits::template setSubTensor<Scalar, Rank+1>(unitary_domain, offsets, extents, Tfull); //this amounts to =. Do we need +=?
                 }
         }
-        
+        // std::cout << "domain" << std::endl; unitary_domain.for_each_value([] (double d) {std::cout << d << std::endl;});
+
         std::array<IndexType,CoRank+1> dims_codomain;
         for (size_t i=0; i<CoRank; i++) {dims_codomain[i] = sorted_uncoupled_codomain[i].fullDim();}
         dims_codomain[CoRank] = sorted_codomain.fullDim();
@@ -791,8 +810,7 @@ plainTensor () const
                         }
                         MatrixType id(uncoupled_dim,uncoupled_dim); id.setIdentity();
                         typename Ttraits::template cTtype<Scalar,2> Tid_mat = Ttraits::template construct<Scalar,2>(Ttraits::Map(id.data(),std::array<IndexType,2>{id.rows(), id.cols()}));
-                        // typename Ttraits::template Maptype<Scalar,2> Tid_mat(id.data(),id.rows(), id.cols());
-                        // Eigen::TensorMap<Eigen::Tensor<Scalar,2> > Tid_mat(id.data(),id.rows(), id.cols());
+
                         std::array<IndexType, CoRank+1> dims;
                         for (std::size_t i=0; i<CoRank; i++) {
                                 dims[i] = sorted_uncoupled_codomain[i].inner_dim(tree.q_uncoupled[i]);
@@ -815,14 +833,13 @@ plainTensor () const
                         Ttraits::template setSubTensor<Scalar, CoRank+1>(unitary_codomain, offsets, extents, Tfull); //this amounts to =. Do we need +=?
                 }
         }
-                        
+        // std::cout << "codomain" << std::endl; unitary_codomain.for_each_value([] (double d) {std::cout << d << std::endl;});
+        
         std::array<IndexType,Rank+CoRank> dims_result;
         for (size_t i=0; i<Rank; i++) {dims_result[i] = sorted_uncoupled_domain[i].fullDim();}
         for (size_t i=0; i<CoRank; i++) {dims_result[i+Rank] = sorted_uncoupled_codomain[i].fullDim();}
         TensorType out = Ttraits::template construct<Scalar>(dims_result); Ttraits::template setZero<Scalar,Rank+CoRank>(out);
 
-        // constexpr std::array<std::pair<IndexType, IndexType>, 1> legs_domain = {std::make_pair(Rank, 0)};
-        // constexpr std::array<std::pair<IndexType, IndexType>, 1> legs_codomain = {std::make_pair(Rank, CoRank)};
         out = tensortraits<TensorLib_>::template contract<Scalar,Rank+1,CoRank+1,Rank,CoRank>( tensortraits<TensorLib_>::template contract<Scalar,Rank+1,2,Rank,0>(unitary_domain, inner_tensor), unitary_codomain);
         return out;
 }

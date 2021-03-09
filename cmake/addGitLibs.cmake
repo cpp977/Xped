@@ -20,7 +20,7 @@ ExternalProject_Add(
 )
 
 set(SEQ_ROOT ${CMAKE_BINARY_DIR}/thirdparty/seq)
-set(SEQ_INCLUDE_DIR ${SEQ_ROOT}/src/seq)
+set(SEQ_INCLUDE_DIR ${SEQ_ROOT}/src/seq/include)
 
 ExternalProject_Add(
         seq

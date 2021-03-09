@@ -269,7 +269,7 @@ struct FusionTree
                 //                 out = tmp2;
                 //         }
                 // }
-                // return out;
+                return out;
         }
         
         FusionTree<Rank+1, Symmetry> enlarge(const FusionTree<1, Symmetry>& other) const

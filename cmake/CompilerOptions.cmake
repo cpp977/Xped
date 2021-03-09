@@ -69,7 +69,6 @@ function(set_project_options project_name)
   set(GCC_OPTIONS_RELEASE
       -std=c++17
       -O3
-      -DNDEBUG
       -march=native
       -m64
       -fmax-errors=5

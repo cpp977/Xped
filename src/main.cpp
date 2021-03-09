@@ -58,8 +58,8 @@ CacheManager<shift, Rank, CoRank, Symmetry> tree_cache(100);
 #include "symmetry/kind_dummies.hpp"
 
 #include "Tensor.hpp"
-// #include "Mps.hpp"
-// #include "MpsAlgebra.hpp"
+#include "Mps.hpp"
+#include "MpsAlgebra.hpp"
 
 
 int main(int argc, char* argv[])
@@ -92,7 +92,7 @@ int main(int argc, char* argv[])
         auto Minit = args.get<std::size_t>("Minit",10);
         auto Qinit = args.get<std::size_t>("Qinit",10);
         auto reps = args.get<std::size_t>("reps",10);
-        // auto DIR = static_cast<DMRG::DIRECTION>(args.get<int>("DIR",0));
+        auto DIR = static_cast<DMRG::DIRECTION>(args.get<int>("DIR",0));
         auto NORM = args.get<bool>("NORM",true);
         auto SWEEP = args.get<bool>("SWEEP",true);
         auto INFO = args.get<bool>("INFO",true);
@@ -100,53 +100,50 @@ int main(int argc, char* argv[])
         qType Qtot = {D}; 
         Qbasis<Symmetry,1> qloc_; qloc_.push_back({2},1);
         std::vector<Qbasis<Symmetry,1>> qloc(L,qloc_);
-        Qbasis<Symmetry,1> in; in.setRandom(Minit);
-        auto out = in.combine(qloc_).forgetHistory();
-        // // Stopwatch<> construct;
-        // // Mps<Symmetry> Psi(L,qloc,Qtot,Minit,Qinit);
-        // // cout << construct.info("Time for constructor") << endl;
-        Tensor<2,1,Symmetry> T({{in, qloc_}}, {{out}}); T.setRandom();
-        auto X = T.permute<1,1,0,2>();
-        // for (std::size_t i=0; i<reps; i++) {
-        //         auto Ap = T.template permute<1>({{0,2,1}});
-        // }
-        // if (INFO) {
-        //         for (size_t l=0; l<=L; l++) {
-        //                 cout << Psi.auxBasis(l) << endl;
-        //         }
-        // }
-        // if (NORM) {
-        //         Stopwatch<> norm;
-        //         for (std::size_t i=0; i<reps; i++) {
-        //                 double normSq = dot(Psi,Psi,DIR);
-        //                 // std::cout << "<Psi|Psi>=" << normSq << std::endl;
-        //         }
-        //         cout << norm.info("Time for norm") << endl;
-        // }
-        // if (SWEEP) {
-        //         Stopwatch<> Sweep;
-        //         if (DIR == DMRG::DIRECTION::RIGHT) {
-        //                 for (std::size_t l=0; l<L; l++) {
-        //                         // cout << l << endl;
-        //                         Psi.rightSweepStep(l, DMRG::BROOM::SVD);
-        //                 }
-        //         }
-        //         else {
-        //                 for (std::size_t l=L-1; l>0; l--) {
-        //                         Psi.leftSweepStep(l, DMRG::BROOM::SVD);
-        //                 }
-        //                 Psi.leftSweepStep(0, DMRG::BROOM::SVD);
-        //         }
-        //         cout << Sweep.info("Time for sweep") << endl;
-        // }
-        // double trunc;
-        // auto [U,S,V] = Psi.A.Ac[L/2].tSVD(10000ul, 1.e-10, trunc, false);
-        // Mps<Symmetry> Phi(L,qloc,Qtot,Minit,Qinit);
-        // cout << "<Phi,Psi>=" << dot(Phi,Psi) << endl;
-        // cout << "<Phi,Phi>=" << dot(Phi,Phi) << endl;
-        // normSq = dot(Psi,Psi,DIR);
-        // std::cout << "<Psi|Psi>=" << normSq << std::endl;
-        // cout << "Left: <Psi,Psi>=" << normSq << endl;
-        // Psi.A.Ac[0] = Psi.A.Ac[0]*std::pow(normSq,-0.5);
-        // cout << "<Psi,Psi>=" << dot(Psi,Psi,DIR) << endl;
+        // Qbasis<Symmetry,1> in; in.setRandom(Minit);
+        // std::cout << in << std::endl;
+        // auto out = in.combine(in).forgetHistory();
+        Stopwatch<> construct;
+        Mps<Symmetry> Psi(L,qloc,Qtot,Minit,Qinit);
+        cout << construct.info("Time for constructor") << endl;
+
+        if (INFO) {
+                for (size_t l=0; l<=L; l++) {
+                        cout << Psi.auxBasis(l) << endl;
+                }
+        }
+        if (NORM) {
+                Stopwatch<> norm;
+                for (std::size_t i=0; i<reps; i++) {
+                        double normSq = dot(Psi,Psi,DIR);
+                        std::cout << "<Psi|Psi>=" << normSq << std::endl;
+                }
+                cout << norm.info("Time for norm") << endl;
+        }
+        if (SWEEP) {
+                Stopwatch<> Sweep;
+                if (DIR == DMRG::DIRECTION::RIGHT) {
+                        for (std::size_t l=0; l<L; l++) {
+                                // cout << l << endl;
+                                Psi.rightSweepStep(l, DMRG::BROOM::SVD);
+                        }
+                }
+                else {
+                        for (std::size_t l=L-1; l>0; l--) {
+                                Psi.leftSweepStep(l, DMRG::BROOM::SVD);
+                        }
+                        Psi.leftSweepStep(0, DMRG::BROOM::SVD);
+                }
+                cout << Sweep.info("Time for sweep") << endl;
+        }
+        double trunc;
+        auto [U,S,V] = Psi.A.Ac[L/2].tSVD(10000ul, 1.e-10, trunc, false);
+        Mps<Symmetry> Phi(L,qloc,Qtot,Minit,Qinit);
+        cout << "<Phi,Psi>=" << dot(Phi,Psi) << endl;
+        cout << "<Phi,Phi>=" << dot(Phi,Phi) << endl;
+        double normSq = dot(Psi,Psi,DIR);
+        std::cout << "<Psi|Psi>=" << normSq << std::endl;
+        cout << "Left: <Psi,Psi>=" << normSq << endl;
+        Psi.A.Ac[0] = Psi.A.Ac[0]*std::pow(normSq,-0.5);
+        cout << "<Psi,Psi>=" << dot(Psi,Psi,DIR) << endl;
 }

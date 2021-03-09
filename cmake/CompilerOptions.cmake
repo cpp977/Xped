@@ -23,7 +23,6 @@ function(set_project_options project_name)
       -stdlib=${USED_LIBCXX}
       -std=c++17
       -O3
-      -DNDEBUG
       -march=native
       -m64
       -ferror-limit=5
@@ -53,7 +52,6 @@ function(set_project_options project_name)
   set(CLANG_LOPTIONS_RELEASE
       -stdlib=${USED_LIBCXX}
       -O3
-      -DNDEBUG
   )
   set(CLANG_LOPTIONS_DEBUG
       -stdlib=${USED_LIBCXX}
@@ -95,7 +93,6 @@ function(set_project_options project_name)
 
   set(GCC_LOPTIONS_RELEASE
       -O3
-      -DNDEBUG
   )
   set(GCC_LOPTIONS_DEBUG
       -O0

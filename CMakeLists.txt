@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.13)
 
 # Set the project name to
-project(Multiped CXX)
+project(Xped CXX)
 
 include(cmake/StandardProjectSettings.cmake)
 

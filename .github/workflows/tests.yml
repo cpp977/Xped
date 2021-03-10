@@ -18,13 +18,13 @@ jobs:
       matrix:
         compiler: [g++-10, clang++]
         LIBCXX: [ON, OFF]
-        TENSOR_LIB: [USE_EIGEN_TENSOR, USE_ARRAY_TENSOR]
+        TENSOR_LIB: [EIGEN_TENSOR, ARRAY_TENSOR]
         exclude:
           # excludes libcxx for g++
           - compiler: g++-10
             LIBCXX: ON
           - compiler: clang++
-            TENSOR_LIB: USE_ARRAY_TENSOR
+            TENSOR_LIB: ARRAY_TENSOR
             
     steps:
     - uses: actions/checkout@v2
@@ -51,7 +51,7 @@ jobs:
       # Note the current convention is to use the -S and -B options here to specify source 
       # and build directories, but this is only available with CMake 3.13 and higher.  
       # The CMake binaries on the Github Actions machines are (as of this writing) 3.12
-      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DENABLE_COVERAGE=ON -DUSE_LIBCXX=${{ matrix.LIBCXX }} -DENABLE_CACHE=OFF -D${{ matrix.TENSOR_LIB }}=ON
+      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DXPED_ENABLE_COVERAGE=ON -DXPED_USE_LIBCXX=${{ matrix.LIBCXX }} -DXPED_ENABLE_CACHE=OFF -DXPED_TENSOR_LIB=${{ matrix.TENSOR_LIB }}
       
     - name: Build
       working-directory: ${{runner.workspace}}/build
@@ -67,7 +67,7 @@ jobs:
       run: ctest -C $BUILD_TYPE
       
     - name: Generate coverage report
-      if: matrix.compiler == 'g++'
+      if: matrix.compiler == 'g++-10'
       working-directory: ${{runner.workspace}}/build/tests
       run: |
         lcov --capture --directory . --output-file coverage.info
@@ -76,7 +76,7 @@ jobs:
         lcov --list coverage.info # debug info
         
     - name: Upload coverage to Codecov
-      if: matrix.compiler == 'g++'
+      if: matrix.compiler == 'g++-10'
       uses: codecov/codecov-action@v1
       with:
         token: ${{ secrets.CODECOV_TOKEN }}

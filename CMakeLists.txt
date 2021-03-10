@@ -7,26 +7,54 @@ include(cmake/StandardProjectSettings.cmake)
 
 include(cmake/PreventInSourceBuilds.cmake)
 
-#define options
-option(ENABLE_LRU_CACHE "Use lru cache library from github." OFF)
-option(USE_LIBCXX "Use libc++ from llvm." OFF)
+############################################################################################
+#############                          define options                   ####################
+############################################################################################
+option(XPED_ENABLE_LRU_CACHE "Use lru cache library from github." OFF)
+
+option(XPED_USE_LIBCXX "Use libc++ from llvm." OFF)
 if(NOT CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
- if(USE_LIBCXX)
+ if(XPED_USE_LIBCXX)
   message( FATAL_ERROR "It is only possible to use libc++ in combination with clang")
  endif()
 endif()
-   
+
+set(SUPPORTED_TENSOR_LIBS EIGEN_TENSOR ARRAY_TENSOR)
+set(XPED_TENSOR_LIB "EIGEN_TENSOR" CACHE STRING "Used tensor library for plain tensor operations.")
+if(NOT (${XPED_TENSOR_LIB} IN_LIST SUPPORTED_TENSOR_LIBS))
+  message( FATAL_ERROR "You specified a tensor library which is not supported.")
+endif()
+message( STATUS "Build uses the ${XPED_TENSOR_LIB} library.")
+
+option(XPED_BUILD_TESTS "Build the tests." ON)
+
+option(XPED_ENABLE_CACHE "Enable cache if available" OFF)
+
+option(XPED_ENABLE_BUILD_WITH_TIME_TRACE "Enable -ftime-trace to generate time tracing .json files on clang" OFF)
+
+option(XPED_ENABLE_COVERAGE "Enable coverage reporting for gcc/clang" FALSE)
+
+option(XPED_ENABLE_SANITIZER_ADDRESS "Enable address sanitizer" FALSE)
+option(XPED_ENABLE_SANITIZER_LEAK "Enable leak sanitizer" FALSE)
+option(XPED_ENABLE_SANITIZER_UNDEFINED_BEHAVIOR "Enable undefined behavior sanitizer" FALSE)
+option(XPED_ENABLE_SANITIZER_THREAD "Enable thread sanitizer" FALSE)
+option(XPED_ENABLE_SANITIZER_MEMORY "Enable memory sanitizer" FALSE)
+
+option(XPED_ENABLE_DOXYGEN "Enable doxygen doc builds of source" OFF)
+
+option(XPED_ENABLE_CPPCHECK "Enable static analysis with cppcheck" OFF)
+option(XPED_ENABLE_CLANG_TIDY "Enable static analysis with clang-tidy" ON)
+option(XPED_ENABLE_INCLUDE_WHAT_YOU_USE "Enable static analysis with include-what-you-use" OFF)
+
+option(XPED_BUILD_SHARED_LIBS "Enable compilation of shared libraries" OFF)
+############################################################################################
+
 # Link this 'library' to set the c++ standard / compile-time options requested
 add_library(project_options INTERFACE)
 
 # include compiler options from cmake/CompilerOptions.cmake
 include(cmake/CompilerOptions.cmake)
 set_project_options(project_options)
-
-set(CMAKE_CXX_FLAGS_RELEASE "")
-message("CMAKE_CXX_FLAGS_RELEASE is ${CMAKE_CXX_FLAGS_RELEASE}")
-
-# target_compile_features(project_options INTERFACE cxx_std_17)
 
 # Link this 'library' to use the warnings specified in CompilerWarnings.cmake
 add_library(project_warnings INTERFACE)
@@ -36,15 +64,13 @@ include(cmake/CompilerWarnings.cmake)
 set_project_warnings(project_warnings)
 
 if(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
-  option(ENABLE_BUILD_WITH_TIME_TRACE "Enable -ftime-trace to generate time tracing .json files on clang" OFF)
-  if(ENABLE_BUILD_WITH_TIME_TRACE)
-    add_compile_definitions(project_options INTERFACE -ftime-trace)
+  if(XPED_ENABLE_BUILD_WITH_TIME_TRACE)
+    target_compile_options(project_options INTERFACE -ftime-trace)
   endif()
 endif()
 
 #git is required to clone libraries used from github/gitlab
 find_package(Git REQUIRED)
-
 include(cmake/addGitLibs.cmake)
 
 # enable cache system
@@ -61,22 +87,10 @@ enable_doxygen()
 # allow for static analysis options
 include(cmake/StaticAnalyzers.cmake)
 
-option(BUILD_SHARED_LIBS "Enable compilation of shared libraries" OFF)
-
-# Very basic PCH example
-option(ENABLE_PCH "Enable Precompiled Headers" OFF)
-if(ENABLE_PCH)
-  # This sets a global PCH parameter, each project will build its own PCH, which is a good idea if any #define's change
-  #
-  # consider breaking this out per project as necessary
-  target_precompile_headers(
-    project_options
-    INTERFACE
-    <vector>
-    <string>
-    <map>
-    <utility>)
-endif()
+# add clang-format target
+include(cmake/clang-format.cmake)
 
 add_subdirectory(src)
-add_subdirectory(tests)
+if (${XPED_BUILD_TESTS})
+  add_subdirectory(tests)
+endif()

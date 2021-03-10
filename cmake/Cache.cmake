@@ -1,5 +1,4 @@
-option(ENABLE_CACHE "Enable cache if available" ON)
-if(NOT ENABLE_CACHE)
+if(NOT XPED_ENABLE_CACHE)
   return()
 endif()
 

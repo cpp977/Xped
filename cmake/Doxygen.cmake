@@ -1,6 +1,5 @@
 function(enable_doxygen)
-  option(ENABLE_DOXYGEN "Enable doxygen doc builds of source" OFF)
-  if(ENABLE_DOXYGEN)
+  if(XPED_ENABLE_DOXYGEN)
     set(DOXYGEN_CALLER_GRAPH YES)
     set(DOXYGEN_CALL_GRAPH YES)
     set(DOXYGEN_EXTRACT_ALL YES)

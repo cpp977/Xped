@@ -3,8 +3,6 @@
 # https://github.com/lefticus/cppbestpractices/blob/master/02-Use_the_Tools_Available.md
 
 function(set_project_warnings project_name)
-  option(WARNINGS_AS_ERRORS "Treat compiler warnings as errors" FALSE)
-
   set(MSVC_WARNINGS
       /W4 # Baseline reasonable warnings
       /w14242 # 'identifier': conversion from 'type1' to 'type1', possible loss of data
@@ -37,11 +35,6 @@ function(set_project_warnings project_name)
 #      -Wunused # warn on anything being unused
   )
 
-  if(WARNINGS_AS_ERRORS)
-    set(CLANG_WARNINGS ${CLANG_WARNINGS} -Werror)
-    set(MSVC_WARNINGS ${MSVC_WARNINGS} /WX)
-  endif()
-
   set(GCC_WARNINGS
       ${CLANG_WARNINGS}
       -Wno-type-limits
@@ -59,7 +52,7 @@ function(set_project_warnings project_name)
   endif()
   
   # disable warnings when building with lru chache lib from github because this lib raises tons of warnings.
-  if(ENABLE_LRU_CACHE)
+  if(XPED_ENABLE_LRU_CACHE)
    set(PROJECT_WARNINGS "")
   endif()
   

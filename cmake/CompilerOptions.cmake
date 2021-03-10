@@ -1,5 +1,9 @@
 function(set_project_options project_name)
 
+  #reset te default values for the flags.
+  set(CMAKE_CXX_FLAGS_RELEASE "")
+  set(CMAKE_CXX_FLAGS_DEBUG "")
+
   set(MSVC_OPTIONS_RELEASE
   )
   set(MSVC_OPTIONS_DEBUG
@@ -13,7 +17,7 @@ function(set_project_options project_name)
   )
   set(MSVC_LOPTIONS_PROFILE
   )
-  if(USE_LIBCXX)
+  if(XPED_USE_LIBCXX)
    set(USED_LIBCXX libc++)
   else()
    set (USED_LIBCXX libstdc++)
@@ -148,13 +152,13 @@ target_compile_options(${project_name} INTERFACE ${PROJECT_OPTIONS})
 
 target_link_options(${project_name} INTERFACE ${PROJECT_LOPTIONS})
 
-if(ENABLE_LRU_CACHE)
+if(XPED_ENABLE_LRU_CACHE)
 target_compile_definitions(${project_name} INTERFACE CACHE_PERMUTE_OUTPUT=1)
 endif()
 
-if(USE_EIGEN_TENSOR)
+if(${XPED_TENSOR_LIB} STREQUAL "EIGEN_TENSOR")
 target_compile_definitions(${project_name} INTERFACE XPED_USE_EIGEN_TENSOR_LIB=1)
-elseif (USE_ARRAY_TENSOR)
+elseif (${XPED_TENSOR_LIB} STREQUAL "ARRAY_TENSOR")
 target_compile_definitions(${project_name} INTERFACE XPED_USE_ARRAY_TENSOR_LIB=1)
 endif()
 

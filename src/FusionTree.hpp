@@ -12,6 +12,8 @@
 #include "numeric_limits.h"
 #include "symmetry/functions.hpp"
 
+#include <unordered_map>
+
 namespace util {
 constexpr std::size_t inter_dim(std::size_t Rank) { return (Rank == 1 or Rank == 0) ? 0 : Rank - 2; }
 constexpr std::size_t mult_dim(std::size_t Rank) { return (Rank == 0) ? 0 : Rank - 1; }

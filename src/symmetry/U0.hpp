@@ -5,7 +5,7 @@
 #include <cstddef>
 /// \endcond
 
-#include "../interfaces/tensor_traits.hpp"
+#include "interfaces/tensor_traits.hpp"
 #include "qarray.hpp"
 
 namespace Sym {

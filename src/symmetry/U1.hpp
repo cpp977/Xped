@@ -7,8 +7,8 @@
 #include <unordered_set>
 /// \endcond
 
-#include "../interfaces/tensor_traits.hpp"
-#include "../util/Random.hpp"
+#include "interfaces/tensor_traits.hpp"
+#include "util/Random.hpp"
 
 #include "SymBase.hpp"
 

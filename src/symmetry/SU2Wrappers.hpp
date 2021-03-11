@@ -2,22 +2,22 @@
 #define SU2WRAPPERS_H_
 
 // As the default libraries for the 3nj-symbols, we use the GSL (Gnu scientific library):
-#if !defined USE_WIG_SU2_COEFFS && !defined USE_WIG_SU2_COEFFS && !defined USE_FAST_WIG_SU2_COEFFS
-#    define USE_GSL_SU2_COEFFS 1
+#if !defined XPED_USE_WIG_SU2_COEFFS && !defined XPED_USE_WIG_SU2_COEFFS && !defined XPED_USE_FAST_WIG_SU2_COEFFS
+#    define XPED_USE_GSL_SU2_COEFFS 1
 #endif
 
 /// \cond
-#ifdef USE_GSL_SU2_COEFFS
+#ifdef XPED_USE_GSL_SU2_COEFFS
 #    include <gsl/gsl_sf_coupling.h>
 #    pragma message("Using GSL library for 3nj-symbols.")
 #endif
 
-#ifdef USE_WIG_SU2_COEFFS
+#ifdef XPED_USE_WIG_SU2_COEFFS
 #    include "wigxjpf.h"
 #    pragma message("Using WIGXJPF library for 3nj-symbols.")
 #endif
 
-#ifdef USE_FAST_WIG_SU2_COEFFS
+#ifdef XPED_USE_FAST_WIG_SU2_COEFFS
 #    include "fastwigxj.h"
 #    include "wigxjpf.h"
 #    pragma message("Using FASTWIGXJ library for 3nj-symbols.")
@@ -64,7 +64,7 @@
  * This is turned off per default but can be used by defining OWN_HASH_CGC.
  */
 
-#ifdef USE_GSL_SU2_COEFFS
+#ifdef XPED_USE_GSL_SU2_COEFFS
 inline double
 coupl_9j_base(const int q1, const int q2, const int q3, const int q4, const int q5, const int q6, const int q7, const int q8, const int q9)
 {
@@ -80,9 +80,9 @@ inline double coupl_3j_base(const int q1, const int q2, const int q3, const int 
 {
     return gsl_sf_coupling_3j(q1 - 1, q2 - 1, q3 - 1, q1_z, q2_z, q3_z);
 }
-#endif // USE_GSL_SU2_COEFFS
+#endif // XPED_USE_GSL_SU2_COEFFS
 
-#ifdef USE_WIG_SU2_COEFFS
+#ifdef XPED_USE_WIG_SU2_COEFFS
 inline double
 coupl_9j_base(const int q1, const int q2, const int q3, const int q4, const int q5, const int q6, const int q7, const int q8, const int q9)
 {
@@ -98,11 +98,11 @@ inline double coupl_3j_base(const int q1, const int q2, const int q3, const int 
 {
     return wig3jj(q1 - 1, q2 - 1, q3 - 1, q1_z, q2_z, q3_z);
 }
-#endif // USE_WIG_SU2_COEFFS
+#endif // XPED_USE_WIG_SU2_COEFFS
 
 /**
  */
-#ifdef USE_FAST_WIG_SU2_COEFFS
+#ifdef XPED_USE_FAST_WIG_SU2_COEFFS
 inline double
 coupl_9j_base(const int q1, const int q2, const int q3, const int q4, const int q5, const int q6, const int q7, const int q8, const int q9)
 {
@@ -118,7 +118,7 @@ inline double coupl_3j_base(const int q1, const int q2, const int q3, const int 
 {
     return fw3jja(q1 - 1, q2 - 1, q3 - 1, q1_z, q2_z);
 }
-#endif // USE_FAST_WIG_SU2_COEFFS
+#endif // XPED_USE_FAST_WIG_SU2_COEFFS
 
 inline double
 coupling_9j(const int q1, const int q2, const int q3, const int q4, const int q5, const int q6, const int q7, const int q8, const int q9)

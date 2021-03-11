@@ -7,7 +7,7 @@ add_subdirectory(interfaces)
 find_package(GSL REQUIRED)
 find_package(Boost REQUIRED)
 
-include_directories(${TOOLS_INCLUDE_DIR} ${TEXTTABLE_INCLUDE_DIR} ${EIGEN_INCLUDE_DIR} ${LRUCACHE_INCLUDE_DIR} ${SEQ_INCLUDE_DIR} ${ARRAY_INCLUDE_DIR})
+include_directories(${XPED_DIR}/src ${TOOLS_INCLUDE_DIR} ${TEXTTABLE_INCLUDE_DIR} ${EIGEN_INCLUDE_DIR} ${LRUCACHE_INCLUDE_DIR} ${SEQ_INCLUDE_DIR} ${ARRAY_INCLUDE_DIR})
 
 file(GLOB SOURCES "./*.cpp"	
                   "./*.hpp"

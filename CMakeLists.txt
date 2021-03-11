@@ -3,6 +3,8 @@ cmake_minimum_required(VERSION 3.13)
 # Set the project name to
 project(Xped CXX)
 
+set(XPED_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+
 include(cmake/StandardProjectSettings.cmake)
 
 include(cmake/PreventInSourceBuilds.cmake)

@@ -153,7 +153,7 @@ target_compile_options(${project_name} INTERFACE ${PROJECT_OPTIONS})
 target_link_options(${project_name} INTERFACE ${PROJECT_LOPTIONS})
 
 if(XPED_ENABLE_LRU_CACHE)
-target_compile_definitions(${project_name} INTERFACE CACHE_PERMUTE_OUTPUT=1)
+target_compile_definitions(${project_name} INTERFACE XPED_CACHE_PERMUTE_OUTPUT=1)
 endif()
 
 if(${XPED_TENSOR_LIB} STREQUAL "EIGEN_TENSOR")

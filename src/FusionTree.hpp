@@ -1,7 +1,7 @@
 #ifndef FUSIONTREE_H_
 #define FUSIONTREE_H_
 
-#ifdef CACHE_PERMUTE_OUTPUT
+#ifdef XPED_CACHE_PERMUTE_OUTPUT
 #    include "lru/lru.hpp"
 #endif
 
@@ -520,7 +520,7 @@ template <int shift, std::size_t Rank, std::size_t CoRank, typename Symmetry>
 std::unordered_map<std::pair<FusionTree<Rank - shift, Symmetry>, FusionTree<CoRank + shift, Symmetry>>, typename Symmetry::Scalar>
 permute(const FusionTree<Rank, Symmetry>& t1, const FusionTree<CoRank, Symmetry>& t2, const Permutation<Rank + CoRank>& p)
 {
-#ifdef CACHE_PERMUTE_OUTPUT
+#ifdef XPED_CACHE_PERMUTE_OUTPUT
     if(tree_cache<shift, Rank, CoRank, Symmetry>.cache.contains(std::make_tuple(t1, t2, p))) {
         return tree_cache<shift, Rank, CoRank, Symmetry>.cache.lookup(std::make_tuple(t1, t2, p));
     }
@@ -558,7 +558,7 @@ permute(const FusionTree<Rank, Symmetry>& t1, const FusionTree<CoRank, Symmetry>
         if(std::abs(coeff) < 1.e-9) { zero_count++; }
     }
     if(zero_count > 0) { cout << "permute pair operation created #=" << zero_count << " 0s." << endl; }
-#ifdef CACHE_PERMUTE_OUTPUT
+#ifdef XPED_CACHE_PERMUTE_OUTPUT
     tree_cache<shift, Rank, CoRank, Symmetry>.cache.emplace(std::make_tuple(t1, t2, p), out);
 #endif
     return out;

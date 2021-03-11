@@ -131,4 +131,26 @@ void test_tree_pair_permute(const Qbasis<Symmetry, 1>& B, const Qbasis<Symmetry,
             }
         }
     }
+
+#ifdef XPED_CACHE_PERMUTE_OUTPUT
+    std::cout << "shift=-2, total hits=" << tree_cache<-2, 2, 2, Symmetry>.cache.stats().total_hits() << endl; // Hits for any key
+    std::cout << "shift=-2, total misses=" << tree_cache<-2, 2, 2, Symmetry>.cache.stats().total_misses() << endl; // Misses for any key
+    std::cout << "shift=-2, hit rate=" << tree_cache<-2, 2, 2, Symmetry>.cache.stats().hit_rate() << endl; // Hit rate in [0, 1]
+
+    std::cout << "shift=-1, total hits=" << tree_cache<-1, 2, 2, Symmetry>.cache.stats().total_hits() << endl; // Hits for any key
+    std::cout << "shift=-1, total misses=" << tree_cache<-1, 2, 2, Symmetry>.cache.stats().total_misses() << endl; // Misses for any key
+    std::cout << "shift=-1, hit rate=" << tree_cache<-1, 2, 2, Symmetry>.cache.stats().hit_rate() << endl; // Hit rate in [0, 1]
+
+    std::cout << "shift=0, total hits=" << tree_cache<0, 2, 2, Symmetry>.cache.stats().total_hits() << endl; // Hits for any key
+    std::cout << "shift=0, total misses=" << tree_cache<0, 2, 2, Symmetry>.cache.stats().total_misses() << endl; // Misses for any key
+    std::cout << "shift=0, hit rate=" << tree_cache<0, 2, 2, Symmetry>.cache.stats().hit_rate() << endl; // Hit rate in [0, 1]
+
+    std::cout << "shift=1, total hits=" << tree_cache<1, 2, 2, Symmetry>.cache.stats().total_hits() << endl; // Hits for any key
+    std::cout << "shift=1, total misses=" << tree_cache<1, 2, 2, Symmetry>.cache.stats().total_misses() << endl; // Misses for any key
+    std::cout << "shift=1, hit rate=" << tree_cache<1, 2, 2, Symmetry>.cache.stats().hit_rate() << endl; // Hit rate in [0, 1]
+
+    std::cout << "shift=2, total hits=" << tree_cache<2, 2, 2, Symmetry>.cache.stats().total_hits() << endl; // Hits for any key
+    std::cout << "shift=2, total misses=" << tree_cache<2, 2, 2, Symmetry>.cache.stats().total_misses() << endl; // Misses for any key
+    std::cout << "shift=2, hit rate=" << tree_cache<2, 2, 2, Symmetry>.cache.stats().hit_rate() << endl; // Hit rate in [0, 1]
+#endif
 };

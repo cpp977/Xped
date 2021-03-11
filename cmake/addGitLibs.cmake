@@ -38,6 +38,7 @@ ExternalProject_Add(
         USES_TERMINAL_DOWNLOAD ON
 )
 
+if(${XPED_TENSOR_LIB} STREQUAL "ARRAY_TENSOR")
 set(ARRAY_ROOT ${CMAKE_BINARY_DIR}/thirdparty/array)
 set(ARRAY_INCLUDE_DIR ${ARRAY_ROOT}/src)
 
@@ -56,6 +57,7 @@ ExternalProject_Add(
         LOG_MERGED_STDOUTERR ON
         USES_TERMINAL_DOWNLOAD ON
 )
+endif()
 
 set(DOCTEST_ROOT ${CMAKE_BINARY_DIR}/thirdparty/doctest)
 set(DOCTEST_INCLUDE_DIR ${DOCTEST_ROOT}/src/doctest)
@@ -114,7 +116,7 @@ ExternalProject_Add(
         USES_TERMINAL_DOWNLOAD ON
 )
 
-if(ENABLE_LRU_CACHE)
+if(XPED_ENABLE_LRU_CACHE)
 set(LRUCACHE_ROOT ${CMAKE_BINARY_DIR}/thirdparty/lru)
 set(LRUCACHE_INCLUDE_DIR ${LRUCACHE_ROOT}/src/lru_cache/include)
 

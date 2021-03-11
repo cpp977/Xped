@@ -19,7 +19,7 @@ struct FusionTree;
 template <std::size_t N>
 struct Permutation;
 
-#ifdef CACHE_PERMUTE_OUTPUT
+#ifdef XPED_CACHE_PERMUTE_OUTPUT
 #    include "lru/lru.hpp"
 
 template <int shift, std::size_t Rank, std::size_t CoRank, typename Symmetry>

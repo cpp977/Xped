@@ -23,10 +23,13 @@ add_dependencies(run
                  TextTable
                  TOOLS
                  Eigen
-                 seq
-                 array)
-if(ENABLE_LRU_CACHE)
+                 seq)
+                 
+if(XPED_ENABLE_LRU_CACHE)
 add_dependencies(run lru_cache)
+endif()
+if(${XPED_TENSOR_LIB} STREQUAL "ARRAY_TENSOR")
+add_dependencies(run array)
 endif()
 
 target_link_libraries (run

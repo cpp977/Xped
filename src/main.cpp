@@ -21,7 +21,7 @@ using std::string;
 
 // #define CACHE_PERMUTE_OUTPUT
 
-#ifdef CACHE_PERMUTE_OUTPUT
+#ifdef XPED_CACHE_PERMUTE_OUTPUT
 #    include "lru/lru.hpp"
 
 template <std::size_t Rank, typename Symmetry>

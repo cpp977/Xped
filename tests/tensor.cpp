@@ -16,7 +16,7 @@ using std::string;
 
 #include "ArgParser.h"
 
-#ifdef CACHE_PERMUTE_OUTPUT
+#ifdef XPED_CACHE_PERMUTE_OUTPUT
 #    include "lru/lru.hpp"
 
 template <std::size_t Rank, typename Symmetry>

@@ -43,7 +43,7 @@ option(XPED_ENABLE_SANITIZER_MEMORY "Enable memory sanitizer" FALSE)
 option(XPED_ENABLE_DOXYGEN "Enable doxygen doc builds of source" OFF)
 
 option(XPED_ENABLE_CPPCHECK "Enable static analysis with cppcheck" OFF)
-option(XPED_ENABLE_CLANG_TIDY "Enable static analysis with clang-tidy" ON)
+option(XPED_ENABLE_CLANG_TIDY "Enable static analysis with clang-tidy" OFF)
 option(XPED_ENABLE_INCLUDE_WHAT_YOU_USE "Enable static analysis with include-what-you-use" OFF)
 
 option(XPED_BUILD_SHARED_LIBS "Enable compilation of shared libraries" OFF)
@@ -89,6 +89,9 @@ include(cmake/StaticAnalyzers.cmake)
 
 # add clang-format target
 include(cmake/clang-format.cmake)
+
+find_package(GSL REQUIRED)
+find_package(Boost REQUIRED)
 
 add_subdirectory(src)
 if (${XPED_BUILD_TESTS})

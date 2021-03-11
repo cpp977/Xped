@@ -1,4 +1,4 @@
-# Checkout config tool: https://zed0.co.uk/clang-format-configurator/
+﻿# Checkout config tool: https://zed0.co.uk/clang-format-configurator/
 # Or http://cf.monofraps.net/
 # https://clang.llvm.org/docs/ClangFormatStyleOptions.html
 # https://github.com/01org/parameter-framework/blob/master/.clang-format
@@ -7,11 +7,11 @@
 
 
 # Common settings
-BasedOnStyle:  WebKit
-TabWidth:        8
-IndentWidth:     8
+BasedOnStyle:  LLVM
+TabWidth:        4
+IndentWidth:     4
 UseTab:          Never
-ColumnLimit: 100
+ColumnLimit: 150
 
 # Other languages JavaScript, Proto
 
@@ -28,18 +28,18 @@ DisableFormat:   false
 Standard: Cpp11
 
 AccessModifierOffset: -4
-AlignAfterOpenBracket: true
-AlignConsecutiveAssignments: false
+AlignAfterOpenBracket: Align
 AlignConsecutiveDeclarations: false
-AlignEscapedNewlinesLeft: false
+AlignEscapedNewlinesLeft: DontAlign
 AlignOperands:   true
 AlignTrailingComments: false
-AllowAllParametersOfDeclarationOnNextLine: true
-AllowShortBlocksOnASingleLine: false
-AllowShortCaseLabelsOnASingleLine: false
-AllowShortFunctionsOnASingleLine: Empty
-AllowShortIfStatementsOnASingleLine: false
-AllowShortLoopsOnASingleLine: false
+AllowAllParametersOfDeclarationOnNextLine: false
+AllowShortBlocksOnASingleLine: true
+AllowShortCaseLabelsOnASingleLine: true
+AllowShortFunctionsOnASingleLine: All
+AllowShortIfStatementsOnASingleLine: true
+AllowShortLoopsOnASingleLine: true
+AllowShortLambdasOnASingleLine: All
 AlwaysBreakAfterDefinitionReturnType: false
 AlwaysBreakAfterReturnType: None
 AlwaysBreakBeforeMultilineStrings: false
@@ -52,14 +52,14 @@ BreakBeforeBraces: Custom
 # Control of individual brace wrapping cases
 BraceWrapping: {
     AfterClass: 'true'
-    AfterControlStatement: 'true'
+    AfterControlStatement: 'false'
     AfterEnum : 'true'
     AfterFunction : 'true'
-    AfterNamespace : 'true'
+    AfterNamespace : 'false'
     AfterStruct : 'true'
     AfterUnion : 'true'
-    BeforeCatch : 'true'
-    BeforeElse : 'true'
+    BeforeCatch : 'false'
+    BeforeElse : 'false'
     IndentBraces : 'false'
     AfterExternBlock : 'true'
     SplitEmptyFunction : 'false'
@@ -72,7 +72,7 @@ BreakBeforeInheritanceComma: false
 BreakBeforeBinaryOperators: None
 BreakBeforeTernaryOperators: true
 BreakConstructorInitializersBeforeComma: true
-BreakStringLiterals: true
+BreakStringLiterals: false
 
 CommentPragmas:  '^ IWYU pragma:'
 CompactNamespaces: false
@@ -125,3 +125,9 @@ ReflowComments: true
 
 IncludeBlocks: Preserve
 IndentPPDirectives: AfterHash
+
+
+
+---
+
+...

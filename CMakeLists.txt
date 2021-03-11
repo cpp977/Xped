@@ -45,8 +45,7 @@ option(XPED_ENABLE_DOXYGEN "Enable doxygen doc builds of source" OFF)
 option(XPED_ENABLE_CPPCHECK "Enable static analysis with cppcheck" OFF)
 option(XPED_ENABLE_CLANG_TIDY "Enable static analysis with clang-tidy" OFF)
 option(XPED_ENABLE_INCLUDE_WHAT_YOU_USE "Enable static analysis with include-what-you-use" OFF)
-
-option(XPED_BUILD_SHARED_LIBS "Enable compilation of shared libraries" OFF)
+option(XPED_ENABLE_CLANG_FORMAT "Enable clang-format target." OFF)
 ############################################################################################
 
 # Link this 'library' to set the c++ standard / compile-time options requested

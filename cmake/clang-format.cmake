@@ -1,3 +1,4 @@
+if(XPED_ENABLE_CLANG_FORMAT)
 # additional target to perform clang-format run, requires clang-format
 
 # get all project files
@@ -18,4 +19,5 @@ add_custom_target(
         -i
         ${ALL_SOURCE_FILES}
 )
+endif()
 

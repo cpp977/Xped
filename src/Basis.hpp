@@ -1,7 +1,11 @@
 #ifndef BASIS_H_
 #define BASIS_H_
 
-#include "TextTable.h"
+/// \cond
+#include "Eigen/Core"
+
+#include "tabulate/tabulate.hpp"
+/// \endcond
 
 // forward declaration
 template <typename Symmetry, std::size_t depth>
@@ -36,10 +40,10 @@ public:
     Basis combine(const Basis& other) const;
 
     /**Prints the basis.*/
-    std::string print() const;
+    auto print() const;
 
     /**Prints the history of the basis.*/
-    std::string printHistory() const;
+    auto printHistory() const;
 
     bool operator==(const Basis& other) const { return (this->dim() == other.dim()); }
 
@@ -75,38 +79,49 @@ Basis Basis::combine(const Basis& other) const
     return out;
 }
 
-std::string Basis::print() const
+auto Basis::print() const
 {
-    std::stringstream out;
-    TextTable t('-', '|', '+');
-    t.add("num");
-    t.endOfRow();
+    tabulate::Table t;
+    // TextTable t('-', '|', '+');
+    t.add_row({"num"});
+    // t.add("num");
+    // t.endOfRow();
     for(std::size_t i = 0; i < dim_; i++) {
         std::stringstream ss;
         ss << i;
-        t.add(ss.str());
-        t.endOfRow();
+        t.add_row({ss.str()});
+        // t.add(ss.str());
+        // t.endOfRow();
     }
-    out << t;
-    return out.str();
+    t.format().font_style({tabulate::FontStyle::bold}).border_top("_").border_bottom("_").border_left("|").border_right("|").corner("+");
+    t[0].format()
+        .padding_top(1)
+        .padding_bottom(1)
+        .font_align(tabulate::FontAlign::center)
+        .font_style({tabulate::FontStyle::underline})
+        .font_background_color(tabulate::Color::red);
+    return t;
 }
 
-std::string Basis::printHistory() const
+auto Basis::printHistory() const
 {
-    std::stringstream out;
-    TextTable t('-', '|', '+');
-    t.add("num");
-    t.add("source");
-    t.endOfRow();
+    tabulate::Table t;
+    t.add_row({"num", "source"});
     for(std::size_t i = 0; i < dim_; i++) {
         std::stringstream ss, tt;
         ss << i;
         tt << "<-- " << history.source(i)[0] << "," << history.source(i)[1];
-        t.add(ss.str());
-        t.endOfRow();
+        t.add_row({ss.str(), tt.str()});
     }
-    out << t;
-    return out.str();
+    t.format().font_style({tabulate::FontStyle::bold}).border_top("_").border_bottom("_").border_left("|").border_right("|").corner("+");
+    t[0].format()
+        .padding_top(1)
+        .padding_bottom(1)
+        .font_align(tabulate::FontAlign::center)
+        .font_style({tabulate::FontStyle::underline})
+        .font_background_color(tabulate::Color::red);
+    t[0][1].format().font_background_color(tabulate::Color::blue).font_color(tabulate::Color::white);
+    return t;
 }
 
 std::ostream& operator<<(std::ostream& os, const Basis& basis)

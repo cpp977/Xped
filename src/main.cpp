@@ -7,10 +7,7 @@
 #include <string>
 #include <vector>
 
-#include <TextTable.h>
-
 #include "Stopwatch.h"
-#include "macros.h"
 
 using std::cout;
 using std::endl;

@@ -12,7 +12,7 @@ add_dependencies(test_suite doctest)
 target_link_libraries (test_suite project_options project_warnings)
 
 add_executable(basis_test basis.cpp $<TARGET_OBJECTS:test_suite>)
-add_dependencies(basis_test TextTable TOOLS Eigen doctest seq)
+add_dependencies(basis_test tabulate TOOLS Eigen doctest seq)
 if(XPED_ENABLE_LRU_CACHE)
 add_dependencies(basis_test lru_cache)
 endif()
@@ -24,7 +24,7 @@ target_link_libraries (basis_test project_options project_warnings GSL::gsl GSL:
 add_test(NAME basis_test COMMAND basis_test )
 
 add_executable(tree_test tree.cpp $<TARGET_OBJECTS:test_suite>)
-add_dependencies(tree_test TextTable TOOLS Eigen doctest seq)
+add_dependencies(tree_test tabulate TOOLS Eigen doctest seq)
 if(XPED_ENABLE_LRU_CACHE)
 add_dependencies(tree_test lru_cache)
 endif()
@@ -36,7 +36,7 @@ target_link_libraries (tree_test project_options project_warnings GSL::gsl GSL::
 add_test(NAME tree_test COMMAND tree_test)
 
 add_executable(tensor_test tensor.cpp $<TARGET_OBJECTS:test_suite>)
-add_dependencies(tensor_test TextTable TOOLS Eigen doctest seq)
+add_dependencies(tensor_test tabulate TOOLS Eigen doctest seq)
 if(XPED_ENABLE_LRU_CACHE)
 add_dependencies(tensor_test lru_cache)
 endif()

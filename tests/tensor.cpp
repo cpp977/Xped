@@ -5,10 +5,6 @@
 #include <string>
 #include <vector>
 
-#include <TextTable.h>
-
-#include "macros.h"
-
 using std::cout;
 using std::endl;
 using std::size_t;
@@ -46,16 +42,16 @@ template <int shift, std::size_t Rank, std::size_t CoRank, typename Symmetry>
 CacheManager<shift, Rank, CoRank, Symmetry> tree_cache(100);
 #endif
 
-#include "../src/interfaces/tensor_traits.hpp"
+#include "interfaces/tensor_traits.hpp"
 
-#include "../src/Qbasis.hpp"
-#include "../src/symmetry/SU2.hpp"
-#include "../src/symmetry/U0.hpp"
-#include "../src/symmetry/U1.hpp"
-#include "../src/symmetry/kind_dummies.hpp"
+#include "Qbasis.hpp"
+#include "symmetry/SU2.hpp"
+#include "symmetry/U0.hpp"
+#include "symmetry/U1.hpp"
+#include "symmetry/kind_dummies.hpp"
 
-#include "../src/FusionTree.hpp"
-#include "../src/Tensor.hpp"
+#include "FusionTree.hpp"
+#include "Tensor.hpp"
 
 #include "doctest/doctest.h"
 

@@ -20,7 +20,7 @@ add_executable(run
                ${SOURCES})
                
 add_dependencies(run
-                 TextTable
+                 tabulate
                  TOOLS
                  Eigen
                  seq)

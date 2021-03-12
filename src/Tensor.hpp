@@ -8,7 +8,8 @@
 
 #include "seq/seq.h"
 
-#include <unsupported/Eigen/KroneckerProduct>
+#include "Eigen/SVD"
+#include "unsupported/Eigen/KroneckerProduct"
 
 #include "NestedLoopIterator.h"
 
@@ -51,36 +52,36 @@ Qbasis<Symmetry, Rank> build_FusionTree(const std::array<Qbasis<Symmetry, 1>, Ra
     }
 }
 
-template <typename MatrixType_>
-MatrixType_ zero_init()
-{
-    if constexpr(std::is_same<MatrixType_, Eigen::MatrixXd>::value) {
-        return Eigen::MatrixXd::Zero(1, 1);
-    } else if constexpr(std::is_same<MatrixType_, Eigen::SparseMatrix<double>>::value) {
-        Eigen::SparseMatrix<double> M(1, 1);
-        return M;
-    } else if constexpr(std::is_same<MatrixType_, Eigen::DiagonalMatrix<double, -1>>::value) {
-        Eigen::DiagonalMatrix<double, -1> M(1);
-        M.diagonal() << 0.;
-        return M;
-    }
-}
+// template <typename MatrixType_>
+// MatrixType_ zero_init()
+// {
+//     if constexpr(std::is_same<MatrixType_, Eigen::MatrixXd>::value) {
+//         return Eigen::MatrixXd::Zero(1, 1);
+//     } else if constexpr(std::is_same<MatrixType_, Eigen::SparseMatrix<double>>::value) {
+//         Eigen::SparseMatrix<double> M(1, 1);
+//         return M;
+//     } else if constexpr(std::is_same<MatrixType_, Eigen::DiagonalMatrix<double, -1>>::value) {
+//         Eigen::DiagonalMatrix<double, -1> M(1);
+//         M.diagonal() << 0.;
+//         return M;
+//     }
+// }
 
-template <typename MatrixType_>
-string print_matrix(const MatrixType_& mat)
-{
-    std::stringstream ss;
-    if constexpr(std::is_same<MatrixType_, Eigen::MatrixXd>::value) {
-        ss << mat;
-        return ss.str();
-    } else if constexpr(std::is_same<MatrixType_, Eigen::SparseMatrix<double>>::value) {
-        ss << mat;
-        return ss.str();
-    } else if constexpr(std::is_same<MatrixType_, Eigen::DiagonalMatrix<double, -1>>::value) {
-        ss << mat.toDenseMatrix();
-        return ss.str();
-    }
-}
+// template <typename MatrixType_>
+// string print_matrix(const MatrixType_& mat)
+// {
+//     std::stringstream ss;
+//     if constexpr(std::is_same<MatrixType_, Eigen::MatrixXd>::value) {
+//         ss << mat;
+//         return ss.str();
+//     } else if constexpr(std::is_same<MatrixType_, Eigen::SparseMatrix<double>>::value) {
+//         ss << mat;
+//         return ss.str();
+//     } else if constexpr(std::is_same<MatrixType_, Eigen::DiagonalMatrix<double, -1>>::value) {
+//         ss << mat.toDenseMatrix();
+//         return ss.str();
+//     }
+// }
 } // namespace util
 
 template <std::size_t Rank, std::size_t CoRank, typename Symmetry, typename MatrixType_ = Eigen::MatrixXd, typename TensorLib_ = M_TENSORLIB>
@@ -890,7 +891,7 @@ std::string Tensor<Rank, CoRank, Symmetry, MatrixType_, TensorLib_>::print(bool 
     ss << "codomain:" << endl << codomain << endl; // << "with trees:" << endl << codomain.printTrees() << endl;
     for(size_t i = 0; i < sector.size(); i++) {
         ss << "Sector with QN=" << sector[i] << endl;
-        if(PRINT_MATRICES) { ss << std::fixed << util::print_matrix(block[i]) << endl; }
+        if(PRINT_MATRICES) { ss << std::fixed << block[i] << endl; }
     }
     return ss.str();
 }

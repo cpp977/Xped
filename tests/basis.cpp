@@ -10,10 +10,6 @@ using std::endl;
 using std::size_t;
 using std::string;
 
-#include "TextTable.h"
-
-#include "macros.h"
-
 template <std::size_t Rank, typename Symmetry>
 struct FusionTree;
 template <std::size_t N>
@@ -44,11 +40,11 @@ template <int shift, std::size_t Rank, std::size_t CoRank, typename Symmetry>
 CacheManager<shift, Rank, CoRank, Symmetry> tree_cache(100);
 #endif
 
-#include "../src/Qbasis.hpp"
-#include "../src/symmetry/SU2.hpp"
-#include "../src/symmetry/U0.hpp"
-#include "../src/symmetry/U1.hpp"
-#include "../src/symmetry/kind_dummies.hpp"
+#include "Qbasis.hpp"
+#include "symmetry/SU2.hpp"
+#include "symmetry/U0.hpp"
+#include "symmetry/U1.hpp"
+#include "symmetry/kind_dummies.hpp"
 
 #include "doctest/doctest.h"
 

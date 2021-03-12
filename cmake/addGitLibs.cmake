@@ -1,15 +1,14 @@
 include(ExternalProject)
 
-set(TEXTTABLE_ROOT ${CMAKE_BINARY_DIR}/thirdparty/texttable)
-set(TEXTTABLE_INCLUDE_DIR ${TEXTTABLE_ROOT}/src/TextTable)
+set(TEXTTABLE_ROOT ${CMAKE_BINARY_DIR}/thirdparty/tabulate)
+set(TEXTTABLE_INCLUDE_DIR ${TEXTTABLE_ROOT}/src/tabulate/single_include)
 
 ExternalProject_Add(
-        TextTable
+        tabulate
         PREFIX ${TEXTTABLE_ROOT}
-        GIT_REPOSITORY "https://github.com/haarcuba/cpp-text-table.git"
+        GIT_REPOSITORY "https://github.com/p-ranav/tabulate"
         GIT_SHALLOW ON
         TIMEOUT 10
-#        UPDATE_COMMAND ${GIT_EXECUTABLE} pull
         UPDATE_COMMAND ""
         CONFIGURE_COMMAND ""
         BUILD_COMMAND ""

@@ -7,7 +7,7 @@
 #include <unordered_map>
 #include <unordered_set>
 
-#include <Eigen/Eigen>
+#include "tabulate/tabulate.hpp"
 /// \endcond
 
 #include "Basis.hpp"
@@ -179,7 +179,7 @@ public:
     Qbasis<Symmetry, 1> forgetHistory() const;
 
     /**Prints the basis.*/
-    std::string print() const;
+    auto print() const;
 
     /**Prints the trees.*/
     std::string printTrees() const;
@@ -634,15 +634,15 @@ Qbasis<Symmetry, depth + 1> Qbasis<Symmetry, depth>::combine(const Qbasis<Symmet
 }
 
 template <typename Symmetry, std::size_t depth>
-std::string Qbasis<Symmetry, depth>::print() const
+auto Qbasis<Symmetry, depth>::print() const
 {
-    std::stringstream out;
-#ifdef TOOLS_IO_TABLE
-    TextTable t('-', '|', '+');
-    t.add("Q");
-    t.add("Dim(Q)");
-    t.add("num");
-    t.endOfRow();
+    tabulate::Table t;
+    // TextTable t('-', '|', '+');
+    t.add_row({"Q", "Dim(Q)", "num"});
+    // t.add("Q");
+    // t.add("Dim(Q)");
+    // t.add("num");
+    // t.endOfRow();
     for(const auto& entry : data_) {
         auto [q_Phys, curr_num, plain] = entry;
         std::stringstream ss, tt, uu;
@@ -651,16 +651,23 @@ std::string Qbasis<Symmetry, depth>::print() const
         tt << plain.dim();
 
         uu << curr_num;
-        t.add(ss.str());
-        t.add(tt.str());
-        t.add(uu.str());
-        t.endOfRow();
+        t.add_row({ss.str(), tt.str(), uu.str()});
+        // t.add(ss.str());
+        // t.add(tt.str());
+        // t.add(uu.str());
+        // t.endOfRow();
     }
-    out << t;
-#else
-    out << "The stream operator for Qbasis needs the TextTable library.";
-#endif
-    return out.str();
+    t.format()
+        .font_align(tabulate::FontAlign::center)
+        .font_style({tabulate::FontStyle::bold})
+        .border_top(" ")
+        .border_bottom(" ")
+        .border_left(" ")
+        .border_right(" ")
+        .corner(" ");
+    t[0].format().padding_top(1).padding_bottom(1).font_style({tabulate::FontStyle::underline}).font_background_color(tabulate::Color::red);
+    t[0][1].format().font_background_color(tabulate::Color::blue);
+    return t;
 }
 
 template <typename Symmetry, std::size_t depth>

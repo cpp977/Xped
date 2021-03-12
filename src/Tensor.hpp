@@ -537,7 +537,7 @@ Tensor<Rank, CoRank, Symmetry, MatrixType_, TensorLib_>::tSVD(size_t maxKeep,
 
     std::vector<std::pair<typename Symmetry::qType, double>> allSV;
     for(size_t i = 0; i < sector.size(); ++i) {
-#ifdef DONT_USE_BDCSVD
+#ifdef XPED_DONT_USE_BDCSVD
         Eigen::JacobiSVD<MatrixType> Jack; // standard SVD
 #else
         Eigen::BDCSVD<MatrixType> Jack; // "Divide and conquer" SVD (only available in Eigen)

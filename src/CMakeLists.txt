@@ -37,3 +37,6 @@ target_link_libraries (run
                        project_warnings
                        GSL::gsl
                        GSL::gslcblas)
+if(XPED_USE_OPENMP)
+target_link_libraries (run OpenMP::OpenMP_CXX)
+endif()

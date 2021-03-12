@@ -32,6 +32,8 @@ option(XPED_BUILD_TESTS "Build the tests." ON)
 
 option(XPED_ENABLE_CACHE "Enable cache if available" OFF)
 
+option(XPED_USE_OPENMP "Enable openmp parallelization" ON)
+
 option(XPED_ENABLE_BUILD_WITH_TIME_TRACE "Enable -ftime-trace to generate time tracing .json files on clang" OFF)
 
 option(XPED_ENABLE_COVERAGE "Enable coverage reporting for gcc/clang" FALSE)
@@ -93,6 +95,10 @@ include(cmake/clang-format.cmake)
 
 find_package(GSL REQUIRED)
 find_package(Boost REQUIRED)
+
+if(XPED_USE_OPENMP)
+  find_package(OpenMP)
+endif()
 
 add_subdirectory(src)
 if (${XPED_BUILD_TESTS})

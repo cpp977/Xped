@@ -10,34 +10,12 @@ using std::endl;
 using std::size_t;
 using std::string;
 
-template <std::size_t Rank, typename Symmetry>
-struct FusionTree;
-template <std::size_t N>
-struct Permutation;
+#include "Util/Macros.hpp"
 
 #ifdef XPED_CACHE_PERMUTE_OUTPUT
+#    pragma message("Xped is using LRU cache for the output of FusionTree manipulations.")
 #    include "lru/lru.hpp"
-
-template <int shift, std::size_t Rank, std::size_t CoRank, typename Symmetry>
-struct CacheManager
-{
-    typedef FusionTree<CoRank, Symmetry> CoTree;
-    typedef FusionTree<CoRank + shift, Symmetry> NewCoTree;
-    typedef FusionTree<Rank, Symmetry> Tree;
-    typedef FusionTree<Rank - shift, Symmetry> NewTree;
-    typedef typename Symmetry::Scalar Scalar;
-
-    typedef LRU::Cache<std::tuple<Tree, CoTree, Permutation<Rank + CoRank>>, std::unordered_map<std::pair<NewTree, NewCoTree>, Scalar>> CacheType;
-    CacheManager(std::size_t cache_size)
-    {
-        cache = CacheType(cache_size);
-        // cache.monitor();
-    }
-    CacheType cache;
-};
-
-template <int shift, std::size_t Rank, std::size_t CoRank, typename Symmetry>
-CacheManager<shift, Rank, CoRank, Symmetry> tree_cache(100);
+XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100)
 #endif
 
 #include "Core/Qbasis.hpp"

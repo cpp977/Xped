@@ -1,3 +1,11 @@
+#ifdef INTEL_MKL_VERSION
+#    pragma message("Xped is using the intel math kernel library (MKL)")
+#endif
+
+#ifdef _OPENMP
+#    pragma message("Xped is using OpenMP parallelization")
+#endif
+
 #include <cmath>
 #include <cstddef>
 #include <iostream>
@@ -12,34 +20,12 @@ using std::string;
 
 #include "ArgParser.h"
 
+#include "Util/Macros.hpp"
+
 #ifdef XPED_CACHE_PERMUTE_OUTPUT
+#    pragma message("Xped is using LRU cache for the output of FusionTree manipulations.")
 #    include "lru/lru.hpp"
-
-template <std::size_t Rank, typename Symmetry>
-struct FusionTree;
-template <std::size_t N>
-struct Permutation;
-
-template <int shift, std::size_t Rank, std::size_t CoRank, typename Symmetry>
-struct CacheManager
-{
-    typedef FusionTree<CoRank, Symmetry> CoTree;
-    typedef FusionTree<CoRank + shift, Symmetry> NewCoTree;
-    typedef FusionTree<Rank, Symmetry> Tree;
-    typedef FusionTree<Rank - shift, Symmetry> NewTree;
-    typedef typename Symmetry::Scalar Scalar;
-
-    typedef LRU::Cache<std::tuple<Tree, CoTree, Permutation<Rank + CoRank>>, std::unordered_map<std::pair<NewTree, NewCoTree>, Scalar>> CacheType;
-    CacheManager(std::size_t cache_size)
-    {
-        cache = CacheType(cache_size);
-        cache.monitor();
-    }
-    CacheType cache;
-};
-
-template <int shift, std::size_t Rank, std::size_t CoRank, typename Symmetry>
-CacheManager<shift, Rank, CoRank, Symmetry> tree_cache(100);
+XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100)
 #endif
 
 #include "Interfaces/tensor_traits.hpp"
@@ -253,7 +239,7 @@ TEST_CASE("Testing operations with SU(2)-spin matrices.")
         s1.setConstant(std::sqrt(S1 * (S1 + 1.)));
 
         // transform to plain tensor and check against pauli_vec1
-        auto tplain = s1.adjoint().plainTensor();
+        auto tplain = s1.adjoint().eval().plainTensor();
         for(Eigen::Index k = 0; k < tensortraits<M_TENSORLIB>::dimensions<double, 3>(tplain)[2]; k++) {
             Eigen::Matrix<double, -1, -1> pauli(twoS1 + 1, twoS1 + 1);
             for(Eigen::Index j = 0; j < tensortraits<M_TENSORLIB>::dimensions<double, 3>(tplain)[1]; j++)
@@ -264,7 +250,7 @@ TEST_CASE("Testing operations with SU(2)-spin matrices.")
         // build the product to QN K=0
         Xped<2, 1, Symmetry> couple1({{C, one}}, {{C}});
         couple1.setConstant(1.);
-        auto prod1 = (s1.adjoint().permute<-1, 0, 1, 2>() * couple1.permute<+1, 0, 2, 1>()).permute<0, 0, 3, 1, 2>() * s1;
+        auto prod1 = (s1.adjoint().eval().permute<-1, 0, 1, 2>() * couple1.permute<+1, 0, 2, 1>()).permute<0, 0, 3, 1, 2>() * s1;
         // transform to plain tensor and check against S^2
         auto check1 = prod1.plainTensor();
         for(Eigen::Index j = 0; j < tensortraits<M_TENSORLIB>::dimensions<double, 3>(check1)[1]; j++) {
@@ -277,9 +263,9 @@ TEST_CASE("Testing operations with SU(2)-spin matrices.")
         // build the product to QN K=1
         Xped<2, 1, Symmetry> couple3({{C, three}}, {{C}});
         couple3.setConstant(1.);
-        auto prod3 = (s1.adjoint().permute<-1, 0, 1, 2>() * couple3.permute<+1, 0, 2, 1>()).permute<0, 0, 3, 1, 2>() * s1;
+        auto prod3 = (s1.adjoint().eval().permute<-1, 0, 1, 2>() * couple3.permute<+1, 0, 2, 1>()).permute<0, 0, 3, 1, 2>() * s1;
         // transform to plain tensor and check against SxS
-        auto check3 = prod3.adjoint().plainTensor();
+        auto check3 = prod3.adjoint().eval().plainTensor();
         for(Eigen::Index k = 0; k < tensortraits<M_TENSORLIB>::dimensions<double, 3>(check3)[2]; k++) {
             Eigen::Matrix<double, -1, -1> mat(twoS1 + 1, twoS1 + 1);
             for(Eigen::Index j = 0; j < tensortraits<M_TENSORLIB>::dimensions<double, 3>(check3)[1]; j++)
@@ -289,9 +275,9 @@ TEST_CASE("Testing operations with SU(2)-spin matrices.")
         // build the product to QN K=2
         Xped<2, 1, Symmetry> couple5({{C, five}}, {{C}});
         couple5.setConstant(1.);
-        auto prod5 = (s1.adjoint().permute<-1, 0, 1, 2>() * couple5.permute<+1, 0, 2, 1>()).permute<0, 0, 3, 1, 2>() * s1;
+        auto prod5 = (s1.adjoint().eval().permute<-1, 0, 1, 2>() * couple5.permute<+1, 0, 2, 1>()).permute<0, 0, 3, 1, 2>() * s1;
         // transform to plain tensor and check against SxS
-        auto check5 = prod5.adjoint().plainTensor();
+        auto check5 = prod5.adjoint().eval().plainTensor();
         for(Eigen::Index k = 0; k < tensortraits<M_TENSORLIB>::dimensions<double, 3>(check5)[2]; k++) {
             Eigen::Matrix<double, -1, -1> mat(twoS1 + 1, twoS1 + 1);
             for(Eigen::Index j = 0; j < tensortraits<M_TENSORLIB>::dimensions<double, 3>(check5)[1]; j++)
@@ -317,9 +303,9 @@ TEST_CASE("Testing operations with SU(2)-spin matrices.")
             s2.setConstant(std::sqrt(S2 * (S2 + 1.)));
 
             // build the outer product to QN K=0 between s1 and s2
-            auto outerprod1 =
-                (((s1.adjoint().permute<-1, 0, 1, 2>() * couple1.permute<+1, 0, 2, 1>()).permute<-1, 0, 1, 3, 2>()) * s2.permute<+1, 1, 2, 0>())
-                    .permute<0, 0, 4, 2, 1, 3>();
+            auto outerprod1 = (((s1.adjoint().eval().permute<-1, 0, 1, 2>() * couple1.permute<+1, 0, 2, 1>()).permute<-1, 0, 1, 3, 2>()) *
+                               s2.permute<+1, 1, 2, 0>())
+                                  .permute<0, 0, 4, 2, 1, 3>();
             for(const auto& q : outerprod1.sector()) {
                 CHECK(outerprod1(q).size() == 1);
                 double Stot = 0.5 * (q[0] - 1.);

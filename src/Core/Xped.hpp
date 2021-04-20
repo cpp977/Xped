@@ -86,6 +86,9 @@ public:
 
     Xped(const std::array<Qbasis<Symmetry, 1>, Rank> basis_domain, const std::array<Qbasis<Symmetry, 1>, CoRank> basis_codomain);
 
+    template <typename OtherDerived>
+    Xped(const XpedBase<OtherDerived>& other);
+
     static constexpr std::size_t rank() { return Rank; }
     static constexpr std::size_t corank() { return CoRank; }
 
@@ -222,6 +225,20 @@ Xped<Rank, CoRank, Symmetry, MatrixType_, TensorLib_>::Xped(const std::array<Qba
 {
     domain = util::build_FusionTree(basis_domain);
     codomain = util::build_FusionTree(basis_codomain);
+}
+
+template <std::size_t Rank, std::size_t CoRank, typename Symmetry, typename MatrixType_, typename TensorLib_>
+template <typename OtherDerived>
+Xped<Rank, CoRank, Symmetry, MatrixType_, TensorLib_>::Xped(const XpedBase<OtherDerived>& other)
+{
+    sector_ = other.derived().sector();
+    block_.resize(sector_.size());
+    for(std::size_t i = 0; i < sector_.size(); i++) { block_[i] = other.derived().block(i); }
+    dict_ = other.derived().dict();
+    uncoupled_domain = other.derived().uncoupledDomain();
+    uncoupled_codomain = other.derived().uncoupledCodomain();
+    domain = other.derived().coupledDomain();
+    codomain = other.derived().coupledCodomain();
 }
 
 template <std::size_t Rank, std::size_t CoRank, typename Symmetry, typename MatrixType_, typename TensorLib_>
@@ -498,7 +515,8 @@ Xped<Rank, CoRank, Symmetry, MatrixType_, TensorLib_>::permute_impl(seq::iseq<st
                         mat.block(out.domain.leftOffset(permuted_domain_tree),
                                   out.codomain.leftOffset(permuted_codomain_tree),
                                   permuted_domain_tree.dim,
-                                  permuted_codomain_tree.dim) = coeff * Eigen::Map<MatrixType>(Tshuffle.data(), domain_tree.dim, codomain_tree.dim);
+                                  permuted_codomain_tree.dim) =
+                            coeff * Eigen::Map<MatrixType>(Tshuffle.data(), permuted_domain_tree.dim, permuted_codomain_tree.dim);
 #endif
                         out.push_back(permuted_domain_tree.q_coupled, mat);
 #ifdef XPED_MEMORY_EFFICIENT
@@ -514,7 +532,7 @@ Xped<Rank, CoRank, Symmetry, MatrixType_, TensorLib_>::permute_impl(seq::iseq<st
                                                      out.codomain.leftOffset(permuted_codomain_tree),
                                                      permuted_domain_tree.dim,
                                                      permuted_codomain_tree.dim) +=
-                            coeff * Eigen::Map<MatrixType>(Tshuffle.data(), domain_tree.dim, codomain_tree.dim);
+                            coeff * Eigen::Map<MatrixType>(Tshuffle.data(), permuted_domain_tree.dim, permuted_codomain_tree.dim);
 #endif
                     }
                 }
@@ -808,7 +826,6 @@ Xped<Rank, CoRank, Symmetry, MatrixType_, TensorLib_>::subBlock(const FusionTree
 
     const auto left_offset_domain = domain.leftOffset(f1);
     const auto left_offset_codomain = codomain.leftOffset(f2);
-    // const auto it = dict_.find(f1.q_coupled);
     std::array<IndexType, Rank + CoRank> dims;
 
     for(size_t i = 0; i < Rank; i++) { dims[i] = uncoupled_domain[i].inner_dim(f1.q_uncoupled[i]); }

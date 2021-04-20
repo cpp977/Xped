@@ -56,6 +56,8 @@ public:
 
     Scalar norm() const { return std::sqrt(squaredNorm()); }
 
+    Xped<Rank, CoRank, Symmetry, MatrixType, TensorLib> eval() const { return Xped<Rank, CoRank, Symmetry, MatrixType, TensorLib>(derived()); };
+
 protected:
     template <std::size_t Rank__, std::size_t CoRank__, typename Symmetry__, typename MatrixType__, typename TensorType__>
     friend class Xped;

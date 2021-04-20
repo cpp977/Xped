@@ -1,11 +1,11 @@
 include(ExternalProject)
 
-set(TEXTTABLE_ROOT ${CMAKE_BINARY_DIR}/thirdparty/tabulate)
-set(TEXTTABLE_INCLUDE_DIR ${TEXTTABLE_ROOT}/src/tabulate/single_include)
+set(TABULATE_ROOT ${CMAKE_BINARY_DIR}/thirdparty/tabulate)
+set(TABULATE_INCLUDE_DIR ${TABULATE_ROOT}/src/tabulate/single_include)
 
 ExternalProject_Add(
         tabulate
-        PREFIX ${TEXTTABLE_ROOT}
+        PREFIX ${TABULATE_ROOT}
         GIT_REPOSITORY "https://github.com/p-ranav/tabulate"
         GIT_SHALLOW ON
         TIMEOUT 10

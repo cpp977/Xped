@@ -269,7 +269,7 @@ struct tensortraits<EigenTensorLib>
 #    include <array/array.h>
 #    include <array/ein_reduce.h>
 
-#    include "../util/Random.hpp"
+#    include "Util/Random.hpp"
 
 template <typename Index, Index oldVal, Index newVal, typename S>
 using replace = seq::insert<seq::index_of<oldVal, S>, newVal, seq::remove<oldVal, S>>;

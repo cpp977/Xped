@@ -1,6 +1,13 @@
-//#define DONT_USE_BDCSVD
+#ifdef INTEL_MKL_VERSION
+#    pragma message("Xped is using the intel math kernel library (MKL)")
+#endif
+
+#ifdef _OPENMP
+#    pragma message("Xped is using OpenMP parallelization")
+#endif
 
 #include <cmath>
+
 #include <cstddef>
 #include <iostream>
 #include <sstream>
@@ -16,49 +23,26 @@ using std::string;
 
 #include "ArgParser.h"
 
-// #define CACHE_PERMUTE_OUTPUT
+#include "Util/Macros.hpp"
 
 #ifdef XPED_CACHE_PERMUTE_OUTPUT
+#    pragma message("Xped is using LRU cache for the output of FusionTree manipulations.")
 #    include "lru/lru.hpp"
-
-template <std::size_t Rank, typename Symmetry>
-struct FusionTree;
-template <std::size_t N>
-struct Permutation;
-
-template <int shift, std::size_t Rank, std::size_t CoRank, typename Symmetry>
-struct CacheManager
-{
-    typedef FusionTree<CoRank, Symmetry> CoTree;
-    typedef FusionTree<CoRank + shift, Symmetry> NewCoTree;
-    typedef FusionTree<Rank, Symmetry> Tree;
-    typedef FusionTree<Rank - shift, Symmetry> NewTree;
-    typedef typename Symmetry::Scalar Scalar;
-
-    typedef LRU::Cache<std::tuple<Tree, CoTree, Permutation<Rank + CoRank>>, std::unordered_map<std::pair<NewTree, NewCoTree>, Scalar>> CacheType;
-    CacheManager(std::size_t cache_size)
-    {
-        cache = CacheType(cache_size);
-        cache.monitor();
-    }
-    CacheType cache;
-};
-
-template <int shift, std::size_t Rank, std::size_t CoRank, typename Symmetry>
-CacheManager<shift, Rank, CoRank, Symmetry> tree_cache(100);
+XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100)
 #endif
 
-#include "interfaces/tensor_traits.hpp"
+#include "Interfaces/tensor_traits.hpp"
 
-#include "Qbasis.hpp"
-#include "symmetry/SU2.hpp"
-#include "symmetry/U0.hpp"
-#include "symmetry/U1.hpp"
-#include "symmetry/kind_dummies.hpp"
+#include "Core/Qbasis.hpp"
+#include "Symmetry/SU2.hpp"
+#include "Symmetry/U0.hpp"
+#include "Symmetry/U1.hpp"
+#include "Symmetry/kind_dummies.hpp"
 
-#include "Mps.hpp"
-#include "MpsAlgebra.hpp"
-#include "Tensor.hpp"
+#include "Core/AdjointOp.hpp"
+#include "Core/Xped.hpp"
+#include "MPS/Mps.hpp"
+#include "MPS/MpsAlgebra.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -83,6 +67,8 @@ int main(int argc, char* argv[])
     // std::cout << std::endl << C << std::endl;
 
     typedef Sym::SU2<Sym::SpinSU2> Symmetry;
+    // typedef Sym::U1<Sym::SpinU1> Symmetry;
+    // typedef Sym::U0 Symmetry;
     typedef Symmetry::qType qType;
     auto L = args.get<std::size_t>("L", 10);
     auto D = args.get<int>("D", 1);
@@ -96,11 +82,23 @@ int main(int argc, char* argv[])
 
     qType Qtot = {D};
     Qbasis<Symmetry, 1> qloc_;
+    // qloc_.push_back({}, 2);
     qloc_.push_back({2}, 1);
+    // qloc_.push_back({-2}, 1);
     std::vector<Qbasis<Symmetry, 1>> qloc(L, qloc_);
-    // Qbasis<Symmetry,1> in; in.setRandom(Minit);
+    // Qbasis<Symmetry, 1> in;
+    // in.setRandom(Minit);
     // std::cout << in << std::endl;
     // auto out = in.combine(in).forgetHistory();
+    // Xped<2, 1, Symmetry> T({{in, in}}, {{out}});
+    // T.setRandom();
+    // auto F = T.permute<0, 2, 0, 1>();
+    // std::cout << T.print(true) << std::endl;
+    // auto X = T * T.adjoint();
+    // std::cout << X.print(true) << std::endl;
+
+    // auto Y = T.adjoint() * T;
+    // std::cout << Y.print(true) << std::endl;
     Stopwatch<> construct;
     Mps<Symmetry> Psi(L, qloc, Qtot, Minit, Qinit);
     cout << construct.info("Time for constructor") << endl;
@@ -129,14 +127,20 @@ int main(int argc, char* argv[])
         }
         cout << Sweep.info("Time for sweep") << endl;
     }
-    double trunc;
-    auto [U, S, V] = Psi.A.Ac[L / 2].tSVD(10000ul, 1.e-10, trunc, false);
-    Mps<Symmetry> Phi(L, qloc, Qtot, Minit, Qinit);
-    cout << "<Phi,Psi>=" << dot(Phi, Psi) << endl;
-    cout << "<Phi,Phi>=" << dot(Phi, Phi) << endl;
-    double normSq = dot(Psi, Psi, DIR);
-    std::cout << "<Psi|Psi>=" << normSq << std::endl;
-    cout << "Left: <Psi,Psi>=" << normSq << endl;
-    Psi.A.Ac[0] = Psi.A.Ac[0] * std::pow(normSq, -0.5);
-    cout << "<Psi,Psi>=" << dot(Psi, Psi, DIR) << endl;
+
+#ifdef XPED_CACHE_PERMUTE_OUTPUT
+    std::cout << "total hits=" << tree_cache<1, 2, 1, Symmetry>.cache.stats().total_hits() << endl; // Hits for any key
+    std::cout << "total misses=" << tree_cache<1, 2, 1, Symmetry>.cache.stats().total_misses() << endl; // Misses for any key
+    std::cout << "hit rate=" << tree_cache<1, 2, 1, Symmetry>.cache.stats().hit_rate() << endl; // Hit rate in [0, 1]
+#endif
+    // double trunc;
+    // auto [U, S, V] = Psi.A.Ac[L / 2].tSVD(10000ul, 1.e-10, trunc, false);
+    // Mps<Symmetry> Phi(L, qloc, Qtot, Minit, Qinit);
+    // cout << "<Phi,Psi>=" << dot(Phi, Psi) << endl;
+    // cout << "<Phi,Phi>=" << dot(Phi, Phi) << endl;
+    // double normSq = dot(Psi, Psi, DIR);
+    // std::cout << "<Psi|Psi>=" << normSq << std::endl;
+    // cout << "Left: <Psi,Psi>=" << normSq << endl;
+    // Psi.A.Ac[0] = Psi.A.Ac[0] * std::pow(normSq, -0.5);
+    // cout << "<Psi,Psi>=" << dot(Psi, Psi, DIR) << endl;
 }

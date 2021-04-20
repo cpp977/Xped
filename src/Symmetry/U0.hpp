@@ -5,8 +5,9 @@
 #include <cstddef>
 /// \endcond
 
-#include "interfaces/tensor_traits.hpp"
-#include "qarray.hpp"
+#include "Interfaces/tensor_traits.hpp"
+#include "Symmetry/SymBase.hpp"
+#include "Symmetry/qarray.hpp"
 
 namespace Sym {
 

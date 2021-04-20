@@ -40,11 +40,11 @@ template <int shift, std::size_t Rank, std::size_t CoRank, typename Symmetry>
 CacheManager<shift, Rank, CoRank, Symmetry> tree_cache(100);
 #endif
 
-#include "Qbasis.hpp"
-#include "symmetry/SU2.hpp"
-#include "symmetry/U0.hpp"
-#include "symmetry/U1.hpp"
-#include "symmetry/kind_dummies.hpp"
+#include "Core/Qbasis.hpp"
+#include "Symmetry/SU2.hpp"
+#include "Symmetry/U0.hpp"
+#include "Symmetry/U1.hpp"
+#include "Symmetry/kind_dummies.hpp"
 
 #include "doctest/doctest.h"
 

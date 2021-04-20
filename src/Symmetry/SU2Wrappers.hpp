@@ -9,18 +9,18 @@
 /// \cond
 #ifdef XPED_USE_GSL_SU2_COEFFS
 #    include <gsl/gsl_sf_coupling.h>
-#    pragma message("Using GSL library for 3nj-symbols.")
+#    pragma message("Xped is using GSL library for 3nj-symbols.")
 #endif
 
 #ifdef XPED_USE_WIG_SU2_COEFFS
 #    include "wigxjpf.h"
-#    pragma message("Using WIGXJPF library for 3nj-symbols.")
+#    pragma message("Xped is using WIGXJPF library for 3nj-symbols.")
 #endif
 
 #ifdef XPED_USE_FAST_WIG_SU2_COEFFS
 #    include "fastwigxj.h"
 #    include "wigxjpf.h"
-#    pragma message("Using FASTWIGXJ library for 3nj-symbols.")
+#    pragma message("Xped is using FASTWIGXJ library for 3nj-symbols.")
 #endif
 /// \endcond
 

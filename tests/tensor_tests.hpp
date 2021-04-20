@@ -25,34 +25,34 @@ void perform_tensor_permute(const TensorT& t, tensortraits<M_TENSORLIB>::cTtype<
 template <int shift, typename Symmetry>
 void test_tensor_permute(const Qbasis<Symmetry, 1>& B, const Qbasis<Symmetry, 1>& C)
 {
-    Tensor<2, 2, Symmetry> t({{B, C}}, {{B, C}});
+    Xped<2, 2, Symmetry> t({{B, C}}, {{B, C}});
     t.setRandom();
     auto tplain = t.plainTensor();
 
-    perform_tensor_permute<Tensor<2, 2, Symmetry>, shift, 0, 1, 2, 3>(t, tplain);
-    perform_tensor_permute<Tensor<2, 2, Symmetry>, shift, 0, 1, 3, 2>(t, tplain);
-    perform_tensor_permute<Tensor<2, 2, Symmetry>, shift, 0, 3, 1, 2>(t, tplain);
-    perform_tensor_permute<Tensor<2, 2, Symmetry>, shift, 0, 2, 1, 3>(t, tplain);
-    perform_tensor_permute<Tensor<2, 2, Symmetry>, shift, 0, 2, 3, 1>(t, tplain);
-    perform_tensor_permute<Tensor<2, 2, Symmetry>, shift, 0, 3, 2, 1>(t, tplain);
-    perform_tensor_permute<Tensor<2, 2, Symmetry>, shift, 1, 0, 2, 3>(t, tplain);
-    perform_tensor_permute<Tensor<2, 2, Symmetry>, shift, 1, 0, 3, 2>(t, tplain);
-    perform_tensor_permute<Tensor<2, 2, Symmetry>, shift, 3, 0, 1, 2>(t, tplain);
-    perform_tensor_permute<Tensor<2, 2, Symmetry>, shift, 2, 0, 1, 3>(t, tplain);
-    perform_tensor_permute<Tensor<2, 2, Symmetry>, shift, 2, 0, 3, 1>(t, tplain);
-    perform_tensor_permute<Tensor<2, 2, Symmetry>, shift, 3, 0, 2, 1>(t, tplain);
-    perform_tensor_permute<Tensor<2, 2, Symmetry>, shift, 1, 2, 0, 3>(t, tplain);
-    perform_tensor_permute<Tensor<2, 2, Symmetry>, shift, 1, 3, 0, 2>(t, tplain);
-    perform_tensor_permute<Tensor<2, 2, Symmetry>, shift, 3, 1, 0, 2>(t, tplain);
-    perform_tensor_permute<Tensor<2, 2, Symmetry>, shift, 2, 1, 0, 3>(t, tplain);
-    perform_tensor_permute<Tensor<2, 2, Symmetry>, shift, 2, 3, 0, 1>(t, tplain);
-    perform_tensor_permute<Tensor<2, 2, Symmetry>, shift, 3, 2, 0, 1>(t, tplain);
-    perform_tensor_permute<Tensor<2, 2, Symmetry>, shift, 1, 2, 3, 0>(t, tplain);
-    perform_tensor_permute<Tensor<2, 2, Symmetry>, shift, 1, 3, 2, 0>(t, tplain);
-    perform_tensor_permute<Tensor<2, 2, Symmetry>, shift, 3, 1, 2, 0>(t, tplain);
-    perform_tensor_permute<Tensor<2, 2, Symmetry>, shift, 2, 1, 3, 0>(t, tplain);
-    perform_tensor_permute<Tensor<2, 2, Symmetry>, shift, 2, 3, 1, 0>(t, tplain);
-    perform_tensor_permute<Tensor<2, 2, Symmetry>, shift, 3, 2, 1, 0>(t, tplain);
+    perform_tensor_permute<Xped<2, 2, Symmetry>, shift, 0, 1, 2, 3>(t, tplain);
+    perform_tensor_permute<Xped<2, 2, Symmetry>, shift, 0, 1, 3, 2>(t, tplain);
+    perform_tensor_permute<Xped<2, 2, Symmetry>, shift, 0, 3, 1, 2>(t, tplain);
+    perform_tensor_permute<Xped<2, 2, Symmetry>, shift, 0, 2, 1, 3>(t, tplain);
+    perform_tensor_permute<Xped<2, 2, Symmetry>, shift, 0, 2, 3, 1>(t, tplain);
+    perform_tensor_permute<Xped<2, 2, Symmetry>, shift, 0, 3, 2, 1>(t, tplain);
+    perform_tensor_permute<Xped<2, 2, Symmetry>, shift, 1, 0, 2, 3>(t, tplain);
+    perform_tensor_permute<Xped<2, 2, Symmetry>, shift, 1, 0, 3, 2>(t, tplain);
+    perform_tensor_permute<Xped<2, 2, Symmetry>, shift, 3, 0, 1, 2>(t, tplain);
+    perform_tensor_permute<Xped<2, 2, Symmetry>, shift, 2, 0, 1, 3>(t, tplain);
+    perform_tensor_permute<Xped<2, 2, Symmetry>, shift, 2, 0, 3, 1>(t, tplain);
+    perform_tensor_permute<Xped<2, 2, Symmetry>, shift, 3, 0, 2, 1>(t, tplain);
+    perform_tensor_permute<Xped<2, 2, Symmetry>, shift, 1, 2, 0, 3>(t, tplain);
+    perform_tensor_permute<Xped<2, 2, Symmetry>, shift, 1, 3, 0, 2>(t, tplain);
+    perform_tensor_permute<Xped<2, 2, Symmetry>, shift, 3, 1, 0, 2>(t, tplain);
+    perform_tensor_permute<Xped<2, 2, Symmetry>, shift, 2, 1, 0, 3>(t, tplain);
+    perform_tensor_permute<Xped<2, 2, Symmetry>, shift, 2, 3, 0, 1>(t, tplain);
+    perform_tensor_permute<Xped<2, 2, Symmetry>, shift, 3, 2, 0, 1>(t, tplain);
+    perform_tensor_permute<Xped<2, 2, Symmetry>, shift, 1, 2, 3, 0>(t, tplain);
+    perform_tensor_permute<Xped<2, 2, Symmetry>, shift, 1, 3, 2, 0>(t, tplain);
+    perform_tensor_permute<Xped<2, 2, Symmetry>, shift, 3, 1, 2, 0>(t, tplain);
+    perform_tensor_permute<Xped<2, 2, Symmetry>, shift, 2, 1, 3, 0>(t, tplain);
+    perform_tensor_permute<Xped<2, 2, Symmetry>, shift, 2, 3, 1, 0>(t, tplain);
+    perform_tensor_permute<Xped<2, 2, Symmetry>, shift, 3, 2, 1, 0>(t, tplain);
 
     // for (const auto& p : Permutation<4>::all()) {
     //         auto tp = t.template permute<shift>(p);
@@ -121,42 +121,42 @@ void test_tensor_permute_within_codomain(const Qbasis<Symmetry, 1>& B,
                                          const Qbasis<Symmetry, 1>& E)
 {
     // Qbasis<Symmetry,1> F; F.setRandom(50);
-    // Tensor<0,3,Symmetry> three({{}},{{F,F,F}}); three.setRandom();
+    // Xped<0,3,Symmetry> three({{}},{{F,F,F}}); three.setRandom();
     // auto threep = three.plainTensor();
     // auto tp=three.template permute<0,2,0,1>();
     // tensortraits<M_TENSORLIB>::Ttype<double,3> tplainshuffle = tensortraits<M_TENSORLIB>::shuffle<double,3,2,0,1>(threep);
     // auto tplainp = tp.plainTensor();
     // auto check = nda::make_ein_sum<double,0,1,2,3>(nda::ein<0,1,2,3>(tplainshuffle) - nda::ein<0,1,2,3>(tplainshuffle));
 
-    Tensor<0, 4, Symmetry> t({{}}, {{B, C, D, E}});
+    Xped<0, 4, Symmetry> t({{}}, {{B, C, D, E}});
     t.setRandom();
     auto tplain = t.plainTensor();
     // Permutation<0> ptriv(std::array<std::size_t,0>{{}});
 
-    perform_tensor_permute_intern<Tensor<0, 4, Symmetry>, 0, 1, 2, 3>(t, tplain);
-    perform_tensor_permute_intern<Tensor<0, 4, Symmetry>, 0, 1, 3, 2>(t, tplain);
-    perform_tensor_permute_intern<Tensor<0, 4, Symmetry>, 0, 3, 1, 2>(t, tplain);
-    perform_tensor_permute_intern<Tensor<0, 4, Symmetry>, 0, 2, 1, 3>(t, tplain);
-    perform_tensor_permute_intern<Tensor<0, 4, Symmetry>, 0, 2, 3, 1>(t, tplain);
-    perform_tensor_permute_intern<Tensor<0, 4, Symmetry>, 0, 3, 2, 1>(t, tplain);
-    perform_tensor_permute_intern<Tensor<0, 4, Symmetry>, 1, 0, 2, 3>(t, tplain);
-    perform_tensor_permute_intern<Tensor<0, 4, Symmetry>, 1, 0, 3, 2>(t, tplain);
-    perform_tensor_permute_intern<Tensor<0, 4, Symmetry>, 3, 0, 1, 2>(t, tplain);
-    perform_tensor_permute_intern<Tensor<0, 4, Symmetry>, 2, 0, 1, 3>(t, tplain);
-    perform_tensor_permute_intern<Tensor<0, 4, Symmetry>, 2, 0, 3, 1>(t, tplain);
-    perform_tensor_permute_intern<Tensor<0, 4, Symmetry>, 3, 0, 2, 1>(t, tplain);
-    perform_tensor_permute_intern<Tensor<0, 4, Symmetry>, 1, 2, 0, 3>(t, tplain);
-    perform_tensor_permute_intern<Tensor<0, 4, Symmetry>, 1, 3, 0, 2>(t, tplain);
-    perform_tensor_permute_intern<Tensor<0, 4, Symmetry>, 3, 1, 0, 2>(t, tplain);
-    perform_tensor_permute_intern<Tensor<0, 4, Symmetry>, 2, 1, 0, 3>(t, tplain);
-    perform_tensor_permute_intern<Tensor<0, 4, Symmetry>, 2, 3, 0, 1>(t, tplain);
-    perform_tensor_permute_intern<Tensor<0, 4, Symmetry>, 3, 2, 0, 1>(t, tplain);
-    perform_tensor_permute_intern<Tensor<0, 4, Symmetry>, 1, 2, 3, 0>(t, tplain);
-    perform_tensor_permute_intern<Tensor<0, 4, Symmetry>, 1, 3, 2, 0>(t, tplain);
-    perform_tensor_permute_intern<Tensor<0, 4, Symmetry>, 3, 1, 2, 0>(t, tplain);
-    perform_tensor_permute_intern<Tensor<0, 4, Symmetry>, 2, 1, 3, 0>(t, tplain);
-    perform_tensor_permute_intern<Tensor<0, 4, Symmetry>, 2, 3, 1, 0>(t, tplain);
-    perform_tensor_permute_intern<Tensor<0, 4, Symmetry>, 3, 2, 1, 0>(t, tplain);
+    perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 0, 1, 2, 3>(t, tplain);
+    perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 0, 1, 3, 2>(t, tplain);
+    perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 0, 3, 1, 2>(t, tplain);
+    perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 0, 2, 1, 3>(t, tplain);
+    perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 0, 2, 3, 1>(t, tplain);
+    perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 0, 3, 2, 1>(t, tplain);
+    perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 1, 0, 2, 3>(t, tplain);
+    perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 1, 0, 3, 2>(t, tplain);
+    perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 3, 0, 1, 2>(t, tplain);
+    perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 2, 0, 1, 3>(t, tplain);
+    perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 2, 0, 3, 1>(t, tplain);
+    perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 3, 0, 2, 1>(t, tplain);
+    perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 1, 2, 0, 3>(t, tplain);
+    perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 1, 3, 0, 2>(t, tplain);
+    perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 3, 1, 0, 2>(t, tplain);
+    perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 2, 1, 0, 3>(t, tplain);
+    perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 2, 3, 0, 1>(t, tplain);
+    perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 3, 2, 0, 1>(t, tplain);
+    perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 1, 2, 3, 0>(t, tplain);
+    perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 1, 3, 2, 0>(t, tplain);
+    perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 3, 1, 2, 0>(t, tplain);
+    perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 2, 1, 3, 0>(t, tplain);
+    perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 2, 3, 1, 0>(t, tplain);
+    perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 3, 2, 1, 0>(t, tplain);
 
     // for (const auto& p : Permutation<4>::all()) {
     //         auto test = t.template permute<0,2,1,3>();
@@ -180,34 +180,34 @@ void test_tensor_permute_within_domain(const Qbasis<Symmetry, 1>& B,
                                        const Qbasis<Symmetry, 1>& D,
                                        const Qbasis<Symmetry, 1>& E)
 {
-    Tensor<4, 0, Symmetry> t({{B, C, D, E}}, {{}});
+    Xped<4, 0, Symmetry> t({{B, C, D, E}}, {{}});
     t.setRandom();
     auto tplain = t.plainTensor();
 
-    perform_tensor_permute_intern<Tensor<4, 0, Symmetry>, 0, 1, 2, 3>(t, tplain);
-    perform_tensor_permute_intern<Tensor<4, 0, Symmetry>, 0, 1, 3, 2>(t, tplain);
-    perform_tensor_permute_intern<Tensor<4, 0, Symmetry>, 0, 3, 1, 2>(t, tplain);
-    perform_tensor_permute_intern<Tensor<4, 0, Symmetry>, 0, 2, 1, 3>(t, tplain);
-    perform_tensor_permute_intern<Tensor<4, 0, Symmetry>, 0, 2, 3, 1>(t, tplain);
-    perform_tensor_permute_intern<Tensor<4, 0, Symmetry>, 0, 3, 2, 1>(t, tplain);
-    perform_tensor_permute_intern<Tensor<4, 0, Symmetry>, 1, 0, 2, 3>(t, tplain);
-    perform_tensor_permute_intern<Tensor<4, 0, Symmetry>, 1, 0, 3, 2>(t, tplain);
-    perform_tensor_permute_intern<Tensor<4, 0, Symmetry>, 3, 0, 1, 2>(t, tplain);
-    perform_tensor_permute_intern<Tensor<4, 0, Symmetry>, 2, 0, 1, 3>(t, tplain);
-    perform_tensor_permute_intern<Tensor<4, 0, Symmetry>, 2, 0, 3, 1>(t, tplain);
-    perform_tensor_permute_intern<Tensor<4, 0, Symmetry>, 3, 0, 2, 1>(t, tplain);
-    perform_tensor_permute_intern<Tensor<4, 0, Symmetry>, 1, 2, 0, 3>(t, tplain);
-    perform_tensor_permute_intern<Tensor<4, 0, Symmetry>, 1, 3, 0, 2>(t, tplain);
-    perform_tensor_permute_intern<Tensor<4, 0, Symmetry>, 3, 1, 0, 2>(t, tplain);
-    perform_tensor_permute_intern<Tensor<4, 0, Symmetry>, 2, 1, 0, 3>(t, tplain);
-    perform_tensor_permute_intern<Tensor<4, 0, Symmetry>, 2, 3, 0, 1>(t, tplain);
-    perform_tensor_permute_intern<Tensor<4, 0, Symmetry>, 3, 2, 0, 1>(t, tplain);
-    perform_tensor_permute_intern<Tensor<4, 0, Symmetry>, 1, 2, 3, 0>(t, tplain);
-    perform_tensor_permute_intern<Tensor<4, 0, Symmetry>, 1, 3, 2, 0>(t, tplain);
-    perform_tensor_permute_intern<Tensor<4, 0, Symmetry>, 3, 1, 2, 0>(t, tplain);
-    perform_tensor_permute_intern<Tensor<4, 0, Symmetry>, 2, 1, 3, 0>(t, tplain);
-    perform_tensor_permute_intern<Tensor<4, 0, Symmetry>, 2, 3, 1, 0>(t, tplain);
-    perform_tensor_permute_intern<Tensor<4, 0, Symmetry>, 3, 2, 1, 0>(t, tplain);
+    perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 0, 1, 2, 3>(t, tplain);
+    perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 0, 1, 3, 2>(t, tplain);
+    perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 0, 3, 1, 2>(t, tplain);
+    perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 0, 2, 1, 3>(t, tplain);
+    perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 0, 2, 3, 1>(t, tplain);
+    perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 0, 3, 2, 1>(t, tplain);
+    perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 1, 0, 2, 3>(t, tplain);
+    perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 1, 0, 3, 2>(t, tplain);
+    perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 3, 0, 1, 2>(t, tplain);
+    perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 2, 0, 1, 3>(t, tplain);
+    perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 2, 0, 3, 1>(t, tplain);
+    perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 3, 0, 2, 1>(t, tplain);
+    perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 1, 2, 0, 3>(t, tplain);
+    perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 1, 3, 0, 2>(t, tplain);
+    perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 3, 1, 0, 2>(t, tplain);
+    perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 2, 1, 0, 3>(t, tplain);
+    perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 2, 3, 0, 1>(t, tplain);
+    perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 3, 2, 0, 1>(t, tplain);
+    perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 1, 2, 3, 0>(t, tplain);
+    perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 1, 3, 2, 0>(t, tplain);
+    perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 3, 1, 2, 0>(t, tplain);
+    perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 2, 1, 3, 0>(t, tplain);
+    perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 2, 3, 1, 0>(t, tplain);
+    perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 3, 2, 1, 0>(t, tplain);
     // Permutation<0> ptriv(std::array<std::size_t,0>{{}});
 
     // for (const auto& p : Permutation<4>::all()) {
@@ -228,7 +228,7 @@ void test_tensor_permute_within_domain(const Qbasis<Symmetry, 1>& B,
 template <typename Symmetry>
 void test_tensor_transformation_to_plain(const Qbasis<Symmetry, 1>& B, const Qbasis<Symmetry, 1>& C)
 {
-    Tensor<2, 2, Symmetry> t({{B, C}}, {{B, C}});
+    Xped<2, 2, Symmetry> t({{B, C}}, {{B, C}});
     t.setRandom();
     auto tplain = t.plainTensor();
     auto norm_ = tensortraits<M_TENSORLIB>::contract<double, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3>(tplain, tplain);

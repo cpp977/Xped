@@ -1,7 +1,8 @@
 #ifndef MPS_H_
 #define MPS_H_
 
-#include "Tensor.hpp"
+#include "Core/AdjointOp.hpp"
+#include "Core/Xped.hpp"
 
 template <typename TL, typename TR, typename TC>
 struct GaugeTriple
@@ -27,10 +28,10 @@ public:
     typedef typename Symmetry::Scalar Scalar;
     typedef Scalar RealScalar;
     typedef typename Symmetry::qType qType;
-    typedef Tensor<2, 1, Symmetry> ALType;
+    typedef Xped<2, 1, Symmetry> ALType;
     typedef typename ALType::TensorType TensorType;
     typedef typename ALType::MatrixType MatrixType;
-    typedef Tensor<1, 2, Symmetry> ARType;
+    typedef Xped<1, 2, Symmetry> ARType;
 
     constexpr static std::size_t Nq = Symmetry::Nq;
 
@@ -53,7 +54,7 @@ public:
         gen_maxBasis();
         gen_auxBasis(Mmax_in, Nqmax_in);
         for(size_t l = 0; l < N_sites; l++) {
-            A.Ac[l] = Tensor<2, 1, Symmetry>({{inBasis(l), locBasis(l)}}, {{outBasis(l)}});
+            A.Ac[l] = Xped<2, 1, Symmetry>({{inBasis(l), locBasis(l)}}, {{outBasis(l)}});
             A.Ac[l].setRandom();
         }
     }
@@ -250,8 +251,8 @@ void Mps<Symmetry_>::leftSweepStep(const std::size_t loc, const DMRG::BROOM& bro
     if(loc != 0) { RETURN_SPEC = true; }
     double entropy;
     std::map<qType, Eigen::ArrayXd> SVspec_;
-    Tensor<1, 1, Symmetry> left;
-    Tensor<2, 1, Symmetry> right;
+    Xped<1, 1, Symmetry> left;
+    Xped<2, 1, Symmetry> right;
     auto [U, Sigma, Vdag] = A.Ac[loc].template permute<+1, 0, 2, 1>().tSVD(max_Nsv, eps_svd, truncWeight(loc), entropy, SVspec_, false, RETURN_SPEC);
     // std::cout << Sigma << std::endl;
     if(loc != this->N_sites - 1) {
@@ -272,8 +273,8 @@ void Mps<Symmetry_>::rightSweepStep(const std::size_t loc, const DMRG::BROOM& br
     if(loc != N_sites - 1) { RETURN_SPEC = true; }
     double entropy;
     std::map<qType, Eigen::ArrayXd> SVspec_;
-    Tensor<2, 1, Symmetry> left;
-    Tensor<1, 1, Symmetry> right;
+    Xped<2, 1, Symmetry> left;
+    Xped<1, 1, Symmetry> right;
     auto [U, Sigma, Vdag] = A.Ac[loc].tSVD(max_Nsv, eps_svd, truncWeight(loc), entropy, SVspec_, false, RETURN_SPEC);
     // std::cout << Sigma << std::endl;
     if(loc != this->N_sites - 1) {

@@ -42,16 +42,17 @@ template <int shift, std::size_t Rank, std::size_t CoRank, typename Symmetry>
 CacheManager<shift, Rank, CoRank, Symmetry> tree_cache(100);
 #endif
 
-#include "interfaces/tensor_traits.hpp"
+#include "Interfaces/tensor_traits.hpp"
 
-#include "Qbasis.hpp"
-#include "symmetry/SU2.hpp"
-#include "symmetry/U0.hpp"
-#include "symmetry/U1.hpp"
-#include "symmetry/kind_dummies.hpp"
+#include "Core/Qbasis.hpp"
+#include "Symmetry/SU2.hpp"
+#include "Symmetry/U0.hpp"
+#include "Symmetry/U1.hpp"
+#include "Symmetry/kind_dummies.hpp"
 
-#include "FusionTree.hpp"
-#include "Tensor.hpp"
+#include "Core/AdjointOp.hpp"
+#include "Core/FusionTree.hpp"
+#include "Core/Xped.hpp"
 
 #include "doctest/doctest.h"
 
@@ -248,7 +249,7 @@ TEST_CASE("Testing operations with SU(2)-spin matrices.")
         pauli_vec1[2] *= std::sqrt(0.5);
 
         // set s to the reduced Spin operator
-        Tensor<2, 1, Symmetry> s1({{B1, C}}, {{B1}});
+        Xped<2, 1, Symmetry> s1({{B1, C}}, {{B1}});
         s1.setConstant(std::sqrt(S1 * (S1 + 1.)));
 
         // transform to plain tensor and check against pauli_vec1
@@ -261,7 +262,7 @@ TEST_CASE("Testing operations with SU(2)-spin matrices.")
         }
 
         // build the product to QN K=0
-        Tensor<2, 1, Symmetry> couple1({{C, one}}, {{C}});
+        Xped<2, 1, Symmetry> couple1({{C, one}}, {{C}});
         couple1.setConstant(1.);
         auto prod1 = (s1.adjoint().permute<-1, 0, 1, 2>() * couple1.permute<+1, 0, 2, 1>()).permute<0, 0, 3, 1, 2>() * s1;
         // transform to plain tensor and check against S^2
@@ -274,7 +275,7 @@ TEST_CASE("Testing operations with SU(2)-spin matrices.")
         }
 
         // build the product to QN K=1
-        Tensor<2, 1, Symmetry> couple3({{C, three}}, {{C}});
+        Xped<2, 1, Symmetry> couple3({{C, three}}, {{C}});
         couple3.setConstant(1.);
         auto prod3 = (s1.adjoint().permute<-1, 0, 1, 2>() * couple3.permute<+1, 0, 2, 1>()).permute<0, 0, 3, 1, 2>() * s1;
         // transform to plain tensor and check against SxS
@@ -286,7 +287,7 @@ TEST_CASE("Testing operations with SU(2)-spin matrices.")
             CHECK((mat - std::sqrt(0.5) * pauli_vec1[k]).norm() == doctest::Approx(0.));
         }
         // build the product to QN K=2
-        Tensor<2, 1, Symmetry> couple5({{C, five}}, {{C}});
+        Xped<2, 1, Symmetry> couple5({{C, five}}, {{C}});
         couple5.setConstant(1.);
         auto prod5 = (s1.adjoint().permute<-1, 0, 1, 2>() * couple5.permute<+1, 0, 2, 1>()).permute<0, 0, 3, 1, 2>() * s1;
         // transform to plain tensor and check against SxS
@@ -312,14 +313,14 @@ TEST_CASE("Testing operations with SU(2)-spin matrices.")
             B2.push_back({twoS2 + 1}, 1);
             double S2 = 0.5 * twoS2;
 
-            Tensor<2, 1, Symmetry> s2({{B2, C}}, {{B2}});
+            Xped<2, 1, Symmetry> s2({{B2, C}}, {{B2}});
             s2.setConstant(std::sqrt(S2 * (S2 + 1.)));
 
             // build the outer product to QN K=0 between s1 and s2
             auto outerprod1 =
                 (((s1.adjoint().permute<-1, 0, 1, 2>() * couple1.permute<+1, 0, 2, 1>()).permute<-1, 0, 1, 3, 2>()) * s2.permute<+1, 1, 2, 0>())
                     .permute<0, 0, 4, 2, 1, 3>();
-            for(const auto& q : outerprod1.sectors()) {
+            for(const auto& q : outerprod1.sector()) {
                 CHECK(outerprod1(q).size() == 1);
                 double Stot = 0.5 * (q[0] - 1.);
                 CHECK(outerprod1(q)(0, 0) == doctest::Approx(0.5 * (Stot * (Stot + 1) - S1 * (S1 + 1.) - S2 * (S2 + 1.))));

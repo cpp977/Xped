@@ -11,12 +11,12 @@
 #include <boost/rational.hpp>
 /// \endcond
 
-#include "SU2Wrappers.hpp"
-#include "SymBase.hpp"
-#include "functions.hpp"
-#include "interfaces/tensor_traits.hpp"
-#include "qarray.hpp"
-#include "util/Random.hpp"
+#include "Interfaces/tensor_traits.hpp"
+#include "Symmetry/SU2Wrappers.hpp"
+#include "Symmetry/SymBase.hpp"
+#include "Symmetry/functions.hpp"
+#include "Symmetry/qarray.hpp"
+#include "Util/Random.hpp"
 
 namespace Sym {
 

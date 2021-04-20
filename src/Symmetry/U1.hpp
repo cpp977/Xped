@@ -7,10 +7,10 @@
 #include <unordered_set>
 /// \endcond
 
-#include "interfaces/tensor_traits.hpp"
-#include "util/Random.hpp"
+#include "Interfaces/tensor_traits.hpp"
+#include "Util/Random.hpp"
 
-#include "SymBase.hpp"
+#include "Symmetry/SymBase.hpp"
 
 namespace Sym {
 

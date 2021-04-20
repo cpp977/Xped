@@ -3,7 +3,7 @@
 
 #include <boost/functional/hash.hpp>
 
-#include "symmetry/qarray.hpp"
+#include "Symmetry/qarray.hpp"
 
 // forward declaration
 template <std::size_t Rank, typename Symmetry>

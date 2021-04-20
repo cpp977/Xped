@@ -10,11 +10,11 @@
 #include "tabulate/tabulate.hpp"
 /// \endcond
 
-#include "Basis.hpp"
-#include "FusionTree.hpp"
-#include "hash/hash.hpp"
-#include "symmetry/functions.hpp"
-#include "util/Random.hpp"
+#include "Core/Basis.hpp"
+#include "Core/FusionTree.hpp"
+#include "Hash/hash.hpp"
+#include "Symmetry/functions.hpp"
+#include "Util/Random.hpp"
 
 /** \class Qbasis
  *
@@ -28,7 +28,6 @@
  * One central function is the combine() method, which combine two instances of Qbasis to the tensor product basis,
  * already proper sorted into irreps.
  *
- * \note Optionally an ident string can be added to each basis state, which give a convinient access for SiteOperatorQ instances.
  */
 template <typename Symmetry, std::size_t depth>
 class Qbasis

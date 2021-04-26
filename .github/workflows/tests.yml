@@ -34,6 +34,7 @@ jobs:
     - run: sudo apt install -qq libgslcblas0
     - run: sudo apt install -qq libboost-all-dev
     - run: sudo apt install -qq g++-10
+    - run: sudo apt install -qq doctest-dev
     - run: sudo apt install -qq lcov
       
     - name: Create Build Environment

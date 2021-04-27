@@ -53,15 +53,15 @@ class Xped : public XpedBase<Xped<Rank, CoRank, Symmetry_, MatrixType_, TensorLi
     // operator*(const Tensor<Rank_, MiddleRank, Symmetry_, MatrixType__, TensorLib__>& T1,
     //           const Tensor<MiddleRank, CoRank_, Symmetry_, MatrixType__, TensorLib__>& T2);
 
-    // template <std::size_t Rank_, std::size_t CoRank_, typename Symmetry_, typename MatrixType__, typename TensorLib__>
-    // friend Tensor<Rank_, CoRank_, Symmetry_, MatrixType__, TensorLib__>
-    // operator+(const Tensor<Rank_, CoRank_, Symmetry_, MatrixType__, TensorLib__>& T1,
-    //           const Tensor<Rank_, CoRank_, Symmetry_, MatrixType__, TensorLib__>& T2);
+    template <std::size_t Rank_, std::size_t CoRank_, typename Symmetry__, typename MatrixType__, typename TensorLib__>
+    friend Xped<Rank_, CoRank_, Symmetry__, MatrixType__, TensorLib__>
+    operator+(const Xped<Rank_, CoRank_, Symmetry__, MatrixType__, TensorLib__>& T1,
+              const Xped<Rank_, CoRank_, Symmetry__, MatrixType__, TensorLib__>& T2);
 
-    // template <std::size_t Rank_, std::size_t CoRank_, typename Symmetry_, typename MatrixType__, typename TensorLib__>
-    // friend Tensor<Rank_, CoRank_, Symmetry_, MatrixType__, TensorLib__>
-    // operator-(const Tensor<Rank_, CoRank_, Symmetry_, MatrixType__, TensorLib__>& T1,
-    //           const Tensor<Rank_, CoRank_, Symmetry_, MatrixType__, TensorLib__>& T2);
+    template <std::size_t Rank_, std::size_t CoRank_, typename Symmetry__, typename MatrixType__, typename TensorLib__>
+    friend Xped<Rank_, CoRank_, Symmetry__, MatrixType__, TensorLib__>
+    operator-(const Xped<Rank_, CoRank_, Symmetry__, MatrixType__, TensorLib__>& T1,
+              const Xped<Rank_, CoRank_, Symmetry__, MatrixType__, TensorLib__>& T2);
 
     // template <std::size_t Rank_, std::size_t CoRank_, typename Symmetry_, typename MatrixType__, typename TensorLib__>
     // friend class Tensor;
@@ -1076,45 +1076,45 @@ std::ostream& operator<<(std::ostream& os, const Xped<Rank, CoRank, Symmetry, Ma
 //     return Tout;
 // }
 
-// template <std::size_t Rank, std::size_t CoRank, typename Symmetry, typename MatrixType_, typename TensorLib_>
-// Xped<Rank, CoRank, Symmetry, MatrixType_, TensorLib_> operator+(const Xped<Rank, CoRank, Symmetry, MatrixType_, TensorLib_>& T1,
-//                                                                   const Xped<Rank, CoRank, Symmetry, MatrixType_, TensorLib_>& T2)
-// {
-//     assert(T1.domain == T2.domain);
-//     assert(T1.codomain == T2.codomain);
-//     Xped<Rank, CoRank, Symmetry, MatrixType_, TensorLib_> Tout;
-//     Tout.domain = T1.domain;
-//     Tout.codomain = T1.codomain;
-//     Tout.uncoupled_domain = T1.uncoupled_domain;
-//     Tout.uncoupled_codomain = T1.uncoupled_codomain;
-//     Tout.sector = T1.sector;
-//     Tout.dict = T1.dict;
-//     Tout.block_.resize(Tout.sector_.size());
-//     for(size_t i = 0; i < T1.sector_.size(); i++) {
-//         auto it = T2.dict_.find(T1.sector_[i]);
-//         Tout.block_[i] = T1.block_[i] + T2.block_[it->second];
-//     }
-//     return Tout;
-// }
+template <std::size_t Rank, std::size_t CoRank, typename Symmetry, typename MatrixType_, typename TensorLib_>
+Xped<Rank, CoRank, Symmetry, MatrixType_, TensorLib_> operator+(const Xped<Rank, CoRank, Symmetry, MatrixType_, TensorLib_>& T1,
+                                                                const Xped<Rank, CoRank, Symmetry, MatrixType_, TensorLib_>& T2)
+{
+    assert(T1.domain == T2.domain);
+    assert(T1.codomain == T2.codomain);
+    Xped<Rank, CoRank, Symmetry, MatrixType_, TensorLib_> Tout;
+    Tout.domain = T1.domain;
+    Tout.codomain = T1.codomain;
+    Tout.uncoupled_domain = T1.uncoupled_domain;
+    Tout.uncoupled_codomain = T1.uncoupled_codomain;
+    Tout.sector_ = T1.sector_;
+    Tout.dict_ = T1.dict_;
+    Tout.block_.resize(Tout.sector_.size());
+    for(size_t i = 0; i < T1.sector_.size(); i++) {
+        auto it = T2.dict_.find(T1.sector_[i]);
+        Tout.block_[i] = T1.block_[i] + T2.block_[it->second];
+    }
+    return Tout;
+}
 
-// template <std::size_t Rank, std::size_t CoRank, typename Symmetry, typename MatrixType_, typename TensorLib_>
-// Xped<Rank, CoRank, Symmetry, MatrixType_, TensorLib_> operator-(const Xped<Rank, CoRank, Symmetry, MatrixType_, TensorLib_>& T1,
-//                                                                   const Xped<Rank, CoRank, Symmetry, MatrixType_, TensorLib_>& T2)
-// {
-//     assert(T1.domain == T2.domain);
-//     assert(T1.codomain == T2.codomain);
-//     Xped<Rank, CoRank, Symmetry, MatrixType_, TensorLib_> Tout;
-//     Tout.domain = T1.domain;
-//     Tout.codomain = T1.codomain;
-//     Tout.uncoupled_domain = T1.uncoupled_domain;
-//     Tout.uncoupled_codomain = T1.uncoupled_codomain;
-//     Tout.sector = T1.sector;
-//     Tout.dict = T1.dict;
-//     Tout.block_.resize(Tout.sector_.size());
-//     for(size_t i = 0; i < T1.sector_.size(); i++) {
-//         auto it = T2.dict_.find(T1.sector_[i]);
-//         Tout.block_[i] = T1.block_[i] - T2.block_[it->second];
-//     }
-//     return Tout;
-// }
+template <std::size_t Rank, std::size_t CoRank, typename Symmetry, typename MatrixType_, typename TensorLib_>
+Xped<Rank, CoRank, Symmetry, MatrixType_, TensorLib_> operator-(const Xped<Rank, CoRank, Symmetry, MatrixType_, TensorLib_>& T1,
+                                                                const Xped<Rank, CoRank, Symmetry, MatrixType_, TensorLib_>& T2)
+{
+    assert(T1.domain == T2.domain);
+    assert(T1.codomain == T2.codomain);
+    Xped<Rank, CoRank, Symmetry, MatrixType_, TensorLib_> Tout;
+    Tout.domain = T1.domain;
+    Tout.codomain = T1.codomain;
+    Tout.uncoupled_domain = T1.uncoupled_domain;
+    Tout.uncoupled_codomain = T1.uncoupled_codomain;
+    Tout.sector_ = T1.sector_;
+    Tout.dict_ = T1.dict_;
+    Tout.block_.resize(Tout.sector_.size());
+    for(size_t i = 0; i < T1.sector_.size(); i++) {
+        auto it = T2.dict_.find(T1.sector_[i]);
+        Tout.block_[i] = T1.block_[i] - T2.block_[it->second];
+    }
+    return Tout;
+}
 #endif

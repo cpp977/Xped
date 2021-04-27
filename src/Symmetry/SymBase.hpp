@@ -1,6 +1,8 @@
 #ifndef SYM_BASE_H_
 #define SYM_BASE_H_
 
+#include <set>
+
 namespace Sym {
 template <typename Derived>
 struct SymTraits;

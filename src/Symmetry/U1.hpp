@@ -11,6 +11,7 @@
 #include "Util/Random.hpp"
 
 #include "Symmetry/SymBase.hpp"
+#include "Symmetry/kind_dummies.hpp"
 
 namespace Sym {
 
@@ -118,6 +119,8 @@ struct U1 : public SymBase<U1<Kind, Scalar_>>
         T(0, 0) = 1;
         return T;
     }
+
+    static Scalar coeff_rightOrtho(const qType&, const qType&) { return 1.; }
 
     inline static Scalar coeff_3j(const qType& q1, const qType& q2, const qType& q3, int, int, int)
     {

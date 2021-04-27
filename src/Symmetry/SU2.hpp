@@ -15,6 +15,7 @@
 #include "Symmetry/SU2Wrappers.hpp"
 #include "Symmetry/SymBase.hpp"
 #include "Symmetry/functions.hpp"
+#include "Symmetry/kind_dummies.hpp"
 #include "Symmetry/qarray.hpp"
 #include "Util/Random.hpp"
 
@@ -112,12 +113,14 @@ struct SU2 : public SymBase<SU2<Kind, Scalar_>>
     /**
      * Various coeffecients, all resulting from contractions or traces of the Clebsch-Gordon coefficients.
      */
-    static Scalar coeff_dot(const qType& q1);
+    static Scalar coeff_dot(const qType& q1) { static_cast<Scalar>(q1[0]); }
 
     static Scalar coeff_FS(const qType& q1) { return (q1[0] % 2 == 0) ? -1. : 1.; }
 
     template <typename TensorLib>
     static typename tensortraits<TensorLib>::template Ttype<Scalar_, 2> one_j_tensor(const qType& q1);
+
+    static Scalar coeff_rightOrtho(const qType& q1, const qType& q2) { return static_cast<Scalar>(q1[0]) / static_cast<Scalar>(q2[0]); }
 
     static Scalar coeff_3j(const qType& q1, const qType& q2, const qType& q3, int q1_z, int q2_z, int q3_z);
 
@@ -163,13 +166,6 @@ std::vector<typename SU2<Kind, Scalar_>::qType> SU2<Kind, Scalar_>::basis_combin
     int qmax = std::abs(ql[0] + qr[0]) - 1;
     for(int i = qmin; i <= qmax; i += 2) { vout.push_back({i}); }
     return vout;
-}
-
-template <typename Kind, typename Scalar_>
-Scalar_ SU2<Kind, Scalar_>::coeff_dot(const qType& q1)
-{
-    Scalar out = static_cast<Scalar>(q1[0]);
-    return out;
 }
 
 template <typename Kind, typename Scalar_>

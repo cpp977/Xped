@@ -2,6 +2,7 @@
 #define MPS_ALGEBRA_H_
 
 #include "MPS/Mps.hpp"
+#include "MPS/MpsContractions.hpp"
 
 namespace DMRG {
 enum class DIRECTION
@@ -20,8 +21,9 @@ typename Symmetry::Scalar dot(const Mps<Symmetry>& Bra, const Mps<Symmetry>& Ket
         B.setIdentity();
         Xped<1, 1, Symmetry> Bnext;
         for(size_t l = 0; l < Bra.length(); l++) {
-            // Bnext = (Bra.A.Ac[l].adjoint().template permute<-1, 0, 2, 1>() * B).template permute<+1, 0, 2, 1>() * Ket.A.Ac[l];
-            Bnext = (Bra.A.Ac[l].template permute<+1, 0, 1, 2>().adjoint() * B).template permute<+1, 1, 2, 0>() * Ket.A.Ac[l];
+            // Bnext = (Bra.A.Ac[l].adjoint().eval().template permute<-1, 0, 2, 1>() * B).template permute<+1, 0, 2, 1>() * Ket.A.Ac[l];
+            // Bnext = (Bra.A.Ac[l].template permute<+1, 0, 1, 2>().adjoint() * B).template permute<+1, 1, 2, 0>() * Ket.A.Ac[l];
+            contract_L(B, Bra.A.Ac[l], Ket.A.Ac[l], Bnext);
             B = Bnext;
             // std::cout << B << std::endl;
             Bnext.clear();
@@ -32,14 +34,16 @@ typename Symmetry::Scalar dot(const Mps<Symmetry>& Bra, const Mps<Symmetry>& Ket
         B.setIdentity();
         Xped<1, 1, Symmetry> Bnext;
         for(size_t l = Bra.length() - 1; l > 0; l--) {
-            // Bnext = (Ket.A.Ac[l] * B).template permute<+1, 0, 1, 2>() * (Bra.A.Ac[l].adjoint().template permute<-1, 2, 0, 1>());
-            Bnext = (Ket.A.Ac[l] * B).template permute<+1, 0, 1, 2>() * (Bra.A.Ac[l].template permute<+1, 0, 1, 2>().adjoint());
+            // Bnext = (Ket.A.Ac[l] * B).template permute<+1, 0, 1, 2>() * (Bra.A.Ac[l].adjoint().eval().template permute<-1, 2, 0, 1>());
+            // Bnext = (Ket.A.Ac[l] * B).template permute<+1, 0, 1, 2>() * (Bra.A.Ac[l].template permute<+1, 0, 1, 2>().adjoint());
+            contract_R(B, Bra.A.Ac[l], Ket.A.Ac[l], Bnext);
             B = Bnext;
             // std::cout << B << std::endl;
             Bnext.clear();
         }
         // Bnext = (Ket.A.Ac[0] * B).template permute<+1, 0, 1, 2>() * (Bra.A.Ac[0].adjoint().template permute<-1, 2, 0, 1>());
-        Bnext = (Ket.A.Ac[0] * B).template permute<+1, 0, 1, 2>() * (Bra.A.Ac[0].template permute<+1, 0, 1, 2>().adjoint());
+        // Bnext = (Ket.A.Ac[0] * B).template permute<+1, 0, 1, 2>() * (Bra.A.Ac[0].template permute<+1, 0, 1, 2>().adjoint());
+        contract_R(B, Bra.A.Ac[0], Ket.A.Ac[0], Bnext);
         return Bnext.norm();
     }
 }

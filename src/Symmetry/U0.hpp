@@ -7,6 +7,7 @@
 
 #include "Interfaces/tensor_traits.hpp"
 #include "Symmetry/SymBase.hpp"
+#include "Symmetry/kind_dummies.hpp"
 #include "Symmetry/qarray.hpp"
 
 namespace Sym {
@@ -77,6 +78,8 @@ struct U0 : SymBase<U0>
         T(0, 0) = 1;
         return T;
     }
+
+    static Scalar coeff_rightOrtho(const qType&, const qType&) { return 1.; }
 
     inline static Scalar coeff_3j(const qType&, const qType&, const qType&, int, int, int) { return 1.; }
 

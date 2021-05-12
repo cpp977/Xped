@@ -55,7 +55,7 @@ if (${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR")
   target_link_libraries(run /home/user/__LIBS__/ctf/lib/libctf.a)
 endif()
 
-if(XPED_USE_OPENMPI OR ${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR")
+if(XPED_USE_OPENMPI)
   target_link_libraries(run MPI::MPI_CXX)
 endif()
 

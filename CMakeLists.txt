@@ -40,6 +40,11 @@ option(XPED_BUILD_TESTS "Build the tests." ON)
 option(XPED_ENABLE_CACHE "Enable a compiler cache if available" OFF)
 
 option(XPED_USE_OPENMP "Enable openmp parallelization" ON)
+option(XPED_USE_OPENMPI "Enable openmpi parallelization" OFF)
+if(${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR")
+  set(XPED_USE_OPENMPI ON)
+endif()
+
 option(XPED_USE_BLAS "Enable blas linking." ON)
 option(XPED_USE_LAPACK "Enable lapack linking." ON)
 
@@ -107,7 +112,7 @@ if(XPED_USE_OPENMP)
   find_package(OpenMP)
 endif()
 
-if(XPED_USE_OPENMPI OR ${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR")
+if(XPED_USE_OPENMPI)
   find_package(MPI)
 endif()
 

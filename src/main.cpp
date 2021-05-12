@@ -48,11 +48,13 @@ XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100)
 int main(int argc, char* argv[])
 {
     ArgParser args(argc, argv);
-
+#ifdef XPED_USE_OPENMPI
     int xped_rank, xped_np;
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &xped_rank);
     MPI_Comm_size(MPI_COMM_WORLD, &xped_np);
+#endif
+
     // constexpr std::size_t Rank=2;
     // tensortraits<EigenTensorLib>::Ttype<double,Rank> T1(2,3); T1.setRandom();
     // tensortraits<EigenTensorLib>::Ttype<double,Rank> T2(2,3); T2.setRandom();
@@ -149,5 +151,7 @@ int main(int argc, char* argv[])
     // cout << "Left: <Psi,Psi>=" << normSq << endl;
     // Psi.A.Ac[0] = Psi.A.Ac[0] * std::pow(normSq, -0.5);
     // cout << "<Psi,Psi>=" << dot(Psi, Psi, DIR) << endl;
+#ifdef XPED_USE_OPENMPI
     MPI_Finalize();
+#endif
 }

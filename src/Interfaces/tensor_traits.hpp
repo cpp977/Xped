@@ -124,12 +124,22 @@ struct tensortraits<EigenTensorLib>
     template <typename Scalar, int Rank>
     static Scalar getVal(const Ttype<Scalar, Rank>& T, const std::array<Indextype, Rank>& index)
     {
-        return T(index);
+        if constexpr(Rank == 0) {
+            return T(0);
+        } else {
+            return T(index);
+        }
     }
 
     // raw data
     template <typename Scalar, int Rank>
-    static Scalar* get_raw_data(const Ttype<Scalar, Rank>& T)
+    static const Scalar* get_raw_data(const Ttype<Scalar, Rank>& T)
+    {
+        return T.data();
+    }
+
+    template <typename Scalar, int Rank>
+    static Scalar* get_raw_data(Ttype<Scalar, Rank>& T)
     {
         return T.data();
     }
@@ -392,12 +402,22 @@ struct tensortraits<ArrayTensorLib>
     template <typename Scalar, int Rank>
     static Scalar getVal(const Ttype<Scalar, Rank>& T, const std::array<Indextype, Rank>& index)
     {
-        return T(as_tuple(index));
+        if constexpr(Rank == 0) {
+            return T();
+        } else {
+            return T(as_tuple(index));
+        }
     }
 
     // raw data
     template <typename Scalar, int Rank>
-    static Scalar* get_raw_data(const Ttype<Scalar, Rank>& T)
+    static const Scalar* get_raw_data(const Ttype<Scalar, Rank>& T)
+    {
+        return T.data();
+    }
+
+    template <typename Scalar, int Rank>
+    static Scalar* get_raw_data(Ttype<Scalar, Rank>& T)
     {
         return T.data();
     }

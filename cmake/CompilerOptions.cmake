@@ -172,6 +172,10 @@ elseif(${XPED_EFFICIENCY_MODEL} STREQUAL "XPED_MEMORY_EFFICIENT")
   target_compile_definitions(${project_name} INTERFACE XPED_MEMORY_EFFICIENT=1)
 endif()
 
+if(XPED_USE_OPENMPI)
+  target_compile_definitions(${project_name} INTERFACE XPED_USE_OPENMPI=1)
+endif()
+
 if(XPED_USE_BLAS)
   target_compile_definitions(${project_name} INTERFACE EIGEN_USE_BLAS=1)
   if(XPED_USE_LAPACK)

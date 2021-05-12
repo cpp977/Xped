@@ -75,7 +75,8 @@ struct U0 : SymBase<U0>
     {
         typedef typename tensortraits<TensorLib>::Indextype IndexType;
         auto T = tensortraits<TensorLib>::template construct<Scalar>(std::array<IndexType, 2>{1, 1});
-        T(0, 0) = 1;
+        std::array<IndexType, 2> index = {0, 0};
+        tensortraits<TensorLib>::template setVal<Scalar, 2>(T, index, Scalar(1.));
         return T;
     }
 
@@ -88,7 +89,8 @@ struct U0 : SymBase<U0>
     {
         typedef typename tensortraits<TensorLib>::Indextype IndexType;
         auto T = tensortraits<TensorLib>::template construct<Scalar>(std::array<IndexType, 3>{1, 1, 1});
-        T(0, 0, 0) = 1;
+        std::array<IndexType, 3> index = {0, 0, 0};
+        tensortraits<TensorLib>::template setVal<Scalar, 3>(T, index, Scalar(1.));
         return T;
     }
 

@@ -16,6 +16,10 @@ if(XPED_USE_MKL)
   include_directories(${XPED_MKL_INCLUDE_DIR})
 endif()
 
+if (${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR")
+  include_directories(home/user/__LIBS__/ctf/include)
+endif()
+
 file(GLOB SOURCES "Core/*.hpp"
                   "Symmetry/*.hpp"
                   "Hash/*.hpp"
@@ -40,11 +44,20 @@ if(${XPED_TENSOR_LIB} STREQUAL "ARRAY_TENSOR")
   add_dependencies(run array)
 endif()
 
+
 target_link_libraries (run
                        project_options
                        project_warnings
                        GSL::gsl
                        GSL::gslcblas)
+
+if (${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR")
+  target_link_libraries(run /home/user/__LIBS__/ctf/lib/libctf.a)
+endif()
+
+if(XPED_USE_OPENMPI OR ${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR")
+  target_link_libraries(run MPI::MPI_CXX)
+endif()
 
 if(XPED_USE_BLAS)
   target_link_libraries (run BLAS::BLAS)

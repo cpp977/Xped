@@ -1,14 +1,18 @@
 template <typename TensorT, int shift, std::size_t... per>
-void perform_tensor_permute(const TensorT& t, tensortraits<M_TENSORLIB>::cTtype<double, 4>& tplain)
+void perform_tensor_permute(const TensorT& t, tensortraits<M_TENSORLIB>::Ttype<double, 4>& tplain)
 {
     // std::array<Eigen::Index,4> p = {per...};
     // std::cout << "permutation: "; for (const auto& elem:p) {std::cout << elem << " ";} std::cout << ", shift=" << shift << std::endl;
 
     auto tp = t.template permute<shift, per...>();
-    tensortraits<M_TENSORLIB>::cTtype<double, 4> tplainshuffle = tensortraits<M_TENSORLIB>::shuffle<double, 4, per...>(tplain);
+    tensortraits<M_TENSORLIB>::Ttype<double, 4> tplainshuffle = tensortraits<M_TENSORLIB>::shuffle<double, 4, per...>(tplain);
     auto tplainp = tp.plainTensor();
 #ifdef XPED_USE_ARRAY_TENSOR_LIB
     auto check = nda::make_ein_sum<double, 0, 1, 2, 3>(nda::ein<0, 1, 2, 3>(tplainp) - nda::ein<0, 1, 2, 3>(tplainshuffle));
+#elif defined(XPED_USE_CYCLOPS_TENSOR_LIB)
+    auto dims = tensortraits<M_TENSORLIB>::dimensions<double, 4>(tplainshuffle);
+    auto check = tensortraits<M_TENSORLIB>::construct<double>(dims);
+    check["ijkl"] = tplainshuffle["ijkl"] - tplainp["ijkl"];
 #else
     Eigen::Tensor<double, 4> check = tplainshuffle - tplainp;
 #endif
@@ -18,7 +22,7 @@ void perform_tensor_permute(const TensorT& t, tensortraits<M_TENSORLIB>::cTtype<
     //                                                                                                               Eigen::IndexPair<Eigen::Index>(1,1),
     //                                                                                                               Eigen::IndexPair<Eigen::Index>(2,2),
     //                                                                                                               Eigen::IndexPair<Eigen::Index>(3,3)}});
-    double zero = zero_();
+    double zero = tensortraits<M_TENSORLIB>::getVal<double, 0>(zero_, {{}});
     CHECK(zero == doctest::Approx(0.));
 }
 
@@ -88,21 +92,26 @@ void test_tensor_permute(const Qbasis<Symmetry, 1>& B, const Qbasis<Symmetry, 1>
 };
 
 template <typename TensorT, std::size_t... per>
-void perform_tensor_permute_intern(const TensorT& t, tensortraits<M_TENSORLIB>::cTtype<double, 4>& tplain)
+void perform_tensor_permute_intern(const TensorT& t, tensortraits<M_TENSORLIB>::Ttype<double, 4>& tplain)
 {
-    // std::array<Eigen::Index,4> p = {per...};
-    // std::cout << "permutation: "; for (const auto& elem:p) {std::cout << elem << " ";} std::cout << std::endl;
+    // std::array<std::size_t, 4> p = {per...};
+    // std::cout << "permutation: ";
+    // for(const auto& elem : p) { std::cout << elem << " "; }
+    // std::cout << std::endl;
 
     auto tp = t.template permute<0, per...>();
     tensortraits<M_TENSORLIB>::Ttype<double, 4> tplainshuffle = tensortraits<M_TENSORLIB>::shuffle<double, 4, per...>(tplain);
     auto tplainp = tp.plainTensor();
 #ifdef XPED_USE_ARRAY_TENSOR_LIB
     auto check = nda::make_ein_sum<double, 0, 1, 2, 3>(nda::ein<0, 1, 2, 3>(tplainp) - nda::ein<0, 1, 2, 3>(tplainshuffle));
+#elif defined(XPED_USE_CYCLOPS_TENSOR_LIB)
+    auto dims = tensortraits<M_TENSORLIB>::dimensions<double, 4>(tplainshuffle);
+    auto check = tensortraits<M_TENSORLIB>::construct<double>(dims);
+    check["ijkl"] = tplainshuffle["ijkl"] - tplainp["ijkl"];
 #else
     Eigen::Tensor<double, 4> check = tplainshuffle - tplainp;
 #endif
     auto zero_ = tensortraits<M_TENSORLIB>::contract<double, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3>(check, check);
-
     // Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p);
     // auto tplainp = tp.plainTensor();
     // auto check = tplainshuffle - tplainp;
@@ -110,7 +119,7 @@ void perform_tensor_permute_intern(const TensorT& t, tensortraits<M_TENSORLIB>::
     //                                                                                                               Eigen::IndexPair<Eigen::Index>(1,1),
     //                                                                                                               Eigen::IndexPair<Eigen::Index>(2,2),
     //                                                                                                               Eigen::IndexPair<Eigen::Index>(3,3)}});
-    double zero = zero_();
+    double zero = tensortraits<M_TENSORLIB>::getVal<double, 0>(zero_, {{}});
     CHECK(zero == doctest::Approx(0.));
 }
 
@@ -183,7 +192,6 @@ void test_tensor_permute_within_domain(const Qbasis<Symmetry, 1>& B,
     Xped<4, 0, Symmetry> t({{B, C, D, E}}, {{}});
     t.setRandom();
     auto tplain = t.plainTensor();
-
     perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 0, 1, 2, 3>(t, tplain);
     perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 0, 1, 3, 2>(t, tplain);
     perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 0, 3, 1, 2>(t, tplain);
@@ -232,6 +240,6 @@ void test_tensor_transformation_to_plain(const Qbasis<Symmetry, 1>& B, const Qba
     t.setRandom();
     auto tplain = t.plainTensor();
     auto norm_ = tensortraits<M_TENSORLIB>::contract<double, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3>(tplain, tplain);
-    double norm = norm_();
+    double norm = tensortraits<M_TENSORLIB>::getVal<double, 0>(norm_, {{}});
     CHECK(t.squaredNorm() == doctest::Approx(norm));
 }

@@ -4,7 +4,10 @@
 
 #ifdef _OPENMP
 #    pragma message("Xped is using OpenMP parallelization")
+#    include "omp.h"
 #endif
+
+#define EIGEN_DEFAULT_DENSE_INDEX_TYPE int
 
 #include <cmath>
 #include <cstddef>
@@ -44,8 +47,8 @@ XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100)
 
 #include "tensor_tests.hpp"
 
-constexpr std::size_t SU2_TENSOR_SIZE = 10;
-constexpr std::size_t U1_TENSOR_SIZE = 8;
+constexpr std::size_t SU2_TENSOR_SIZE = 5;
+constexpr std::size_t U1_TENSOR_SIZE = 5;
 constexpr std::size_t U0_TENSOR_SIZE = 5;
 
 TEST_SUITE_BEGIN("Tensor");
@@ -243,7 +246,13 @@ TEST_CASE("Testing operations with SU(2)-spin matrices.")
         for(Eigen::Index k = 0; k < tensortraits<M_TENSORLIB>::dimensions<double, 3>(tplain)[2]; k++) {
             Eigen::Matrix<double, -1, -1> pauli(twoS1 + 1, twoS1 + 1);
             for(Eigen::Index j = 0; j < tensortraits<M_TENSORLIB>::dimensions<double, 3>(tplain)[1]; j++)
-                for(Eigen::Index i = 0; i < tensortraits<M_TENSORLIB>::dimensions<double, 3>(tplain)[0]; i++) { pauli(i, j) = tplain(i, j, k); }
+                for(Eigen::Index i = 0; i < tensortraits<M_TENSORLIB>::dimensions<double, 3>(tplain)[0]; i++) {
+                    pauli(i, j) =
+                        tensortraits<M_TENSORLIB>::getVal<double, 3>(tplain,
+                                                                     std::array<int, 3>{static_cast<tensortraits<M_TENSORLIB>::Indextype>(i),
+                                                                                        static_cast<tensortraits<M_TENSORLIB>::Indextype>(j),
+                                                                                        static_cast<tensortraits<M_TENSORLIB>::Indextype>(k)});
+                }
             CHECK((pauli - pauli_vec1[k]).norm() == doctest::Approx(0.));
         }
 
@@ -256,7 +265,13 @@ TEST_CASE("Testing operations with SU(2)-spin matrices.")
         for(Eigen::Index j = 0; j < tensortraits<M_TENSORLIB>::dimensions<double, 3>(check1)[1]; j++) {
             Eigen::Matrix<double, -1, -1> diag(twoS1 + 1, twoS1 + 1);
             for(Eigen::Index k = 0; k < tensortraits<M_TENSORLIB>::dimensions<double, 3>(check1)[2]; k++)
-                for(Eigen::Index i = 0; i < tensortraits<M_TENSORLIB>::dimensions<double, 3>(check1)[0]; i++) { diag(i, k) = check1(i, j, k); }
+                for(Eigen::Index i = 0; i < tensortraits<M_TENSORLIB>::dimensions<double, 3>(check1)[0]; i++) {
+                    diag(i, k) =
+                        tensortraits<M_TENSORLIB>::getVal<double, 3>(check1,
+                                                                     std::array<int, 3>{static_cast<tensortraits<M_TENSORLIB>::Indextype>(i),
+                                                                                        static_cast<tensortraits<M_TENSORLIB>::Indextype>(j),
+                                                                                        static_cast<tensortraits<M_TENSORLIB>::Indextype>(k)});
+                }
             CHECK((diag - S1 * (S1 + 1.) * Eigen::Matrix<double, -1, -1>::Identity(twoS1 + 1, twoS1 + 1)).norm() == doctest::Approx(0.));
         }
 
@@ -269,7 +284,13 @@ TEST_CASE("Testing operations with SU(2)-spin matrices.")
         for(Eigen::Index k = 0; k < tensortraits<M_TENSORLIB>::dimensions<double, 3>(check3)[2]; k++) {
             Eigen::Matrix<double, -1, -1> mat(twoS1 + 1, twoS1 + 1);
             for(Eigen::Index j = 0; j < tensortraits<M_TENSORLIB>::dimensions<double, 3>(check3)[1]; j++)
-                for(Eigen::Index i = 0; i < tensortraits<M_TENSORLIB>::dimensions<double, 3>(check3)[0]; i++) { mat(i, j) = check3(i, j, k); }
+                for(Eigen::Index i = 0; i < tensortraits<M_TENSORLIB>::dimensions<double, 3>(check3)[0]; i++) {
+                    mat(i, j) =
+                        tensortraits<M_TENSORLIB>::getVal<double, 3>(check3,
+                                                                     std::array<int, 3>{static_cast<tensortraits<M_TENSORLIB>::Indextype>(i),
+                                                                                        static_cast<tensortraits<M_TENSORLIB>::Indextype>(j),
+                                                                                        static_cast<tensortraits<M_TENSORLIB>::Indextype>(k)});
+                }
             CHECK((mat - std::sqrt(0.5) * pauli_vec1[k]).norm() == doctest::Approx(0.));
         }
         // build the product to QN K=2
@@ -281,7 +302,13 @@ TEST_CASE("Testing operations with SU(2)-spin matrices.")
         for(Eigen::Index k = 0; k < tensortraits<M_TENSORLIB>::dimensions<double, 3>(check5)[2]; k++) {
             Eigen::Matrix<double, -1, -1> mat(twoS1 + 1, twoS1 + 1);
             for(Eigen::Index j = 0; j < tensortraits<M_TENSORLIB>::dimensions<double, 3>(check5)[1]; j++)
-                for(Eigen::Index i = 0; i < tensortraits<M_TENSORLIB>::dimensions<double, 3>(check5)[0]; i++) { mat(i, j) = check5(i, j, k); }
+                for(Eigen::Index i = 0; i < tensortraits<M_TENSORLIB>::dimensions<double, 3>(check5)[0]; i++) {
+                    mat(i, j) =
+                        tensortraits<M_TENSORLIB>::getVal<double, 3>(check5,
+                                                                     std::array<int, 3>{static_cast<tensortraits<M_TENSORLIB>::Indextype>(i),
+                                                                                        static_cast<tensortraits<M_TENSORLIB>::Indextype>(j),
+                                                                                        static_cast<tensortraits<M_TENSORLIB>::Indextype>(k)});
+                }
             Eigen::MatrixXd pauli(twoS1 + 1, twoS1 + 1);
             pauli.setZero();
             if(k == 0) { pauli = -std::sqrt(0.6) * (pauli_vec1[0] * pauli_vec1[0]); }

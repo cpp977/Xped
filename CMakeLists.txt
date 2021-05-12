@@ -28,7 +28,7 @@ if(NOT CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
  endif()
 endif()
 
-set(XPED_SUPPORTED_TENSOR_LIBS EIGEN_TENSOR ARRAY_TENSOR)
+set(XPED_SUPPORTED_TENSOR_LIBS EIGEN_TENSOR ARRAY_TENSOR CYCLOPS_TENSOR)
 set(XPED_TENSOR_LIB "EIGEN_TENSOR" CACHE STRING "Used tensor library for plain tensor operations.")
 if(NOT (${XPED_TENSOR_LIB} IN_LIST XPED_SUPPORTED_TENSOR_LIBS))
   message( FATAL_ERROR "You specified a tensor library which is not supported.")
@@ -105,6 +105,10 @@ find_package(Boost REQUIRED)
 
 if(XPED_USE_OPENMP)
   find_package(OpenMP)
+endif()
+
+if(XPED_USE_OPENMPI OR ${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR")
+  find_package(MPI)
 endif()
 
 if(XPED_USE_BLAS)

@@ -179,7 +179,14 @@ typename tensortraits<TensorLib>::template Ttype<Scalar_, 2> SU2<Kind, Scalar_>:
     tensortraits<TensorLib>::template setZero<Scalar, 2>(out);
 
     for(IndexType i = 0; i < degeneracy(q1); i++)
-        for(IndexType j = 0; j < degeneracy(q1); j++) { out(i, j) = std::sqrt(degeneracy(q1)) * tmp(i, j, 0); }
+        for(IndexType j = 0; j < degeneracy(q1); j++) {
+            int im = -(2 * i - (q1[0] - 1));
+            int jm = -(2 * j - (q1[0] - 1));
+            if(im == -jm) {
+                Scalar value = phase<Scalar>((q1[0] - im) / 2);
+                tensortraits<TensorLib>::template setVal<Scalar, 2>(out, {{i, j}}, value);
+            }
+        }
     return out;
 }
 
@@ -204,8 +211,9 @@ SU2<Kind, Scalar_>::CGC(const qType& q1, const qType& q2, const qType& q3, const
                 int q1_2m = -(2 * i_q1m - (q1[0] - 1));
                 int q2_2m = -(2 * i_q2m - (q2[0] - 1));
                 int q3_2m = -(2 * i_q3m - (q3[0] - 1));
-                out(i_q1m, i_q2m, i_q3m) =
-                    coupling_3j(q1[0], q2[0], q3[0], q1_2m, q2_2m, -q3_2m) * phase<Scalar>((q1[0] - q2[0] + q3_2m) / 2) * sqrt(q3[0]);
+                Scalar value = coupling_3j(q1[0], q2[0], q3[0], q1_2m, q2_2m, -q3_2m) * phase<Scalar>((q1[0] - q2[0] + q3_2m) / 2) * sqrt(q3[0]);
+                std::array<IndexType, 3> index = {i_q1m, i_q2m, i_q3m};
+                tensortraits<TensorLib>::template setVal<Scalar, 3>(out, index, value);
             }
 
     return out;

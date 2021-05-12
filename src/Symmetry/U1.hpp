@@ -116,7 +116,8 @@ struct U1 : public SymBase<U1<Kind, Scalar_>>
     {
         typedef typename tensortraits<TensorLib>::Indextype IndexType;
         auto T = tensortraits<TensorLib>::template construct<Scalar>(std::array<IndexType, 2>{1, 1});
-        T(0, 0) = 1;
+        std::array<IndexType, 2> index = {0, 0};
+        tensortraits<TensorLib>::template setVal<Scalar, 2>(T, index, Scalar(1.));
         return T;
     }
 
@@ -167,9 +168,11 @@ U1<Kind, Scalar_>::CGC(const qType& q1, const qType& q2, const qType& q3, const 
     typedef typename tensortraits<TensorLib>::Indextype IndexType;
     auto T = tensortraits<TensorLib>::template construct<Scalar>(std::array<IndexType, 3>{1, 1, 1});
     if(triangle(q1, q2, q3)) {
-        T(0, 0, 0) = 1.;
+        std::array<IndexType, 3> index = {0, 0, 0};
+        tensortraits<TensorLib>::template setVal<Scalar, 3>(T, index, Scalar(1.));
     } else {
-        T(0, 0, 0) = 0.;
+        std::array<IndexType, 3> index = {0, 0, 0};
+        tensortraits<TensorLib>::template setVal<Scalar, 3>(T, index, Scalar(0.));
     }
     return T;
 }

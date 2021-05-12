@@ -1,3 +1,8 @@
+#ifdef _OPENMP
+#    pragma message("Xped is using OpenMP parallelization")
+#    include "omp.h"
+#endif
+
 #include <cmath>
 #include <cstddef>
 #include <iostream>

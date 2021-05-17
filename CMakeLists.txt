@@ -37,6 +37,8 @@ message( STATUS "Build uses the ${XPED_TENSOR_LIB} library.")
 
 option(XPED_BUILD_TESTS "Build the tests." ON)
 
+option(XPED_BUILD_CYCLOPS "Build the cyclops library from source." OFF)
+
 option(XPED_ENABLE_CACHE "Enable a compiler cache if available" OFF)
 
 option(XPED_USE_OPENMP "Enable openmp parallelization" ON)
@@ -71,6 +73,10 @@ option(XPED_ENABLE_CLANG_FORMAT "Enable clang-format target." OFF)
 # Link this 'library' to set the c++ standard / compile-time options requested
 add_library(project_options INTERFACE)
 
+# include compiler options from cmake/CompilerOptions.cmake
+include(cmake/CompilerOptions.cmake)
+set_project_options(project_options)
+
 # Link this 'library' to use the warnings specified in CompilerWarnings.cmake
 add_library(project_warnings INTERFACE)
 
@@ -83,10 +89,6 @@ if(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
     target_compile_options(project_options INTERFACE -ftime-trace)
   endif()
 endif()
-
-#git is required to clone libraries used from github/gitlab
-find_package(Git REQUIRED)
-include(cmake/addGitLibs.cmake)
 
 # enable cache system
 include(cmake/Cache.cmake)
@@ -138,12 +140,33 @@ if(XPED_USE_LAPACK)
   find_package(LAPACK)
 endif()
 
-# include compiler options from cmake/CompilerOptions.cmake
-include(cmake/CompilerOptions.cmake)
-set_project_options(project_options)
-
 find_package(GSL REQUIRED)
 find_package(Boost REQUIRED)
+
+#git is required to clone libraries used from github/gitlab
+find_package(Git REQUIRED)
+include(cmake/addGitLibs.cmake)
+
+if(${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR" AND NOT XPED_BUILD_CYCLOPS)
+  find_library(CYCLOPS_LIB NAMES ctf
+    #HINTS /home/user/__LIBS__/ctf/lib
+    #NO_DEFAULT_PATH
+    REQUIRED
+  )
+  add_library(cyclops_lib::all UNKNOWN IMPORTED)
+  set_target_properties(cyclops_lib::all PROPERTIES
+    IMPORTED_LOCATION "${CYCLOPS_LIB}"
+    )
+  message(STATUS ${CYCLOPS_LIB})
+
+  find_path(CYCLOPS_INCLUDE_DIR
+    NAMES ctf.hpp
+    #NO_DEFAULT_PATH
+    #HINTS /home/user/__LIBS__/ctf/include
+    REQUIRED
+  )
+  message(STATUS ${CYCLOPS_INCLUDE_DIR})
+endif()
 
 add_subdirectory(src)
 

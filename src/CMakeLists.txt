@@ -17,7 +17,10 @@ if(XPED_USE_MKL)
 endif()
 
 if (${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR")
-  include_directories(home/user/__LIBS__/ctf/include)
+  include_directories(${CYCLOPS_INCLUDE_DIR})
+  if(${XPED_BUILD_CYCLOPS})
+    include_directories(${CYCLOPS_HPTT_INCLUDE_DIR})
+  endif()
 endif()
 
 file(GLOB SOURCES "Core/*.hpp"
@@ -43,6 +46,9 @@ endif()
 if(${XPED_TENSOR_LIB} STREQUAL "ARRAY_TENSOR")
   add_dependencies(run array)
 endif()
+if(${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR" AND ${XPED_BUILD_CYCLOPS})
+  add_dependencies(run cyclops)
+endif()
 
 
 target_link_libraries (run
@@ -51,8 +57,11 @@ target_link_libraries (run
                        GSL::gsl
                        GSL::gslcblas)
 
-if (${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR")
-  target_link_libraries(run /home/user/__LIBS__/ctf/lib/libctf.a)
+#if(${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR" AND ${XPED_BUILD_CYCLOPS})
+#  target_link_libraries(run ${CYCLOPS_LIB_DIR}/libctf.a)
+#  target_link_libraries(run ${CYCLOPS_HPTT_LIB_DIR}/libhptt.a)
+if(${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR")
+  target_link_libraries(run cyclops_lib::all)
 endif()
 
 if(XPED_USE_OPENMPI)

@@ -18,7 +18,7 @@ jobs:
       matrix:
         compiler: [g++-10, clang++]
         LIBCXX: [ON, OFF]
-        TENSOR_LIB: [EIGEN_TENSOR, ARRAY_TENSOR]
+        TENSOR_LIB: [EIGEN_TENSOR, ARRAY_TENSOR, CYCLOPS_TENSOR]
         exclude:
           # excludes libcxx for g++
           - compiler: g++-10

@@ -36,6 +36,8 @@ jobs:
     - run: sudo apt install -qq g++-10
     - run: sudo apt install -qq doctest-dev
     - run: sudo apt install -qq libblas-dev liblapack-dev liblapacke-dev
+    - run: nm /usr/lib/x86_64-linux-gnu/libblas.so
+    - run: nm /usr/lib/x86_64-linux-gnu/liblapack.so
     - run: sudo apt install -qq openmpi-bin libopenmpi-dev
     - run: sudo apt install -qq libomp-dev
     

@@ -37,7 +37,7 @@ message( STATUS "Build uses the ${XPED_TENSOR_LIB} library.")
 
 option(XPED_BUILD_TESTS "Build the tests." ON)
 
-option(XPED_BUILD_CYCLOPS "Build the cyclops library from source." OFF)
+option(XPED_BUILD_CYCLOPS "Build the cyclops library from source." ON)
 
 option(XPED_ENABLE_CACHE "Enable a compiler cache if available" OFF)
 

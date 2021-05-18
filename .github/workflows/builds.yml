@@ -35,9 +35,7 @@ jobs:
     - run: sudo apt install -qq libboost-all-dev
     - run: sudo apt install -qq g++-10
     - run: sudo apt install -qq doctest-dev
-    - run: sudo apt install -qq libblas-dev liblapack-dev liblapacke-dev
-    - run: nm /usr/lib/x86_64-linux-gnu/libblas.so
-    - run: nm /usr/lib/x86_64-linux-gnu/liblapack.so
+    - run: sudo apt install -qq libatlas-base-dev
     - run: sudo apt install -qq openmpi-bin libopenmpi-dev
     - run: sudo apt install -qq libomp-dev
     
@@ -56,7 +54,7 @@ jobs:
       # Note the current convention is to use the -S and -B options here to specify source 
       # and build directories, but this is only available with CMake 3.13 and higher.  
       # The CMake binaries on the Github Actions machines are (as of this writing) 3.12
-      run: cmake $GITHUB_WORKSPACE -DXPED_USE_BLAS=ON -DXPED_USE_LAPACK=ON -DXPED_USE_OPENMP=ON -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DXPED_USE_LIBCXX=${{ matrix.LIBCXX }} -DXPED_ENABLE_CACHE=OFF -DXPED_TENSOR_LIB=${{ matrix.TENSOR_LIB }}
+      run: cmake $GITHUB_WORKSPACE -DBLA_VENDOR="ATLAS PhiPACK" -DXPED_USE_BLAS=ON -DXPED_USE_LAPACK=ON -DXPED_USE_OPENMP=ON -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DXPED_USE_LIBCXX=${{ matrix.LIBCXX }} -DXPED_ENABLE_CACHE=OFF -DXPED_TENSOR_LIB=${{ matrix.TENSOR_LIB }}
 
     - name: Build
       working-directory: ${{runner.workspace}}/build

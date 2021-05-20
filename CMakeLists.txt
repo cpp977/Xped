@@ -140,6 +140,7 @@ if(XPED_USE_LAPACK)
   find_package(LAPACK REQUIRED)
   set(test_prog_for_lapacke "\#include <lapacke.h> \\nint main() {lapack_int m, n, lda, info\; double *a, *tau\; info = LAPACKE_dgeqrf( LAPACK_COL_MAJOR, m, n, a, lda, tau )\;}")
   set(CMAKE_REQUIRED_LIBRARIES LAPACK::LAPACK)
+  include(check_cxx_source_compiles)
   check_cxx_source_compiles(${test_prog_for_lapacke} XPED_COMPILES_LAPACKE)
 
   if (NOT XPED_COMPILES_LAPACKE)    

@@ -30,6 +30,8 @@ jobs:
     - uses: actions/checkout@v2
     - run: sudo add-apt-repository ppa:ubuntu-toolchain-r/ppa
     - run: sudo apt update -qq
+    - run: sudo apt install -qq libc++-dev
+    - run: sudo apt install -qq libc++abi-dev
     - run: sudo apt install -qq libgsl-dev
     - run: sudo apt install -qq libgslcblas0
     - run: sudo apt install -qq libboost-all-dev

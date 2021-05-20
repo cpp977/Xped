@@ -7,7 +7,7 @@
 #    include "omp.h"
 #endif
 
-#ifdef defined(XPED_USE_CYCLOPS_TENSOR_LIB)
+#ifdef XPED_USE_CYCLOPS_TENSOR_LIB
 #    define EIGEN_DEFAULT_DENSE_INDEX_TYPE int
 #endif
 

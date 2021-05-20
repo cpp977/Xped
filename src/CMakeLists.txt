@@ -57,9 +57,6 @@ target_link_libraries (run
                        GSL::gsl
                        GSL::gslcblas)
 
-#if(${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR" AND ${XPED_BUILD_CYCLOPS})
-#  target_link_libraries(run ${CYCLOPS_LIB_DIR}/libctf.a)
-#  target_link_libraries(run ${CYCLOPS_HPTT_LIB_DIR}/libhptt.a)
 if(${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR")
   target_link_libraries(run cyclops_lib::all)
 endif()
@@ -74,6 +71,9 @@ endif()
 
 if(XPED_USE_LAPACK)
   target_link_libraries (run LAPACK::LAPACK)
+  if(XPED_USE_LAPACKE)
+    target_link_libraries (run LAPACKE::LAPACKE)
+  endif()
 endif()
 
 if(XPED_USE_OPENMP)

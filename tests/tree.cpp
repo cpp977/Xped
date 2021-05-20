@@ -10,6 +10,10 @@
 #include <string>
 #include <vector>
 
+#ifdef XPED_USE_CYCLOPS_TENSOR_LIB
+#    define EIGEN_DEFAULT_DENSE_INDEX_TYPE int
+#endif
+
 using std::cout;
 using std::endl;
 using std::size_t;

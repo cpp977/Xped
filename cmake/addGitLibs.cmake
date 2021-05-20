@@ -60,7 +60,7 @@ endif()
 
 if(${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR" AND XPED_BUILD_CYCLOPS)
   set(CYCLOPS_ROOT ${CMAKE_BINARY_DIR}/thirdparty/cyclops)
-  set(CYCLOPS_INCLUDE_DIR ${CYCLOPS_ROOT}/src/cyclops/include)
+  set(CYCLOPS_INCLUDE_DIR ${CYCLOPS_ROOT}/include)
   set(CYCLOPS_LIB_DIR ${CYCLOPS_ROOT}/lib)
   set(CYCLOPS_HPTT_LIB_DIR ${CYCLOPS_ROOT}/src/cyclops-build/hptt/lib)
   set(CYCLOPS_HPTT_INCLUDE_DIR ${CYCLOPS_ROOT}/src/cyclops-build/hptt/include)
@@ -82,6 +82,10 @@ if(${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR" AND XPED_BUILD_CYCLOPS)
   
   message(STATUS ${cmd_configure})
   file(WRITE ${CYCLOPS_ROOT}/src/configure.sh ${cmd_configure})
+
+  set(cmd_patch "sed -i 's/\\&//g' ${CYCLOPS_ROOT}/src/cyclops/src/scripts/expand_includes.sh\; sed -i 's/ctf_all.hpp/ctf_all.hpp 2> \\/dev\\/null/g' ${CYCLOPS_ROOT}/src/cyclops/src/scripts/expand_includes.sh")
+  file(WRITE ${CYCLOPS_ROOT}/src/patch.sh ${cmd_patch})
+  
 #  get_target_property(MAIN_CXXFLAGS project_options INTERFACE_COMPILE_OPTIONS)
 #  message(STATUS ${MAIN_CXXFLAGS})
 
@@ -97,13 +101,16 @@ if(${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR" AND XPED_BUILD_CYCLOPS)
           GIT_REPOSITORY "https://github.com/cyclops-community/ctf.git"
           GIT_SHALLOW ON
           TIMEOUT 10
-#          PATCH_COMMAND bash ../patch.sh
+          PATCH_COMMAND bash ../patch.sh
 #         UPDATE_COMMAND ${GIT_EXECUTABLE} pull
           UPDATE_COMMAND ""
 #          CONFIGURE_COMMAND ../cyclops/configure CXX="mpicxx -cxx=${CMAKE_CXX_COMPILER}" CXXFLAGS=-march=native --install-dir=${CYCLOPS_ROOT} --with-hptt --build-hptt
           CONFIGURE_COMMAND bash ../configure.sh
+#	  CONFIGURE_COMMAND ""
           BUILD_COMMAND bash ../cmd_make.sh
+#	  BUILD_COMMAND ""
           INSTALL_COMMAND make install
+#	  INSTALL_COMMAND ""
           LOG_DOWNLOAD ON
           LOG_MERGED_STDOUTERR ON
           USES_TERMINAL_DOWNLOAD ON

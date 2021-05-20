@@ -39,6 +39,7 @@ function(set_project_warnings project_name)
       ${CLANG_WARNINGS}
       -Wno-type-limits
       -Wno-sign-compare
+      -Wno-int-in-bool-context
   )
 
   if(MSVC)

@@ -30,20 +30,29 @@ jobs:
     - uses: actions/checkout@v2
     - run: sudo add-apt-repository ppa:ubuntu-toolchain-r/ppa
     - run: sudo apt update -qq
-    - run: sudo apt install -qq libc++-dev
-    - run: sudo apt install -qq libc++abi-dev
-    - run: sudo apt install -qq llvm-11-dev
-    - run: sudo apt install -qq llvm-11-runtime
     - run: sudo apt install -qq libgsl-dev
     - run: sudo apt install -qq libgslcblas0
     - run: sudo apt install -qq libboost-all-dev
     - run: sudo apt install -qq g++-10
     - run: sudo apt install -qq doctest-dev
+    - run: sudo apt install -qq lcov
+
+#    - run: sudo add-apt-repository ppa:ubuntu-toolchain-r/ppa
+#    - run: sudo apt update -qq
+#    - run: sudo apt install -qq libc++-dev
+#    - run: sudo apt install -qq libc++abi-dev
+#    - run: sudo apt install -qq llvm-11-dev
+#    - run: sudo apt install -qq llvm-11-runtime
+#    - run: sudo apt install -qq libgsl-dev
+#    - run: sudo apt install -qq libgslcblas0
+#    - run: sudo apt install -qq libboost-all-dev
+#    - run: sudo apt install -qq g++-10
+#    - run: sudo apt install -qq doctest-dev
     - run: sudo apt install -qq libopenblas-dev
-    - run: sudo apt install -qq liblapacke-dev
+#    - run: sudo apt install -qq liblapacke-dev
     - run: sudo apt install -qq openmpi-bin libopenmpi-dev
     - run: sudo apt install -qq libomp-dev
-    - run: apt list --installed
+#    - run: apt list --installed
     
     - name: Create Build Environment
       # Some projects don't allow in-source building, so create a separate build directory

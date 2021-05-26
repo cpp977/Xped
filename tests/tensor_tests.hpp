@@ -58,7 +58,7 @@ void test_tensor_permute(const Qbasis<Symmetry, 1>& B, const Qbasis<Symmetry, 1>
     perform_tensor_permute<Xped<2, 2, Symmetry>, shift, 2, 3, 1, 0>(t, tplain);
     perform_tensor_permute<Xped<2, 2, Symmetry>, shift, 3, 2, 1, 0>(t, tplain);
 
-    // for (const auto& p : Permutation<4>::all()) {
+    // for (const auto& p : Permutation::all(4)) {
     //         auto tp = t.template permute<shift>(p);
     //         auto tplainp = tp.plainTensor();
     //         Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p.template pi_as_index<Eigen::Index>());
@@ -140,7 +140,7 @@ void test_tensor_permute_within_codomain(const Qbasis<Symmetry, 1>& B,
     Xped<0, 4, Symmetry> t({{}}, {{B, C, D, E}});
     t.setRandom();
     auto tplain = t.plainTensor();
-    // Permutation<0> ptriv(std::array<std::size_t,0>{{}});
+    // Permutation ptriv(std::array<std::size_t,0>{{}});
 
     perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 0, 1, 2, 3>(t, tplain);
     perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 0, 1, 3, 2>(t, tplain);
@@ -167,7 +167,7 @@ void test_tensor_permute_within_codomain(const Qbasis<Symmetry, 1>& B,
     perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 2, 3, 1, 0>(t, tplain);
     perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 3, 2, 1, 0>(t, tplain);
 
-    // for (const auto& p : Permutation<4>::all()) {
+    // for (const auto& p : Permutation::all(4)) {
     //         auto test = t.template permute<0,2,1,3>();
     //         auto tp = t.permute(ptriv,p);
     //         Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p.pi_as_index<Eigen::Index>());
@@ -216,9 +216,9 @@ void test_tensor_permute_within_domain(const Qbasis<Symmetry, 1>& B,
     perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 2, 1, 3, 0>(t, tplain);
     perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 2, 3, 1, 0>(t, tplain);
     perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 3, 2, 1, 0>(t, tplain);
-    // Permutation<0> ptriv(std::array<std::size_t,0>{{}});
+    // Permutation ptriv(std::array<std::size_t,0>{{}});
 
-    // for (const auto& p : Permutation<4>::all()) {
+    // for (const auto& p : Permutation::all(4)) {
     //         auto tp = t.permute(p,ptriv);
     //         Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p.pi_as_index<Eigen::Index>());
     //         auto tplainp = tp.plainTensor();

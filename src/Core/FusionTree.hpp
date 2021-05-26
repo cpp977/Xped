@@ -310,7 +310,7 @@ struct FusionTree
         return out;
     }
 
-    std::unordered_map<FusionTree<Rank, Symmetry>, typename Symmetry::Scalar> permute(const Permutation<Rank>& p) const
+    std::unordered_map<FusionTree<Rank, Symmetry>, typename Symmetry::Scalar> permute(const Permutation& p) const
     {
         std::unordered_map<FusionTree<Rank, Symmetry>, typename Symmetry::Scalar> tmp;
         std::unordered_map<FusionTree<Rank, Symmetry>, typename Symmetry::Scalar> out;
@@ -522,7 +522,7 @@ turn(const FusionTree<Rank, Symmetry>& t1, const FusionTree<CoRank, Symmetry>& t
 
 template <int shift, std::size_t Rank, std::size_t CoRank, typename Symmetry>
 std::unordered_map<std::pair<FusionTree<Rank - shift, Symmetry>, FusionTree<CoRank + shift, Symmetry>>, typename Symmetry::Scalar>
-permute(const FusionTree<Rank, Symmetry>& t1, const FusionTree<CoRank, Symmetry>& t2, const Permutation<Rank + CoRank>& p)
+permute(const FusionTree<Rank, Symmetry>& t1, const FusionTree<CoRank, Symmetry>& t2, const Permutation& p)
 {
 #ifdef XPED_CACHE_PERMUTE_OUTPUT
     if constexpr(Symmetry::NON_ABELIAN) {
@@ -544,7 +544,7 @@ permute(const FusionTree<Rank, Symmetry>& t1, const FusionTree<CoRank, Symmetry>
     std::array<std::size_t, Rank + CoRank> pi_corrected;
     std::copy(pi_tmp.begin(), pi_tmp.begin() + newRank, pi_corrected.begin());
     for(std::size_t i = 0; i < newCoRank; i++) { pi_corrected[i + newRank] = pi_tmp[(newCoRank - 1) - i + newRank]; }
-    Permutation<Rank + CoRank> p_corrected(pi_corrected);
+    Permutation p_corrected(pi_corrected);
 
     constexpr int reshift = CoRank + shift;
     std::unordered_map<std::pair<FusionTree<Rank - shift, Symmetry>, FusionTree<CoRank + shift, Symmetry>>, typename Symmetry::Scalar> out;

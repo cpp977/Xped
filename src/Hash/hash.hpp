@@ -8,7 +8,6 @@
 // forward declaration
 template <std::size_t Rank, typename Symmetry>
 struct FusionTree;
-template <std::size_t N>
 struct Permutation;
 
 namespace std {
@@ -59,9 +58,9 @@ struct hash<std::pair<FusionTree<Rank, Symmetry>, FusionTree<CoRank, Symmetry>>>
 };
 
 template <size_t Rank, size_t CoRank, typename Symmetry>
-struct hash<std::tuple<FusionTree<Rank, Symmetry>, FusionTree<CoRank, Symmetry>, Permutation<Rank + CoRank>>>
+struct hash<std::tuple<FusionTree<Rank, Symmetry>, FusionTree<CoRank, Symmetry>, Permutation>>
 {
-    inline size_t operator()(const std::tuple<FusionTree<Rank, Symmetry>, FusionTree<CoRank, Symmetry>, Permutation<Rank + CoRank>>& ix) const
+    inline size_t operator()(const std::tuple<FusionTree<Rank, Symmetry>, FusionTree<CoRank, Symmetry>, Permutation>& ix) const
     {
         size_t seed = 0;
         boost::hash_combine(seed, std::get<0>(ix));

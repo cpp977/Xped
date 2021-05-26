@@ -39,7 +39,8 @@ void test_tree_permute(const Qbasis<Symmetry, 1>& B, const Qbasis<Symmetry, 1>& 
     auto BCD = BC.combine(D);
     auto BCDE = BCD.combine(E);
 
-    for(const auto& p : Permutation<4>::all()) {
+    for(const auto& p : Permutation::all(4)) {
+        std::cout << "p:" << std::endl << p.print() << std::endl;
         for(const auto& [q, num, plain] : BCDE) {
             for(const auto& tree : BCDE.tree(q)) {
                 std::unordered_map<FusionTree<4, Symmetry>, typename Symmetry::Scalar> check;
@@ -103,7 +104,7 @@ template <int shift, typename Symmetry>
 void test_tree_pair_permute(const Qbasis<Symmetry, 1>& B, const Qbasis<Symmetry, 1>& C)
 {
     auto BC = B.combine(C);
-    for(const auto& p : Permutation<4>::all()) {
+    for(const auto& p : Permutation::all(4)) {
         for(const auto& [q, num, plain] : BC) {
             for(const auto& t1 : BC.tree({q})) {
                 for(const auto& t2 : BC.tree({q})) {

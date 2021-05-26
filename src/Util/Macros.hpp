@@ -52,7 +52,6 @@
 #define XPED_INIT_TREE_CACHE_VARIABLE(VARIABLE_NAME, CACHE_SIZE) \
 template <std::size_t Rank, typename Symmetry> \
 struct FusionTree; \
-template <std::size_t N> \
 struct Permutation; \
 template <int shift, std::size_t Rank, std::size_t CoRank, typename Symmetry> \
 struct CacheManager \
@@ -62,7 +61,7 @@ struct CacheManager \
     typedef FusionTree<Rank, Symmetry> Tree; \
     typedef FusionTree<Rank - shift, Symmetry> NewTree; \
     typedef typename Symmetry::Scalar Scalar; \
-    typedef LRU::Cache<std::tuple<Tree, CoTree, Permutation<Rank + CoRank>>, std::unordered_map<std::pair<NewTree, NewCoTree>, Scalar>> CacheType; \
+    typedef LRU::Cache<std::tuple<Tree, CoTree, Permutation>, std::unordered_map<std::pair<NewTree, NewCoTree>, Scalar>> CacheType; \
     CacheManager(std::size_t cache_size) \
     { \
         cache = CacheType(cache_size); \

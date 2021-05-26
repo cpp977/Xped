@@ -387,8 +387,8 @@ Xped<Rank, CoRank, Symmetry, MatrixType_, TensorLib_>::permute_impl(seq::iseq<st
 {
     std::array<std::size_t, Rank> pdomain_ = {pds...};
     std::array<std::size_t, CoRank> pcodomain_ = {(pcs - Rank)...};
-    Permutation<Rank> p_domain(pdomain_);
-    Permutation<CoRank> p_codomain(pcodomain_);
+    Permutation p_domain(pdomain_);
+    Permutation p_codomain(pcodomain_);
 
     std::array<IndexType, Rank + CoRank> total_p;
     auto it_total = std::copy(p_domain.pi.begin(), p_domain.pi.end(), total_p.begin());
@@ -469,7 +469,7 @@ Xped<Rank - shift, CoRank + shift, Symmetry, MatrixType_, TensorLib_>
 Xped<Rank, CoRank, Symmetry, MatrixType_, TensorLib_>::permute_impl(seq::iseq<std::size_t, ps...> per) const
 {
     std::array<std::size_t, Rank + CoRank> p_ = {ps...};
-    Permutation<Rank + CoRank> p(p_);
+    Permutation p(p_);
     constexpr std::size_t newRank = Rank - shift;
     constexpr std::size_t newCoRank = CoRank + shift;
     Xped<newRank, newCoRank, Symmetry, MatrixType_, TensorLib_> out;

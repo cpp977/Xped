@@ -1,4 +1,4 @@
-#ifdef INTEL_MKL_VERSION
+#ifdef MKL_ILP64
 #    pragma message("Xped is using the intel math kernel library (MKL)")
 #endif
 

@@ -70,20 +70,6 @@ option(XPED_ENABLE_CLANG_FORMAT "Enable clang-format target." OFF)
 ##########################################                          end                   #########################################
 ###################################################################################################################################
 
-# Link this 'library' to set the c++ standard / compile-time options requested
-add_library(project_options INTERFACE)
-
-# include compiler options from cmake/CompilerOptions.cmake
-include(cmake/CompilerOptions.cmake)
-set_project_options(project_options)
-
-# Link this 'library' to use the warnings specified in CompilerWarnings.cmake
-add_library(project_warnings INTERFACE)
-
-# standard compiler warnings
-include(cmake/CompilerWarnings.cmake)
-set_project_warnings(project_warnings)
-
 if(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
   if(XPED_ENABLE_BUILD_WITH_TIME_TRACE)
     target_compile_options(project_options INTERFACE -ftime-trace)
@@ -129,6 +115,9 @@ if(XPED_USE_BLAS)
     else()
       message(STATUS "Found mkl headers: ${XPED_MKL_INCLUDE_DIR}")
     endif()
+    set_target_properties(BLAS::BLAS PROPERTIES
+      INTERFACE_INCLUDE_DIRECTORIES ${XPED_MKL_INCLUDE_DIR}
+      )
   else()
     set(XPED_USE_MKL OFF)
   endif()
@@ -160,6 +149,20 @@ endif()
 find_package(GSL REQUIRED)
 find_package(Boost REQUIRED)
 
+# Link this 'library' to set the c++ standard / compile-time options requested
+add_library(project_options INTERFACE)
+
+# include compiler options from cmake/CompilerOptions.cmake
+include(cmake/CompilerOptions.cmake)
+set_project_options(project_options)
+
+# Link this 'library' to use the warnings specified in CompilerWarnings.cmake
+add_library(project_warnings INTERFACE)
+
+# standard compiler warnings
+include(cmake/CompilerWarnings.cmake)
+set_project_warnings(project_warnings)
+
 #git is required to clone libraries used from github/gitlab
 find_package(Git REQUIRED)
 include(cmake/addGitLibs.cmake)
@@ -181,7 +184,10 @@ if(${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR" AND NOT XPED_BUILD_CYCLOPS)
     #NO_DEFAULT_PATH
     #HINTS /home/user/__LIBS__/ctf/include
     REQUIRED
-  )
+    )
+  set_target_properties(cyclops_lib::all PROPERTIES
+    INCLUDE_DIRECTORIES ${CYCLOPS_INCLUDE_DIR}
+    )
   message(STATUS ${CYCLOPS_INCLUDE_DIR})
 endif()
 

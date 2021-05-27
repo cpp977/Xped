@@ -4,58 +4,73 @@ set(TABULATE_ROOT ${CMAKE_BINARY_DIR}/thirdparty/tabulate)
 set(TABULATE_INCLUDE_DIR ${TABULATE_ROOT}/src/tabulate/single_include)
 
 ExternalProject_Add(
-        tabulate
-        PREFIX ${TABULATE_ROOT}
-        GIT_REPOSITORY "https://github.com/p-ranav/tabulate"
-        GIT_SHALLOW ON
-        TIMEOUT 10
-        UPDATE_COMMAND ""
-        CONFIGURE_COMMAND ""
-        BUILD_COMMAND ""
-        INSTALL_COMMAND ""
-        LOG_DOWNLOAD ON
-        LOG_MERGED_STDOUTERR ON
-        USES_TERMINAL_DOWNLOAD ON
-)
+  tabulate
+  PREFIX ${TABULATE_ROOT}
+  GIT_REPOSITORY "https://github.com/p-ranav/tabulate"
+  GIT_SHALLOW ON
+  TIMEOUT 10
+  UPDATE_COMMAND ""
+  CONFIGURE_COMMAND ""
+  BUILD_COMMAND ""
+  INSTALL_COMMAND ""
+  LOG_DOWNLOAD ON
+  LOG_MERGED_STDOUTERR ON
+  USES_TERMINAL_DOWNLOAD ON
+  )
+
+add_library(XPED_TABULATE INTERFACE)
+set_target_properties(XPED_TABULATE PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES ${TABULATE_INCLUDE_DIR}
+  )
 
 set(SEQ_ROOT ${CMAKE_BINARY_DIR}/thirdparty/seq)
 set(SEQ_INCLUDE_DIR ${SEQ_ROOT}/src/seq/include)
 
 ExternalProject_Add(
-        seq
-        PREFIX ${SEQ_ROOT}
-        GIT_REPOSITORY "https://github.com/integricho/seq.git"
-        GIT_SHALLOW ON
-        TIMEOUT 10
-#        UPDATE_COMMAND ${GIT_EXECUTABLE} pull
-        UPDATE_COMMAND ""
-        CONFIGURE_COMMAND ""
-        BUILD_COMMAND ""
-        INSTALL_COMMAND ""
-        LOG_DOWNLOAD ON
-        LOG_MERGED_STDOUTERR ON
-        USES_TERMINAL_DOWNLOAD ON
-)
+  seq
+  PREFIX ${SEQ_ROOT}
+  GIT_REPOSITORY "https://github.com/integricho/seq.git"
+  GIT_SHALLOW ON
+  TIMEOUT 10
+  #        UPDATE_COMMAND ${GIT_EXECUTABLE} pull
+  UPDATE_COMMAND ""
+  CONFIGURE_COMMAND ""
+  BUILD_COMMAND ""
+  INSTALL_COMMAND ""
+  LOG_DOWNLOAD ON
+  LOG_MERGED_STDOUTERR ON
+  USES_TERMINAL_DOWNLOAD ON
+  )
+
+add_library(XPED_SEQ INTERFACE)
+set_target_properties(XPED_SEQ PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES ${SEQ_INCLUDE_DIR}
+  )
 
 if(${XPED_TENSOR_LIB} STREQUAL "ARRAY_TENSOR")
   set(ARRAY_ROOT ${CMAKE_BINARY_DIR}/thirdparty/array)
   set(ARRAY_INCLUDE_DIR ${ARRAY_ROOT}/src)
 
   ExternalProject_Add(
-          array
-          PREFIX ${ARRAY_ROOT}
-          GIT_REPOSITORY "https://github.com/dsharlet/array.git"
-          GIT_SHALLOW ON
-          TIMEOUT 10
-#         UPDATE_COMMAND ${GIT_EXECUTABLE} pull
-          UPDATE_COMMAND ""
-          CONFIGURE_COMMAND ""
-          BUILD_COMMAND ""
-          INSTALL_COMMAND ""
-          LOG_DOWNLOAD ON
-          LOG_MERGED_STDOUTERR ON
-          USES_TERMINAL_DOWNLOAD ON
-  )
+    array
+    PREFIX ${ARRAY_ROOT}
+    GIT_REPOSITORY "https://github.com/dsharlet/array.git"
+    GIT_SHALLOW ON
+    TIMEOUT 10
+    #         UPDATE_COMMAND ${GIT_EXECUTABLE} pull
+    UPDATE_COMMAND ""
+    CONFIGURE_COMMAND ""
+    BUILD_COMMAND ""
+    INSTALL_COMMAND ""
+    LOG_DOWNLOAD ON
+    LOG_MERGED_STDOUTERR ON
+    USES_TERMINAL_DOWNLOAD ON
+    )
+
+  add_library(XPED_ARRAY INTERFACE)
+  set_target_properties(XPED_ARRAY PROPERTIES
+    INTERFACE_INCLUDE_DIRECTORIES ${ARRAY_INCLUDE_DIR}
+    )
 endif()
 
 if(${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR" AND XPED_BUILD_CYCLOPS)
@@ -73,8 +88,13 @@ if(${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR" AND XPED_BUILD_CYCLOPS)
     list(APPEND cmd_configure " CXXFLAGS=\"-O3 -march=native -DOMP_OFF\"")
   endif()
   if(XPED_USE_BLAS)
-    list(APPEND cmd_configure " LIBS=\"${BLAS_LIBRARIES}\"")
-    list(APPEND cmd_configure " LD_LIBS=\"${BLAS_LIBRARIES}\"")
+    get_target_property(XPED_USED_BLAS_LINKER_FLAGS BLAS::BLAS INTERFACE_LINK_LIBRARIES)
+    set(XPED_USED_BLAS_LIBS "")
+    foreach(MKL_LIB ${XPED_USED_BLAS_LINKER_FLAGS})
+      set(XPED_USED_BLAS_LIBS "${XPED_USED_BLAS_LIBS} ${MKL_LIB}")
+    endforeach()
+    list(APPEND cmd_configure " LIBS=\"${XPED_USED_BLAS_LIBS}\"")
+    list(APPEND cmd_configure " LD_LIBS=\"${XPED_USED_BLAS_LIBS}\"")
   endif()
   list(APPEND cmd_configure " --install-dir=${CYCLOPS_ROOT}")
   list(APPEND cmd_configure " --with-hptt")
@@ -83,7 +103,9 @@ if(${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR" AND XPED_BUILD_CYCLOPS)
   message(STATUS ${cmd_configure})
   file(WRITE ${CYCLOPS_ROOT}/src/configure.sh ${cmd_configure})
 
-  set(cmd_patch "sed -i 's/\\&//g' ${CYCLOPS_ROOT}/src/cyclops/src/scripts/expand_includes.sh\; sed -i 's/ctf_all.hpp/ctf_all.hpp 2> \\/dev\\/null/g' ${CYCLOPS_ROOT}/src/cyclops/src/scripts/expand_includes.sh")
+  set(cmd_patch "sed -i 's/\\&//g' ${CYCLOPS_ROOT}/src/cyclops/src/scripts/expand_includes.sh\; sed -i 's/ctf_all.hpp/ctf_all.hpp 2> \\/dev\\/null/g' ${CYCLOPS_ROOT}/src/cyclops/src/scripts/expand_includes.sh\; sed -i 's/bool tensor_name_less::operator()(CTF::Idx_Tensor\\* A, CTF::Idx_Tensor\\* B)/bool tensor_name_less::operator()(CTF::Idx_Tensor\\* A, CTF::Idx_Tensor\\* B) const/g' ${CYCLOPS_ROOT}/src/cyclops/src/interface/term.cxx\; sed -i 's/bool operator()(CTF::Idx_Tensor\\* A, CTF::Idx_Tensor\\* B)/bool operator()(CTF::Idx_Tensor\\* A, CTF::Idx_Tensor\\* B) const/g' ${CYCLOPS_ROOT}/src/cyclops/src/interface/term.h")
+
+  #
   file(WRITE ${CYCLOPS_ROOT}/src/patch.sh ${cmd_patch})
   
 #  get_target_property(MAIN_CXXFLAGS project_options INTERFACE_COMPILE_OPTIONS)
@@ -117,12 +139,12 @@ if(${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR" AND XPED_BUILD_CYCLOPS)
   )
   add_library(cyclops_lib::cyclops_lib UNKNOWN IMPORTED)
   set_target_properties(cyclops_lib::cyclops_lib PROPERTIES
-    #INTERFACE_INCLUDE_DIRECTORIES ${MyLibBar_INCLUDE_DIR}
+    INCLUDE_DIRECTORIES ${CYCLOPS_INCLUDE_DIR}
     IMPORTED_LOCATION ${CYCLOPS_LIB_DIR}/libctf.a
     )
   add_library(cyclops_lib::hptt UNKNOWN IMPORTED)
   set_target_properties(cyclops_lib::hptt PROPERTIES
-    #INTERFACE_INCLUDE_DIRECTORIES ${MyLibBar_INCLUDE_DIR}
+    INCLUDE_DIRECTORIES ${CYCLOPS_HPTT_INCLUDE_DIR}
     IMPORTED_LOCATION ${CYCLOPS_HPTT_LIB_DIR}/libhptt.a
     )
   add_library(cyclops_lib::all INTERFACE IMPORTED)
@@ -150,42 +172,57 @@ ExternalProject_Add(
         USES_TERMINAL_DOWNLOAD ON
 )
 
+add_library(XPED_TOOLS INTERFACE)
+set_target_properties(XPED_TOOLS PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES ${TOOLS_INCLUDE_DIR}
+  )
+
 set(EIGEN_ROOT ${CMAKE_BINARY_DIR}/thirdparty/eigen)
 set(EIGEN_INCLUDE_DIR ${EIGEN_ROOT}/src/Eigen)
 
 ExternalProject_Add(
-        Eigen
-        PREFIX ${EIGEN_ROOT}
-        GIT_REPOSITORY "https://gitlab.com/libeigen/eigen"
-        GIT_SHALLOW ON
-        TIMEOUT 10
-        UPDATE_COMMAND ""
-        CONFIGURE_COMMAND "" 
-        BUILD_COMMAND ""
-        INSTALL_COMMAND "" 
-        TEST_COMMAND ""
-        LOG_DOWNLOAD ON
-        LOG_MERGED_STDOUTERR ON
-        USES_TERMINAL_DOWNLOAD ON
-)
+  Eigen
+  PREFIX ${EIGEN_ROOT}
+  GIT_REPOSITORY "https://gitlab.com/libeigen/eigen"
+  GIT_SHALLOW ON
+  TIMEOUT 10
+  UPDATE_COMMAND ""
+  CONFIGURE_COMMAND "" 
+  BUILD_COMMAND ""
+  INSTALL_COMMAND "" 
+  TEST_COMMAND ""
+  LOG_DOWNLOAD ON
+  LOG_MERGED_STDOUTERR ON
+  USES_TERMINAL_DOWNLOAD ON
+  )
+
+add_library(XPED_EIGEN INTERFACE)
+set_target_properties(XPED_EIGEN PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES ${EIGEN_INCLUDE_DIR}
+  )
 
 if(XPED_ENABLE_LRU_CACHE)
-set(LRUCACHE_ROOT ${CMAKE_BINARY_DIR}/thirdparty/lru)
-set(LRUCACHE_INCLUDE_DIR ${LRUCACHE_ROOT}/src/lru_cache/include)
+  set(LRUCACHE_ROOT ${CMAKE_BINARY_DIR}/thirdparty/lru)
+  set(LRUCACHE_INCLUDE_DIR ${LRUCACHE_ROOT}/src/lru_cache/include)
 
-ExternalProject_Add(
-        lru_cache
-        PREFIX ${LRUCACHE_ROOT}
-        GIT_REPOSITORY "https://github.com/goldsborough/lru-cache"
-        GIT_SHALLOW ON
-        TIMEOUT 10
-        UPDATE_COMMAND ""
-        CONFIGURE_COMMAND "" 
-        BUILD_COMMAND ""
-        INSTALL_COMMAND "" 
-        TEST_COMMAND ""
-        LOG_DOWNLOAD ON
-        LOG_MERGED_STDOUTERR ON
-        USES_TERMINAL_DOWNLOAD ON
-)
+  ExternalProject_Add(
+    lru_cache
+    PREFIX ${LRUCACHE_ROOT}
+    GIT_REPOSITORY "https://github.com/goldsborough/lru-cache"
+    GIT_SHALLOW ON
+    TIMEOUT 10
+    UPDATE_COMMAND ""
+    CONFIGURE_COMMAND "" 
+    BUILD_COMMAND ""
+    INSTALL_COMMAND "" 
+    TEST_COMMAND ""
+    LOG_DOWNLOAD ON
+    LOG_MERGED_STDOUTERR ON
+    USES_TERMINAL_DOWNLOAD ON
+    )
+  
+  add_library(XPED_LRUCACHE INTERFACE)
+  set_target_properties(XPED_LRUCACHE PROPERTIES
+    INTERFACE_INCLUDE_DIRECTORIES ${LRUCACHE_INCLUDE_DIR}
+    )
 endif()

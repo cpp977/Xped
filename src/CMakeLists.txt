@@ -5,23 +5,7 @@ add_subdirectory(MPS)
 add_subdirectory(Core)
 add_subdirectory(Symmetry)
 
-include_directories(${XPED_DIR}/src
-                    ${TOOLS_INCLUDE_DIR}
-                    ${TABULATE_INCLUDE_DIR}
-                    ${EIGEN_INCLUDE_DIR}
-                    ${LRUCACHE_INCLUDE_DIR}
-                    ${SEQ_INCLUDE_DIR}
-                    ${ARRAY_INCLUDE_DIR})
-if(XPED_USE_MKL)
-  include_directories(${XPED_MKL_INCLUDE_DIR})
-endif()
-
-if (${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR")
-  include_directories(${CYCLOPS_INCLUDE_DIR})
-  if(${XPED_BUILD_CYCLOPS})
-    include_directories(${CYCLOPS_HPTT_INCLUDE_DIR})
-  endif()
-endif()
+include_directories(${XPED_DIR}/src)
 
 file(GLOB SOURCES "Core/*.hpp"
                   "Symmetry/*.hpp"
@@ -29,7 +13,7 @@ file(GLOB SOURCES "Core/*.hpp"
                   "Interfaces/*.hpp"
                   "MPS/*.hpp"
                   "Util/*.hpp")
-                  
+                
 add_executable(run
                main.cpp
                ${SOURCES})
@@ -52,13 +36,24 @@ endif()
 
 
 target_link_libraries (run
-                       project_options
-                       project_warnings
-                       GSL::gsl
-                       GSL::gslcblas)
+  project_options
+  project_warnings
+  GSL::gsl
+  GSL::gslcblas
+  XPED_EIGEN
+  XPED_TOOLS
+  XPED_TABULATE
+  XPED_SEQ
+  )
 
 if(${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR")
   target_link_libraries(run cyclops_lib::all)
+elseif(${XPED_TENSOR_LIB} STREQUAL "ARRAY_TENSOR")
+  target_link_libraries(run XPED_ARRAY)
+endif()
+
+if(XPED_ENABLE_LRU_CACHE)
+  target_link_libraries(run XPED_LRUCACHE)
 endif()
 
 if(XPED_USE_OPENMPI)

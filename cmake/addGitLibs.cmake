@@ -115,42 +115,43 @@ if(${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR" AND XPED_BUILD_CYCLOPS)
   file(WRITE ${CYCLOPS_ROOT}/src/cmd_make.sh ${cmd_make})
   
   ExternalProject_Add(
-          cyclops
-          PREFIX ${CYCLOPS_ROOT}
-          BINARY_DIR "${CYCLOPS_ROOT}/src/cyclops-build"
-          SOURCE_DIR "${CYCLOPS_ROOT}/src/cyclops"
-          INSTALL_DIR "${CYCLOPS_ROOT}/src/cyclops-build"
-          GIT_REPOSITORY "https://github.com/cyclops-community/ctf.git"
-          GIT_SHALLOW ON
-          TIMEOUT 10
-          PATCH_COMMAND bash ../patch.sh
-#         UPDATE_COMMAND ${GIT_EXECUTABLE} pull
-          UPDATE_COMMAND ""
-#          CONFIGURE_COMMAND ../cyclops/configure CXX="mpicxx -cxx=${CMAKE_CXX_COMPILER}" CXXFLAGS=-march=native --install-dir=${CYCLOPS_ROOT} --with-hptt --build-hptt
-          CONFIGURE_COMMAND bash ../configure.sh
-#	  CONFIGURE_COMMAND ""
-          BUILD_COMMAND bash ../cmd_make.sh
-#	  BUILD_COMMAND ""
-          INSTALL_COMMAND make install
-#	  INSTALL_COMMAND ""
-          LOG_DOWNLOAD ON
-          LOG_MERGED_STDOUTERR ON
-          USES_TERMINAL_DOWNLOAD ON
-  )
+    cyclops
+    PREFIX ${CYCLOPS_ROOT}
+    BINARY_DIR "${CYCLOPS_ROOT}/src/cyclops-build"
+    SOURCE_DIR "${CYCLOPS_ROOT}/src/cyclops"
+    INSTALL_DIR "${CYCLOPS_ROOT}/src/cyclops-build"
+    GIT_REPOSITORY "https://github.com/cyclops-community/ctf.git"
+    GIT_SHALLOW ON
+    TIMEOUT 10
+    PATCH_COMMAND bash ../patch.sh
+    #         UPDATE_COMMAND ${GIT_EXECUTABLE} pull
+    UPDATE_COMMAND ""
+    #          CONFIGURE_COMMAND ../cyclops/configure CXX="mpicxx -cxx=${CMAKE_CXX_COMPILER}" CXXFLAGS=-march=native --install-dir=${CYCLOPS_ROOT} --with-hptt --build-hptt
+    CONFIGURE_COMMAND bash ../configure.sh
+    #	  CONFIGURE_COMMAND ""
+    BUILD_COMMAND bash ../cmd_make.sh
+    #	  BUILD_COMMAND ""
+    INSTALL_COMMAND make install
+    #	  INSTALL_COMMAND ""
+    LOG_DOWNLOAD ON
+    LOG_MERGED_STDOUTERR ON
+    USES_TERMINAL_DOWNLOAD ON
+    )
   add_library(cyclops_lib::cyclops_lib UNKNOWN IMPORTED)
   set_target_properties(cyclops_lib::cyclops_lib PROPERTIES
-    INCLUDE_DIRECTORIES ${CYCLOPS_INCLUDE_DIR}
     IMPORTED_LOCATION ${CYCLOPS_LIB_DIR}/libctf.a
     )
+  target_include_directories(cyclops_lib::cyclops_lib INTERFACE ${CYCLOPS_INCLUDE_DIR})
   add_library(cyclops_lib::hptt UNKNOWN IMPORTED)
   set_target_properties(cyclops_lib::hptt PROPERTIES
-    INCLUDE_DIRECTORIES ${CYCLOPS_HPTT_INCLUDE_DIR}
     IMPORTED_LOCATION ${CYCLOPS_HPTT_LIB_DIR}/libhptt.a
     )
+  target_include_directories(cyclops_lib::hptt INTERFACE ${CYCLOPS_HPTT_INCLUDE_DIR})
+
   add_library(cyclops_lib::all INTERFACE IMPORTED)
   set_property(TARGET cyclops_lib::all PROPERTY
-  INTERFACE_LINK_LIBRARIES cyclops_lib::cyclops_lib cyclops_lib::hptt)
-  
+    INTERFACE_LINK_LIBRARIES cyclops_lib::cyclops_lib cyclops_lib::hptt
+    )
 endif()
 
 set(TOOLS_ROOT ${CMAKE_BINARY_DIR}/thirdparty/tools)

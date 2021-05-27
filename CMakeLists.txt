@@ -70,29 +70,6 @@ option(XPED_ENABLE_CLANG_FORMAT "Enable clang-format target." OFF)
 ##########################################                          end                   #########################################
 ###################################################################################################################################
 
-if(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
-  if(XPED_ENABLE_BUILD_WITH_TIME_TRACE)
-    target_compile_options(project_options INTERFACE -ftime-trace)
-  endif()
-endif()
-
-# enable cache system
-include(cmake/Cache.cmake)
-
-# sanitizer options if supported by compiler
-include(cmake/Sanitizers.cmake)
-enable_sanitizers(project_options)
-
-# enable doxygen
-include(cmake/Doxygen.cmake)
-enable_doxygen()
-
-# allow for static analysis options
-include(cmake/StaticAnalyzers.cmake)
-
-# add clang-format target
-include(cmake/clang-format.cmake)
-
 find_package(GSL REQUIRED)
 find_package(Boost REQUIRED)
 
@@ -190,6 +167,29 @@ if(${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR" AND NOT XPED_BUILD_CYCLOPS)
     )
   message(STATUS ${CYCLOPS_INCLUDE_DIR})
 endif()
+
+if(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
+  if(XPED_ENABLE_BUILD_WITH_TIME_TRACE)
+    target_compile_options(project_options INTERFACE -ftime-trace)
+  endif()
+endif()
+
+# enable cache system
+include(cmake/Cache.cmake)
+
+# sanitizer options if supported by compiler
+include(cmake/Sanitizers.cmake)
+enable_sanitizers(project_options)
+
+# enable doxygen
+include(cmake/Doxygen.cmake)
+enable_doxygen()
+
+# allow for static analysis options
+include(cmake/StaticAnalyzers.cmake)
+
+# add clang-format target
+include(cmake/clang-format.cmake)
 
 add_subdirectory(src)
 

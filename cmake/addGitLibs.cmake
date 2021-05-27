@@ -141,11 +141,13 @@ if(${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR" AND XPED_BUILD_CYCLOPS)
   set_target_properties(cyclops_lib::cyclops_lib PROPERTIES
     IMPORTED_LOCATION ${CYCLOPS_LIB_DIR}/libctf.a
     )
+  file(MAKE_DIRECTORY ${CYCLOPS_INCLUDE_DIR})
   target_include_directories(cyclops_lib::cyclops_lib INTERFACE ${CYCLOPS_INCLUDE_DIR})
   add_library(cyclops_lib::hptt UNKNOWN IMPORTED)
   set_target_properties(cyclops_lib::hptt PROPERTIES
     IMPORTED_LOCATION ${CYCLOPS_HPTT_LIB_DIR}/libhptt.a
     )
+  file(MAKE_DIRECTORY ${CYCLOPS_HPTT_INCLUDE_DIR})
   target_include_directories(cyclops_lib::hptt INTERFACE ${CYCLOPS_HPTT_INCLUDE_DIR})
 
   add_library(cyclops_lib::all INTERFACE IMPORTED)

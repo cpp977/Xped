@@ -42,11 +42,6 @@ jobs:
     - run: sudo apt install -qq liblapacke-dev
     - run: sudo apt install -qq openmpi-bin libopenmpi-dev
     - run: sudo apt install -qq libomp-dev
-
-#    - run: sudo apt install -qq libc++-dev
-#    - run: sudo apt install -qq libc++abi-dev
-#    - run: sudo apt install -qq llvm-11-dev
-#    - run: sudo apt install -qq llvm-11-runtime
     
     - name: Create Build Environment
       # Some projects don't allow in-source building, so create a separate build directory
@@ -64,4 +59,4 @@ jobs:
       working-directory: ${{runner.workspace}}/build
       shell: bash
       # Execute the build.  You can specify a specific target with "--target <NAME>"
-      run: cmake --build . --config $BUILD_TYPE -- -j1 VERBOSE=1
+      run: cmake --build . --config $BUILD_TYPE -- -j2

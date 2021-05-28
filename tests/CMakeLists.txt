@@ -98,7 +98,7 @@ doctest_discover_tests(basis_test TEST_PREFIX basis__ ADD_LABELS "1")
 #########################
 #        tree_test      #
 #########################
-add_executable(tree_test basis.cpp $<TARGET_OBJECTS:test_suite>)
+add_executable(tree_test tree.cpp $<TARGET_OBJECTS:test_suite>)
 add_dependencies(tree_test
                  tabulate
                  TOOLS
@@ -153,7 +153,7 @@ doctest_discover_tests(tree_test TEST_PREFIX basis__ ADD_LABELS "1")
 #########################
 #       tensor_test     #
 #########################
-add_executable(tensor_test basis.cpp $<TARGET_OBJECTS:test_suite>)
+add_executable(tensor_test tensor.cpp $<TARGET_OBJECTS:test_suite>)
 add_dependencies(tensor_test
                  tabulate
                  TOOLS
@@ -208,7 +208,7 @@ doctest_discover_tests(tensor_test TEST_PREFIX basis__ ADD_LABELS "1")
 #########################
 #        mps_test       #
 #########################
-add_executable(mps_test basis.cpp $<TARGET_OBJECTS:test_suite>)
+add_executable(mps_test mps.cpp $<TARGET_OBJECTS:test_suite>)
 add_dependencies(mps_test
                  tabulate
                  TOOLS

@@ -800,7 +800,7 @@ struct TensorInterface<CyclopsTensorLib>
             global_idx += index[i] * factor;
         }
 
-        Scalar out;
+        Scalar out = 0.;
 
         int64_t nvals;
         int64_t* indices;

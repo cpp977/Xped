@@ -6,7 +6,7 @@ void test_tree_swap(const Qbasis<Symmetry, 1>& B, const Qbasis<Symmetry, 1>& C, 
     auto BCDE = BCD.combine(E);
 
     for(std::size_t pos = 0ul; pos < 3; pos++) {
-        for(const auto [q, num, plain] : BCDE) {
+        for(const auto& [q, num, plain] : BCDE) {
             for(const auto& tree : BCDE.tree(q)) {
                 std::unordered_map<FusionTree<4, Symmetry>, typename Symmetry::Scalar> check;
                 auto transformed = tree.swap(pos);

@@ -33,7 +33,7 @@ using std::string;
 XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100)
 #endif
 
-#include "Interfaces/tensor_traits.hpp"
+#include "Interfaces/TensorInterface.hpp"
 
 #include "Core/Qbasis.hpp"
 #include "Symmetry/SU2.hpp"
@@ -245,15 +245,15 @@ TEST_CASE("Testing operations with SU(2)-spin matrices.")
 
         // transform to plain tensor and check against pauli_vec1
         auto tplain = s1.adjoint().eval().plainTensor();
-        for(Eigen::Index k = 0; k < tensortraits<M_TENSORLIB>::dimensions<double, 3>(tplain)[2]; k++) {
+        for(Eigen::Index k = 0; k < TensorInterface<M_TENSORLIB>::dimensions<double, 3>(tplain)[2]; k++) {
             Eigen::Matrix<double, -1, -1> pauli(twoS1 + 1, twoS1 + 1);
-            for(Eigen::Index j = 0; j < tensortraits<M_TENSORLIB>::dimensions<double, 3>(tplain)[1]; j++)
-                for(Eigen::Index i = 0; i < tensortraits<M_TENSORLIB>::dimensions<double, 3>(tplain)[0]; i++) {
-                    pauli(i, j) = tensortraits<M_TENSORLIB>::getVal<double, 3>(
+            for(Eigen::Index j = 0; j < TensorInterface<M_TENSORLIB>::dimensions<double, 3>(tplain)[1]; j++)
+                for(Eigen::Index i = 0; i < TensorInterface<M_TENSORLIB>::dimensions<double, 3>(tplain)[0]; i++) {
+                    pauli(i, j) = TensorInterface<M_TENSORLIB>::getVal<double, 3>(
                         tplain,
-                        std::array<tensortraits<M_TENSORLIB>::Indextype, 3>{static_cast<tensortraits<M_TENSORLIB>::Indextype>(i),
-                                                                            static_cast<tensortraits<M_TENSORLIB>::Indextype>(j),
-                                                                            static_cast<tensortraits<M_TENSORLIB>::Indextype>(k)});
+                        std::array<TensorInterface<M_TENSORLIB>::Indextype, 3>{static_cast<TensorInterface<M_TENSORLIB>::Indextype>(i),
+                                                                               static_cast<TensorInterface<M_TENSORLIB>::Indextype>(j),
+                                                                               static_cast<TensorInterface<M_TENSORLIB>::Indextype>(k)});
                 }
             CHECK((pauli - pauli_vec1[k]).norm() == doctest::Approx(0.));
         }
@@ -264,15 +264,15 @@ TEST_CASE("Testing operations with SU(2)-spin matrices.")
         auto prod1 = (s1.adjoint().eval().permute<-1, 0, 1, 2>() * couple1.permute<+1, 0, 2, 1>()).permute<0, 0, 3, 1, 2>() * s1;
         // transform to plain tensor and check against S^2
         auto check1 = prod1.plainTensor();
-        for(Eigen::Index j = 0; j < tensortraits<M_TENSORLIB>::dimensions<double, 3>(check1)[1]; j++) {
+        for(Eigen::Index j = 0; j < TensorInterface<M_TENSORLIB>::dimensions<double, 3>(check1)[1]; j++) {
             Eigen::Matrix<double, -1, -1> diag(twoS1 + 1, twoS1 + 1);
-            for(Eigen::Index k = 0; k < tensortraits<M_TENSORLIB>::dimensions<double, 3>(check1)[2]; k++)
-                for(Eigen::Index i = 0; i < tensortraits<M_TENSORLIB>::dimensions<double, 3>(check1)[0]; i++) {
-                    diag(i, k) = tensortraits<M_TENSORLIB>::getVal<double, 3>(
+            for(Eigen::Index k = 0; k < TensorInterface<M_TENSORLIB>::dimensions<double, 3>(check1)[2]; k++)
+                for(Eigen::Index i = 0; i < TensorInterface<M_TENSORLIB>::dimensions<double, 3>(check1)[0]; i++) {
+                    diag(i, k) = TensorInterface<M_TENSORLIB>::getVal<double, 3>(
                         check1,
-                        std::array<tensortraits<M_TENSORLIB>::Indextype, 3>{static_cast<tensortraits<M_TENSORLIB>::Indextype>(i),
-                                                                            static_cast<tensortraits<M_TENSORLIB>::Indextype>(j),
-                                                                            static_cast<tensortraits<M_TENSORLIB>::Indextype>(k)});
+                        std::array<TensorInterface<M_TENSORLIB>::Indextype, 3>{static_cast<TensorInterface<M_TENSORLIB>::Indextype>(i),
+                                                                               static_cast<TensorInterface<M_TENSORLIB>::Indextype>(j),
+                                                                               static_cast<TensorInterface<M_TENSORLIB>::Indextype>(k)});
                 }
             CHECK((diag - S1 * (S1 + 1.) * Eigen::Matrix<double, -1, -1>::Identity(twoS1 + 1, twoS1 + 1)).norm() == doctest::Approx(0.));
         }
@@ -283,15 +283,15 @@ TEST_CASE("Testing operations with SU(2)-spin matrices.")
         auto prod3 = (s1.adjoint().eval().permute<-1, 0, 1, 2>() * couple3.permute<+1, 0, 2, 1>()).permute<0, 0, 3, 1, 2>() * s1;
         // transform to plain tensor and check against SxS
         auto check3 = prod3.adjoint().eval().plainTensor();
-        for(Eigen::Index k = 0; k < tensortraits<M_TENSORLIB>::dimensions<double, 3>(check3)[2]; k++) {
+        for(Eigen::Index k = 0; k < TensorInterface<M_TENSORLIB>::dimensions<double, 3>(check3)[2]; k++) {
             Eigen::Matrix<double, -1, -1> mat(twoS1 + 1, twoS1 + 1);
-            for(Eigen::Index j = 0; j < tensortraits<M_TENSORLIB>::dimensions<double, 3>(check3)[1]; j++)
-                for(Eigen::Index i = 0; i < tensortraits<M_TENSORLIB>::dimensions<double, 3>(check3)[0]; i++) {
-                    mat(i, j) = tensortraits<M_TENSORLIB>::getVal<double, 3>(
+            for(Eigen::Index j = 0; j < TensorInterface<M_TENSORLIB>::dimensions<double, 3>(check3)[1]; j++)
+                for(Eigen::Index i = 0; i < TensorInterface<M_TENSORLIB>::dimensions<double, 3>(check3)[0]; i++) {
+                    mat(i, j) = TensorInterface<M_TENSORLIB>::getVal<double, 3>(
                         check3,
-                        std::array<tensortraits<M_TENSORLIB>::Indextype, 3>{static_cast<tensortraits<M_TENSORLIB>::Indextype>(i),
-                                                                            static_cast<tensortraits<M_TENSORLIB>::Indextype>(j),
-                                                                            static_cast<tensortraits<M_TENSORLIB>::Indextype>(k)});
+                        std::array<TensorInterface<M_TENSORLIB>::Indextype, 3>{static_cast<TensorInterface<M_TENSORLIB>::Indextype>(i),
+                                                                               static_cast<TensorInterface<M_TENSORLIB>::Indextype>(j),
+                                                                               static_cast<TensorInterface<M_TENSORLIB>::Indextype>(k)});
                 }
             CHECK((mat - std::sqrt(0.5) * pauli_vec1[k]).norm() == doctest::Approx(0.));
         }
@@ -301,15 +301,15 @@ TEST_CASE("Testing operations with SU(2)-spin matrices.")
         auto prod5 = (s1.adjoint().eval().permute<-1, 0, 1, 2>() * couple5.permute<+1, 0, 2, 1>()).permute<0, 0, 3, 1, 2>() * s1;
         // transform to plain tensor and check against SxS
         auto check5 = prod5.adjoint().eval().plainTensor();
-        for(Eigen::Index k = 0; k < tensortraits<M_TENSORLIB>::dimensions<double, 3>(check5)[2]; k++) {
+        for(Eigen::Index k = 0; k < TensorInterface<M_TENSORLIB>::dimensions<double, 3>(check5)[2]; k++) {
             Eigen::Matrix<double, -1, -1> mat(twoS1 + 1, twoS1 + 1);
-            for(Eigen::Index j = 0; j < tensortraits<M_TENSORLIB>::dimensions<double, 3>(check5)[1]; j++)
-                for(Eigen::Index i = 0; i < tensortraits<M_TENSORLIB>::dimensions<double, 3>(check5)[0]; i++) {
-                    mat(i, j) = tensortraits<M_TENSORLIB>::getVal<double, 3>(
+            for(Eigen::Index j = 0; j < TensorInterface<M_TENSORLIB>::dimensions<double, 3>(check5)[1]; j++)
+                for(Eigen::Index i = 0; i < TensorInterface<M_TENSORLIB>::dimensions<double, 3>(check5)[0]; i++) {
+                    mat(i, j) = TensorInterface<M_TENSORLIB>::getVal<double, 3>(
                         check5,
-                        std::array<tensortraits<M_TENSORLIB>::Indextype, 3>{static_cast<tensortraits<M_TENSORLIB>::Indextype>(i),
-                                                                            static_cast<tensortraits<M_TENSORLIB>::Indextype>(j),
-                                                                            static_cast<tensortraits<M_TENSORLIB>::Indextype>(k)});
+                        std::array<TensorInterface<M_TENSORLIB>::Indextype, 3>{static_cast<TensorInterface<M_TENSORLIB>::Indextype>(i),
+                                                                               static_cast<TensorInterface<M_TENSORLIB>::Indextype>(j),
+                                                                               static_cast<TensorInterface<M_TENSORLIB>::Indextype>(k)});
                 }
             Eigen::MatrixXd pauli(twoS1 + 1, twoS1 + 1);
             pauli.setZero();

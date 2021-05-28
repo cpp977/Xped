@@ -1,28 +1,28 @@
 template <typename TensorT, int shift, std::size_t... per>
-void perform_tensor_permute(const TensorT& t, tensortraits<M_TENSORLIB>::Ttype<double, 4>& tplain)
+void perform_tensor_permute(const TensorT& t, TensorInterface<M_TENSORLIB>::Ttype<double, 4>& tplain)
 {
     // std::array<Eigen::Index,4> p = {per...};
     // std::cout << "permutation: "; for (const auto& elem:p) {std::cout << elem << " ";} std::cout << ", shift=" << shift << std::endl;
 
     auto tp = t.template permute<shift, per...>();
-    tensortraits<M_TENSORLIB>::Ttype<double, 4> tplainshuffle = tensortraits<M_TENSORLIB>::shuffle<double, 4, per...>(tplain);
+    TensorInterface<M_TENSORLIB>::Ttype<double, 4> tplainshuffle = TensorInterface<M_TENSORLIB>::shuffle<double, 4, per...>(tplain);
     auto tplainp = tp.plainTensor();
 #ifdef XPED_USE_ARRAY_TENSOR_LIB
     auto check = nda::make_ein_sum<double, 0, 1, 2, 3>(nda::ein<0, 1, 2, 3>(tplainp) - nda::ein<0, 1, 2, 3>(tplainshuffle));
 #elif defined(XPED_USE_CYCLOPS_TENSOR_LIB)
-    auto dims = tensortraits<M_TENSORLIB>::dimensions<double, 4>(tplainshuffle);
-    auto check = tensortraits<M_TENSORLIB>::construct<double>(dims);
+    auto dims = TensorInterface<M_TENSORLIB>::dimensions<double, 4>(tplainshuffle);
+    auto check = TensorInterface<M_TENSORLIB>::construct<double>(dims);
     check["ijkl"] = tplainshuffle["ijkl"] - tplainp["ijkl"];
 #else
     Eigen::Tensor<double, 4> check = tplainshuffle - tplainp;
 #endif
-    auto zero_ = tensortraits<M_TENSORLIB>::contract<double, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3>(check, check);
+    auto zero_ = TensorInterface<M_TENSORLIB>::contract<double, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3>(check, check);
     // auto check = tplainshuffle - tplainp;
     // Eigen::Tensor<double,0> zero_ = check.contract(check,Eigen::array<Eigen::IndexPair<Eigen::Index>, 4>{{Eigen::IndexPair<Eigen::Index>(0,0),
     //                                                                                                               Eigen::IndexPair<Eigen::Index>(1,1),
     //                                                                                                               Eigen::IndexPair<Eigen::Index>(2,2),
     //                                                                                                               Eigen::IndexPair<Eigen::Index>(3,3)}});
-    double zero = tensortraits<M_TENSORLIB>::getVal<double, 0>(zero_, {{}});
+    double zero = TensorInterface<M_TENSORLIB>::getVal<double, 0>(zero_, {{}});
     CHECK(zero == doctest::Approx(0.));
 }
 
@@ -92,7 +92,7 @@ void test_tensor_permute(const Qbasis<Symmetry, 1>& B, const Qbasis<Symmetry, 1>
 };
 
 template <typename TensorT, std::size_t... per>
-void perform_tensor_permute_intern(const TensorT& t, tensortraits<M_TENSORLIB>::Ttype<double, 4>& tplain)
+void perform_tensor_permute_intern(const TensorT& t, TensorInterface<M_TENSORLIB>::Ttype<double, 4>& tplain)
 {
     // std::array<std::size_t, 4> p = {per...};
     // std::cout << "permutation: ";
@@ -100,18 +100,18 @@ void perform_tensor_permute_intern(const TensorT& t, tensortraits<M_TENSORLIB>::
     // std::cout << std::endl;
 
     auto tp = t.template permute<0, per...>();
-    tensortraits<M_TENSORLIB>::Ttype<double, 4> tplainshuffle = tensortraits<M_TENSORLIB>::shuffle<double, 4, per...>(tplain);
+    TensorInterface<M_TENSORLIB>::Ttype<double, 4> tplainshuffle = TensorInterface<M_TENSORLIB>::shuffle<double, 4, per...>(tplain);
     auto tplainp = tp.plainTensor();
 #ifdef XPED_USE_ARRAY_TENSOR_LIB
     auto check = nda::make_ein_sum<double, 0, 1, 2, 3>(nda::ein<0, 1, 2, 3>(tplainp) - nda::ein<0, 1, 2, 3>(tplainshuffle));
 #elif defined(XPED_USE_CYCLOPS_TENSOR_LIB)
-    auto dims = tensortraits<M_TENSORLIB>::dimensions<double, 4>(tplainshuffle);
-    auto check = tensortraits<M_TENSORLIB>::construct<double>(dims);
+    auto dims = TensorInterface<M_TENSORLIB>::dimensions<double, 4>(tplainshuffle);
+    auto check = TensorInterface<M_TENSORLIB>::construct<double>(dims);
     check["ijkl"] = tplainshuffle["ijkl"] - tplainp["ijkl"];
 #else
     Eigen::Tensor<double, 4> check = tplainshuffle - tplainp;
 #endif
-    auto zero_ = tensortraits<M_TENSORLIB>::contract<double, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3>(check, check);
+    auto zero_ = TensorInterface<M_TENSORLIB>::contract<double, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3>(check, check);
     // Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p);
     // auto tplainp = tp.plainTensor();
     // auto check = tplainshuffle - tplainp;
@@ -119,7 +119,7 @@ void perform_tensor_permute_intern(const TensorT& t, tensortraits<M_TENSORLIB>::
     //                                                                                                               Eigen::IndexPair<Eigen::Index>(1,1),
     //                                                                                                               Eigen::IndexPair<Eigen::Index>(2,2),
     //                                                                                                               Eigen::IndexPair<Eigen::Index>(3,3)}});
-    double zero = tensortraits<M_TENSORLIB>::getVal<double, 0>(zero_, {{}});
+    double zero = TensorInterface<M_TENSORLIB>::getVal<double, 0>(zero_, {{}});
     CHECK(zero == doctest::Approx(0.));
 }
 
@@ -133,7 +133,7 @@ void test_tensor_permute_within_codomain(const Qbasis<Symmetry, 1>& B,
     // Xped<0,3,Symmetry> three({{}},{{F,F,F}}); three.setRandom();
     // auto threep = three.plainTensor();
     // auto tp=three.template permute<0,2,0,1>();
-    // tensortraits<M_TENSORLIB>::Ttype<double,3> tplainshuffle = tensortraits<M_TENSORLIB>::shuffle<double,3,2,0,1>(threep);
+    // TensorInterface<M_TENSORLIB>::Ttype<double,3> tplainshuffle = TensorInterface<M_TENSORLIB>::shuffle<double,3,2,0,1>(threep);
     // auto tplainp = tp.plainTensor();
     // auto check = nda::make_ein_sum<double,0,1,2,3>(nda::ein<0,1,2,3>(tplainshuffle) - nda::ein<0,1,2,3>(tplainshuffle));
 
@@ -239,7 +239,7 @@ void test_tensor_transformation_to_plain(const Qbasis<Symmetry, 1>& B, const Qba
     Xped<2, 2, Symmetry> t({{B, C}}, {{B, C}});
     t.setRandom();
     auto tplain = t.plainTensor();
-    auto norm_ = tensortraits<M_TENSORLIB>::contract<double, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3>(tplain, tplain);
-    double norm = tensortraits<M_TENSORLIB>::getVal<double, 0>(norm_, {{}});
+    auto norm_ = TensorInterface<M_TENSORLIB>::contract<double, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3>(tplain, tplain);
+    double norm = TensorInterface<M_TENSORLIB>::getVal<double, 0>(norm_, {{}});
     CHECK(t.squaredNorm() == doctest::Approx(norm));
 }

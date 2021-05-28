@@ -2,7 +2,7 @@
 #define XPED_BASE_H_
 
 #include "Core/XpedHelper.hpp"
-#include "Interfaces/tensor_traits.hpp"
+#include "Interfaces/TensorInterface.hpp"
 #include "Util/Constfct.hpp"
 
 template <typename Derived>
@@ -30,7 +30,7 @@ public:
     typedef typename MatrixType::Scalar Scalar;
     static constexpr std::size_t Rank = XpedTraits<Derived>::Rank;
     static constexpr std::size_t CoRank = XpedTraits<Derived>::CoRank;
-    typedef tensortraits<TensorLib> Ttraits;
+    typedef TensorInterface<TensorLib> Ttraits;
     typedef typename Ttraits::template Maptype<Scalar, Rank + CoRank> TensorMapType;
     typedef typename Ttraits::template cMaptype<Scalar, Rank + CoRank> TensorcMapType;
     typedef typename Ttraits::Indextype IndexType;

@@ -15,7 +15,7 @@
 #include "Core/FusionTree.hpp"
 #include "Core/Qbasis.hpp"
 #include "Core/XpedTypedefs.hpp"
-#include "Interfaces/tensor_traits.hpp"
+#include "Interfaces/TensorInterface.hpp"
 #include "Util/Constfct.hpp"
 #include "Util/Macros.hpp"
 #include "Util/Random.hpp"
@@ -32,7 +32,7 @@ struct XpedTraits<Xped<Rank_, CoRank_, Symmetry_, MatrixType_, TensorLib_>>
     typedef Symmetry_ Symmetry;
     typedef typename Symmetry::qType qType;
     typedef TensorLib_ TensorLib;
-    typedef typename tensortraits<TensorLib>::template Ttype<Scalar, Rank + CoRank> TensorType;
+    typedef typename TensorInterface<TensorLib>::template Ttype<Scalar, Rank + CoRank> TensorType;
 };
 
 template <std::size_t Rank, std::size_t CoRank, typename Symmetry_, typename MatrixType_ = Eigen::MatrixXd, typename TensorLib_ = M_TENSORLIB>
@@ -72,7 +72,7 @@ public:
     typedef Symmetry_ Symmetry;
     typedef typename MatrixType::Scalar Scalar;
     typedef TensorLib_ TensorLib;
-    typedef tensortraits<TensorLib> Ttraits;
+    typedef TensorInterface<TensorLib> Ttraits;
     typedef typename Ttraits::template Ttype<Scalar, Rank + CoRank> TensorType;
     typedef typename Ttraits::template Maptype<Scalar, Rank + CoRank> TensorMapType;
     typedef typename Ttraits::template cMaptype<Scalar, Rank + CoRank> TensorcMapType;
@@ -814,7 +814,7 @@ auto Xped<Rank, CoRank, Symmetry, MatrixType_, TensorLib_>::view(const FusionTre
 }
 
 template <std::size_t Rank, std::size_t CoRank, typename Symmetry, typename MatrixType_, typename TensorLib_>
-typename tensortraits<TensorLib_>::template Ttype<typename MatrixType_::Scalar, Rank + CoRank>
+typename TensorInterface<TensorLib_>::template Ttype<typename MatrixType_::Scalar, Rank + CoRank>
 Xped<Rank, CoRank, Symmetry, MatrixType_, TensorLib_>::subBlock(const FusionTree<Rank, Symmetry>& f1, const FusionTree<CoRank, Symmetry>& f2) const
 {
     const auto it = dict_.find(f1.q_coupled);
@@ -823,7 +823,7 @@ Xped<Rank, CoRank, Symmetry, MatrixType_, TensorLib_>::subBlock(const FusionTree
 }
 
 template <std::size_t Rank, std::size_t CoRank, typename Symmetry, typename MatrixType_, typename TensorLib_>
-typename tensortraits<TensorLib_>::template Ttype<typename MatrixType_::Scalar, Rank + CoRank>
+typename TensorInterface<TensorLib_>::template Ttype<typename MatrixType_::Scalar, Rank + CoRank>
 Xped<Rank, CoRank, Symmetry, MatrixType_, TensorLib_>::subBlock(const FusionTree<Rank, Symmetry>& f1,
                                                                 const FusionTree<CoRank, Symmetry>& f2,
                                                                 std::size_t block_number) const
@@ -861,7 +861,7 @@ MatrixType_ Xped<Rank, CoRank, Symmetry, MatrixType_, TensorLib_>::subMatrix(con
 }
 
 template <std::size_t Rank, std::size_t CoRank, typename Symmetry, typename MatrixType_, typename TensorLib_>
-typename tensortraits<TensorLib_>::template Ttype<typename MatrixType_::Scalar, Rank + CoRank>
+typename TensorInterface<TensorLib_>::template Ttype<typename MatrixType_::Scalar, Rank + CoRank>
 Xped<Rank, CoRank, Symmetry, MatrixType_, TensorLib_>::plainTensor() const
 {
     auto sorted_domain = domain;
@@ -988,8 +988,8 @@ Xped<Rank, CoRank, Symmetry, MatrixType_, TensorLib_>::plainTensor() const
     TensorType out = Ttraits::template construct<Scalar>(dims_result);
     Ttraits::template setZero<Scalar, Rank + CoRank>(out);
 
-    auto intermediate = tensortraits<TensorLib_>::template contract<Scalar, Rank + 1, 2, Rank, 0>(unitary_domain, inner_tensor);
-    out = tensortraits<TensorLib_>::template contract<Scalar, Rank + 1, CoRank + 1, Rank, CoRank>(intermediate, unitary_codomain);
+    auto intermediate = TensorInterface<TensorLib_>::template contract<Scalar, Rank + 1, 2, Rank, 0>(unitary_domain, inner_tensor);
+    out = TensorInterface<TensorLib_>::template contract<Scalar, Rank + 1, CoRank + 1, Rank, CoRank>(intermediate, unitary_codomain);
     return out;
 }
 

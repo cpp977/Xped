@@ -19,7 +19,7 @@ struct CyclopsTensorLib
 #endif
 
 template <typename Library>
-struct tensortraits
+struct TensorInterface
 {
     // constructor with dim array [x] [x]
     // constructor with map [x] [x]
@@ -48,7 +48,7 @@ struct tensortraits
 #ifdef XPED_USE_EIGEN_TENSOR_LIB
 #    include <unsupported/Eigen/CXX11/Tensor>
 template <>
-struct tensortraits<EigenTensorLib>
+struct TensorInterface<EigenTensorLib>
 {
     // typedefs
     template <typename Scalar, std::size_t Rank>
@@ -309,7 +309,7 @@ template <typename Index, Index oldVal, Index newVal, typename S>
 using seq_replace = seq::insert<seq::index_of<oldVal, S>, newVal, seq::remove<oldVal, S>>;
 
 template <>
-struct tensortraits<ArrayTensorLib>
+struct TensorInterface<ArrayTensorLib>
 {
     template <typename element_t, std::size_t N, size_t... Is>
     static nda::internal::tuple_of_n<element_t, N> as_tuple(std::array<element_t, N> const& arr, std::index_sequence<Is...>)
@@ -655,7 +655,7 @@ template <typename Index, Index oldVal, Index newVal, typename S>
 using seq_replace = seq::insert<seq::index_of<oldVal, S>, newVal, seq::remove<oldVal, S>>;
 
 template <>
-struct tensortraits<CyclopsTensorLib>
+struct TensorInterface<CyclopsTensorLib>
 {
     // typedefs
     template <typename Scalar, std::size_t Rank>

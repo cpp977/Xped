@@ -32,7 +32,7 @@ using std::string;
 XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100)
 #endif
 
-#include "Interfaces/tensor_traits.hpp"
+#include "Interfaces/TensorInterface.hpp"
 
 #include "Core/Qbasis.hpp"
 #include "Symmetry/SU2.hpp"

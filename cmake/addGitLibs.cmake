@@ -97,8 +97,8 @@ if(${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR" AND XPED_BUILD_CYCLOPS)
     list(APPEND cmd_configure " LD_LIBS=\"${XPED_USED_BLAS_LIBS}\"")
   endif()
   list(APPEND cmd_configure " --install-dir=${CYCLOPS_ROOT}")
-  list(APPEND cmd_configure " --with-hptt")
-  list(APPEND cmd_configure " --build-hptt")
+  # list(APPEND cmd_configure " --with-hptt")
+  # list(APPEND cmd_configure " --build-hptt")
   
   message(STATUS ${cmd_configure})
   file(WRITE ${CYCLOPS_ROOT}/src/configure.sh ${cmd_configure})
@@ -143,16 +143,16 @@ if(${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR" AND XPED_BUILD_CYCLOPS)
     )
   file(MAKE_DIRECTORY ${CYCLOPS_INCLUDE_DIR})
   target_include_directories(cyclops_lib::cyclops_lib INTERFACE ${CYCLOPS_INCLUDE_DIR})
-  add_library(cyclops_lib::hptt UNKNOWN IMPORTED)
-  set_target_properties(cyclops_lib::hptt PROPERTIES
-    IMPORTED_LOCATION ${CYCLOPS_HPTT_LIB_DIR}/libhptt.a
-    )
-  file(MAKE_DIRECTORY ${CYCLOPS_HPTT_INCLUDE_DIR})
-  target_include_directories(cyclops_lib::hptt INTERFACE ${CYCLOPS_HPTT_INCLUDE_DIR})
+  # add_library(cyclops_lib::hptt UNKNOWN IMPORTED)
+  # set_target_properties(cyclops_lib::hptt PROPERTIES
+  #   IMPORTED_LOCATION ${CYCLOPS_HPTT_LIB_DIR}/libhptt.a
+  #   )
+  # file(MAKE_DIRECTORY ${CYCLOPS_HPTT_INCLUDE_DIR})
+  # target_include_directories(cyclops_lib::hptt INTERFACE ${CYCLOPS_HPTT_INCLUDE_DIR})
 
   add_library(cyclops_lib::all INTERFACE IMPORTED)
   set_property(TARGET cyclops_lib::all PROPERTY
-    INTERFACE_LINK_LIBRARIES cyclops_lib::cyclops_lib cyclops_lib::hptt
+    INTERFACE_LINK_LIBRARIES cyclops_lib::cyclops_lib
     )
 endif()
 

@@ -107,9 +107,9 @@ struct U1 : public SymBase<U1<Kind, Scalar_>>
      *       Here we return simply 1, because the algorithm only allows valid combinations of quantumnumbers,
      *       for which the Kronecker deltas are not necessary.
      */
-    inline static Scalar coeff_dot(const qType&) { return 1.; }
+    inline static Scalar coeff_dot(const qType&) { return Scalar(1.); }
 
-    static Scalar coeff_FS(const qType&) { return 1.; }
+    static Scalar coeff_FS(const qType&) { return Scalar(1.); }
 
     template <typename TensorLib>
     static typename TensorInterface<TensorLib>::template Ttype<Scalar_, 2> one_j_tensor(const qType&)
@@ -121,7 +121,7 @@ struct U1 : public SymBase<U1<Kind, Scalar_>>
         return T;
     }
 
-    static Scalar coeff_rightOrtho(const qType&, const qType&) { return 1.; }
+    static Scalar coeff_rightOrtho(const qType&, const qType&) { return Scalar(1.); }
 
     inline static Scalar coeff_3j(const qType& q1, const qType& q2, const qType& q3, int, int, int)
     {

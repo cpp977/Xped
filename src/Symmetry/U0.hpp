@@ -12,14 +12,15 @@
 
 namespace Sym {
 
+template <typename Scalar_>
 struct U0;
 
-template <>
-struct SymTraits<U0>
+template <typename Scalar__>
+struct SymTraits<U0<Scalar__>>
 {
     constexpr static int Nq = 0;
     typedef qarray<Nq> qType;
-    typedef double Scalar;
+    typedef Scalar__ Scalar;
 };
 
 /** \class U0
@@ -28,9 +29,10 @@ struct SymTraits<U0>
  * Dummy class for no symmetry.
  *
  */
-struct U0 : SymBase<U0>
+template <typename Scalar_ = double>
+struct U0 : SymBase<U0<Scalar>>
 {
-    typedef double Scalar;
+    typedef Scalar_ Scalar;
     typedef qarray<0> qType;
 
     U0(){};
@@ -60,15 +62,15 @@ struct U0 : SymBase<U0>
     inline static constexpr std::array<qType, 1> lowest_qs() { return std::array<qType, 1>{{qarray<0>(std::array<int, 0>{{}})}}; }
 
     inline static qType conj(const qType&) { return {}; }
-    inline static int degeneracy(const qType&) { return 1; }
+    inline static int degeneracy(const qType&) { return Scalar(1); }
 
     inline static qType random_q() { return {}; }
 
     inline static std::vector<qType> basis_combine(const qType&, const qType&) { return {{}}; }
 
-    inline static double coeff_dot(const qType&) { return 1.; }
+    inline static Scalar coeff_dot(const qType&) { return Scalar(1.); }
 
-    inline static Scalar coeff_FS(const qType&) { return 1.; }
+    inline static Scalar coeff_FS(const qType&) { return Scalar(1.); }
 
     template <typename TensorLib>
     inline static typename TensorInterface<TensorLib>::template Ttype<Scalar, 2> one_j_tensor(const qType&)
@@ -80,9 +82,9 @@ struct U0 : SymBase<U0>
         return T;
     }
 
-    static Scalar coeff_rightOrtho(const qType&, const qType&) { return 1.; }
+    static Scalar coeff_rightOrtho(const qType&, const qType&) { return Scalar(1.); }
 
-    inline static Scalar coeff_3j(const qType&, const qType&, const qType&, int, int, int) { return 1.; }
+    inline static Scalar coeff_3j(const qType&, const qType&, const qType&, int, int, int) { return Scalar(1.); }
 
     template <typename TensorLib>
     inline static typename TensorInterface<TensorLib>::template Ttype<Scalar, 3> CGC(const qType&, const qType&, const qType&, const std::size_t)
@@ -94,17 +96,17 @@ struct U0 : SymBase<U0>
         return T;
     }
 
-    inline static double coeff_6j(const qType&, const qType&, const qType&, const qType&, const qType&, const qType&) { return 1.; }
+    inline static Scalar coeff_6j(const qType&, const qType&, const qType&, const qType&, const qType&, const qType&) { return Scalar(1.); }
 
     static Scalar coeff_recouple(const qType& q1, const qType& q2, const qType& q3, const qType& Q, const qType& Q12, const qType& Q23)
     {
         return coeff_6j(q1, q2, Q12, q3, Q, Q23);
     }
 
-    inline static double
+    inline static Scalar
     coeff_9j(const qType&, const qType&, const qType&, const qType&, const qType&, const qType&, const qType&, const qType&, const qType&)
     {
-        return 1.;
+        return Scalar(1.);
     }
 
     static Scalar coeff_swap(const qType& ql, const qType& qr, const qType& qf) { return triangle(ql, qr, qf) ? Scalar(1.) : Scalar(0.); };

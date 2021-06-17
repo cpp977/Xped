@@ -1,9 +1,14 @@
 #ifndef FUSIONTREE_H_
 #define FUSIONTREE_H_
 
+#include <unordered_map>
+
 #ifdef XPED_CACHE_PERMUTE_OUTPUT
 #    include "lru/lru.hpp"
 #endif
+
+#include "yas/serialize.hpp"
+#include "yas/std_types.hpp"
 
 #include "Interfaces/TensorInterface.hpp"
 
@@ -11,8 +16,6 @@
 #include "Permutations.h"
 #include "Symmetry/functions.hpp"
 #include "numeric_limits.h"
-
-#include <unordered_map>
 
 namespace util {
 constexpr std::size_t inter_dim(std::size_t Rank) { return (Rank == 1 or Rank == 0) ? 0 : Rank - 2; }
@@ -37,6 +40,19 @@ struct FusionTree
     std::array<size_t, util::mult_dim(Rank)> multiplicities =
         std::array<size_t, util::mult_dim(Rank)>(); // only for non-Abelian symmetries with outermultiplicity.
     std::array<bool, Rank> IS_DUAL{};
+
+    template <typename Ar>
+    void serialize(Ar& ar)
+    {
+        ar& YAS_OBJECT_NVP("FusionTree",
+                           ("q_uncoupled", q_uncoupled),
+                           ("q_coupled", q_coupled),
+                           ("dim", dim),
+                           ("dims", dims),
+                           ("q_intermediates", q_intermediates),
+                           ("multiplicities", multiplicities),
+                           ("IS_DUAL", IS_DUAL));
+    }
 
     void computeDim() { dim = std::accumulate(dims.begin(), dims.end(), 1ul, std::multiplies<std::size_t>()); }
 
@@ -141,10 +157,10 @@ struct FusionTree
     }
 
     template <typename TensorLib_>
-    typename TensorInterface<TensorLib_>::template Ttype<Scalar, Rank + 1> asTensor() const
+    typename TensorInterface<TensorLib_>::template TType<Scalar, Rank + 1> asTensor() const
     {
         static_assert(Rank <= 5);
-        typedef typename TensorInterface<TensorLib_>::template Ttype<Scalar, Rank + 1> TensorType;
+        typedef typename TensorInterface<TensorLib_>::template TType<Scalar, Rank + 1> TensorType;
         typedef typename TensorInterface<TensorLib_>::Indextype IndexType;
         TensorType out;
         if constexpr(Rank == 0) {

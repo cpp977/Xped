@@ -88,7 +88,7 @@ struct U1 : public SymBase<U1<Kind, Scalar_>>
 
     inline static qType random_q()
     {
-        int qval = util::random::threadSafeRandUniform<int, int>(-20, 20, false);
+        int qval = util::random::threadSafeRandUniform<int, int>(-20, 20);
         qType out = {qval};
         return out;
     }
@@ -112,7 +112,7 @@ struct U1 : public SymBase<U1<Kind, Scalar_>>
     static Scalar coeff_FS(const qType&) { return Scalar(1.); }
 
     template <typename TensorLib>
-    static typename TensorInterface<TensorLib>::template Ttype<Scalar_, 2> one_j_tensor(const qType&)
+    static typename TensorInterface<TensorLib>::template TType<Scalar_, 2> one_j_tensor(const qType&)
     {
         typedef typename TensorInterface<TensorLib>::Indextype IndexType;
         auto T = TensorInterface<TensorLib>::template construct<Scalar>(std::array<IndexType, 2>{1, 1});
@@ -129,7 +129,7 @@ struct U1 : public SymBase<U1<Kind, Scalar_>>
     }
 
     template <typename TensorLib>
-    static typename TensorInterface<TensorLib>::template Ttype<Scalar_, 3> CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t);
+    static typename TensorInterface<TensorLib>::template TType<Scalar_, 3> CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t);
 
     static Scalar coeff_turn(const qType& ql, const qType& qr, const qType& qf) { return triangle(ql, qr, qf) ? Scalar(1.) : Scalar(0.); }
 
@@ -162,7 +162,7 @@ std::vector<typename U1<Kind, Scalar_>::qType> U1<Kind, Scalar_>::basis_combine(
 
 template <typename Kind, typename Scalar_>
 template <typename TensorLib>
-typename TensorInterface<TensorLib>::template Ttype<Scalar_, 3>
+typename TensorInterface<TensorLib>::template TType<Scalar_, 3>
 U1<Kind, Scalar_>::CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t)
 {
     typedef typename TensorInterface<TensorLib>::Indextype IndexType;

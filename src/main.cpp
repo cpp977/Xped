@@ -1,3 +1,16 @@
+#define XPED_USE_CYCLOPS_MATRIX_LIB
+#define XPED_USE_CYCLOPS_VECTOR_LIB
+
+#include <cstdio>
+#include <iostream>
+#include <string>
+
+#include "spdlog/spdlog.h"
+
+#include "spdlog/fmt/ostr.h"
+#include "spdlog/sinks/basic_file_sink.h"
+#include "spdlog/sinks/stdout_color_sinks.h"
+
 #ifdef MKL_ILP64
 #    pragma message("Xped is using the intel math kernel library (MKL)")
 #endif
@@ -32,7 +45,7 @@ using std::string;
 XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100)
 #endif
 
-#include "Interfaces/TensorInterface.hpp"
+#include "Interfaces/PlainInterface.hpp"
 
 #include "Core/Qbasis.hpp"
 #include "Symmetry/SU2.hpp"
@@ -47,14 +60,43 @@ XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100)
 
 int main(int argc, char* argv[])
 {
+    std::ios::sync_with_stdio(true);
+
     ArgParser args(argc, argv);
 #ifdef XPED_USE_OPENMPI
-    int xped_rank, xped_np;
     MPI_Init(&argc, &argv);
-    MPI_Comm_rank(MPI_COMM_WORLD, &xped_rank);
-    MPI_Comm_size(MPI_COMM_WORLD, &xped_np);
+    // MPI_Comm_rank(MPI_COMM_WORLD, &xped_rank);
+    // MPI_Comm_size(MPI_COMM_WORLD, &xped_np);
+    CTF::World World(argc, argv);
 #endif
+    spdlog::set_level(spdlog::level::info);
+    auto my_logger = spdlog::basic_logger_mt("info", "logs/log_" + to_string(World.rank) + ".txt");
+    my_logger->sinks()[0]->set_pattern("[%H:%M:%S %z] [%n] [%^---%L---%$] [process %P] %v");
+    // if(World.rank == 0) {
+    auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
+    console_sink->set_level(spdlog::level::info);
+    console_sink->set_pattern("[%H:%M:%S %z] [%n] [%^---%L---%$] [process %P] %v");
+    my_logger->sinks().push_back(console_sink);
+    // }
 
+    my_logger->info("Number of MPI processes: {}", World.np);
+    my_logger->info("I am process number #={}", World.rank);
+
+    typedef Sym::U1<Sym::SpinU1> Symmetry_;
+    Qbasis<Symmetry_, 1> B, C;
+    B.setRandom(4);
+    my_logger->info("basis B");
+    for(const auto& [q, pos, plain] : B.data_) { my_logger->info("QN: {}, deg={}", q.data[0], plain.dim()); }
+    C.setRandom(4);
+    my_logger->info("basis C");
+    for(const auto& [q, pos, plain] : C.data_) { my_logger->info("QN: {}, deg={}", q.data[0], plain.dim()); }
+
+    // Xped<double, 2, 2, Symmetry_> t({{B, C}}, {{B, C}}, World);
+    // t.setRandom();
+    // std::cout << t.print() << std::endl;
+
+    // std::cout << t << std::endl;
+    // spdlog::get("info")->info("Tensor: \n {}", t);
     // constexpr std::size_t Rank=2;
     // tensortraits<EigenTensorLib>::Ttype<double,Rank> T1(2,3); T1.setRandom();
     // tensortraits<EigenTensorLib>::Ttype<double,Rank> T2(2,3); T2.setRandom();
@@ -74,67 +116,70 @@ int main(int argc, char* argv[])
 
     // std::cout << std::endl << C << std::endl;
 
-    typedef Sym::SU2<Sym::SpinSU2> Symmetry;
-    // typedef Sym::U1<Sym::SpinU1> Symmetry;
-    // typedef Sym::U0 Symmetry;
-    typedef Symmetry::qType qType;
-    auto L = args.get<std::size_t>("L", 10);
-    auto D = args.get<int>("D", 1);
-    auto Minit = args.get<std::size_t>("Minit", 10);
-    auto Qinit = args.get<std::size_t>("Qinit", 10);
-    auto reps = args.get<std::size_t>("reps", 10);
-    auto DIR = static_cast<DMRG::DIRECTION>(args.get<int>("DIR", 0));
-    auto NORM = args.get<bool>("NORM", true);
-    auto SWEEP = args.get<bool>("SWEEP", true);
-    auto INFO = args.get<bool>("INFO", true);
+    // typedef Sym::SU2<Sym::SpinSU2> Symmetry;
+    // // typedef Sym::U1<Sym::SpinU1> Symmetry;
+    // // typedef Sym::U0 Symmetry;
+    // typedef Symmetry::qType qType;
+    // auto L = args.get<std::size_t>("L", 10);
+    // auto D = args.get<int>("D", 1);
+    // auto Minit = args.get<std::size_t>("Minit", 10);
+    // auto Qinit = args.get<std::size_t>("Qinit", 10);
+    // auto reps = args.get<std::size_t>("reps", 10);
+    // auto DIR = static_cast<DMRG::DIRECTION>(args.get<int>("DIR", 0));
+    // auto NORM = args.get<bool>("NORM", true);
+    // auto SWEEP = args.get<bool>("SWEEP", true);
+    // auto INFO = args.get<bool>("INFO", true);
 
-    qType Qtot = {D};
-    Qbasis<Symmetry, 1> qloc_;
-    // qloc_.push_back({}, 2);
-    qloc_.push_back({2}, 1);
-    // qloc_.push_back({-2}, 1);
-    std::vector<Qbasis<Symmetry, 1>> qloc(L, qloc_);
-    // Qbasis<Symmetry, 1> in;
-    // in.setRandom(Minit);
-    // std::cout << in << std::endl;
-    // auto out = in.combine(in).forgetHistory();
-    // Xped<2, 1, Symmetry> T({{in, in}}, {{out}});
-    // T.setRandom();
-    // auto F = T.permute<0, 2, 0, 1>();
-    // std::cout << T.print(true) << std::endl;
-    // auto X = T * T.adjoint();
-    // std::cout << X.print(true) << std::endl;
+    // qType Qtot = {D};
+    // Qbasis<Symmetry, 1> qloc_;
+    // // qloc_.push_back({}, 2);
+    // qloc_.push_back({2}, 1);
+    // qloc_.push_back({3}, 1);
+    // qloc_.push_back({4}, 1);
+    // // qloc_.push_back({-2}, 1);
+    // std::vector<Qbasis<Symmetry, 1>> qloc(L, qloc_);
+    // // Qbasis<Symmetry, 1> in;
+    // // in.setRandom(Minit);
+    // // std::cout << in << std::endl;
+    // // auto out = in.combine(in).forgetHistory();
+    // // Xped<double, 2, 1, Symmetry> T({{in, in}}, {{out}});
+    // // T.setRandom();
+    // // auto F = T.permute<0, 2, 0, 1>();
+    // // std::cout << T.print(true) << std::endl;
+    // // auto X = T * T.adjoint();
+    // // std::cout << X.print(true) << std::endl;
 
-    // auto Y = T.adjoint() * T;
-    // std::cout << Y.print(true) << std::endl;
-    Stopwatch<> construct;
-    Mps<Symmetry> Psi(L, qloc, Qtot, Minit, Qinit);
-    cout << construct.info("Time for constructor") << endl;
+    // // auto Y = T.adjoint() * T;
+    // // std::cout << Y.print(true) << std::endl;
+    // Stopwatch<> construct;
+    // Mps<double, Symmetry> Psi(L, qloc, Qtot, Minit, Qinit);
+    // my_logger->critical(construct.info("Time for constructor"));
 
-    if(INFO) {
-        for(size_t l = 0; l <= L; l++) { cout << Psi.auxBasis(l) << endl; }
-    }
-    if(NORM) {
-        Stopwatch<> norm;
-        for(std::size_t i = 0; i < reps; i++) {
-            double normSq = dot(Psi, Psi, DIR);
-            std::cout << "<Psi|Psi>=" << normSq << std::endl;
-        }
-        cout << norm.info("Time for norm") << endl;
-    }
-    if(SWEEP) {
-        Stopwatch<> Sweep;
-        if(DIR == DMRG::DIRECTION::RIGHT) {
-            for(std::size_t l = 0; l < L; l++) {
-                // cout << l << endl;
-                Psi.rightSweepStep(l, DMRG::BROOM::SVD);
-            }
-        } else {
-            for(std::size_t l = L - 1; l > 0; l--) { Psi.leftSweepStep(l, DMRG::BROOM::SVD); }
-            Psi.leftSweepStep(0, DMRG::BROOM::SVD);
-        }
-        cout << Sweep.info("Time for sweep") << endl;
-    }
+    // if(INFO) {
+    //     for(size_t l = 0; l <= L; l++) {
+    //         std::stringstream ss;
+    //         ss << Psi.auxBasis(l);
+    //         my_logger->info(ss.str());
+    //     }
+    // }
+    // if(NORM) {
+    //     Stopwatch<> norm;
+    //     for(std::size_t i = 0; i < reps; i++) {
+    //         double normSq = dot(Psi, Psi, DIR);
+    //         my_logger->info("<Psi|Psi>= {:03.2f}", normSq);
+    //     }
+    //     my_logger->critical(norm.info("Time for norm"));
+    // }
+    // if(SWEEP) {
+    //     Stopwatch<> Sweep;
+    //     if(DIR == DMRG::DIRECTION::RIGHT) {
+    //         for(std::size_t l = 0; l < L; l++) { Psi.rightSweepStep(l, DMRG::BROOM::SVD); }
+    //     } else {
+    //         for(std::size_t l = L - 1; l > 0; l--) { Psi.leftSweepStep(l, DMRG::BROOM::SVD); }
+    //         Psi.leftSweepStep(0, DMRG::BROOM::SVD);
+    //     }
+    //     my_logger->critical(Sweep.info("Time for sweep"));
+    // }
 
 #ifdef XPED_CACHE_PERMUTE_OUTPUT
     std::cout << "total hits=" << tree_cache<1, 2, 1, Symmetry>.cache.stats().total_hits() << endl; // Hits for any key
@@ -152,6 +197,13 @@ int main(int argc, char* argv[])
     // Psi.A.Ac[0] = Psi.A.Ac[0] * std::pow(normSq, -0.5);
     // cout << "<Psi,Psi>=" << dot(Psi, Psi, DIR) << endl;
 #ifdef XPED_USE_OPENMPI
+    my_logger->critical("Calling MPI_Finalize()");
+    // volatile int i = 0;
+    // char hostname[256];
+    // gethostname(hostname, sizeof(hostname));
+    // printf("PID %d on %s ready for attach\n", getpid(), hostname);
+    // fflush(stdout);
+    // while(0 == i) sleep(5);
     MPI_Finalize();
 #endif
 }

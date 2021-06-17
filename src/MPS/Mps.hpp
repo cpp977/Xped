@@ -2,6 +2,7 @@
 #define MPS_H_
 
 #include "Core/AdjointOp.hpp"
+#include "Core/ScalarTraits.hpp"
 #include "Core/Xped.hpp"
 
 template <typename TL, typename TR, typename TC>
@@ -20,18 +21,19 @@ enum class BROOM
 };
 }
 
-template <typename Symmetry_>
+template <typename Scalar_, typename Symmetry_>
 class Mps
 {
 public:
     typedef Symmetry_ Symmetry;
-    typedef typename Symmetry::Scalar Scalar;
-    typedef Scalar RealScalar;
+    typedef Scalar_ Scalar;
+    typedef typename ScalarTraits<Scalar>::Real RealScalar;
     typedef typename Symmetry::qType qType;
-    typedef Xped<2, 1, Symmetry> ALType;
+    typedef Xped<Scalar, 2, 1, Symmetry> ALType;
     typedef typename ALType::TensorType TensorType;
     typedef typename ALType::MatrixType MatrixType;
-    typedef Xped<1, 2, Symmetry> ARType;
+    typedef typename ALType::VectorType VectorType;
+    typedef Xped<Scalar, 1, 2, Symmetry> ARType;
 
     constexpr static std::size_t Nq = Symmetry::Nq;
 
@@ -54,7 +56,7 @@ public:
         gen_maxBasis();
         gen_auxBasis(Mmax_in, Nqmax_in);
         for(size_t l = 0; l < N_sites; l++) {
-            A.Ac[l] = Xped<2, 1, Symmetry>({{inBasis(l), locBasis(l)}}, {{outBasis(l)}});
+            A.Ac[l] = Xped<Scalar, 2, 1, Symmetry>({{inBasis(l), locBasis(l)}}, {{outBasis(l)}});
             A.Ac[l].setRandom();
         }
     }
@@ -99,12 +101,12 @@ public:
 
     std::size_t max_Nsv = 10000, min_Nsv = 0;
     RealScalar eps_svd = 1.e-10;
-    std::vector<std::map<qType, Eigen::ArrayXd>> SVspec;
+    std::vector<std::map<qType, VectorType>> SVspec;
     /**truncated weight*/
-    Eigen::ArrayXd truncWeight;
+    std::vector<RealScalar> truncWeight;
 
     /**entropy*/
-    Eigen::ArrayXd S;
+    std::vector<RealScalar> S;
 
     void gen_maxBasis();
 
@@ -122,8 +124,8 @@ public:
     }
 };
 
-template <typename Symmetry_>
-void Mps<Symmetry_>::gen_maxBasis()
+template <typename Scalar_, typename Symmetry_>
+void Mps<Scalar_, Symmetry_>::gen_maxBasis()
 {
     maxBasis[0].push_back(Symmetry::qvacuum(), 1ul);
     for(const auto& q : Qtarget) { maxBasis[N_sites].push_back(q, 1ul); }
@@ -145,8 +147,8 @@ void Mps<Symmetry_>::gen_maxBasis()
     }
 }
 
-template <typename Symmetry_>
-void Mps<Symmetry_>::gen_auxBasis(const std::size_t Minit, const std::size_t Qinit)
+template <typename Scalar_, typename Symmetry_>
+void Mps<Scalar_, Symmetry_>::gen_auxBasis(const std::size_t Minit, const std::size_t Qinit)
 {
     assert(Minit >= Qinit and "Minit is too small as compared to Qinit");
 
@@ -244,19 +246,19 @@ void Mps<Symmetry_>::gen_auxBasis(const std::size_t Minit, const std::size_t Qin
     // }
 }
 
-template <typename Symmetry_>
-void Mps<Symmetry_>::leftSweepStep(const std::size_t loc, const DMRG::BROOM& broom, const bool DISCARD_U)
+template <typename Scalar_, typename Symmetry_>
+void Mps<Scalar_, Symmetry_>::leftSweepStep(const std::size_t loc, const DMRG::BROOM& broom, const bool DISCARD_U)
 {
     bool RETURN_SPEC = false;
     if(loc != 0) { RETURN_SPEC = true; }
     double entropy;
-    std::map<qType, Eigen::ArrayXd> SVspec_;
-    Xped<1, 1, Symmetry> left;
-    Xped<2, 1, Symmetry> right;
-    auto [U, Sigma, Vdag] = A.Ac[loc].template permute<+1, 0, 2, 1>().tSVD(max_Nsv, eps_svd, truncWeight(loc), entropy, SVspec_, false, RETURN_SPEC);
+    std::map<qType, VectorType> SVspec_;
+    Xped<Scalar, 1, 1, Symmetry> left;
+    Xped<Scalar, 2, 1, Symmetry> right;
+    auto [U, Sigma, Vdag] = A.Ac[loc].template permute<+1, 0, 2, 1>().tSVD(max_Nsv, eps_svd, truncWeight[loc], entropy, SVspec_, false, RETURN_SPEC);
     // std::cout << Sigma << std::endl;
     if(loc != this->N_sites - 1) {
-        S(loc) = entropy;
+        S[loc] = entropy;
         SVspec[loc] = SVspec_;
     }
     left = U * Sigma;
@@ -266,19 +268,22 @@ void Mps<Symmetry_>::leftSweepStep(const std::size_t loc, const DMRG::BROOM& bro
     if(loc != 0 and DISCARD_U == false) { A.Ac[loc - 1] = A.Ac[loc - 1] * left; }
 }
 
-template <typename Symmetry_>
-void Mps<Symmetry_>::rightSweepStep(const std::size_t loc, const DMRG::BROOM& broom, const bool DISCARD_V)
+template <typename Scalar_, typename Symmetry_>
+void Mps<Scalar_, Symmetry_>::rightSweepStep(const std::size_t loc, const DMRG::BROOM& broom, const bool DISCARD_V)
 {
+    spdlog::get("info")->info("Entering Mps::rightSweepStep()");
     bool RETURN_SPEC = false;
     if(loc != N_sites - 1) { RETURN_SPEC = true; }
     double entropy;
-    std::map<qType, Eigen::ArrayXd> SVspec_;
-    Xped<2, 1, Symmetry> left;
-    Xped<1, 1, Symmetry> right;
-    auto [U, Sigma, Vdag] = A.Ac[loc].tSVD(max_Nsv, eps_svd, truncWeight(loc), entropy, SVspec_, false, RETURN_SPEC);
+    std::map<qType, VectorType> SVspec_;
+    Xped<Scalar, 2, 1, Symmetry> left;
+    Xped<Scalar, 1, 1, Symmetry> right;
+    spdlog::get("info")->info("Set up pre stuff.");
+    auto [U, Sigma, Vdag] = A.Ac[loc].tSVD(max_Nsv, eps_svd, truncWeight[loc], entropy, SVspec_, false, RETURN_SPEC);
+    spdlog::get("info")->info("Applied the svd.");
     // std::cout << Sigma << std::endl;
     if(loc != this->N_sites - 1) {
-        S(loc) = entropy;
+        S[loc] = entropy;
         SVspec[loc] = SVspec_;
     }
     left = U;
@@ -288,5 +293,6 @@ void Mps<Symmetry_>::rightSweepStep(const std::size_t loc, const DMRG::BROOM& br
     if(loc != this->N_sites - 1 and DISCARD_V == false) {
         A.Ac[loc + 1] = (right * (A.Ac[loc + 1].template permute<+1, 0, 1, 2>())).template permute<-1, 0, 1, 2>();
     }
+    spdlog::get("info")->info("Leaving Mps::rightSweepStep()");
 }
 #endif

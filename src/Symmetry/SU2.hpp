@@ -98,7 +98,7 @@ struct SU2 : public SymBase<SU2<Kind, Scalar_>>
 
     inline static qType random_q()
     {
-        int qval = util::random::threadSafeRandUniform<int, int>(1, 20, false);
+        int qval = util::random::threadSafeRandUniform<int, int>(1, 20);
         qType out = {qval};
         return out;
     }
@@ -118,7 +118,7 @@ struct SU2 : public SymBase<SU2<Kind, Scalar_>>
     static Scalar coeff_FS(const qType& q1) { return (q1[0] % 2 == 0) ? -1. : 1.; }
 
     template <typename TensorLib>
-    static typename TensorInterface<TensorLib>::template Ttype<Scalar_, 2> one_j_tensor(const qType& q1);
+    static typename TensorInterface<TensorLib>::template TType<Scalar_, 2> one_j_tensor(const qType& q1);
 
     static Scalar coeff_rightOrtho(const qType& q1, const qType& q2) { return static_cast<Scalar>(q1[0]) / static_cast<Scalar>(q2[0]); }
 
@@ -130,7 +130,7 @@ struct SU2 : public SymBase<SU2<Kind, Scalar_>>
     }
 
     template <typename TensorLib>
-    static typename TensorInterface<TensorLib>::template Ttype<Scalar_, 3> CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t);
+    static typename TensorInterface<TensorLib>::template TType<Scalar_, 3> CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t);
 
     static Scalar coeff_6j(const qType& q1, const qType& q2, const qType& q3, const qType& q4, const qType& q5, const qType& q6);
 
@@ -170,11 +170,11 @@ std::vector<typename SU2<Kind, Scalar_>::qType> SU2<Kind, Scalar_>::basis_combin
 
 template <typename Kind, typename Scalar_>
 template <typename TensorLib>
-typename TensorInterface<TensorLib>::template Ttype<Scalar_, 2> SU2<Kind, Scalar_>::one_j_tensor(const qType& q1)
+typename TensorInterface<TensorLib>::template TType<Scalar_, 2> SU2<Kind, Scalar_>::one_j_tensor(const qType& q1)
 {
     typedef typename TensorInterface<TensorLib>::Indextype IndexType;
     auto tmp = CGC<TensorLib>(q1, q1, qvacuum(), 0);
-    // typename TensorInterface<TensorLib>::template Ttype<Scalar_,2> out(degeneracy(q1), degeneracy(q1));
+    // typename TensorInterface<TensorLib>::template TType<Scalar_,2> out(degeneracy(q1), degeneracy(q1));
     auto out = TensorInterface<TensorLib>::template construct<Scalar>(std::array<IndexType, 2>{degeneracy(q1), degeneracy(q1)});
     TensorInterface<TensorLib>::template setZero<Scalar, 2>(out);
 
@@ -199,11 +199,11 @@ Scalar_ SU2<Kind, Scalar_>::coeff_3j(const qType& q1, const qType& q2, const qTy
 
 template <typename Kind, typename Scalar_>
 template <typename TensorLib>
-typename TensorInterface<TensorLib>::template Ttype<Scalar_, 3>
+typename TensorInterface<TensorLib>::template TType<Scalar_, 3>
 SU2<Kind, Scalar_>::CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t)
 {
     typedef typename TensorInterface<TensorLib>::Indextype IndexType;
-    // typename TensorInterface<TensorLib>::template Ttype<Scalar_,3> out(degeneracy(q1),degeneracy(q2),degeneracy(q3));
+    // typename TensorInterface<TensorLib>::template TType<Scalar_,3> out(degeneracy(q1),degeneracy(q2),degeneracy(q3));
     auto out = TensorInterface<TensorLib>::template construct<Scalar>(std::array<IndexType, 3>{degeneracy(q1), degeneracy(q2), degeneracy(q3)});
     for(int i_q1m = 0; i_q1m < degeneracy(q1); i_q1m++)
         for(int i_q2m = 0; i_q2m < degeneracy(q2); i_q2m++)

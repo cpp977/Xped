@@ -2,9 +2,12 @@
 #define BASIS_H_
 
 /// \cond
-#include "Eigen/Core"
+#include "yas/serialize.hpp"
+#include "yas/std_types.hpp"
 
 #include "tabulate/tabulate.hpp"
+
+#include "Eigen/Core"
 /// \endcond
 
 // forward declaration
@@ -49,6 +52,12 @@ public:
 
     friend std::ostream& operator<<(std::ostream& os, const Basis& basis);
 
+    template <typename Ar>
+    void serialize(Ar& ar)
+    {
+        ar& YAS_OBJECT_NVP("Basis", ("dim", dim_), ("history", history));
+    }
+
 private:
     std::size_t dim_;
 
@@ -60,7 +69,13 @@ private:
             Eigen::Index tmp = combined_num / dim1;
             return {{combined_num - dim1 * tmp, tmp}};
         };
+        template <typename Ar>
+        void serialize(Ar& ar)
+        {
+            ar& YAS_OBJECT_NVP("fuseData", ("dim1", dim1), ("dim2", dim2));
+        }
     };
+
     Basis::fuseData history;
 };
 

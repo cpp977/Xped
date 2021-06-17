@@ -1,3 +1,8 @@
+#define XPED_USE_CYCLOPS_MATRIX_LIB
+#define XPED_USE_CYCLOPS_VECTOR_LIB
+
+// #define XPED_USE_EIGEN_MATRIX_LIB
+
 #ifdef _OPENMP
 #    pragma message("Xped is using OpenMP parallelization")
 #    include "omp.h"
@@ -27,6 +32,8 @@ using std::string;
 XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100)
 #endif
 
+#include "Interfaces/PlainInterface.hpp"
+
 #include "Symmetry/SU2.hpp"
 #include "Symmetry/U0.hpp"
 #include "Symmetry/U1.hpp"
@@ -48,7 +55,7 @@ TEST_CASE("Testing contract_L() and contract_R().")
 {
     SUBCASE("SU2") { perform_mps_contraction<Sym::SU2<Sym::SpinSU2>>(SU2_BASIS_SIZE); }
     SUBCASE("U1") { perform_mps_contraction<Sym::U1<Sym::SpinU1>>(U1_BASIS_SIZE); }
-    SUBCASE("U0") { perform_mps_contraction<Sym::U0>(U0_BASIS_SIZE); }
+    SUBCASE("U0") { perform_mps_contraction<Sym::U0<>>(U0_BASIS_SIZE); }
 }
 
 TEST_SUITE_END();

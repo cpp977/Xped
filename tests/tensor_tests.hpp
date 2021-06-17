@@ -1,62 +1,66 @@
-template <typename TensorT, int shift, std::size_t... per>
-void perform_tensor_permute(const TensorT& t, TensorInterface<M_TENSORLIB>::Ttype<double, 4>& tplain)
+template <typename Symmetry, int shift, std::size_t... per>
+void perform_tensor_permute(const std::size_t& size)
 {
     // std::array<Eigen::Index,4> p = {per...};
     // std::cout << "permutation: "; for (const auto& elem:p) {std::cout << elem << " ";} std::cout << ", shift=" << shift << std::endl;
+    Qbasis<Symmetry, 1> B, C;
+    B.setRandom(size);
+    C.setRandom(size);
+
+    Xped<double, 2, 2, Symmetry> t({{B, C}}, {{B, C}});
+    t.setRandom();
+    auto tplain = t.plainTensor();
 
     auto tp = t.template permute<shift, per...>();
-    TensorInterface<M_TENSORLIB>::Ttype<double, 4> tplainshuffle = TensorInterface<M_TENSORLIB>::shuffle<double, 4, per...>(tplain);
+    PlainInterface<M_MATRIXLIB, M_TENSORLIB, M_VECTORLIB>::TType<double, 4> tplainshuffle =
+        PlainInterface<M_MATRIXLIB, M_TENSORLIB, M_VECTORLIB>::shuffle<double, 4, per...>(tplain);
     auto tplainp = tp.plainTensor();
 #ifdef XPED_USE_ARRAY_TENSOR_LIB
     auto check = nda::make_ein_sum<double, 0, 1, 2, 3>(nda::ein<0, 1, 2, 3>(tplainp) - nda::ein<0, 1, 2, 3>(tplainshuffle));
 #elif defined(XPED_USE_CYCLOPS_TENSOR_LIB)
-    auto dims = TensorInterface<M_TENSORLIB>::dimensions<double, 4>(tplainshuffle);
-    auto check = TensorInterface<M_TENSORLIB>::construct<double>(dims);
+    auto dims = PlainInterface<M_MATRIXLIB, M_TENSORLIB, M_VECTORLIB>::dimensions<double, 4>(tplainshuffle);
+    auto check = PlainInterface<M_MATRIXLIB, M_TENSORLIB, M_VECTORLIB>::construct<double>(dims);
     check["ijkl"] = tplainshuffle["ijkl"] - tplainp["ijkl"];
 #else
     Eigen::Tensor<double, 4> check = tplainshuffle - tplainp;
 #endif
-    auto zero_ = TensorInterface<M_TENSORLIB>::contract<double, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3>(check, check);
+    auto zero_ = PlainInterface<M_MATRIXLIB, M_TENSORLIB, M_VECTORLIB>::contract<double, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3>(check, check);
     // auto check = tplainshuffle - tplainp;
     // Eigen::Tensor<double,0> zero_ = check.contract(check,Eigen::array<Eigen::IndexPair<Eigen::Index>, 4>{{Eigen::IndexPair<Eigen::Index>(0,0),
     //                                                                                                               Eigen::IndexPair<Eigen::Index>(1,1),
     //                                                                                                               Eigen::IndexPair<Eigen::Index>(2,2),
     //                                                                                                               Eigen::IndexPair<Eigen::Index>(3,3)}});
-    double zero = TensorInterface<M_TENSORLIB>::getVal<double, 0>(zero_, {{}});
+    double zero = PlainInterface<M_MATRIXLIB, M_TENSORLIB, M_VECTORLIB>::getVal<double, 0>(zero_, {{}});
     CHECK(zero == doctest::Approx(0.));
 }
 
-template <int shift, typename Symmetry>
-void test_tensor_permute(const Qbasis<Symmetry, 1>& B, const Qbasis<Symmetry, 1>& C)
+template <typename Symmetry, int shift>
+void test_tensor_permute(const std::size_t& size)
 {
-    Xped<2, 2, Symmetry> t({{B, C}}, {{B, C}});
-    t.setRandom();
-    auto tplain = t.plainTensor();
-
-    perform_tensor_permute<Xped<2, 2, Symmetry>, shift, 0, 1, 2, 3>(t, tplain);
-    perform_tensor_permute<Xped<2, 2, Symmetry>, shift, 0, 1, 3, 2>(t, tplain);
-    perform_tensor_permute<Xped<2, 2, Symmetry>, shift, 0, 3, 1, 2>(t, tplain);
-    perform_tensor_permute<Xped<2, 2, Symmetry>, shift, 0, 2, 1, 3>(t, tplain);
-    perform_tensor_permute<Xped<2, 2, Symmetry>, shift, 0, 2, 3, 1>(t, tplain);
-    perform_tensor_permute<Xped<2, 2, Symmetry>, shift, 0, 3, 2, 1>(t, tplain);
-    perform_tensor_permute<Xped<2, 2, Symmetry>, shift, 1, 0, 2, 3>(t, tplain);
-    perform_tensor_permute<Xped<2, 2, Symmetry>, shift, 1, 0, 3, 2>(t, tplain);
-    perform_tensor_permute<Xped<2, 2, Symmetry>, shift, 3, 0, 1, 2>(t, tplain);
-    perform_tensor_permute<Xped<2, 2, Symmetry>, shift, 2, 0, 1, 3>(t, tplain);
-    perform_tensor_permute<Xped<2, 2, Symmetry>, shift, 2, 0, 3, 1>(t, tplain);
-    perform_tensor_permute<Xped<2, 2, Symmetry>, shift, 3, 0, 2, 1>(t, tplain);
-    perform_tensor_permute<Xped<2, 2, Symmetry>, shift, 1, 2, 0, 3>(t, tplain);
-    perform_tensor_permute<Xped<2, 2, Symmetry>, shift, 1, 3, 0, 2>(t, tplain);
-    perform_tensor_permute<Xped<2, 2, Symmetry>, shift, 3, 1, 0, 2>(t, tplain);
-    perform_tensor_permute<Xped<2, 2, Symmetry>, shift, 2, 1, 0, 3>(t, tplain);
-    perform_tensor_permute<Xped<2, 2, Symmetry>, shift, 2, 3, 0, 1>(t, tplain);
-    perform_tensor_permute<Xped<2, 2, Symmetry>, shift, 3, 2, 0, 1>(t, tplain);
-    perform_tensor_permute<Xped<2, 2, Symmetry>, shift, 1, 2, 3, 0>(t, tplain);
-    perform_tensor_permute<Xped<2, 2, Symmetry>, shift, 1, 3, 2, 0>(t, tplain);
-    perform_tensor_permute<Xped<2, 2, Symmetry>, shift, 3, 1, 2, 0>(t, tplain);
-    perform_tensor_permute<Xped<2, 2, Symmetry>, shift, 2, 1, 3, 0>(t, tplain);
-    perform_tensor_permute<Xped<2, 2, Symmetry>, shift, 2, 3, 1, 0>(t, tplain);
-    perform_tensor_permute<Xped<2, 2, Symmetry>, shift, 3, 2, 1, 0>(t, tplain);
+    perform_tensor_permute<Symmetry, shift, 0, 1, 2, 3>(size);
+    perform_tensor_permute<Symmetry, shift, 0, 1, 3, 2>(size);
+    perform_tensor_permute<Symmetry, shift, 0, 3, 1, 2>(size);
+    perform_tensor_permute<Symmetry, shift, 0, 2, 1, 3>(size);
+    perform_tensor_permute<Symmetry, shift, 0, 2, 3, 1>(size);
+    perform_tensor_permute<Symmetry, shift, 0, 3, 2, 1>(size);
+    perform_tensor_permute<Symmetry, shift, 1, 0, 2, 3>(size);
+    perform_tensor_permute<Symmetry, shift, 1, 0, 3, 2>(size);
+    perform_tensor_permute<Symmetry, shift, 3, 0, 1, 2>(size);
+    perform_tensor_permute<Symmetry, shift, 2, 0, 1, 3>(size);
+    perform_tensor_permute<Symmetry, shift, 2, 0, 3, 1>(size);
+    perform_tensor_permute<Symmetry, shift, 3, 0, 2, 1>(size);
+    perform_tensor_permute<Symmetry, shift, 1, 2, 0, 3>(size);
+    perform_tensor_permute<Symmetry, shift, 1, 3, 0, 2>(size);
+    perform_tensor_permute<Symmetry, shift, 3, 1, 0, 2>(size);
+    perform_tensor_permute<Symmetry, shift, 2, 1, 0, 3>(size);
+    perform_tensor_permute<Symmetry, shift, 2, 3, 0, 1>(size);
+    perform_tensor_permute<Symmetry, shift, 3, 2, 0, 1>(size);
+    perform_tensor_permute<Symmetry, shift, 1, 2, 3, 0>(size);
+    perform_tensor_permute<Symmetry, shift, 1, 3, 2, 0>(size);
+    perform_tensor_permute<Symmetry, shift, 3, 1, 2, 0>(size);
+    perform_tensor_permute<Symmetry, shift, 2, 1, 3, 0>(size);
+    perform_tensor_permute<Symmetry, shift, 2, 3, 1, 0>(size);
+    perform_tensor_permute<Symmetry, shift, 3, 2, 1, 0>(size);
 
     // for (const auto& p : Permutation::all(4)) {
     //         auto tp = t.template permute<shift>(p);
@@ -91,27 +95,86 @@ void test_tensor_permute(const Qbasis<Symmetry, 1>& B, const Qbasis<Symmetry, 1>
     // std::cout << "shift=2, hit rate=" << tree_cache<2,2,2,Symmetry>.cache.stats().hit_rate() << endl; // Hit rate in [0, 1]
 };
 
-template <typename TensorT, std::size_t... per>
-void perform_tensor_permute_intern(const TensorT& t, TensorInterface<M_TENSORLIB>::Ttype<double, 4>& tplain)
+template <typename Symmetry, std::size_t... per>
+void perform_tensor_permute_intern(const std::size_t size, MPI_Comm comm = MPI_COMM_WORLD)
 {
-    // std::array<std::size_t, 4> p = {per...};
+    CTF::World world(comm);
+    spdlog::get("info")->warn("Permute intern: Number of processes in tensor-test #={}", world.np);
+    spdlog::get("info")->warn("Permute intern: I am process number #={}", world.rank);
+    Qbasis<Symmetry, 1> B, C, D, E;
+    if(world.rank == 0) {
+        B.setRandom(size);
+        C.setRandom(size);
+        D.setRandom(size);
+        E.setRandom(size);
+        // std::cout << B << std::endl;
+        // std::cout << C << std::endl;
+        // std::cout << D << std::endl;
+        // std::cout << E << std::endl;
+    }
+    MPI_Barrier(world.comm);
+    util::mpi::broadcast(B, world.rank, 0, world.comm);
+    util::mpi::broadcast(C, world.rank, 0, world.comm);
+    util::mpi::broadcast(D, world.rank, 0, world.comm);
+    util::mpi::broadcast(E, world.rank, 0, world.comm);
+    // if(world.rank == 1) {
+    //     std::cout << "process " << world.rank << std::endl;
+    //     std::cout << B << std::endl;
+    //     std::cout << C << std::endl;
+    //     std::cout << D << std::endl;
+    //     std::cout << E << std::endl;
+    // }
+    // MPI_Barrier(world.comm);
+    // if(world.rank == 2) {
+    //     std::cout << "process " << world.rank << std::endl;
+    //     std::cout << B << std::endl;
+    //     std::cout << C << std::endl;
+    //     std::cout << D << std::endl;
+    //     std::cout << E << std::endl;
+    // }
+    // MPI_Barrier(world.comm);
+    // if(world.rank == 3) {
+    //     std::cout << "process " << world.rank << std::endl;
+    //     std::cout << B << std::endl;
+    //     std::cout << C << std::endl;
+    //     std::cout << D << std::endl;
+    //     std::cout << E << std::endl;
+    // }
+
+    std::array<std::size_t, 4> p = {per...};
     // std::cout << "permutation: ";
+    spdlog::get("info")->critical("Permutation: {},{},{},{}.", p[0], p[1], p[2], p[3]);
     // for(const auto& elem : p) { std::cout << elem << " "; }
     // std::cout << std::endl;
-
+    MPI_Barrier(world.comm);
+    Xped<double, 4, 0, Symmetry> t({{B, C, D, E}}, {{}}, world);
+    t.setRandom();
+    spdlog::get("info")->warn("Tensor t set to Random.");
+    MPI_Barrier(world.comm);
+    auto tplain = t.plainTensor();
+    spdlog::get("info")->warn("Computed plain tensor.");
+    MPI_Barrier(world.comm);
     auto tp = t.template permute<0, per...>();
-    TensorInterface<M_TENSORLIB>::Ttype<double, 4> tplainshuffle = TensorInterface<M_TENSORLIB>::shuffle<double, 4, per...>(tplain);
+    spdlog::get("info")->warn("Computed permutation of tensor.");
+    MPI_Barrier(world.comm);
+
+    PlainInterface<M_MATRIXLIB, M_TENSORLIB, M_VECTORLIB>::TType<double, 4> tplainshuffle =
+        PlainInterface<M_MATRIXLIB, M_TENSORLIB, M_VECTORLIB>::shuffle<double, 4, per...>(tplain);
+    spdlog::get("info")->warn("Computed plain shuffle of tensor.");
+    MPI_Barrier(world.comm);
     auto tplainp = tp.plainTensor();
+    spdlog::get("info")->warn("Computed plain tensor of permuted tensor.");
+    MPI_Barrier(world.comm);
 #ifdef XPED_USE_ARRAY_TENSOR_LIB
     auto check = nda::make_ein_sum<double, 0, 1, 2, 3>(nda::ein<0, 1, 2, 3>(tplainp) - nda::ein<0, 1, 2, 3>(tplainshuffle));
 #elif defined(XPED_USE_CYCLOPS_TENSOR_LIB)
-    auto dims = TensorInterface<M_TENSORLIB>::dimensions<double, 4>(tplainshuffle);
-    auto check = TensorInterface<M_TENSORLIB>::construct<double>(dims);
+    auto dims = PlainInterface<M_MATRIXLIB, M_TENSORLIB, M_VECTORLIB>::dimensions<double, 4>(tplainshuffle);
+    auto check = PlainInterface<M_MATRIXLIB, M_TENSORLIB, M_VECTORLIB>::construct<double>(dims, world);
     check["ijkl"] = tplainshuffle["ijkl"] - tplainp["ijkl"];
 #else
     Eigen::Tensor<double, 4> check = tplainshuffle - tplainp;
 #endif
-    auto zero_ = TensorInterface<M_TENSORLIB>::contract<double, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3>(check, check);
+    auto zero_ = PlainInterface<M_MATRIXLIB, M_TENSORLIB, M_VECTORLIB>::contract<double, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3>(check, check);
     // Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p);
     // auto tplainp = tp.plainTensor();
     // auto check = tplainshuffle - tplainp;
@@ -119,53 +182,50 @@ void perform_tensor_permute_intern(const TensorT& t, TensorInterface<M_TENSORLIB
     //                                                                                                               Eigen::IndexPair<Eigen::Index>(1,1),
     //                                                                                                               Eigen::IndexPair<Eigen::Index>(2,2),
     //                                                                                                               Eigen::IndexPair<Eigen::Index>(3,3)}});
-    double zero = TensorInterface<M_TENSORLIB>::getVal<double, 0>(zero_, {{}});
+    double zero = PlainInterface<M_MATRIXLIB, M_TENSORLIB, M_VECTORLIB>::getVal<double, 0>(zero_, {{}});
     CHECK(zero == doctest::Approx(0.));
 }
 
 template <typename Symmetry>
-void test_tensor_permute_within_codomain(const Qbasis<Symmetry, 1>& B,
-                                         const Qbasis<Symmetry, 1>& C,
-                                         const Qbasis<Symmetry, 1>& D,
-                                         const Qbasis<Symmetry, 1>& E)
+void test_tensor_permute_within_codomain(const std::size_t size, MPI_Comm comm)
 {
     // Qbasis<Symmetry,1> F; F.setRandom(50);
     // Xped<0,3,Symmetry> three({{}},{{F,F,F}}); three.setRandom();
     // auto threep = three.plainTensor();
     // auto tp=three.template permute<0,2,0,1>();
-    // TensorInterface<M_TENSORLIB>::Ttype<double,3> tplainshuffle = TensorInterface<M_TENSORLIB>::shuffle<double,3,2,0,1>(threep);
-    // auto tplainp = tp.plainTensor();
-    // auto check = nda::make_ein_sum<double,0,1,2,3>(nda::ein<0,1,2,3>(tplainshuffle) - nda::ein<0,1,2,3>(tplainshuffle));
+    // PlainInterface<M_MATRIXLIB, M_TENSORLIB, M_VECTORLIB>::TType<double,3> tplainshuffle = PlainInterface<M_MATRIXLIB,
+    // M_TENSORLIB>::shuffle<double,3,2,0,1>(threep); auto tplainp = tp.plainTensor(); auto check =
+    // nda::make_ein_sum<double,0,1,2,3>(nda::ein<0,1,2,3>(tplainshuffle) - nda::ein<0,1,2,3>(tplainshuffle));
 
-    Xped<0, 4, Symmetry> t({{}}, {{B, C, D, E}});
-    t.setRandom();
-    auto tplain = t.plainTensor();
+    // Xped<double, 0, 4, Symmetry> t({{}}, {{B, C, D, E}});
+    // t.setRandom();
+    // auto tplain = t.plainTensor();
     // Permutation ptriv(std::array<std::size_t,0>{{}});
 
-    perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 0, 1, 2, 3>(t, tplain);
-    perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 0, 1, 3, 2>(t, tplain);
-    perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 0, 3, 1, 2>(t, tplain);
-    perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 0, 2, 1, 3>(t, tplain);
-    perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 0, 2, 3, 1>(t, tplain);
-    perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 0, 3, 2, 1>(t, tplain);
-    perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 1, 0, 2, 3>(t, tplain);
-    perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 1, 0, 3, 2>(t, tplain);
-    perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 3, 0, 1, 2>(t, tplain);
-    perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 2, 0, 1, 3>(t, tplain);
-    perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 2, 0, 3, 1>(t, tplain);
-    perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 3, 0, 2, 1>(t, tplain);
-    perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 1, 2, 0, 3>(t, tplain);
-    perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 1, 3, 0, 2>(t, tplain);
-    perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 3, 1, 0, 2>(t, tplain);
-    perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 2, 1, 0, 3>(t, tplain);
-    perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 2, 3, 0, 1>(t, tplain);
-    perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 3, 2, 0, 1>(t, tplain);
-    perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 1, 2, 3, 0>(t, tplain);
-    perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 1, 3, 2, 0>(t, tplain);
-    perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 3, 1, 2, 0>(t, tplain);
-    perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 2, 1, 3, 0>(t, tplain);
-    perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 2, 3, 1, 0>(t, tplain);
-    perform_tensor_permute_intern<Xped<0, 4, Symmetry>, 3, 2, 1, 0>(t, tplain);
+    perform_tensor_permute_intern<Symmetry, 0, 1, 2, 3>(size, comm);
+    perform_tensor_permute_intern<Symmetry, 0, 1, 3, 2>(size, comm);
+    perform_tensor_permute_intern<Symmetry, 0, 3, 1, 2>(size, comm);
+    perform_tensor_permute_intern<Symmetry, 0, 2, 1, 3>(size, comm);
+    perform_tensor_permute_intern<Symmetry, 0, 2, 3, 1>(size, comm);
+    perform_tensor_permute_intern<Symmetry, 0, 3, 2, 1>(size, comm);
+    perform_tensor_permute_intern<Symmetry, 1, 0, 2, 3>(size, comm);
+    perform_tensor_permute_intern<Symmetry, 1, 0, 3, 2>(size, comm);
+    perform_tensor_permute_intern<Symmetry, 3, 0, 1, 2>(size, comm);
+    perform_tensor_permute_intern<Symmetry, 2, 0, 1, 3>(size, comm);
+    perform_tensor_permute_intern<Symmetry, 2, 0, 3, 1>(size, comm);
+    perform_tensor_permute_intern<Symmetry, 3, 0, 2, 1>(size, comm);
+    perform_tensor_permute_intern<Symmetry, 1, 2, 0, 3>(size, comm);
+    perform_tensor_permute_intern<Symmetry, 1, 3, 0, 2>(size, comm);
+    perform_tensor_permute_intern<Symmetry, 3, 1, 0, 2>(size, comm);
+    perform_tensor_permute_intern<Symmetry, 2, 1, 0, 3>(size, comm);
+    perform_tensor_permute_intern<Symmetry, 2, 3, 0, 1>(size, comm);
+    perform_tensor_permute_intern<Symmetry, 3, 2, 0, 1>(size, comm);
+    perform_tensor_permute_intern<Symmetry, 1, 2, 3, 0>(size, comm);
+    perform_tensor_permute_intern<Symmetry, 1, 3, 2, 0>(size, comm);
+    perform_tensor_permute_intern<Symmetry, 3, 1, 2, 0>(size, comm);
+    perform_tensor_permute_intern<Symmetry, 2, 1, 3, 0>(size, comm);
+    perform_tensor_permute_intern<Symmetry, 2, 3, 1, 0>(size, comm);
+    perform_tensor_permute_intern<Symmetry, 3, 2, 1, 0>(size, comm);
 
     // for (const auto& p : Permutation::all(4)) {
     //         auto test = t.template permute<0,2,1,3>();
@@ -184,38 +244,35 @@ void test_tensor_permute_within_codomain(const Qbasis<Symmetry, 1>& B,
 }
 
 template <typename Symmetry>
-void test_tensor_permute_within_domain(const Qbasis<Symmetry, 1>& B,
-                                       const Qbasis<Symmetry, 1>& C,
-                                       const Qbasis<Symmetry, 1>& D,
-                                       const Qbasis<Symmetry, 1>& E)
+void test_tensor_permute_within_domain(const std::size_t size, MPI_Comm comm)
 {
-    Xped<4, 0, Symmetry> t({{B, C, D, E}}, {{}});
-    t.setRandom();
-    auto tplain = t.plainTensor();
-    perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 0, 1, 2, 3>(t, tplain);
-    perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 0, 1, 3, 2>(t, tplain);
-    perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 0, 3, 1, 2>(t, tplain);
-    perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 0, 2, 1, 3>(t, tplain);
-    perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 0, 2, 3, 1>(t, tplain);
-    perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 0, 3, 2, 1>(t, tplain);
-    perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 1, 0, 2, 3>(t, tplain);
-    perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 1, 0, 3, 2>(t, tplain);
-    perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 3, 0, 1, 2>(t, tplain);
-    perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 2, 0, 1, 3>(t, tplain);
-    perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 2, 0, 3, 1>(t, tplain);
-    perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 3, 0, 2, 1>(t, tplain);
-    perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 1, 2, 0, 3>(t, tplain);
-    perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 1, 3, 0, 2>(t, tplain);
-    perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 3, 1, 0, 2>(t, tplain);
-    perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 2, 1, 0, 3>(t, tplain);
-    perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 2, 3, 0, 1>(t, tplain);
-    perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 3, 2, 0, 1>(t, tplain);
-    perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 1, 2, 3, 0>(t, tplain);
-    perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 1, 3, 2, 0>(t, tplain);
-    perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 3, 1, 2, 0>(t, tplain);
-    perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 2, 1, 3, 0>(t, tplain);
-    perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 2, 3, 1, 0>(t, tplain);
-    perform_tensor_permute_intern<Xped<4, 0, Symmetry>, 3, 2, 1, 0>(t, tplain);
+    // Xped<double, 4, 0, Symmetry> t({{B, C, D, E}}, {{}});
+    // t.setRandom();
+    // auto tplain = t.plainTensor();
+    perform_tensor_permute_intern<Symmetry, 0, 1, 2, 3>(size, comm);
+    perform_tensor_permute_intern<Symmetry, 0, 1, 3, 2>(size, comm);
+    perform_tensor_permute_intern<Symmetry, 0, 3, 1, 2>(size, comm);
+    perform_tensor_permute_intern<Symmetry, 0, 2, 1, 3>(size, comm);
+    perform_tensor_permute_intern<Symmetry, 0, 2, 3, 1>(size, comm);
+    perform_tensor_permute_intern<Symmetry, 0, 3, 2, 1>(size, comm);
+    perform_tensor_permute_intern<Symmetry, 1, 0, 2, 3>(size, comm);
+    perform_tensor_permute_intern<Symmetry, 1, 0, 3, 2>(size, comm);
+    perform_tensor_permute_intern<Symmetry, 3, 0, 1, 2>(size, comm);
+    perform_tensor_permute_intern<Symmetry, 2, 0, 1, 3>(size, comm);
+    perform_tensor_permute_intern<Symmetry, 2, 0, 3, 1>(size, comm);
+    perform_tensor_permute_intern<Symmetry, 3, 0, 2, 1>(size, comm);
+    perform_tensor_permute_intern<Symmetry, 1, 2, 0, 3>(size, comm);
+    perform_tensor_permute_intern<Symmetry, 1, 3, 0, 2>(size, comm);
+    perform_tensor_permute_intern<Symmetry, 3, 1, 0, 2>(size, comm);
+    perform_tensor_permute_intern<Symmetry, 2, 1, 0, 3>(size, comm);
+    perform_tensor_permute_intern<Symmetry, 2, 3, 0, 1>(size, comm);
+    perform_tensor_permute_intern<Symmetry, 3, 2, 0, 1>(size, comm);
+    perform_tensor_permute_intern<Symmetry, 1, 2, 3, 0>(size, comm);
+    perform_tensor_permute_intern<Symmetry, 1, 3, 2, 0>(size, comm);
+    perform_tensor_permute_intern<Symmetry, 3, 1, 2, 0>(size, comm);
+    perform_tensor_permute_intern<Symmetry, 2, 1, 3, 0>(size, comm);
+    perform_tensor_permute_intern<Symmetry, 2, 3, 1, 0>(size, comm);
+    perform_tensor_permute_intern<Symmetry, 3, 2, 1, 0>(size, comm);
     // Permutation ptriv(std::array<std::size_t,0>{{}});
 
     // for (const auto& p : Permutation::all(4)) {
@@ -234,12 +291,23 @@ void test_tensor_permute_within_domain(const Qbasis<Symmetry, 1>& B,
 }
 
 template <typename Symmetry>
-void test_tensor_transformation_to_plain(const Qbasis<Symmetry, 1>& B, const Qbasis<Symmetry, 1>& C)
+void test_tensor_transformation_to_plain(const Qbasis<Symmetry, 1>& B, const Qbasis<Symmetry, 1>& C, MPI_Comm comm)
 {
-    Xped<2, 2, Symmetry> t({{B, C}}, {{B, C}});
+    CTF::World world(comm);
+    spdlog::get("info")->info("Number of processes in tensor-test #={}", world.np);
+    spdlog::get("info")->info("I am process number #={}", world.rank);
+    // spdlog::get("info")->info("basis B");
+    // for(const auto& [q, pos, plain] : B.data_) { spdlog::get("info")->info("QN: {}, deg={}", q.data[0], plain.dim()); }
+    // spdlog::get("info")->info("basis C");
+    // for(const auto& [q, pos, plain] : C.data_) { spdlog::get("info")->info("QN: {}, deg={}", q.data[0], plain.dim()); }
+
+    Xped<double, 2, 2, Symmetry> t({{B, C}}, {{B, C}}, world);
     t.setRandom();
+    // if(world.rank == 0) { std::cout << t << std::endl; }
+    // spdlog::get("info")->info(t.print());
     auto tplain = t.plainTensor();
-    auto norm_ = TensorInterface<M_TENSORLIB>::contract<double, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3>(tplain, tplain);
-    double norm = TensorInterface<M_TENSORLIB>::getVal<double, 0>(norm_, {{}});
+    // tplain.print();
+    auto norm_ = PlainInterface<M_MATRIXLIB, M_TENSORLIB, M_VECTORLIB>::contract<double, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3>(tplain, tplain);
+    double norm = PlainInterface<M_MATRIXLIB, M_TENSORLIB, M_VECTORLIB>::getVal<double, 0>(norm_, {{}});
     CHECK(t.squaredNorm() == doctest::Approx(norm));
 }

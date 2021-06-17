@@ -19,10 +19,12 @@ add_executable(run
                ${SOURCES})
                
 add_dependencies(run
-                 tabulate
-                 TOOLS
-                 Eigen
-                 seq)
+  tabulate
+  spdlog
+  yas
+  TOOLS
+  Eigen
+  seq)
                  
 if(XPED_ENABLE_LRU_CACHE)
   add_dependencies(run lru_cache)
@@ -43,6 +45,8 @@ target_link_libraries (run
   XPED_EIGEN
   XPED_TOOLS
   XPED_TABULATE
+  XPED_SPDLOG
+  XPED_YAS
   XPED_SEQ
   )
 

@@ -1,4 +1,4 @@
-find_package(doctest REQUIRED)
+
 
 include_directories(${XPED_DIR}/src)
 
@@ -35,9 +35,21 @@ file(GLOB SOURCES "Core/*.hpp"
                   "Util/*.hpp")
 
 add_library(test_suite OBJECT driver.cpp ${SOURCES})
-target_link_libraries (test_suite project_options project_warnings doctest::doctest)
+add_dependencies(test_suite spdlog)
+if(${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR" AND ${XPED_BUILD_CYCLOPS})
+  add_dependencies(test_suite cyclops)
+endif()
+target_link_libraries (test_suite
+  project_options
+  project_warnings
+  doctest::doctest
+  XPED_SPDLOG)
+
 if(XPED_USE_OPENMPI OR ${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR")
   target_link_libraries(test_suite MPI::MPI_CXX)
+endif()
+if(${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR")
+  target_link_libraries(test_suite cyclops_lib::all)
 endif()
 
 #########################
@@ -45,10 +57,12 @@ endif()
 #########################
 add_executable(basis_test basis.cpp $<TARGET_OBJECTS:test_suite>)
 add_dependencies(basis_test
-                 tabulate
-                 TOOLS
-                 Eigen
-                 seq)
+  tabulate
+  spdlog
+  yas
+  TOOLS
+  Eigen
+  seq)
                  
 if(XPED_ENABLE_LRU_CACHE)
   add_dependencies(basis_test lru_cache)
@@ -68,6 +82,8 @@ target_link_libraries (basis_test
   XPED_EIGEN
   XPED_TOOLS
   XPED_TABULATE
+  XPED_SPDLOG
+  XPED_YAS
   XPED_SEQ
   )
 if(${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR")
@@ -100,10 +116,12 @@ doctest_discover_tests(basis_test TEST_PREFIX basis__ ADD_LABELS "1")
 #########################
 add_executable(tree_test tree.cpp $<TARGET_OBJECTS:test_suite>)
 add_dependencies(tree_test
-                 tabulate
-                 TOOLS
-                 Eigen
-                 seq)
+  tabulate
+  spdlog
+  yas
+  TOOLS
+  Eigen
+  seq)
                  
 if(XPED_ENABLE_LRU_CACHE)
   add_dependencies(tree_test lru_cache)
@@ -123,6 +141,8 @@ target_link_libraries (tree_test
   XPED_EIGEN
   XPED_TOOLS
   XPED_TABULATE
+  XPED_SPDLOG
+  XPED_YAS
   XPED_SEQ
   )
 if(${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR")
@@ -148,17 +168,19 @@ endif()
 if(XPED_USE_OPENMPI)
   target_link_libraries(tree_test MPI::MPI_CXX)
 endif()
-doctest_discover_tests(tree_test TEST_PREFIX basis__ ADD_LABELS "1")
+doctest_discover_tests(tree_test TEST_PREFIX tree__ ADD_LABELS "1")
 
 #########################
 #       tensor_test     #
 #########################
 add_executable(tensor_test tensor.cpp $<TARGET_OBJECTS:test_suite>)
 add_dependencies(tensor_test
-                 tabulate
-                 TOOLS
-                 Eigen
-                 seq)
+  tabulate
+  spdlog
+  yas
+  TOOLS
+  Eigen
+  seq)
                  
 if(XPED_ENABLE_LRU_CACHE)
   add_dependencies(tensor_test lru_cache)
@@ -178,6 +200,8 @@ target_link_libraries (tensor_test
   XPED_EIGEN
   XPED_TOOLS
   XPED_TABULATE
+  XPED_SPDLOG
+  XPED_YAS
   XPED_SEQ
   )
 if(${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR")
@@ -203,17 +227,19 @@ endif()
 if(XPED_USE_OPENMPI)
   target_link_libraries(tensor_test MPI::MPI_CXX)
 endif()
-doctest_discover_tests(tensor_test TEST_PREFIX basis__ ADD_LABELS "1")
+doctest_discover_tests(tensor_test TEST_PREFIX tensor__ ADD_LABELS "1")
 
 #########################
 #        mps_test       #
 #########################
 add_executable(mps_test mps.cpp $<TARGET_OBJECTS:test_suite>)
 add_dependencies(mps_test
-                 tabulate
-                 TOOLS
-                 Eigen
-                 seq)
+  tabulate
+  spdlog
+  yas
+  TOOLS
+  Eigen
+  seq)
                  
 if(XPED_ENABLE_LRU_CACHE)
   add_dependencies(mps_test lru_cache)
@@ -233,6 +259,8 @@ target_link_libraries (mps_test
   XPED_EIGEN
   XPED_TOOLS
   XPED_TABULATE
+  XPED_SPDLOG
+  XPED_YAS
   XPED_SEQ
   )
 if(${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR")
@@ -258,4 +286,4 @@ endif()
 if(XPED_USE_OPENMPI)
   target_link_libraries(mps_test MPI::MPI_CXX)
 endif()
-doctest_discover_tests(mps_test TEST_PREFIX basis__ ADD_LABELS "1")
+doctest_discover_tests(mps_test TEST_PREFIX mps__ ADD_LABELS "1")

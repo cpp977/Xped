@@ -12,9 +12,12 @@ struct XpedTraits<AdjointOp<XprType>>
     static constexpr std::size_t Rank = XprType::corank();
     static constexpr std::size_t CoRank = XprType::rank();
     typedef typename XprType::Symmetry Symmetry;
+    typedef typename XprType::MatrixLib MatrixLib;
     typedef typename XprType::MatrixType MatrixType;
     typedef typename XprType::TensorLib TensorLib;
     typedef typename XprType::TensorType TensorType;
+    typedef typename XprType::VectorLib VectorLib;
+    typedef typename XprType::VectorType VectorType;
     typedef typename XprType::Scalar Scalar;
 };
 
@@ -24,13 +27,18 @@ class AdjointOp : public XpedBase<AdjointOp<XprType>>
 public:
     static constexpr std::size_t Rank = XprType::corank();
     static constexpr std::size_t CoRank = XprType::rank();
+    typedef typename XprType::Scalar Scalar;
     typedef typename XprType::Symmetry Symmetry;
     typedef typename Symmetry::qType qType;
 
-    typedef typename XprType::TensorType TensorType;
     typedef typename XprType::MatrixType MatrixType;
+    typedef typename XprType::MatrixLib MatrixLib;
+    typedef typename XprType::TensorType TensorType;
+    typedef typename XprType::TensorLib TensorLib;
 
-    AdjointOp(const XprType& xpr)
+    typedef typename XprType::Plain Plain;
+
+    AdjointOp(XPED_CONST XprType& xpr)
         : refxpr_(xpr)
     {}
 
@@ -42,7 +50,9 @@ public:
     const qType sector(std::size_t i) const { return refxpr_.sector(i); }
 
     // const std::vector<MatrixType> block() const { return refxpr_block(); }
-    const MatrixType block(std::size_t i) const { return refxpr_.block(i).adjoint(); }
+    // const MatrixType block(std::size_t i) const { return Plain::template adjoint(refxpr_.block(i)); }
+    const auto block(std::size_t i) const { return Plain::template adjoint<Scalar>(refxpr_.block(i)); }
+    auto block(std::size_t i) { return Plain::template adjoint<Scalar>(refxpr_.block(i)); }
 
     inline const std::unordered_map<qType, std::size_t> dict() const { return refxpr_.dict(); }
 
@@ -56,6 +66,6 @@ public:
     std::vector<FusionTree<CoRank, Symmetry>> codomainTrees(const qType& q) const { return refxpr_.domainTrees(q); }
 
 protected:
-    const XprType& refxpr_;
+    XPED_CONST XprType& refxpr_;
 };
 #endif

@@ -8,6 +8,9 @@
 #include <unordered_set>
 
 #include "tabulate/tabulate.hpp"
+
+#include "yas/serialize.hpp"
+#include "yas/std_types.hpp"
 /// \endcond
 
 #include "Core/Basis.hpp"
@@ -203,6 +206,12 @@ public:
         auto it = trees.find(q);
         if(it == trees.end()) { assert(false); }
         return it->second;
+    }
+
+    template <typename Ar>
+    void serialize(Ar& ar)
+    {
+        ar& YAS_OBJECT_NVP("Qbasis", ("data", data_), ("curr_dim", curr_dim), ("trees", trees), ("IS_SORTED", IS_SORTED_), ("CONJ", CONJ));
     }
 
 private:

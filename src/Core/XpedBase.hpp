@@ -2,7 +2,7 @@
 #define XPED_BASE_H_
 
 #include "Core/XpedHelper.hpp"
-#include "Interfaces/TensorInterface.hpp"
+#include "Interfaces/PlainInterface.hpp"
 #include "Util/Constfct.hpp"
 
 template <typename Derived>
@@ -16,31 +16,35 @@ class AdjointOp;
 template <typename XprType>
 class ScaledOp;
 
-template <std::size_t Rank, std::size_t CoRank, typename Symmetry, typename MatrixType, typename TensorLib>
+template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename MatrixLib, typename TensorLib, typename VectorLib>
 class Xped;
 
 template <typename Derived>
 class XpedBase
 {
 public:
+    typedef typename XpedTraits<Derived>::Scalar Scalar;
     typedef typename XpedTraits<Derived>::Symmetry Symmetry;
+    typedef typename XpedTraits<Derived>::MatrixLib MatrixLib;
     typedef typename XpedTraits<Derived>::MatrixType MatrixType;
     typedef typename XpedTraits<Derived>::TensorLib TensorLib;
     typedef typename XpedTraits<Derived>::TensorType TensorType;
-    typedef typename MatrixType::Scalar Scalar;
+    typedef typename XpedTraits<Derived>::VectorLib VectorLib;
+    typedef typename XpedTraits<Derived>::VectorType VectorType;
+
     static constexpr std::size_t Rank = XpedTraits<Derived>::Rank;
     static constexpr std::size_t CoRank = XpedTraits<Derived>::CoRank;
-    typedef TensorInterface<TensorLib> Ttraits;
-    typedef typename Ttraits::template Maptype<Scalar, Rank + CoRank> TensorMapType;
-    typedef typename Ttraits::template cMaptype<Scalar, Rank + CoRank> TensorcMapType;
-    typedef typename Ttraits::Indextype IndexType;
+    typedef PlainInterface<MatrixLib, TensorLib, VectorLib> Plain;
+    typedef typename Plain::template MapTType<Scalar, Rank + CoRank> TensorMapType;
+    typedef typename Plain::template cMapTType<Scalar, Rank + CoRank> TensorcMapType;
+    typedef typename Plain::Indextype IndexType;
 
     const ScaledOp<Derived> operator*(const Scalar scale) const { return ScaledOp(derived, scale); }
 
-    const AdjointOp<Derived> adjoint() const { return AdjointOp<Derived>(derived()); }
+    XPED_CONST AdjointOp<Derived> adjoint() XPED_CONST { return AdjointOp<Derived>(derived()); }
 
     template <typename OtherDerived>
-    auto operator*(const OtherDerived& other) const;
+    auto operator*(OtherDerived&& other) XPED_CONST;
 
     template <int shift, std::size_t...>
     auto permute() const;
@@ -50,21 +54,31 @@ public:
 
     TensorType subBlock(const FusionTree<Rank, Symmetry>& f1, const FusionTree<CoRank, Symmetry>& f2) const;
 
-    Scalar trace() const;
+    Scalar trace() XPED_CONST;
 
-    Scalar squaredNorm() const { return (*this * this->adjoint()).trace(); }
+    Scalar squaredNorm() XPED_CONST { return (*this * this->adjoint()).trace(); }
 
-    Scalar norm() const { return std::sqrt(squaredNorm()); }
+    Scalar norm() XPED_CONST { return std::sqrt(squaredNorm()); }
 
-    Xped<Rank, CoRank, Symmetry, MatrixType, TensorLib> eval() const { return Xped<Rank, CoRank, Symmetry, MatrixType, TensorLib>(derived()); };
+    Xped<Scalar, Rank, CoRank, Symmetry, MatrixLib, TensorLib, VectorLib> eval() const
+    {
+        return Xped<Scalar, Rank, CoRank, Symmetry, MatrixLib, TensorLib, VectorLib>(derived());
+    };
 
 protected:
-    template <std::size_t Rank__, std::size_t CoRank__, typename Symmetry__, typename MatrixType__, typename TensorType__>
+    template <typename Scalar,
+              std::size_t Rank__,
+              std::size_t CoRank__,
+              typename Symmetry__,
+              typename MatrixLib__,
+              typename TensorLib__,
+              typename VectorLib__>
     friend class Xped;
     template <typename OtherDerived>
     friend class XpedBase;
 
-    inline const Derived& derived() const { return *static_cast<const Derived*>(this); }
+    const Derived& derived() const { return *static_cast<const Derived*>(this); }
+    Derived& derived() { return *static_cast<Derived*>(this); }
 
     template <std::size_t... p_domain, std::size_t... p_codomain>
     auto permute_impl(seq::iseq<std::size_t, p_domain...> pd, seq::iseq<std::size_t, p_codomain...> pc) const;
@@ -74,11 +88,14 @@ protected:
 };
 
 template <typename Derived>
-typename XpedTraits<Derived>::MatrixType::Scalar XpedBase<Derived>::trace() const
+typename XpedTraits<Derived>::Scalar XpedBase<Derived>::trace() XPED_CONST
 {
     assert(derived().coupledDomain() == derived().coupledCodomain());
     Scalar out = 0.;
-    for(size_t i = 0; i < derived().sector().size(); i++) { out += derived().block(i).trace() * Symmetry::degeneracy(derived().sector(i)); }
+    for(size_t i = 0; i < derived().sector().size(); i++) {
+        out += Plain::template trace<Scalar>(derived().block(i)) * Symmetry::degeneracy(derived().sector(i));
+        // out += derived().block(i).trace() * Symmetry::degeneracy(derived().sector(i));
+    }
     return out;
 }
 
@@ -115,7 +132,7 @@ typename XpedTraits<Derived>::MatrixType::Scalar XpedBase<Derived>::trace() cons
 //                 auto permuted_domain_trees = domain_tree.permute(p_domain);
 //                 auto permuted_codomain_trees = codomain_tree.permute(p_codomain);
 //                 auto tensor = this->view(domain_tree, codomain_tree);
-//                 auto Tshuffle = Ttraits::template shuffle_view<decltype(tensor), pds..., pcs...>(tensor);
+//                 auto Tshuffle = Plain::template shuffle_view<decltype(tensor), pds..., pcs...>(tensor);
 //                 for(const auto& [permuted_domain_tree, coeff_domain] : permuted_domain_trees)
 //                     for(const auto& [permuted_codomain_tree, coeff_codomain] : permuted_codomain_trees) {
 //                         if(std::abs(coeff_domain * coeff_codomain) < 1.e-10) { continue; }
@@ -126,10 +143,10 @@ typename XpedTraits<Derived>::MatrixType::Scalar XpedBase<Derived>::trace() cons
 //                             mat.setZero();
 //                             out.push_back(derived_ref.sector(i), mat);
 //                             auto t = out.view(permuted_domain_tree, permuted_codomain_tree, i);
-//                             Ttraits::template addScale<Scalar, Rank + CoRank>(Tshuffle, t, coeff_domain * coeff_codomain);
+//                             Plain::template addScale<Scalar, Rank + CoRank>(Tshuffle, t, coeff_domain * coeff_codomain);
 //                         } else {
 //                             auto t = out.view(permuted_domain_tree, permuted_codomain_tree, it->second);
-//                             Ttraits::template addScale<Scalar, Rank + CoRank>(Tshuffle, t, coeff_domain * coeff_codomain);
+//                             Plain::template addScale<Scalar, Rank + CoRank>(Tshuffle, t, coeff_domain * coeff_codomain);
 //                         }
 //                     }
 //             }
@@ -172,7 +189,7 @@ typename XpedTraits<Derived>::MatrixType::Scalar XpedBase<Derived>::trace() cons
 //         for(const auto& domain_tree : domain_trees)
 //             for(const auto& codomain_tree : codomain_trees) {
 //                 auto tensor = this->view(domain_tree, codomain_tree);
-//                 auto Tshuffle = Ttraits::template shuffle_view<decltype(tensor), ps...>(tensor);
+//                 auto Tshuffle = Plain::template shuffle_view<decltype(tensor), ps...>(tensor);
 //                 for(const auto& [permuted_trees, coeff] : treepair::permute<shift>(domain_tree, codomain_tree, p)) {
 //                     if(std::abs(coeff) < 1.e-10) { continue; }
 
@@ -184,10 +201,10 @@ typename XpedTraits<Derived>::MatrixType::Scalar XpedBase<Derived>::trace() cons
 //                         MatrixType mat(out.domain.inner_dim(permuted_domain_tree.q_coupled),
 //                         out.codomain.inner_dim(permuted_domain_tree.q_coupled)); mat.setZero(); out.push_back(permuted_domain_tree.q_coupled, mat);
 //                         auto t = out.view(permuted_domain_tree, permuted_codomain_tree, out.block_.size() - 1);
-//                         Ttraits::template addScale<Scalar, Rank + CoRank>(Tshuffle, t, coeff);
+//                         Plain::template addScale<Scalar, Rank + CoRank>(Tshuffle, t, coeff);
 //                     } else {
 //                         auto t = out.view(permuted_domain_tree, permuted_codomain_tree, it->second);
-//                         Ttraits::template addScale<Scalar, Rank + CoRank>(Tshuffle, t, coeff);
+//                         Plain::template addScale<Scalar, Rank + CoRank>(Tshuffle, t, coeff);
 //                     }
 //                 }
 //             }
@@ -213,13 +230,14 @@ typename XpedTraits<Derived>::MatrixType::Scalar XpedBase<Derived>::trace() cons
 
 template <typename Derived>
 template <typename OtherDerived>
-auto XpedBase<Derived>::operator*(const OtherDerived& other) const
+auto XpedBase<Derived>::operator*(OtherDerived&& other) XPED_CONST
 {
-    static_assert(CoRank == XpedTraits<OtherDerived>::Rank);
+    typedef typename std::remove_const<std::remove_reference_t<OtherDerived>>::type OtherDerived_;
+    static_assert(CoRank == XpedTraits<OtherDerived_>::Rank);
     auto derived_ref = derived();
     auto other_derived_ref = other.derived();
     assert(derived_ref.coupledCodomain() == other_derived_ref.coupledDomain());
-    Xped<Rank, XpedTraits<OtherDerived>::CoRank, Symmetry, MatrixType, TensorLib> Tout;
+    Xped<Scalar, Rank, XpedTraits<OtherDerived_>::CoRank, Symmetry, MatrixLib, TensorLib, VectorLib> Tout;
     Tout.domain = derived_ref.coupledDomain();
     Tout.codomain = other_derived_ref.coupledCodomain();
     Tout.uncoupled_domain = derived_ref.uncoupledDomain();
@@ -234,14 +252,16 @@ auto XpedBase<Derived>::operator*(const OtherDerived& other) const
         uniqueController.insert(derived_ref.sector(i));
         auto it = other_dict.find(derived_ref.sector(i));
         if(it == other_dict.end()) { continue; }
-        Tout.push_back(derived_ref.sector(i), derived_ref.block(i) * other_derived_ref.block(it->second));
+        // Tout.push_back(derived_ref.sector(i), Plain::template prod<Scalar>(derived_ref.block(i), other_derived_ref.block(it->second)));
+        Tout.push_back(derived_ref.sector(i), Plain::template prod<Scalar>(derived_ref.block(i), other_derived_ref.block(it->second)));
         // Tout.block_[i] = T1.block_[i] * T2.block_[it->second];
     }
     for(size_t i = 0; i < other_derived_ref.sector().size(); i++) {
         if(auto it = uniqueController.find(other_derived_ref.sector(i)); it != uniqueController.end()) { continue; }
         auto it = this_dict.find(other_derived_ref.sector(i));
         if(it == this_dict.end()) { continue; }
-        Tout.push_back(other_derived_ref.sector(i), derived_ref.block(it->second) * other_derived_ref.block(i));
+        // Tout.push_back(other_derived_ref.sector(i), Plain::template prod<Scalar>(derived_ref.block(it->second), other_derived_ref.block(i)));
+        Tout.push_back(other_derived_ref.sector(i), Plain::template prod<Scalar>(derived_ref.block(it->second), other_derived_ref.block(i)));
     }
     return Tout;
 }
@@ -293,7 +313,7 @@ auto XpedBase<Derived>::operator*(const OtherDerived& other) const
 //         shape_data[i + Rank - 1].set_stride(stride_correction *
 //                                             std::accumulate(dims.begin() + Rank, dims.begin() + Rank + i, 1ul, std::multiplies<Scalar>()));
 //     }
-//     auto dims_tuple = std::tuple_cat(std::make_tuple(first_dim), Ttraits::as_tuple(shape_data));
+//     auto dims_tuple = std::tuple_cat(std::make_tuple(first_dim), Plain::as_tuple(shape_data));
 
 //     nda::dense_shape<Rank + CoRank> block_shape(dims_tuple);
 
@@ -321,8 +341,8 @@ auto XpedBase<Derived>::operator*(const OtherDerived& other) const
 
 //     MatrixType submatrix = derived_ref.block(it->second).block(left_offset_domain, left_offset_codomain, f1.dim, f2.dim);
 //     // std::cout << "from subblock:" << std::endl << submatrix << std::endl;
-//     TensorcMapType tensorview = Ttraits::cMap(submatrix.data(), dims);
-//     TensorType T = Ttraits::template construct<Scalar, Rank + CoRank>(tensorview);
+//     TensorcMapType tensorview = Plain::cMap(submatrix.data(), dims);
+//     TensorType T = Plain::template construct<Scalar, Rank + CoRank>(tensorview);
 //     return T;
 // }
 

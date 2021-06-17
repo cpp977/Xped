@@ -8,11 +8,14 @@ struct XpedTraits<ScaledOp<XprType>>
 {
     static constexpr std::size_t Rank = XprType::Rank;
     static constexpr std::size_t CoRank = XprType::CoRank;
+    typedef typename XprType::Scalar Scalar;
     typedef typename XprType::Symmetry Symmetry;
+    typedef typename XprType::MatrixLib MatrixLib;
     typedef typename XprType::MatrixType MatrixType;
     typedef typename XprType::TensorLib TensorLib;
     typedef typename XprType::TensorType TensorType;
-    typedef typename XprType::Scalar Scalar;
+    typedef typename XprType::VectorLib VectorLib;
+    typedef typename XprType::VectorType VectorType;
 };
 
 template <typename XprType>
@@ -20,10 +23,17 @@ class ScaledOp : public TensorBase<ScaledOp<XprType>>
 {
     constexpr Rank = XprType::Rank;
     constexpr CoRank = XprType::CoRank;
+    typedef typename XprType::Scalar Scalar;
     typedef typename XprType::Symmetry Symmetry;
 
-    typedef typename XprType::TensorType TensorType;
     typedef typename XprType::MatrixType MatrixType;
+    typedef typename XprType::MatrixLib MatrixLib;
+    typedef typename XprType::TensorType TensorType;
+    typedef typename XprType::TensorLib TensorLib;
+    typedef typename XprType::VectorType VectorType;
+    typedef typename XprType::VectorLib VectorLib;
+
+    typedef typename XprType::Plain Plain;
 
 public:
     template <typename OtherDerived>
@@ -39,7 +49,7 @@ public:
     const qType sector(std::size_t i) const { return refxpr_.sector(i); }
 
     // const std::vector<MatrixType> block() const { return refxpr_block(); }
-    const MatrixType block(std::size_t i) const { return scale * refxpr_block(i); }
+    const MatrixType block(std::size_t i) const { return Plain::template scale<Scalar>(scale_ * refxpr_block(i)); }
 
     inline const std::unordered_map<qType, std::size_t> dict() const { return refxpr_.dict(); }
 

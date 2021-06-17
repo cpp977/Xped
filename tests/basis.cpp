@@ -1,3 +1,6 @@
+#define XPED_USE_CYCLOPS_MATRIX_LIB
+#define XPED_USE_CYCLOPS_VECTOR_LIB
+
 #ifdef _OPENMP
 #    pragma message("Xped is using OpenMP parallelization")
 #    include "omp.h"
@@ -9,6 +12,10 @@
 #include <sstream>
 #include <string>
 #include <vector>
+
+#ifdef XPED_USE_CYCLOPS_TENSOR_LIB
+#    define EIGEN_DEFAULT_DENSE_INDEX_TYPE int
+#endif
 
 using std::cout;
 using std::endl;
@@ -23,6 +30,7 @@ using std::string;
 XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100)
 #endif
 
+#include "Core/FusionTree.hpp"
 #include "Core/Qbasis.hpp"
 #include "Symmetry/SU2.hpp"
 #include "Symmetry/U0.hpp"
@@ -30,10 +38,11 @@ XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100)
 #include "Symmetry/kind_dummies.hpp"
 
 #include "doctest/doctest.h"
+#include "doctest/extensions/doctest_mpi.h"
 
 TEST_SUITE_BEGIN("Qbasis");
 
-TEST_CASE("Testing combine() in Qbasis.")
+MPI_TEST_CASE("Testing combine() in Qbasis.", 2)
 {
 
     SUBCASE("SU2")
@@ -66,7 +75,7 @@ TEST_CASE("Testing combine() in Qbasis.")
 
     SUBCASE("U0")
     {
-        typedef Sym::U0 Symmetry;
+        typedef Sym::U0<> Symmetry;
         Qbasis<Symmetry, 1> B, C;
         B.setRandom(100);
         C.setRandom(100);

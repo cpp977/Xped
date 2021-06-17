@@ -40,7 +40,7 @@ void test_tree_permute(const Qbasis<Symmetry, 1>& B, const Qbasis<Symmetry, 1>& 
     auto BCDE = BCD.combine(E);
 
     for(const auto& p : Permutation::all(4)) {
-        std::cout << "p:" << std::endl << p.print() << std::endl;
+        // std::cout << "p:" << std::endl << p.print() << std::endl;
         for(const auto& [q, num, plain] : BCDE) {
             for(const auto& tree : BCDE.tree(q)) {
                 std::unordered_map<FusionTree<4, Symmetry>, typename Symmetry::Scalar> check;

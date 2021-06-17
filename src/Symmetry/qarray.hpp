@@ -11,6 +11,9 @@
 
 #include <boost/functional/hash.hpp>
 
+#include "yas/serialize.hpp"
+#include "yas/std_types.hpp"
+
 #include "JoinArray.h"
 #include "NestedLoopIterator.h"
 
@@ -57,6 +60,12 @@ struct qarray
         for(size_t q = 0; q < Nq; ++q) { boost::hash_combine(seed, qin.data[q]); }
 
         return seed;
+    }
+
+    template <typename Ar>
+    void serialize(Ar& ar)
+    {
+        ar& YAS_OBJECT_NVP("qarray", ("data", data));
     }
 };
 

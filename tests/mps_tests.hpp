@@ -5,21 +5,21 @@ void perform_mps_contraction(std::size_t basis_size)
     in.setRandom(basis_size);
     loc.setRandom(8);
     auto out = in.combine(loc).forgetHistory();
-    Xped<2, 1, Symmetry> T1({{in, loc}}, {{out}});
+    Xped<double, 2, 1, Symmetry> T1({{in, loc}}, {{out}});
     T1.setRandom();
-    Xped<2, 1, Symmetry> T2({{in, loc}}, {{out}});
+    Xped<double, 2, 1, Symmetry> T2({{in, loc}}, {{out}});
     T2.setRandom();
 
-    Xped<1, 1, Symmetry> Bright({{out}}, {{out}});
+    Xped<double, 1, 1, Symmetry> Bright({{out}}, {{out}});
     Bright.setRandom();
-    Xped<1, 1, Symmetry> Brightn;
+    Xped<double, 1, 1, Symmetry> Brightn;
     contract_R(Bright, T1, T2, Brightn);
     auto Bcheck = (T2 * Bright).template permute<+1, 0, 1, 2>() * (T1.template permute<+1, 0, 1, 2>().adjoint());
     CHECK((Brightn - Bcheck).norm() == doctest::Approx(0.));
 
-    Xped<1, 1, Symmetry> Bleft({{in}}, {{in}});
+    Xped<double, 1, 1, Symmetry> Bleft({{in}}, {{in}});
     Bleft.setRandom();
-    Xped<1, 1, Symmetry> Bleftn;
+    Xped<double, 1, 1, Symmetry> Bleftn;
     contract_L(Bleft, T1, T2, Bleftn);
     Bcheck.clear();
     Bcheck = (T1.template permute<+1, 0, 1, 2>().adjoint() * Bleft).template permute<+1, 1, 2, 0>() * T2;

@@ -10,10 +10,10 @@ template <typename Scalar, typename RealScalar>
 Scalar threadSafeRandUniform(RealScalar, RealScalar, bool = false){};
 
 template <>
-double threadSafeRandUniform<double, double>(double min, double max, bool SEED)
+double threadSafeRandUniform<double, double>(double min, double max, bool FIXED_SEED)
 {
     static thread_local std::mt19937 generatorUniformReal(std::random_device{}());
-    if(SEED) generatorUniformReal.seed(std::time(0));
+    if(FIXED_SEED) generatorUniformReal.seed(std::time(0));
     std::uniform_real_distribution<double> distribution(min, max);
     return distribution(generatorUniformReal);
 }
@@ -28,10 +28,10 @@ std::complex<double> threadSafeRandUniform<std::complex<double>, double>(double 
 }
 
 template <>
-int threadSafeRandUniform<int, int>(int min, int max, bool SEED)
+int threadSafeRandUniform<int, int>(int min, int max, bool FIXED_SEED)
 {
     static thread_local std::mt19937 generatorUniformInt(std::random_device{}());
-    if(SEED) generatorUniformInt.seed(std::time(0));
+    if(FIXED_SEED) generatorUniformInt.seed(std::time(0));
     std::uniform_int_distribution<int> distribution(min, max);
     return distribution(generatorUniformInt);
 }

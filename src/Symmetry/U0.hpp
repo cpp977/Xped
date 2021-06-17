@@ -30,7 +30,7 @@ struct SymTraits<U0<Scalar__>>
  *
  */
 template <typename Scalar_ = double>
-struct U0 : SymBase<U0<Scalar>>
+struct U0 : SymBase<U0<Scalar_>>
 {
     typedef Scalar_ Scalar;
     typedef qarray<0> qType;
@@ -73,7 +73,7 @@ struct U0 : SymBase<U0<Scalar>>
     inline static Scalar coeff_FS(const qType&) { return Scalar(1.); }
 
     template <typename TensorLib>
-    inline static typename TensorInterface<TensorLib>::template Ttype<Scalar, 2> one_j_tensor(const qType&)
+    inline static typename TensorInterface<TensorLib>::template TType<Scalar, 2> one_j_tensor(const qType&)
     {
         typedef typename TensorInterface<TensorLib>::Indextype IndexType;
         auto T = TensorInterface<TensorLib>::template construct<Scalar>(std::array<IndexType, 2>{1, 1});
@@ -87,7 +87,7 @@ struct U0 : SymBase<U0<Scalar>>
     inline static Scalar coeff_3j(const qType&, const qType&, const qType&, int, int, int) { return Scalar(1.); }
 
     template <typename TensorLib>
-    inline static typename TensorInterface<TensorLib>::template Ttype<Scalar, 3> CGC(const qType&, const qType&, const qType&, const std::size_t)
+    inline static typename TensorInterface<TensorLib>::template TType<Scalar, 3> CGC(const qType&, const qType&, const qType&, const std::size_t)
     {
         typedef typename TensorInterface<TensorLib>::Indextype IndexType;
         auto T = TensorInterface<TensorLib>::template construct<Scalar>(std::array<IndexType, 3>{1, 1, 1});

@@ -23,6 +23,53 @@ set_target_properties(XPED_TABULATE PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES ${TABULATE_INCLUDE_DIR}
   )
 
+set(SPDLOG_ROOT ${CMAKE_BINARY_DIR}/thirdparty/spdlog)
+set(SPDLOG_INCLUDE_DIR ${SPDLOG_ROOT}/src/spdlog/include)
+
+ExternalProject_Add(
+  spdlog
+  PREFIX ${SPDLOG_ROOT}
+  GIT_REPOSITORY "https://github.com/gabime/spdlog"
+  GIT_TAG origin/v1.x
+  GIT_SHALLOW ON
+  TIMEOUT 10
+  UPDATE_COMMAND ""
+  CONFIGURE_COMMAND ""
+  BUILD_COMMAND ""
+  INSTALL_COMMAND ""
+  LOG_DOWNLOAD ON
+  LOG_MERGED_STDOUTERR ON
+  USES_TERMINAL_DOWNLOAD ON
+  )
+
+add_library(XPED_SPDLOG INTERFACE)
+set_target_properties(XPED_SPDLOG PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES ${SPDLOG_INCLUDE_DIR}
+  )
+
+set(YAS_ROOT ${CMAKE_BINARY_DIR}/thirdparty/yas)
+set(YAS_INCLUDE_DIR ${YAS_ROOT}/src/yas/include)
+
+ExternalProject_Add(
+  yas
+  PREFIX ${YAS_ROOT}
+  GIT_REPOSITORY "https://github.com/niXman/yas"
+  GIT_SHALLOW ON
+  TIMEOUT 10
+  UPDATE_COMMAND ""
+  CONFIGURE_COMMAND ""
+  BUILD_COMMAND ""
+  INSTALL_COMMAND ""
+  LOG_DOWNLOAD ON
+  LOG_MERGED_STDOUTERR ON
+  USES_TERMINAL_DOWNLOAD ON
+  )
+
+add_library(XPED_YAS INTERFACE)
+set_target_properties(XPED_YAS PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES ${YAS_INCLUDE_DIR}
+  )
+
 set(SEQ_ROOT ${CMAKE_BINARY_DIR}/thirdparty/seq)
 set(SEQ_INCLUDE_DIR ${SEQ_ROOT}/src/seq/include)
 
@@ -79,13 +126,15 @@ if(${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR" AND XPED_BUILD_CYCLOPS)
   set(CYCLOPS_LIB_DIR ${CYCLOPS_ROOT}/lib)
   set(CYCLOPS_HPTT_LIB_DIR ${CYCLOPS_ROOT}/src/cyclops-build/hptt/lib)
   set(CYCLOPS_HPTT_INCLUDE_DIR ${CYCLOPS_ROOT}/src/cyclops-build/hptt/include)
+  set(CYCLOPS_SCALAPACK_LIB_DIR ${CYCLOPS_ROOT}/src/cyclops-build/scalapack/build/lib)
+  set(CYCLOPS_SCALAPACK_INCLUDE_DIR ${CYCLOPS_ROOT}/src/cyclops-build/scalapack/include)
 
   set(cmd_configure "OMPI_CXX=${CMAKE_CXX_COMPILER} ../cyclops/configure")
   list(APPEND cmd_configure " CXX=\"mpicxx\"")
   if(XPED_USE_OPENMP)
-    list(APPEND cmd_configure " CXXFLAGS=\"-O3 -march=native -fopenmp\"")
+    list(APPEND cmd_configure " CXXFLAGS=\"-O3 -fPIC -march=native -fopenmp\"")
   else()
-    list(APPEND cmd_configure " CXXFLAGS=\"-O3 -march=native -DOMP_OFF\"")
+    list(APPEND cmd_configure " CXXFLAGS=\"-O3 -fPIC -march=native -DOMP_OFF\"")
   endif()
   if(XPED_USE_BLAS)
     get_target_property(XPED_USED_BLAS_LINKER_FLAGS BLAS::BLAS INTERFACE_LINK_LIBRARIES)
@@ -97,14 +146,19 @@ if(${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR" AND XPED_BUILD_CYCLOPS)
     list(APPEND cmd_configure " LD_LIBS=\"${XPED_USED_BLAS_LIBS}\"")
   endif()
   list(APPEND cmd_configure " --install-dir=${CYCLOPS_ROOT}")
-  # list(APPEND cmd_configure " --with-hptt")
-  # list(APPEND cmd_configure " --build-hptt")
+  list(APPEND cmd_configure " --with-hptt")
+  list(APPEND cmd_configure " --build-hptt")
+  list(APPEND cmd_configure " --with-scalapack")
+  list(APPEND cmd_configure " --build-scalapack")
   
   message(STATUS ${cmd_configure})
   file(WRITE ${CYCLOPS_ROOT}/src/configure.sh ${cmd_configure})
 
-  set(cmd_patch "sed -i 's/\\&//g' ${CYCLOPS_ROOT}/src/cyclops/src/scripts/expand_includes.sh\; sed -i 's/ctf_all.hpp/ctf_all.hpp 2> \\/dev\\/null/g' ${CYCLOPS_ROOT}/src/cyclops/src/scripts/expand_includes.sh\; sed -i 's/bool tensor_name_less::operator()(CTF::Idx_Tensor\\* A, CTF::Idx_Tensor\\* B)/bool tensor_name_less::operator()(CTF::Idx_Tensor\\* A, CTF::Idx_Tensor\\* B) const/g' ${CYCLOPS_ROOT}/src/cyclops/src/interface/term.cxx\; sed -i 's/bool operator()(CTF::Idx_Tensor\\* A, CTF::Idx_Tensor\\* B)/bool operator()(CTF::Idx_Tensor\\* A, CTF::Idx_Tensor\\* B) const/g' ${CYCLOPS_ROOT}/src/cyclops/src/interface/term.h")
-
+  set(cmd_patch "sed -i 's/\\&//g' ${CYCLOPS_ROOT}/src/cyclops/src/scripts/expand_includes.sh\;")
+  list(APPEND cmd_patch " sed -i 's/ctf_all.hpp/ctf_all.hpp 2> \\/dev\\/null/g' ${CYCLOPS_ROOT}/src/cyclops/src/scripts/expand_includes.sh\;")
+  list(APPEND cmd_patch " sed -i 's/bool tensor_name_less::operator()(CTF::Idx_Tensor\\* A, CTF::Idx_Tensor\\* B)/bool tensor_name_less::operator()(CTF::Idx_Tensor\\* A, CTF::Idx_Tensor\\* B) const/g' ${CYCLOPS_ROOT}/src/cyclops/src/interface/term.cxx\;")
+  list(APPEND cmd_patch " sed -i 's/bool operator()(CTF::Idx_Tensor\\* A, CTF::Idx_Tensor\\* B)/bool operator()(CTF::Idx_Tensor\\* A, CTF::Idx_Tensor\\* B) const/g' ${CYCLOPS_ROOT}/src/cyclops/src/interface/term.h\;")
+  list(APPEND cmd_patch " sed -i 's/cmake \\.\\. -DBUILD_STATIC_LIBS=ON -DBUILD_SHARED_LIBS=OFF/cmake \\.\\. -DBUILD_STATIC_LIBS=ON -DBUILD_SHARED_LIBS=OFF -DCMAKE_Fortran_FLAGS=-fallow-argument-mismatch/g' ${CYCLOPS_ROOT}/src/cyclops/configure\;")
   #
   file(WRITE ${CYCLOPS_ROOT}/src/patch.sh ${cmd_patch})
   
@@ -143,16 +197,23 @@ if(${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR" AND XPED_BUILD_CYCLOPS)
     )
   file(MAKE_DIRECTORY ${CYCLOPS_INCLUDE_DIR})
   target_include_directories(cyclops_lib::cyclops_lib INTERFACE ${CYCLOPS_INCLUDE_DIR})
-  # add_library(cyclops_lib::hptt UNKNOWN IMPORTED)
-  # set_target_properties(cyclops_lib::hptt PROPERTIES
-  #   IMPORTED_LOCATION ${CYCLOPS_HPTT_LIB_DIR}/libhptt.a
-  #   )
-  # file(MAKE_DIRECTORY ${CYCLOPS_HPTT_INCLUDE_DIR})
-  # target_include_directories(cyclops_lib::hptt INTERFACE ${CYCLOPS_HPTT_INCLUDE_DIR})
+  add_library(cyclops_lib::hptt UNKNOWN IMPORTED)
+  set_target_properties(cyclops_lib::hptt PROPERTIES
+    IMPORTED_LOCATION ${CYCLOPS_HPTT_LIB_DIR}/libhptt.a
+    )
+  file(MAKE_DIRECTORY ${CYCLOPS_HPTT_INCLUDE_DIR})
+  target_include_directories(cyclops_lib::hptt INTERFACE ${CYCLOPS_HPTT_INCLUDE_DIR})
+
+  add_library(cyclops_lib::scalapack UNKNOWN IMPORTED)
+  set_target_properties(cyclops_lib::scalapack PROPERTIES
+    IMPORTED_LOCATION ${CYCLOPS_SCALAPACK_LIB_DIR}/libscalapack.a
+    )
+  target_link_libraries(cyclops_lib::scalapack INTERFACE gfortran)
+  file(MAKE_DIRECTORY ${CYCLOPS_SCALAPACK_INCLUDE_DIR})
 
   add_library(cyclops_lib::all INTERFACE IMPORTED)
   set_property(TARGET cyclops_lib::all PROPERTY
-    INTERFACE_LINK_LIBRARIES cyclops_lib::cyclops_lib
+    INTERFACE_LINK_LIBRARIES cyclops_lib::cyclops_lib cyclops_lib::hptt cyclops_lib::scalapack
     )
 endif()
 

@@ -9,7 +9,10 @@
 
 #define DOCTEST_CONFIG_IMPLEMENT
 #include "doctest/doctest.h"
-#include "doctest/extensions/doctest_mpi.h"
+
+#ifdef XPED_USE_OPENMPI
+#    include "doctest/extensions/doctest_mpi.h"
+#endif
 
 #ifdef XPED_USE_OPENMPI
 #    include "ctf.hpp"
@@ -41,11 +44,16 @@ int main(int argc, char** argv)
     my_logger->warn("Driver: Number of MPI processes: {}", world.np);
     my_logger->warn("Driver: I am process #={}", world.rank);
     MPI_Barrier(world.comm);
-#endif
 
     doctest::Context ctx;
     ctx.setOption("reporters", "MpiConsoleReporter");
     ctx.setOption("reporters", "MpiFileReporter");
+    ctx.setOption("force-colors", true);
+    ctx.applyCommandLine(argc, argv);
+
+    int test_result = ctx.run();
+#endif
+    doctest::Context ctx;
     ctx.setOption("force-colors", true);
     ctx.applyCommandLine(argc, argv);
 

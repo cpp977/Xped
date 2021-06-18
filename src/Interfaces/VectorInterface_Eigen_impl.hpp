@@ -3,6 +3,8 @@
 
 #include "Eigen/Dense"
 
+#include "Util/Mpi.hpp"
+
 template <>
 struct VectorInterface<EigenVectorLib>
 {
@@ -14,13 +16,13 @@ struct VectorInterface<EigenVectorLib>
 
     // constructors
     template <typename Scalar>
-    static VType<Scalar> construct(const VIndextype& elems)
+    static VType<Scalar> construct(const VIndextype& elems, util::mpi::XpedWorld world = util::mpi::Universe)
     {
         return VType<Scalar>(elems);
     }
 
     template <typename Scalar>
-    static VType<Scalar> construct_with_zero(const VIndextype& elems)
+    static VType<Scalar> construct_with_zero(const VIndextype& elems, util::mpi::XpedWorld world = util::mpi::Universe)
     {
         VType<Scalar> vec(elems);
         vec.setZero();
@@ -90,6 +92,12 @@ struct VectorInterface<EigenVectorLib>
         std::stringstream ss;
         ss << V;
         return ss.str();
+    }
+
+    template <typename Scalar>
+    static void vec_to_stdvec(const VType<Scalar>& V, std::vector<Scalar>& vec)
+    {
+        vec = std::vector<Scalar>(V.data(), V.data() + V.size());
     }
 };
 

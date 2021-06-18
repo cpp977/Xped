@@ -29,6 +29,8 @@ using std::string;
 
 #include "ArgParser.h"
 
+#include "Util/Mpi.hpp"
+
 #include "Util/Macros.hpp"
 
 #ifdef XPED_CACHE_PERMUTE_OUTPUT
@@ -55,24 +57,30 @@ int main(int argc, char* argv[])
     std::ios::sync_with_stdio(true);
 
     ArgParser args(argc, argv);
+
+    spdlog::set_level(spdlog::level::info);
 #ifdef XPED_USE_OPENMPI
     MPI_Init(&argc, &argv);
     // MPI_Comm_rank(MPI_COMM_WORLD, &xped_rank);
     // MPI_Comm_size(MPI_COMM_WORLD, &xped_np);
-    CTF::World World(argc, argv);
+    // CTF::World world(argc, argv);
+    util::mpi::XpedWorld world(argc.argv);
+    auto my_logger = spdlog::basic_logger_mt("info", "logs/log_" + to_string(world.rank) + ".txt");
+#else
+    util::mpi::XpedWorld world;
+    auto my_logger = spdlog::basic_logger_mt("info", "logs/log.txt");
 #endif
-    spdlog::set_level(spdlog::level::info);
-    auto my_logger = spdlog::basic_logger_mt("info", "logs/log_" + to_string(World.rank) + ".txt");
-    my_logger->sinks()[0]->set_pattern("[%H:%M:%S %z] [%n] [%^---%L---%$] [process %P] %v");
-    // if(World.rank == 0) {
-    auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
-    console_sink->set_level(spdlog::level::info);
-    console_sink->set_pattern("[%H:%M:%S %z] [%n] [%^---%L---%$] [process %P] %v");
-    my_logger->sinks().push_back(console_sink);
-    // }
 
-    my_logger->info("Number of MPI processes: {}", World.np);
-    my_logger->info("I am process number #={}", World.rank);
+    my_logger->sinks()[0]->set_pattern("[%H:%M:%S %z] [%n] [%^---%L---%$] [process %P] %v");
+    if(world.rank == 0) {
+        auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
+        console_sink->set_level(spdlog::level::info);
+        console_sink->set_pattern("[%H:%M:%S %z] [%n] [%^---%L---%$] [process %P] %v");
+        my_logger->sinks().push_back(console_sink);
+    }
+
+    my_logger->info("Number of MPI processes: {}", world.np);
+    my_logger->info("I am process number #={}", world.rank);
 
     // Xped<double, 2, 2, Symmetry_> t({{B, C}}, {{B, C}}, World);
     // t.setRandom();

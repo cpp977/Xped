@@ -4,6 +4,8 @@
 #include <Eigen/Dense>
 #include <unsupported/Eigen/CXX11/Tensor>
 
+#include "Util/Mpi.hpp"
+
 template <>
 struct TensorInterface<EigenTensorLib>
 {
@@ -23,7 +25,7 @@ struct TensorInterface<EigenTensorLib>
 
     // constructors
     template <typename Scalar, std::size_t Rank>
-    static TType<Scalar, Rank> construct(const std::array<Indextype, Rank>& dims)
+    static TType<Scalar, Rank> construct(const std::array<Indextype, Rank>& dims, util::mpi::XpedWorld world = util::mpi::Universe)
     {
         return TType<Scalar, Rank>(dims);
     }
@@ -252,6 +254,14 @@ struct TensorInterface<EigenTensorLib>
     static auto reshape(TType<Scalar, Rank1>& T, const std::array<Indextype, Rank2>& dims)
     {
         return T.reshape(dims);
+    }
+
+    template <typename Scalar, int Rank>
+    static std::string print(const TType<Scalar, Rank>& T)
+    {
+        std::stringstream ss;
+        ss << T;
+        return ss.str();
     }
 };
 

@@ -50,7 +50,9 @@ XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100)
 #include "Core/Xped.hpp"
 
 #include "doctest/doctest.h"
-#include "doctest/extensions/doctest_mpi.h"
+#ifdef XPED_USE_OPENMPI
+#    include "doctest/extensions/doctest_mpi.h"
+#endif
 
 #include "tensor_tests.hpp"
 
@@ -58,125 +60,164 @@ constexpr std::size_t SU2_TENSOR_SIZE = 5;
 constexpr std::size_t U1_TENSOR_SIZE = 5;
 constexpr std::size_t U0_TENSOR_SIZE = 5;
 
+#ifdef XPED_USE_OPENMPI
 constexpr int MPI_NUM_PROC = 4;
+#endif
 
 TEST_SUITE_BEGIN("Tensor");
 
+#ifdef XPED_USE_OPENMPI
 MPI_TEST_CASE("Testing the transformation to plain Tensor.", MPI_NUM_PROC)
+#else
+TEST_CASE("Testing the transformation to plain Tensor.")
+#endif
 {
-    SUBCASE("SU2")
+#ifdef XPED_USE_OPENMPI
+    util::mpi::XpedWorld world(test_comm)
+#else
+    util::mpi::XpedWorld world;
+#endif
+
+        SUBCASE("SU2")
     {
         spdlog::get("info")->info("Performing the transformation to plain for SU(2)");
         typedef Sym::SU2<Sym::SpinSU2> Symmetry;
         Qbasis<Symmetry, 1> B, C;
-        if(test_rank == 0) {
+        if(world.rank == 0) {
             B.setRandom(SU2_TENSOR_SIZE);
             C.setRandom(SU2_TENSOR_SIZE);
         }
-        util::mpi::broadcast(B, test_rank, 0, test_comm);
-        util::mpi::broadcast(C, test_rank, 0, test_comm);
-        test_tensor_transformation_to_plain(B, C, test_comm);
+        util::mpi::broadcast(B, world.rank, 0, world);
+        util::mpi::broadcast(C, world.rank, 0, world);
+        test_tensor_transformation_to_plain(B, C, world);
     }
 
     SUBCASE("U1")
     {
         typedef Sym::U1<Sym::SpinU1> Symmetry;
         Qbasis<Symmetry, 1> B, C;
-        if(test_rank == 0) {
+        if(world.rank == 0) {
             B.setRandom(U1_TENSOR_SIZE);
             C.setRandom(U1_TENSOR_SIZE);
         }
-        util::mpi::broadcast(B, test_rank, 0, test_comm);
-        util::mpi::broadcast(C, test_rank, 0, test_comm);
-        test_tensor_transformation_to_plain(B, C, test_comm);
+        util::mpi::broadcast(B, world.rank, 0, world);
+        util::mpi::broadcast(C, world.rank, 0, world);
+        test_tensor_transformation_to_plain(B, C, world);
     }
 
     SUBCASE("U0")
     {
         typedef Sym::U0<> Symmetry;
         Qbasis<Symmetry, 1> B, C;
-        if(test_rank == 0) {
+        if(world.rank == 0) {
             B.setRandom(U0_TENSOR_SIZE);
             C.setRandom(U0_TENSOR_SIZE);
         }
-        util::mpi::broadcast(B, test_rank, 0, test_comm);
-        util::mpi::broadcast(C, test_rank, 0, test_comm);
-        test_tensor_transformation_to_plain(B, C, test_comm);
+        util::mpi::broadcast(B, world.rank, 0, world);
+        util::mpi::broadcast(C, world.rank, 0, world);
+        test_tensor_transformation_to_plain(B, C, world);
     }
 }
 
+#ifdef XPED_USE_OPENMPI
 MPI_TEST_CASE("Testing the permutation within the domain.", MPI_NUM_PROC)
+#else
+TEST_CASE("Testing the permutation within the domain.")
+#endif
 {
-    SUBCASE("SU2")
+#ifdef XPED_USE_OPENMPI
+    util::mpi::XpedWorld world(test_comm)
+#else
+    util::mpi::XpedWorld world;
+#endif
+        SUBCASE("SU2")
     {
         typedef Sym::SU2<Sym::SpinSU2> Symmetry;
-        test_tensor_permute_within_domain<Symmetry>(SU2_TENSOR_SIZE, test_comm);
+        test_tensor_permute_within_domain<Symmetry>(SU2_TENSOR_SIZE, world);
     }
 
     SUBCASE("U1")
     {
         typedef Sym::U1<Sym::SpinU1> Symmetry;
-        test_tensor_permute_within_domain<Symmetry>(U1_TENSOR_SIZE, test_comm);
+        test_tensor_permute_within_domain<Symmetry>(U1_TENSOR_SIZE, world);
     }
 
     SUBCASE("U0")
     {
         typedef Sym::U0<> Symmetry;
-        test_tensor_permute_within_domain<Symmetry>(U0_TENSOR_SIZE, test_comm);
+        test_tensor_permute_within_domain<Symmetry>(U0_TENSOR_SIZE, world);
     }
 }
 
+#ifdef XPED_USE_OPENMPI
 MPI_TEST_CASE("Testing the permutation within the codomain.", MPI_NUM_PROC)
+#else
+TEST_CASE("Testing the permutation within the codomain.")
+#endif
 {
-    SUBCASE("SU2")
+#ifdef XPED_USE_OPENMPI
+    util::mpi::XpedWorld world(test_comm)
+#else
+    util::mpi::XpedWorld world;
+#endif
+        SUBCASE("SU2")
     {
         typedef Sym::SU2<Sym::SpinSU2> Symmetry;
-        test_tensor_permute_within_codomain<Symmetry>(SU2_TENSOR_SIZE, test_comm);
+        test_tensor_permute_within_codomain<Symmetry>(SU2_TENSOR_SIZE, world);
     }
 
     SUBCASE("U1")
     {
         typedef Sym::U1<Sym::SpinU1> Symmetry;
-        test_tensor_permute_within_codomain<Symmetry>(U1_TENSOR_SIZE, test_comm);
+        test_tensor_permute_within_codomain<Symmetry>(U1_TENSOR_SIZE, world);
     }
 
     SUBCASE("U0")
     {
         typedef Sym::U0<> Symmetry;
-        test_tensor_permute_within_codomain<Symmetry>(U0_TENSOR_SIZE, test_comm);
+        test_tensor_permute_within_codomain<Symmetry>(U0_TENSOR_SIZE, world);
     }
 }
 
+#ifdef XPED_USE_OPENMPI
 MPI_TEST_CASE("Testing the general permutation of legs.", MPI_NUM_PROC)
+#else
+TEST_CASE("Testing the general permutation of legs.")
+#endif
 {
-    SUBCASE("SU2")
+#ifdef XPED_USE_OPENMPI
+    util::mpi::XpedWorld world(test_comm)
+#else
+    util::mpi::XpedWorld world;
+#endif
+        SUBCASE("SU2")
     {
         typedef Sym::SU2<Sym::SpinSU2> Symmetry;
-        test_tensor_permute<Symmetry, -2>(SU2_TENSOR_SIZE, test_comm);
-        test_tensor_permute<Symmetry, -1>(SU2_TENSOR_SIZE, test_comm);
-        test_tensor_permute<Symmetry, +0>(SU2_TENSOR_SIZE, test_comm);
-        test_tensor_permute<Symmetry, +1>(SU2_TENSOR_SIZE, test_comm);
-        test_tensor_permute<Symmetry, +2>(SU2_TENSOR_SIZE, test_comm);
+        test_tensor_permute<Symmetry, -2>(SU2_TENSOR_SIZE, world);
+        test_tensor_permute<Symmetry, -1>(SU2_TENSOR_SIZE, world);
+        test_tensor_permute<Symmetry, +0>(SU2_TENSOR_SIZE, world);
+        test_tensor_permute<Symmetry, +1>(SU2_TENSOR_SIZE, world);
+        test_tensor_permute<Symmetry, +2>(SU2_TENSOR_SIZE, world);
     }
 
     SUBCASE("U1")
     {
         typedef Sym::U1<Sym::SpinU1> Symmetry;
-        test_tensor_permute<Symmetry, -2>(U1_TENSOR_SIZE, test_comm);
-        test_tensor_permute<Symmetry, -1>(U1_TENSOR_SIZE, test_comm);
-        test_tensor_permute<Symmetry, +0>(U1_TENSOR_SIZE, test_comm);
-        test_tensor_permute<Symmetry, +1>(U1_TENSOR_SIZE, test_comm);
-        test_tensor_permute<Symmetry, +2>(U1_TENSOR_SIZE, test_comm);
+        test_tensor_permute<Symmetry, -2>(U1_TENSOR_SIZE, world);
+        test_tensor_permute<Symmetry, -1>(U1_TENSOR_SIZE, world);
+        test_tensor_permute<Symmetry, +0>(U1_TENSOR_SIZE, world);
+        test_tensor_permute<Symmetry, +1>(U1_TENSOR_SIZE, world);
+        test_tensor_permute<Symmetry, +2>(U1_TENSOR_SIZE, world);
     }
 
     SUBCASE("U0")
     {
         typedef Sym::U0<> Symmetry;
-        test_tensor_permute<Symmetry, -2>(U0_TENSOR_SIZE, test_comm);
-        test_tensor_permute<Symmetry, -1>(U0_TENSOR_SIZE, test_comm);
-        test_tensor_permute<Symmetry, +0>(U0_TENSOR_SIZE, test_comm);
-        test_tensor_permute<Symmetry, +1>(U0_TENSOR_SIZE, test_comm);
-        test_tensor_permute<Symmetry, +2>(U0_TENSOR_SIZE, test_comm);
+        test_tensor_permute<Symmetry, -2>(U0_TENSOR_SIZE, world);
+        test_tensor_permute<Symmetry, -1>(U0_TENSOR_SIZE, world);
+        test_tensor_permute<Symmetry, +0>(U0_TENSOR_SIZE, world);
+        test_tensor_permute<Symmetry, +1>(U0_TENSOR_SIZE, world);
+        test_tensor_permute<Symmetry, +2>(U0_TENSOR_SIZE, world);
     }
 }
 

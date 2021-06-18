@@ -5,10 +5,15 @@
 
 #    include "mpi.h"
 #    include "yas/serialize.hpp"
+#    incude "ctf.hpp"
 
 namespace util::mpi {
+
+typedef CTF::World XpedWorld;
+XpedWorld Universe = CTF::get_universe();
+
 template <typename T>
-void broadcast(T&& t, int process_rank, int root_process = 0, MPI_Comm comm = MPI_COMM_WORLD)
+void broadcast(T&& t, int process_rank, int root_process = 0, XpedWorld world = Universe)
 {
     constexpr std::size_t flags = yas::mem /*IO type*/ | yas::binary; /*IO format*/
     yas::shared_buffer buf;
@@ -23,10 +28,10 @@ void broadcast(T&& t, int process_rank, int root_process = 0, MPI_Comm comm = MP
         plain_buf = buf.data.get();
     }
 
-    MPI_Bcast(&size, 1, MPI_INT, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&size, 1, MPI_INT, 0, world.comm);
     if(process_rank != root_process) { plain_buf = (char*)malloc(sizeof(char) * size); }
 
-    MPI_Bcast(plain_buf, size, MPI_CHAR, 0, MPI_COMM_WORLD);
+    MPI_Bcast(plain_buf, size, MPI_CHAR, 0, world.comm);
 
     if(process_rank != root_process) {
         buf = yas::shared_buffer(plain_buf, size);
@@ -34,5 +39,21 @@ void broadcast(T&& t, int process_rank, int root_process = 0, MPI_Comm comm = MP
     }
 }
 } // namespace util::mpi
+#else
+namespace util::mpi {
+struct XpedWorld
+{
+    int rank = 0;
+    int np = 1;
+};
+XpedWorld Universe;
+
+template <typename T>
+void broadcast(T&&, int, int, XpedWorld)
+{
+    return;
+}
+} // namespace util::mpi
+
 #endif
 #endif

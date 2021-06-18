@@ -116,7 +116,7 @@ public:
 
     Xped(const std::array<Qbasis<Symmetry, 1>, Rank> basis_domain,
          const std::array<Qbasis<Symmetry, 1>, CoRank> basis_codomain,
-         CTF::World world = CTF::get_universe());
+         util::mpi::XpedWorld world = util::mpi::Universe);
 
     template <typename OtherDerived>
     Xped(const XpedBase<OtherDerived>& other);
@@ -234,7 +234,7 @@ public:
     Qbasis<Symmetry, Rank> domain;
     Qbasis<Symmetry, CoRank> codomain;
 
-    CTF::World world_ = CTF::get_universe();
+    util::mpi::XpedWorld world_ = util::mpi::Universe;
 
     void push_back(const qType& q, const MatrixType& M)
     {
@@ -253,7 +253,7 @@ public:
 template <typename Scalar_, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename MatrixLib_, typename TensorLib_, typename VectorLib_>
 Xped<Scalar_, Rank, CoRank, Symmetry, MatrixLib_, TensorLib_, VectorLib_>::Xped(const std::array<Qbasis<Symmetry, 1>, Rank> basis_domain,
                                                                                 const std::array<Qbasis<Symmetry, 1>, CoRank> basis_codomain,
-                                                                                CTF::World world)
+                                                                                util::mpi::XpedWorld world)
     : uncoupled_domain(basis_domain)
     , uncoupled_codomain(basis_codomain)
     , world_(world)
@@ -703,9 +703,7 @@ Xped<Scalar_, Rank, CoRank, Symmetry, MatrixLib_, TensorLib_, VectorLib_>::tSVD(
             allSV.push_back(std::make_pair(sector_[i], sv));
         }
         spdlog::get("info")->trace("Extracted singular values for step i={}", i);
-        // for (const auto& s:Jack.singularValues()) {allSV.push_back(make_pair(in[q],s));}
-        CTF::Matrix<Scalar> Sigmamat(Sigmavec.len, Sigmavec.len);
-        Sigmamat["ii"] = Sigmavec["i"];
+        auto Sigmamat = Plain::template vec_to_diagmat(Sigmavec);
         U.push_back(sector_[i], Umat);
         Sigma.push_back(sector_[i], Sigmamat);
         Vdag.push_back(sector_[i], Vmatdag);
@@ -1038,12 +1036,12 @@ Xped<Scalar_, Rank, CoRank, Symmetry, MatrixLib_, TensorLib_, VectorLib_>::plain
         spdlog::get("info")->trace("Static identity done");
         auto mat = Plain::template kronecker_prod<Scalar>(sorted_block[i], id_cgc);
         spdlog::get("info")->trace("Kronecker Product done.");
-        Plain::template add_to_block(inner_mat,
-                                     sorted_domain.full_outer_num(sorted_sector[i]),
-                                     sorted_codomain.full_outer_num(sorted_sector[i]),
-                                     Symmetry::degeneracy(sorted_sector[i]) * Plain::template rows<Scalar>(sorted_block[i]),
-                                     Symmetry::degeneracy(sorted_sector[i]) * Plain::template cols<Scalar>(sorted_block[i]),
-                                     mat);
+        Plain::template add_to_block<Scalar>(inner_mat,
+                                             sorted_domain.full_outer_num(sorted_sector[i]),
+                                             sorted_codomain.full_outer_num(sorted_sector[i]),
+                                             Symmetry::degeneracy(sorted_sector[i]) * Plain::template rows<Scalar>(sorted_block[i]),
+                                             Symmetry::degeneracy(sorted_sector[i]) * Plain::template cols<Scalar>(sorted_block[i]),
+                                             mat);
         spdlog::get("info")->trace("Block added.");
         // inner_mat.block(sorted_domain.full_outer_num(sorted_sector[i]),
         //                 sorted_codomain.full_outer_num(sorted_sector[i]),

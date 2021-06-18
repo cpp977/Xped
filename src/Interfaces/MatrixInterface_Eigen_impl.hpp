@@ -5,6 +5,8 @@
 #include "Eigen/SVD"
 #include "unsupported/Eigen/KroneckerProduct"
 
+#include "Util/Mpi.hpp"
+
 #include "Interfaces/MatrixMultiplication.hpp"
 
 template <>
@@ -24,13 +26,13 @@ struct MatrixInterface<EigenMatrixLib>
     typedef Eigen::Index MIndextype;
     // constructors
     template <typename Scalar>
-    static MType<Scalar> construct(const MIndextype& rows, const MIndextype& cols)
+    static MType<Scalar> construct(const MIndextype& rows, const MIndextype& cols, util::mpi::XpedWorld world = util::mpi::Universe)
     {
         return MType<Scalar>(rows, cols);
     }
 
     template <typename Scalar>
-    static MType<Scalar> construct_with_zero(const MIndextype& rows, const MIndextype& cols)
+    static MType<Scalar> construct_with_zero(const MIndextype& rows, const MIndextype& cols, util::mpi::XpedWorld world = util::mpi::Universe)
     {
         MType<Scalar> mat(rows, cols);
         mat.setZero();
@@ -117,7 +119,9 @@ struct MatrixInterface<EigenMatrixLib>
     static void optimal_prod(const Scalar& scale, const MatrixExpr1& M1, const MatrixExpr2& M2, const MatrixExpr3& M3, MatrixExprRes& Mres)
     {
         std::vector<std::size_t> cost(2);
-        cost = internal::mult_cost(M1, M2, M3);
+        cost = internal::mult_cost(std::array<MIndextype, 2>{M1.rows(), M1.cols()},
+                                   std::array<MIndextype, 2>{M2.rows(), M2.cols()},
+                                   std::array<MIndextype, 2>{M3.rows(), M3.cols()});
         std::size_t opt_mult = std::min_element(cost.begin(), cost.end()) - cost.begin();
 
         if(opt_mult == 0) {
@@ -133,7 +137,9 @@ struct MatrixInterface<EigenMatrixLib>
     static void optimal_prod_add(const Scalar& scale, const MatrixExpr1& M1, const MatrixExpr2& M2, const MatrixExpr3& M3, MatrixExprRes& Mres)
     {
         std::vector<std::size_t> cost(2);
-        cost = internal::mult_cost(M1, M2, M3);
+        cost = internal::mult_cost(std::array<MIndextype, 2>{M1.rows(), M1.cols()},
+                                   std::array<MIndextype, 2>{M2.rows(), M2.cols()},
+                                   std::array<MIndextype, 2>{M3.rows(), M3.cols()});
         std::size_t opt_mult = std::min_element(cost.begin(), cost.end()) - cost.begin();
 
         if(opt_mult == 0) {
@@ -152,7 +158,7 @@ struct MatrixInterface<EigenMatrixLib>
     }
 
     template <typename Scalar>
-    static auto substract(const MType<Scalar>& M1, const MType<Scalar>& M2)
+    static auto difference(const MType<Scalar>& M1, const MType<Scalar>& M2)
     {
         return (M1 - M2);
     }
@@ -182,10 +188,9 @@ struct MatrixInterface<EigenMatrixLib>
                              const MIndextype& col_off,
                              const MIndextype& rows,
                              const MIndextype& cols,
-                             const Scalar& scale,
                              const MType<Scalar>& M2)
     {
-        M1.block(row_off, col_off, rows, cols) += scale * M2;
+        M1.block(row_off, col_off, rows, cols) += M2;
     }
 
     template <typename Scalar>
@@ -194,10 +199,9 @@ struct MatrixInterface<EigenMatrixLib>
                           const MIndextype& col_off,
                           const MIndextype& rows,
                           const MIndextype& cols,
-                          const Scalar& scale,
                           const MType<Scalar>& M2)
     {
-        M1.block(row_off, col_off, rows, cols) = scale * M2;
+        M1.block(row_off, col_off, rows, cols) = M2;
     }
 
     template <typename Scalar>
@@ -206,19 +210,6 @@ struct MatrixInterface<EigenMatrixLib>
         std::stringstream ss;
         ss << M;
         return ss.str();
-    }
-
-    template <typename Scalar>
-    static std::tuple<MType<Scalar>, MType<Scalar>, MType<Scalar>> svd(const MType<Scalar>& M)
-    {
-#ifdef XPED_DONT_USE_BDCSVD
-        Eigen::JacobiSVD<MType<Scalar>> Jack; // standard SVD
-#else
-        Eigen::BDCSVD<MType<Scalar>> Jack; // "Divide and conquer" SVD (only available in Eigen)
-#endif
-
-        Jack.compute(M, Eigen::ComputeThinU | Eigen::ComputeThinV);
-        return std::make_tuple(Jack.matrixU(), Jack.singularValues().asDiagonal(), Jack.matrixV().adjoint());
     }
 };
 

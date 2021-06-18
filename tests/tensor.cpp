@@ -147,36 +147,36 @@ MPI_TEST_CASE("Testing the permutation within the codomain.", MPI_NUM_PROC)
     }
 }
 
-TEST_CASE("Testing the general permutation of legs.")
+MPI_TEST_CASE("Testing the general permutation of legs.", MPI_NUM_PROC)
 {
     SUBCASE("SU2")
     {
         typedef Sym::SU2<Sym::SpinSU2> Symmetry;
-        test_tensor_permute<Symmetry, -2>(SU2_TENSOR_SIZE);
-        test_tensor_permute<Symmetry, -1>(SU2_TENSOR_SIZE);
-        test_tensor_permute<Symmetry, +0>(SU2_TENSOR_SIZE);
-        test_tensor_permute<Symmetry, +1>(SU2_TENSOR_SIZE);
-        test_tensor_permute<Symmetry, +2>(SU2_TENSOR_SIZE);
+        test_tensor_permute<Symmetry, -2>(SU2_TENSOR_SIZE, test_comm);
+        test_tensor_permute<Symmetry, -1>(SU2_TENSOR_SIZE, test_comm);
+        test_tensor_permute<Symmetry, +0>(SU2_TENSOR_SIZE, test_comm);
+        test_tensor_permute<Symmetry, +1>(SU2_TENSOR_SIZE, test_comm);
+        test_tensor_permute<Symmetry, +2>(SU2_TENSOR_SIZE, test_comm);
     }
 
     SUBCASE("U1")
     {
         typedef Sym::U1<Sym::SpinU1> Symmetry;
-        test_tensor_permute<Symmetry, -2>(U1_TENSOR_SIZE);
-        test_tensor_permute<Symmetry, -1>(U1_TENSOR_SIZE);
-        test_tensor_permute<Symmetry, +0>(U1_TENSOR_SIZE);
-        test_tensor_permute<Symmetry, +1>(U1_TENSOR_SIZE);
-        test_tensor_permute<Symmetry, +2>(U1_TENSOR_SIZE);
+        test_tensor_permute<Symmetry, -2>(U1_TENSOR_SIZE, test_comm);
+        test_tensor_permute<Symmetry, -1>(U1_TENSOR_SIZE, test_comm);
+        test_tensor_permute<Symmetry, +0>(U1_TENSOR_SIZE, test_comm);
+        test_tensor_permute<Symmetry, +1>(U1_TENSOR_SIZE, test_comm);
+        test_tensor_permute<Symmetry, +2>(U1_TENSOR_SIZE, test_comm);
     }
 
     SUBCASE("U0")
     {
         typedef Sym::U0<> Symmetry;
-        test_tensor_permute<Symmetry, -2>(U0_TENSOR_SIZE);
-        test_tensor_permute<Symmetry, -1>(U0_TENSOR_SIZE);
-        test_tensor_permute<Symmetry, +0>(U0_TENSOR_SIZE);
-        test_tensor_permute<Symmetry, +1>(U0_TENSOR_SIZE);
-        test_tensor_permute<Symmetry, +2>(U0_TENSOR_SIZE);
+        test_tensor_permute<Symmetry, -2>(U0_TENSOR_SIZE, test_comm);
+        test_tensor_permute<Symmetry, -1>(U0_TENSOR_SIZE, test_comm);
+        test_tensor_permute<Symmetry, +0>(U0_TENSOR_SIZE, test_comm);
+        test_tensor_permute<Symmetry, +1>(U0_TENSOR_SIZE, test_comm);
+        test_tensor_permute<Symmetry, +2>(U0_TENSOR_SIZE, test_comm);
     }
 }
 

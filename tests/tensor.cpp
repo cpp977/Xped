@@ -1,8 +1,3 @@
-#define XPED_USE_CYCLOPS_MATRIX_LIB
-#define XPED_USE_CYCLOPS_VECTOR_LIB
-
-// #define XPED_USE_EIGEN_MATRIX_LIB
-
 #ifdef INTEL_MKL_VERSION
 #    pragma message("Xped is using the intel math kernel library (MKL)")
 #endif

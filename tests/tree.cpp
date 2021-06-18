@@ -1,6 +1,3 @@
-#define XPED_USE_CYCLOPS_MATRIX_LIB
-#define XPED_USE_CYCLOPS_VECTOR_LIB
-
 #ifdef _OPENMP
 #    pragma message("Xped is using OpenMP parallelization")
 #    include "omp.h"

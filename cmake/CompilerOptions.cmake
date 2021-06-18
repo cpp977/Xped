@@ -164,6 +164,18 @@ elseif (${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR")
   target_compile_definitions(${project_name} INTERFACE XPED_USE_CYCLOPS_TENSOR_LIB=1)
 endif()
 
+if(${XPED_MATRIX_LIB} STREQUAL "EIGEN_MATRIX")
+  target_compile_definitions(${project_name} INTERFACE XPED_USE_EIGEN_MATRIX_LIB=1)
+elseif (${XPED_MATRIX_LIB} STREQUAL "CYCLOPS_MATRIX")  
+  target_compile_definitions(${project_name} INTERFACE XPED_USE_CYCLOPS_MATRIX_LIB=1)
+endif()
+
+if(${XPED_VECTOR_LIB} STREQUAL "EIGEN_VECTOR")
+  target_compile_definitions(${project_name} INTERFACE XPED_USE_EIGEN_VECTOR_LIB=1)
+elseif (${XPED_VECTOR_LIB} STREQUAL "CYCLOPS_VECTOR")  
+  target_compile_definitions(${project_name} INTERFACE XPED_USE_CYCLOPS_VECTOR_LIB=1)
+endif()
+
 if(${XPED_EFFICIENCY_MODEL} STREQUAL "XPED_TIME_EFFICIENT")
   target_compile_definitions(${project_name} INTERFACE XPED_EFFICIENCY_MODEL=1)
   target_compile_definitions(${project_name} INTERFACE XPED_TIME_EFFICIENT=1)

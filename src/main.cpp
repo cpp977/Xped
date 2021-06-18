@@ -1,9 +1,9 @@
-#define XPED_USE_CYCLOPS_MATRIX_LIB
-#define XPED_USE_CYCLOPS_VECTOR_LIB
-
+#include <cstddef>
 #include <cstdio>
 #include <iostream>
+#include <sstream>
 #include <string>
+#include <vector>
 
 #include "spdlog/spdlog.h"
 
@@ -19,14 +19,6 @@
 #    pragma message("Xped is using OpenMP parallelization")
 #    include "omp.h"
 #endif
-
-// #include <cmath>
-
-#include <cstddef>
-#include <iostream>
-#include <sstream>
-#include <string>
-#include <vector>
 
 #include "Stopwatch.h"
 
@@ -82,15 +74,6 @@ int main(int argc, char* argv[])
     my_logger->info("Number of MPI processes: {}", World.np);
     my_logger->info("I am process number #={}", World.rank);
 
-    typedef Sym::U1<Sym::SpinU1> Symmetry_;
-    Qbasis<Symmetry_, 1> B, C;
-    B.setRandom(4);
-    my_logger->info("basis B");
-    for(const auto& [q, pos, plain] : B.data_) { my_logger->info("QN: {}, deg={}", q.data[0], plain.dim()); }
-    C.setRandom(4);
-    my_logger->info("basis C");
-    for(const auto& [q, pos, plain] : C.data_) { my_logger->info("QN: {}, deg={}", q.data[0], plain.dim()); }
-
     // Xped<double, 2, 2, Symmetry_> t({{B, C}}, {{B, C}}, World);
     // t.setRandom();
     // std::cout << t.print() << std::endl;
@@ -116,70 +99,70 @@ int main(int argc, char* argv[])
 
     // std::cout << std::endl << C << std::endl;
 
-    // typedef Sym::SU2<Sym::SpinSU2> Symmetry;
-    // // typedef Sym::U1<Sym::SpinU1> Symmetry;
-    // // typedef Sym::U0 Symmetry;
-    // typedef Symmetry::qType qType;
-    // auto L = args.get<std::size_t>("L", 10);
-    // auto D = args.get<int>("D", 1);
-    // auto Minit = args.get<std::size_t>("Minit", 10);
-    // auto Qinit = args.get<std::size_t>("Qinit", 10);
-    // auto reps = args.get<std::size_t>("reps", 10);
-    // auto DIR = static_cast<DMRG::DIRECTION>(args.get<int>("DIR", 0));
-    // auto NORM = args.get<bool>("NORM", true);
-    // auto SWEEP = args.get<bool>("SWEEP", true);
-    // auto INFO = args.get<bool>("INFO", true);
+    typedef Sym::SU2<Sym::SpinSU2> Symmetry;
+    // typedef Sym::U1<Sym::SpinU1> Symmetry;
+    // typedef Sym::U0 Symmetry;
+    typedef Symmetry::qType qType;
+    auto L = args.get<std::size_t>("L", 10);
+    auto D = args.get<int>("D", 1);
+    auto Minit = args.get<std::size_t>("Minit", 10);
+    auto Qinit = args.get<std::size_t>("Qinit", 10);
+    auto reps = args.get<std::size_t>("reps", 10);
+    auto DIR = static_cast<DMRG::DIRECTION>(args.get<int>("DIR", 0));
+    auto NORM = args.get<bool>("NORM", true);
+    auto SWEEP = args.get<bool>("SWEEP", true);
+    auto INFO = args.get<bool>("INFO", true);
 
-    // qType Qtot = {D};
-    // Qbasis<Symmetry, 1> qloc_;
-    // // qloc_.push_back({}, 2);
-    // qloc_.push_back({2}, 1);
-    // qloc_.push_back({3}, 1);
-    // qloc_.push_back({4}, 1);
-    // // qloc_.push_back({-2}, 1);
-    // std::vector<Qbasis<Symmetry, 1>> qloc(L, qloc_);
-    // // Qbasis<Symmetry, 1> in;
-    // // in.setRandom(Minit);
-    // // std::cout << in << std::endl;
-    // // auto out = in.combine(in).forgetHistory();
-    // // Xped<double, 2, 1, Symmetry> T({{in, in}}, {{out}});
-    // // T.setRandom();
-    // // auto F = T.permute<0, 2, 0, 1>();
-    // // std::cout << T.print(true) << std::endl;
-    // // auto X = T * T.adjoint();
-    // // std::cout << X.print(true) << std::endl;
+    qType Qtot = {D};
+    Qbasis<Symmetry, 1> qloc_;
+    // qloc_.push_back({}, 2);
+    qloc_.push_back({2}, 1);
+    qloc_.push_back({3}, 1);
+    qloc_.push_back({4}, 1);
+    // qloc_.push_back({-2}, 1);
+    std::vector<Qbasis<Symmetry, 1>> qloc(L, qloc_);
+    // Qbasis<Symmetry, 1> in;
+    // in.setRandom(Minit);
+    // std::cout << in << std::endl;
+    // auto out = in.combine(in).forgetHistory();
+    // Xped<double, 2, 1, Symmetry> T({{in, in}}, {{out}});
+    // T.setRandom();
+    // auto F = T.permute<0, 2, 0, 1>();
+    // std::cout << T.print(true) << std::endl;
+    // auto X = T * T.adjoint();
+    // std::cout << X.print(true) << std::endl;
 
-    // // auto Y = T.adjoint() * T;
-    // // std::cout << Y.print(true) << std::endl;
-    // Stopwatch<> construct;
-    // Mps<double, Symmetry> Psi(L, qloc, Qtot, Minit, Qinit);
-    // my_logger->critical(construct.info("Time for constructor"));
+    // auto Y = T.adjoint() * T;
+    // std::cout << Y.print(true) << std::endl;
+    Stopwatch<> construct;
+    Mps<double, Symmetry> Psi(L, qloc, Qtot, Minit, Qinit);
+    my_logger->critical(construct.info("Time for constructor"));
 
-    // if(INFO) {
-    //     for(size_t l = 0; l <= L; l++) {
-    //         std::stringstream ss;
-    //         ss << Psi.auxBasis(l);
-    //         my_logger->info(ss.str());
-    //     }
-    // }
-    // if(NORM) {
-    //     Stopwatch<> norm;
-    //     for(std::size_t i = 0; i < reps; i++) {
-    //         double normSq = dot(Psi, Psi, DIR);
-    //         my_logger->info("<Psi|Psi>= {:03.2f}", normSq);
-    //     }
-    //     my_logger->critical(norm.info("Time for norm"));
-    // }
-    // if(SWEEP) {
-    //     Stopwatch<> Sweep;
-    //     if(DIR == DMRG::DIRECTION::RIGHT) {
-    //         for(std::size_t l = 0; l < L; l++) { Psi.rightSweepStep(l, DMRG::BROOM::SVD); }
-    //     } else {
-    //         for(std::size_t l = L - 1; l > 0; l--) { Psi.leftSweepStep(l, DMRG::BROOM::SVD); }
-    //         Psi.leftSweepStep(0, DMRG::BROOM::SVD);
-    //     }
-    //     my_logger->critical(Sweep.info("Time for sweep"));
-    // }
+    if(INFO) {
+        for(size_t l = 0; l <= L; l++) {
+            std::stringstream ss;
+            ss << Psi.auxBasis(l);
+            my_logger->info(ss.str());
+        }
+    }
+    if(NORM) {
+        Stopwatch<> norm;
+        for(std::size_t i = 0; i < reps; i++) {
+            double normSq = dot(Psi, Psi, DIR);
+            my_logger->info("<Psi|Psi>= {:03.2f}", normSq);
+        }
+        my_logger->critical(norm.info("Time for norm"));
+    }
+    if(SWEEP) {
+        Stopwatch<> Sweep;
+        if(DIR == DMRG::DIRECTION::RIGHT) {
+            for(std::size_t l = 0; l < L; l++) { Psi.rightSweepStep(l, DMRG::BROOM::SVD); }
+        } else {
+            for(std::size_t l = L - 1; l > 0; l--) { Psi.leftSweepStep(l, DMRG::BROOM::SVD); }
+            Psi.leftSweepStep(0, DMRG::BROOM::SVD);
+        }
+        my_logger->critical(Sweep.info("Time for sweep"));
+    }
 
 #ifdef XPED_CACHE_PERMUTE_OUTPUT
     std::cout << "total hits=" << tree_cache<1, 2, 1, Symmetry>.cache.stats().total_hits() << endl; // Hits for any key

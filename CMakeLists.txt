@@ -36,6 +36,22 @@ if(NOT (${XPED_TENSOR_LIB} IN_LIST XPED_SUPPORTED_TENSOR_LIBS))
 endif()
 message( STATUS "Build uses the ${XPED_TENSOR_LIB} library.")
 
+set(XPED_SUPPORTED_MATRIX_LIBS EIGEN_MATRIX CYCLOPS_MATRIX)
+set(XPED_MATRIX_LIB "EIGEN_MATRIX" CACHE STRING "Used matrix library for plain tensor operations.")
+if(NOT (${XPED_MATRIX_LIB} IN_LIST XPED_SUPPORTED_MATRIX_LIBS))
+  message( STATUS "Build wanted to use the ${XPED_MATRIX_LIB} library.")
+  message( FATAL_ERROR "You specified a matrix library which is not supported.")  
+endif()
+message( STATUS "Build uses the ${XPED_MATRIX_LIB} library.")
+
+set(XPED_SUPPORTED_VECTOR_LIBS EIGEN_VECTOR CYCLOPS_VECTOR)
+set(XPED_VECTOR_LIB "EIGEN_VECTOR" CACHE STRING "Used matrix library for plain tensor operations.")
+if(NOT (${XPED_VECTOR_LIB} IN_LIST XPED_SUPPORTED_VECTOR_LIBS))
+  message( STATUS "Build wanted to use the ${XPED_VECTOR_LIB} library.")
+  message( FATAL_ERROR "You specified a vector library which is not supported.")  
+endif()
+message( STATUS "Build uses the ${XPED_VECTOR_LIB} library.")
+
 option(XPED_BUILD_TESTS "Build the tests." ON)
 
 option(XPED_BUILD_CYCLOPS "Build the cyclops library from source." ON)

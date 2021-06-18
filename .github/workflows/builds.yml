@@ -25,6 +25,16 @@ jobs:
             LIBCXX: ON
           - compiler: clang++
             TENSOR_LIB: CYCLOPS_TENSOR
+        include:
+          - TENSOR_LIB: EIGEN_TENSOR
+            MATRIX_LIB: EIGEN_MATRIX
+            VECTOR_LIB: EIGEN_MATRIX
+          - TENSOR_LIB: ARRAY_TENSOR
+            MATRIX_LIB: EIGEN_MATRIX
+            VECTOR_LIB: EIGEN_MATRIX
+          - TENSOR_LIB: CYCLOPS_TENSOR
+            MATRIX_LIB: CYCLOPS_MATRIX
+            VECTOR_LIB: CYCLOPS_MATRIX
 
     steps:
     - uses: actions/checkout@v2
@@ -53,7 +63,7 @@ jobs:
       working-directory: ${{runner.workspace}}/build
       env:
         CXX: ${{ matrix.compiler }}
-      run: cmake $GITHUB_WORKSPACE -DBLA_VENDOR=OpenBLAS -DXPED_USE_BLAS=ON -DXPED_USE_LAPACK=ON -DXPED_USE_OPENMP=ON -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DXPED_USE_LIBCXX=${{ matrix.LIBCXX }} -DXPED_ENABLE_CACHE=OFF -DXPED_TENSOR_LIB=${{ matrix.TENSOR_LIB }}
+      run: cmake $GITHUB_WORKSPACE -DBLA_VENDOR=OpenBLAS -DXPED_USE_BLAS=ON -DXPED_USE_LAPACK=ON -DXPED_USE_OPENMP=ON -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DXPED_USE_LIBCXX=${{ matrix.LIBCXX }} -DXPED_ENABLE_CACHE=OFF -DXPED_TENSOR_LIB=${{ matrix.TENSOR_LIB }} -DXPED_TENSOR_LIB=${{ matrix.MATRIX_LIB }} -DXPED_TENSOR_LIB=${{ matrix.VECTOR_LIB }}
 
     - name: Build
       working-directory: ${{runner.workspace}}/build

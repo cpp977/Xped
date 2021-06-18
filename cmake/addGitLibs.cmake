@@ -159,7 +159,9 @@ if(${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR" AND XPED_BUILD_CYCLOPS)
   list(APPEND cmd_patch " sed -i 's/bool tensor_name_less::operator()(CTF::Idx_Tensor\\* A, CTF::Idx_Tensor\\* B)/bool tensor_name_less::operator()(CTF::Idx_Tensor\\* A, CTF::Idx_Tensor\\* B) const/g' ${CYCLOPS_ROOT}/src/cyclops/src/interface/term.cxx\;")
   list(APPEND cmd_patch " sed -i 's/bool operator()(CTF::Idx_Tensor\\* A, CTF::Idx_Tensor\\* B)/bool operator()(CTF::Idx_Tensor\\* A, CTF::Idx_Tensor\\* B) const/g' ${CYCLOPS_ROOT}/src/cyclops/src/interface/term.h\;")
   list(APPEND cmd_patch " sed -i 's/cmake \\.\\. -DBUILD_STATIC_LIBS=ON -DBUILD_SHARED_LIBS=OFF/cmake \\.\\. -DBUILD_STATIC_LIBS=ON -DBUILD_SHARED_LIBS=OFF -DCMAKE_Fortran_FLAGS=-fallow-argument-mismatch/g' ${CYCLOPS_ROOT}/src/cyclops/configure\;")
-  #
+  list(APPEND cmd_patch " sed -i 's/read -p \\\"found/echo \\\"found/g' ${CYCLOPS_ROOT}/src/cyclops/configure\;")
+  list(APPEND cmd_patch " sed -i 's/overwrite?  (Y\\/N)? \\\" -n 1 -r/overwrite.\\\"/g' ${CYCLOPS_ROOT}/src/cyclops/configure\;")
+  list(APPEND cmd_patch " sed -i 's/if \\[\\[ \\$REPLY =~ \\^\\[Yy]\\$ ]]/if \\[\\[ 1 == 1 ]]/g' ${CYCLOPS_ROOT}/src/cyclops/configure\;")
   file(WRITE ${CYCLOPS_ROOT}/src/patch.sh ${cmd_patch})
   
 #  get_target_property(MAIN_CXXFLAGS project_options INTERFACE_COMPILE_OPTIONS)

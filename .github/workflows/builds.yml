@@ -28,13 +28,13 @@ jobs:
         include:
           - TENSOR_LIB: EIGEN_TENSOR
             MATRIX_LIB: EIGEN_MATRIX
-            VECTOR_LIB: EIGEN_MATRIX
+            VECTOR_LIB: EIGEN_VECTOR
           - TENSOR_LIB: ARRAY_TENSOR
             MATRIX_LIB: EIGEN_MATRIX
-            VECTOR_LIB: EIGEN_MATRIX
+            VECTOR_LIB: EIGEN_VECTOR
           - TENSOR_LIB: CYCLOPS_TENSOR
             MATRIX_LIB: CYCLOPS_MATRIX
-            VECTOR_LIB: CYCLOPS_MATRIX
+            VECTOR_LIB: CYCLOPS_VECTOR
 
     steps:
     - uses: actions/checkout@v2

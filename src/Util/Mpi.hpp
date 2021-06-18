@@ -3,9 +3,9 @@
 
 #ifdef XPED_USE_OPENMPI
 
+#    include "ctf.hpp"
 #    include "mpi.h"
 #    include "yas/serialize.hpp"
-#    incude "ctf.hpp"
 
 namespace util::mpi {
 

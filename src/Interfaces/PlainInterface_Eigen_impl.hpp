@@ -2,6 +2,7 @@
 #define PLAIN_INTERFACE_EIGEN_IMPL_H_
 
 #include <Eigen/Core>
+#include <Eigen/SVD>
 #include <unsupported/Eigen/CXX11/Tensor>
 
 template <>

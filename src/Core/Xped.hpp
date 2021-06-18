@@ -703,7 +703,7 @@ Xped<Scalar_, Rank, CoRank, Symmetry, MatrixLib_, TensorLib_, VectorLib_>::tSVD(
             allSV.push_back(std::make_pair(sector_[i], sv));
         }
         spdlog::get("info")->trace("Extracted singular values for step i={}", i);
-        auto Sigmamat = Plain::template vec_to_diagmat(Sigmavec);
+        auto Sigmamat = Plain::template vec_to_diagmat<Scalar>(Sigmavec);
         U.push_back(sector_[i], Umat);
         Sigma.push_back(sector_[i], Sigmamat);
         Vdag.push_back(sector_[i], Vmatdag);

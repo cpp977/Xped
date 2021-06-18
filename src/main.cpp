@@ -64,7 +64,7 @@ int main(int argc, char* argv[])
     // MPI_Comm_rank(MPI_COMM_WORLD, &xped_rank);
     // MPI_Comm_size(MPI_COMM_WORLD, &xped_np);
     // CTF::World world(argc, argv);
-    util::mpi::XpedWorld world(argc.argv);
+    util::mpi::XpedWorld world(argc, argv);
     auto my_logger = spdlog::basic_logger_mt("info", "logs/log_" + to_string(world.rank) + ".txt");
 #else
     util::mpi::XpedWorld world;

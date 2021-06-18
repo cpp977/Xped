@@ -135,9 +135,9 @@ struct PlainInterface<CyclopsMatrixLib, CyclopsTensorLib, CyclopsVectorLib>
     template <typename Scalar, typename VT>
     static MType<Scalar> vec_to_diagmat(VT&& V)
     {
-        CTF::Matrix<Scalar> Sigmamat(Sigmavec.len, Sigmavec.len);
-        Sigmamat["ii"] = Sigmavec["i"];
-        return Sigmamat;
+        CTF::Matrix<Scalar> mat(V.len, V.len);
+        mat["ii"] = V["i"];
+        return mat;
     }
 };
 #endif

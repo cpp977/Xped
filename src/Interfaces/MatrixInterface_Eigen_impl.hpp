@@ -2,7 +2,6 @@
 #define MATRIX_INTERFACE_EIGEN_IMPL_H_
 
 #include "Eigen/Dense"
-#include "Eigen/SVD"
 #include "unsupported/Eigen/KroneckerProduct"
 
 #include "Util/Mpi.hpp"

@@ -32,7 +32,7 @@ void contract_L(XPED_CONST Xped<Scalar, 1, 1, Symmetry, MatrixLib, TensorLib, Ve
             auto itBold = Bold.dict_.find(Qin);
             if(itBold == Bold.dict_.end()) { continue; }
             for(std::size_t s = 0; s < domainTree.dims[1]; s++) {
-                typename PlainInterface<MatrixLib, TensorLib, VectorLib>::MType<Scalar> Mbrablock =
+                typename PlainInterface<MatrixLib, TensorLib, VectorLib>::template MType<Scalar> Mbrablock =
                     PlainInterface<MatrixLib, TensorLib, VectorLib>::block(Mbra, s * domainTree.dims[0], 0, domainTree.dims[0], dimQ);
                 PlainInterface<MatrixLib, TensorLib, VectorLib>::template optimal_prod_add<Scalar>(
                     1.,
@@ -84,7 +84,7 @@ void contract_R(XPED_CONST Xped<Scalar, 1, 1, Symmetry, MatrixLib, TensorLib, Ve
             auto Mbra = Bra.subMatrix(domainTree, trivial);
             auto Mket = Ket.subMatrix(domainTree, trivial);
             for(std::size_t s = 0; s < domainTree.dims[1]; s++) {
-                typename PlainInterface<MatrixLib, TensorLib, VectorLib>::MType<Scalar> Mbrablock =
+                typename PlainInterface<MatrixLib, TensorLib, VectorLib>::template MType<Scalar> Mbrablock =
                     PlainInterface<MatrixLib, TensorLib, VectorLib>::block(Mbra, s * domainTree.dims[0], 0, domainTree.dims[0], dimQ);
                 PlainInterface<MatrixLib, TensorLib, VectorLib>::template optimal_prod_add<Scalar>(
                     1.,

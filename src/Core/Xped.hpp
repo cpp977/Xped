@@ -979,7 +979,7 @@ Xped<Scalar_, Rank, CoRank, Symmetry, MatrixLib_, TensorLib_, VectorLib_>::subBl
 }
 
 template <typename Scalar_, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename MatrixLib_, typename TensorLib_, typename VectorLib_>
-typename PlainInterface<MatrixLib_, TensorLib_, VectorLib_>::MType<Scalar_>
+typename PlainInterface<MatrixLib_, TensorLib_, VectorLib_>::template MType<Scalar_>
 Xped<Scalar_, Rank, CoRank, Symmetry, MatrixLib_, TensorLib_, VectorLib_>::subMatrix(const FusionTree<Rank, Symmetry>& f1,
                                                                                      const FusionTree<CoRank, Symmetry>& f2) const
 {

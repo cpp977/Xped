@@ -59,7 +59,6 @@ int main(int argc, char** argv)
     console_sink->set_pattern("[%H:%M:%S %z] [%n] [%^---%L---%$] [process %P] %v");
     my_logger->sinks().push_back(console_sink);
 
-    int test_result = ctx.run();
     doctest::Context ctx;
     ctx.setOption("force-colors", true);
     ctx.applyCommandLine(argc, argv);

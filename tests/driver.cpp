@@ -50,14 +50,22 @@ int main(int argc, char** argv)
     ctx.setOption("reporters", "MpiFileReporter");
     ctx.setOption("force-colors", true);
     ctx.applyCommandLine(argc, argv);
+#else
+    spdlog::set_level(spdlog::level::info);
+    auto my_logger = spdlog::basic_logger_mt("info", "logs/log.txt");
+    my_logger->set_pattern("[%H:%M:%S %z] [%n] [%^---%L---%$] [process %P] %v");
+    auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
+    console_sink->set_level(spdlog::level::critical);
+    console_sink->set_pattern("[%H:%M:%S %z] [%n] [%^---%L---%$] [process %P] %v");
+    my_logger->sinks().push_back(console_sink);
 
     int test_result = ctx.run();
-#endif
     doctest::Context ctx;
     ctx.setOption("force-colors", true);
     ctx.applyCommandLine(argc, argv);
 
     int test_result = ctx.run();
+#endif
 
 #ifdef XPED_USE_OPENMPI
     MPI_Finalize();

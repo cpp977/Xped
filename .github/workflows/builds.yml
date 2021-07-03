@@ -58,7 +58,6 @@ jobs:
     - run: sudo apt-get install libgsl-dev
     - run: sudo apt-get install libgslcblas0
     - run: sudo apt-get install libboost-all-dev
-#    - run: sudo apt install -qq doctest-dev
     - run: sudo apt-get install lcov
     - run: sudo apt-get install libopenblas-dev
     - run: sudo apt-get install liblapacke-dev

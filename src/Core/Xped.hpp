@@ -1179,11 +1179,11 @@ void Xped<Scalar_, Rank, CoRank, Symmetry, MatrixLib_, TensorLib_, VectorLib_>::
     o << "domain:" << endl << domain << endl; // << "with trees:" << endl << domain.printTrees() << endl;
     o << "codomain:" << endl << codomain << endl; // << "with trees:" << endl << codomain.printTrees() << endl;
     for(size_t i = 0; i < sector_.size(); i++) {
-        o << "Sector with QN=" << sector_[i] << endl;
+        o << "Sector with QN=" << Sym::format<Symmetry>(sector_[i]) << endl;
         // if(PRINT_MATRICES) {
-        // ss << std::fixed << Plain::template print<Scalar>(block_[i]) << endl;
-        // block_[i].print(stdout);
-        // Plain::template print<Scalar>(block_[i]);
+        //     o << std::fixed << block_[i] << endl;
+        //     // block_[i].print(stdout);
+        //     // Plain::template print<Scalar>(block_[i]);
         // }
     }
     // return ss;

@@ -73,12 +73,12 @@ TEST_CASE("Testing the transformation to plain Tensor.")
 #endif
 {
 #ifdef XPED_USE_OPENMPI
-    util::mpi::XpedWorld world(test_comm)
+    util::mpi::XpedWorld world(test_comm);
 #else
     util::mpi::XpedWorld world;
 #endif
 
-        SUBCASE("SU2")
+    SUBCASE("SU2")
     {
         spdlog::get("info")->info("Performing the transformation to plain for SU(2)");
         typedef Sym::SU2<Sym::SpinSU2> Symmetry;
@@ -126,11 +126,11 @@ TEST_CASE("Testing the permutation within the domain.")
 #endif
 {
 #ifdef XPED_USE_OPENMPI
-    util::mpi::XpedWorld world(test_comm)
+    util::mpi::XpedWorld world(test_comm);
 #else
     util::mpi::XpedWorld world;
 #endif
-        SUBCASE("SU2")
+    SUBCASE("SU2")
     {
         typedef Sym::SU2<Sym::SpinSU2> Symmetry;
         test_tensor_permute_within_domain<Symmetry>(SU2_TENSOR_SIZE, world);
@@ -156,11 +156,11 @@ TEST_CASE("Testing the permutation within the codomain.")
 #endif
 {
 #ifdef XPED_USE_OPENMPI
-    util::mpi::XpedWorld world(test_comm)
+    util::mpi::XpedWorld world(test_comm);
 #else
     util::mpi::XpedWorld world;
 #endif
-        SUBCASE("SU2")
+    SUBCASE("SU2")
     {
         typedef Sym::SU2<Sym::SpinSU2> Symmetry;
         test_tensor_permute_within_codomain<Symmetry>(SU2_TENSOR_SIZE, world);
@@ -186,11 +186,11 @@ TEST_CASE("Testing the general permutation of legs.")
 #endif
 {
 #ifdef XPED_USE_OPENMPI
-    util::mpi::XpedWorld world(test_comm)
+    util::mpi::XpedWorld world(test_comm);
 #else
     util::mpi::XpedWorld world;
 #endif
-        SUBCASE("SU2")
+    SUBCASE("SU2")
     {
         typedef Sym::SU2<Sym::SpinSU2> Symmetry;
         test_tensor_permute<Symmetry, -2>(SU2_TENSOR_SIZE, world);

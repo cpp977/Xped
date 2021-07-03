@@ -11,14 +11,16 @@
 
 #include "seq/seq.h"
 
+#include "Util/Constfct.hpp"
+#include "Util/Macros.hpp"
+#include "Util/Mpi.hpp"
+#include "Util/Random.hpp"
+
 #include "Core/FusionTree.hpp"
 #include "Core/Qbasis.hpp"
 #include "Core/ScalarTraits.hpp"
 #include "Core/XpedTypedefs.hpp"
 #include "Interfaces/PlainInterface.hpp"
-#include "Util/Constfct.hpp"
-#include "Util/Macros.hpp"
-#include "Util/Random.hpp"
 
 #include "Core/XpedBase.hpp"
 

@@ -62,9 +62,8 @@ int main(int argc, char** argv)
     doctest::Context ctx;
     ctx.setOption("force-colors", true);
     ctx.applyCommandLine(argc, argv);
-
-    int test_result = ctx.run();
 #endif
+    int test_result = ctx.run();
 
 #ifdef XPED_USE_OPENMPI
     MPI_Finalize();

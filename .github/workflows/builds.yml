@@ -38,6 +38,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - run: sudo apt-get install openmpi-bin libopenmpi-dev
     - uses: actions/checkout@v2
       with:
         repository: onqtam/doctest
@@ -60,7 +61,6 @@ jobs:
     - run: sudo apt-get install lcov
     - run: sudo apt-get install libopenblas-dev
     - run: sudo apt-get install liblapacke-dev
-    - run: sudo apt-get install openmpi-bin libopenmpi-dev
     - run: sudo apt-get install libomp-dev
     
     - name: Create Build Environment

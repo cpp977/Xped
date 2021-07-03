@@ -44,7 +44,8 @@ jobs:
         ref: master
         path: doctest-src
     - run: cd $GITHUB_WORKSPACE/doctest-src && cmake .
-    - run: cd $GITHUB_WORKSPACE/doctest-src && cmake --build . --target INSTALL
+    - run: cd $GITHUB_WORKSPACE/doctest-src && cmake --build .
+    - run: cd $GITHUB_WORKSPACE/doctest-src && sudo cmake --build . --target install
     - run: sudo add-apt-repository ppa:ubuntu-toolchain-r/ppa
     - run: sudo apt update -qq
     - run: sudo apt install -qq g++-10

@@ -47,20 +47,21 @@ jobs:
     - run: cd $GITHUB_WORKSPACE/doctest-src && cmake --build .
     - run: cd $GITHUB_WORKSPACE/doctest-src && sudo cmake --build . --target install
     - run: sudo add-apt-repository ppa:ubuntu-toolchain-r/ppa
-    - run: sudo apt update -qq
-    - run: sudo apt install -qq g++-10
-    - run: sudo apt install -qq libc++1-11
-    - run: sudo apt install -qq libc++-11-dev
-    - run: sudo apt install -qq libc++abi-11-dev
-    - run: sudo apt install -qq libgsl-dev
-    - run: sudo apt install -qq libgslcblas0
-    - run: sudo apt install -qq libboost-all-dev
+    - run: sudo apt-get update
+    - run: sudo apt-get install g++-10
+    - run: sudo apt-get install libc++abi1-11
+    - run: sudo apt-get install libc++1-11
+    - run: sudo apt-get install libc++-11-dev
+    - run: sudo apt-get install libc++abi-11-dev
+    - run: sudo apt-get install libgsl-dev
+    - run: sudo apt-get install libgslcblas0
+    - run: sudo apt-get install libboost-all-dev
 #    - run: sudo apt install -qq doctest-dev
-    - run: sudo apt install -qq lcov
-    - run: sudo apt install -qq libopenblas-dev
-    - run: sudo apt install -qq liblapacke-dev
-    - run: sudo apt install -qq openmpi-bin libopenmpi-dev
-    - run: sudo apt install -qq libomp-dev
+    - run: sudo apt-get install lcov
+    - run: sudo apt-get install libopenblas-dev
+    - run: sudo apt-get install liblapacke-dev
+    - run: sudo apt-get install openmpi-bin libopenmpi-dev
+    - run: sudo apt-get install libomp-dev
     
     - name: Create Build Environment
       # Some projects don't allow in-source building, so create a separate build directory

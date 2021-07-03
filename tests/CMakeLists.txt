@@ -109,8 +109,8 @@ endif()
 if(XPED_USE_OPENMPI)
   target_link_libraries(basis_test MPI::MPI_CXX)
 endif()
-doctest_discover_tests(basis_test TEST_PREFIX basis__ ADD_LABELS "1")
-
+# doctest_discover_tests(basis_test TEST_PREFIX basis__ ADD_LABELS "1")
+add_test(NAME basis COMMAND basis_test)
 #########################
 #        tree_test      #
 #########################
@@ -168,7 +168,8 @@ endif()
 if(XPED_USE_OPENMPI)
   target_link_libraries(tree_test MPI::MPI_CXX)
 endif()
-doctest_discover_tests(tree_test TEST_PREFIX tree__ ADD_LABELS "1")
+# doctest_discover_tests(tree_test TEST_PREFIX tree__ ADD_LABELS "1")
+add_test(NAME tree COMMAND tree_test)
 
 #########################
 #       tensor_test     #
@@ -227,8 +228,8 @@ endif()
 if(XPED_USE_OPENMPI)
   target_link_libraries(tensor_test MPI::MPI_CXX)
 endif()
-doctest_discover_tests(tensor_test TEST_PREFIX tensor__ ADD_LABELS "1")
-
+# doctest_discover_tests(tensor_test TEST_PREFIX tensor__ ADD_LABELS "1")
+add_test(NAME tensor COMMAND tensor_test)
 #########################
 #        mps_test       #
 #########################
@@ -286,4 +287,5 @@ endif()
 if(XPED_USE_OPENMPI)
   target_link_libraries(mps_test MPI::MPI_CXX)
 endif()
-doctest_discover_tests(mps_test TEST_PREFIX mps__ ADD_LABELS "1")
+# doctest_discover_tests(mps_test TEST_PREFIX mps__ ADD_LABELS "1")
+add_test(NAME MPS COMMAND mps_test)

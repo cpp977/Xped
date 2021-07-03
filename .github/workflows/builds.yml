@@ -38,6 +38,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - uses: actions/checkout@v2
+      with:
+        repository: onqtam/doctest
+        ref: master
+        path: doctest-src
+    - run: cd $GITHUB_WORKSPACE/doctest-src && cmake .
+    - run: cd $GITHUB_WORKSPACE/doctest-src && cmake --build . --target INSTALL
     - run: sudo add-apt-repository ppa:ubuntu-toolchain-r/ppa
     - run: sudo apt update -qq
     - run: sudo apt install -qq g++-10
@@ -46,7 +53,7 @@ jobs:
     - run: sudo apt install -qq libgsl-dev
     - run: sudo apt install -qq libgslcblas0
     - run: sudo apt install -qq libboost-all-dev
-    - run: sudo apt install -qq doctest-dev
+#    - run: sudo apt install -qq doctest-dev
     - run: sudo apt install -qq lcov
     - run: sudo apt install -qq libopenblas-dev
     - run: sudo apt install -qq liblapacke-dev

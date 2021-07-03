@@ -31,6 +31,7 @@ jobs:
     - run: sudo add-apt-repository ppa:ubuntu-toolchain-r/ppa
     - run: sudo apt update -qq
     - run: sudo apt install -qq g++-10
+    - run: sudo apt install -qq libc++1-11
     - run: sudo apt install -qq libc++-11-dev
     - run: sudo apt install -qq libc++abi-11-dev
     - run: sudo apt install -qq libgsl-dev

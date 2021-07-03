@@ -1,3 +1,4 @@
+
 #ifndef MATRIX_INTERFACE_EIGEN_IMPL_H_
 #define MATRIX_INTERFACE_EIGEN_IMPL_H_
 
@@ -163,9 +164,9 @@ struct MatrixInterface<EigenMatrixLib>
     }
 
     template <typename Scalar>
-    static auto scale(const MType<Scalar>& M, const Scalar& val)
+    static void scale(MType<Scalar>& M, const Scalar& val)
     {
-        return (val * M);
+        M = (val * M);
     }
 
     template <typename Scalar>

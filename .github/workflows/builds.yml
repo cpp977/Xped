@@ -51,6 +51,8 @@ jobs:
     - run: sudo add-apt-repository ppa:ubuntu-toolchain-r/ppa
     - run: sudo apt-get update
     - run: sudo apt-get install g++-10
+    - run: sudo apt-get install gcc-10
+    - run: sudo apt-get install gfortran-10
     - run: sudo apt-get install libc++abi1-11
     - run: sudo apt-get install libc++1-11
     - run: sudo apt-get install libc++-11-dev

@@ -221,6 +221,7 @@ TEST_CASE("Testing the general permutation of legs.")
     }
 }
 
+#ifndef XPED_USE_OPENMPI
 TEST_CASE("Testing operations with SU(2)-spin matrices.")
 {
     typedef Sym::SU2<Sym::SpinSU2> Symmetry;
@@ -265,7 +266,8 @@ TEST_CASE("Testing operations with SU(2)-spin matrices.")
         pauli_vec1[2] *= std::sqrt(0.5);
 
         // set s to the reduced Spin operator
-        Xped<double, 2, 1, Symmetry> s1({{B1, C}}, {{B1}});
+        std::cout << "rank=" << world.rank << ", before Xped call" << std::endl;
+        Xped<double, 2, 1, Symmetry> s1({{B1, C}}, {{B1}}, world);
         s1.setConstant(std::sqrt(S1 * (S1 + 1.)));
 
         // transform to plain tensor and check against pauli_vec1
@@ -285,7 +287,7 @@ TEST_CASE("Testing operations with SU(2)-spin matrices.")
         }
 
         // build the product to QN K=0
-        Xped<double, 2, 1, Symmetry> couple1({{C, one}}, {{C}});
+        Xped<double, 2, 1, Symmetry> couple1({{C, one}}, {{C}}, world);
         couple1.setConstant(1.);
         auto prod1 = (s1.adjoint().eval().permute<-1, 0, 1, 2>() * couple1.permute<+1, 0, 2, 1>()).permute<0, 0, 3, 1, 2>() * s1;
         // transform to plain tensor and check against S^2
@@ -305,7 +307,7 @@ TEST_CASE("Testing operations with SU(2)-spin matrices.")
         }
 
         // build the product to QN K=1
-        Xped<double, 2, 1, Symmetry> couple3({{C, three}}, {{C}});
+        Xped<double, 2, 1, Symmetry> couple3({{C, three}}, {{C}}, world);
         couple3.setConstant(1.);
         auto prod3 = (s1.adjoint().eval().permute<-1, 0, 1, 2>() * couple3.permute<+1, 0, 2, 1>()).permute<0, 0, 3, 1, 2>() * s1;
         // transform to plain tensor and check against SxS
@@ -324,7 +326,7 @@ TEST_CASE("Testing operations with SU(2)-spin matrices.")
             CHECK((mat - std::sqrt(0.5) * pauli_vec1[k]).norm() == doctest::Approx(0.));
         }
         // build the product to QN K=2
-        Xped<double, 2, 1, Symmetry> couple5({{C, five}}, {{C}});
+        Xped<double, 2, 1, Symmetry> couple5({{C, five}}, {{C}}, world);
         couple5.setConstant(1.);
         auto prod5 = (s1.adjoint().eval().permute<-1, 0, 1, 2>() * couple5.permute<+1, 0, 2, 1>()).permute<0, 0, 3, 1, 2>() * s1;
         // transform to plain tensor and check against SxS
@@ -357,7 +359,7 @@ TEST_CASE("Testing operations with SU(2)-spin matrices.")
             B2.push_back({twoS2 + 1}, 1);
             double S2 = 0.5 * twoS2;
 
-            Xped<double, 2, 1, Symmetry> s2({{B2, C}}, {{B2}});
+            Xped<double, 2, 1, Symmetry> s2({{B2, C}}, {{B2}}, world);
             s2.setConstant(std::sqrt(S2 * (S2 + 1.)));
 
             // build the outer product to QN K=0 between s1 and s2
@@ -375,5 +377,5 @@ TEST_CASE("Testing operations with SU(2)-spin matrices.")
         }
     }
 }
-
+#endif
 TEST_SUITE_END();

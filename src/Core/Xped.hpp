@@ -118,7 +118,7 @@ public:
 
     Xped(const std::array<Qbasis<Symmetry, 1>, Rank> basis_domain,
          const std::array<Qbasis<Symmetry, 1>, CoRank> basis_codomain,
-         util::mpi::XpedWorld world = util::mpi::Universe);
+         util::mpi::XpedWorld world = util::mpi::getUniverse());
 
     template <typename OtherDerived>
     Xped(const XpedBase<OtherDerived>& other);
@@ -236,7 +236,7 @@ public:
     Qbasis<Symmetry, Rank> domain;
     Qbasis<Symmetry, CoRank> codomain;
 
-    util::mpi::XpedWorld world_ = util::mpi::Universe;
+    util::mpi::XpedWorld world_ = util::mpi::getUniverse();
 
     void push_back(const qType& q, const MatrixType& M)
     {

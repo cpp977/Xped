@@ -47,7 +47,7 @@ void perform_tensor_permute(const std::size_t& size, util::mpi::XpedWorld world)
 }
 
 template <typename Symmetry, int shift>
-void test_tensor_permute(const std::size_t& size, util::mpi::XpedWorld world = util::mpi::Universe)
+void test_tensor_permute(const std::size_t& size, util::mpi::XpedWorld world = util::mpi::getUniverse())
 {
     perform_tensor_permute<Symmetry, shift, 0, 1, 2, 3>(size, world);
     perform_tensor_permute<Symmetry, shift, 0, 1, 3, 2>(size, world);
@@ -108,7 +108,7 @@ void test_tensor_permute(const std::size_t& size, util::mpi::XpedWorld world = u
 };
 
 template <typename Symmetry, std::size_t... per>
-void perform_tensor_permute_intern(const std::size_t size, util::mpi::XpedWorld world = util::mpi::Universe)
+void perform_tensor_permute_intern(const std::size_t size, util::mpi::XpedWorld world = util::mpi::getUniverse())
 {
     // CTF::World world(comm);
     spdlog::get("info")->warn("Permute intern: Number of processes in tensor-test #={}", world.np);

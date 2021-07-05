@@ -29,9 +29,8 @@ using std::string;
 
 #include "ArgParser.h"
 
-#include "Util/Mpi.hpp"
-
 #include "Util/Macros.hpp"
+#include "Util/Mpi.hpp"
 
 #ifdef XPED_CACHE_PERMUTE_OUTPUT
 #    pragma message("Xped is using LRU cache for the output of FusionTree manipulations.")
@@ -54,15 +53,7 @@ XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100)
 
 int main(int argc, char* argv[])
 {
-    std::cout << "I am here at begin of main" << std::endl;
-    // std::ios::sync_with_stdio(true);
-
-    ArgParser args(argc, argv);
-
-    spdlog::set_level(spdlog::level::info);
-    std::cout << "I am here" << std::endl;
 #ifdef XPED_USE_OPENMPI
-    std::cout << "Before MPI_Init()" << std::endl;
     MPI_Init(&argc, &argv);
     // MPI_Comm_rank(MPI_COMM_WORLD, &xped_rank);
     // MPI_Comm_size(MPI_COMM_WORLD, &xped_np);
@@ -73,6 +64,14 @@ int main(int argc, char* argv[])
     util::mpi::XpedWorld world;
     auto my_logger = spdlog::basic_logger_mt("info", "logs/log.txt");
 #endif
+
+    std::cout << "I am here at begin of main" << std::endl;
+    std::ios::sync_with_stdio(true);
+
+    ArgParser args(argc, argv);
+
+    spdlog::set_level(spdlog::level::critical);
+    std::cout << "I am here" << std::endl;
 
     my_logger->sinks()[0]->set_pattern("[%H:%M:%S %z] [%n] [%^---%L---%$] [process %P] %v");
     if(world.rank == 0) {
@@ -180,16 +179,16 @@ int main(int argc, char* argv[])
     std::cout << "total misses=" << tree_cache<1, 2, 1, Symmetry>.cache.stats().total_misses() << endl; // Misses for any key
     std::cout << "hit rate=" << tree_cache<1, 2, 1, Symmetry>.cache.stats().hit_rate() << endl; // Hit rate in [0, 1]
 #endif
-    // double trunc;
-    // auto [U, S, V] = Psi.A.Ac[L / 2].tSVD(10000ul, 1.e-10, trunc, false);
-    // Mps<Symmetry> Phi(L, qloc, Qtot, Minit, Qinit);
-    // cout << "<Phi,Psi>=" << dot(Phi, Psi) << endl;
-    // cout << "<Phi,Phi>=" << dot(Phi, Phi) << endl;
-    // double normSq = dot(Psi, Psi, DIR);
-    // std::cout << "<Psi|Psi>=" << normSq << std::endl;
-    // cout << "Left: <Psi,Psi>=" << normSq << endl;
-    // Psi.A.Ac[0] = Psi.A.Ac[0] * std::pow(normSq, -0.5);
-    // cout << "<Psi,Psi>=" << dot(Psi, Psi, DIR) << endl;
+// double trunc;
+// auto [U, S, V] = Psi.A.Ac[L / 2].tSVD(10000ul, 1.e-10, trunc, false);
+// Mps<Symmetry> Phi(L, qloc, Qtot, Minit, Qinit);
+// cout << "<Phi,Psi>=" << dot(Phi, Psi) << endl;
+// cout << "<Phi,Phi>=" << dot(Phi, Phi) << endl;
+// double normSq = dot(Psi, Psi, DIR);
+// std::cout << "<Psi|Psi>=" << normSq << std::endl;
+// cout << "Left: <Psi,Psi>=" << normSq << endl;
+// Psi.A.Ac[0] = Psi.A.Ac[0] * std::pow(normSq, -0.5);
+// cout << "<Psi,Psi>=" << dot(Psi, Psi, DIR) << endl;
 #ifdef XPED_USE_OPENMPI
     my_logger->critical("Calling MPI_Finalize()");
     // volatile int i = 0;

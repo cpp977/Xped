@@ -10,10 +10,10 @@
 namespace util::mpi {
 
 typedef CTF::World XpedWorld;
-XpedWorld Universe = CTF::get_universe();
+XpedWorld getUniverse() { return CTF::get_universe(); }
 
 template <typename T>
-void broadcast(T&& t, int process_rank, int root_process = 0, XpedWorld world = Universe)
+void broadcast(T&& t, int process_rank, int root_process = 0, XpedWorld world = getUniverse())
 {
     constexpr std::size_t flags = yas::mem /*IO type*/ | yas::binary; /*IO format*/
     yas::shared_buffer buf;
@@ -46,7 +46,11 @@ struct XpedWorld
     int rank = 0;
     int np = 1;
 };
-XpedWorld Universe;
+XpedWorld getUniverse()
+{
+    XpedWorld out;
+    return out;
+};
 
 template <typename T>
 void broadcast(T&&, int, int, XpedWorld)

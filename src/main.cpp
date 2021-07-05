@@ -54,12 +54,15 @@ XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100)
 
 int main(int argc, char* argv[])
 {
-    std::ios::sync_with_stdio(true);
+    std::cout << "I am here at begin of main" << std::endl;
+    // std::ios::sync_with_stdio(true);
 
     ArgParser args(argc, argv);
 
     spdlog::set_level(spdlog::level::info);
+    std::cout << "I am here" << std::endl;
 #ifdef XPED_USE_OPENMPI
+    std::cout << "Before MPI_Init()" << std::endl;
     MPI_Init(&argc, &argv);
     // MPI_Comm_rank(MPI_COMM_WORLD, &xped_rank);
     // MPI_Comm_size(MPI_COMM_WORLD, &xped_np);

@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.18)
 
 # Set the project name to
-project(Xped CXX)
+project(Xped CXX Fortran)
 
 set(XPED_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 

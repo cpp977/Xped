@@ -22,6 +22,7 @@ int main(int argc, char** argv)
 {
     std::ios::sync_with_stdio(true);
 #ifdef XPED_USE_OPENMPI
+    std::cout << "Hello, I am in MPI mode" << std::endl;
     MPI_Init(&argc, &argv);
     // MPI_Comm_rank(MPI_COMM_WORLD, &xped_rank);
     // MPI_Comm_size(MPI_COMM_WORLD, &xped_np);

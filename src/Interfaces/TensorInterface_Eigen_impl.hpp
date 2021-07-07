@@ -25,7 +25,7 @@ struct TensorInterface<EigenTensorLib>
 
     // constructors
     template <typename Scalar, std::size_t Rank>
-    static TType<Scalar, Rank> construct(const std::array<Indextype, Rank>& dims, util::mpi::XpedWorld world = util::mpi::Universe)
+    static TType<Scalar, Rank> construct(const std::array<Indextype, Rank>& dims, util::mpi::XpedWorld world = util::mpi::getUniverse())
     {
         return TType<Scalar, Rank>(dims);
     }

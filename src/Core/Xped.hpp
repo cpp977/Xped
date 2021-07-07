@@ -1079,7 +1079,7 @@ Xped<Scalar_, Rank, CoRank, Symmetry, MatrixLib_, TensorLib_, VectorLib_>::plain
             MatrixType id = Plain::template construct<Scalar>(uncoupled_dim, uncoupled_dim, world_);
             Plain::template setIdentity<Scalar>(id);
             // id.setIdentity();
-            typename Plain::template TType<Scalar, 2> Tid_mat = Plain::template tensor_from_matrix_block<Scalar, 2>(
+            typename Plain::template cTType<Scalar, 2> Tid_mat = Plain::template tensor_from_matrix_block<Scalar, 2>(
                 id,
                 0,
                 0,
@@ -1128,7 +1128,7 @@ Xped<Scalar_, Rank, CoRank, Symmetry, MatrixLib_, TensorLib_, VectorLib_>::plain
             MatrixType id = Plain::template construct<Scalar>(uncoupled_dim, uncoupled_dim);
             Plain::template setIdentity<Scalar>(id);
             // id.setIdentity();
-            typename Plain::template TType<Scalar, 2> Tid_mat = Plain::template tensor_from_matrix_block<Scalar, 2>(
+            typename Plain::template cTType<Scalar, 2> Tid_mat = Plain::template tensor_from_matrix_block<Scalar, 2>(
                 id,
                 0,
                 0,

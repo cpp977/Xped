@@ -26,82 +26,82 @@ struct TensorInterface<ArrayTensorLib>
 
     // typedefs
     template <typename Scalar, std::size_t Rank>
-    using Ttype = nda::dense_array<Scalar, Rank>;
+    using TType = nda::dense_array<Scalar, Rank>;
     template <typename Scalar, std::size_t Rank>
-    using cTtype = const nda::dense_array<Scalar, Rank>;
+    using cTType = const nda::dense_array<Scalar, Rank>;
 
     template <typename Scalar, std::size_t Rank>
-    using Maptype = nda::dense_array_ref<Scalar, Rank>;
+    using MapTType = nda::dense_array_ref<Scalar, Rank>;
     template <typename Scalar, std::size_t Rank>
-    using cMaptype = nda::const_dense_array_ref<Scalar, Rank>;
+    using cMapTType = nda::const_dense_array_ref<Scalar, Rank>;
 
     // template<typename Scalar, std::size_t Rank> using Indextype = typename nda::dense_array<Scalar,Rank>::shape_type::index_type;
     using Indextype = nda::index_t;
 
     // constructors
     template <typename Scalar, std::size_t Rank>
-    static Ttype<Scalar, Rank> construct(const std::array<Indextype, Rank>& dims)
+    static TType<Scalar, Rank> construct(const std::array<Indextype, Rank>& dims)
     {
-        return Ttype<Scalar, Rank>(as_tuple(dims));
+        return TType<Scalar, Rank>(as_tuple(dims));
     }
 
     template <typename Scalar, std::size_t Rank>
-    static Ttype<Scalar, Rank> construct(const Maptype<Scalar, Rank>& map)
+    static TType<Scalar, Rank> construct(const MapTType<Scalar, Rank>& map)
     {
-        Ttype<Scalar, Rank> out(map.shape());
+        TType<Scalar, Rank> out(map.shape());
         nda::copy(map, out);
         return out;
     }
 
     template <typename Scalar, std::size_t Rank>
-    static cTtype<Scalar, Rank> construct(const cMaptype<Scalar, Rank>& map)
+    static cTType<Scalar, Rank> construct(const cMapTType<Scalar, Rank>& map)
     {
-        Ttype<Scalar, Rank> tmp(map.shape());
+        TType<Scalar, Rank> tmp(map.shape());
         nda::copy(map, tmp);
-        const cTtype<Scalar, Rank> out(std::move(tmp));
+        const cTType<Scalar, Rank> out(std::move(tmp));
         return out;
     }
 
     // map constructors
     template <typename Scalar, std::size_t Rank>
-    static cMaptype<Scalar, Rank> cMap(const Scalar* data, const std::array<Indextype, Rank>& dims)
+    static cMapTType<Scalar, Rank> cMap(const Scalar* data, const std::array<Indextype, Rank>& dims)
     {
-        return cMaptype<Scalar, Rank>(data, as_tuple(dims));
+        return cMapTType<Scalar, Rank>(data, as_tuple(dims));
     }
 
     template <typename Scalar, std::size_t Rank>
-    static Maptype<Scalar, Rank> Map(Scalar* data, const std::array<Indextype, Rank>& dims)
+    static MapTType<Scalar, Rank> Map(Scalar* data, const std::array<Indextype, Rank>& dims)
     {
-        return Maptype<Scalar, Rank>(data, as_tuple(dims));
+        return MapTType<Scalar, Rank>(data, as_tuple(dims));
     }
 
     // initialization
     template <typename Scalar, std::size_t Rank>
-    static void setZero(Ttype<Scalar, Rank>& T)
+    static void setZero(TType<Scalar, Rank>& T)
     {
         T.for_each_value([](Scalar& d) { d = 0.; });
     }
 
     template <typename Scalar, std::size_t Rank>
-    static void setRandom(Ttype<Scalar, Rank>& T)
+    static void setRandom(TType<Scalar, Rank>& T)
     {
         T.for_each_value([](Scalar& d) { d = util::random::threadSafeRandUniform<Scalar, Scalar>(-1., 1.); });
     }
 
     template <typename Scalar, std::size_t Rank>
-    static void setConstant(Ttype<Scalar, Rank>& T, const Scalar& val)
+    static void setConstant(TType<Scalar, Rank>& T, const Scalar& val)
     {
         T.for_each_value([val](Scalar& d) { d = val; });
     }
 
     template <typename Scalar, int Rank>
-    static void setVal(Ttype<Scalar, Rank>& T, const std::array<Indextype, Rank>& index, const Scalar& val)
+    static void setVal(TType<Scalar, Rank>& T, const std::array<Indextype, Rank>& index, const Scalar& val)
     {
         T(as_tuple(index)) = val;
     }
 
     template <typename Scalar, int Rank>
-    static Scalar getVal(const Ttype<Scalar, Rank>& T, const std::array<Indextype, Rank>& index)
+    static Scalar getVal(const TType<Scalar, Rank>& T, const std::array<Indextype, Rank>& index)
     {
         if constexpr(Rank == 0) {
             return T();
@@ -112,20 +112,20 @@ struct TensorInterface<ArrayTensorLib>
 
     // raw data
     template <typename Scalar, int Rank>
-    static const Scalar* get_raw_data(const Ttype<Scalar, Rank>& T)
+    static const Scalar* get_raw_data(const TType<Scalar, Rank>& T)
     {
         return T.data();
     }
 
     template <typename Scalar, int Rank>
-    static Scalar* get_raw_data(Ttype<Scalar, Rank>& T)
+    static Scalar* get_raw_data(TType<Scalar, Rank>& T)
     {
         return T.data();
     }
 
     // shape info
     template <typename Scalar, std::size_t Rank>
-    static std::array<Indextype, Rank> dimensions(const Ttype<Scalar, Rank>& T)
+    static std::array<Indextype, Rank> dimensions(const TType<Scalar, Rank>& T)
     {
         std::array<Indextype, Rank> out;
         auto tmp = nda::internal::tuple_to_array<nda::dim<>>(T.shape().dims());
@@ -135,10 +135,10 @@ struct TensorInterface<ArrayTensorLib>
 
     // tensorProd
     template <typename Scalar, std::size_t Rank>
-    static Ttype<Scalar, Rank> tensorProd(const Ttype<Scalar, Rank>& T1, const Ttype<Scalar, Rank>& T2)
+    static TType<Scalar, Rank> tensorProd(const TType<Scalar, Rank>& T1, const TType<Scalar, Rank>& T2)
     {
-        cMaptype<Scalar, Rank> T2m(T2.data(), T2.shape());
-        typedef Ttype<Scalar, Rank> TensorType;
+        cMapTType<Scalar, Rank> T2m(T2.data(), T2.shape());
+        typedef TType<Scalar, Rank> TensorType;
         typedef Indextype Index;
         std::array<Index, Rank> dims;
         std::array<Index, Rank> dim1_array;
@@ -196,8 +196,8 @@ struct TensorInterface<ArrayTensorLib>
 
     // methods rvalue
     template <typename Scalar, std::size_t Rank1, std::size_t Rank2, Indextype... Is1, Indextype... Is2, Indextype... Ist>
-    static auto contract_helper(const Ttype<Scalar, Rank1>& T1,
-                                const Ttype<Scalar, Rank2>& T2,
+    static auto contract_helper(const TType<Scalar, Rank1>& T1,
+                                const TType<Scalar, Rank2>& T2,
                                 seq::iseq<Indextype, Is1...> S1,
                                 seq::iseq<Indextype, Is2...> S2,
                                 seq::iseq<Indextype, Ist...> St)
@@ -206,7 +206,7 @@ struct TensorInterface<ArrayTensorLib>
     }
 
     template <typename Scalar, std::size_t Rank1, std::size_t Rank2, Indextype... Is>
-    static Ttype<Scalar, Rank1 + Rank2 - sizeof...(Is)> contract(const Ttype<Scalar, Rank1>& T1, const Ttype<Scalar, Rank2>& T2)
+    static TType<Scalar, Rank1 + Rank2 - sizeof...(Is)> contract(const TType<Scalar, Rank1>& T1, const TType<Scalar, Rank2>& T2)
     {
         static_assert(sizeof...(Is) % 2 == 0);
         constexpr Indextype Ncon = sizeof...(Is) / 2;
@@ -266,7 +266,7 @@ struct TensorInterface<ArrayTensorLib>
     }
 
     template <typename Scalar, std::size_t Rank, Indextype... p>
-    static Ttype<Scalar, Rank> shuffle(const Ttype<Scalar, Rank>& T)
+    static TType<Scalar, Rank> shuffle(const TType<Scalar, Rank>& T)
     {
         static_assert(Rank == sizeof...(p));
         std::array<Indextype, Rank> perm = {p...};
@@ -278,7 +278,7 @@ struct TensorInterface<ArrayTensorLib>
     }
 
     template <typename Scalar, std::size_t Rank, Indextype... p>
-    static Ttype<Scalar, Rank> shuffle(const cMaptype<Scalar, Rank>& T)
+    static TType<Scalar, Rank> shuffle(const cMapTType<Scalar, Rank>& T)
     {
         static_assert(Rank == sizeof...(p));
         std::array<Indextype, Rank> perm = {p...};
@@ -290,7 +290,7 @@ struct TensorInterface<ArrayTensorLib>
     }
 
     template <typename Scalar, std::size_t Rank, Indextype... p>
-    static Ttype<Scalar, Rank> shuffle(const Ttype<Scalar, Rank>& T, seq::iseq<Indextype, p...> s)
+    static TType<Scalar, Rank> shuffle(const TType<Scalar, Rank>& T, seq::iseq<Indextype, p...> s)
     {
         static_assert(Rank == sizeof...(p));
         std::array<Indextype, Rank> perm = {p...};
@@ -302,22 +302,22 @@ struct TensorInterface<ArrayTensorLib>
     }
 
     template <typename Scalar, std::size_t Rank, Indextype... p>
-    static auto shuffle_view(const cMaptype<Scalar, Rank>& T, seq::iseq<Indextype, p...> s)
+    static auto shuffle_view(const cMapTType<Scalar, Rank>& T, seq::iseq<Indextype, p...> s)
     {
         static_assert(Rank == sizeof...(p));
         return nda::transpose<p...>(T);
     }
 
     template <typename Scalar, std::size_t Rank1, std::size_t Rank2>
-    static Ttype<Scalar, Rank2> reshape(const Ttype<Scalar, Rank1>& T, const std::array<Indextype, Rank2>& dims)
+    static TType<Scalar, Rank2> reshape(const TType<Scalar, Rank1>& T, const std::array<Indextype, Rank2>& dims)
     {
-        cMaptype<Scalar, Rank2> map(T.data(), as_tuple(dims));
+        cMapTType<Scalar, Rank2> map(T.data(), as_tuple(dims));
         return construct<Scalar, Rank2>(map);
     }
 
     // methods lvalue
     template <typename Scalar, std::size_t Rank1, std::size_t Rank2>
-    static auto slice(Ttype<Scalar, Rank1>& T, const std::array<Indextype, Rank2>& offsets, const std::array<Indextype, Rank2>& extents)
+    static auto slice(TType<Scalar, Rank1>& T, const std::array<Indextype, Rank2>& offsets, const std::array<Indextype, Rank2>& extents)
     {
         std::array<nda::interval<>, Rank1> slices;
         for(std::size_t r = 0; r < Rank1; r++) { slices[r] = nda::interval<>(offsets[r], extents[r]); }
@@ -325,12 +325,12 @@ struct TensorInterface<ArrayTensorLib>
     }
 
     template <typename Scalar, std::size_t Rank1, std::size_t Rank2>
-    static void setSubTensor(Ttype<Scalar, Rank1>& T,
+    static void setSubTensor(TType<Scalar, Rank1>& T,
                              const std::array<Indextype, Rank2>& offsets,
                              const std::array<Indextype, Rank2>& extents,
-                             const Ttype<Scalar, Rank1>& S)
+                             const TType<Scalar, Rank1>& S)
     {
-        cMaptype<Scalar, Rank1> Sm = S;
+        cMapTType<Scalar, Rank1> Sm = S;
         std::array<nda::interval<>, Rank1> slices;
         for(std::size_t r = 0; r < Rank1; r++) { slices[r] = nda::interval<>(offsets[r], extents[r]); }
         nda::dense_shape<Rank1> new_s(as_tuple(slices));
@@ -341,10 +341,18 @@ struct TensorInterface<ArrayTensorLib>
     }
 
     template <typename Scalar, std::size_t Rank1, std::size_t Rank2>
-    static auto reshape(Ttype<Scalar, Rank1>& T, const std::array<Indextype, Rank2>& dims)
+    static auto reshape(TType<Scalar, Rank1>& T, const std::array<Indextype, Rank2>& dims)
     {
-        Maptype<Scalar, Rank2> map(T.data(), as_tuple(dims));
+        MapTType<Scalar, Rank2> map(T.data(), as_tuple(dims));
         return map;
+    }
+
+    template <typename Scalar, int Rank>
+    static std::string print(const TType<Scalar, Rank>& T)
+    {
+        std::stringstream ss;
+        ss << "Tensor";
+        return ss.str();
     }
 };
 

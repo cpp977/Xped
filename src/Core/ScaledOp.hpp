@@ -4,6 +4,9 @@
 #include "XpedBase.hpp"
 
 template <typename XprType>
+class ScaledOp;
+
+template <typename XprType>
 struct XpedTraits<ScaledOp<XprType>>
 {
     static constexpr std::size_t Rank = XprType::Rank;
@@ -49,7 +52,19 @@ public:
     const qType sector(std::size_t i) const { return refxpr_.sector(i); }
 
     // const std::vector<MatrixType> block() const { return refxpr_block(); }
-    const MatrixType block(std::size_t i) const { return Plain::template scale<Scalar>(scale_ * refxpr_block(i)); }
+    const auto block(std::size_t i) const
+    {
+        auto res = refxpr_.block(i);
+        Plain::template scale<Scalar>(res, scale);
+        return res;
+    }
+
+    auto block(std::size_t i)
+    {
+        auto res = refxpr_.block(i);
+        Plain::template scale<Scalar>(res, scale);
+        return res;
+    }
 
     inline const std::unordered_map<qType, std::size_t> dict() const { return refxpr_.dict(); }
 
@@ -63,7 +78,7 @@ public:
     std::vector<FusionTree<CoRank, Symmetry>> codomainTrees(const qType& q) const { return refxpr_.codomainTrees(q); }
 
 protected:
-    const XprType& refxpr_;
+    XPED_CONST XprType& refxpr_;
     const Scalar scale_;
 };
 #endif

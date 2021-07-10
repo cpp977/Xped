@@ -7,7 +7,6 @@
 #include <unordered_set>
 /// \endcond
 
-#include "Interfaces/TensorInterface.hpp"
 #include "Util/Random.hpp"
 
 #include "Symmetry/SymBase.hpp"
@@ -111,13 +110,13 @@ struct U1 : public SymBase<U1<Kind, Scalar_>>
 
     static Scalar coeff_FS(const qType&) { return Scalar(1.); }
 
-    template <typename TensorLib>
-    static typename TensorInterface<TensorLib>::template TType<Scalar_, 2> one_j_tensor(const qType&)
+    template <typename PlainLib>
+    static typename PlainLib::template TType<Scalar_, 2> one_j_tensor(const qType&)
     {
-        typedef typename TensorInterface<TensorLib>::Indextype IndexType;
-        auto T = TensorInterface<TensorLib>::template construct<Scalar>(std::array<IndexType, 2>{1, 1});
+        typedef typename PlainLib::Indextype IndexType;
+        auto T = PlainLib::template construct<Scalar>(std::array<IndexType, 2>{1, 1});
         std::array<IndexType, 2> index = {0, 0};
-        TensorInterface<TensorLib>::template setVal<Scalar, 2>(T, index, Scalar(1.));
+        PlainLib::template setVal<Scalar, 2>(T, index, Scalar(1.));
         return T;
     }
 
@@ -128,8 +127,8 @@ struct U1 : public SymBase<U1<Kind, Scalar_>>
         return triangle(q1, q2, conj(q3)) ? Scalar(1.) : Scalar(0.);
     }
 
-    template <typename TensorLib>
-    static typename TensorInterface<TensorLib>::template TType<Scalar_, 3> CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t);
+    template <typename PlainLib>
+    static typename PlainLib::template TType<Scalar_, 3> CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t);
 
     static Scalar coeff_turn(const qType& ql, const qType& qr, const qType& qf) { return triangle(ql, qr, qf) ? Scalar(1.) : Scalar(0.); }
 
@@ -161,18 +160,17 @@ std::vector<typename U1<Kind, Scalar_>::qType> U1<Kind, Scalar_>::basis_combine(
 }
 
 template <typename Kind, typename Scalar_>
-template <typename TensorLib>
-typename TensorInterface<TensorLib>::template TType<Scalar_, 3>
-U1<Kind, Scalar_>::CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t)
+template <typename PlainLib>
+typename PlainLib::template TType<Scalar_, 3> U1<Kind, Scalar_>::CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t)
 {
-    typedef typename TensorInterface<TensorLib>::Indextype IndexType;
-    auto T = TensorInterface<TensorLib>::template construct<Scalar>(std::array<IndexType, 3>{1, 1, 1});
+    typedef typename PlainLib::Indextype IndexType;
+    auto T = PlainLib::template construct<Scalar>(std::array<IndexType, 3>{1, 1, 1});
     if(triangle(q1, q2, q3)) {
         std::array<IndexType, 3> index = {0, 0, 0};
-        TensorInterface<TensorLib>::template setVal<Scalar, 3>(T, index, Scalar(1.));
+        PlainLib::template setVal<Scalar, 3>(T, index, Scalar(1.));
     } else {
         std::array<IndexType, 3> index = {0, 0, 0};
-        TensorInterface<TensorLib>::template setVal<Scalar, 3>(T, index, Scalar(0.));
+        PlainLib::template setVal<Scalar, 3>(T, index, Scalar(0.));
     }
     return T;
 }

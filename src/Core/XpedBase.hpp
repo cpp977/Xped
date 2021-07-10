@@ -16,7 +16,7 @@ class AdjointOp;
 template <typename XprType>
 class ScaledOp;
 
-template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename MatrixLib, typename TensorLib, typename VectorLib>
+template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename PlainLib>
 class Xped;
 
 template <typename Derived>
@@ -25,19 +25,16 @@ class XpedBase
 public:
     typedef typename XpedTraits<Derived>::Scalar Scalar;
     typedef typename XpedTraits<Derived>::Symmetry Symmetry;
-    typedef typename XpedTraits<Derived>::MatrixLib MatrixLib;
+    typedef typename XpedTraits<Derived>::PlainLib PlainLib;
     typedef typename XpedTraits<Derived>::MatrixType MatrixType;
-    typedef typename XpedTraits<Derived>::TensorLib TensorLib;
     typedef typename XpedTraits<Derived>::TensorType TensorType;
-    typedef typename XpedTraits<Derived>::VectorLib VectorLib;
     typedef typename XpedTraits<Derived>::VectorType VectorType;
 
     static constexpr std::size_t Rank = XpedTraits<Derived>::Rank;
     static constexpr std::size_t CoRank = XpedTraits<Derived>::CoRank;
-    typedef PlainInterface<MatrixLib, TensorLib, VectorLib> Plain;
-    typedef typename Plain::template MapTType<Scalar, Rank + CoRank> TensorMapType;
-    typedef typename Plain::template cMapTType<Scalar, Rank + CoRank> TensorcMapType;
-    typedef typename Plain::Indextype IndexType;
+    typedef typename PlainLib::template MapTType<Scalar, Rank + CoRank> TensorMapType;
+    typedef typename PlainLib::template cMapTType<Scalar, Rank + CoRank> TensorcMapType;
+    typedef typename PlainLib::Indextype IndexType;
 
     const ScaledOp<Derived> operator*(const Scalar scale) const { return ScaledOp(derived, scale); }
 
@@ -60,19 +57,10 @@ public:
 
     Scalar norm() XPED_CONST { return std::sqrt(squaredNorm()); }
 
-    Xped<Scalar, Rank, CoRank, Symmetry, MatrixLib, TensorLib, VectorLib> eval() const
-    {
-        return Xped<Scalar, Rank, CoRank, Symmetry, MatrixLib, TensorLib, VectorLib>(derived());
-    };
+    Xped<Scalar, Rank, CoRank, Symmetry, PlainLib> eval() const { return Xped<Scalar, Rank, CoRank, Symmetry, PlainLib>(derived()); };
 
 protected:
-    template <typename Scalar,
-              std::size_t Rank__,
-              std::size_t CoRank__,
-              typename Symmetry__,
-              typename MatrixLib__,
-              typename TensorLib__,
-              typename VectorLib__>
+    template <typename Scalar, std::size_t Rank__, std::size_t CoRank__, typename Symmetry__, typename PlainLib__>
     friend class Xped;
     template <typename OtherDerived>
     friend class XpedBase;
@@ -93,7 +81,7 @@ typename XpedTraits<Derived>::Scalar XpedBase<Derived>::trace() XPED_CONST
     assert(derived().coupledDomain() == derived().coupledCodomain());
     Scalar out = 0.;
     for(size_t i = 0; i < derived().sector().size(); i++) {
-        out += Plain::template trace<Scalar>(derived().block(i)) * Symmetry::degeneracy(derived().sector(i));
+        out += PlainLib::template trace<Scalar>(derived().block(i)) * Symmetry::degeneracy(derived().sector(i));
         // out += derived().block(i).trace() * Symmetry::degeneracy(derived().sector(i));
     }
     return out;
@@ -237,7 +225,7 @@ auto XpedBase<Derived>::operator*(OtherDerived&& other) XPED_CONST
     auto derived_ref = derived();
     auto other_derived_ref = other.derived();
     assert(derived_ref.coupledCodomain() == other_derived_ref.coupledDomain());
-    Xped<Scalar, Rank, XpedTraits<OtherDerived_>::CoRank, Symmetry, MatrixLib, TensorLib, VectorLib> Tout;
+    Xped<Scalar, Rank, XpedTraits<OtherDerived_>::CoRank, Symmetry, PlainLib> Tout;
     Tout.domain = derived_ref.coupledDomain();
     Tout.codomain = other_derived_ref.coupledCodomain();
     Tout.uncoupled_domain = derived_ref.uncoupledDomain();
@@ -253,7 +241,7 @@ auto XpedBase<Derived>::operator*(OtherDerived&& other) XPED_CONST
         auto it = other_dict.find(derived_ref.sector(i));
         if(it == other_dict.end()) { continue; }
         // Tout.push_back(derived_ref.sector(i), Plain::template prod<Scalar>(derived_ref.block(i), other_derived_ref.block(it->second)));
-        Tout.push_back(derived_ref.sector(i), Plain::template prod<Scalar>(derived_ref.block(i), other_derived_ref.block(it->second)));
+        Tout.push_back(derived_ref.sector(i), PlainLib::template prod<Scalar>(derived_ref.block(i), other_derived_ref.block(it->second)));
         // Tout.block_[i] = T1.block_[i] * T2.block_[it->second];
     }
     for(size_t i = 0; i < other_derived_ref.sector().size(); i++) {
@@ -261,7 +249,7 @@ auto XpedBase<Derived>::operator*(OtherDerived&& other) XPED_CONST
         auto it = this_dict.find(other_derived_ref.sector(i));
         if(it == this_dict.end()) { continue; }
         // Tout.push_back(other_derived_ref.sector(i), Plain::template prod<Scalar>(derived_ref.block(it->second), other_derived_ref.block(i)));
-        Tout.push_back(other_derived_ref.sector(i), Plain::template prod<Scalar>(derived_ref.block(it->second), other_derived_ref.block(i)));
+        Tout.push_back(other_derived_ref.sector(i), PlainLib::template prod<Scalar>(derived_ref.block(it->second), other_derived_ref.block(i)));
     }
     return Tout;
 }

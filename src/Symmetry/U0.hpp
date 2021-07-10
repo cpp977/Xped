@@ -5,7 +5,6 @@
 #include <cstddef>
 /// \endcond
 
-#include "Interfaces/TensorInterface.hpp"
 #include "Symmetry/SymBase.hpp"
 #include "Symmetry/kind_dummies.hpp"
 #include "Symmetry/qarray.hpp"
@@ -72,13 +71,13 @@ struct U0 : SymBase<U0<Scalar_>>
 
     inline static Scalar coeff_FS(const qType&) { return Scalar(1.); }
 
-    template <typename TensorLib>
-    inline static typename TensorInterface<TensorLib>::template TType<Scalar, 2> one_j_tensor(const qType&)
+    template <typename PlainLib>
+    inline static typename PlainLib::template TType<Scalar, 2> one_j_tensor(const qType&)
     {
-        typedef typename TensorInterface<TensorLib>::Indextype IndexType;
-        auto T = TensorInterface<TensorLib>::template construct<Scalar>(std::array<IndexType, 2>{1, 1});
+        typedef typename PlainLib::Indextype IndexType;
+        auto T = PlainLib::template construct<Scalar>(std::array<IndexType, 2>{1, 1});
         std::array<IndexType, 2> index = {0, 0};
-        TensorInterface<TensorLib>::template setVal<Scalar, 2>(T, index, Scalar(1.));
+        PlainLib::template setVal<Scalar, 2>(T, index, Scalar(1.));
         return T;
     }
 
@@ -86,13 +85,13 @@ struct U0 : SymBase<U0<Scalar_>>
 
     inline static Scalar coeff_3j(const qType&, const qType&, const qType&, int, int, int) { return Scalar(1.); }
 
-    template <typename TensorLib>
-    inline static typename TensorInterface<TensorLib>::template TType<Scalar, 3> CGC(const qType&, const qType&, const qType&, const std::size_t)
+    template <typename PlainLib>
+    inline static typename PlainLib::template TType<Scalar, 3> CGC(const qType&, const qType&, const qType&, const std::size_t)
     {
-        typedef typename TensorInterface<TensorLib>::Indextype IndexType;
-        auto T = TensorInterface<TensorLib>::template construct<Scalar>(std::array<IndexType, 3>{1, 1, 1});
+        typedef typename PlainLib::Indextype IndexType;
+        auto T = PlainLib::template construct<Scalar>(std::array<IndexType, 3>{1, 1, 1});
         std::array<IndexType, 3> index = {0, 0, 0};
-        TensorInterface<TensorLib>::template setVal<Scalar, 3>(T, index, Scalar(1.));
+        PlainLib::template setVal<Scalar, 3>(T, index, Scalar(1.));
         return T;
     }
 

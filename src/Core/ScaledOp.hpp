@@ -13,11 +13,9 @@ struct XpedTraits<ScaledOp<XprType>>
     static constexpr std::size_t CoRank = XprType::CoRank;
     typedef typename XprType::Scalar Scalar;
     typedef typename XprType::Symmetry Symmetry;
-    typedef typename XprType::MatrixLib MatrixLib;
+    typedef typename XprType::PlainLib PlainLib;
     typedef typename XprType::MatrixType MatrixType;
-    typedef typename XprType::TensorLib TensorLib;
     typedef typename XprType::TensorType TensorType;
-    typedef typename XprType::VectorLib VectorLib;
     typedef typename XprType::VectorType VectorType;
 };
 
@@ -29,14 +27,10 @@ class ScaledOp : public TensorBase<ScaledOp<XprType>>
     typedef typename XprType::Scalar Scalar;
     typedef typename XprType::Symmetry Symmetry;
 
+    typedef typename XprType::PlainLib PlainLib;
     typedef typename XprType::MatrixType MatrixType;
-    typedef typename XprType::MatrixLib MatrixLib;
     typedef typename XprType::TensorType TensorType;
-    typedef typename XprType::TensorLib TensorLib;
     typedef typename XprType::VectorType VectorType;
-    typedef typename XprType::VectorLib VectorLib;
-
-    typedef typename XprType::Plain Plain;
 
 public:
     template <typename OtherDerived>
@@ -55,14 +49,14 @@ public:
     const auto block(std::size_t i) const
     {
         auto res = refxpr_.block(i);
-        Plain::template scale<Scalar>(res, scale);
+        PlainLib::template scale<Scalar>(res, scale);
         return res;
     }
 
     auto block(std::size_t i)
     {
         auto res = refxpr_.block(i);
-        Plain::template scale<Scalar>(res, scale);
+        PlainLib::template scale<Scalar>(res, scale);
         return res;
     }
 

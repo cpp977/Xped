@@ -2,28 +2,30 @@
 #define PLAIN_INTERFACE_H_
 
 #ifdef XPED_USE_ARRAY_TENSOR_LIB
-#    define M_TENSORLIB ArrayTensorLib
+#    define XPED_DEFAULT_TENSORLIB ArrayTensorLib
 #elif defined(XPED_USE_EIGEN_TENSOR_LIB)
-#    define M_TENSORLIB EigenTensorLib
+#    define XPED_DEFAULT_TENSORLIB EigenTensorLib
 #elif defined(XPED_USE_CYCLOPS_TENSOR_LIB)
-#    define M_TENSORLIB CyclopsTensorLib
+#    define XPED_DEFAULT_TENSORLIB CyclopsTensorLib
 #endif
 
 #ifdef XPED_USE_ARRAY_MATRIX_LIB
-#    define M_MATRIXLIB ArrayMatrixLib
+#    define XPED_DEFAULT_MATRIXLIB ArrayMatrixLib
 #elif defined(XPED_USE_EIGEN_MATRIX_LIB)
-#    define M_MATRIXLIB EigenMatrixLib
+#    define XPED_DEFAULT_MATRIXLIB EigenMatrixLib
 #elif defined(XPED_USE_CYCLOPS_MATRIX_LIB)
-#    define M_MATRIXLIB CyclopsMatrixLib
+#    define XPED_DEFAULT_MATRIXLIB CyclopsMatrixLib
 #endif
 
 #ifdef XPED_USE_ARRAY_VECTOR_LIB
-#    define M_VECTORLIB ArrayVectorLib
+#    define XPED_DEFAULT_VECTORLIB ArrayVectorLib
 #elif defined(XPED_USE_EIGEN_VECTOR_LIB)
-#    define M_VECTORLIB EigenVectorLib
+#    define XPED_DEFAULT_VECTORLIB EigenVectorLib
 #elif defined(XPED_USE_CYCLOPS_VECTOR_LIB)
-#    define M_VECTORLIB CyclopsVectorLib
+#    define XPED_DEFAULT_VECTORLIB CyclopsVectorLib
 #endif
+
+#define XPED_DEFAULT_PLAININTERFACE PlainInterface<XPED_DEFAULT_MATRIXLIB, XPED_DEFAULT_TENSORLIB, XPED_DEFAULT_VECTORLIB>
 
 #include "Interfaces/MatrixInterface.hpp"
 #include "Interfaces/TensorInterface.hpp"
@@ -105,5 +107,4 @@ struct PlainInterface
 #else
 #    error "You specified an invalid combination of plain matrix library, plain tensor library and plain vector library."
 #endif
-
 #endif

@@ -50,7 +50,7 @@ XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100)
 #include "Core/Xped.hpp"
 
 #include "doctest/doctest.h"
-#ifdef XPED_USE_OPENMPI
+#ifdef XPED_USE_MPI
 #    include "doctest/extensions/doctest_mpi.h"
 #endif
 
@@ -60,19 +60,19 @@ constexpr std::size_t SU2_TENSOR_SIZE = 5;
 constexpr std::size_t U1_TENSOR_SIZE = 5;
 constexpr std::size_t U0_TENSOR_SIZE = 5;
 
-#ifdef XPED_USE_OPENMPI
+#ifdef XPED_USE_MPI
 constexpr int MPI_NUM_PROC = 4;
 #endif
 
 TEST_SUITE_BEGIN("Tensor");
 
-#ifdef XPED_USE_OPENMPI
+#ifdef XPED_USE_MPI
 MPI_TEST_CASE("Testing the transformation to plain Tensor.", MPI_NUM_PROC)
 #else
 TEST_CASE("Testing the transformation to plain Tensor.")
 #endif
 {
-#ifdef XPED_USE_OPENMPI
+#ifdef XPED_USE_MPI
     util::mpi::XpedWorld world(test_comm);
 #else
     util::mpi::XpedWorld world;
@@ -119,13 +119,13 @@ TEST_CASE("Testing the transformation to plain Tensor.")
     }
 }
 
-#ifdef XPED_USE_OPENMPI
+#ifdef XPED_USE_MPI
 MPI_TEST_CASE("Testing the permutation within the domain.", MPI_NUM_PROC)
 #else
 TEST_CASE("Testing the permutation within the domain.")
 #endif
 {
-#ifdef XPED_USE_OPENMPI
+#ifdef XPED_USE_MPI
     util::mpi::XpedWorld world(test_comm);
 #else
     util::mpi::XpedWorld world;
@@ -149,13 +149,13 @@ TEST_CASE("Testing the permutation within the domain.")
     }
 }
 
-#ifdef XPED_USE_OPENMPI
+#ifdef XPED_USE_MPI
 MPI_TEST_CASE("Testing the permutation within the codomain.", MPI_NUM_PROC)
 #else
 TEST_CASE("Testing the permutation within the codomain.")
 #endif
 {
-#ifdef XPED_USE_OPENMPI
+#ifdef XPED_USE_MPI
     util::mpi::XpedWorld world(test_comm);
 #else
     util::mpi::XpedWorld world;
@@ -179,13 +179,13 @@ TEST_CASE("Testing the permutation within the codomain.")
     }
 }
 
-#ifdef XPED_USE_OPENMPI
+#ifdef XPED_USE_MPI
 MPI_TEST_CASE("Testing the general permutation of legs.", MPI_NUM_PROC)
 #else
 TEST_CASE("Testing the general permutation of legs.")
 #endif
 {
-#ifdef XPED_USE_OPENMPI
+#ifdef XPED_USE_MPI
     util::mpi::XpedWorld world(test_comm);
 #else
     util::mpi::XpedWorld world;
@@ -221,7 +221,7 @@ TEST_CASE("Testing the general permutation of legs.")
     }
 }
 
-#ifndef XPED_USE_OPENMPI
+#ifndef XPED_USE_MPI
 TEST_CASE("Testing operations with SU(2)-spin matrices.")
 {
     typedef Sym::SU2<Sym::SpinSU2> Symmetry;

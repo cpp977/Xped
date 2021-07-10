@@ -73,7 +73,7 @@ template <int shift, std::size_t Rank, std::size_t CoRank, typename Symmetry> \
 CacheManager<shift, Rank, CoRank, Symmetry> VARIABLE_NAME(CACHE_SIZE);
 
 // clang-format on
-#ifdef XPED_USE_OPENMPI
+#ifdef XPED_USE_MPI
 #    define XPED_MPI_BARRIER(comm) MPI_Barrier(comm);
 #else
 #    define XPED_MPI_BARRIER(comm)

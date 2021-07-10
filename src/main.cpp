@@ -53,7 +53,7 @@ XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100)
 
 int main(int argc, char* argv[])
 {
-#ifdef XPED_USE_OPENMPI
+#ifdef XPED_USE_MPI
     MPI_Init(&argc, &argv);
     // MPI_Comm_rank(MPI_COMM_WORLD, &xped_rank);
     // MPI_Comm_size(MPI_COMM_WORLD, &xped_np);
@@ -65,13 +65,11 @@ int main(int argc, char* argv[])
     auto my_logger = spdlog::basic_logger_mt("info", "logs/log.txt");
 #endif
 
-    std::cout << "I am here at begin of main" << std::endl;
     std::ios::sync_with_stdio(true);
 
     ArgParser args(argc, argv);
 
     spdlog::set_level(spdlog::level::critical);
-    std::cout << "I am here" << std::endl;
 
     my_logger->sinks()[0]->set_pattern("[%H:%M:%S %z] [%n] [%^---%L---%$] [process %P] %v");
     if(world.rank == 0) {
@@ -165,12 +163,14 @@ int main(int argc, char* argv[])
     }
     if(SWEEP) {
         Stopwatch<> Sweep;
-        if(DIR == DMRG::DIRECTION::RIGHT) {
-            for(std::size_t l = 0; l < L; l++) { Psi.rightSweepStep(l, DMRG::BROOM::SVD); }
-        } else {
-            for(std::size_t l = L - 1; l > 0; l--) { Psi.leftSweepStep(l, DMRG::BROOM::SVD); }
-            Psi.leftSweepStep(0, DMRG::BROOM::SVD);
-        }
+        double trunc = 0;
+        Psi.A.Ac[L / 2].tSVD(10000, 0., trunc, false);
+        // if(DIR == DMRG::DIRECTION::RIGHT) {
+        //     for(std::size_t l = 0; l < L; l++) { Psi.rightSweepStep(l, DMRG::BROOM::SVD); }
+        // } else {
+        //     for(std::size_t l = L - 1; l > 0; l--) { Psi.leftSweepStep(l, DMRG::BROOM::SVD); }
+        //     Psi.leftSweepStep(0, DMRG::BROOM::SVD);
+        // }
         my_logger->critical(Sweep.info("Time for sweep"));
     }
 
@@ -189,7 +189,7 @@ int main(int argc, char* argv[])
 // cout << "Left: <Psi,Psi>=" << normSq << endl;
 // Psi.A.Ac[0] = Psi.A.Ac[0] * std::pow(normSq, -0.5);
 // cout << "<Psi,Psi>=" << dot(Psi, Psi, DIR) << endl;
-#ifdef XPED_USE_OPENMPI
+#ifdef XPED_USE_MPI
     my_logger->critical("Calling MPI_Finalize()");
     // volatile int i = 0;
     // char hostname[256];

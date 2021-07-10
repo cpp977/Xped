@@ -1,7 +1,7 @@
 #ifndef XPED_MPI_H_
 #define XPED_MPI_H_
 
-#ifdef XPED_USE_OPENMPI
+#ifdef XPED_USE_MPI
 
 #    include "ctf.hpp"
 #    include "mpi.h"

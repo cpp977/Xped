@@ -60,7 +60,7 @@ if(XPED_ENABLE_LRU_CACHE)
   target_link_libraries(run XPED_LRUCACHE)
 endif()
 
-if(XPED_USE_OPENMPI)
+if(XPED_USE_MPI)
   target_link_libraries(run MPI::MPI_CXX)
 endif()
 

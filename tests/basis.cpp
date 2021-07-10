@@ -35,13 +35,13 @@ XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100)
 #include "Symmetry/kind_dummies.hpp"
 
 #include "doctest/doctest.h"
-#ifdef XPED_USE_OPENMPI
+#ifdef XPED_USE_MPI
 #    include "doctest/extensions/doctest_mpi.h"
 #endif
 
 TEST_SUITE_BEGIN("Qbasis");
 
-#ifdef XPED_USE_OPENMPI
+#ifdef XPED_USE_MPI
 MPI_TEST_CASE("Testing combine() in Qbasis.", 2)
 #else
 TEST_CASE("Testing combine() in Qbasis.")

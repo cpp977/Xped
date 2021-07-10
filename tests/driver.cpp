@@ -1,4 +1,4 @@
-#ifdef XPED_USE_OPENMPI
+#ifdef XPED_USE_MPI
 #    include "mpi.h"
 #endif
 
@@ -10,18 +10,18 @@
 #define DOCTEST_CONFIG_IMPLEMENT
 #include "doctest/doctest.h"
 
-#ifdef XPED_USE_OPENMPI
+#ifdef XPED_USE_MPI
 #    include "doctest/extensions/doctest_mpi.h"
 #endif
 
-#ifdef XPED_USE_OPENMPI
+#ifdef XPED_USE_MPI
 #    include "ctf.hpp"
 #endif
 
 int main(int argc, char** argv)
 {
     std::ios::sync_with_stdio(true);
-#ifdef XPED_USE_OPENMPI
+#ifdef XPED_USE_MPI
     std::cout << "Hello, I am in MPI mode" << std::endl;
     MPI_Init(&argc, &argv);
     // MPI_Comm_rank(MPI_COMM_WORLD, &xped_rank);
@@ -66,7 +66,7 @@ int main(int argc, char** argv)
 #endif
     int test_result = ctx.run();
 
-#ifdef XPED_USE_OPENMPI
+#ifdef XPED_USE_MPI
     MPI_Finalize();
 #endif
 

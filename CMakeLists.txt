@@ -59,9 +59,9 @@ option(XPED_BUILD_CYCLOPS "Build the cyclops library from source." ON)
 option(XPED_ENABLE_CACHE "Enable a compiler cache if available" OFF)
 
 option(XPED_USE_OPENMP "Enable openmp parallelization" ON)
-option(XPED_USE_OPENMPI "Enable openmpi parallelization" OFF)
+option(XPED_USE_MPI "Enable message parsing interface (mpi) parallelization" OFF)
 if(${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR")
-  set(XPED_USE_OPENMPI ON)
+  set(XPED_USE_MPI ON)
 endif()
 
 option(XPED_USE_BLAS "Enable blas linking." ON)
@@ -94,7 +94,8 @@ if(XPED_USE_OPENMP)
   find_package(OpenMP)
 endif()
 
-if(XPED_USE_OPENMPI)
+if(XPED_USE_MPI)
+  set(MPIEXEC_EXECUTABLE "/opt/mpich/bin/mpiexec")
   find_package(MPI REQUIRED)
 endif()
 

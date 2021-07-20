@@ -111,7 +111,7 @@ struct PlainInterface<CyclopsMatrixLib, CyclopsTensorLib, CyclopsVectorLib>
         assert(n_elems <= M.nrow);
         assert(n_elems <= M.ncol);
         spdlog::get("info")->info("Got mat with size=({},{}) and cut size={}", M.nrow, M.ncol, n_elems);
-        CTF::Vector<Scalar> tmp(M.nrow);
+        CTF::Vector<Scalar> tmp(M.nrow, *V.wrld);
         spdlog::get("info")->info("Constructed vector of size={}", M.nrow);
         tmp["i"] = M["ii"];
         std::array<int, 1> offsets = {0};
@@ -135,7 +135,7 @@ struct PlainInterface<CyclopsMatrixLib, CyclopsTensorLib, CyclopsVectorLib>
     template <typename Scalar, typename VT>
     static MType<Scalar> vec_to_diagmat(VT&& V)
     {
-        CTF::Matrix<Scalar> mat(V.len, V.len);
+        CTF::Matrix<Scalar> mat(V.len, V.len, *V.wrld);
         mat["ii"] = V["i"];
         return mat;
     }

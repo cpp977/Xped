@@ -7,8 +7,8 @@
 
 #include "Interfaces/MatrixMultiplication.hpp"
 
-#define XPED_CONST
-#define XPED_REF &&
+// #define XPED_CONST
+// #define XPED_REF &&
 
 template <>
 struct MatrixInterface<CyclopsMatrixLib>
@@ -28,21 +28,23 @@ struct MatrixInterface<CyclopsMatrixLib>
 
     // constructors
     template <typename Scalar>
-    static MType<Scalar> construct(const MIndextype& rows, const MIndextype& cols, CTF::World world = CTF::get_universe())
+    static MType<Scalar> construct(const MIndextype& rows, const MIndextype& cols, CTF::World& world)
     {
-        return MType<Scalar>(rows, cols);
+        return MType<Scalar>(rows, cols, world);
     }
 
     template <typename Scalar>
-    static MType<Scalar> construct_with_zero(const MIndextype& rows, const MIndextype& cols, CTF::World world = CTF::get_universe())
+    static MType<Scalar> construct_with_zero(const MIndextype& rows, const MIndextype& cols, CTF::World& world)
     {
-        return MType<Scalar>(rows, cols);
+        spdlog::get("info")->info("Entering construct with zero");
+        spdlog::get("info")->info("rows={}, cols={}", rows, cols);
+        return MType<Scalar>(rows, cols, world);
     }
 
     template <typename Scalar>
     static void resize(MType<Scalar>& M, const MIndextype& new_rows, const MIndextype& new_cols)
     {
-        M = CTF::Matrix<Scalar>(new_rows, new_cols);
+        M = CTF::Matrix<Scalar>(new_rows, new_cols, *M.wrld);
     }
 
     // initialization
@@ -71,11 +73,11 @@ struct MatrixInterface<CyclopsMatrixLib>
     }
 
     template <typename Scalar>
-    static MType<Scalar> Identity(const MIndextype& rows, const MIndextype& cols)
+    static MType<Scalar> Identity(const MIndextype& rows, const MIndextype& cols, CTF::World& world)
     {
         spdlog::get("info")->trace("Begin of Identity()");
         spdlog::get("info")->trace("rows: " + std::to_string(rows) + ", cols: " + std::to_string(cols));
-        MType<Scalar> M(rows, cols);
+        MType<Scalar> M(rows, cols, world);
         spdlog::get("info")->trace("Constructor passed.");
         M["ii"] = Scalar(1.);
         spdlog::get("info")->trace("Set diagonal to 1..");
@@ -125,6 +127,7 @@ struct MatrixInterface<CyclopsMatrixLib>
     template <typename Scalar, typename MT1, typename MT2>
     static MType<Scalar> kronecker_prod(MT1&& M1, MT2&& M2)
     {
+        assert(*M1.wrld == *M2.wrld and "Tensors needs to live on the same world for kroneckerProd().");
         std::array<int64_t, 4> dims = {M1.nrow, M2.nrow, M1.ncol, M2.ncol};
         CTF::Tensor<Scalar> tmp(4, dims.data(), *M1.wrld);
         tmp["ikjl"] = M1["ij"] * M2["kl"];
@@ -142,6 +145,7 @@ struct MatrixInterface<CyclopsMatrixLib>
     template <typename Scalar, typename MT1, typename MT2>
     static MType<Scalar> prod(MT1&& M1, MT2&& M2)
     {
+        assert(*M1.wrld == *M2.wrld and "Tensors needs to live on the same world for prod().");
         MType<Scalar> res(M1.nrow, M2.ncol, *M1.wrld);
         res["ik"] = M1["ij"] * M2["jk"];
         return res;
@@ -184,6 +188,7 @@ struct MatrixInterface<CyclopsMatrixLib>
     template <typename Scalar, typename MT1, typename MT2>
     static auto add(MT1&& M1, MT2&& M2)
     {
+        assert(*M1.wrld == *M2.wrld and "Tensors needs to live on the same world for add().");
         MType<Scalar> res(M1.nrow, M2.ncol, *M1.wrld);
         res["ij"] = M1["ij"] + M2["ij"];
         return res;
@@ -192,6 +197,7 @@ struct MatrixInterface<CyclopsMatrixLib>
     template <typename Scalar, typename MT1, typename MT2>
     static auto difference(MT1&& M1, MT2&& M2)
     {
+        assert(*M1.wrld == *M2.wrld and "Tensors needs to live on the same world for difference().");
         MType<Scalar> res(M1.nrow, M2.ncol, *M1.wrld);
         res["ij"] = M1["ij"] - M2["ij"];
         return res;

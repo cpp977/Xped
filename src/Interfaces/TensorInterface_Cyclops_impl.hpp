@@ -1,6 +1,8 @@
 #ifndef TENSOR_INTERFACE_CYCLOPS_IMPL_H_
 #define TENSOR_INTERFACE_CYCLOPS_IMPL_H_
 
+#include "spdlog/spdlog.h"
+
 #include <ctf.hpp>
 
 template <typename Index, Index oldVal, Index newVal, typename S>
@@ -53,9 +55,9 @@ struct TensorInterface<CyclopsTensorLib>
 
     // constructors
     template <typename Scalar, std::size_t Rank>
-    static TType<Scalar, Rank> construct(const std::array<Indextype, Rank>& dims, CTF::World world = CTF::get_universe())
+    static TType<Scalar, Rank> construct(const std::array<Indextype, Rank>& dims, CTF::World& world)
     {
-        return TType<Scalar, Rank>(Rank, dims.data());
+        return TType<Scalar, Rank>(Rank, dims.data(), world);
     }
 
     template <typename Scalar, int Rank>
@@ -279,10 +281,23 @@ struct TensorInterface<CyclopsTensorLib>
                                 seq::iseq<Indextype, Is2...> S2,
                                 seq::iseq<Indextype, Ist...> St)
     {
+        assert(*T1.wrld == *T2.wrld and "Tensors should live on the same world for contraction");
+
+        spdlog::get("info")->info("Entering TensorInterface::contract_helper().");
+        // spdlog::get("info")->info("T1.world={}, T2.world={}", T1.wrld->comm, T2.wrld->comm);
+        // spdlog::get("info")->info("T1");
+        // T1.print(stdout, 1.e-15);
+        // XPED_MPI_BARRIER(T1.wrld->comm)
+        // spdlog::get("info")->info("T2");
+        // T2.print(stdout, 1.e-15);
+        XPED_MPI_BARRIER(T2.wrld->comm)
         char idx_T1[Rank1] = {idx(Is1)...};
         char idx_T2[Rank2] = {idx(Is2)...};
         char idx_res[sizeof...(Ist)] = {idx(Ist)...};
         std::array<Indextype, sizeof...(Ist)> res_i = {Ist...};
+
+        for(std::size_t i = 0; i < Rank1; i++) { spdlog::get("info")->info("T1.lens[{}]={}", i, T1.lens[i]); }
+        for(std::size_t i = 0; i < Rank2; i++) { spdlog::get("info")->info("T2.lens[{}]={}", i, T2.lens[i]); }
 
         int lens[sizeof...(Ist)];
         for(std::size_t i = 0; i < sizeof...(Ist); i++) {
@@ -294,8 +309,8 @@ struct TensorInterface<CyclopsTensorLib>
         }
 
         TType<Scalar, sizeof...(Ist)> res(sizeof...(Ist), lens, *T1.wrld);
-
         res[idx_res] = T1[idx_T1] * T2[idx_T2];
+        spdlog::get("info")->info("Returning from TensorInterface::contract_helper().");
         return res;
     }
 

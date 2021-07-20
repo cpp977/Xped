@@ -14,21 +14,21 @@ struct VectorInterface<CyclopsVectorLib>
 
     // constructors
     template <typename Scalar>
-    static VType<Scalar> construct(const VIndextype& elems, CTF::World world = CTF::get_universe())
+    static VType<Scalar> construct(const VIndextype& elems, CTF::World& world)
     {
-        return VType<Scalar>(elems);
+        return VType<Scalar>(elems, world);
     }
 
     template <typename Scalar>
-    static VType<Scalar> construct_with_zero(const VIndextype& elems, CTF::World world = CTF::get_universe())
+    static VType<Scalar> construct_with_zero(const VIndextype& elems, CTF::World& world)
     {
-        return VType<Scalar>(elems);
+        return VType<Scalar>(elems, world);
     }
 
     template <typename Scalar>
     static void resize(VType<Scalar>& V, const VIndextype& new_elems)
     {
-        V = VType<Scalar>(new_elems);
+        V = VType<Scalar>(new_elems, *V.wrld);
     }
 
     // initialization

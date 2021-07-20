@@ -10,6 +10,8 @@
 #include "yas/serialize.hpp"
 #include "yas/std_types.hpp"
 
+#include "Util/Mpi.hpp"
+
 #include "Interfaces/TensorInterface.hpp"
 
 #include "Hash/hash.hpp"
@@ -157,42 +159,39 @@ struct FusionTree
     }
 
     template <typename PlainLib>
-    typename PlainLib::template TType<Scalar, Rank + 1> asTensor() const
+    typename PlainLib::template TType<Scalar, Rank + 1> asTensor(util::mpi::XpedWorld& world = util::mpi::getUniverse()) const
     {
         static_assert(Rank <= 5);
         typedef typename PlainLib::template TType<Scalar, Rank + 1> TensorType;
         typedef typename PlainLib::Indextype IndexType;
         TensorType out;
         if constexpr(Rank == 0) {
-            out = PlainLib::template construct<Scalar, 1>(std::array<IndexType, 1>{1});
+            out = PlainLib::template construct<Scalar, 1>(std::array<IndexType, 1>{1}, world);
             PlainLib::template setConstant<Scalar, 1>(out, 1.);
-            // out(0) = 1.;
         } else if constexpr(Rank == 1) {
-            out =
-                PlainLib::template construct<Scalar>(std::array<IndexType, 2>{Symmetry::degeneracy(q_uncoupled[0]), Symmetry::degeneracy(q_coupled)});
-            // out = TensorType(Symmetry::degeneracy(q_uncoupled[0]), Symmetry::degeneracy(q_coupled));
+            out = PlainLib::template construct<Scalar>(
+                std::array<IndexType, 2>{Symmetry::degeneracy(q_uncoupled[0]), Symmetry::degeneracy(q_coupled)}, world);
             PlainLib::template setZero<Scalar, 2>(out);
             for(IndexType i = 0; i < static_cast<std::size_t>(Symmetry::degeneracy(q_uncoupled[0])); i++) {
                 PlainLib::template setVal<Scalar, 2>(out, {{i, i}}, 1.);
             }
-
         } else if constexpr(Rank == 2) {
-            out = Symmetry::template CGC<PlainLib>(q_uncoupled[0], q_uncoupled[1], q_coupled, multiplicities[0]);
+            out = Symmetry::template CGC<PlainLib>(q_uncoupled[0], q_uncoupled[1], q_coupled, multiplicities[0], world);
         } else if constexpr(Rank == 3) {
-            auto vertex1 = Symmetry::template CGC<PlainLib>(q_uncoupled[0], q_uncoupled[1], q_intermediates[0], multiplicities[0]);
-            auto vertex2 = Symmetry::template CGC<PlainLib>(q_intermediates[0], q_uncoupled[2], q_coupled, multiplicities[1]);
+            auto vertex1 = Symmetry::template CGC<PlainLib>(q_uncoupled[0], q_uncoupled[1], q_intermediates[0], multiplicities[0], world);
+            auto vertex2 = Symmetry::template CGC<PlainLib>(q_intermediates[0], q_uncoupled[2], q_coupled, multiplicities[1], world);
             out = PlainLib::template contract<Scalar, 3, 3, 2, 0>(vertex1, vertex2);
         } else if constexpr(Rank == 4) {
-            auto vertex1 = Symmetry::template CGC<PlainLib>(q_uncoupled[0], q_uncoupled[1], q_intermediates[0], multiplicities[0]);
-            auto vertex2 = Symmetry::template CGC<PlainLib>(q_intermediates[0], q_uncoupled[2], q_intermediates[1], multiplicities[1]);
-            auto vertex3 = Symmetry::template CGC<PlainLib>(q_intermediates[1], q_uncoupled[3], q_coupled, multiplicities[2]);
+            auto vertex1 = Symmetry::template CGC<PlainLib>(q_uncoupled[0], q_uncoupled[1], q_intermediates[0], multiplicities[0], world);
+            auto vertex2 = Symmetry::template CGC<PlainLib>(q_intermediates[0], q_uncoupled[2], q_intermediates[1], multiplicities[1], world);
+            auto vertex3 = Symmetry::template CGC<PlainLib>(q_intermediates[1], q_uncoupled[3], q_coupled, multiplicities[2], world);
             auto intermediate = PlainLib::template contract<Scalar, 3, 3, 2, 0>(vertex1, vertex2);
             out = PlainLib::template contract<Scalar, 4, 3, 3, 0>(intermediate, vertex3);
         } else if constexpr(Rank == 5) {
-            auto vertex1 = Symmetry::template CGC<PlainLib>(q_uncoupled[0], q_uncoupled[1], q_intermediates[0], multiplicities[0]);
-            auto vertex2 = Symmetry::template CGC<PlainLib>(q_intermediates[0], q_uncoupled[2], q_intermediates[1], multiplicities[1]);
-            auto vertex3 = Symmetry::template CGC<PlainLib>(q_intermediates[1], q_uncoupled[3], q_intermediates[2], multiplicities[2]);
-            auto vertex4 = Symmetry::template CGC<PlainLib>(q_intermediates[2], q_uncoupled[4], q_coupled, multiplicities[3]);
+            auto vertex1 = Symmetry::template CGC<PlainLib>(q_uncoupled[0], q_uncoupled[1], q_intermediates[0], multiplicities[0], world);
+            auto vertex2 = Symmetry::template CGC<PlainLib>(q_intermediates[0], q_uncoupled[2], q_intermediates[1], multiplicities[1], world);
+            auto vertex3 = Symmetry::template CGC<PlainLib>(q_intermediates[1], q_uncoupled[3], q_intermediates[2], multiplicities[2], world);
+            auto vertex4 = Symmetry::template CGC<PlainLib>(q_intermediates[2], q_uncoupled[4], q_coupled, multiplicities[3], world);
             auto intermediate1 = PlainLib::template contract<Scalar, 3, 3, 2, 0>(vertex1, vertex2);
             auto intermediate2 = PlainLib::template contract<Scalar, 4, 3, 3, 0>(intermediate1, vertex3);
             out = PlainLib::template contract<Scalar, 5, 3, 4, 0>(intermediate2, vertex4);
@@ -208,7 +207,7 @@ struct FusionTree
         } // 0
         else {
             if(IS_DUAL[0]) {
-                auto one_j = Symmetry::template one_j_tensor<PlainLib>(q_uncoupled[0]);
+                auto one_j = Symmetry::template one_j_tensor<PlainLib>(q_uncoupled[0], world);
                 TensorType tmp = PlainLib::template contract<Scalar, 2, Rank + 1, 1, 0>(one_j, out);
                 out = tmp;
                 // std::array<IndexType, Rank+1> shuffle_dims; std::iota(shuffle_dims.begin(), shuffle_dims.end(), 0);
@@ -224,7 +223,7 @@ struct FusionTree
             } // 1
             else {
                 if(IS_DUAL[1]) {
-                    auto one_j = Symmetry::template one_j_tensor<PlainLib>(q_uncoupled[1]);
+                    auto one_j = Symmetry::template one_j_tensor<PlainLib>(q_uncoupled[1], world);
                     TensorType tmp = PlainLib::template contract<Scalar, 2, Rank + 1, 1, 1>(one_j, out);
                     out = tmp;
                     // std::array<IndexType, Rank+1> shuffle_dims; std::iota(shuffle_dims.begin(), shuffle_dims.end(), 0);
@@ -241,7 +240,7 @@ struct FusionTree
                     return out;
                 } else {
                     if(IS_DUAL[2]) {
-                        auto one_j = Symmetry::template one_j_tensor<PlainLib>(q_uncoupled[2]);
+                        auto one_j = Symmetry::template one_j_tensor<PlainLib>(q_uncoupled[2], world);
                         TensorType tmp = PlainLib::template contract<Scalar, 2, Rank + 1, 1, 2>(one_j, out);
                         out = tmp;
                         // std::array<IndexType, Rank+1> shuffle_dims; std::iota(shuffle_dims.begin(), shuffle_dims.end(), 0);
@@ -257,7 +256,7 @@ struct FusionTree
                         return out;
                     } else {
                         if(IS_DUAL[3]) {
-                            auto one_j = Symmetry::template one_j_tensor<PlainLib>(q_uncoupled[3]);
+                            auto one_j = Symmetry::template one_j_tensor<PlainLib>(q_uncoupled[3], world);
                             TensorType tmp = PlainLib::template contract<Scalar, 2, Rank + 1, 1, 3>(one_j, out);
                             out = tmp;
                             // std::array<IndexType, Rank+1> shuffle_dims; std::iota(shuffle_dims.begin(), shuffle_dims.end(), 0);
@@ -273,7 +272,7 @@ struct FusionTree
                             return out;
                         } else {
                             if(IS_DUAL[4]) {
-                                auto one_j = Symmetry::template one_j_tensor<PlainLib>(q_uncoupled[4]);
+                                auto one_j = Symmetry::template one_j_tensor<PlainLib>(q_uncoupled[4], world);
                                 TensorType tmp = PlainLib::template contract<Scalar, 2, Rank + 1, 1, 4>(one_j, out);
                                 out = tmp;
                                 // std::array<IndexType, Rank+1> shuffle_dims; std::iota(shuffle_dims.begin(), shuffle_dims.end(), 0);

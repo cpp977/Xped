@@ -17,7 +17,7 @@ void contract_L(XPED_CONST Xped<Scalar, 1, 1, Symmetry, PlainLib>& Bold,
         typename Symmetry::qType Q = Bra.sector_[i];
         auto itKet = Ket.dict_.find(Q);
         if(itKet == Ket.dict_.end()) { continue; }
-        auto Mtmp = PlainLib::template construct_with_zero<Scalar>(dimQ, dimQ);
+        auto Mtmp = PlainLib::template construct_with_zero<Scalar>(dimQ, dimQ, *Bold.world_);
         // typename Xped<Scalar, 1, 1, Symmetry, MatrixLib, TensorLib>::MatrixType Mtmp(dimQ, dimQ);
         // Mtmp.setZero();
         for(const auto& domainTree : Bra.domainTrees(Q)) {
@@ -75,7 +75,7 @@ void contract_R(XPED_CONST Xped<Scalar, 1, 1, Symmetry, PlainLib>& Bold,
             trivial.dim = dimQ;
 
             auto Qin = domainTree.q_uncoupled[0];
-            auto Mtmp = PlainLib::template construct_with_zero<Scalar>(domainTree.dims[0], domainTree.dims[0]);
+            auto Mtmp = PlainLib::template construct_with_zero<Scalar>(domainTree.dims[0], domainTree.dims[0], *Bold.world_);
             // typename Xped<Scalar, 1, 1, Symmetry, MatrixLib, TensorLib>::MatrixType Mtmp(domainTree.dims[0], domainTree.dims[0]);
             // Mtmp.setZero();
 

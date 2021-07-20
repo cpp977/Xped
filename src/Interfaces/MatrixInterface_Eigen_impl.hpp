@@ -26,13 +26,13 @@ struct MatrixInterface<EigenMatrixLib>
     typedef Eigen::Index MIndextype;
     // constructors
     template <typename Scalar>
-    static MType<Scalar> construct(const MIndextype& rows, const MIndextype& cols, util::mpi::XpedWorld world = util::mpi::getUniverse())
+    static MType<Scalar> construct(const MIndextype& rows, const MIndextype& cols, util::mpi::XpedWorld& world = util::mpi::getUniverse())
     {
         return MType<Scalar>(rows, cols);
     }
 
     template <typename Scalar>
-    static MType<Scalar> construct_with_zero(const MIndextype& rows, const MIndextype& cols, util::mpi::XpedWorld world = util::mpi::getUniverse())
+    static MType<Scalar> construct_with_zero(const MIndextype& rows, const MIndextype& cols, util::mpi::XpedWorld& world = util::mpi::getUniverse())
     {
         MType<Scalar> mat(rows, cols);
         mat.setZero();
@@ -71,7 +71,7 @@ struct MatrixInterface<EigenMatrixLib>
     }
 
     template <typename Scalar>
-    static MType<Scalar> Identity(const MIndextype& rows, const MIndextype& cols)
+    static MType<Scalar> Identity(const MIndextype& rows, const MIndextype& cols, util::mpi::XpedWorld& world = util::mpi::getUniverse())
     {
         return Eigen::MatrixXd::Identity(rows, cols);
     }

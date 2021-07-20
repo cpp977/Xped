@@ -5,6 +5,8 @@
 #include <cstddef>
 /// \endcond
 
+#include "Util/Mpi.hpp"
+
 #include "Symmetry/SymBase.hpp"
 #include "Symmetry/kind_dummies.hpp"
 #include "Symmetry/qarray.hpp"
@@ -72,10 +74,10 @@ struct U0 : SymBase<U0<Scalar_>>
     inline static Scalar coeff_FS(const qType&) { return Scalar(1.); }
 
     template <typename PlainLib>
-    inline static typename PlainLib::template TType<Scalar, 2> one_j_tensor(const qType&)
+    inline static typename PlainLib::template TType<Scalar, 2> one_j_tensor(const qType&, util::mpi::XpedWorld& world = util::mpi::getUniverse())
     {
         typedef typename PlainLib::Indextype IndexType;
-        auto T = PlainLib::template construct<Scalar>(std::array<IndexType, 2>{1, 1});
+        auto T = PlainLib::template construct<Scalar>(std::array<IndexType, 2>{1, 1}, world);
         std::array<IndexType, 2> index = {0, 0};
         PlainLib::template setVal<Scalar, 2>(T, index, Scalar(1.));
         return T;
@@ -86,10 +88,11 @@ struct U0 : SymBase<U0<Scalar_>>
     inline static Scalar coeff_3j(const qType&, const qType&, const qType&, int, int, int) { return Scalar(1.); }
 
     template <typename PlainLib>
-    inline static typename PlainLib::template TType<Scalar, 3> CGC(const qType&, const qType&, const qType&, const std::size_t)
+    inline static typename PlainLib::template TType<Scalar, 3>
+    CGC(const qType&, const qType&, const qType&, const std::size_t, util::mpi::XpedWorld& world = util::mpi::getUniverse())
     {
         typedef typename PlainLib::Indextype IndexType;
-        auto T = PlainLib::template construct<Scalar>(std::array<IndexType, 3>{1, 1, 1});
+        auto T = PlainLib::template construct<Scalar>(std::array<IndexType, 3>{1, 1, 1}, world);
         std::array<IndexType, 3> index = {0, 0, 0};
         PlainLib::template setVal<Scalar, 3>(T, index, Scalar(1.));
         return T;

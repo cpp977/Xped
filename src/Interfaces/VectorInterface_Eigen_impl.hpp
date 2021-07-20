@@ -16,13 +16,13 @@ struct VectorInterface<EigenVectorLib>
 
     // constructors
     template <typename Scalar>
-    static VType<Scalar> construct(const VIndextype& elems, util::mpi::XpedWorld world = util::mpi::getUniverse())
+    static VType<Scalar> construct(const VIndextype& elems, util::mpi::XpedWorld& world = util::mpi::getUniverse())
     {
         return VType<Scalar>(elems);
     }
 
     template <typename Scalar>
-    static VType<Scalar> construct_with_zero(const VIndextype& elems, util::mpi::XpedWorld world = util::mpi::getUniverse())
+    static VType<Scalar> construct_with_zero(const VIndextype& elems, util::mpi::XpedWorld& world = util::mpi::getUniverse())
     {
         VType<Scalar> vec(elems);
         vec.setZero();

@@ -32,18 +32,19 @@ int main(int argc, char** argv)
     // file_sink->set_level(spdlog::level::trace);
     // auto my_logger = std::make_shared<spdlog::logger>("info", {file_sink});
     // spdlog::register_logger(std::make_shared(my_logger));
-    spdlog::set_level(spdlog::level::info);
+    spdlog::set_level(spdlog::level::critical);
     auto my_logger = spdlog::basic_logger_mt("info", "logs/log_" + to_string(world.rank) + ".txt");
     my_logger->set_pattern("[%H:%M:%S %z] [%n] [%^---%L---%$] [process %P] %v");
     if(world.rank == 0) {
         auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
-        console_sink->set_level(spdlog::level::info);
+        console_sink->set_level(spdlog::level::critical);
         console_sink->set_pattern("[%H:%M:%S %z] [%n] [%^---%L---%$] [process %P] %v");
         my_logger->sinks().push_back(console_sink);
     }
 
     my_logger->warn("Driver: Number of MPI processes: {}", world.np);
     my_logger->warn("Driver: I am process #={}", world.rank);
+    // my_logger->warn("Driver: World #={}", world.comm);
     MPI_Barrier(world.comm);
 
     doctest::Context ctx;

@@ -69,7 +69,7 @@ int main(int argc, char* argv[])
 
     ArgParser args(argc, argv);
 
-    spdlog::set_level(spdlog::level::critical);
+    spdlog::set_level(spdlog::level::info);
 
     my_logger->sinks()[0]->set_pattern("[%H:%M:%S %z] [%n] [%^---%L---%$] [process %P] %v");
     if(world.rank == 0) {
@@ -146,6 +146,10 @@ int main(int argc, char* argv[])
     Mps<double, Symmetry> Psi(L, qloc, Qtot, Minit, Qinit);
     my_logger->critical(construct.info("Time for constructor"));
 
+    // Xped<double, 1, 1, Symmetry> X({{qloc_}}, {{qloc_}}, world);
+    // X.setRandom();
+    // std::cout << "rank=" << world.rank << ", norm=" << X.norm() << std::endl;
+    XPED_MPI_BARRIER(world.comm)
     if(INFO) {
         for(size_t l = 0; l <= L; l++) {
             std::stringstream ss;

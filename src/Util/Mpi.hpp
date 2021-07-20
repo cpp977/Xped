@@ -9,11 +9,17 @@
 
 namespace util::mpi {
 
+template <typename T>
+struct TrivialDeleter
+{
+    void operator()(T*) {}
+};
+
 typedef CTF::World XpedWorld;
-XpedWorld getUniverse() { return CTF::get_universe(); }
+XpedWorld& getUniverse() { return CTF::get_universe(); }
 
 template <typename T>
-void broadcast(T&& t, int process_rank, int root_process = 0, XpedWorld world = getUniverse())
+void broadcast(T&& t, int process_rank, int root_process = 0, XpedWorld& world = getUniverse())
 {
     constexpr std::size_t flags = yas::mem /*IO type*/ | yas::binary; /*IO format*/
     yas::shared_buffer buf;
@@ -41,19 +47,24 @@ void broadcast(T&& t, int process_rank, int root_process = 0, XpedWorld world = 
 } // namespace util::mpi
 #else
 namespace util::mpi {
+
+template <typename T>
+struct TrivialDeleter
+{
+    void operator()(T*) {}
+};
+
 struct XpedWorld
 {
     int rank = 0;
     int np = 1;
+    int comm = 1000;
 };
-XpedWorld getUniverse()
-{
-    XpedWorld out;
-    return out;
-};
+XpedWorld universe;
+XpedWorld& getUniverse() { return universe; };
 
 template <typename T>
-void broadcast(T&&, int, int, XpedWorld)
+void broadcast(T&&, int, int, XpedWorld&)
 {
     return;
 }

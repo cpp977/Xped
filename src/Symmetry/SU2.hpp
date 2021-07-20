@@ -16,6 +16,7 @@
 #include "Symmetry/functions.hpp"
 #include "Symmetry/kind_dummies.hpp"
 #include "Symmetry/qarray.hpp"
+#include "Util/Mpi.hpp"
 #include "Util/Random.hpp"
 
 namespace Sym {
@@ -117,7 +118,7 @@ struct SU2 : public SymBase<SU2<Kind, Scalar_>>
     static Scalar coeff_FS(const qType& q1) { return (q1[0] % 2 == 0) ? -1. : 1.; }
 
     template <typename PlainLib>
-    static typename PlainLib::template TType<Scalar_, 2> one_j_tensor(const qType& q1);
+    static typename PlainLib::template TType<Scalar_, 2> one_j_tensor(const qType& q1, util::mpi::XpedWorld& world = util::mpi::getUniverse());
 
     static Scalar coeff_rightOrtho(const qType& q1, const qType& q2) { return static_cast<Scalar>(q1[0]) / static_cast<Scalar>(q2[0]); }
 
@@ -129,7 +130,8 @@ struct SU2 : public SymBase<SU2<Kind, Scalar_>>
     }
 
     template <typename PlainLib>
-    static typename PlainLib::template TType<Scalar_, 3> CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t);
+    static typename PlainLib::template TType<Scalar_, 3>
+    CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t, util::mpi::XpedWorld& world = util::mpi::getUniverse());
 
     static Scalar coeff_6j(const qType& q1, const qType& q2, const qType& q3, const qType& q4, const qType& q5, const qType& q6);
 
@@ -169,12 +171,12 @@ std::vector<typename SU2<Kind, Scalar_>::qType> SU2<Kind, Scalar_>::basis_combin
 
 template <typename Kind, typename Scalar_>
 template <typename PlainLib>
-typename PlainLib::template TType<Scalar_, 2> SU2<Kind, Scalar_>::one_j_tensor(const qType& q1)
+typename PlainLib::template TType<Scalar_, 2> SU2<Kind, Scalar_>::one_j_tensor(const qType& q1, util::mpi::XpedWorld& world)
 {
     typedef typename PlainLib::Indextype IndexType;
-    auto tmp = CGC<PlainLib>(q1, q1, qvacuum(), 0);
+    auto tmp = CGC<PlainLib>(q1, q1, qvacuum(), 0, world);
     // typename TensorInterface<TensorLib>::template TType<Scalar_,2> out(degeneracy(q1), degeneracy(q1));
-    auto out = PlainLib::template construct<Scalar>(std::array<IndexType, 2>{degeneracy(q1), degeneracy(q1)});
+    auto out = PlainLib::template construct<Scalar>(std::array<IndexType, 2>{degeneracy(q1), degeneracy(q1)}, world);
     PlainLib::template setZero<Scalar, 2>(out);
 
     for(IndexType i = 0; i < degeneracy(q1); i++)
@@ -198,11 +200,12 @@ Scalar_ SU2<Kind, Scalar_>::coeff_3j(const qType& q1, const qType& q2, const qTy
 
 template <typename Kind, typename Scalar_>
 template <typename PlainLib>
-typename PlainLib::template TType<Scalar_, 3> SU2<Kind, Scalar_>::CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t)
+typename PlainLib::template TType<Scalar_, 3>
+SU2<Kind, Scalar_>::CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t, util::mpi::XpedWorld& world)
 {
     typedef typename PlainLib::Indextype IndexType;
     // typename TensorInterface<TensorLib>::template TType<Scalar_,3> out(degeneracy(q1),degeneracy(q2),degeneracy(q3));
-    auto out = PlainLib::template construct<Scalar>(std::array<IndexType, 3>{degeneracy(q1), degeneracy(q2), degeneracy(q3)});
+    auto out = PlainLib::template construct<Scalar>(std::array<IndexType, 3>{degeneracy(q1), degeneracy(q2), degeneracy(q3)}, world);
     for(int i_q1m = 0; i_q1m < degeneracy(q1); i_q1m++)
         for(int i_q2m = 0; i_q2m < degeneracy(q2); i_q2m++)
             for(int i_q3m = 0; i_q3m < degeneracy(q3); i_q3m++) {
@@ -213,7 +216,6 @@ typename PlainLib::template TType<Scalar_, 3> SU2<Kind, Scalar_>::CGC(const qTyp
                 std::array<IndexType, 3> index = {i_q1m, i_q2m, i_q3m};
                 PlainLib::template setVal<Scalar, 3>(out, index, value);
             }
-
     return out;
 }
 

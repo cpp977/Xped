@@ -35,12 +35,19 @@ XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100)
 #include "Symmetry/kind_dummies.hpp"
 
 #include "doctest/doctest.h"
+#ifdef XPED_USE_MPI
+#    include "doctest/extensions/doctest_mpi.h"
+#endif
 
 #include "tree_tests.hpp"
 
 TEST_SUITE_BEGIN("FusionTrees");
 
+#ifdef XPED_USE_MPI
+MPI_TEST_CASE("Testing the elementary swap.", 2)
+#else
 TEST_CASE("Testing the elementary swap.")
+#endif
 {
     SUBCASE("SU2")
     {
@@ -76,7 +83,11 @@ TEST_CASE("Testing the elementary swap.")
     }
 }
 
+#ifdef XPED_USE_MPI
+MPI_TEST_CASE("Testing the permutation.", 2)
+#else
 TEST_CASE("Testing the permutation.")
+#endif
 {
     SUBCASE("SU2")
     {
@@ -112,7 +123,11 @@ TEST_CASE("Testing the permutation.")
     }
 }
 
+#ifdef XPED_USE_MPI
+MPI_TEST_CASE("Testing the turn operation for FusionTree pairs.", 2)
+#else
 TEST_CASE("Testing the turn operation for FusionTree pairs.")
+#endif
 {
     SUBCASE("SU2")
     {
@@ -152,7 +167,11 @@ TEST_CASE("Testing the turn operation for FusionTree pairs.")
     }
 }
 
+#ifdef XPED_USE_MPI
+MPI_TEST_CASE("Testing the permutation for FusionTree pairs.", 2)
+#else
 TEST_CASE("Testing the permutation for FusionTree pairs.")
+#endif
 {
     SUBCASE("SU2")
     {

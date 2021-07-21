@@ -47,7 +47,6 @@ MPI_TEST_CASE("Testing combine() in Qbasis.", 2)
 TEST_CASE("Testing combine() in Qbasis.")
 #endif
 {
-
     SUBCASE("SU2")
     {
         typedef Sym::SU2<Sym::SpinSU2> Symmetry;

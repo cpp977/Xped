@@ -1136,7 +1136,7 @@ typename PlainLib_::template TType<Scalar_, Rank + CoRank> Xped<Scalar_, Rank, C
     // std::cout << "codomain" << std::endl;
     //    unitary_codomain.print();
     // unitary_codomain.for_each_value([](double d) { std::cout << d << std::endl; });
-    XPED_MPI_BARRIER(world_->comm);
+    // XPED_MPI_BARRIER(world_->comm);
     std::array<IndexType, Rank + CoRank> dims_result;
     for(size_t i = 0; i < Rank; i++) { dims_result[i] = sorted_uncoupled_domain[i].fullDim(); }
     for(size_t i = 0; i < CoRank; i++) { dims_result[i + Rank] = sorted_uncoupled_codomain[i].fullDim(); }

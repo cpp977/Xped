@@ -274,7 +274,7 @@ struct TensorInterface<CyclopsTensorLib>
         // XPED_MPI_BARRIER(T1.wrld->comm)
         // spdlog::get("info")->info("T2");
         // T2.print(stdout, 1.e-15);
-        XPED_MPI_BARRIER(T2.wrld->comm)
+        // XPED_MPI_BARRIER(T2.wrld->comm)
         char idx_T1[Rank1] = {idx(Is1)...};
         char idx_T2[Rank2] = {idx(Is2)...};
         char idx_res[sizeof...(Ist)] = {idx(Ist)...};

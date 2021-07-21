@@ -9,15 +9,16 @@ void contract_L(XPED_CONST Xped<Scalar, 1, 1, Symmetry, PlainLib>& Bold,
                 XPED_CONST Xped<Scalar, 2, 1, Symmetry, PlainLib>& Ket,
                 Xped<Scalar, 1, 1, Symmetry, PlainLib>& Bnew)
 {
+    spdlog::get("info")->info("Entering contract_L().");
     Bnew.clear();
-    Bnew = Xped<Scalar, 1, 1, Symmetry, PlainLib>({{Bra.uncoupledCodomain()[0]}}, {{Ket.uncoupledCodomain()[0]}});
+    Bnew = Xped<Scalar, 1, 1, Symmetry, PlainLib>({{Bra.uncoupledCodomain()[0]}}, {{Ket.uncoupledCodomain()[0]}}, *Bold.world());
 
     for(std::size_t i = 0; i < Bra.sector().size(); i++) {
         std::size_t dimQ = PlainLib::template cols<Scalar>(Bra.block_[i]);
         typename Symmetry::qType Q = Bra.sector_[i];
         auto itKet = Ket.dict_.find(Q);
         if(itKet == Ket.dict_.end()) { continue; }
-        auto Mtmp = PlainLib::template construct_with_zero<Scalar>(dimQ, dimQ, *Bold.world_);
+        auto Mtmp = PlainLib::template construct_with_zero<Scalar>(dimQ, dimQ, *Bold.world());
         // typename Xped<Scalar, 1, 1, Symmetry, MatrixLib, TensorLib>::MatrixType Mtmp(dimQ, dimQ);
         // Mtmp.setZero();
         for(const auto& domainTree : Bra.domainTrees(Q)) {
@@ -49,6 +50,7 @@ void contract_L(XPED_CONST Xped<Scalar, 1, 1, Symmetry, PlainLib>& Bold,
             Bnew.block_[it->second] = PlainLib::template add<Scalar>(Bnew.block_[it->second], Mtmp);
         }
     }
+    spdlog::get("info")->info("Leaving contract_L().");
 }
 
 template <typename Scalar, typename Symmetry, typename PlainLib>
@@ -57,8 +59,9 @@ void contract_R(XPED_CONST Xped<Scalar, 1, 1, Symmetry, PlainLib>& Bold,
                 XPED_CONST Xped<Scalar, 2, 1, Symmetry, PlainLib>& Ket,
                 Xped<Scalar, 1, 1, Symmetry, PlainLib>& Bnew)
 {
+    spdlog::get("info")->info("Entering contract_R().");
     Bnew.clear();
-    Bnew = Xped<Scalar, 1, 1, Symmetry, PlainLib>({{Ket.uncoupledDomain()[0]}}, {{Bra.uncoupledDomain()[0]}});
+    Bnew = Xped<Scalar, 1, 1, Symmetry, PlainLib>({{Ket.uncoupledDomain()[0]}}, {{Bra.uncoupledDomain()[0]}}, *Bold.world());
 
     for(std::size_t i = 0; i < Ket.sector().size(); i++) {
         std::size_t dimQ = PlainLib::template cols<Scalar>(Ket.block_[i]);
@@ -75,7 +78,7 @@ void contract_R(XPED_CONST Xped<Scalar, 1, 1, Symmetry, PlainLib>& Bold,
             trivial.dim = dimQ;
 
             auto Qin = domainTree.q_uncoupled[0];
-            auto Mtmp = PlainLib::template construct_with_zero<Scalar>(domainTree.dims[0], domainTree.dims[0], *Bold.world_);
+            auto Mtmp = PlainLib::template construct_with_zero<Scalar>(domainTree.dims[0], domainTree.dims[0], *Bold.world());
             // typename Xped<Scalar, 1, 1, Symmetry, MatrixLib, TensorLib>::MatrixType Mtmp(domainTree.dims[0], domainTree.dims[0]);
             // Mtmp.setZero();
 
@@ -108,6 +111,7 @@ void contract_R(XPED_CONST Xped<Scalar, 1, 1, Symmetry, PlainLib>& Bold,
             }
         }
     }
+    spdlog::get("info")->info("Leaving contract_R().");
 }
 
 #endif

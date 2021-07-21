@@ -110,7 +110,11 @@ if(XPED_USE_MPI)
   target_link_libraries(basis_test MPI::MPI_CXX)
 endif()
 # doctest_discover_tests(basis_test TEST_PREFIX basis__ ADD_LABELS "1")
-add_test(NAME basis COMMAND basis_test)
+if (XPED_USE_MPI)
+  add_test(NAME basis COMMAND ${MPIEXEC_EXECUTABLE} --mca opal_warn_on_missing_libcuda 0 ${MPIEXEC_NUMPROC_FLAG} 2 ${MPIEXEC_PREFLAGS} ./basis_test ${MPIEXEC_POSTFLAGS})
+else ()
+  add_test(NAME basis COMMAND basis_test)
+endif()
 #########################
 #        tree_test      #
 #########################
@@ -169,7 +173,11 @@ if(XPED_USE_MPI)
   target_link_libraries(tree_test MPI::MPI_CXX)
 endif()
 # doctest_discover_tests(tree_test TEST_PREFIX tree__ ADD_LABELS "1")
-add_test(NAME tree COMMAND tree_test)
+if(XPED_USE_MPI)
+  add_test(NAME tree COMMAND ${MPIEXEC_EXECUTABLE} --mca opal_warn_on_missing_libcuda 0 ${MPIEXEC_NUMPROC_FLAG} 2 ${MPIEXEC_PREFLAGS} ./tree_test ${MPIEXEC_POSTFLAGS})
+else()
+  add_test(NAME tree COMMAND tree_test)
+endif()
 
 #########################
 #       tensor_test     #
@@ -229,7 +237,12 @@ if(XPED_USE_MPI)
   target_link_libraries(tensor_test MPI::MPI_CXX)
 endif()
 # doctest_discover_tests(tensor_test TEST_PREFIX tensor__ ADD_LABELS "1")
-add_test(NAME tensor COMMAND tensor_test)
+if(XPED_USE_MPI)
+  add_test(NAME tensor COMMAND ${MPIEXEC_EXECUTABLE} --mca opal_warn_on_missing_libcuda 0 ${MPIEXEC_NUMPROC_FLAG} 2 ${MPIEXEC_PREFLAGS} ./tensor_test ${MPIEXEC_POSTFLAGS})
+else()
+  add_test(NAME tensor COMMAND tensor_test)
+endif()
+
 #########################
 #        mps_test       #
 #########################
@@ -288,4 +301,8 @@ if(XPED_USE_MPI)
   target_link_libraries(mps_test MPI::MPI_CXX)
 endif()
 # doctest_discover_tests(mps_test TEST_PREFIX mps__ ADD_LABELS "1")
-add_test(NAME MPS COMMAND mps_test)
+if(XPED_USE_MPI)
+  add_test(NAME MPS COMMAND ${MPIEXEC_EXECUTABLE} --mca opal_warn_on_missing_libcuda 0 ${MPIEXEC_NUMPROC_FLAG} 2 ${MPIEXEC_PREFLAGS} ./mps_test ${MPIEXEC_POSTFLAGS})
+else()
+  add_test(NAME MPS COMMAND mps_test)
+endif()

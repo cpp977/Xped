@@ -43,8 +43,8 @@ public:
     template <typename OtherDerived>
     auto operator*(OtherDerived&& other) XPED_CONST;
 
-    template <int shift, std::size_t...>
-    auto permute() const;
+    // template <int shift, std::size_t...>
+    // auto permute() const;
 
     // auto view(const FusionTree<Rank, Symmetry>& f1, const FusionTree<CoRank, Symmetry>& f2) const;
     // auto view(const FusionTree<Rank, Symmetry>& f1, const FusionTree<CoRank, Symmetry>& f2, std::size_t block_number) const;
@@ -68,11 +68,11 @@ protected:
     const Derived& derived() const { return *static_cast<const Derived*>(this); }
     Derived& derived() { return *static_cast<Derived*>(this); }
 
-    template <std::size_t... p_domain, std::size_t... p_codomain>
-    auto permute_impl(seq::iseq<std::size_t, p_domain...> pd, seq::iseq<std::size_t, p_codomain...> pc) const;
+    // template <std::size_t... p_domain, std::size_t... p_codomain>
+    // auto permute_impl(seq::iseq<std::size_t, p_domain...> pd, seq::iseq<std::size_t, p_codomain...> pc) const;
 
-    template <int shift, std::size_t... ps>
-    auto permute_impl(seq::iseq<std::size_t, ps...> per) const;
+    // template <int shift, std::size_t... ps>
+    // auto permute_impl(seq::iseq<std::size_t, ps...> per) const;
 };
 
 template <typename Derived>
@@ -224,8 +224,11 @@ auto XpedBase<Derived>::operator*(OtherDerived&& other) XPED_CONST
     static_assert(CoRank == XpedTraits<OtherDerived_>::Rank);
     auto derived_ref = derived();
     auto other_derived_ref = other.derived();
+    assert(derived_ref.world() == other_derived_ref.world());
     assert(derived_ref.coupledCodomain() == other_derived_ref.coupledDomain());
+
     Xped<Scalar, Rank, XpedTraits<OtherDerived_>::CoRank, Symmetry, PlainLib> Tout;
+    Tout.world_ = derived_ref.world();
     Tout.domain = derived_ref.coupledDomain();
     Tout.codomain = other_derived_ref.coupledCodomain();
     Tout.uncoupled_domain = derived_ref.uncoupledDomain();

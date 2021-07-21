@@ -114,6 +114,8 @@ public:
 
     const std::unordered_map<qType, std::size_t> dict() const { return dict_; }
 
+    const std::shared_ptr<util::mpi::XpedWorld> world() const { return world_; }
+
     const std::array<Qbasis<Symmetry, 1>, Rank> uncoupledDomain() const { return uncoupled_domain; }
     const std::array<Qbasis<Symmetry, 1>, CoRank> uncoupledCodomain() const { return uncoupled_codomain; }
 
@@ -247,6 +249,7 @@ Xped<Scalar_, Rank, CoRank, Symmetry, PlainLib_>::Xped(const XpedBase<OtherDeriv
     block_.resize(sector_.size());
     for(std::size_t i = 0; i < sector_.size(); i++) { block_[i] = other.derived().block(i); }
     dict_ = other.derived().dict();
+    world_ = other.derived().world();
     uncoupled_domain = other.derived().uncoupledDomain();
     uncoupled_codomain = other.derived().uncoupledCodomain();
     domain = other.derived().coupledDomain();
@@ -1154,8 +1157,8 @@ void Xped<Scalar_, Rank, CoRank, Symmetry, PlainLib_>::print(std::ostream& o, bo
     for(size_t i = 0; i < sector_.size(); i++) {
         o << "Sector with QN=" << Sym::format<Symmetry>(sector_[i]) << endl;
         // if(PRINT_MATRICES) {
-        //     o << std::fixed << block_[i] << endl;
-        //     // block_[i].print(stdout);
+        // o << std::fixed << block_[i] << endl;
+        block_[i].print_matrix();
         //     // Plain::template print<Scalar>(block_[i]);
         // }
     }

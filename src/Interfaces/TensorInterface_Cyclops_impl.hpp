@@ -147,33 +147,17 @@ struct TensorInterface<CyclopsTensorLib>
     template <typename Scalar, int Rank>
     static Scalar getVal(const TType<Scalar, Rank>& T, const std::array<Indextype, Rank>& index)
     {
-        if constexpr(Rank == 0) {
-            Scalar out = 0.;
-
-            int64_t nvals;
-            Scalar* data;
-            T.get_all_data(&nvals, &data);
-            out = data[0];
-            delete[] data;
-            return out;
-        }
         int64_t global_idx = 0;
         for(std::size_t i = 0; i < Rank; i++) {
             int64_t factor = 1;
             for(std::size_t j = 0; j < i; j++) { factor *= T.lens[j]; }
             global_idx += index[i] * factor;
         }
-
         Scalar out = 0.;
-
         int64_t nvals;
-        int64_t* indices;
         Scalar* data;
-        T.get_local_data(&nvals, &indices, &data);
-        for(int i = 0; i < nvals; i++) {
-            if(indices[i] == global_idx) { out = data[i]; }
-        }
-        free(indices);
+        T.get_all_data(&nvals, &data);
+        out = data[global_idx];
         delete[] data;
         return out;
     }

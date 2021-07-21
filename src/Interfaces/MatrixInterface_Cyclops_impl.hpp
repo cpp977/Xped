@@ -109,17 +109,11 @@ struct MatrixInterface<CyclopsMatrixLib>
     static Scalar getVal(const MType<Scalar>& M, const MIndextype& row, const MIndextype& col)
     {
         int64_t global_idx = 1 * row + M.nrow * col;
-
         Scalar out = 0.;
-
         int64_t nvals;
-        int64_t* indices;
         Scalar* data;
-        M.get_local_data(&nvals, &indices, &data);
-        for(int i = 0; i < nvals; i++) {
-            if(indices[i] == global_idx) { out = data[i]; }
-        }
-        free(indices);
+        M.get_all_data(&nvals, &data);
+        out = data[global_idx];
         delete[] data;
         return out;
     }
@@ -128,9 +122,9 @@ struct MatrixInterface<CyclopsMatrixLib>
     static MType<Scalar> kronecker_prod(MT1&& M1, MT2&& M2)
     {
         assert(*M1.wrld == *M2.wrld and "Tensors needs to live on the same world for kroneckerProd().");
-        std::array<int64_t, 4> dims = {M1.nrow, M2.nrow, M1.ncol, M2.ncol};
+        std::array<int64_t, 4> dims = {M2.nrow, M1.nrow, M2.ncol, M1.ncol};
         CTF::Tensor<Scalar> tmp(4, dims.data(), *M1.wrld);
-        tmp["ikjl"] = M1["ij"] * M2["kl"];
+        tmp["kilj"] = M1["ij"] * M2["kl"];
         MType<Scalar> res(M1.nrow * M2.nrow, M1.ncol * M2.ncol, *M1.wrld);
         int64_t nvals;
         int64_t* indices;

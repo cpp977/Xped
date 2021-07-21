@@ -4,6 +4,7 @@
 #include <array/array.h>
 #include <array/ein_reduce.h>
 
+#include "Util/Mpi.hpp"
 #include "Util/Random.hpp"
 
 template <typename Index, Index oldVal, Index newVal, typename S>
@@ -40,7 +41,7 @@ struct TensorInterface<ArrayTensorLib>
 
     // constructors
     template <typename Scalar, std::size_t Rank>
-    static TType<Scalar, Rank> construct(const std::array<Indextype, Rank>& dims)
+    static TType<Scalar, Rank> construct(const std::array<Indextype, Rank>& dims, util::mpi::XpedWorld& world = util::mpi::getUniverse())
     {
         return TType<Scalar, Rank>(as_tuple(dims));
     }

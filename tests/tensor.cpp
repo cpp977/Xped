@@ -56,12 +56,12 @@ XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100)
 
 #include "tensor_tests.hpp"
 
-constexpr std::size_t SU2_TENSOR_SIZE = 2;
-constexpr std::size_t U1_TENSOR_SIZE = 3;
-constexpr std::size_t U0_TENSOR_SIZE = 3;
+constexpr std::size_t SU2_TENSOR_SIZE = 5;
+constexpr std::size_t U1_TENSOR_SIZE = 5;
+constexpr std::size_t U0_TENSOR_SIZE = 5;
 
 #ifdef XPED_USE_MPI
-constexpr int MPI_NUM_PROC = 1;
+constexpr int MPI_NUM_PROC = 2;
 #endif
 
 TEST_SUITE_BEGIN("Tensor");
@@ -221,9 +221,17 @@ TEST_CASE("Testing the general permutation of legs.")
     }
 }
 
-#ifndef XPED_USE_MPI
+#ifdef XPED_USE_MPI
+MPI_TEST_CASE("Testing operations with SU(2)-spin matrices.", MPI_NUM_PROC)
+#else
 TEST_CASE("Testing operations with SU(2)-spin matrices.")
+#endif
 {
+#ifdef XPED_USE_MPI
+    util::mpi::XpedWorld test_world(test_comm);
+#else
+    util::mpi::XpedWorld test_world;
+#endif
     typedef Sym::SU2<Sym::SpinSU2> Symmetry;
 
     // loop over different S
@@ -266,80 +274,104 @@ TEST_CASE("Testing operations with SU(2)-spin matrices.")
         pauli_vec1[2] *= std::sqrt(0.5);
 
         // set s to the reduced Spin operator
-        Xped<double, 2, 1, Symmetry> s1({{B1, C}}, {{B1}});
+        Xped<double, 2, 1, Symmetry> s1({{B1, C}}, {{B1}}, test_world);
         s1.setConstant(std::sqrt(S1 * (S1 + 1.)));
 
         // transform to plain tensor and check against pauli_vec1
         auto tplain = s1.adjoint().eval().plainTensor();
-        for(Eigen::Index k = 0; k < PlainInterface<M_MATRIXLIB, M_TENSORLIB, M_VECTORLIB>::dimensions<double, 3>(tplain)[2]; k++) {
+        for(Eigen::Index k = 0;
+            k < PlainInterface<XPED_DEFAULT_MATRIXLIB, XPED_DEFAULT_TENSORLIB, XPED_DEFAULT_VECTORLIB>::dimensions<double, 3>(tplain)[2];
+            k++) {
             Eigen::Matrix<double, -1, -1> pauli(twoS1 + 1, twoS1 + 1);
-            for(Eigen::Index j = 0; j < PlainInterface<M_MATRIXLIB, M_TENSORLIB, M_VECTORLIB>::dimensions<double, 3>(tplain)[1]; j++)
-                for(Eigen::Index i = 0; i < PlainInterface<M_MATRIXLIB, M_TENSORLIB, M_VECTORLIB>::dimensions<double, 3>(tplain)[0]; i++) {
-                    pauli(i, j) = PlainInterface<M_MATRIXLIB, M_TENSORLIB, M_VECTORLIB>::getVal<double, 3>(
+            for(Eigen::Index j = 0;
+                j < PlainInterface<XPED_DEFAULT_MATRIXLIB, XPED_DEFAULT_TENSORLIB, XPED_DEFAULT_VECTORLIB>::dimensions<double, 3>(tplain)[1];
+                j++)
+                for(Eigen::Index i = 0;
+                    i < PlainInterface<XPED_DEFAULT_MATRIXLIB, XPED_DEFAULT_TENSORLIB, XPED_DEFAULT_VECTORLIB>::dimensions<double, 3>(tplain)[0];
+                    i++) {
+                    pauli(i, j) = PlainInterface<XPED_DEFAULT_MATRIXLIB, XPED_DEFAULT_TENSORLIB, XPED_DEFAULT_VECTORLIB>::getVal<double, 3>(
                         tplain,
-                        std::array<PlainInterface<M_MATRIXLIB, M_TENSORLIB, M_VECTORLIB>::Indextype, 3>{
-                            static_cast<PlainInterface<M_MATRIXLIB, M_TENSORLIB, M_VECTORLIB>::Indextype>(i),
-                            static_cast<PlainInterface<M_MATRIXLIB, M_TENSORLIB, M_VECTORLIB>::Indextype>(j),
-                            static_cast<PlainInterface<M_MATRIXLIB, M_TENSORLIB, M_VECTORLIB>::Indextype>(k)});
+                        std::array<PlainInterface<XPED_DEFAULT_MATRIXLIB, XPED_DEFAULT_TENSORLIB, XPED_DEFAULT_VECTORLIB>::Indextype, 3>{
+                            static_cast<PlainInterface<XPED_DEFAULT_MATRIXLIB, XPED_DEFAULT_TENSORLIB, XPED_DEFAULT_VECTORLIB>::Indextype>(i),
+                            static_cast<PlainInterface<XPED_DEFAULT_MATRIXLIB, XPED_DEFAULT_TENSORLIB, XPED_DEFAULT_VECTORLIB>::Indextype>(j),
+                            static_cast<PlainInterface<XPED_DEFAULT_MATRIXLIB, XPED_DEFAULT_TENSORLIB, XPED_DEFAULT_VECTORLIB>::Indextype>(k)});
                 }
             CHECK((pauli - pauli_vec1[k]).norm() == doctest::Approx(0.));
         }
 
         // build the product to QN K=0
-        Xped<double, 2, 1, Symmetry> couple1({{C, one}}, {{C}});
+        Xped<double, 2, 1, Symmetry> couple1({{C, one}}, {{C}}, test_world);
         couple1.setConstant(1.);
         auto prod1 = (s1.adjoint().eval().permute<-1, 0, 1, 2>() * couple1.permute<+1, 0, 2, 1>()).permute<0, 0, 3, 1, 2>() * s1;
         // transform to plain tensor and check against S^2
         auto check1 = prod1.plainTensor();
-        for(Eigen::Index j = 0; j < PlainInterface<M_MATRIXLIB, M_TENSORLIB, M_VECTORLIB>::dimensions<double, 3>(check1)[1]; j++) {
+        for(Eigen::Index j = 0;
+            j < PlainInterface<XPED_DEFAULT_MATRIXLIB, XPED_DEFAULT_TENSORLIB, XPED_DEFAULT_VECTORLIB>::dimensions<double, 3>(check1)[1];
+            j++) {
             Eigen::Matrix<double, -1, -1> diag(twoS1 + 1, twoS1 + 1);
-            for(Eigen::Index k = 0; k < PlainInterface<M_MATRIXLIB, M_TENSORLIB, M_VECTORLIB>::dimensions<double, 3>(check1)[2]; k++)
-                for(Eigen::Index i = 0; i < PlainInterface<M_MATRIXLIB, M_TENSORLIB, M_VECTORLIB>::dimensions<double, 3>(check1)[0]; i++) {
-                    diag(i, k) = PlainInterface<M_MATRIXLIB, M_TENSORLIB, M_VECTORLIB>::getVal<double, 3>(
+            for(Eigen::Index k = 0;
+                k < PlainInterface<XPED_DEFAULT_MATRIXLIB, XPED_DEFAULT_TENSORLIB, XPED_DEFAULT_VECTORLIB>::dimensions<double, 3>(check1)[2];
+                k++)
+                for(Eigen::Index i = 0;
+                    i < PlainInterface<XPED_DEFAULT_MATRIXLIB, XPED_DEFAULT_TENSORLIB, XPED_DEFAULT_VECTORLIB>::dimensions<double, 3>(check1)[0];
+                    i++) {
+                    diag(i, k) = PlainInterface<XPED_DEFAULT_MATRIXLIB, XPED_DEFAULT_TENSORLIB, XPED_DEFAULT_VECTORLIB>::getVal<double, 3>(
                         check1,
-                        std::array<PlainInterface<M_MATRIXLIB, M_TENSORLIB, M_VECTORLIB>::Indextype, 3>{
-                            static_cast<PlainInterface<M_MATRIXLIB, M_TENSORLIB, M_VECTORLIB>::Indextype>(i),
-                            static_cast<PlainInterface<M_MATRIXLIB, M_TENSORLIB, M_VECTORLIB>::Indextype>(j),
-                            static_cast<PlainInterface<M_MATRIXLIB, M_TENSORLIB, M_VECTORLIB>::Indextype>(k)});
+                        std::array<PlainInterface<XPED_DEFAULT_MATRIXLIB, XPED_DEFAULT_TENSORLIB, XPED_DEFAULT_VECTORLIB>::Indextype, 3>{
+                            static_cast<PlainInterface<XPED_DEFAULT_MATRIXLIB, XPED_DEFAULT_TENSORLIB, XPED_DEFAULT_VECTORLIB>::Indextype>(i),
+                            static_cast<PlainInterface<XPED_DEFAULT_MATRIXLIB, XPED_DEFAULT_TENSORLIB, XPED_DEFAULT_VECTORLIB>::Indextype>(j),
+                            static_cast<PlainInterface<XPED_DEFAULT_MATRIXLIB, XPED_DEFAULT_TENSORLIB, XPED_DEFAULT_VECTORLIB>::Indextype>(k)});
                 }
             CHECK((diag - S1 * (S1 + 1.) * Eigen::Matrix<double, -1, -1>::Identity(twoS1 + 1, twoS1 + 1)).norm() == doctest::Approx(0.));
         }
 
         // build the product to QN K=1
-        Xped<double, 2, 1, Symmetry> couple3({{C, three}}, {{C}});
+        Xped<double, 2, 1, Symmetry> couple3({{C, three}}, {{C}}, test_world);
         couple3.setConstant(1.);
         auto prod3 = (s1.adjoint().eval().permute<-1, 0, 1, 2>() * couple3.permute<+1, 0, 2, 1>()).permute<0, 0, 3, 1, 2>() * s1;
         // transform to plain tensor and check against SxS
         auto check3 = prod3.adjoint().eval().plainTensor();
-        for(Eigen::Index k = 0; k < PlainInterface<M_MATRIXLIB, M_TENSORLIB, M_VECTORLIB>::dimensions<double, 3>(check3)[2]; k++) {
+        for(Eigen::Index k = 0;
+            k < PlainInterface<XPED_DEFAULT_MATRIXLIB, XPED_DEFAULT_TENSORLIB, XPED_DEFAULT_VECTORLIB>::dimensions<double, 3>(check3)[2];
+            k++) {
             Eigen::Matrix<double, -1, -1> mat(twoS1 + 1, twoS1 + 1);
-            for(Eigen::Index j = 0; j < PlainInterface<M_MATRIXLIB, M_TENSORLIB, M_VECTORLIB>::dimensions<double, 3>(check3)[1]; j++)
-                for(Eigen::Index i = 0; i < PlainInterface<M_MATRIXLIB, M_TENSORLIB, M_VECTORLIB>::dimensions<double, 3>(check3)[0]; i++) {
-                    mat(i, j) = PlainInterface<M_MATRIXLIB, M_TENSORLIB, M_VECTORLIB>::getVal<double, 3>(
+            for(Eigen::Index j = 0;
+                j < PlainInterface<XPED_DEFAULT_MATRIXLIB, XPED_DEFAULT_TENSORLIB, XPED_DEFAULT_VECTORLIB>::dimensions<double, 3>(check3)[1];
+                j++)
+                for(Eigen::Index i = 0;
+                    i < PlainInterface<XPED_DEFAULT_MATRIXLIB, XPED_DEFAULT_TENSORLIB, XPED_DEFAULT_VECTORLIB>::dimensions<double, 3>(check3)[0];
+                    i++) {
+                    mat(i, j) = PlainInterface<XPED_DEFAULT_MATRIXLIB, XPED_DEFAULT_TENSORLIB, XPED_DEFAULT_VECTORLIB>::getVal<double, 3>(
                         check3,
-                        std::array<PlainInterface<M_MATRIXLIB, M_TENSORLIB, M_VECTORLIB>::Indextype, 3>{
-                            static_cast<PlainInterface<M_MATRIXLIB, M_TENSORLIB, M_VECTORLIB>::Indextype>(i),
-                            static_cast<PlainInterface<M_MATRIXLIB, M_TENSORLIB, M_VECTORLIB>::Indextype>(j),
-                            static_cast<PlainInterface<M_MATRIXLIB, M_TENSORLIB, M_VECTORLIB>::Indextype>(k)});
+                        std::array<PlainInterface<XPED_DEFAULT_MATRIXLIB, XPED_DEFAULT_TENSORLIB, XPED_DEFAULT_VECTORLIB>::Indextype, 3>{
+                            static_cast<PlainInterface<XPED_DEFAULT_MATRIXLIB, XPED_DEFAULT_TENSORLIB, XPED_DEFAULT_VECTORLIB>::Indextype>(i),
+                            static_cast<PlainInterface<XPED_DEFAULT_MATRIXLIB, XPED_DEFAULT_TENSORLIB, XPED_DEFAULT_VECTORLIB>::Indextype>(j),
+                            static_cast<PlainInterface<XPED_DEFAULT_MATRIXLIB, XPED_DEFAULT_TENSORLIB, XPED_DEFAULT_VECTORLIB>::Indextype>(k)});
                 }
             CHECK((mat - std::sqrt(0.5) * pauli_vec1[k]).norm() == doctest::Approx(0.));
         }
         // build the product to QN K=2
-        Xped<double, 2, 1, Symmetry> couple5({{C, five}}, {{C}});
+        Xped<double, 2, 1, Symmetry> couple5({{C, five}}, {{C}}, test_world);
         couple5.setConstant(1.);
         auto prod5 = (s1.adjoint().eval().permute<-1, 0, 1, 2>() * couple5.permute<+1, 0, 2, 1>()).permute<0, 0, 3, 1, 2>() * s1;
         // transform to plain tensor and check against SxS
         auto check5 = prod5.adjoint().eval().plainTensor();
-        for(Eigen::Index k = 0; k < PlainInterface<M_MATRIXLIB, M_TENSORLIB, M_VECTORLIB>::dimensions<double, 3>(check5)[2]; k++) {
+        for(Eigen::Index k = 0;
+            k < PlainInterface<XPED_DEFAULT_MATRIXLIB, XPED_DEFAULT_TENSORLIB, XPED_DEFAULT_VECTORLIB>::dimensions<double, 3>(check5)[2];
+            k++) {
             Eigen::Matrix<double, -1, -1> mat(twoS1 + 1, twoS1 + 1);
-            for(Eigen::Index j = 0; j < PlainInterface<M_MATRIXLIB, M_TENSORLIB, M_VECTORLIB>::dimensions<double, 3>(check5)[1]; j++)
-                for(Eigen::Index i = 0; i < PlainInterface<M_MATRIXLIB, M_TENSORLIB, M_VECTORLIB>::dimensions<double, 3>(check5)[0]; i++) {
-                    mat(i, j) = PlainInterface<M_MATRIXLIB, M_TENSORLIB, M_VECTORLIB>::getVal<double, 3>(
+            for(Eigen::Index j = 0;
+                j < PlainInterface<XPED_DEFAULT_MATRIXLIB, XPED_DEFAULT_TENSORLIB, XPED_DEFAULT_VECTORLIB>::dimensions<double, 3>(check5)[1];
+                j++)
+                for(Eigen::Index i = 0;
+                    i < PlainInterface<XPED_DEFAULT_MATRIXLIB, XPED_DEFAULT_TENSORLIB, XPED_DEFAULT_VECTORLIB>::dimensions<double, 3>(check5)[0];
+                    i++) {
+                    mat(i, j) = PlainInterface<XPED_DEFAULT_MATRIXLIB, XPED_DEFAULT_TENSORLIB, XPED_DEFAULT_VECTORLIB>::getVal<double, 3>(
                         check5,
-                        std::array<PlainInterface<M_MATRIXLIB, M_TENSORLIB, M_VECTORLIB>::Indextype, 3>{
-                            static_cast<PlainInterface<M_MATRIXLIB, M_TENSORLIB, M_VECTORLIB>::Indextype>(i),
-                            static_cast<PlainInterface<M_MATRIXLIB, M_TENSORLIB, M_VECTORLIB>::Indextype>(j),
-                            static_cast<PlainInterface<M_MATRIXLIB, M_TENSORLIB, M_VECTORLIB>::Indextype>(k)});
+                        std::array<PlainInterface<XPED_DEFAULT_MATRIXLIB, XPED_DEFAULT_TENSORLIB, XPED_DEFAULT_VECTORLIB>::Indextype, 3>{
+                            static_cast<PlainInterface<XPED_DEFAULT_MATRIXLIB, XPED_DEFAULT_TENSORLIB, XPED_DEFAULT_VECTORLIB>::Indextype>(i),
+                            static_cast<PlainInterface<XPED_DEFAULT_MATRIXLIB, XPED_DEFAULT_TENSORLIB, XPED_DEFAULT_VECTORLIB>::Indextype>(j),
+                            static_cast<PlainInterface<XPED_DEFAULT_MATRIXLIB, XPED_DEFAULT_TENSORLIB, XPED_DEFAULT_VECTORLIB>::Indextype>(k)});
                 }
             Eigen::MatrixXd pauli(twoS1 + 1, twoS1 + 1);
             pauli.setZero();
@@ -358,7 +390,7 @@ TEST_CASE("Testing operations with SU(2)-spin matrices.")
             B2.push_back({twoS2 + 1}, 1);
             double S2 = 0.5 * twoS2;
 
-            Xped<double, 2, 1, Symmetry> s2({{B2, C}}, {{B2}});
+            Xped<double, 2, 1, Symmetry> s2({{B2, C}}, {{B2}}, test_world);
             s2.setConstant(std::sqrt(S2 * (S2 + 1.)));
 
             // build the outer product to QN K=0 between s1 and s2
@@ -366,15 +398,14 @@ TEST_CASE("Testing operations with SU(2)-spin matrices.")
                                s2.permute<+1, 1, 2, 0>())
                                   .permute<0, 0, 4, 2, 1, 3>();
             for(const auto& q : outerprod1.sector()) {
-                CHECK(PlainInterface<M_MATRIXLIB, M_TENSORLIB, M_VECTORLIB>::rows(outerprod1(q)) *
-                          PlainInterface<M_MATRIXLIB, M_TENSORLIB, M_VECTORLIB>::cols(outerprod1(q)) ==
+                CHECK(PlainInterface<XPED_DEFAULT_MATRIXLIB, XPED_DEFAULT_TENSORLIB, XPED_DEFAULT_VECTORLIB>::rows(outerprod1(q)) *
+                          PlainInterface<XPED_DEFAULT_MATRIXLIB, XPED_DEFAULT_TENSORLIB, XPED_DEFAULT_VECTORLIB>::cols(outerprod1(q)) ==
                       1);
                 double Stot = 0.5 * (q[0] - 1.);
-                CHECK(PlainInterface<M_MATRIXLIB, M_TENSORLIB, M_VECTORLIB>::getVal<double>(outerprod1(q), 0, 0) ==
+                CHECK(PlainInterface<XPED_DEFAULT_MATRIXLIB, XPED_DEFAULT_TENSORLIB, XPED_DEFAULT_VECTORLIB>::getVal<double>(outerprod1(q), 0, 0) ==
                       doctest::Approx(0.5 * (Stot * (Stot + 1) - S1 * (S1 + 1.) - S2 * (S2 + 1.))));
             }
         }
     }
 }
-#endif
 TEST_SUITE_END();

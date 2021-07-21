@@ -8,7 +8,6 @@ void perform_tensor_permute(const std::size_t& size, util::mpi::XpedWorld& world
     if(world.rank == 0) {
         B.setRandom(size);
         C.setRandom(size);
-        std::cout << B << std::endl << C << std::endl;
     }
 
     XPED_MPI_BARRIER(world.comm)
@@ -17,7 +16,6 @@ void perform_tensor_permute(const std::size_t& size, util::mpi::XpedWorld& world
 
     std::array<Eigen::Index, 4> p = {per...};
     spdlog::get("info")->critical("Permutation: {},{},{},{}. Shift={}", p[0], p[1], p[2], p[3], shift);
-    // std::cout << "permutation: "; for (const auto& elem:p) {std::cout << elem << " ";} std::cout << ", shift=" << shift << std::endl;
 
     Xped<double, 2, 2, Symmetry> t({{B, C}}, {{B, C}}, world);
     t.setRandom();
@@ -35,8 +33,6 @@ void perform_tensor_permute(const std::size_t& size, util::mpi::XpedWorld& world
 #elif defined(XPED_USE_CYCLOPS_TENSOR_LIB)
     auto dims = XPED_DEFAULT_PLAININTERFACE::dimensions<double, 4>(tplainshuffle);
     auto check = XPED_DEFAULT_PLAININTERFACE::construct<double>(dims, world);
-    tplainshuffle.print();
-    tplainp.print();
     check["ijkl"] = tplainshuffle["ijkl"] - tplainp["ijkl"];
 #else
     Eigen::Tensor<double, 4> check = tplainshuffle - tplainp;
@@ -45,7 +41,7 @@ void perform_tensor_permute(const std::size_t& size, util::mpi::XpedWorld& world
     auto zero_ = XPED_DEFAULT_PLAININTERFACE::contract<double, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3>(check, check);
     XPED_MPI_BARRIER(world.comm)
     double zero = XPED_DEFAULT_PLAININTERFACE::getVal<double, 0>(zero_, {{}});
-    spdlog::get("info")->critical("zero={}.", zero);
+    spdlog::get("info")->info("zero={}.", zero);
     CHECK(zero == doctest::Approx(0.));
 }
 
@@ -53,29 +49,29 @@ template <typename Symmetry, int shift>
 void test_tensor_permute(const std::size_t& size, util::mpi::XpedWorld& world = util::mpi::getUniverse())
 {
     perform_tensor_permute<Symmetry, shift, 0, 1, 2, 3>(size, world);
-    // perform_tensor_permute<Symmetry, shift, 0, 1, 3, 2>(size, world);
-    // perform_tensor_permute<Symmetry, shift, 0, 3, 1, 2>(size, world);
-    // perform_tensor_permute<Symmetry, shift, 0, 2, 1, 3>(size, world);
-    // perform_tensor_permute<Symmetry, shift, 0, 2, 3, 1>(size, world);
-    // perform_tensor_permute<Symmetry, shift, 0, 3, 2, 1>(size, world);
-    // perform_tensor_permute<Symmetry, shift, 1, 0, 2, 3>(size, world);
-    // perform_tensor_permute<Symmetry, shift, 1, 0, 3, 2>(size, world);
-    // perform_tensor_permute<Symmetry, shift, 3, 0, 1, 2>(size, world);
-    // perform_tensor_permute<Symmetry, shift, 2, 0, 1, 3>(size, world);
-    // perform_tensor_permute<Symmetry, shift, 2, 0, 3, 1>(size, world);
-    // perform_tensor_permute<Symmetry, shift, 3, 0, 2, 1>(size, world);
-    // perform_tensor_permute<Symmetry, shift, 1, 2, 0, 3>(size, world);
-    // perform_tensor_permute<Symmetry, shift, 1, 3, 0, 2>(size, world);
-    // perform_tensor_permute<Symmetry, shift, 3, 1, 0, 2>(size, world);
-    // perform_tensor_permute<Symmetry, shift, 2, 1, 0, 3>(size, world);
-    // perform_tensor_permute<Symmetry, shift, 2, 3, 0, 1>(size, world);
-    // perform_tensor_permute<Symmetry, shift, 3, 2, 0, 1>(size, world);
-    // perform_tensor_permute<Symmetry, shift, 1, 2, 3, 0>(size, world);
-    // perform_tensor_permute<Symmetry, shift, 1, 3, 2, 0>(size, world);
-    // perform_tensor_permute<Symmetry, shift, 3, 1, 2, 0>(size, world);
-    // perform_tensor_permute<Symmetry, shift, 2, 1, 3, 0>(size, world);
-    // perform_tensor_permute<Symmetry, shift, 2, 3, 1, 0>(size, world);
-    // perform_tensor_permute<Symmetry, shift, 3, 2, 1, 0>(size, world);
+    perform_tensor_permute<Symmetry, shift, 0, 1, 3, 2>(size, world);
+    perform_tensor_permute<Symmetry, shift, 0, 3, 1, 2>(size, world);
+    perform_tensor_permute<Symmetry, shift, 0, 2, 1, 3>(size, world);
+    perform_tensor_permute<Symmetry, shift, 0, 2, 3, 1>(size, world);
+    perform_tensor_permute<Symmetry, shift, 0, 3, 2, 1>(size, world);
+    perform_tensor_permute<Symmetry, shift, 1, 0, 2, 3>(size, world);
+    perform_tensor_permute<Symmetry, shift, 1, 0, 3, 2>(size, world);
+    perform_tensor_permute<Symmetry, shift, 3, 0, 1, 2>(size, world);
+    perform_tensor_permute<Symmetry, shift, 2, 0, 1, 3>(size, world);
+    perform_tensor_permute<Symmetry, shift, 2, 0, 3, 1>(size, world);
+    perform_tensor_permute<Symmetry, shift, 3, 0, 2, 1>(size, world);
+    perform_tensor_permute<Symmetry, shift, 1, 2, 0, 3>(size, world);
+    perform_tensor_permute<Symmetry, shift, 1, 3, 0, 2>(size, world);
+    perform_tensor_permute<Symmetry, shift, 3, 1, 0, 2>(size, world);
+    perform_tensor_permute<Symmetry, shift, 2, 1, 0, 3>(size, world);
+    perform_tensor_permute<Symmetry, shift, 2, 3, 0, 1>(size, world);
+    perform_tensor_permute<Symmetry, shift, 3, 2, 0, 1>(size, world);
+    perform_tensor_permute<Symmetry, shift, 1, 2, 3, 0>(size, world);
+    perform_tensor_permute<Symmetry, shift, 1, 3, 2, 0>(size, world);
+    perform_tensor_permute<Symmetry, shift, 3, 1, 2, 0>(size, world);
+    perform_tensor_permute<Symmetry, shift, 2, 1, 3, 0>(size, world);
+    perform_tensor_permute<Symmetry, shift, 2, 3, 1, 0>(size, world);
+    perform_tensor_permute<Symmetry, shift, 3, 2, 1, 0>(size, world);
 
     // for (const auto& p : Permutation::all(4)) {
     //         auto tp = t.template permute<shift>(p);

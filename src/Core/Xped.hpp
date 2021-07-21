@@ -1158,7 +1158,7 @@ void Xped<Scalar_, Rank, CoRank, Symmetry, PlainLib_>::print(std::ostream& o, bo
         o << "Sector with QN=" << Sym::format<Symmetry>(sector_[i]) << endl;
         // if(PRINT_MATRICES) {
         // o << std::fixed << block_[i] << endl;
-        block_[i].print_matrix();
+        // block_[i].print_matrix();
         //     // Plain::template print<Scalar>(block_[i]);
         // }
     }

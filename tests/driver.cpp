@@ -22,7 +22,6 @@ int main(int argc, char** argv)
 {
     std::ios::sync_with_stdio(true);
 #ifdef XPED_USE_MPI
-    std::cout << "Hello, I am in MPI mode" << std::endl;
     MPI_Init(&argc, &argv);
     // MPI_Comm_rank(MPI_COMM_WORLD, &xped_rank);
     // MPI_Comm_size(MPI_COMM_WORLD, &xped_np);
@@ -42,9 +41,8 @@ int main(int argc, char** argv)
         my_logger->sinks().push_back(console_sink);
     }
 
-    my_logger->warn("Driver: Number of MPI processes: {}", world.np);
-    my_logger->warn("Driver: I am process #={}", world.rank);
-    // my_logger->warn("Driver: World #={}", world.comm);
+    my_logger->critical("Driver: Number of MPI processes: {}", world.np);
+    my_logger->critical("Driver: I am process #={}", world.rank);
     MPI_Barrier(world.comm);
 
     doctest::Context ctx;

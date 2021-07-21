@@ -51,6 +51,8 @@ public:
 
     inline const std::unordered_map<qType, std::size_t> dict() const { return refxpr_.dict(); }
 
+    const std::shared_ptr<util::mpi::XpedWorld> world() const { return refxpr_.world(); }
+
     const std::array<Qbasis<Symmetry, 1>, Rank> uncoupledDomain() const { return refxpr_.uncoupledCodomain(); }
     const std::array<Qbasis<Symmetry, 1>, CoRank> uncoupledCodomain() const { return refxpr_.uncoupledDomain(); }
 

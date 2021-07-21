@@ -56,9 +56,15 @@ XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100)
 
 #include "tensor_tests.hpp"
 
-constexpr std::size_t SU2_TENSOR_SIZE = 5;
+#ifdef XPED_USE_MPI
+constexpr std::size_t SU2_TENSOR_SIZE = 3;
+constexpr std::size_t U1_TENSOR_SIZE = 3;
+constexpr std::size_t U0_TENSOR_SIZE = 3;
+#else
+constexpr std::size_t SU2_TENSOR_SIZE = 7;
 constexpr std::size_t U1_TENSOR_SIZE = 5;
 constexpr std::size_t U0_TENSOR_SIZE = 5;
+#endif
 
 #ifdef XPED_USE_MPI
 constexpr int MPI_NUM_PROC = 2;

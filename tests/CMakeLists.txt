@@ -1,27 +1,4 @@
-
-
 include_directories(${XPED_DIR}/src)
-
-# include_directories(${XPED_DIR}/src
-#                     ${TOOLS_INCLUDE_DIR}
-#                     ${TABULATE_INCLUDE_DIR}
-#                     ${DOCTEST_INCLUDE_DIR}
-#                     ${EIGEN_INCLUDE_DIR}
-#                     ${LRUCACHE_INCLUDE_DIR}
-#                     ${SEQ_INCLUDE_DIR})
-                    
-# if(XPED_USE_MKL)
-#   include_directories(${XPED_MKL_INCLUDE_DIR})
-# endif()
-# if (${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR")
-#   include_directories(${CYCLOPS_INCLUDE_DIR})
-#   if(${XPED_BUILD_CYCLOPS})
-#     include_directories(${CYCLOPS_HPTT_INCLUDE_DIR})
-#   endif()
-# endif()
-# if (${XPED_TENSOR_LIB} STREQUAL "ARRAY_TENSOR")
-#   include_directories(${ARRAY_INCLUDE_DIR})
-# endif()
 
 include(doctest)
 

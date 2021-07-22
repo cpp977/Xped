@@ -14,8 +14,9 @@ include(cmake/PreventInSourceBuilds.cmake)
 ###################################################################################################################################
 option(XPED_ENABLE_LRU_CACHE "Use lru cache library from github." OFF)
 
-set(XPED_SUPPORTED_EFFICIENCY_MODELS XPED_MEMORY_EFFICIENT XPED_TIME_EFFICIENT)
 set(XPED_EFFICIENCY_MODEL "XPED_TIME_EFFICIENT" CACHE STRING "Xped tries to be time efficient.")
+set(XPED_SUPPORTED_EFFICIENCY_MODELS "XPED_TIME_EFFICIENT;XPED_MEMORY_EFFICIENT")
+set_property(CACHE XPED_EFFICIENCY_MODEL PROPERTY STRINGS ${XPED_SUPPORTED_EFFICIENCY_MODELS})
 if(NOT (${XPED_EFFICIENCY_MODEL} IN_LIST XPED_SUPPORTED_EFFICIENCY_MODELS))
   message( FATAL_ERROR "You specified an unsupported efficiency model.")
 endif()
@@ -28,24 +29,27 @@ if(NOT CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
  endif()
 endif()
 
-set(XPED_SUPPORTED_TENSOR_LIBS EIGEN_TENSOR ARRAY_TENSOR CYCLOPS_TENSOR)
 set(XPED_TENSOR_LIB "EIGEN_TENSOR" CACHE STRING "Used tensor library for plain tensor operations.")
+set(XPED_SUPPORTED_TENSOR_LIBS "EIGEN_TENSOR;ARRAY_TENSOR;CYCLOPS_TENSOR")
+set_property(CACHE XPED_TENSOR_LIB PROPERTY STRINGS ${XPED_SUPPORTED_TENSOR_LIBS})
 if(NOT (${XPED_TENSOR_LIB} IN_LIST XPED_SUPPORTED_TENSOR_LIBS))
   message( STATUS "Build wanted to use the ${XPED_TENSOR_LIB} library.")
   message( FATAL_ERROR "You specified a tensor library which is not supported.")  
 endif()
 message( STATUS "Build uses the ${XPED_TENSOR_LIB} library.")
 
-set(XPED_SUPPORTED_MATRIX_LIBS EIGEN_MATRIX CYCLOPS_MATRIX)
 set(XPED_MATRIX_LIB "EIGEN_MATRIX" CACHE STRING "Used matrix library for plain tensor operations.")
+set(XPED_SUPPORTED_MATRIX_LIBS "EIGEN_MATRIX;CYCLOPS_MATRIX")
+set_property(CACHE XPED_MATRIX_LIB PROPERTY STRINGS ${XPED_SUPPORTED_MATRIX_LIBS})
 if(NOT (${XPED_MATRIX_LIB} IN_LIST XPED_SUPPORTED_MATRIX_LIBS))
   message( STATUS "Build wanted to use the ${XPED_MATRIX_LIB} library.")
   message( FATAL_ERROR "You specified a matrix library which is not supported.")  
 endif()
 message( STATUS "Build uses the ${XPED_MATRIX_LIB} library.")
 
-set(XPED_SUPPORTED_VECTOR_LIBS EIGEN_VECTOR CYCLOPS_VECTOR)
 set(XPED_VECTOR_LIB "EIGEN_VECTOR" CACHE STRING "Used matrix library for plain tensor operations.")
+set(XPED_SUPPORTED_VECTOR_LIBS "EIGEN_VECTOR;CYCLOPS_VECTOR")
+set_property(CACHE XPED_VECTOR_LIB PROPERTY STRINGS ${XPED_SUPPORTED_VECTOR_LIBS})
 if(NOT (${XPED_VECTOR_LIB} IN_LIST XPED_SUPPORTED_VECTOR_LIBS))
   message( STATUS "Build wanted to use the ${XPED_VECTOR_LIB} library.")
   message( FATAL_ERROR "You specified a vector library which is not supported.")  
@@ -54,7 +58,7 @@ message( STATUS "Build uses the ${XPED_VECTOR_LIB} library.")
 
 option(XPED_BUILD_TESTS "Build the tests." ON)
 
-option(XPED_BUILD_CYCLOPS "Build the cyclops library from source." ON)
+option(XPED_BUILD_CYCLOPS "Build the cyclops library from source." OFF)
 
 option(XPED_ENABLE_CACHE "Enable a compiler cache if available" OFF)
 
@@ -69,13 +73,13 @@ option(XPED_USE_LAPACK "Enable lapack linking." ON)
 
 option(XPED_ENABLE_BUILD_WITH_TIME_TRACE "Enable -ftime-trace to generate time tracing .json files on clang" OFF)
 
-option(XPED_ENABLE_COVERAGE "Enable coverage reporting for gcc/clang" FALSE)
+option(XPED_ENABLE_COVERAGE "Enable coverage reporting for gcc/clang" OFF)
 
-option(XPED_ENABLE_SANITIZER_ADDRESS "Enable address sanitizer" FALSE)
-option(XPED_ENABLE_SANITIZER_LEAK "Enable leak sanitizer" FALSE)
-option(XPED_ENABLE_SANITIZER_UNDEFINED_BEHAVIOR "Enable undefined behavior sanitizer" FALSE)
-option(XPED_ENABLE_SANITIZER_THREAD "Enable thread sanitizer" FALSE)
-option(XPED_ENABLE_SANITIZER_MEMORY "Enable memory sanitizer" FALSE)
+option(XPED_ENABLE_SANITIZER_ADDRESS "Enable address sanitizer" OFF)
+option(XPED_ENABLE_SANITIZER_LEAK "Enable leak sanitizer" OFF)
+option(XPED_ENABLE_SANITIZER_UNDEFINED_BEHAVIOR "Enable undefined behavior sanitizer" OFF)
+option(XPED_ENABLE_SANITIZER_THREAD "Enable thread sanitizer" OFF)
+option(XPED_ENABLE_SANITIZER_MEMORY "Enable memory sanitizer" OFF)
 
 option(XPED_ENABLE_DOXYGEN "Enable doxygen doc builds of source" OFF)
 

@@ -25,6 +25,8 @@ jobs:
             LIBCXX: ON
           - compiler: clang++
             TENSOR_LIB: CYCLOPS_TENSOR
+          - compiler: clang++
+            TENSOR_LIB: ARRAY_TENSOR
         include:
           - TENSOR_LIB: EIGEN_TENSOR
             MATRIX_LIB: EIGEN_MATRIX
@@ -35,16 +37,6 @@ jobs:
           - TENSOR_LIB: CYCLOPS_TENSOR
             MATRIX_LIB: CYCLOPS_MATRIX
             VECTOR_LIB: CYCLOPS_VECTOR
-      # matrix:
-      #   compiler: [g++-10, clang++]
-      #   LIBCXX: [ON, OFF]
-      #   TENSOR_LIB: [EIGEN_TENSOR, ARRAY_TENSOR]
-      #   exclude:
-      #     # excludes libcxx for g++
-      #     - compiler: g++-10
-      #       LIBCXX: ON
-      #     - compiler: clang++
-      #       TENSOR_LIB: ARRAY_TENSOR
 
     steps:
     - uses: actions/checkout@v2
@@ -72,20 +64,6 @@ jobs:
     - run: sudo apt-get install libopenblas-dev
     - run: sudo apt-get install liblapacke-dev
     - run: sudo apt-get install libomp-dev
-
-    # steps:
-    # - uses: actions/checkout@v2
-    # - run: sudo add-apt-repository ppa:ubuntu-toolchain-r/ppa
-    # - run: sudo apt update -qq
-    # - run: sudo apt install -qq g++-10
-    # - run: sudo apt install -qq libc++1-11
-    # - run: sudo apt install -qq libc++-11-dev
-    # - run: sudo apt install -qq libc++abi-11-dev
-    # - run: sudo apt install -qq libgsl-dev
-    # - run: sudo apt install -qq libgslcblas0
-    # - run: sudo apt install -qq libboost-all-dev
-    # - run: sudo apt install -qq doctest-dev
-    # - run: sudo apt install -qq lcov
       
     - name: Create Build Environment
       # Some projects don't allow in-source building, so create a separate build directory
@@ -103,7 +81,6 @@ jobs:
       # and build directories, but this is only available with CMake 3.13 and higher.  
       # The CMake binaries on the Github Actions machines are (as of this writing) 3.12
       run: cmake $GITHUB_WORKSPACE -DBLA_VENDOR=OpenBLAS -DXPED_USE_BLAS=ON -DXPED_USE_LAPACK=ON -DXPED_USE_OPENMP=ON -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DXPED_USE_LIBCXX=${{ matrix.LIBCXX }} -DXPED_ENABLE_CACHE=OFF -DXPED_TENSOR_LIB=${{ matrix.TENSOR_LIB }} -DXPED_MATRIX_LIB=${{ matrix.MATRIX_LIB }} -DXPED_VECTOR_LIB=${{ matrix.VECTOR_LIB }} -DXPED_ENABLE_COVERAGE=ON
-      # run: cmake $GITHUB_WORKSPACE -DXPED_USE_BLAS=OFF -DXPED_USE_LAPACK=OFF -DXPED_USE_OPENMP=OFF -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DXPED_ENABLE_COVERAGE=ON -DXPED_USE_LIBCXX=${{ matrix.LIBCXX }} -DXPED_ENABLE_CACHE=OFF -DXPED_TENSOR_LIB=${{ matrix.TENSOR_LIB }}
       
     - name: Build
       working-directory: ${{runner.workspace}}/build

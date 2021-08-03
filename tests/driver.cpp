@@ -42,20 +42,18 @@ int main(int argc, char** argv)
     doctest::Context ctx;
     ctx.setOption("reporters", "MpiConsoleReporter");
     ctx.setOption("reporters", "MpiFileReporter");
-    ctx.setOption("force-colors", true);
-    ctx.applyCommandLine(argc, argv);
 #else
     auto my_logger = spdlog::basic_logger_mt("info", "logs/log.txt");
     my_logger->set_pattern("[%H:%M:%S] [%n] [%^---%L---%$] [process %P] %v");
     auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
-    console_sink->set_level(spdlog::level::critical);
     console_sink->set_pattern("[%H:%M:%S] [%n] [%^---%L---%$] [process %P] %v");
     my_logger->sinks().push_back(console_sink);
 
     doctest::Context ctx;
+#endif
     ctx.setOption("force-colors", true);
     ctx.applyCommandLine(argc, argv);
-#endif
+
     int test_result = ctx.run();
 
 #ifdef XPED_USE_MPI

@@ -28,10 +28,10 @@ int main(int argc, char** argv)
     CTF::World world(MPI_COMM_WORLD, argc, argv);
 
     auto my_logger = spdlog::basic_logger_mt("info", "logs/log_" + to_string(world.rank) + ".txt");
-    my_logger->set_pattern("[%H:%M:%S %z] [%n] [%^---%L---%$] [process %P] %v");
+    my_logger->set_pattern("[%H:%M:%S] [%n] [%^---%L---%$] [process %P] %v");
     if(world.rank == 0) {
         auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
-        console_sink->set_pattern("[%H:%M:%S %z] [%n] [%^---%L---%$] [process %P] %v");
+        console_sink->set_pattern("[%H:%M:%S] [%n] [%^---%L---%$] [process %P] %v");
         my_logger->sinks().push_back(console_sink);
     }
 
@@ -46,10 +46,10 @@ int main(int argc, char** argv)
     ctx.applyCommandLine(argc, argv);
 #else
     auto my_logger = spdlog::basic_logger_mt("info", "logs/log.txt");
-    my_logger->set_pattern("[%H:%M:%S %z] [%n] [%^---%L---%$] [process %P] %v");
+    my_logger->set_pattern("[%H:%M:%S] [%n] [%^---%L---%$] [process %P] %v");
     auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
     console_sink->set_level(spdlog::level::critical);
-    console_sink->set_pattern("[%H:%M:%S %z] [%n] [%^---%L---%$] [process %P] %v");
+    console_sink->set_pattern("[%H:%M:%S] [%n] [%^---%L---%$] [process %P] %v");
     my_logger->sinks().push_back(console_sink);
 
     doctest::Context ctx;

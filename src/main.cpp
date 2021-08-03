@@ -55,27 +55,21 @@ int main(int argc, char* argv[])
 {
 #ifdef XPED_USE_MPI
     MPI_Init(&argc, &argv);
-    // MPI_Comm_rank(MPI_COMM_WORLD, &xped_rank);
-    // MPI_Comm_size(MPI_COMM_WORLD, &xped_np);
-    // CTF::World world(argc, argv);
     util::mpi::XpedWorld world(argc, argv);
     auto my_logger = spdlog::basic_logger_mt("info", "logs/log_" + to_string(world.rank) + ".txt");
 #else
     util::mpi::XpedWorld world;
     auto my_logger = spdlog::basic_logger_mt("info", "logs/log.txt");
 #endif
-
+    spdlog::set_default_logger(my_logger);
     std::ios::sync_with_stdio(true);
 
     ArgParser args(argc, argv);
 
-    spdlog::set_level(spdlog::level::info);
-
-    my_logger->sinks()[0]->set_pattern("[%H:%M:%S %z] [%n] [%^---%L---%$] [process %P] %v");
+    my_logger->sinks()[0]->set_pattern("[%H:%M:%S] [%n] [%^---%L---%$] [process %P] %v");
     if(world.rank == 0) {
         auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
-        console_sink->set_level(spdlog::level::info);
-        console_sink->set_pattern("[%H:%M:%S %z] [%n] [%^---%L---%$] [process %P] %v");
+        console_sink->set_pattern("[%H:%M:%S] [%n] [%^---%L---%$] [process %P] %v");
         my_logger->sinks().push_back(console_sink);
     }
 

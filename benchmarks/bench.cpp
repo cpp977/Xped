@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-#define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_WARN
+#define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_TRACE
 #include "spdlog/spdlog.h"
 
 #include "spdlog/cfg/argv.h" // for loading levels from argv

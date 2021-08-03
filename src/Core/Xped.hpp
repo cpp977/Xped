@@ -9,6 +9,8 @@
 
 #include "spdlog/spdlog.h"
 
+#include "spdlog/fmt/bundled/ranges.h"
+
 #include "seq/seq.h"
 
 #include "Util/Constfct.hpp"
@@ -678,7 +680,7 @@ Xped<Scalar_, Rank, CoRank, Symmetry, PlainLib_>::tSVD(size_t maxKeep,
     }
     size_t numberOfStates = allSV.size();
     SPDLOG_TRACE("numberOfStates={}", numberOfStates);
-    for(const auto& [q, s] : allSV) { SPDLOG_TRACE("val={}", s); }
+    SPDLOG_TRACE("allSV={}\n", allSV);
     std::sort(allSV.begin(),
               allSV.end(),
               [](const std::pair<typename Symmetry::qType, double>& sv1, const std::pair<typename Symmetry::qType, double>& sv2) {

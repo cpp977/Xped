@@ -34,6 +34,7 @@ int main(int argc, char** argv)
         console_sink->set_pattern("[%H:%M:%S] [%n] [%^---%L---%$] [process %P] %v");
         my_logger->sinks().push_back(console_sink);
     }
+    spdlog::set_default_logger(my_logger);
 
     SPDLOG_CRITICAL("Driver: Number of MPI processes: {}", world.np);
     SPDLOG_CRITICAL("Driver: I am process #={}", world.rank);
@@ -48,6 +49,7 @@ int main(int argc, char** argv)
     auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
     console_sink->set_pattern("[%H:%M:%S] [%n] [%^---%L---%$] [process %P] %v");
     my_logger->sinks().push_back(console_sink);
+    spdlog::set_default_logger(my_logger);
 
     doctest::Context ctx;
 #endif

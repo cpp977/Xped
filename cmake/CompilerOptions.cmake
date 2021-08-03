@@ -152,6 +152,8 @@ target_compile_options(${project_name} INTERFACE ${PROJECT_OPTIONS})
 
 target_link_options(${project_name} INTERFACE ${PROJECT_LOPTIONS})
 
+target_compile_definitions(${project_name} INTERFACE XPED_LOG_LEVEL=${XPED_LOG_LEVEL})
+
 if(XPED_ENABLE_LRU_CACHE)
   target_compile_definitions(${project_name} INTERFACE XPED_CACHE_PERMUTE_OUTPUT=1)
 endif()

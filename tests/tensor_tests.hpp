@@ -14,8 +14,7 @@ void perform_tensor_permute(const std::size_t& size, util::mpi::XpedWorld& world
     util::mpi::broadcast(B, world.rank, 0, world);
     util::mpi::broadcast(C, world.rank, 0, world);
 
-    std::array<Eigen::Index, 4> p = {per...};
-    SPDLOG_CRITICAL("Permutation: {},{},{},{}. Shift={}", p[0], p[1], p[2], p[3], shift);
+    SPDLOG_CRITICAL("Permutation: {}. Shift={}", std::array<Eigen::Index, 4>{per...}, shift);
 
     Xped<double, 2, 2, Symmetry> t({{B, C}}, {{B, C}}, world);
     t.setRandom();
@@ -153,11 +152,7 @@ void perform_tensor_permute_intern(const std::size_t size, util::mpi::XpedWorld&
     //     std::cout << E << std::endl;
     // }
 
-    std::array<std::size_t, 4> p = {per...};
-    // std::cout << "permutation: ";
-    SPDLOG_CRITICAL("Permutation: {},{},{},{}.", p[0], p[1], p[2], p[3]);
-    // for(const auto& elem : p) { std::cout << elem << " "; }
-    // std::cout << std::endl;
+    SPDLOG_CRITICAL("Permutation: {}", std::array<Eigen::Index, 4>{per...});
     XPED_MPI_BARRIER(world.comm)
     Xped<double, 4, 0, Symmetry> t({{B, B, B, B}}, {{}}, world);
     // if(world.rank == 0) { std::cout << t << std::endl; }

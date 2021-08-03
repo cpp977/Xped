@@ -19,8 +19,6 @@ using std::endl;
 using std::size_t;
 using std::string;
 
-#define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_WARN
-
 #include "Util/Macros.hpp"
 
 #ifdef XPED_CACHE_PERMUTE_OUTPUT

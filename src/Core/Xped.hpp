@@ -1029,10 +1029,7 @@ typename PlainLib_::template TType<Scalar_, Rank + CoRank> Xped<Scalar_, Rank, C
     std::array<IndexType, Rank + 1> dims_domain;
     for(size_t i = 0; i < Rank; i++) { dims_domain[i] = sorted_uncoupled_domain[i].fullDim(); }
     dims_domain[Rank] = sorted_domain.fullDim();
-    SPDLOG_INFO("dims domain:");
-    // cout << "dims domain: ";
-    for(const auto& d : dims_domain) { SPDLOG_INFO(std::to_string(d)); }
-    // cout << endl;
+    SPDLOG_INFO("dims domain: {}", dims_domain);
     typename Plain::template TType<Scalar, Rank + 1> unitary_domain = Plain::template construct<Scalar>(dims_domain, *world_);
     Plain::template setZero<Scalar, Rank + 1>(unitary_domain);
 
@@ -1078,9 +1075,7 @@ typename PlainLib_::template TType<Scalar_, Rank + CoRank> Xped<Scalar_, Rank, C
     std::array<IndexType, CoRank + 1> dims_codomain;
     for(size_t i = 0; i < CoRank; i++) { dims_codomain[i] = sorted_uncoupled_codomain[i].fullDim(); }
     dims_codomain[CoRank] = sorted_codomain.fullDim();
-    // cout << "dims codomain: ";
-    // for(const auto& d : dims_codomain) { cout << d << " "; }
-    // cout << endl;
+    SPDLOG_INFO("dims codomain: {}", dims_codomain);
     typename Plain::template TType<Scalar, CoRank + 1> unitary_codomain = Plain::template construct<Scalar>(dims_codomain, *world_);
     Plain::template setZero<Scalar, CoRank + 1>(unitary_codomain);
     // std::cout << "codomain" << std::endl;

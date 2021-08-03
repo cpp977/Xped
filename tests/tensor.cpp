@@ -23,13 +23,11 @@ using std::endl;
 using std::size_t;
 using std::string;
 
-#define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_WARN
+#include "Util/Macros.hpp"
 
 #include "spdlog/spdlog.h"
 
 #include "ArgParser.h"
-
-#include "Util/Macros.hpp"
 
 #include "Util/Mpi.hpp"
 

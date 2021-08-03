@@ -5,14 +5,6 @@
 #include <string>
 #include <vector>
 
-#define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_TRACE
-#include "spdlog/spdlog.h"
-
-#include "spdlog/cfg/argv.h" // for loading levels from argv
-#include "spdlog/fmt/ostr.h"
-#include "spdlog/sinks/basic_file_sink.h"
-#include "spdlog/sinks/stdout_color_sinks.h"
-
 #ifdef MKL_ILP64
 #    pragma message("Xped is using the intel math kernel library (MKL)")
 #endif
@@ -32,6 +24,14 @@ using std::string;
 #include "ArgParser.h"
 
 #include "Util/Macros.hpp"
+
+#include "spdlog/spdlog.h"
+
+#include "spdlog/cfg/argv.h" // for loading levels from argv
+#include "spdlog/fmt/ostr.h"
+#include "spdlog/sinks/basic_file_sink.h"
+#include "spdlog/sinks/stdout_color_sinks.h"
+
 #include "Util/Mpi.hpp"
 
 #ifdef XPED_CACHE_PERMUTE_OUTPUT
@@ -123,10 +123,7 @@ int main(int argc, char* argv[])
     }
     if(NORM) {
         Stopwatch<> norm;
-        for(std::size_t i = 0; i < reps; i++) {
-            double normSq = dot(Psi, Psi, DIR);
-            SPDLOG_WARN("<Psi|Psi>= {:03.2e}", normSq);
-        }
+        for(std::size_t i = 0; i < reps; i++) { SPDLOG_WARN("<Psi|Psi>= {:03.2e}", dot(Psi, Psi, DIR)); }
         SPDLOG_CRITICAL(norm.info("Time for norm"));
     }
     if(SWEEP) {

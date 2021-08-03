@@ -48,6 +48,11 @@
 #    pragma message("Xped tries to be memory efficient.")
 #endif
 
+#ifndef XPED_LOG_LEVEL
+#    define XPED_LOG_LEVEL SPDLOG_LEVEL_OFF
+#endif
+#define SPDLOG_ACTIVE_LEVEL XPED_LOG_LEVEL
+
 // clang-format off
 #define XPED_INIT_TREE_CACHE_VARIABLE(VARIABLE_NAME, CACHE_SIZE) \
 template <std::size_t Rank, typename Symmetry> \

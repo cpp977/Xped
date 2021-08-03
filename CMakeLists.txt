@@ -89,6 +89,14 @@ option(XPED_ENABLE_CPPCHECK "Enable static analysis with cppcheck" OFF)
 option(XPED_ENABLE_CLANG_TIDY "Enable static analysis with clang-tidy" OFF)
 option(XPED_ENABLE_INCLUDE_WHAT_YOU_USE "Enable static analysis with include-what-you-use" OFF)
 option(XPED_ENABLE_CLANG_FORMAT "Enable clang-format target." OFF)
+
+set(XPED_LOG_LEVEL "SPDLOG_LEVEL_OFF" CACHE STRING "Compile time log level.")
+set(XPED_SUPPORTED_LOG_LEVELS "SPDLOG_LEVEL_TRACE;SPDLOG_LEVEL_DEBUG;SPDLOG_LEVEL_INFO;SPDLOG_LEVEL_WARN;SPDLOG_LEVEL_ERROR;SPDLOG_LEVEL_CRITICAL;SPDLOG_LEVEL_OFF")
+set_property(CACHE XPED_LOG_LEVEL PROPERTY STRINGS ${XPED_SUPPORTED_LOG_LEVELS})
+if(NOT (${XPED_LOG_LEVEL} IN_LIST XPED_SUPPORTED_LOG_LEVELS))
+  message( STATUS "Log level was set to ${XPED_LOG_LEVEL}.")
+  message( FATAL_ERROR "You specified a log level which is not supported.")  
+endif()
 ###################################################################################################################################
 ##########################################                          end                   #########################################
 ###################################################################################################################################

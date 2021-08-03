@@ -17,12 +17,12 @@ void perform_mps_contraction(std::size_t basis_size, util::mpi::XpedWorld& world
 
     Xped<double, 1, 1, Symmetry> Bright({{out}}, {{out}}, world);
     Bright.setRandom();
-    spdlog::get("info")->info("Mps tests: Set tensors to random.");
+    SPDLOG_INFO("Mps tests: Set tensors to random.");
     Xped<double, 1, 1, Symmetry> Brightn;
     contract_R(Bright, T1, T2, Brightn);
     auto Bcheck = (T2 * Bright).template permute<+1, 0, 1, 2>() * (T1.template permute<+1, 0, 1, 2>().adjoint());
     CHECK((Brightn - Bcheck).norm() == doctest::Approx(0.));
-    spdlog::get("info")->info("Mps tests: right check done.");
+    SPDLOG_INFO("Mps tests: right check done.");
     Xped<double, 1, 1, Symmetry> Bleft({{in}}, {{in}}, world);
     Bleft.setRandom();
     Xped<double, 1, 1, Symmetry> Bleftn;
@@ -30,5 +30,5 @@ void perform_mps_contraction(std::size_t basis_size, util::mpi::XpedWorld& world
     Bcheck.clear();
     Bcheck = (T1.template permute<+1, 0, 1, 2>().adjoint() * Bleft).template permute<+1, 1, 2, 0>() * T2;
     CHECK((Bleftn - Bcheck).norm() == doctest::Approx(0.));
-    spdlog::get("info")->info("Mps tests: left check done.");
+    SPDLOG_INFO("Mps tests: left check done.");
 }

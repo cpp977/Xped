@@ -87,7 +87,7 @@ int main(int argc, char* argv[])
     // std::cout << t.print() << std::endl;
 
     // std::cout << t << std::endl;
-    // spdlog::get("info")->info("Tensor: \n {}", t);
+    // SPDLOG_INFO("Tensor: \n {}", t);
     // constexpr std::size_t Rank=2;
     // tensortraits<EigenTensorLib>::Ttype<double,Rank> T1(2,3); T1.setRandom();
     // tensortraits<EigenTensorLib>::Ttype<double,Rank> T2(2,3); T2.setRandom();

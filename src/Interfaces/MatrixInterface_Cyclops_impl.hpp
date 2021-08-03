@@ -75,12 +75,12 @@ struct MatrixInterface<CyclopsMatrixLib>
     template <typename Scalar>
     static MType<Scalar> Identity(const MIndextype& rows, const MIndextype& cols, CTF::World& world)
     {
-        spdlog::get("info")->trace("Begin of Identity()");
-        spdlog::get("info")->trace("rows: " + std::to_string(rows) + ", cols: " + std::to_string(cols));
+        SPDLOG_TRACE("Begin of Identity()");
+        SPDLOG_TRACE("rows: " + std::to_string(rows) + ", cols: " + std::to_string(cols));
         MType<Scalar> M(rows, cols, world);
-        spdlog::get("info")->trace("Constructor passed.");
+        SPDLOG_TRACE("Constructor passed.");
         M["ii"] = Scalar(1.);
-        spdlog::get("info")->trace("Set diagonal to 1..");
+        SPDLOG_TRACE("Set diagonal to 1..");
         return M;
     }
 

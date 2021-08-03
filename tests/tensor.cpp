@@ -86,7 +86,7 @@ TEST_CASE("Testing the transformation to plain Tensor.")
 
     SUBCASE("SU2")
     {
-        spdlog::get("info")->info("Performing the transformation to plain for SU(2)");
+        SPDLOG_INFO("Performing the transformation to plain for SU(2)");
         typedef Sym::SU2<Sym::SpinSU2> Symmetry;
         Qbasis<Symmetry, 1> B, C;
         if(test_world.rank == 0) {

@@ -2,8 +2,8 @@ template <typename Symmetry, int shift, std::size_t... per>
 void perform_tensor_permute(const std::size_t& size, util::mpi::XpedWorld& world)
 {
     // CTF::World world(comm);
-    spdlog::get("info")->warn("Permute: Number of processes in tensor-test #={}", world.np);
-    spdlog::get("info")->warn("Permute: I am process number #={}", world.rank);
+    SPDLOG_WARN("Permute: Number of processes in tensor-test #={}", world.np);
+    SPDLOG_WARN("Permute: I am process number #={}", world.rank);
     Qbasis<Symmetry, 1> B, C;
     if(world.rank == 0) {
         B.setRandom(size);
@@ -15,7 +15,7 @@ void perform_tensor_permute(const std::size_t& size, util::mpi::XpedWorld& world
     util::mpi::broadcast(C, world.rank, 0, world);
 
     std::array<Eigen::Index, 4> p = {per...};
-    spdlog::get("info")->critical("Permutation: {},{},{},{}. Shift={}", p[0], p[1], p[2], p[3], shift);
+    SPDLOG_CRITICAL("Permutation: {},{},{},{}. Shift={}", p[0], p[1], p[2], p[3], shift);
 
     Xped<double, 2, 2, Symmetry> t({{B, C}}, {{B, C}}, world);
     t.setRandom();
@@ -41,7 +41,7 @@ void perform_tensor_permute(const std::size_t& size, util::mpi::XpedWorld& world
     auto zero_ = XPED_DEFAULT_PLAININTERFACE::contract<double, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3>(check, check);
     XPED_MPI_BARRIER(world.comm)
     double zero = XPED_DEFAULT_PLAININTERFACE::getVal<double, 0>(zero_, {{}});
-    spdlog::get("info")->info("zero={}.", zero);
+    SPDLOG_INFO("zero={}.", zero);
     CHECK(zero == doctest::Approx(0.));
 }
 
@@ -110,9 +110,9 @@ template <typename Symmetry, std::size_t... per>
 void perform_tensor_permute_intern(const std::size_t size, util::mpi::XpedWorld& world = util::mpi::getUniverse())
 {
     // CTF::World world(comm);
-    spdlog::get("info")->warn("Permute intern: Number of processes in tensor-test #={}", world.np);
-    spdlog::get("info")->warn("Permute intern: I am process number #={}", world.rank);
-    // spdlog::get("info")->warn("Permute intern: World #={}", world.comm);
+    SPDLOG_WARN("Permute intern: Number of processes in tensor-test #={}", world.np);
+    SPDLOG_WARN("Permute intern: I am process number #={}", world.rank);
+    // SPDLOG_WARN("Permute intern: World #={}", world.comm);
     Qbasis<Symmetry, 1> B, C, D, E;
     if(world.rank == 0) {
         B.setRandom(size);
@@ -155,27 +155,27 @@ void perform_tensor_permute_intern(const std::size_t size, util::mpi::XpedWorld&
 
     std::array<std::size_t, 4> p = {per...};
     // std::cout << "permutation: ";
-    spdlog::get("info")->critical("Permutation: {},{},{},{}.", p[0], p[1], p[2], p[3]);
+    SPDLOG_CRITICAL("Permutation: {},{},{},{}.", p[0], p[1], p[2], p[3]);
     // for(const auto& elem : p) { std::cout << elem << " "; }
     // std::cout << std::endl;
     XPED_MPI_BARRIER(world.comm)
     Xped<double, 4, 0, Symmetry> t({{B, B, B, B}}, {{}}, world);
     // if(world.rank == 0) { std::cout << t << std::endl; }
     t.setRandom();
-    spdlog::get("info")->warn("Tensor t set to Random.");
+    SPDLOG_WARN("Tensor t set to Random.");
     XPED_MPI_BARRIER(world.comm)
     auto tplain = t.plainTensor();
-    spdlog::get("info")->warn("Computed plain tensor.");
+    SPDLOG_WARN("Computed plain tensor.");
     XPED_MPI_BARRIER(world.comm)
     auto tp = t.template permute<0, per...>();
-    spdlog::get("info")->warn("Computed permutation of tensor.");
+    SPDLOG_WARN("Computed permutation of tensor.");
     XPED_MPI_BARRIER(world.comm)
 
     XPED_DEFAULT_PLAININTERFACE::TType<double, 4> tplainshuffle = XPED_DEFAULT_PLAININTERFACE::shuffle<double, 4, per...>(tplain);
-    spdlog::get("info")->warn("Computed plain shuffle of tensor.");
+    SPDLOG_WARN("Computed plain shuffle of tensor.");
     XPED_MPI_BARRIER(world.comm)
     auto tplainp = tp.plainTensor();
-    spdlog::get("info")->warn("Computed plain tensor of permuted tensor.");
+    SPDLOG_WARN("Computed plain tensor of permuted tensor.");
     XPED_MPI_BARRIER(world.comm)
 #ifdef XPED_USE_ARRAY_TENSOR_LIB
     auto check = nda::make_ein_sum<double, 0, 1, 2, 3>(nda::ein<0, 1, 2, 3>(tplainp) - nda::ein<0, 1, 2, 3>(tplainshuffle));
@@ -306,17 +306,17 @@ template <typename Symmetry>
 void test_tensor_transformation_to_plain(const Qbasis<Symmetry, 1>& B, const Qbasis<Symmetry, 1>& C, util::mpi::XpedWorld& world)
 {
     // CTF::World world(comm);
-    spdlog::get("info")->info("Number of processes in tensor-test #={}", world.np);
-    spdlog::get("info")->info("I am process number #={}", world.rank);
-    // spdlog::get("info")->info("basis B");
-    // for(const auto& [q, pos, plain] : B.data_) { spdlog::get("info")->info("QN: {}, deg={}", q.data[0], plain.dim()); }
-    // spdlog::get("info")->info("basis C");
-    // for(const auto& [q, pos, plain] : C.data_) { spdlog::get("info")->info("QN: {}, deg={}", q.data[0], plain.dim()); }
+    SPDLOG_INFO("Number of processes in tensor-test #={}", world.np);
+    SPDLOG_INFO("I am process number #={}", world.rank);
+    // SPDLOG_INFO("basis B");
+    // for(const auto& [q, pos, plain] : B.data_) { SPDLOG_INFO("QN: {}, deg={}", q.data[0], plain.dim()); }
+    // SPDLOG_INFO("basis C");
+    // for(const auto& [q, pos, plain] : C.data_) { SPDLOG_INFO("QN: {}, deg={}", q.data[0], plain.dim()); }
 
     Xped<double, 2, 2, Symmetry> t({{B, C}}, {{B, C}}, world);
     t.setRandom();
     // if(world.rank == 0) { std::cout << t << std::endl; }
-    // spdlog::get("info")->info(t.print());
+    // SPDLOG_INFO(t);
     auto tplain = t.plainTensor();
     // tplain.print();
     auto norm_ = XPED_DEFAULT_PLAININTERFACE::contract<double, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3>(tplain, tplain);

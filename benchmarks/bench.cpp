@@ -5,8 +5,10 @@
 #include <string>
 #include <vector>
 
+#define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_WARN
 #include "spdlog/spdlog.h"
 
+#include "spdlog/cfg/argv.h" // for loading levels from argv
 #include "spdlog/fmt/ostr.h"
 #include "spdlog/sinks/basic_file_sink.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
@@ -53,6 +55,7 @@ XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100)
 
 int main(int argc, char* argv[])
 {
+    spdlog::cfg::load_argv_levels(argc, argv);
 #ifdef XPED_USE_MPI
     MPI_Init(&argc, &argv);
     util::mpi::XpedWorld world(argc, argv);
@@ -66,18 +69,21 @@ int main(int argc, char* argv[])
 
     ArgParser args(argc, argv);
 
-    spdlog::set_level(spdlog::level::info);
+    // spdlog::set_level(spdlog::level::info);
 
-    my_logger->sinks()[0]->set_pattern("[%H:%M:%S %z] [%n] [%^---%L---%$] [process %P] %v");
+    my_logger->sinks()[0]->set_pattern("[%H:%M:%S] [%n] [%^---%L---%$] [process %P] %v");
     if(world.rank == 0) {
         auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
-        console_sink->set_level(spdlog::level::info);
-        console_sink->set_pattern("[%H:%M:%S %z] [%n] [%^---%L---%$] [process %P] %v");
+        // console_sink->set_level(spdlog::level::warn);
+        console_sink->set_pattern("[%H:%M:%S] [%n] [%^---%L---%$] [process %P] %v");
         my_logger->sinks().push_back(console_sink);
     }
+    spdlog::set_default_logger(my_logger);
 
-    my_logger->info("Number of MPI processes: {}", world.np);
-    my_logger->info("I am process number #={}", world.rank);
+    SPDLOG_INFO("Number of MPI processes: {}", world.np);
+    SPDLOG_INFO("I am process number #={}", world.rank);
+
+    SPDLOG_INFO("Number of MPI processes: {}", world.np);
 
     typedef Sym::SU2<Sym::SpinSU2> Symmetry;
     // typedef Sym::U1<Sym::SpinU1> Symmetry;
@@ -97,41 +103,44 @@ int main(int argc, char* argv[])
     Qbasis<Symmetry, 1> qloc_;
     // qloc_.push_back({}, 2);
     qloc_.push_back({2}, 1);
-    qloc_.push_back({3}, 1);
-    qloc_.push_back({4}, 1);
+    // qloc_.push_back({3}, 1);
+    // qloc_.push_back({4}, 1);
     // qloc_.push_back({-2}, 1);
     std::vector<Qbasis<Symmetry, 1>> qloc(L, qloc_);
 
     Stopwatch<> construct;
     Mps<double, Symmetry> Psi(L, qloc, Qtot, Minit, Qinit);
-    my_logger->critical(construct.info("Time for constructor"));
+    SPDLOG_CRITICAL(construct.info("Time for constructor"));
 
     XPED_MPI_BARRIER(world.comm)
 
     if(INFO) {
         for(size_t l = 0; l <= L; l++) {
-            std::stringstream ss;
-            ss << Psi.auxBasis(l);
-            my_logger->info(ss.str());
+            // std::stringstream ss;
+            // ss << Psi.auxBasis(l);
+            SPDLOG_INFO("l={} \n {}", l, Psi.auxBasis(l));
         }
     }
     if(NORM) {
         Stopwatch<> norm;
         for(std::size_t i = 0; i < reps; i++) {
             double normSq = dot(Psi, Psi, DIR);
-            my_logger->info("<Psi|Psi>= {:03.2f}", normSq);
+            SPDLOG_WARN("<Psi|Psi>= {:03.2e}", normSq);
         }
-        my_logger->critical(norm.info("Time for norm"));
+        SPDLOG_CRITICAL(norm.info("Time for norm"));
     }
     if(SWEEP) {
         Stopwatch<> Sweep;
         if(DIR == DMRG::DIRECTION::RIGHT) {
-            for(std::size_t l = 0; l < L; l++) { Psi.rightSweepStep(l, DMRG::BROOM::SVD); }
+            for(std::size_t l = 0; l < L; l++) {
+                SPDLOG_WARN("l={}", l);
+                Psi.rightSweepStep(l, DMRG::BROOM::SVD);
+            }
         } else {
             for(std::size_t l = L - 1; l > 0; l--) { Psi.leftSweepStep(l, DMRG::BROOM::SVD); }
             Psi.leftSweepStep(0, DMRG::BROOM::SVD);
         }
-        my_logger->critical(Sweep.info("Time for sweep"));
+        SPDLOG_CRITICAL(Sweep.info("Time for sweep"));
     }
 
 #ifdef XPED_CACHE_PERMUTE_OUTPUT
@@ -140,7 +149,7 @@ int main(int argc, char* argv[])
     std::cout << "hit rate=" << tree_cache<1, 2, 1, Symmetry>.cache.stats().hit_rate() << endl; // Hit rate in [0, 1]
 #endif
 #ifdef XPED_USE_MPI
-    my_logger->critical("Calling MPI_Finalize()");
+    SPDLOG_CRITICAL("Calling MPI_Finalize()");
     // volatile int i = 0;
     // char hostname[256];
     // gethostname(hostname, sizeof(hostname));

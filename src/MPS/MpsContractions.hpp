@@ -9,7 +9,7 @@ void contract_L(XPED_CONST Xped<Scalar, 1, 1, Symmetry, PlainLib>& Bold,
                 XPED_CONST Xped<Scalar, 2, 1, Symmetry, PlainLib>& Ket,
                 Xped<Scalar, 1, 1, Symmetry, PlainLib>& Bnew)
 {
-    spdlog::get("info")->info("Entering contract_L().");
+    SPDLOG_INFO("Entering contract_L().");
     Bnew.clear();
     Bnew = Xped<Scalar, 1, 1, Symmetry, PlainLib>({{Bra.uncoupledCodomain()[0]}}, {{Ket.uncoupledCodomain()[0]}}, *Bold.world());
 
@@ -50,7 +50,7 @@ void contract_L(XPED_CONST Xped<Scalar, 1, 1, Symmetry, PlainLib>& Bold,
             Bnew.block_[it->second] = PlainLib::template add<Scalar>(Bnew.block_[it->second], Mtmp);
         }
     }
-    spdlog::get("info")->info("Leaving contract_L().");
+    SPDLOG_INFO("Leaving contract_L().");
 }
 
 template <typename Scalar, typename Symmetry, typename PlainLib>
@@ -59,7 +59,7 @@ void contract_R(XPED_CONST Xped<Scalar, 1, 1, Symmetry, PlainLib>& Bold,
                 XPED_CONST Xped<Scalar, 2, 1, Symmetry, PlainLib>& Ket,
                 Xped<Scalar, 1, 1, Symmetry, PlainLib>& Bnew)
 {
-    spdlog::get("info")->info("Entering contract_R().");
+    SPDLOG_INFO("Entering contract_R().");
     Bnew.clear();
     Bnew = Xped<Scalar, 1, 1, Symmetry, PlainLib>({{Ket.uncoupledDomain()[0]}}, {{Bra.uncoupledDomain()[0]}}, *Bold.world());
 
@@ -111,7 +111,7 @@ void contract_R(XPED_CONST Xped<Scalar, 1, 1, Symmetry, PlainLib>& Bold,
             }
         }
     }
-    spdlog::get("info")->info("Leaving contract_R().");
+    SPDLOG_INFO("Leaving contract_R().");
 }
 
 #endif

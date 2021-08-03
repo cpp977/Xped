@@ -259,7 +259,7 @@ Xped<Scalar_, Rank, CoRank, Symmetry, PlainLib_>::Xped(const XpedBase<OtherDeriv
 template <typename Scalar_, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename PlainLib_>
 void Xped<Scalar_, Rank, CoRank, Symmetry, PlainLib_>::setRandom()
 {
-    spdlog::get("info")->trace("Entering set Random().");
+    SPDLOG_TRACE("Entering set Random().");
     if(domain.dim() < codomain.dim()) {
         for(const auto& [q, dim, plain] : domain) {
             if(codomain.IS_PRESENT(q)) {
@@ -276,31 +276,20 @@ void Xped<Scalar_, Rank, CoRank, Symmetry, PlainLib_>::setRandom()
         }
     }
     block_.resize(sector_.size());
-    spdlog::get("info")->trace("Start initialization loop wit #={} iterations.", sector_.size());
+    SPDLOG_TRACE("Start randomization loop with #={} iterations.", sector_.size());
     for(size_t i = 0; i < sector_.size(); i++) {
         // auto mat = Plain::template construct<Scalar>(domain.inner_dim(sector_[i]), codomain.inner_dim(sector_[i]), world_);
         // Plain::template setRandom<Scalar>(mat);
         block_[i] = Plain::template construct<Scalar>(domain.inner_dim(sector_[i]), codomain.inner_dim(sector_[i]), *world_);
-        spdlog::get("info")->trace("Init block #={}.", i);
-        // block_[i].print_matrix();
-        // for (IndexType row=0; row<block_[i].rows(); row++)
-        //         for (IndexType col=0; col<block_[i].cols(); col++) {
-        // 		block_[i](row,col) = util::random::threadSafeRandUniform<Scalar>(-1.,1.,true);
-        //         }
-    }
-    spdlog::get("info")->trace("Start randomization loop wit #={} iterations.", sector_.size());
-    for(size_t i = 0; i < sector_.size(); i++) {
-        // auto mat = Plain::template construct<Scalar>(domain.inner_dim(sector_[i]), codomain.inner_dim(sector_[i]), world_);
         Plain::template setRandom<Scalar>(block_[i]);
-        // block_[i] = Plain::template construct<Scalar>(domain.inner_dim(sector_[i]), codomain.inner_dim(sector_[i]), world_);
-        spdlog::get("info")->trace("Set block #={} to random.", i);
+        SPDLOG_TRACE("Set block #={} to random.", i);
         // block_[i].print_matrix();
         // for (IndexType row=0; row<block_[i].rows(); row++)
         //         for (IndexType col=0; col<block_[i].cols(); col++) {
         // 		block_[i](row,col) = util::random::threadSafeRandUniform<Scalar>(-1.,1.,true);
         //         }
     }
-    spdlog::get("info")->trace("Leaving set Random().");
+    SPDLOG_TRACE("Leaving set Random().");
 }
 
 template <typename Scalar_, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename PlainLib_>
@@ -326,7 +315,7 @@ void Xped<Scalar_, Rank, CoRank, Symmetry, PlainLib_>::setZero()
 template <typename Scalar_, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename PlainLib_>
 void Xped<Scalar_, Rank, CoRank, Symmetry, PlainLib_>::setIdentity()
 {
-    spdlog::get("info")->trace("Entering Xped::setIdentity().");
+    SPDLOG_TRACE("Entering Xped::setIdentity().");
     std::unordered_set<qType> uniqueController;
     for(const auto& [q, dim, plain] : domain) {
         if(auto it = uniqueController.find(q); it == uniqueController.end() and codomain.IS_PRESENT(q)) {
@@ -342,7 +331,7 @@ void Xped<Scalar_, Rank, CoRank, Symmetry, PlainLib_>::setIdentity()
         Plain::template setIdentity<Scalar>(mat);
         block_[i] = mat;
     }
-    spdlog::get("info")->trace("Leaving Xped::setIdentity().");
+    SPDLOG_TRACE("Leaving Xped::setIdentity().");
 }
 
 template <typename Scalar_, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename PlainLib_>
@@ -650,8 +639,8 @@ Xped<Scalar_, Rank, CoRank, Symmetry, PlainLib_>::tSVD(size_t maxKeep,
                                                        bool PRESERVE_MULTIPLETS,
                                                        bool RETURN_SPEC) XPED_CONST
 {
-    spdlog::get("info")->trace("Entering Xped::tSVD()");
-    spdlog::get("info")->trace("Input param eps_svd={}", eps_svd);
+    SPDLOG_TRACE("Entering Xped::tSVD()");
+    SPDLOG_TRACE("Input param eps_svd={}", eps_svd);
     entropy = 0.;
     truncWeight = 0;
     Qbasis<Symmetry, 1> middle;
@@ -662,12 +651,11 @@ Xped<Scalar_, Rank, CoRank, Symmetry, PlainLib_>::tSVD(size_t maxKeep,
     Xped<Scalar, 1, CoRank, Symmetry, PlainLib_> Vdag({{middle}}, uncoupled_codomain);
 
     std::vector<std::pair<typename Symmetry::qType, RealScalar>> allSV;
-    spdlog::get("info")->trace("Performing the svd loop (size={})", sector_.size());
+    SPDLOG_TRACE("Performing the svd loop (size={})", sector_.size());
     for(size_t i = 0; i < sector_.size(); ++i) {
-        spdlog::get("info")->trace(
-            "Step i={} for mat with dim=({},{})", i, Plain::template rows<Scalar>(block_[i]), Plain::template rows<Scalar>(block_[i]));
+        SPDLOG_TRACE("Step i={} for mat with dim=({},{})", i, Plain::template rows<Scalar>(block_[i]), Plain::template rows<Scalar>(block_[i]));
         auto [Umat, Sigmavec, Vmatdag] = Plain::template svd<Scalar>(block_[i]);
-        spdlog::get("info")->trace("Performed svd for step i={}", i);
+        SPDLOG_TRACE("Performed svd for step i={}", i);
         // #ifdef XPED_DONT_USE_BDCSVD
         //         Eigen::JacobiSVD<MatrixType> Jack; // standard SVD
         // #else
@@ -679,32 +667,32 @@ Xped<Scalar_, Rank, CoRank, Symmetry, PlainLib_>::tSVD(size_t maxKeep,
         Plain::template vec_to_stdvec<Scalar>(Sigmavec, svs);
 
         for(const auto& sv : svs) {
-            spdlog::get("info")->trace("Move the element {} from sigma to allSV", sv);
+            SPDLOG_TRACE("Move the element {} from sigma to allSV", sv);
             allSV.push_back(std::make_pair(sector_[i], sv));
         }
-        spdlog::get("info")->trace("Extracted singular values for step i={}", i);
+        SPDLOG_TRACE("Extracted singular values for step i={}", i);
         auto Sigmamat = Plain::template vec_to_diagmat<Scalar>(Sigmavec);
         U.push_back(sector_[i], Umat);
         Sigma.push_back(sector_[i], Sigmamat);
         Vdag.push_back(sector_[i], Vmatdag);
     }
     size_t numberOfStates = allSV.size();
-    spdlog::get("info")->trace("numberOfStates={}", numberOfStates);
-    for(const auto& [q, s] : allSV) { spdlog::get("info")->trace("val={}", s); }
+    SPDLOG_TRACE("numberOfStates={}", numberOfStates);
+    for(const auto& [q, s] : allSV) { SPDLOG_TRACE("val={}", s); }
     std::sort(allSV.begin(),
               allSV.end(),
               [](const std::pair<typename Symmetry::qType, double>& sv1, const std::pair<typename Symmetry::qType, double>& sv2) {
                   return sv1.second > sv2.second;
               });
-    spdlog::get("info")->trace("numberOfStates after sort {}", allSV.size());
+    SPDLOG_TRACE("numberOfStates after sort {}", allSV.size());
     for(size_t i = maxKeep; i < allSV.size(); i++) { truncWeight += Symmetry::degeneracy(allSV[i].first) * std::pow(std::abs(allSV[i].second), 2.); }
     allSV.resize(std::min(maxKeep, numberOfStates));
-    spdlog::get("info")->trace("numberOfStates after resize {}", allSV.size());
+    SPDLOG_TRACE("numberOfStates after resize {}", allSV.size());
     // std::erase_if(allSV, [eps_svd](const pair<typename Symmetry::qType, Scalar> &sv) { return (sv < eps_svd); }); c++-20 version
     allSV.erase(std::remove_if(
                     allSV.begin(), allSV.end(), [eps_svd](const std::pair<typename Symmetry::qType, double>& sv) { return (sv.second < eps_svd); }),
                 allSV.end());
-    spdlog::get("info")->trace("numberOfStates after erase {}", allSV.size());
+    SPDLOG_TRACE("numberOfStates after erase {}", allSV.size());
     // cout << "saving sv for expansion to file, #sv=" << allSV.size() << endl;
     // ofstream Filer("sv_expand");
     // size_t index=0;
@@ -731,7 +719,7 @@ Xped<Scalar_, Rank, CoRank, Symmetry, PlainLib_>::tSVD(size_t maxKeep,
             allSV.resize(endOfMultiplet);
         }
     }
-    spdlog::get("info")->trace("Adding {} states from {} states", allSV.size(), numberOfStates);
+    SPDLOG_TRACE("Adding {} states from {} states", allSV.size(), numberOfStates);
     // std::cout << "Adding " << allSV.size() << " states from " << numberOfStates << " states" << std::endl;
     std::map<typename Symmetry::qType, std::vector<Scalar>> qn_orderedSV;
     Qbasis<Symmetry, 1> truncBasis;
@@ -740,38 +728,38 @@ Xped<Scalar_, Rank, CoRank, Symmetry, PlainLib_>::tSVD(size_t maxKeep,
         qn_orderedSV[q].push_back(s);
         entropy += -Symmetry::degeneracy(q) * s * s * std::log(s * s);
     }
-    spdlog::get("info")->trace("Set up the truncated basis.");
+    SPDLOG_TRACE("Set up the truncated basis.");
     std::stringstream ss;
     ss << truncBasis.print();
-    spdlog::get("info")->trace(ss.str());
+    SPDLOG_TRACE(ss.str());
 
     Xped<Scalar, Rank, 1, Symmetry, PlainLib_> trunc_U(uncoupled_domain, {{truncBasis}});
     Xped<RealScalar, 1, 1, Symmetry, PlainLib_> trunc_Sigma({{truncBasis}}, {{truncBasis}});
     Xped<Scalar, 1, CoRank, Symmetry, PlainLib_> trunc_Vdag({{truncBasis}}, uncoupled_codomain);
-    spdlog::get("info")->trace("Starting the loop for truncating U,S,V (size={})", qn_orderedSV.size());
+    SPDLOG_TRACE("Starting the loop for truncating U,S,V (size={})", qn_orderedSV.size());
     for(const auto& [q, vec_sv] : qn_orderedSV) {
-        spdlog::get("info")->trace("Step with q={}", q.data[0]);
+        SPDLOG_TRACE("Step with q={}", q.data[0]);
         size_t Nret = vec_sv.size();
         // cout << "q=" << q << ", Nret=" << Nret << endl;
         auto itSigma = Sigma.dict_.find({q});
-        spdlog::get("info")->trace("Searched the dict of Sigma.");
+        SPDLOG_TRACE("Searched the dict of Sigma.");
         auto sigma_mat = Plain::template block(Sigma.block_[itSigma->second], 0, 0, Nret, Nret);
-        spdlog::get("info")->trace("Got subblock of Sigma.");
+        SPDLOG_TRACE("Got subblock of Sigma.");
         trunc_Sigma.push_back(q, sigma_mat);
         // if(RETURN_SPEC) { SVspec.insert(std::make_pair(q, Sigma.block_[itSigma->second].diagonal().head(Nret).real())); }
-        spdlog::get("info")->trace("Before return spec.");
+        SPDLOG_TRACE("Before return spec.");
         if(RETURN_SPEC) {
             VectorType spec;
             Plain::template diagonal_head_matrix_to_vector<RealScalar>(spec, Sigma.block_[itSigma->second], Nret);
             SVspec.insert(std::make_pair(q, spec));
         }
-        spdlog::get("info")->trace("After return spec.");
+        SPDLOG_TRACE("After return spec.");
         auto itU = U.dict_.find({q});
         trunc_U.push_back(q, Plain::template block(U.block_[itU->second], 0, 0, Plain::rows(U.block_[itU->second]), Nret));
         auto itVdag = Vdag.dict_.find({q});
         trunc_Vdag.push_back(q, Plain::template block(Vdag.block_[itVdag->second], 0, 0, Nret, Plain::cols(U.block_[itU->second])));
     }
-    spdlog::get("info")->trace("Leaving Xped::tSVD()");
+    SPDLOG_TRACE("Leaving Xped::tSVD()");
     return std::make_tuple(U, Sigma, Vdag);
 }
 
@@ -973,7 +961,7 @@ typename PlainLib_::template MType<Scalar_> Xped<Scalar_, Rank, CoRank, Symmetry
 template <typename Scalar_, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename PlainLib_>
 typename PlainLib_::template TType<Scalar_, Rank + CoRank> Xped<Scalar_, Rank, CoRank, Symmetry, PlainLib_>::plainTensor() const
 {
-    spdlog::get("info")->info("Entering plainTensor()");
+    SPDLOG_INFO("Entering plainTensor()");
     auto sorted_domain = domain;
     sorted_domain.sort();
     auto sorted_codomain = codomain;
@@ -997,21 +985,21 @@ typename PlainLib_::template TType<Scalar_, Rank + CoRank> Xped<Scalar_, Rank, C
         sorted_sector[i] = sector_[index_sort[i]];
         sorted_block[i] = block_[index_sort[i]];
     }
-    spdlog::get("info")->info("sorted everything");
+    SPDLOG_INFO("sorted everything");
 
     auto inner_mat = Plain::template construct_with_zero<Scalar>(sorted_domain.fullDim(), sorted_codomain.fullDim(), *world_);
-    spdlog::get("info")->info("Constructed inner_mat (size={},{}) and perform loop with {} steps.",
-                              sorted_domain.fullDim(),
-                              sorted_codomain.fullDim(),
-                              sorted_sector.size());
+    SPDLOG_INFO("Constructed inner_mat (size={},{}) and perform loop with {} steps.",
+                sorted_domain.fullDim(),
+                sorted_codomain.fullDim(),
+                sorted_sector.size());
     for(std::size_t i = 0; i < sorted_sector.size(); i++) {
-        spdlog::get("info")->info("step #={}", i);
+        SPDLOG_INFO("step #={}", i);
         auto id_cgc = Plain::template Identity<Scalar>(Symmetry::degeneracy(sorted_sector[i]), Symmetry::degeneracy(sorted_sector[i]), *world_);
-        spdlog::get("info")->info("Static identity done");
-        // spdlog::get("info")->info("block[{}]", i);
+        SPDLOG_INFO("Static identity done");
+        // SPDLOG_INFO("block[{}]", i);
         // sorted_block[i].print();
         auto mat = Plain::template kronecker_prod<Scalar>(sorted_block[i], id_cgc);
-        spdlog::get("info")->info("Kronecker Product done.");
+        SPDLOG_INFO("Kronecker Product done.");
         // mat.print();
         Plain::template add_to_block<Scalar>(inner_mat,
                                              sorted_domain.full_outer_num(sorted_sector[i]),
@@ -1019,7 +1007,7 @@ typename PlainLib_::template TType<Scalar_, Rank + CoRank> Xped<Scalar_, Rank, C
                                              Symmetry::degeneracy(sorted_sector[i]) * Plain::template rows<Scalar>(sorted_block[i]),
                                              Symmetry::degeneracy(sorted_sector[i]) * Plain::template cols<Scalar>(sorted_block[i]),
                                              mat);
-        spdlog::get("info")->info("Block added.");
+        SPDLOG_INFO("Block added.");
         // inner_mat.block(sorted_domain.full_outer_num(sorted_sector[i]),
         //                 sorted_codomain.full_outer_num(sorted_sector[i]),
         //                 Symmetry::degeneracy(sorted_sector[i]) * sorted_block[i].rows(),
@@ -1034,14 +1022,14 @@ typename PlainLib_::template TType<Scalar_, Rank + CoRank> Xped<Scalar_, Rank, C
 
     typename Plain::template TType<Scalar, 2> inner_tensor = Plain::template tensor_from_matrix_block<Scalar, 2>(
         inner_mat, 0, 0, Plain::template rows<Scalar>(inner_mat), Plain::template cols<Scalar>(inner_mat), full_dims);
-    spdlog::get("info")->info("constructed inner_tensor");
+    SPDLOG_INFO("constructed inner_tensor");
     //    inner_tensor.print();
     std::array<IndexType, Rank + 1> dims_domain;
     for(size_t i = 0; i < Rank; i++) { dims_domain[i] = sorted_uncoupled_domain[i].fullDim(); }
     dims_domain[Rank] = sorted_domain.fullDim();
-    spdlog::get("info")->info("dims domain:");
+    SPDLOG_INFO("dims domain:");
     // cout << "dims domain: ";
-    for(const auto& d : dims_domain) { spdlog::get("info")->info(std::to_string(d)); }
+    for(const auto& d : dims_domain) { SPDLOG_INFO(std::to_string(d)); }
     // cout << endl;
     typename Plain::template TType<Scalar, Rank + 1> unitary_domain = Plain::template construct<Scalar>(dims_domain, *world_);
     Plain::template setZero<Scalar, Rank + 1>(unitary_domain);
@@ -1080,7 +1068,7 @@ typename PlainLib_::template TType<Scalar_, Rank + CoRank> Xped<Scalar_, Rank, C
             Plain::template setSubTensor<Scalar, Rank + 1>(unitary_domain, offsets, extents, Tfull); // this amounts to =. Do we need +=?
         }
     }
-    spdlog::get("info")->info("constructed domain unitary");
+    SPDLOG_INFO("constructed domain unitary");
     // std::cout << "domain" << std::endl;
     //    unitary_domain.print();
     // unitary_domain.for_each_value([](double d) { std::cout << d << std::endl; });
@@ -1132,7 +1120,7 @@ typename PlainLib_::template TType<Scalar_, Rank + CoRank> Xped<Scalar_, Rank, C
             Plain::template setSubTensor<Scalar, CoRank + 1>(unitary_codomain, offsets, extents, Tfull); // this amounts to =. Do we need +=?
         }
     }
-    spdlog::get("info")->info("constructed codomain unitary");
+    SPDLOG_INFO("constructed codomain unitary");
     // std::cout << "codomain" << std::endl;
     //    unitary_codomain.print();
     // unitary_codomain.for_each_value([](double d) { std::cout << d << std::endl; });

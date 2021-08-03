@@ -19,7 +19,7 @@ typename Symmetry::Scalar
 dot(XPED_CONST Mps<Scalar, Symmetry>& Bra, XPED_CONST Mps<Scalar, Symmetry>& Ket, const DMRG::DIRECTION DIR = DMRG::DIRECTION::RIGHT)
 {
     assert(Bra.length() == Ket.length());
-    spdlog::get("info")->info("Entering dot()");
+    SPDLOG_INFO("Entering dot()");
     if(DIR == DMRG::DIRECTION::RIGHT) {
         Xped<Scalar, 1, 1, Symmetry> B({{Ket.inBasis(0)}}, {{Bra.inBasis(0)}});
         B.setIdentity();
@@ -32,7 +32,7 @@ dot(XPED_CONST Mps<Scalar, Symmetry>& Bra, XPED_CONST Mps<Scalar, Symmetry>& Ket
             // std::cout << B << std::endl;
             Bnext.clear();
         }
-        spdlog::get("info")->info("Leaving dot()");
+        SPDLOG_INFO("Leaving dot()");
         return B.norm();
     } else {
         Xped<Scalar, 1, 1, Symmetry> B({{Ket.outBasis(Ket.length() - 1)}}, {{Bra.outBasis(Bra.length() - 1)}});
@@ -49,7 +49,7 @@ dot(XPED_CONST Mps<Scalar, Symmetry>& Bra, XPED_CONST Mps<Scalar, Symmetry>& Ket
         // Bnext = (Ket.A.Ac[0] * B).template permute<+1, 0, 1, 2>() * (Bra.A.Ac[0].adjoint().template permute<-1, 2, 0, 1>());
         // Bnext = (Ket.A.Ac[0] * B).template permute<+1, 0, 1, 2>() * (Bra.A.Ac[0].template permute<+1, 0, 1, 2>().adjoint());
         contract_R(B, Bra.A.Ac[0], Ket.A.Ac[0], Bnext);
-        spdlog::get("info")->info("Leaving dot()");
+        SPDLOG_INFO("Leaving dot()");
         return Bnext.norm();
     }
 }

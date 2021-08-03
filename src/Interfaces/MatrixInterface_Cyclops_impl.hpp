@@ -36,8 +36,8 @@ struct MatrixInterface<CyclopsMatrixLib>
     template <typename Scalar>
     static MType<Scalar> construct_with_zero(const MIndextype& rows, const MIndextype& cols, CTF::World& world)
     {
-        spdlog::get("info")->info("Entering construct with zero");
-        spdlog::get("info")->info("rows={}, cols={}", rows, cols);
+        SPDLOG_INFO("Entering construct with zero");
+        SPDLOG_INFO("rows={}, cols={}", rows, cols);
         return MType<Scalar>(rows, cols, world);
     }
 
@@ -223,11 +223,11 @@ struct MatrixInterface<CyclopsMatrixLib>
     static MType<Scalar>
     block(const MType<Scalar>& M, const MIndextype& row_off, const MIndextype& col_off, const MIndextype& rows, const MIndextype& cols)
     {
-        spdlog::get("info")->info("Entering MatrixInterface::block()");
-        spdlog::get("info")->info("Extract block of mat with dims=({},{})", M.nrow, M.ncol);
+        SPDLOG_INFO("Entering MatrixInterface::block()");
+        SPDLOG_INFO("Extract block of mat with dims=({},{})", M.nrow, M.ncol);
         std::array<MIndextype, 2> offsets = {row_off, col_off};
         std::array<MIndextype, 2> ends = {row_off + rows, col_off + cols};
-        spdlog::get("info")->info("Prepared the dims: offs=({},{}), ends=({},{})", offsets[0], offsets[1], ends[0], ends[1]);
+        SPDLOG_INFO("Prepared the dims: offs=({},{}), ends=({},{})", offsets[0], offsets[1], ends[0], ends[1]);
         // {
         //     volatile int i = 0;
         //     char hostname[256];
@@ -237,7 +237,7 @@ struct MatrixInterface<CyclopsMatrixLib>
         //     while(0 == i) sleep(5);
         // }
         CTF::Matrix<Scalar> out = (M.slice(offsets.data(), ends.data()));
-        spdlog::get("info")->info("Leaving MatrixInterface::block()");
+        SPDLOG_INFO("Leaving MatrixInterface::block()");
         return out;
     }
 
@@ -249,15 +249,15 @@ struct MatrixInterface<CyclopsMatrixLib>
                              const MIndextype& cols,
                              const MType<Scalar>& M2)
     {
-        spdlog::get("info")->info("Entering MatrixInterface::add_to_block().");
-        spdlog::get("info")->info("Add to block of mat with dims=({},{})", M1.nrow, M1.ncol);
-        spdlog::get("info")->info("Add mat with dims=({},{})", M2.nrow, M2.ncol);
+        SPDLOG_INFO("Entering MatrixInterface::add_to_block().");
+        SPDLOG_INFO("Add to block of mat with dims=({},{})", M1.nrow, M1.ncol);
+        SPDLOG_INFO("Add mat with dims=({},{})", M2.nrow, M2.ncol);
         std::array<MIndextype, 2> offsets = {row_off, col_off};
         std::array<MIndextype, 2> ends = {row_off + rows, col_off + cols};
         std::array<MIndextype, 2> offsets_M2 = {0, 0};
         std::array<MIndextype, 2> ends_M2 = {static_cast<MIndextype>(M2.nrow), static_cast<MIndextype>(M2.ncol)};
         M1.slice(offsets.data(), ends.data(), Scalar(1.), M2, offsets_M2.data(), ends_M2.data(), Scalar(1.));
-        spdlog::get("info")->info("Leaving MatrixInterface::add_to_block().");
+        SPDLOG_INFO("Leaving MatrixInterface::add_to_block().");
     }
 
     template <typename Scalar, typename MT>

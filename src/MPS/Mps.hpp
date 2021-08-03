@@ -271,16 +271,16 @@ void Mps<Scalar_, Symmetry_>::leftSweepStep(const std::size_t loc, const DMRG::B
 template <typename Scalar_, typename Symmetry_>
 void Mps<Scalar_, Symmetry_>::rightSweepStep(const std::size_t loc, const DMRG::BROOM& broom, const bool DISCARD_V)
 {
-    spdlog::get("info")->info("Entering Mps::rightSweepStep()");
+    SPDLOG_INFO("Entering Mps::rightSweepStep()");
     bool RETURN_SPEC = false;
     if(loc != N_sites - 1) { RETURN_SPEC = true; }
     double entropy;
     std::map<qType, VectorType> SVspec_;
     Xped<Scalar, 2, 1, Symmetry> left;
     Xped<Scalar, 1, 1, Symmetry> right;
-    spdlog::get("info")->info("Set up pre stuff.");
+    SPDLOG_INFO("Set up pre stuff.");
     auto [U, Sigma, Vdag] = A.Ac[loc].tSVD(max_Nsv, eps_svd, truncWeight[loc], entropy, SVspec_, false, RETURN_SPEC);
-    spdlog::get("info")->info("Applied the svd.");
+    SPDLOG_INFO("Applied the svd.");
     // std::cout << Sigma << std::endl;
     if(loc != this->N_sites - 1) {
         S[loc] = entropy;
@@ -293,6 +293,6 @@ void Mps<Scalar_, Symmetry_>::rightSweepStep(const std::size_t loc, const DMRG::
     if(loc != this->N_sites - 1 and DISCARD_V == false) {
         A.Ac[loc + 1] = (right * (A.Ac[loc + 1].template permute<+1, 0, 1, 2>())).template permute<-1, 0, 1, 2>();
     }
-    spdlog::get("info")->info("Leaving Mps::rightSweepStep()");
+    SPDLOG_INFO("Leaving Mps::rightSweepStep()");
 }
 #endif

@@ -191,6 +191,7 @@ if(XPED_USE_MPI)
 endif()
 
 if(XPED_USE_BLAS)
+  target_compile_definitions(${project_name} INTERFACE XPED_USE_BLAS=1)
   target_compile_definitions(${project_name} INTERFACE EIGEN_USE_BLAS=1)
   if(XPED_USE_LAPACK)
     target_compile_definitions(${project_name} INTERFACE EIGEN_USE_LAPACKE=1)

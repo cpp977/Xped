@@ -645,25 +645,14 @@ template <typename Symmetry, std::size_t depth>
 auto Qbasis<Symmetry, depth>::print() const
 {
     tabulate::Table t;
-    // TextTable t('-', '|', '+');
     t.add_row({"Q", "Dim(Q)", "num"});
-    // t.add("Q");
-    // t.add("Dim(Q)");
-    // t.add("num");
-    // t.endOfRow();
     for(const auto& entry : data_) {
         auto [q_Phys, curr_num, plain] = entry;
         std::stringstream ss, tt, uu;
         ss << Sym::format<Symmetry>(q_Phys);
-
         tt << plain.dim();
-
         uu << curr_num;
         t.add_row({ss.str(), tt.str(), uu.str()});
-        // t.add(ss.str());
-        // t.add(tt.str());
-        // t.add(uu.str());
-        // t.endOfRow();
     }
     t.format()
         .font_align(tabulate::FontAlign::center)

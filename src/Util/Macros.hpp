@@ -20,8 +20,20 @@
 
 #if defined(__clang__)
 #    define XPED_COMP_CLANG (__clang_major__ * 100 + __clang_minor__)
+const std::string XPED_COMPILER_STR = "clang++";
 #else
 #    define XPED_COMP_CLANG 0
+const std::string XPED_COMPILER_STR = "g++";
+#endif
+
+#ifdef XPED_USE_BLAS
+#    ifdef MKL_ILP64
+const std::string XPED_BLAS_STR = "MKL";
+#    else
+const std::string XPED_BLAS_STR = "OpenBLAS";
+#    endif
+#else
+const std::string XPED_BLAS_STR = "None";
 #endif
 
 // Get supported std of the compiler

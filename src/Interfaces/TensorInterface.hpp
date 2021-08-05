@@ -2,13 +2,19 @@
 #define TENSORINTERFACE_HPP__
 
 struct EigenTensorLib
-{};
+{
+    const std::string name() const { return "Eigen"; }
+};
 
 struct ArrayTensorLib
-{};
+{
+    const std::string name() const { return "ndarray"; }
+};
 
 struct CyclopsTensorLib
-{};
+{
+    const std::string name() const { return "CTF Tensor"; }
+};
 
 #ifdef XPED_USE_ARRAY_TENSOR_LIB
 #    define M_TENSORLIB ArrayTensorLib

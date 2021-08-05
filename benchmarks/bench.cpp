@@ -1,5 +1,6 @@
 #include <cstddef>
 #include <cstdio>
+#include <filesystem>
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -12,16 +13,18 @@
 #ifdef _OPENMP
 #    pragma message("Xped is using OpenMP parallelization")
 #    include "omp.h"
+const int XPED_MAX_THREADS = omp_get_max_threads();
+#else
+const int XPED_MAX_THREADS = 1;
 #endif
 
+#include "ArgParser.h"
 #include "Stopwatch.h"
 
 using std::cout;
 using std::endl;
 using std::size_t;
 using std::string;
-
-#include "ArgParser.h"
 
 #include "Util/Macros.hpp"
 
@@ -98,6 +101,7 @@ int main(int argc, char* argv[])
     auto NORM = args.get<bool>("NORM", true);
     auto SWEEP = args.get<bool>("SWEEP", true);
     auto INFO = args.get<bool>("INFO", true);
+    auto outfile = args.get<std::string>("outfile", "./out.csv");
 
     qType Qtot = {D};
     Qbasis<Symmetry, 1> qloc_;
@@ -114,17 +118,20 @@ int main(int argc, char* argv[])
 
     XPED_MPI_BARRIER(world.comm)
 
+    Eigen::ArrayXd norm_times;
+
     if(INFO) {
-        for(size_t l = 0; l <= L; l++) {
-            // std::stringstream ss;
-            // ss << Psi.auxBasis(l);
-            SPDLOG_INFO("l={} \n {}", l, Psi.auxBasis(l));
-        }
+        for(size_t l = 0; l <= L; l++) { SPDLOG_INFO("l={} \n {}", l, Psi.auxBasis(l)); }
     }
     if(NORM) {
-        Stopwatch<> norm;
-        for(std::size_t i = 0; i < reps; i++) { SPDLOG_WARN("<Psi|Psi>= {:03.2e}", dot(Psi, Psi, DIR)); }
-        SPDLOG_CRITICAL(norm.info("Time for norm"));
+        norm_times.resize(reps);
+        for(std::size_t i = 0; i < reps; i++) {
+            Stopwatch<> norm;
+            double normsq __attribute__((unused)) = dot(Psi, Psi, DIR);
+            norm_times(i) = norm.time();
+            SPDLOG_WARN("<Psi|Psi>= {:03.2e}", normsq);
+        }
+        SPDLOG_CRITICAL("Time for norm: {}", norm_times.sum());
     }
     if(SWEEP) {
         Stopwatch<> Sweep;
@@ -145,6 +152,66 @@ int main(int argc, char* argv[])
     std::cout << "total misses=" << tree_cache<1, 2, 1, Symmetry>.cache.stats().total_misses() << endl; // Misses for any key
     std::cout << "hit rate=" << tree_cache<1, 2, 1, Symmetry>.cache.stats().hit_rate() << endl; // Hit rate in [0, 1]
 #endif
+
+    XPED_MPI_BARRIER(world.comm)
+
+    if(world.rank == 0) {
+        std::filesystem::path p(outfile);
+        std::ofstream f;
+        if(std::filesystem::exists(p)) {
+            f = std::ofstream(p, std::ios::app);
+        } else {
+            f = std::ofstream(p, std::ios::out);
+            f << "Compiler,BLAS,#Processes,#Threads / process,Lib,Algorithm,Nq,M,L,Repetition,Total t [s],Mean t [s],Min t [s],Max t [s]\n";
+        }
+        f << XPED_COMPILER_STR << "," << XPED_BLAS_STR << "," << world.np << "," << XPED_MAX_THREADS << "," << XPED_DEFAULT_TENSORLIB{}.name()
+          << ",norm," << std::to_string(Qinit) << "," << std::to_string(Minit) << "," << std::to_string(L) << "," << std::to_string(reps) << ","
+          << std::to_string(norm_times.sum()) << "," << std::to_string(norm_times.mean()) << "," << std::to_string(norm_times.minCoeff()) << ","
+          << std::to_string(norm_times.maxCoeff()) << "\n";
+        f.close();
+
+        using Row_t = std::vector<variant<std::string, const char*, tabulate::Table>>;
+        tabulate::Table t;
+        t.add_row({"Compiler",
+                   "BLAS",
+                   "#Processes",
+                   "#Threads / process",
+                   "Lib",
+                   "Algorithm",
+                   "Nq",
+                   "M",
+                   "L",
+                   "Repetitions",
+                   "Total t [s]",
+                   "Mean t [s]",
+                   "Min t [s]",
+                   "Max t [s]"});
+        t.add_row(Row_t{XPED_COMPILER_STR,
+                        XPED_BLAS_STR,
+                        std::to_string(world.np),
+                        std::to_string(XPED_MAX_THREADS),
+                        XPED_DEFAULT_TENSORLIB{}.name(),
+                        "norm",
+                        std::to_string(Qinit),
+                        std::to_string(Minit),
+                        std::to_string(L),
+                        std::to_string(reps),
+                        std::to_string(norm_times.sum()),
+                        std::to_string(norm_times.mean()),
+                        std::to_string(norm_times.minCoeff()),
+                        std::to_string(norm_times.maxCoeff())});
+        t.format()
+            .font_align(tabulate::FontAlign::center)
+            .font_style({tabulate::FontStyle::bold})
+            .border_top("-")
+            .border_bottom("-")
+            .border_left("|")
+            .border_right("|")
+            .corner(" ");
+        t[0].format().padding_top(1).padding_bottom(1).font_style({tabulate::FontStyle::underline}).font_background_color(tabulate::Color::grey);
+
+        std::cout << t << std::endl;
+    }
 #ifdef XPED_USE_MPI
     SPDLOG_CRITICAL("Calling MPI_Finalize()");
     // volatile int i = 0;

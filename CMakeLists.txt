@@ -101,8 +101,8 @@ endif()
 ##########################################                          end                   #########################################
 ###################################################################################################################################
 
-find_package(GSL REQUIRED)
-find_package(Boost REQUIRED)
+find_package(GSL 1.16 REQUIRED)
+find_package(Boost 1.34.0 REQUIRED)
 
 if(XPED_USE_OPENMP)
   find_package(OpenMP)
@@ -236,7 +236,7 @@ include(cmake/clang-format.cmake)
 add_subdirectory(src)
 
 if (${XPED_BUILD_TESTS})
-  find_package(doctest REQUIRED)
+  find_package(doctest 2.4.6 REQUIRED)
   add_subdirectory(tests)
 endif()
 

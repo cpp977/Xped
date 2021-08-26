@@ -641,8 +641,8 @@ Xped<Scalar_, Rank, CoRank, Symmetry, PlainLib_>::tSVD(size_t maxKeep,
                                                        bool PRESERVE_MULTIPLETS,
                                                        bool RETURN_SPEC) XPED_CONST
 {
-    SPDLOG_TRACE("Entering Xped::tSVD()");
-    SPDLOG_TRACE("Input param eps_svd={}", eps_svd);
+    SPDLOG_INFO("Entering Xped::tSVD()");
+    SPDLOG_INFO("Input param eps_svd={}", eps_svd);
     entropy = 0.;
     truncWeight = 0;
     Qbasis<Symmetry, 1> middle;
@@ -653,11 +653,11 @@ Xped<Scalar_, Rank, CoRank, Symmetry, PlainLib_>::tSVD(size_t maxKeep,
     Xped<Scalar, 1, CoRank, Symmetry, PlainLib_> Vdag({{middle}}, uncoupled_codomain);
 
     std::vector<std::pair<typename Symmetry::qType, RealScalar>> allSV;
-    SPDLOG_TRACE("Performing the svd loop (size={})", sector_.size());
+    SPDLOG_INFO("Performing the svd loop (size={})", sector_.size());
     for(size_t i = 0; i < sector_.size(); ++i) {
-        SPDLOG_TRACE("Step i={} for mat with dim=({},{})", i, Plain::template rows<Scalar>(block_[i]), Plain::template rows<Scalar>(block_[i]));
+        SPDLOG_INFO("Step i={} for mat with dim=({},{})", i, Plain::template rows<Scalar>(block_[i]), Plain::template rows<Scalar>(block_[i]));
         auto [Umat, Sigmavec, Vmatdag] = Plain::template svd<Scalar>(block_[i]);
-        SPDLOG_TRACE("Performed svd for step i={}", i);
+        SPDLOG_INFO("Performed svd for step i={}", i);
         // #ifdef XPED_DONT_USE_BDCSVD
         //         Eigen::JacobiSVD<MatrixType> Jack; // standard SVD
         // #else
@@ -669,32 +669,32 @@ Xped<Scalar_, Rank, CoRank, Symmetry, PlainLib_>::tSVD(size_t maxKeep,
         Plain::template vec_to_stdvec<Scalar>(Sigmavec, svs);
 
         for(const auto& sv : svs) {
-            SPDLOG_TRACE("Move the element {} from sigma to allSV", sv);
+            SPDLOG_INFO("Move the element {} from sigma to allSV", sv);
             allSV.push_back(std::make_pair(sector_[i], sv));
         }
-        SPDLOG_TRACE("Extracted singular values for step i={}", i);
+        SPDLOG_INFO("Extracted singular values for step i={}", i);
         auto Sigmamat = Plain::template vec_to_diagmat<Scalar>(Sigmavec);
         U.push_back(sector_[i], Umat);
         Sigma.push_back(sector_[i], Sigmamat);
         Vdag.push_back(sector_[i], Vmatdag);
     }
     size_t numberOfStates = allSV.size();
-    SPDLOG_TRACE("numberOfStates={}", numberOfStates);
-    SPDLOG_TRACE("allSV={}\n", allSV);
+    SPDLOG_INFO("numberOfStates={}", numberOfStates);
+    SPDLOG_INFO("allSV={}\n", allSV);
     std::sort(allSV.begin(),
               allSV.end(),
               [](const std::pair<typename Symmetry::qType, double>& sv1, const std::pair<typename Symmetry::qType, double>& sv2) {
                   return sv1.second > sv2.second;
               });
-    SPDLOG_TRACE("numberOfStates after sort {}", allSV.size());
+    SPDLOG_INFO("numberOfStates after sort {}", allSV.size());
     for(size_t i = maxKeep; i < allSV.size(); i++) { truncWeight += Symmetry::degeneracy(allSV[i].first) * std::pow(std::abs(allSV[i].second), 2.); }
     allSV.resize(std::min(maxKeep, numberOfStates));
-    SPDLOG_TRACE("numberOfStates after resize {}", allSV.size());
+    SPDLOG_INFO("numberOfStates after resize {}", allSV.size());
     // std::erase_if(allSV, [eps_svd](const pair<typename Symmetry::qType, Scalar> &sv) { return (sv < eps_svd); }); c++-20 version
     allSV.erase(std::remove_if(
                     allSV.begin(), allSV.end(), [eps_svd](const std::pair<typename Symmetry::qType, double>& sv) { return (sv.second < eps_svd); }),
                 allSV.end());
-    SPDLOG_TRACE("numberOfStates after erase {}", allSV.size());
+    SPDLOG_INFO("numberOfStates after erase {}", allSV.size());
     // cout << "saving sv for expansion to file, #sv=" << allSV.size() << endl;
     // ofstream Filer("sv_expand");
     // size_t index=0;
@@ -721,7 +721,7 @@ Xped<Scalar_, Rank, CoRank, Symmetry, PlainLib_>::tSVD(size_t maxKeep,
             allSV.resize(endOfMultiplet);
         }
     }
-    SPDLOG_TRACE("Adding {} states from {} states", allSV.size(), numberOfStates);
+    SPDLOG_INFO("Adding {} states from {} states", allSV.size(), numberOfStates);
     // std::cout << "Adding " << allSV.size() << " states from " << numberOfStates << " states" << std::endl;
     std::map<typename Symmetry::qType, std::vector<Scalar>> qn_orderedSV;
     Qbasis<Symmetry, 1> truncBasis;
@@ -730,38 +730,38 @@ Xped<Scalar_, Rank, CoRank, Symmetry, PlainLib_>::tSVD(size_t maxKeep,
         qn_orderedSV[q].push_back(s);
         entropy += -Symmetry::degeneracy(q) * s * s * std::log(s * s);
     }
-    SPDLOG_TRACE("Set up the truncated basis.");
+    SPDLOG_INFO("Set up the truncated basis.");
     std::stringstream ss;
     ss << truncBasis.print();
-    SPDLOG_TRACE(ss.str());
+    SPDLOG_INFO(ss.str());
 
     Xped<Scalar, Rank, 1, Symmetry, PlainLib_> trunc_U(uncoupled_domain, {{truncBasis}});
     Xped<RealScalar, 1, 1, Symmetry, PlainLib_> trunc_Sigma({{truncBasis}}, {{truncBasis}});
     Xped<Scalar, 1, CoRank, Symmetry, PlainLib_> trunc_Vdag({{truncBasis}}, uncoupled_codomain);
-    SPDLOG_TRACE("Starting the loop for truncating U,S,V (size={})", qn_orderedSV.size());
+    SPDLOG_INFO("Starting the loop for truncating U,S,V (size={})", qn_orderedSV.size());
     for(const auto& [q, vec_sv] : qn_orderedSV) {
-        SPDLOG_TRACE("Step with q={}", q.data[0]);
+        SPDLOG_INFO("Step with q={}", q.data[0]);
         size_t Nret = vec_sv.size();
         // cout << "q=" << q << ", Nret=" << Nret << endl;
         auto itSigma = Sigma.dict_.find({q});
-        SPDLOG_TRACE("Searched the dict of Sigma.");
+        SPDLOG_INFO("Searched the dict of Sigma.");
         auto sigma_mat = Plain::template block(Sigma.block_[itSigma->second], 0, 0, Nret, Nret);
-        SPDLOG_TRACE("Got subblock of Sigma.");
+        SPDLOG_INFO("Got subblock of Sigma.");
         trunc_Sigma.push_back(q, sigma_mat);
         // if(RETURN_SPEC) { SVspec.insert(std::make_pair(q, Sigma.block_[itSigma->second].diagonal().head(Nret).real())); }
-        SPDLOG_TRACE("Before return spec.");
+        SPDLOG_INFO("Before return spec.");
         if(RETURN_SPEC) {
             VectorType spec;
             Plain::template diagonal_head_matrix_to_vector<RealScalar>(spec, Sigma.block_[itSigma->second], Nret);
             SVspec.insert(std::make_pair(q, spec));
         }
-        SPDLOG_TRACE("After return spec.");
+        SPDLOG_INFO("After return spec.");
         auto itU = U.dict_.find({q});
         trunc_U.push_back(q, Plain::template block(U.block_[itU->second], 0, 0, Plain::rows(U.block_[itU->second]), Nret));
         auto itVdag = Vdag.dict_.find({q});
         trunc_Vdag.push_back(q, Plain::template block(Vdag.block_[itVdag->second], 0, 0, Nret, Plain::cols(U.block_[itU->second])));
     }
-    SPDLOG_TRACE("Leaving Xped::tSVD()");
+    SPDLOG_INFO("Leaving Xped::tSVD()");
     return std::make_tuple(U, Sigma, Vdag);
 }
 

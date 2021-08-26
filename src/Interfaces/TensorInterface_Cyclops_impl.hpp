@@ -41,7 +41,6 @@ struct TensorInterface<CyclopsTensorLib>
         if(i == 104) { return 'v'; }
         if(i == 105) { return 'u'; }
         if(i == 106) { return 't'; }
-        assert(false and "Invalid usage of idx() for CTF tensors.");
         return 'e';
     }
 

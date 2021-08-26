@@ -25,7 +25,6 @@ function(set_project_options project_name)
   
   set(CLANG_OPTIONS_RELEASE
       -stdlib=${USED_LIBCXX}
-      -std=c++17
       # -O3
       -march=native
       # -m64
@@ -33,7 +32,6 @@ function(set_project_options project_name)
       -fcolor-diagnostics
   )
   set(CLANG_OPTIONS_DEBUG
-      -std=c++17
       -stdlib=${USED_LIBCXX}
       # -O0
       # -g
@@ -43,7 +41,6 @@ function(set_project_options project_name)
       -fcolor-diagnostics
   )
   set(CLANG_OPTIONS_PROFILE
-      -std=c++17
       -stdlib=${USED_LIBCXX}
       -O2
       -pg
@@ -69,7 +66,6 @@ function(set_project_options project_name)
   )
   
   set(GCC_OPTIONS_RELEASE
-      -std=c++17
       # -O3
       -march=native
       # -m64
@@ -77,7 +73,6 @@ function(set_project_options project_name)
       -fdiagnostics-color=always
   )
   set(GCC_OPTIONS_DEBUG
-      -std=c++17
       # -O0
       # -g
       -march=native
@@ -86,7 +81,6 @@ function(set_project_options project_name)
       -fdiagnostics-color=always
   )
   set(GCC_OPTIONS_PROFILE
-      -std=c++17
       -O2
       -pg
       -march=native
@@ -183,10 +177,11 @@ function(set_project_options project_name)
   endif()
 
 target_compile_options(${project_name} INTERFACE ${PROJECT_OPTIONS})
+target_compile_options(${project_name} INTERFACE -std=c++17)
 
 target_link_options(${project_name} INTERFACE ${PROJECT_LOPTIONS})
 
-# target_compile_features(project_options INTERFACE cxx_std_17)
+#target_compile_features(project_options INTERFACE cxx_std_17)
 
 target_compile_definitions(${project_name} INTERFACE XPED_LOG_LEVEL=${XPED_LOG_LEVEL})
 

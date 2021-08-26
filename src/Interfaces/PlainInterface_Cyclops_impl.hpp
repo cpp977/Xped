@@ -111,9 +111,10 @@ struct PlainInterface<CyclopsMatrixLib, CyclopsTensorLib, CyclopsVectorLib>
         assert(n_elems <= M.nrow);
         assert(n_elems <= M.ncol);
         SPDLOG_INFO("Got mat with size=({},{}) and cut size={}", M.nrow, M.ncol, n_elems);
-        CTF::Vector<Scalar> tmp(M.nrow, *V.wrld);
+        CTF::Vector<Scalar> tmp(M.nrow, *M.wrld);
         SPDLOG_INFO("Constructed vector of size={}", M.nrow);
         tmp["i"] = M["ii"];
+        SPDLOG_INFO("Set the elements of the tmp vec.");
         std::array<int, 1> offsets = {0};
         std::array<int, 1> ends = {n_elems};
         V = tmp.slice(offsets.data(), ends.data());

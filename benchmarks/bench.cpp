@@ -119,7 +119,8 @@ int main(int argc, char* argv[])
     XPED_MPI_BARRIER(world.comm)
 
     Eigen::ArrayXd norm_times;
-
+    norm_times.resize(reps);
+    norm_times.setZero();
     if(INFO) {
         for(size_t l = 0; l <= L; l++) { SPDLOG_INFO("l={} \n {}", l, Psi.auxBasis(l)); }
     }

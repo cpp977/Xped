@@ -48,7 +48,7 @@ struct TensorInterface
     // return dimensions [x] [x]
 };
 
-#include "NestedLoopIterator.h"
+#include "TOOLS/NestedLoopIterator.h"
 #include "seq/seq.h"
 
 #if defined XPED_USE_EIGEN_TENSOR_LIB

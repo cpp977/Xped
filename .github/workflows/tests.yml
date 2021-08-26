@@ -52,6 +52,14 @@ jobs:
     - run: cd $GITHUB_WORKSPACE/doctest-src && cmake --build .
     - run: cd $GITHUB_WORKSPACE/doctest-src && sudo cmake --build . --target install
     - run: sudo cp -r $GITHUB_WORKSPACE/doctest-src/doctest/extensions /usr/local/include/doctest/
+    - uses: actions/checkout@v2
+      with:
+        repository: cpp977/TOOLS
+        ref: master
+        path: tools-src
+    - run: sudo mkdir -p /usr/local/include/TOOLS
+    - run: sudo cp -r $GITHUB_WORKSPACE/tools-src/TOOLS/* /usr/local/include/TOOLS/
+      
     - run: sudo apt-get install g++-10
     - run: sudo apt-get install libc++abi1-11
     - run: sudo apt-get install libc++1-11

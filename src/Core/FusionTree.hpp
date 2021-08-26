@@ -15,9 +15,9 @@
 #include "Interfaces/TensorInterface.hpp"
 
 #include "Hash/hash.hpp"
-#include "Permutations.h"
 #include "Symmetry/functions.hpp"
-#include "numeric_limits.h"
+#include "TOOLS/Permutations.h"
+#include "TOOLS/numeric_limits.h"
 
 namespace util {
 constexpr std::size_t inter_dim(std::size_t Rank) { return (Rank == 1 or Rank == 0) ? 0 : Rank - 2; }

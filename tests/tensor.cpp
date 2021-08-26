@@ -27,8 +27,6 @@ using std::string;
 
 #include "spdlog/spdlog.h"
 
-#include "ArgParser.h"
-
 #include "Util/Mpi.hpp"
 
 #ifdef XPED_CACHE_PERMUTE_OUTPUT

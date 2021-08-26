@@ -297,29 +297,29 @@ if(${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR" AND XPED_BUILD_CYCLOPS)
   endif()
 endif()
 
-set(TOOLS_ROOT ${CMAKE_BINARY_DIR}/thirdparty/tools)
-set(TOOLS_INCLUDE_DIR ${TOOLS_ROOT}/src/TOOLS)
+# set(TOOLS_ROOT ${CMAKE_BINARY_DIR}/thirdparty/tools)
+# set(TOOLS_INCLUDE_DIR ${TOOLS_ROOT}/src/TOOLS)
 
-ExternalProject_Add(
-        TOOLS
-        PREFIX ${TOOLS_ROOT}
-        GIT_REPOSITORY "ssh://git@github.com/cpp977/TOOLS.git"
-        GIT_SHALLOW ON
-        TIMEOUT 10
-#        UPDATE_COMMAND ${GIT_EXECUTABLE} pull
-        UPDATE_COMMAND ""
-        CONFIGURE_COMMAND ""
-        BUILD_COMMAND ""
-        INSTALL_COMMAND ""
-        LOG_DOWNLOAD ON
-        LOG_MERGED_STDOUTERR ON
-        USES_TERMINAL_DOWNLOAD ON
-)
+# ExternalProject_Add(
+#         TOOLS
+#         PREFIX ${TOOLS_ROOT}
+#         GIT_REPOSITORY "ssh://git@github.com/cpp977/TOOLS.git"
+#         GIT_SHALLOW ON
+#         TIMEOUT 10
+# #        UPDATE_COMMAND ${GIT_EXECUTABLE} pull
+#         UPDATE_COMMAND ""
+#         CONFIGURE_COMMAND ""
+#         BUILD_COMMAND ""
+#         INSTALL_COMMAND ""
+#         LOG_DOWNLOAD ON
+#         LOG_MERGED_STDOUTERR ON
+#         USES_TERMINAL_DOWNLOAD ON
+# )
 
-add_library(XPED_TOOLS INTERFACE)
-set_target_properties(XPED_TOOLS PROPERTIES
-  INTERFACE_INCLUDE_DIRECTORIES ${TOOLS_INCLUDE_DIR}
-  )
+# add_library(XPED_TOOLS INTERFACE)
+# set_target_properties(XPED_TOOLS PROPERTIES
+#   INTERFACE_INCLUDE_DIRECTORIES ${TOOLS_INCLUDE_DIR}
+#   )
 
 set(EIGEN_ROOT ${CMAKE_BINARY_DIR}/thirdparty/eigen)
 set(EIGEN_INCLUDE_DIR ${EIGEN_ROOT}/src/Eigen)

@@ -15,7 +15,7 @@ add_dependencies(benchmark
   tabulate
   spdlog
   yas
-  TOOLS
+#  TOOLS
   Eigen
   seq)
                  
@@ -37,7 +37,7 @@ target_link_libraries (benchmark
   GSL::gslcblas
   Boost::headers
   XPED_EIGEN
-  XPED_TOOLS
+#  XPED_TOOLS
   XPED_TABULATE
   XPED_SPDLOG
   XPED_YAS

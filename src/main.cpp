@@ -20,14 +20,14 @@
 #    include "omp.h"
 #endif
 
-#include "Stopwatch.h"
+#include "TOOLS/Stopwatch.h"
 
 using std::cout;
 using std::endl;
 using std::size_t;
 using std::string;
 
-#include "ArgParser.h"
+#include "TOOLS/ArgParser.h"
 
 #include "Util/Macros.hpp"
 #include "Util/Mpi.hpp"

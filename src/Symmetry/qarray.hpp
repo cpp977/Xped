@@ -14,8 +14,7 @@
 #include "yas/serialize.hpp"
 #include "yas/std_types.hpp"
 
-#include "JoinArray.h"
-#include "NestedLoopIterator.h"
+#include "TOOLS/JoinArray.h"
 
 /**
  * Array of quantum numbers corresponding to Abelian or non Abelian symmetries.

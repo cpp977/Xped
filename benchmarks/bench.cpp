@@ -18,8 +18,8 @@ const int XPED_MAX_THREADS = omp_get_max_threads();
 const int XPED_MAX_THREADS = 1;
 #endif
 
-#include "ArgParser.h"
-#include "Stopwatch.h"
+#include "TOOLS/ArgParser.h"
+#include "TOOLS/Stopwatch.h"
 
 using std::cout;
 using std::endl;

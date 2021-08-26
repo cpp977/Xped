@@ -22,7 +22,7 @@ add_dependencies(run
   tabulate
   spdlog
   yas
-  TOOLS
+#  TOOLS
   Eigen
   seq)
                  
@@ -43,7 +43,7 @@ target_link_libraries (run
   GSL::gsl
   GSL::gslcblas
   XPED_EIGEN
-  XPED_TOOLS
+#  XPED_TOOLS
   XPED_TABULATE
   XPED_SPDLOG
   XPED_YAS

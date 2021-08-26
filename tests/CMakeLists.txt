@@ -37,7 +37,7 @@ add_dependencies(basis_test
   tabulate
   spdlog
   yas
-  TOOLS
+#  TOOLS
   Eigen
   seq)
                  
@@ -57,7 +57,7 @@ target_link_libraries (basis_test
   GSL::gsl
   GSL::gslcblas
   XPED_EIGEN
-  XPED_TOOLS
+#  XPED_TOOLS
   XPED_TABULATE
   XPED_SPDLOG
   XPED_YAS
@@ -107,7 +107,7 @@ add_dependencies(tree_test
   tabulate
   spdlog
   yas
-  TOOLS
+#  TOOLS
   Eigen
   seq)
                  
@@ -127,7 +127,7 @@ target_link_libraries (tree_test
   GSL::gsl
   GSL::gslcblas
   XPED_EIGEN
-  XPED_TOOLS
+#  XPED_TOOLS
   XPED_TABULATE
   XPED_SPDLOG
   XPED_YAS
@@ -177,7 +177,7 @@ add_dependencies(tensor_test
   tabulate
   spdlog
   yas
-  TOOLS
+#  TOOLS
   Eigen
   seq)
                  
@@ -197,7 +197,7 @@ target_link_libraries (tensor_test
   GSL::gsl
   GSL::gslcblas
   XPED_EIGEN
-  XPED_TOOLS
+#  XPED_TOOLS
   XPED_TABULATE
   XPED_SPDLOG
   XPED_YAS
@@ -247,7 +247,7 @@ add_dependencies(mps_test
   tabulate
   spdlog
   yas
-  TOOLS
+#  TOOLS
   Eigen
   seq)
                  
@@ -267,7 +267,7 @@ target_link_libraries (mps_test
   GSL::gsl
   GSL::gslcblas
   XPED_EIGEN
-  XPED_TOOLS
+#  XPED_TOOLS
   XPED_TABULATE
   XPED_SPDLOG
   XPED_YAS

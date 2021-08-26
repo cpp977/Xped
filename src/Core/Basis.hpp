@@ -6,8 +6,6 @@
 #include "yas/std_types.hpp"
 
 #include "tabulate/tabulate.hpp"
-
-#include "Eigen/Core"
 /// \endcond
 
 // forward declaration
@@ -31,7 +29,7 @@ public:
     Basis(std::size_t dim_in)
         : dim_(dim_in){};
 
-    Eigen::Index dim() const { return dim_; }
+    std::size_t dim() const { return dim_; }
 
     /**Adds to bases together.*/
     Basis add(const Basis& other) const;
@@ -63,10 +61,10 @@ private:
 
     struct fuseData
     {
-        Eigen::Index dim1, dim2;
-        std::array<Eigen::Index, 2> source(Eigen::Index combined_num) const
+        std::size_t dim1, dim2;
+        std::array<std::size_t, 2> source(std::size_t combined_num) const
         {
-            Eigen::Index tmp = combined_num / dim1;
+            std::size_t tmp = combined_num / dim1;
             return {{combined_num - dim1 * tmp, tmp}};
         };
         template <typename Ar>

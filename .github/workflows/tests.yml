@@ -55,6 +55,7 @@ jobs:
     - uses: actions/checkout@v2
       with:
         repository: cpp977/TOOLS
+        token: ${{ secrets.push_pull }}
         ref: master
         path: tools-src
     - run: sudo mkdir -p /usr/local/include/TOOLS

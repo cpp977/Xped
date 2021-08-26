@@ -35,6 +35,7 @@ target_link_libraries (benchmark
   project_warnings
   GSL::gsl
   GSL::gslcblas
+  Boost::headers
   XPED_EIGEN
   XPED_TOOLS
   XPED_TABULATE
@@ -43,6 +44,11 @@ target_link_libraries (benchmark
   XPED_SEQ
   )
 
+if((CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 9) OR CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
+  message(STATUS "Adding explicit linker flag for cpp-17 std::filesystem.")
+  target_link_libraries(benchmark stdc++fs)
+endif()
+  
 if(${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR")
   target_link_libraries(benchmark cyclops_lib::all)
 elseif(${XPED_TENSOR_LIB} STREQUAL "ARRAY_TENSOR")
@@ -57,6 +63,10 @@ if(XPED_USE_MPI)
   target_link_libraries(benchmark MPI::MPI_CXX)
 endif()
 
+if(XPED_USE_OPENMP)
+  target_link_libraries (benchmark OpenMP::OpenMP_CXX)
+endif()
+
 if(XPED_USE_BLAS)
   target_link_libraries (benchmark BLAS::BLAS)
 endif()
@@ -68,6 +78,9 @@ if(XPED_USE_LAPACK)
   endif()
 endif()
 
-if(XPED_USE_OPENMP)
-  target_link_libraries (benchmark OpenMP::OpenMP_CXX)
+if(XPED_USE_MKL)
+  target_link_libraries(benchmark mkl::mkl_intel_32bit_omp_dyn)
+  if(XPED_MKL_USE_MPI)
+    target_link_libraries(benchmark mkl::scalapack_mpich_intel_32bit_omp_dyn)
+  endif()
 endif()

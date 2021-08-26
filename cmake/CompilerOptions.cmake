@@ -1,8 +1,8 @@
 function(set_project_options project_name)
 
   #reset te default values for the flags.
-  set(CMAKE_CXX_FLAGS_RELEASE "")
-  set(CMAKE_CXX_FLAGS_DEBUG "")
+#  set(CMAKE_CXX_FLAGS_RELEASE "")
+#  set(CMAKE_CXX_FLAGS_DEBUG "")
 
   set(MSVC_OPTIONS_RELEASE
   )
@@ -26,19 +26,19 @@ function(set_project_options project_name)
   set(CLANG_OPTIONS_RELEASE
       -stdlib=${USED_LIBCXX}
       -std=c++17
-      -O3
+      # -O3
       -march=native
-      -m64
+      # -m64
       -ferror-limit=5
       -fcolor-diagnostics
   )
   set(CLANG_OPTIONS_DEBUG
       -std=c++17
       -stdlib=${USED_LIBCXX}
-      -O0
-      -g
+      # -O0
+      # -g
       -march=native
-      -m64
+      # -m64
       -ferror-limit=5
       -fcolor-diagnostics
   )
@@ -48,19 +48,19 @@ function(set_project_options project_name)
       -O2
       -pg
       -march=native
-      -m64
+      # -m64
       -ferror-limit=5
       -fcolor-diagnostics
   )
 
   set(CLANG_LOPTIONS_RELEASE
       -stdlib=${USED_LIBCXX}
-      -O3
+      # -O3
   )
   set(CLANG_LOPTIONS_DEBUG
       -stdlib=${USED_LIBCXX}
-      -O0
-      -g
+      # -O0
+      # -g
   )
   set(CLANG_LOPTIONS_PROFILE
       -stdlib=${USED_LIBCXX}
@@ -70,18 +70,18 @@ function(set_project_options project_name)
   
   set(GCC_OPTIONS_RELEASE
       -std=c++17
-      -O3
+      # -O3
       -march=native
-      -m64
+      # -m64
       -fmax-errors=5
       -fdiagnostics-color=always
   )
   set(GCC_OPTIONS_DEBUG
       -std=c++17
-      -O0
-      -g
+      # -O0
+      # -g
       -march=native
-      -m64
+      # -m64
       -fmax-errors=5
       -fdiagnostics-color=always
   )
@@ -90,23 +90,48 @@ function(set_project_options project_name)
       -O2
       -pg
       -march=native
-      -m64
+      # -m64
       -fmax-errors=5
       -fdiagnostics-color=always
   )
 
   set(GCC_LOPTIONS_RELEASE
-      -O3
+      # -O3
   )
   set(GCC_LOPTIONS_DEBUG
-      -O0
-      -g
+      # -O0
+      # -g
   )
   set(GCC_LOPTIONS_PROFILE
       -O2
       -pg
   )
-  
+
+  set(INTEL_OPTIONS_RELEASE
+#      -O3
+     # -mkl=parallel
+  )
+  set(INTEL_OPTIONS_DEBUG
+#      -O0
+#	  -g
+#	  -mkl=parallel
+  )
+  set(INTEL_OPTIONS_PROFILE
+      -O2
+	  -g
+	  -prof-gen
+  )
+
+  set(INTEL_LOPTIONS_RELEASE
+ #     -O3
+  )
+  set(INTEL_LOPTIONS_DEBUG
+  #    -O0
+  )
+  set(INTEL_LOPTIONS_PROFILE
+      -O2
+  )
+
   if (${CMAKE_BUILD_TYPE} STREQUAL "Release")
    if(MSVC)
      set(PROJECT_OPTIONS ${MSVC_OPTIONS_RELEASE})
@@ -117,6 +142,9 @@ function(set_project_options project_name)
    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
      set(PROJECT_OPTIONS ${GCC_OPTIONS_RELEASE})
      set(PROJECT_LOPTIONS ${GCC_LOPTIONS_RELEASE})
+   elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
+     set(PROJECT_OPTIONS ${INTEL_OPTIONS_RELEASE})
+     set(PROJECT_LOPTIONS ${INTEL_LOPTIONS_RELEASE})
    else()
      message(AUTHOR_WARNING "No compiler options set for '${CMAKE_CXX_COMPILER_ID}' compiler.")
    endif()
@@ -130,6 +158,9 @@ function(set_project_options project_name)
    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
      set(PROJECT_OPTIONS ${GCC_OPTIONS_DEBUG})
      set(PROJECT_LOPTIONS ${GCC_LOPTIONS_DEBUG})
+   elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
+     set(PROJECT_OPTIONS ${INTEL_OPTIONS_RELEASE})
+     set(PROJECT_LOPTIONS ${INTEL_LOPTIONS_RELEASE})
    else()
      message(AUTHOR_WARNING "No compiler options set for '${CMAKE_CXX_COMPILER_ID}' compiler.")
    endif()
@@ -143,6 +174,9 @@ function(set_project_options project_name)
    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
      set(PROJECT_OPTIONS ${GCC_OPTIONS_PROFILE})
      set(PROJECT_LOPTIONS ${GCC_LOPTIONS_PROFILE})
+   elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
+     set(PROJECT_OPTIONS ${INTEL_OPTIONS_RELEASE})
+     set(PROJECT_LOPTIONS ${INTEL_LOPTIONS_RELEASE})
    else()
      message(AUTHOR_WARNING "No compiler options set for '${CMAKE_CXX_COMPILER_ID}' compiler.")
    endif()
@@ -151,6 +185,8 @@ function(set_project_options project_name)
 target_compile_options(${project_name} INTERFACE ${PROJECT_OPTIONS})
 
 target_link_options(${project_name} INTERFACE ${PROJECT_LOPTIONS})
+
+# target_compile_features(project_options INTERFACE cxx_std_17)
 
 target_compile_definitions(${project_name} INTERFACE XPED_LOG_LEVEL=${XPED_LOG_LEVEL})
 
@@ -186,7 +222,7 @@ elseif(${XPED_EFFICIENCY_MODEL} STREQUAL "XPED_MEMORY_EFFICIENT")
   target_compile_definitions(${project_name} INTERFACE XPED_MEMORY_EFFICIENT=1)
 endif()
 
-if(XPED_USE_MPI)
+if(XPED_USE_MPI OR XPED_MKL_USE_MPI)
   target_compile_definitions(${project_name} INTERFACE XPED_USE_MPI=1)
 endif()
 
@@ -197,8 +233,14 @@ if(XPED_USE_BLAS)
     target_compile_definitions(${project_name} INTERFACE EIGEN_USE_LAPACKE=1)
     target_compile_definitions(${project_name} INTERFACE XPED_DONT_USE_BDCSVD=1)
   endif()
-  if(XPED_USE_MKL)
-    target_compile_definitions(${project_name} INTERFACE MKL_ILP64)
+endif()
+
+if(XPED_USE_MKL)
+  target_compile_definitions(${project_name} INTERFACE XPED_USE_MKL=1)
+  if(${XPED_MATRIX_LIB} STREQUAL "EIGEN_MATRIX")
+    target_compile_definitions(${project_name} INTERFACE EIGEN_USE_BLAS=1)
+    target_compile_definitions(${project_name} INTERFACE EIGEN_USE_LAPACKE=1)
+    target_compile_definitions(${project_name} INTERFACE XPED_DONT_USE_BDCSVD=1)
     target_compile_definitions(${project_name} INTERFACE EIGEN_USE_MKL_VML=1)
   endif()
 endif()

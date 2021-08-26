@@ -21,17 +21,18 @@
 #if defined(__clang__)
 #    define XPED_COMP_CLANG (__clang_major__ * 100 + __clang_minor__)
 const std::string XPED_COMPILER_STR = "clang++";
+#elif defined(__INTEL_COMPILER)
+#define XPED_COMP_ICPC (__INTEL_COMPILER)
+const std::string XPED_COMPILER_STR = "icpc";
 #else
 #    define XPED_COMP_CLANG 0
 const std::string XPED_COMPILER_STR = "g++";
 #endif
 
-#ifdef XPED_USE_BLAS
-#    ifdef MKL_ILP64
+#if defined(XPED_USE_MKL)
 const std::string XPED_BLAS_STR = "MKL";
-#    else
+#elif defined(XPES_USE_BLAS)
 const std::string XPED_BLAS_STR = "OpenBLAS";
-#    endif
 #else
 const std::string XPED_BLAS_STR = "None";
 #endif

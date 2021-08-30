@@ -55,7 +55,7 @@ jobs:
     - uses: actions/checkout@v2
       with:
         repository: cpp977/TOOLS
-        ssh-key: ${{ secrets.CLONE }}
+        token: ${{ secrets.TOOLS_CLONE }}
         ref: master
         path: tools-src
     - run: sudo mkdir -p /usr/local/include/TOOLS

@@ -177,11 +177,11 @@ function(set_project_options project_name)
   endif()
 
 target_compile_options(${project_name} INTERFACE ${PROJECT_OPTIONS})
-target_compile_options(${project_name} INTERFACE -std=c++17)
+# target_compile_options(${project_name} INTERFACE -std=c++17)
 
 target_link_options(${project_name} INTERFACE ${PROJECT_LOPTIONS})
 
-#target_compile_features(project_options INTERFACE cxx_std_17)
+target_compile_features(project_options INTERFACE cxx_std_17)
 
 target_compile_definitions(${project_name} INTERFACE XPED_LOG_LEVEL=${XPED_LOG_LEVEL})
 

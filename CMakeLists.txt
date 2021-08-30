@@ -2,12 +2,15 @@ cmake_minimum_required(VERSION 3.18)
 
 # Set the project name to
 project(Xped CXX C Fortran)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(XPED_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
 include(cmake/StandardProjectSettings.cmake)
 
 include(cmake/PreventInSourceBuilds.cmake)
+
+include(FeatureSummary)
 
 ###################################################################################################################################
 ###################################                          define options                   #####################################
@@ -38,6 +41,8 @@ if(NOT (${XPED_TENSOR_LIB} IN_LIST XPED_SUPPORTED_TENSOR_LIBS))
 endif()
 message( STATUS "Build uses the ${XPED_TENSOR_LIB} library.")
 
+add_feature_info(TensorLib XPED_TENSOR_LIB "Build will use the ${XPED_TENSOR_LIB} library.")
+
 set(XPED_MATRIX_LIB "EIGEN_MATRIX" CACHE STRING "Used matrix library for plain tensor operations.")
 set(XPED_SUPPORTED_MATRIX_LIBS "EIGEN_MATRIX;CYCLOPS_MATRIX")
 set_property(CACHE XPED_MATRIX_LIB PROPERTY STRINGS ${XPED_SUPPORTED_MATRIX_LIBS})
@@ -57,6 +62,7 @@ endif()
 message( STATUS "Build uses the ${XPED_VECTOR_LIB} library.")
 
 option(XPED_BUILD_TESTS "Build the tests." ON)
+add_feature_info(Tests XPED_BUILD_TESTS "The tests will be compiled.")
 
 option(XPED_BUILD_BENCHMARKS "Build the benchmarks." ON)
 
@@ -130,7 +136,7 @@ endif()
 ###################################################################################################################################
 
 if(XPED_USE_OPENMP)
-  find_package(OpenMP)
+  find_package(OpenMP REQUIRED)
 endif()
 
 if(XPED_USE_MPI)
@@ -160,6 +166,12 @@ endif()
 
 if(XPED_USE_BLAS)
   find_package(BLAS REQUIRED)
+  set_package_properties(BLAS PROPERTIES
+    URL "www.netlib.org"
+    DESCRIPTION "(B)asic (L)inear (A)lgebra (S)ubprograms, by vendor ${BLA_VENDOR}."
+    TYPE REQUIRED
+    )
+  
   # list(FIND BLAS_LIBRARIES $ENV{MKLROOT}/lib/intel64_lin/libmkl_core.so XPED_INTERN_USE_MKL)
 #   if(NOT (${XPED_INTERN_USE_MKL} EQUAL -1))
 #     set(XPED_USE_MKL ON)
@@ -216,9 +228,10 @@ if(XPED_USE_MKL)
     endif()
   endif()
 endif()
-  
-find_package(GSL REQUIRED)
-find_package(Boost REQUIRED)
+
+find_package(GSL 1.16 REQUIRED)
+set(Boost_NO_BOOST_CMAKE ON)
+find_package(Boost 1.34.0 REQUIRED)
 
 # Link this 'library' to set the c++ standard / compile-time options requested
 add_library(project_options INTERFACE)
@@ -283,10 +296,13 @@ include(cmake/clang-format.cmake)
 add_subdirectory(src)
 
 if (XPED_BUILD_TESTS)
-  find_package(doctest REQUIRED)
+  find_package(doctest 2.4.6 REQUIRED)
   add_subdirectory(tests)
 endif()
 
 if (XPED_BUILD_BENCHMARKS)
   add_subdirectory(benchmarks)
 endif()
+
+feature_summary(WHAT ALL
+                FILENAME ${CMAKE_BINARY_DIR}/all.log APPEND)

@@ -2,8 +2,6 @@ cmake_minimum_required(VERSION 3.18)
 
 # Set the project name to
 project(Xped CXX C Fortran)
-set(CMAKE_CXX_EXTENSIONS OFF)
-
 set(XPED_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
 include(cmake/StandardProjectSettings.cmake)
@@ -248,7 +246,7 @@ include(cmake/CompilerWarnings.cmake)
 set_project_warnings(project_warnings)
 
 #git is required to clone libraries used from github/gitlab
-find_package(Git REQUIRED)
+find_package(Git 1.6.5 REQUIRED)
 include(cmake/addGitLibs.cmake)
 
 if(${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR" AND NOT XPED_BUILD_CYCLOPS)

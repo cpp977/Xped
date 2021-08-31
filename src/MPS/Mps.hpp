@@ -158,17 +158,21 @@ void Mps<Scalar_, Symmetry_>::gen_auxBasis(const std::size_t Minit, const std::s
         if(vec.size() > Qinit) {
             // sort the vector first according to the distance to mean
             sort(vec.begin(), vec.end(), [mean, loc, this](qType q1, qType q2) {
-                Eigen::VectorXd dist_q1(Nq);
-                Eigen::VectorXd dist_q2(Nq);
+                std::vector<double> dist_q1(Nq);
+                std::vector<double> dist_q2(Nq);
                 for(size_t q = 0; q < Nq; q++) {
                     const auto Qmin = maxBasis[loc].minQ();
                     const auto Qmax = maxBasis[loc].maxQ();
                     // const auto [Qmin, Qmax] = std::minmax_element(qranges[loc].begin(), qranges[loc].end());
                     double Delta = (Qmax)[q] - (Qmin)[q];
-                    dist_q1(q) = (q1[q] - mean[q]) / Delta;
-                    dist_q2(q) = (q2[q] - mean[q]) / Delta;
+                    dist_q1[q] = (q1[q] - mean[q]) / Delta;
+                    dist_q2[q] = (q2[q] - mean[q]) / Delta;
                 }
-                return (dist_q1.norm() < dist_q2.norm()) ? true : false;
+                return (std::sqrt(std::transform_reduce(dist_q1.begin(), dist_q1.end(), dist_q1.begin(), 0.)) <
+                        std::sqrt(std::transform_reduce(dist_q2.begin(), dist_q2.end(), dist_q2.begin(), 0.)))
+                           ? true
+                           : false;
+                // return (dist_q1.norm() < dist_q2.norm()) ? true : false;
             });
 
             vec.erase(vec.begin() + Qinit, vec.end());

@@ -12,6 +12,11 @@
 #define DOCTEST_CONFIG_IMPLEMENT
 #include "doctest/doctest.h"
 
+#ifdef _OPENMP
+#    pragma message("Xped is using OpenMP parallelization")
+#    include "omp.h"
+#endif
+
 #ifdef XPED_USE_MPI
 #    include "doctest/extensions/doctest_mpi.h"
 #endif

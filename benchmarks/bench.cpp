@@ -6,6 +6,8 @@
 #include <string>
 #include <vector>
 
+#include "Eigen/Core"
+
 #ifdef MKL_ILP64
 #    pragma message("Xped is using the intel math kernel library (MKL)")
 #endif

@@ -1,243 +1,214 @@
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
 function(set_project_options project_name)
-
-  #reset te default values for the flags.
-#  set(CMAKE_CXX_FLAGS_RELEASE "")
-#  set(CMAKE_CXX_FLAGS_DEBUG "")
-
   set(MSVC_OPTIONS_RELEASE
-  )
+    )
   set(MSVC_OPTIONS_DEBUG
-  )
+    )
   set(MSVC_OPTIONS_PROFILE
-  )
+    )
 
   set(MSVC_LOPTIONS_RELEASE
-  )
+    )
   set(MSVC_LOPTIONS_DEBUG
-  )
+    )
   set(MSVC_LOPTIONS_PROFILE
-  )
+    )
   if(XPED_USE_LIBCXX)
-   set(USED_LIBCXX libc++)
+    set(USED_LIBCXX libc++)
   else()
-   set (USED_LIBCXX libstdc++)
+    set (USED_LIBCXX libstdc++)
   endif()
   
   set(CLANG_OPTIONS_RELEASE
-      -stdlib=${USED_LIBCXX}
-      # -O3
-      -march=native
-      # -m64
-      -ferror-limit=5
-      -fcolor-diagnostics
-  )
+    -stdlib=${USED_LIBCXX}
+    -march=native
+    -ferror-limit=5
+    -fcolor-diagnostics
+    )
   set(CLANG_OPTIONS_DEBUG
-      -stdlib=${USED_LIBCXX}
-      # -O0
-      # -g
-      -march=native
-      # -m64
-      -ferror-limit=5
-      -fcolor-diagnostics
-  )
+    -stdlib=${USED_LIBCXX}
+    -march=native
+    -ferror-limit=5
+    -fcolor-diagnostics
+    )
   set(CLANG_OPTIONS_PROFILE
-      -stdlib=${USED_LIBCXX}
-      -O2
-      -pg
-      -march=native
-      # -m64
-      -ferror-limit=5
-      -fcolor-diagnostics
-  )
+    -stdlib=${USED_LIBCXX}
+    -O2
+    -pg
+    -march=native
+    -ferror-limit=5
+    -fcolor-diagnostics
+    )
 
   set(CLANG_LOPTIONS_RELEASE
-      -stdlib=${USED_LIBCXX}
-      # -O3
-  )
+    -stdlib=${USED_LIBCXX}
+    )
   set(CLANG_LOPTIONS_DEBUG
-      -stdlib=${USED_LIBCXX}
-      # -O0
-      # -g
-  )
+    -stdlib=${USED_LIBCXX}
+    )
   set(CLANG_LOPTIONS_PROFILE
-      -stdlib=${USED_LIBCXX}
-      -O2
-      -pg
-  )
+    -stdlib=${USED_LIBCXX}
+    -O2
+    -pg
+    )
   
   set(GCC_OPTIONS_RELEASE
-      # -O3
-      -march=native
-      # -m64
-      -fmax-errors=5
-      -fdiagnostics-color=always
-  )
+    -march=native
+    -fmax-errors=5
+    -fdiagnostics-color=always
+    )
   set(GCC_OPTIONS_DEBUG
-      # -O0
-      # -g
-      -march=native
-      # -m64
-      -fmax-errors=5
-      -fdiagnostics-color=always
-  )
+    -march=native
+    -fmax-errors=5
+    -fdiagnostics-color=always
+    )
   set(GCC_OPTIONS_PROFILE
-      -O2
-      -pg
-      -march=native
-      # -m64
-      -fmax-errors=5
-      -fdiagnostics-color=always
-  )
+    -O2
+    -pg
+    -march=native
+    -fmax-errors=5
+    -fdiagnostics-color=always
+    )
 
   set(GCC_LOPTIONS_RELEASE
-      # -O3
-  )
+    )
   set(GCC_LOPTIONS_DEBUG
-      # -O0
-      # -g
-  )
+    )
   set(GCC_LOPTIONS_PROFILE
-      -O2
-      -pg
-  )
+    -O2
+    -pg
+    )
 
   set(INTEL_OPTIONS_RELEASE
-#      -O3
-     # -mkl=parallel
-  )
+    )
   set(INTEL_OPTIONS_DEBUG
-#      -O0
-#	  -g
-#	  -mkl=parallel
-  )
+    )
   set(INTEL_OPTIONS_PROFILE
-      -O2
-	  -g
-	  -prof-gen
-  )
+    -O2
+    -g
+    -prof-gen
+    )
 
   set(INTEL_LOPTIONS_RELEASE
- #     -O3
-  )
+    )
   set(INTEL_LOPTIONS_DEBUG
-  #    -O0
-  )
+    )
   set(INTEL_LOPTIONS_PROFILE
-      -O2
-  )
+    -O2
+    )
 
   if (${CMAKE_BUILD_TYPE} STREQUAL "Release")
-   if(MSVC)
-     set(PROJECT_OPTIONS ${MSVC_OPTIONS_RELEASE})
-     set(PROJECT_LOPTIONS ${MSVC_LOPTIONS_RELEASE})
-   elseif(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
-     set(PROJECT_OPTIONS ${CLANG_OPTIONS_RELEASE})
-     set(PROJECT_LOPTIONS ${CLANG_LOPTIONS_RELEASE})
-   elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-     set(PROJECT_OPTIONS ${GCC_OPTIONS_RELEASE})
-     set(PROJECT_LOPTIONS ${GCC_LOPTIONS_RELEASE})
-   elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
-     set(PROJECT_OPTIONS ${INTEL_OPTIONS_RELEASE})
-     set(PROJECT_LOPTIONS ${INTEL_LOPTIONS_RELEASE})
-   else()
-     message(AUTHOR_WARNING "No compiler options set for '${CMAKE_CXX_COMPILER_ID}' compiler.")
-   endif()
+    if(MSVC)
+      set(PROJECT_OPTIONS ${MSVC_OPTIONS_RELEASE})
+      set(PROJECT_LOPTIONS ${MSVC_LOPTIONS_RELEASE})
+    elseif(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
+      set(PROJECT_OPTIONS ${CLANG_OPTIONS_RELEASE})
+      set(PROJECT_LOPTIONS ${CLANG_LOPTIONS_RELEASE})
+    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+      set(PROJECT_OPTIONS ${GCC_OPTIONS_RELEASE})
+      set(PROJECT_LOPTIONS ${GCC_LOPTIONS_RELEASE})
+    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
+      set(PROJECT_OPTIONS ${INTEL_OPTIONS_RELEASE})
+      set(PROJECT_LOPTIONS ${INTEL_LOPTIONS_RELEASE})
+    else()
+      message(AUTHOR_WARNING "No compiler options set for '${CMAKE_CXX_COMPILER_ID}' compiler.")
+    endif()
   elseif (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
-   if(MSVC)
-     set(PROJECT_OPTIONS ${MSVC_OPTIONS_DEBUG})
-     set(PROJECT_LOPTIONS ${MSVC_LOPTIONS_DEBUG})
-   elseif(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
-     set(PROJECT_OPTIONS ${CLANG_OPTIONS_DEBUG})
-     set(PROJECT_LOPTIONS ${CLANG_LOPTIONS_DEBUG})
-   elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-     set(PROJECT_OPTIONS ${GCC_OPTIONS_DEBUG})
-     set(PROJECT_LOPTIONS ${GCC_LOPTIONS_DEBUG})
-   elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
-     set(PROJECT_OPTIONS ${INTEL_OPTIONS_RELEASE})
-     set(PROJECT_LOPTIONS ${INTEL_LOPTIONS_RELEASE})
-   else()
-     message(AUTHOR_WARNING "No compiler options set for '${CMAKE_CXX_COMPILER_ID}' compiler.")
-   endif()
+    if(MSVC)
+      set(PROJECT_OPTIONS ${MSVC_OPTIONS_DEBUG})
+      set(PROJECT_LOPTIONS ${MSVC_LOPTIONS_DEBUG})
+    elseif(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
+      set(PROJECT_OPTIONS ${CLANG_OPTIONS_DEBUG})
+      set(PROJECT_LOPTIONS ${CLANG_LOPTIONS_DEBUG})
+    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+      set(PROJECT_OPTIONS ${GCC_OPTIONS_DEBUG})
+      set(PROJECT_LOPTIONS ${GCC_LOPTIONS_DEBUG})
+    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
+      set(PROJECT_OPTIONS ${INTEL_OPTIONS_RELEASE})
+      set(PROJECT_LOPTIONS ${INTEL_LOPTIONS_RELEASE})
+    else()
+      message(AUTHOR_WARNING "No compiler options set for '${CMAKE_CXX_COMPILER_ID}' compiler.")
+    endif()
   elseif (${CMAKE_BUILD_TYPE} STREQUAL "Profile")
-   if(MSVC)
-     set(PROJECT_OPTIONS ${MSVC_OPTIONS_PROFILE})
-     set(PROJECT_LOPTIONS ${MSVC_LOPTIONS_PROFILE})
-   elseif(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
-     set(PROJECT_OPTIONS ${CLANG_OPTIONS_PROFILE})
-     set(PROJECT_LOPTIONS ${CLANG_LOPTIONS_PROFILE})
-   elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-     set(PROJECT_OPTIONS ${GCC_OPTIONS_PROFILE})
-     set(PROJECT_LOPTIONS ${GCC_LOPTIONS_PROFILE})
-   elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
-     set(PROJECT_OPTIONS ${INTEL_OPTIONS_RELEASE})
-     set(PROJECT_LOPTIONS ${INTEL_LOPTIONS_RELEASE})
-   else()
-     message(AUTHOR_WARNING "No compiler options set for '${CMAKE_CXX_COMPILER_ID}' compiler.")
-   endif()
+    if(MSVC)
+      set(PROJECT_OPTIONS ${MSVC_OPTIONS_PROFILE})
+      set(PROJECT_LOPTIONS ${MSVC_LOPTIONS_PROFILE})
+    elseif(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
+      set(PROJECT_OPTIONS ${CLANG_OPTIONS_PROFILE})
+      set(PROJECT_LOPTIONS ${CLANG_LOPTIONS_PROFILE})
+    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+      set(PROJECT_OPTIONS ${GCC_OPTIONS_PROFILE})
+      set(PROJECT_LOPTIONS ${GCC_LOPTIONS_PROFILE})
+    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
+      set(PROJECT_OPTIONS ${INTEL_OPTIONS_RELEASE})
+      set(PROJECT_LOPTIONS ${INTEL_LOPTIONS_RELEASE})
+    else()
+      message(AUTHOR_WARNING "No compiler options set for '${CMAKE_CXX_COMPILER_ID}' compiler.")
+    endif()
   endif()
 
-target_compile_options(${project_name} INTERFACE ${PROJECT_OPTIONS})
-# target_compile_options(${project_name} INTERFACE -std=c++17)
+  target_compile_options(${project_name} INTERFACE ${PROJECT_OPTIONS})
 
-target_link_options(${project_name} INTERFACE ${PROJECT_LOPTIONS})
+  target_link_options(${project_name} INTERFACE ${PROJECT_LOPTIONS})
 
-target_compile_features(project_options INTERFACE cxx_std_17)
+  target_compile_definitions(${project_name} INTERFACE XPED_LOG_LEVEL=${XPED_LOG_LEVEL})
 
-target_compile_definitions(${project_name} INTERFACE XPED_LOG_LEVEL=${XPED_LOG_LEVEL})
-
-if(XPED_ENABLE_LRU_CACHE)
-  target_compile_definitions(${project_name} INTERFACE XPED_CACHE_PERMUTE_OUTPUT=1)
-endif()
-
-if(${XPED_TENSOR_LIB} STREQUAL "EIGEN_TENSOR")
-  target_compile_definitions(${project_name} INTERFACE XPED_USE_EIGEN_TENSOR_LIB=1)
-elseif (${XPED_TENSOR_LIB} STREQUAL "ARRAY_TENSOR")
-  target_compile_definitions(${project_name} INTERFACE XPED_USE_ARRAY_TENSOR_LIB=1)
-elseif (${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR")  
-  target_compile_definitions(${project_name} INTERFACE XPED_USE_CYCLOPS_TENSOR_LIB=1)
-endif()
-
-if(${XPED_MATRIX_LIB} STREQUAL "EIGEN_MATRIX")
-  target_compile_definitions(${project_name} INTERFACE XPED_USE_EIGEN_MATRIX_LIB=1)
-elseif (${XPED_MATRIX_LIB} STREQUAL "CYCLOPS_MATRIX")  
-  target_compile_definitions(${project_name} INTERFACE XPED_USE_CYCLOPS_MATRIX_LIB=1)
-endif()
-
-if(${XPED_VECTOR_LIB} STREQUAL "EIGEN_VECTOR")
-  target_compile_definitions(${project_name} INTERFACE XPED_USE_EIGEN_VECTOR_LIB=1)
-elseif (${XPED_VECTOR_LIB} STREQUAL "CYCLOPS_VECTOR")  
-  target_compile_definitions(${project_name} INTERFACE XPED_USE_CYCLOPS_VECTOR_LIB=1)
-endif()
-
-if(${XPED_EFFICIENCY_MODEL} STREQUAL "XPED_TIME_EFFICIENT")
-  target_compile_definitions(${project_name} INTERFACE XPED_EFFICIENCY_MODEL=1)
-  target_compile_definitions(${project_name} INTERFACE XPED_TIME_EFFICIENT=1)
-elseif(${XPED_EFFICIENCY_MODEL} STREQUAL "XPED_MEMORY_EFFICIENT")
-  target_compile_definitions(${project_name} INTERFACE XPED_EFFICIENCY_MODEL=1)
-  target_compile_definitions(${project_name} INTERFACE XPED_MEMORY_EFFICIENT=1)
-endif()
-
-if(XPED_USE_MPI OR XPED_MKL_USE_MPI)
-  target_compile_definitions(${project_name} INTERFACE XPED_USE_MPI=1)
-endif()
-
-if(XPED_USE_BLAS)
-  target_compile_definitions(${project_name} INTERFACE XPED_USE_BLAS=1)
-  target_compile_definitions(${project_name} INTERFACE EIGEN_USE_BLAS=1)
-  if(XPED_USE_LAPACK)
-    target_compile_definitions(${project_name} INTERFACE EIGEN_USE_LAPACKE=1)
-    target_compile_definitions(${project_name} INTERFACE XPED_DONT_USE_BDCSVD=1)
+  if(XPED_ENABLE_LRU_CACHE)
+    target_compile_definitions(${project_name} INTERFACE XPED_CACHE_PERMUTE_OUTPUT=1)
   endif()
-endif()
 
-if(XPED_USE_MKL)
-  target_compile_definitions(${project_name} INTERFACE XPED_USE_MKL=1)
+  if(${XPED_TENSOR_LIB} STREQUAL "EIGEN_TENSOR")
+    target_compile_definitions(${project_name} INTERFACE XPED_USE_EIGEN_TENSOR_LIB=1)
+  elseif (${XPED_TENSOR_LIB} STREQUAL "ARRAY_TENSOR")
+    target_compile_definitions(${project_name} INTERFACE XPED_USE_ARRAY_TENSOR_LIB=1)
+  elseif (${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR")  
+    target_compile_definitions(${project_name} INTERFACE XPED_USE_CYCLOPS_TENSOR_LIB=1)
+  endif()
+
   if(${XPED_MATRIX_LIB} STREQUAL "EIGEN_MATRIX")
-    target_compile_definitions(${project_name} INTERFACE EIGEN_USE_BLAS=1)
-    target_compile_definitions(${project_name} INTERFACE EIGEN_USE_LAPACKE=1)
-    target_compile_definitions(${project_name} INTERFACE XPED_DONT_USE_BDCSVD=1)
-    target_compile_definitions(${project_name} INTERFACE EIGEN_USE_MKL_VML=1)
+    target_compile_definitions(${project_name} INTERFACE XPED_USE_EIGEN_MATRIX_LIB=1)
+  elseif (${XPED_MATRIX_LIB} STREQUAL "CYCLOPS_MATRIX")  
+    target_compile_definitions(${project_name} INTERFACE XPED_USE_CYCLOPS_MATRIX_LIB=1)
   endif()
-endif()
+
+  if(${XPED_VECTOR_LIB} STREQUAL "EIGEN_VECTOR")
+    target_compile_definitions(${project_name} INTERFACE XPED_USE_EIGEN_VECTOR_LIB=1)
+  elseif (${XPED_VECTOR_LIB} STREQUAL "CYCLOPS_VECTOR")  
+    target_compile_definitions(${project_name} INTERFACE XPED_USE_CYCLOPS_VECTOR_LIB=1)
+  endif()
+
+  if(${XPED_EFFICIENCY_MODEL} STREQUAL "XPED_TIME_EFFICIENT")
+    target_compile_definitions(${project_name} INTERFACE XPED_EFFICIENCY_MODEL=1)
+    target_compile_definitions(${project_name} INTERFACE XPED_TIME_EFFICIENT=1)
+  elseif(${XPED_EFFICIENCY_MODEL} STREQUAL "XPED_MEMORY_EFFICIENT")
+    target_compile_definitions(${project_name} INTERFACE XPED_EFFICIENCY_MODEL=1)
+    target_compile_definitions(${project_name} INTERFACE XPED_MEMORY_EFFICIENT=1)
+  endif()
+
+  if(XPED_USE_MPI OR XPED_MKL_USE_MPI)
+    target_compile_definitions(${project_name} INTERFACE XPED_USE_MPI=1)
+  endif()
+
+  if(XPED_USE_BLAS)
+    target_compile_definitions(${project_name} INTERFACE XPED_USE_BLAS=1)
+    target_compile_definitions(${project_name} INTERFACE EIGEN_USE_BLAS=1)
+    if(XPED_USE_LAPACK)
+      target_compile_definitions(${project_name} INTERFACE EIGEN_USE_LAPACKE=1)
+      target_compile_definitions(${project_name} INTERFACE XPED_DONT_USE_BDCSVD=1)
+    endif()
+  endif()
+
+  if(XPED_USE_MKL)
+    target_compile_definitions(${project_name} INTERFACE XPED_USE_MKL=1)
+    if(${XPED_MATRIX_LIB} STREQUAL "EIGEN_MATRIX")
+      target_compile_definitions(${project_name} INTERFACE EIGEN_USE_BLAS=1)
+      target_compile_definitions(${project_name} INTERFACE EIGEN_USE_LAPACKE=1)
+      target_compile_definitions(${project_name} INTERFACE XPED_DONT_USE_BDCSVD=1)
+      target_compile_definitions(${project_name} INTERFACE EIGEN_USE_MKL_VML=1)
+    endif()
+  endif()
 
 endfunction()

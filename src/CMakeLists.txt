@@ -1,31 +1,14 @@
-add_subdirectory(Util)
-add_subdirectory(Hash)
-add_subdirectory(Interfaces)
-add_subdirectory(MPS)
-add_subdirectory(Core)
-add_subdirectory(Symmetry)
+add_executable(run main.cpp)
 
-include_directories(${XPED_DIR}/src)
+target_include_directories(run BEFORE PUBLIC ${XPED_DIR}/src)
 
-file(GLOB SOURCES "Core/*.hpp"
-                  "Symmetry/*.hpp"
-                  "Hash/*.hpp"
-                  "Interfaces/*.hpp"
-                  "MPS/*.hpp"
-                  "Util/*.hpp")
-                
-add_executable(run
-               main.cpp
-               ${SOURCES})
-               
 add_dependencies(run
   tabulate
   spdlog
   yas
-#  TOOLS
   Eigen
   seq)
-                 
+
 if(XPED_ENABLE_LRU_CACHE)
   add_dependencies(run lru_cache)
 endif()
@@ -36,14 +19,12 @@ if(${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR" AND ${XPED_BUILD_CYCLOPS})
   add_dependencies(run cyclops)
 endif()
 
-
 target_link_libraries (run
   project_options
   project_warnings
   GSL::gsl
   GSL::gslcblas
   XPED_EIGEN
-#  XPED_TOOLS
   XPED_TABULATE
   XPED_SPDLOG
   XPED_YAS

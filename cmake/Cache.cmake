@@ -1,4 +1,4 @@
-if(NOT XPED_ENABLE_CACHE)
+if(NOT XPED_ENABLE_CCACHE)
   return()
 endif()
 

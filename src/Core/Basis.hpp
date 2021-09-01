@@ -5,6 +5,7 @@
 #include "yas/serialize.hpp"
 #include "yas/std_types.hpp"
 
+#include "tabulate/table.hpp"
 #include "tabulate/tabulate.hpp"
 /// \endcond
 

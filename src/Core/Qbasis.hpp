@@ -7,6 +7,7 @@
 #include <unordered_map>
 #include <unordered_set>
 
+#include "tabulate/table.hpp"
 #include "tabulate/tabulate.hpp"
 
 #include "yas/serialize.hpp"

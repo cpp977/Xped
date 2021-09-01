@@ -1,8 +1,8 @@
 #ifndef TENSOR_INTERFACE_ARRAY_IMPL_H_
 #define TENSOR_INTERFACE_ARRAY_IMPL_H_
 
-#include <array/array.h>
-#include <array/ein_reduce.h>
+#include <array.h>
+#include <ein_reduce.h>
 
 #include "Util/Mpi.hpp"
 #include "Util/Random.hpp"

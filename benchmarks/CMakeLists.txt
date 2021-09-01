@@ -2,23 +2,9 @@ add_executable(benchmark bench.cpp)
 
 target_include_directories(benchmark BEFORE PUBLIC ${XPED_DIR}/src)
 
-add_dependencies(benchmark
-  tabulate
-  spdlog
-  yas
-  Eigen
-  seq)
-
-if(XPED_ENABLE_LRU_CACHE)
-  add_dependencies(benchmark lru_cache)
-endif()
-if(${XPED_TENSOR_LIB} STREQUAL "ARRAY_TENSOR")
-  add_dependencies(benchmark array)
-endif()
 if(${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR" AND ${XPED_BUILD_CYCLOPS})
   add_dependencies(benchmark cyclops)
 endif()
-
 
 target_link_libraries (benchmark
   project_options
@@ -26,11 +12,11 @@ target_link_libraries (benchmark
   GSL::gsl
   GSL::gslcblas
   Boost::headers
-  XPED_EIGEN
-  XPED_TABULATE
-  XPED_SPDLOG
-  XPED_YAS
-  XPED_SEQ
+  eigen
+  tabulate
+  spdlog
+  yas
+  seq
   )
 
 if((CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 9) OR CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
@@ -41,11 +27,10 @@ endif()
 if(${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR")
   target_link_libraries(benchmark cyclops_lib::all)
 elseif(${XPED_TENSOR_LIB} STREQUAL "ARRAY_TENSOR")
-  target_link_libraries(benchmark XPED_ARRAY)
+  target_link_libraries(benchmark ndarray)
 endif()
-
 if(XPED_ENABLE_LRU_CACHE)
-  target_link_libraries(benchmark XPED_LRUCACHE)
+  target_link_libraries(benchmark lrucache)
 endif()
 
 if(XPED_USE_MPI)

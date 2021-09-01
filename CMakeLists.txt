@@ -253,7 +253,49 @@ set_project_warnings(project_warnings)
 
 #git is required to clone libraries used from github/gitlab
 find_package(Git 1.6.5 REQUIRED)
+
 include(cmake/addGitLibs.cmake)
+
+include(cmake/CPM.cmake)
+CPMAddPackage("gh:gabime/spdlog@1.9.2")
+CPMAddPackage("gl:libeigen/eigen#3.4.0")
+CPMAddPackage("gh:p-ranav/tabulate@1.4")
+CPMAddPackage("gh:n0phx/seq@0.2.1")
+if(XPED_ENABLE_LRU_CACHE)
+  CPMAddPackage(
+    NAME lrucache
+    DOWNLOAD_ONLY YES
+    GIT_REPOSITORY https://github.com/goldsborough/lru-cache
+    GIT_TAG master
+    )
+  if(lrucache_ADDED)
+    add_library(lrucache INTERFACE IMPORTED)
+    target_include_directories(lrucache SYSTEM INTERFACE ${lrucache_SOURCE_DIR}/include)
+  endif()
+endif()
+CPMAddPackage(
+  NAME yas
+  DOWNLOAD_ONLY YES
+  GIT_REPOSITORY https://github.com/niXman/yas
+  GIT_TAG 7.1.0
+)
+if(yas_ADDED)
+  add_library(yas INTERFACE IMPORTED)
+  target_include_directories(yas SYSTEM INTERFACE ${yas_SOURCE_DIR}/include)
+endif()
+
+if(${XPED_TENSOR_LIB} STREQUAL "ARRAY_TENSOR")
+  CPMAddPackage(
+    NAME array
+    DOWNLOAD_ONLY YES
+    GIT_REPOSITORY https://github.com/dsharlet/array
+    GIT_TAG master
+    )
+  if(array_ADDED)
+    add_library(ndarray INTERFACE IMPORTED)
+    target_include_directories(ndarray SYSTEM INTERFACE ${array_SOURCE_DIR})
+  endif()  
+endif()
 
 if(${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR" AND NOT XPED_BUILD_CYCLOPS)
   find_library(CYCLOPS_LIB NAMES ctf REQUIRED)

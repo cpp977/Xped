@@ -8,6 +8,9 @@
 
 #include "Eigen/Core"
 
+#include "tabulate/table.hpp"
+#include "tabulate/tabulate.hpp"
+
 #ifdef _OPENMP
 #    include "omp.h"
 const int XPED_MAX_THREADS = omp_get_max_threads();

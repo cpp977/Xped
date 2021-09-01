@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 3.18)
 
-# Set the project name to
 project(Xped CXX C Fortran)
 set(XPED_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
@@ -9,26 +8,16 @@ include(cmake/StandardProjectSettings.cmake)
 include(cmake/PreventInSourceBuilds.cmake)
 
 include(FeatureSummary)
+include(CMakeDependentOption)
 
 ###################################################################################################################################
 ###################################                          define options                   #####################################
 ###################################################################################################################################
-option(XPED_ENABLE_LRU_CACHE "Use lru cache library from github." OFF)
+option(XPED_BUILD_TESTS "Build the tests." ON)
+add_feature_info("The tests will be build." XPED_BUILD_TESTS "")
 
-set(XPED_EFFICIENCY_MODEL "XPED_TIME_EFFICIENT" CACHE STRING "Xped tries to be time efficient.")
-set(XPED_SUPPORTED_EFFICIENCY_MODELS "XPED_TIME_EFFICIENT;XPED_MEMORY_EFFICIENT")
-set_property(CACHE XPED_EFFICIENCY_MODEL PROPERTY STRINGS ${XPED_SUPPORTED_EFFICIENCY_MODELS})
-if(NOT (${XPED_EFFICIENCY_MODEL} IN_LIST XPED_SUPPORTED_EFFICIENCY_MODELS))
-  message( FATAL_ERROR "You specified an unsupported efficiency model.")
-endif()
-message( STATUS "Build uses the ${XPED_EFFICIENCY_MODEL} model.")
-
-option(XPED_USE_LIBCXX "Use libc++ from llvm." OFF)
-if(NOT CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
- if(XPED_USE_LIBCXX)
-  message( FATAL_ERROR "It is only possible to use libc++ in combination with clang")
- endif()
-endif()
+option(XPED_BUILD_BENCHMARKS "Build the benchmarks." ON)
+add_feature_info("The benchmarks will be build." XPED_BUILD_BENCHMARKS "")
 
 set(XPED_TENSOR_LIB "EIGEN_TENSOR" CACHE STRING "Used tensor library for plain tensor operations.")
 set(XPED_SUPPORTED_TENSOR_LIBS "EIGEN_TENSOR;ARRAY_TENSOR;CYCLOPS_TENSOR")
@@ -37,9 +26,7 @@ if(NOT (${XPED_TENSOR_LIB} IN_LIST XPED_SUPPORTED_TENSOR_LIBS))
   message( STATUS "Build wanted to use the ${XPED_TENSOR_LIB} library.")
   message( FATAL_ERROR "You specified a tensor library which is not supported.")  
 endif()
-message( STATUS "Build uses the ${XPED_TENSOR_LIB} library.")
-
-add_feature_info(TensorLib XPED_TENSOR_LIB "Build will use the ${XPED_TENSOR_LIB} library.")
+add_feature_info("Build uses the ${XPED_TENSOR_LIB} library." XPED_TENSOR_LIB "")
 
 set(XPED_MATRIX_LIB "EIGEN_MATRIX" CACHE STRING "Used matrix library for plain tensor operations.")
 set(XPED_SUPPORTED_MATRIX_LIBS "EIGEN_MATRIX;CYCLOPS_MATRIX")
@@ -48,7 +35,7 @@ if(NOT (${XPED_MATRIX_LIB} IN_LIST XPED_SUPPORTED_MATRIX_LIBS))
   message( STATUS "Build wanted to use the ${XPED_MATRIX_LIB} library.")
   message( FATAL_ERROR "You specified a matrix library which is not supported.")  
 endif()
-message( STATUS "Build uses the ${XPED_MATRIX_LIB} library.")
+add_feature_info("Build uses the ${XPED_MATRIX_LIB} library." XPED_MATRIX_LIB "")
 
 set(XPED_VECTOR_LIB "EIGEN_VECTOR" CACHE STRING "Used matrix library for plain tensor operations.")
 set(XPED_SUPPORTED_VECTOR_LIBS "EIGEN_VECTOR;CYCLOPS_VECTOR")
@@ -57,70 +44,83 @@ if(NOT (${XPED_VECTOR_LIB} IN_LIST XPED_SUPPORTED_VECTOR_LIBS))
   message( STATUS "Build wanted to use the ${XPED_VECTOR_LIB} library.")
   message( FATAL_ERROR "You specified a vector library which is not supported.")  
 endif()
-message( STATUS "Build uses the ${XPED_VECTOR_LIB} library.")
-
-option(XPED_BUILD_TESTS "Build the tests." ON)
-add_feature_info(Tests XPED_BUILD_TESTS "The tests will be compiled.")
-
-option(XPED_BUILD_BENCHMARKS "Build the benchmarks." ON)
+add_feature_info("Build uses the ${XPED_VECTOR_LIB} library." XPED_VECTOR_LIB "")
 
 option(XPED_BUILD_CYCLOPS "Build the cyclops library from source." OFF)
+add_feature_info("Cyclops library will be build in ${CMAKE_BINARY_DIR}/thirdparty/cyclops." XPED_BUILD_CYCLOPS "")
 
-option(XPED_ENABLE_CACHE "Enable a compiler cache if available" OFF)
+option(XPED_ENABLE_CCACHE "Enable a compiler cache if available" OFF)
+add_feature_info("Compilation uses ccache to speed up recompilation." XPED_ENABLE_CCACHE "")
 
 option(XPED_USE_OPENMP "Enable openmp parallelization" ON)
 option(XPED_USE_MPI "Enable message parsing interface (mpi) parallelization" OFF)
-
 option(XPED_USE_BLAS "Enable blas linking." ON)
 option(XPED_USE_LAPACK "Enable lapack linking." ON)
 option(XPED_USE_SCALAPACK "Enable scalapack linking (only useful for MPI programs)." OFF)
-
 option(XPED_USE_MKL "Enable use of intel math kernel library (MKL)." OFF)
+add_feature_info("External MKL libraries from Intel will be linked." XPED_USE_MKL "")
 if(XPED_USE_MKL)
   set(XPED_USE_BLAS OFF)
   set(XPED_USE_LAPACK OFF)
   set(XPED_USE_SCALAPACK OFF)
   set(XPED_USE_OPENMP OFF)
-  set(XPED_USE_MPI OFF)
-  
-  # set(XPED_MKL_THREADING "OpenMP" CACHE STRING "Which threading is used by MKL.")
-  # set(XPED_MKL_SUPPORTED_THREADINGS "OpenMP;TBB;Seq")
-  # set_property(CACHE XPED_MKL_THREADING PROPERTY STRINGS ${XPED_MKL_SUPPORTED_THREADINGS})
-  # if(NOT (${XPED_MKL_THREADING} IN_LIST XPED_MKL_SUPPORTED_THREADINGS))
-  #   message( STATUS "MKL theading was set to ${XPED_MKL_THREADING}.")
-  #   message( FATAL_ERROR "You specified a MKL threading which is not supported.")  
-  # endif()
-  # if(XPED_MKL_THREADING STREQUAL "OpenMP")
-  #   set(XPED_MKL_THREADING_STR "omp")
-  # elseif(XPED_MKL_THREADING STREQUAL "TBB")
-  #   set(XPED_MKL_THREADING_STR "tbb")
-  # elseif(XPED_MKL_THREADING STREQUAL "Seq")
-  #   set(XPED_MKL_THREADING_STR "seq")
-  # endif()
-  # if(${CMAKE_SIZEOF_VOID_P} STREQUAL "8")
-  #   set(XPED_MKL_BITNESS_STR "32bit")
-  # else()
-  #   set(XPED_MKL_BITNESS_STR "32bit")
-  # endif()
-  option(XPED_MKL_USE_MPI "Use mkl with intel MPI and Scalapack enabled." OFF)
+  set(XPED_USE_MPI OFF)  
 endif()
+cmake_dependent_option(XPED_MKL_USE_MPI "Use mkl with intel MPI and Scalapack enabled." OFF XPED_USE_MKL OFF)
+add_feature_info("ScaLAPACK of Intel MKL implementation wll be linked." XPED_MKL_USE_MPI "")
+add_feature_info("Threading with OpenMP is enabled." XPED_USE_OPENMP "")
+add_feature_info("Distributed parallelism with MPI (message passing interface) is enabled." XPED_USE_MPI "")
+add_feature_info("External BLAS implementation will be linked." XPED_USE_BLAS "")
+add_feature_info("External LAPACK implementation will be linked." XPED_USE_LAPACK "")
+add_feature_info("External SCALAPACK implementation will be linked." XPED_USE_SCALAPACK "")
 
 option(XPED_ENABLE_BUILD_WITH_TIME_TRACE "Enable -ftime-trace to generate time tracing .json files on clang" OFF)
+add_feature_info("Compiler option -ftime-trace is appended when building with clang." XPED_ENABLE_BUILD_WITH_TIME_TRACE "")
 
 option(XPED_ENABLE_COVERAGE "Enable coverage reporting for gcc/clang" OFF)
+add_feature_info("Compile flags for coverage are added." XPED_ENABLE_COVERGAE "")
 
 option(XPED_ENABLE_SANITIZER_ADDRESS "Enable address sanitizer" OFF)
+add_feature_info("Address sanitizer is enabled." XPED_ENABLE_SANITIZER_ADDRESS "")
 option(XPED_ENABLE_SANITIZER_LEAK "Enable leak sanitizer" OFF)
+add_feature_info("Leak sanitizer is enabled." XPED_ENABLE_SANITIZER_LEAK "")
 option(XPED_ENABLE_SANITIZER_UNDEFINED_BEHAVIOR "Enable undefined behavior sanitizer" OFF)
+add_feature_info("Undefined behavior sanitizer is enabled." XPED_ENABLE_SANITIZER_UNDEFINED_BEHAVIOR "")
 option(XPED_ENABLE_SANITIZER_THREAD "Enable thread sanitizer" OFF)
+add_feature_info("Thread sanitizer is enabled." XPED_ENABLE_SANITIZER_THREAD "")
 option(XPED_ENABLE_SANITIZER_MEMORY "Enable memory sanitizer" OFF)
+add_feature_info("Memory sanitizer is created." XPED_ENABLE_SANITIZER_MEMORY "")
 
 option(XPED_ENABLE_DOXYGEN "Enable doxygen doc builds of source" OFF)
+add_feature_info("Target for doxygen is enabled." XPED_ENABLE_DOXYGEN "")
 
 option(XPED_ENABLE_CPPCHECK "Enable static analysis with cppcheck" OFF)
+add_feature_info("Tool cppcheck is enabled." XPED_ENABLE_CPPCHECKT "")
 option(XPED_ENABLE_CLANG_TIDY "Enable static analysis with clang-tidy" OFF)
+add_feature_info("Tool clang-tidy is enabled." XPED_ENABLE_CLANG_TIDY "")
 option(XPED_ENABLE_INCLUDE_WHAT_YOU_USE "Enable static analysis with include-what-you-use" OFF)
+add_feature_info("Tool include-what-you-use is enabled." XPED_ENABLE_INCLUDE_WHAT_YOU_USE "")
 option(XPED_ENABLE_CLANG_FORMAT "Enable clang-format target." OFF)
+add_feature_info("Clang format target is included." XPED_ENABLE_CLANG_FORMAT "")
+
+option(XPED_ENABLE_LRU_CACHE "Use lru cache library from github." OFF)
+add_feature_info("Build uses lru cache to cache results for fusion tree manipulations." XPED_ENABLE_LRU_CACHE "")
+
+set(XPED_EFFICIENCY_MODEL "XPED_TIME_EFFICIENT" CACHE STRING "Xped tries to be time efficient.")
+set(XPED_SUPPORTED_EFFICIENCY_MODELS "XPED_TIME_EFFICIENT;XPED_MEMORY_EFFICIENT")
+set_property(CACHE XPED_EFFICIENCY_MODEL PROPERTY STRINGS ${XPED_SUPPORTED_EFFICIENCY_MODELS})
+if(NOT (${XPED_EFFICIENCY_MODEL} IN_LIST XPED_SUPPORTED_EFFICIENCY_MODELS))
+  message( FATAL_ERROR "You specified an unsupported efficiency model.")
+endif()
+add_feature_info("Build uses the ${XPED_EFFICIENCY_MODEL} model." XPED_EFFICIENCY_MODEL "")
+
+option(XPED_USE_LIBCXX "Use libc++ from llvm." OFF)
+add_feature_info("c++ standard library implementation from clang (libc++) will be used." XPED_USE_LIBCXX "")
+if(NOT CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
+ if(XPED_USE_LIBCXX)
+  message( FATAL_ERROR "It is only possible to use libc++ in combination with clang")
+ endif()
+endif()
 
 set(XPED_LOG_LEVEL "SPDLOG_LEVEL_OFF" CACHE STRING "Compile time log level.")
 set(XPED_SUPPORTED_LOG_LEVELS "SPDLOG_LEVEL_TRACE;SPDLOG_LEVEL_DEBUG;SPDLOG_LEVEL_INFO;SPDLOG_LEVEL_WARN;SPDLOG_LEVEL_ERROR;SPDLOG_LEVEL_CRITICAL;SPDLOG_LEVEL_OFF")
@@ -129,12 +129,19 @@ if(NOT (${XPED_LOG_LEVEL} IN_LIST XPED_SUPPORTED_LOG_LEVELS))
   message( STATUS "Log level was set to ${XPED_LOG_LEVEL}.")
   message( FATAL_ERROR "You specified a log level which is not supported.")  
 endif()
+add_feature_info("Log level set to ${XPED_LOG_LEVEL}." XPED_LOG_LEVEL "")
 ###################################################################################################################################
-##########################################                          end                   #########################################
+##########################################                   end options                  #########################################
 ###################################################################################################################################
 
 if(XPED_USE_OPENMP)
   find_package(OpenMP REQUIRED)
+  set_package_properties(OpenMP PROPERTIES
+    URL "https://www.openmp.org/"
+    DESCRIPTION "Open (M)ulti (P)rocessing."
+    TYPE REQUIRED
+    PURPOSE "Allows computations to be processed by several threads. This is supported by all backends for plain tensor and matrix operations."
+    )
 endif()
 
 if(XPED_USE_MPI)
@@ -145,7 +152,8 @@ if(XPED_USE_MPI)
     set(XPED_USE_OPENMPI ON)
     set(XPED_USE_MPICH OFF)
     set(XPED_USE_INTELMPI OFF)
-    message(STATUS "Found openmpi library.")
+    set(XPED_MPI_IMPL "openmpi")
+    # message(STATUS "Found openmpi library.")
   else()
     string(FIND ${XPED_MPI_VENDOR_CHECK} "Intel" XPED_USE_INTELMPI)
     if(NOT (${XPED_USE_INTELMPI} EQUAL -1))
@@ -157,45 +165,37 @@ if(XPED_USE_MPI)
       set(XPED_USE_OPENMPI OFF)
       set(XPED_USE_INTELMPI OFF)
       set(XPED_USE_MPICH ON)
-      message(STATUS "Found mpich library.")
+      set(XPED_MPI_IMPL "MPICH")
+      # message(STATUS "Found mpich library.")
     endif()
   endif()
+  set_package_properties(MPI PROPERTIES
+    URL "https://en.wikipedia.org/wiki/Message_Passing_Interface"
+    DESCRIPTION "(M)essage (P)assing (I)nterface, implementation by ${XPED_MPI_IMPL}."
+    TYPE REQUIRED
+    PURPOSE "When using the cyclops library as a backend for plain tensor and matrix operations, computations can be distributed among different cpus using the MPI."
+    )
 endif()
 
 if(XPED_USE_BLAS)
   find_package(BLAS REQUIRED)
   set_package_properties(BLAS PROPERTIES
-    URL "www.netlib.org"
+    URL "https://en.wikipedia.org/wiki/Basic_Linear_Algebra_Subprograms"
     DESCRIPTION "(B)asic (L)inear (A)lgebra (S)ubprograms, by vendor ${BLA_VENDOR}."
     TYPE REQUIRED
+    PURPOSE "The Eigen and cyclops backend can export matrix arithmetics to external BLAS implementations."
     )
-  
-  # list(FIND BLAS_LIBRARIES $ENV{MKLROOT}/lib/intel64_lin/libmkl_core.so XPED_INTERN_USE_MKL)
-#   if(NOT (${XPED_INTERN_USE_MKL} EQUAL -1))
-#     set(XPED_USE_MKL ON)
-#     find_path(XPED_MKL_INCLUDE_DIR mkl.h HINTS $ENV{MKLROOT}/include /usr/lib/intel/mkl/include /usr/lib64/intel/mkl/include)
-#     if(NOT XPED_MKL_INCLUDE_DIR)
-#       message(FATAL_ERROR "Could not find intel mkl headers.")
-#     else()
-#       message(STATUS "Found mkl headers: ${XPED_MKL_INCLUDE_DIR}")
-#     endif()
-#     set_target_properties(BLAS::BLAS PROPERTIES
-#       INTERFACE_INCLUDE_DIRECTORIES ${XPED_MKL_INCLUDE_DIR}
-#       )
-#   else()
-#     set(XPED_USE_MKL OFF)
-#   endif()
-# else()
-#   set(XPED_USE_MKL OFF)
 endif()
 
 if(XPED_USE_LAPACK)
   find_package(LAPACK REQUIRED)
-  # if(XPED_USE_MKL)
-  # set(test_prog_for_lapacke "\#include <mkl_lapacke.h> \\nint main() {lapack_int m, n, lda, info\; double *a, *tau\; info = LAPACKE_dgeqrf( LAPACK_COL_MAJOR, m, n, a, lda, tau )\;}")
-  # else()
+  set_package_properties(LAPACK PROPERTIES
+    URL "https://en.wikipedia.org/wiki/LAPACK"
+    DESCRIPTION "(L)inear (A)lgebra (Pack)age, by vendor ${BLA_VENDOR}."
+    TYPE REQUIRED
+    PURPOSE "The Eigen and cyclops backend can export matrix decompositions (SVD, QR, ...) to external LAPACK implementations."
+    )
   set(test_prog_for_lapacke "\#include <lapacke.h> \\nint main() {lapack_int m, n, lda, info\; double *a, *tau\; info = LAPACKE_dgeqrf( LAPACK_COL_MAJOR, m, n, a, lda, tau )\;}")
-  # endif()
   set(CMAKE_REQUIRED_LIBRARIES LAPACK::LAPACK;BLAS::BLAS)
   include(CheckCXXSourceCompiles)
   check_cxx_source_compiles(${test_prog_for_lapacke} XPED_COMPILES_LAPACKE)
@@ -216,7 +216,13 @@ endif()
 if(XPED_USE_MKL)
   list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
   find_package(MKL REQUIRED)
-
+  set_package_properties(LAPACK PROPERTIES
+    URL "https://software.intel.com/content/www/us/en/develop/tools/oneapi/components/onemkl.html#gs.acpjiq"
+    DESCRIPTION "(M)ath (K)ernel (L)ibrary, by intel."
+    TYPE REQUIRED
+    PURPOSE "The Eigen and cyclops backend can export matrix decompositions (SVD, QR, ...) to calls to MKL. The cyclops backend can also use the Intel MPI and ScaLAPACK implementation."
+    )
+  
   if(NOT TARGET mkl::mkl_intel_32bit_omp_dyn)
     message(FATAL_ERROR "Intel MKL support not sufficient (Core libraries with BLAS and LAPACK support not found).")
   endif()
@@ -302,5 +308,9 @@ if (XPED_BUILD_BENCHMARKS)
   add_subdirectory(benchmarks)
 endif()
 
-feature_summary(WHAT ALL
-                FILENAME ${CMAKE_BINARY_DIR}/all.log APPEND)
+feature_summary(WHAT ENABLED_FEATURES PACKAGES_FOUND PACKAGES_NOT_FOUND
+  FILENAME ${CMAKE_BINARY_DIR}/ConfigSummary.log
+  VAR XPED_FEATURE_SUMMARY
+  DESCRIPTION "******************************************************************\n*                  Summary of build configuration                *\n******************************************************************")
+
+#message(STATUS ${XPED_FEATURE_SUMMARY})

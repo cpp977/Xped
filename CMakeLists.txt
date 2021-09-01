@@ -258,7 +258,16 @@ include(cmake/addGitLibs.cmake)
 
 include(cmake/CPM.cmake)
 CPMAddPackage("gh:gabime/spdlog@1.9.2")
-CPMAddPackage("gl:libeigen/eigen#3.4.0")
+CPMAddPackage(
+  NAME eigen
+  DOWNLOAD_ONLY YES
+  GIT_REPOSITORY https://gitlab.com/libeigen/eigen
+  GIT_TAG 3.4.0
+  )
+if(eigen_ADDED)
+  add_library(eigen INTERFACE IMPORTED)
+  target_include_directories(eigen SYSTEM INTERFACE ${eigen_SOURCE_DIR})
+endif()
 CPMAddPackage("gh:p-ranav/tabulate@1.4")
 CPMAddPackage("gh:n0phx/seq@0.2.1")
 if(XPED_ENABLE_LRU_CACHE)

@@ -43,6 +43,7 @@ void broadcast(T&& t, int process_rank, int root_process = 0, XpedWorld& world =
         buf = yas::shared_buffer(plain_buf, size);
         yas::load<flags>(buf, t);
     }
+    free(plain_buf);
 }
 } // namespace util::mpi
 #else

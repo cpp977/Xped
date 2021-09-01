@@ -8,12 +8,7 @@
 
 #include "Eigen/Core"
 
-#ifdef MKL_ILP64
-#    pragma message("Xped is using the intel math kernel library (MKL)")
-#endif
-
 #ifdef _OPENMP
-#    pragma message("Xped is using OpenMP parallelization")
 #    include "omp.h"
 const int XPED_MAX_THREADS = omp_get_max_threads();
 #else
@@ -40,7 +35,6 @@ using std::string;
 #include "Util/Mpi.hpp"
 
 #ifdef XPED_CACHE_PERMUTE_OUTPUT
-#    pragma message("Xped is using LRU cache for the output of FusionTree manipulations.")
 #    include "lru/lru.hpp"
 XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100)
 #endif

@@ -22,7 +22,7 @@
 #    define XPED_COMP_CLANG (__clang_major__ * 100 + __clang_minor__)
 const std::string XPED_COMPILER_STR = "clang++";
 #elif defined(__INTEL_COMPILER)
-#define XPED_COMP_ICPC (__INTEL_COMPILER)
+#    define XPED_COMP_ICPC (__INTEL_COMPILER)
 const std::string XPED_COMPILER_STR = "icpc";
 #else
 #    define XPED_COMP_CLANG 0
@@ -54,11 +54,6 @@ const std::string XPED_BLAS_STR = "None";
 
 #ifndef XPED_EFFICIENCY_MODEL
 #    define XPED_TIME_EFFICIENT
-#endif
-#ifdef XPED_TIME_EFFICIENT
-#    pragma message("Xped tries to be time efficient.")
-#elif defined(XPED_MEMORY_EFFICIENT)
-#    pragma message("Xped tries to be memory efficient.")
 #endif
 
 #ifndef XPED_LOG_LEVEL

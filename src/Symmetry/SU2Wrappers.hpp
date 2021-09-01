@@ -9,7 +9,6 @@
 /// \cond
 #ifdef XPED_USE_GSL_SU2_COEFFS
 #    include <gsl/gsl_sf_coupling.h>
-#    pragma message("Xped is using GSL library for 3nj-symbols.")
 #endif
 
 #ifdef XPED_USE_WIG_SU2_COEFFS

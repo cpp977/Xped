@@ -266,6 +266,7 @@ include(cmake/CPM.cmake)
 if(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
   set(XPED_SPDLOG_OPTIONS "CMAKE_CXX_FLAGS -stdlib=${USED_LIBCXX}")
 endif()
+set(CMAKE_POLICY_DEFAULT_CMP0075 NEW)
 CPMAddPackage(
   NAME spdlog
   VERSION 1.9.2

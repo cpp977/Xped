@@ -15,7 +15,7 @@ target_link_libraries (test_suite PUBLIC
   doctest::doctest
   GSL::gsl
   GSL::gslcblas
-  eigen
+  Eigen
   tabulate
   spdlog
   yas

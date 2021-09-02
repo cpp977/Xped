@@ -257,19 +257,29 @@ find_package(Git 1.6.5 REQUIRED)
 include(cmake/addGitLibs.cmake)
 
 include(cmake/CPM.cmake)
+
 CPMAddPackage("gh:gabime/spdlog@1.9.2")
+
 CPMAddPackage(
-  NAME eigen
+  NAME Eigen
   DOWNLOAD_ONLY YES
   GIT_REPOSITORY https://gitlab.com/libeigen/eigen
   GIT_TAG 3.4.0
   )
-if(eigen_ADDED)
-  add_library(eigen INTERFACE IMPORTED)
-  target_include_directories(eigen SYSTEM INTERFACE ${eigen_SOURCE_DIR})
+if(Eigen_ADDED)
+  add_library(Eigen INTERFACE IMPORTED)
+  target_include_directories(Eigen INTERFACE ${Eigen_SOURCE_DIR})
 endif()
-CPMAddPackage("gh:p-ranav/tabulate@1.4")
+
+CPMAddPackage(
+  NAME tabulate
+  VERSION 1.4
+  GIT_REPOSITORY https://github.com/p-ranav/tabulate
+  OPTIONS "USE_CPP17 ON"
+  )
+
 CPMAddPackage("gh:n0phx/seq@0.2.1")
+
 if(XPED_ENABLE_LRU_CACHE)
   CPMAddPackage(
     NAME lrucache
@@ -279,9 +289,10 @@ if(XPED_ENABLE_LRU_CACHE)
     )
   if(lrucache_ADDED)
     add_library(lrucache INTERFACE IMPORTED)
-    target_include_directories(lrucache SYSTEM INTERFACE ${lrucache_SOURCE_DIR}/include)
+    target_include_directories(lrucache INTERFACE ${lrucache_SOURCE_DIR}/include)
   endif()
 endif()
+
 CPMAddPackage(
   NAME yas
   DOWNLOAD_ONLY YES
@@ -290,7 +301,7 @@ CPMAddPackage(
 )
 if(yas_ADDED)
   add_library(yas INTERFACE IMPORTED)
-  target_include_directories(yas SYSTEM INTERFACE ${yas_SOURCE_DIR}/include)
+  target_include_directories(yas INTERFACE ${yas_SOURCE_DIR}/include)
 endif()
 
 if(${XPED_TENSOR_LIB} STREQUAL "ARRAY_TENSOR")
@@ -302,7 +313,7 @@ if(${XPED_TENSOR_LIB} STREQUAL "ARRAY_TENSOR")
     )
   if(array_ADDED)
     add_library(ndarray INTERFACE IMPORTED)
-    target_include_directories(ndarray SYSTEM INTERFACE ${array_SOURCE_DIR})
+    target_include_directories(ndarray INTERFACE ${array_SOURCE_DIR})
   endif()  
 endif()
 

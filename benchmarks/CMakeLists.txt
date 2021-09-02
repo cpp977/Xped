@@ -12,7 +12,7 @@ target_link_libraries (benchmark
   GSL::gsl
   GSL::gslcblas
   Boost::headers
-  eigen
+  Eigen
   tabulate
   spdlog
   yas

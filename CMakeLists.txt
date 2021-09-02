@@ -270,7 +270,7 @@ CPMAddPackage(
   NAME spdlog
   VERSION 1.9.2
   GIT_REPOSITORY https://github.com/gabime/spdlog
-  OPTIONS XPED_SPDLOG_OPTIONS
+  OPTIONS ${XPED_SPDLOG_OPTIONS}
   )
 
 CPMAddPackage(

@@ -16,11 +16,6 @@ function(set_project_options project_name)
     )
   set(MSVC_LOPTIONS_PROFILE
     )
-  if(XPED_USE_LIBCXX)
-    set(USED_LIBCXX libc++)
-  else()
-    set (USED_LIBCXX libstdc++)
-  endif()
   
   set(CLANG_OPTIONS_RELEASE
     -stdlib=${USED_LIBCXX}

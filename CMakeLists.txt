@@ -116,6 +116,11 @@ add_feature_info("Build uses the ${XPED_EFFICIENCY_MODEL} model." XPED_EFFICIENC
 
 option(XPED_USE_LIBCXX "Use libc++ from llvm." OFF)
 add_feature_info("c++ standard library implementation from clang (libc++) will be used." XPED_USE_LIBCXX "")
+if(XPED_USE_LIBCXX)
+  set(USED_LIBCXX libc++)
+else()
+  set (USED_LIBCXX libstdc++)
+endif()
 if(NOT CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
  if(XPED_USE_LIBCXX)
   message( FATAL_ERROR "It is only possible to use libc++ in combination with clang")
@@ -258,7 +263,12 @@ include(cmake/addGitLibs.cmake)
 
 include(cmake/CPM.cmake)
 
-CPMAddPackage("gh:gabime/spdlog@1.9.2")
+CPMAddPackage(
+  NAME spdlog
+  VERSION 1.9.2
+  GIT_REPOSITORY https://github.com/gabime/spdlog
+  OPTIONS "CMAKE_CXX_FLAGS -stdlib=${USED_LIBCXX}"
+  )
 
 CPMAddPackage(
   NAME Eigen

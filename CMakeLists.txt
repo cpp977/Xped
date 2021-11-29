@@ -266,20 +266,17 @@ include(cmake/addGitLibs.cmake)
 
 include(cmake/CPM.cmake)
 
-if(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
-  set(XPED_SPDLOG_OPTIONS "\"CMAKE_CXX_FLAGS -stdlib=${USED_LIBCXX}\" \"SPDLOG_BUILD_SHARED ON\"")
-else()
-  set(XPED_SPDLOG_OPTIONS "SPDLOG_BUILD_SHARED ON")
-endif()
-
 set(CMAKE_POLICY_DEFAULT_CMP0075 NEW)
 CPMAddPackage(
   NAME spdlog
   VERSION 1.9.2
   GIT_REPOSITORY https://github.com/gabime/spdlog
-  OPTIONS ${XPED_SPDLOG_OPTIONS}
   )
 target_compile_definitions(spdlog PRIVATE SPDLOG_ACTIVE_LEVEL=${XPED_LOG_LEVEL})
+target_compile_definitions(spdlog PRIVATE SPDLOG_BUILD_SHARED=ON)
+if(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
+  target_compile_options(spdlog PRIVATE -stdlib=${USED_LIBCXX})
+endif()
 
 CPMAddPackage(
   NAME Eigen

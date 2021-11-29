@@ -33,7 +33,7 @@ const std::string XPED_COMPILER_STR = "g++";
 
 #if defined(XPED_USE_MKL)
 const std::string XPED_BLAS_STR = "MKL";
-#elif defined(XPES_USE_BLAS)
+#elif defined(XPED_USE_BLAS)
 const std::string XPED_BLAS_STR = "OpenBLAS";
 #else
 const std::string XPED_BLAS_STR = "None";

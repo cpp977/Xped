@@ -20,23 +20,23 @@ using std::string;
 
 // #define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_WARN
 
-#include "Util/Macros.hpp"
+#include "Xped/Util/Macros.hpp"
 
-#include "Util/Mpi.hpp"
+#include "Xped/Util/Mpi.hpp"
 
 #ifdef XPED_CACHE_PERMUTE_OUTPUT
 #    include "lru/lru.hpp"
 XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100)
 #endif
 
-#include "Interfaces/PlainInterface.hpp"
+#include "Xped/Interfaces/PlainInterface.hpp"
 
-#include "Symmetry/SU2.hpp"
-#include "Symmetry/U0.hpp"
-#include "Symmetry/U1.hpp"
+#include "Xped/Symmetry/SU2.hpp"
+#include "Xped/Symmetry/U0.hpp"
+#include "Xped/Symmetry/U1.hpp"
 
-#include "MPS/Mps.hpp"
-#include "MPS/MpsAlgebra.hpp"
+#include "Xped/MPS/Mps.hpp"
+#include "Xped/MPS/MpsAlgebra.hpp"
 
 #include "doctest/doctest.h"
 #ifdef XPED_USE_MPI

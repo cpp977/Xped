@@ -2,54 +2,10 @@ include(doctest)
 enable_testing()
 
 add_library(test_suite OBJECT driver.cpp)
-target_include_directories(test_suite BEFORE PUBLIC ${XPED_DIR}/src)
-
-if(${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR" AND ${XPED_BUILD_CYCLOPS})
-  add_dependencies(test_suite cyclops)
-endif()
-
-
 target_link_libraries (test_suite PUBLIC
-  project_options
-  project_warnings
+  Xped
   doctest::doctest
-  GSL::gsl
-  GSL::gslcblas
-  Eigen
-  tabulate
-  spdlog
-  yas
-  seq)
-
-if(${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR")
-  target_link_libraries(test_suite PUBLIC cyclops_lib::all)
-elseif(${XPED_TENSOR_LIB} STREQUAL "ARRAY_TENSOR")
-  target_link_libraries(test_suite PUBLIC ndarray)
-endif()
-if(XPED_ENABLE_LRU_CACHE)
-  target_link_libraries(test_suite PUBLIC lrucache)
-endif()
-if(XPED_USE_MPI)
-  target_link_libraries(test_suite PUBLIC MPI::MPI_CXX)
-endif()
-if(XPED_USE_OPENMP)
-  target_link_libraries (test_suite PUBLIC OpenMP::OpenMP_CXX)
-endif()
-if(XPED_USE_BLAS)
-  target_link_libraries (test_suite PUBLIC BLAS::BLAS)
-endif()
-if(XPED_USE_LAPACK)
-  target_link_libraries (test_suite PUBLIC LAPACK::LAPACK)
-  if(XPED_USE_LAPACKE)
-    target_link_libraries (test_suite PUBLIC LAPACKE::LAPACKE)
-  endif()
-endif()
-if(XPED_USE_MKL)
-  target_link_libraries(test_suite PUBLIC mkl::mkl_intel_32bit_omp_dyn)
-  if(XPED_MKL_USE_MPI)
-    target_link_libraries(test_suite PUBLIC mkl::scalapack_mpich_intel_32bit_omp_dyn)
-  endif()
-endif()
+  )
 
 #########################
 #       basis_test      #

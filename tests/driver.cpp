@@ -2,8 +2,6 @@
 #    include "mpi.h"
 #endif
 
-#define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_WARN
-
 #include "spdlog/spdlog.h"
 
 #include "spdlog/sinks/basic_file_sink.h"

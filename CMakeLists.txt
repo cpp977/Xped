@@ -13,6 +13,9 @@ include(CMakeDependentOption)
 ###################################################################################################################################
 ###################################                          define options                   #####################################
 ###################################################################################################################################
+option(XPED_COMPILED_LIB "Configure the library as a compiled library. Long compile times." OFF)
+add_feature_info("Xped is configured to be a compiled library only." XPED_COMPILED_LIB "")
+
 option(XPED_BUILD_TESTS "Build the tests." ON)
 add_feature_info("The tests will be build." XPED_BUILD_TESTS "")
 
@@ -264,8 +267,11 @@ include(cmake/addGitLibs.cmake)
 include(cmake/CPM.cmake)
 
 if(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
-  set(XPED_SPDLOG_OPTIONS "CMAKE_CXX_FLAGS -stdlib=${USED_LIBCXX}")
+  set(XPED_SPDLOG_OPTIONS "\"CMAKE_CXX_FLAGS -stdlib=${USED_LIBCXX}\" \"SPDLOG_BUILD_SHARED ON\"")
+else()
+  set(XPED_SPDLOG_OPTIONS "SPDLOG_BUILD_SHARED ON")
 endif()
+
 set(CMAKE_POLICY_DEFAULT_CMP0075 NEW)
 CPMAddPackage(
   NAME spdlog
@@ -273,6 +279,7 @@ CPMAddPackage(
   GIT_REPOSITORY https://github.com/gabime/spdlog
   OPTIONS ${XPED_SPDLOG_OPTIONS}
   )
+target_compile_definitions(spdlog PRIVATE SPDLOG_ACTIVE_LEVEL=${XPED_LOG_LEVEL})
 
 CPMAddPackage(
   NAME Eigen
@@ -323,7 +330,7 @@ if(${XPED_TENSOR_LIB} STREQUAL "ARRAY_TENSOR")
     NAME array
     DOWNLOAD_ONLY YES
     GIT_REPOSITORY https://github.com/dsharlet/array
-    GIT_TAG master
+    GIT_TAG a8b42e241ca50bee73e200a952ea8c936d03a856
     )
   if(array_ADDED)
     add_library(ndarray INTERFACE IMPORTED)

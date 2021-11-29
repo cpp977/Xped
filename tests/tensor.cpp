@@ -18,30 +18,30 @@ using std::endl;
 using std::size_t;
 using std::string;
 
-#include "Util/Macros.hpp"
+#include "Xped/Util/Macros.hpp"
 
 #include "spdlog/spdlog.h"
 
 #include "Eigen/Core"
 
-#include "Util/Mpi.hpp"
+#include "Xped/Util/Mpi.hpp"
 
 #ifdef XPED_CACHE_PERMUTE_OUTPUT
 #    include "lru/lru.hpp"
 XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100)
 #endif
 
-#include "Interfaces/PlainInterface.hpp"
+#include "Xped/Interfaces/PlainInterface.hpp"
 
-#include "Core/Qbasis.hpp"
-#include "Symmetry/SU2.hpp"
-#include "Symmetry/U0.hpp"
-#include "Symmetry/U1.hpp"
-#include "Symmetry/kind_dummies.hpp"
+#include "Xped/Core/Qbasis.hpp"
+#include "Xped/Symmetry/SU2.hpp"
+#include "Xped/Symmetry/U0.hpp"
+#include "Xped/Symmetry/U1.hpp"
+#include "Xped/Symmetry/kind_dummies.hpp"
 
-#include "Core/AdjointOp.hpp"
-#include "Core/FusionTree.hpp"
-#include "Core/Xped.hpp"
+#include "Xped/Core/AdjointOp.hpp"
+#include "Xped/Core/FusionTree.hpp"
+#include "Xped/Core/Xped.hpp"
 
 #include "doctest/doctest.h"
 #ifdef XPED_USE_MPI

@@ -58,6 +58,9 @@ add_feature_info("Compilation uses ccache to speed up recompilation." XPED_ENABL
 option(XPED_USE_OPENMP "Enable openmp parallelization" ON)
 option(XPED_USE_MPI "Enable message parsing interface (mpi) parallelization" OFF)
 option(XPED_USE_BLAS "Enable blas linking." ON)
+if(NOT BLA_VENDOR)
+  set(BLA_VENDOR OpenBLAS)
+endif()
 option(XPED_USE_LAPACK "Enable lapack linking." ON)
 option(XPED_USE_SCALAPACK "Enable scalapack linking (only useful for MPI programs)." OFF)
 option(XPED_USE_MKL "Enable use of intel math kernel library (MKL)." OFF)
@@ -273,7 +276,6 @@ CPMAddPackage(
   GIT_REPOSITORY https://github.com/gabime/spdlog
   )
 target_compile_definitions(spdlog PRIVATE SPDLOG_ACTIVE_LEVEL=${XPED_LOG_LEVEL})
-target_compile_definitions(spdlog PRIVATE SPDLOG_BUILD_SHARED=ON)
 if(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
   target_compile_options(spdlog PRIVATE -stdlib=${USED_LIBCXX})
 endif()

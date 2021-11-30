@@ -41,7 +41,7 @@ template <typename PlainLib>
 typename PlainLib::template TType<Scalar_, 2> SU2<Kind, Scalar_>::one_j_tensor(const qType& q1, util::mpi::XpedWorld& world)
 {
     typedef typename PlainLib::Indextype IndexType;
-    auto tmp = CGC<PlainLib>(q1, q1, qvacuum(), 0, world);
+
     // typename TensorInterface<TensorLib>::template TType<Scalar_,2> out(degeneracy(q1), degeneracy(q1));
     auto out = PlainLib::template construct<Scalar>(std::array<IndexType, 2>{degeneracy(q1), degeneracy(q1)}, world);
     PlainLib::template setZero<Scalar, 2>(out);

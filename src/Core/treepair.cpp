@@ -1,6 +1,6 @@
+#include <array>
 #include <iostream>
 #include <string>
-#include <array>
 #include <unordered_map>
 
 using std::cout;

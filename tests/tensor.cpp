@@ -52,8 +52,8 @@ XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100)
 
 #ifdef XPED_USE_MPI
 constexpr std::size_t SU2_TENSOR_SIZE = 3;
-constexpr std::size_t U1_TENSOR_SIZE = 3;
-constexpr std::size_t U0_TENSOR_SIZE = 3;
+constexpr std::size_t U1_TENSOR_SIZE = 2;
+constexpr std::size_t U0_TENSOR_SIZE = 2;
 #else
 constexpr std::size_t SU2_TENSOR_SIZE = 7;
 constexpr std::size_t U1_TENSOR_SIZE = 5;

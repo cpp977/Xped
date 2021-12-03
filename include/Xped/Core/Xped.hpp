@@ -40,12 +40,12 @@ class Xped : public XpedBase<Xped<Scalar_, Rank, CoRank, Symmetry_, PlainLib_>>
     friend class XpedBase;
 
     template <typename Scalar__, std::size_t Rank_, std::size_t CoRank_, typename Symmetry__, typename PlainLib__>
-    friend Xped<Scalar__, Rank_, CoRank_, Symmetry__, PlainLib__> operator+(const Xped<Scalar__, Rank_, CoRank_, Symmetry__, PlainLib__>& T1,
-                                                                            const Xped<Scalar__, Rank_, CoRank_, Symmetry__, PlainLib__>& T2);
+    friend Xped<Scalar__, Rank_, CoRank_, Symmetry__, PlainLib__> operator+(XPED_CONST Xped<Scalar__, Rank_, CoRank_, Symmetry__, PlainLib__>& T1,
+                                                                            XPED_CONST Xped<Scalar__, Rank_, CoRank_, Symmetry__, PlainLib__>& T2);
 
     template <typename Scalar__, std::size_t Rank_, std::size_t CoRank_, typename Symmetry__, typename PlainLib__>
-    friend Xped<Scalar__, Rank_, CoRank_, Symmetry__, PlainLib__> operator-(const Xped<Scalar__, Rank_, CoRank_, Symmetry__, PlainLib__>& T1,
-                                                                            const Xped<Scalar__, Rank_, CoRank_, Symmetry__, PlainLib__>& T2);
+    friend Xped<Scalar__, Rank_, CoRank_, Symmetry__, PlainLib__> operator-(XPED_CONST Xped<Scalar__, Rank_, CoRank_, Symmetry__, PlainLib__>& T1,
+                                                                            XPED_CONST Xped<Scalar__, Rank_, CoRank_, Symmetry__, PlainLib__>& T2);
 
 public:
     typedef Scalar_ Scalar;

@@ -51,9 +51,9 @@ XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100)
 #include "tensor_tests.hpp"
 
 #ifdef XPED_USE_MPI
-constexpr std::size_t SU2_TENSOR_SIZE = 3;
-constexpr std::size_t U1_TENSOR_SIZE = 2;
-constexpr std::size_t U0_TENSOR_SIZE = 2;
+constexpr std::size_t SU2_TENSOR_SIZE = 4;
+constexpr std::size_t U1_TENSOR_SIZE = 3;
+constexpr std::size_t U0_TENSOR_SIZE = 3;
 #else
 constexpr std::size_t SU2_TENSOR_SIZE = 7;
 constexpr std::size_t U1_TENSOR_SIZE = 5;
@@ -80,7 +80,7 @@ TEST_CASE("Testing the transformation to plain Tensor.")
 
     SUBCASE("SU2")
     {
-        SPDLOG_INFO("Performing the transformation to plain for SU(2)");
+        SPDLOG_CRITICAL("Performing the transformation to plain for SU(2)");
         typedef Sym::SU2<Sym::SpinSU2> Symmetry;
         Qbasis<Symmetry, 1> B, C;
         if(test_world.rank == 0) {

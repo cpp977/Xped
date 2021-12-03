@@ -58,6 +58,7 @@ else()
     ${XPED_DIR}/src/Core/XpedBase.cpp
     ${XPED_DIR}/src/Core/XpedHelper.cpp
     ${XPED_DIR}/src/Core/Xped.cpp
+    ${XPED_DIR}/src/Util/Mpi.cpp
     )
   target_include_directories(Xped BEFORE PUBLIC ${XPED_DIR}/include)
   target_link_libraries(Xped PUBLIC
@@ -73,7 +74,7 @@ else()
     )
 
   if(${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR")
-    target_link_libraries(Xped cyclops_lib::all)
+    target_link_libraries(Xped PUBLIC cyclops_lib::all)
   elseif(${XPED_TENSOR_LIB} STREQUAL "ARRAY_TENSOR")
     target_link_libraries(Xped PUBLIC ndarray)
   endif()

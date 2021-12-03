@@ -14,7 +14,8 @@ void perform_tensor_permute(const std::size_t& size, util::mpi::XpedWorld& world
     util::mpi::broadcast(B, world.rank, 0, world);
     util::mpi::broadcast(C, world.rank, 0, world);
 
-    SPDLOG_CRITICAL("Permutation: {}. Shift={}", std::array<Eigen::Index, 4>{per...}, shift);
+    std::array<std::size_t, 4> perm{per...};
+    SPDLOG_CRITICAL("Permutation: {} {} {} {}. Shift={}", perm[0], perm[1], perm[2], perm[3], shift);
 
     Xped<double, 2, 2, Symmetry> t({{B, C}}, {{B, C}}, world);
     t.setRandom();
@@ -152,7 +153,8 @@ void perform_tensor_permute_intern(const std::size_t size, util::mpi::XpedWorld&
     //     std::cout << E << std::endl;
     // }
 
-    SPDLOG_CRITICAL("Permutation: {}", std::array<Eigen::Index, 4>{per...});
+    std::array<std::size_t, 4> perm{per...};
+    SPDLOG_CRITICAL("Permutation: {} {} {} {}", perm[0], perm[1], perm[2], perm[3]);
     XPED_MPI_BARRIER(world.comm)
     Xped<double, 4, 0, Symmetry> t({{B, B, B, B}}, {{}}, world);
     // if(world.rank == 0) { std::cout << t << std::endl; }
@@ -301,8 +303,8 @@ template <typename Symmetry>
 void test_tensor_transformation_to_plain(const Qbasis<Symmetry, 1>& B, const Qbasis<Symmetry, 1>& C, util::mpi::XpedWorld& world)
 {
     // CTF::World world(comm);
-    SPDLOG_INFO("Number of processes in tensor-test #={}", world.np);
-    SPDLOG_INFO("I am process number #={}", world.rank);
+    SPDLOG_CRITICAL("Number of processes in tensor-test #={}", world.np);
+    SPDLOG_CRITICAL("I am process number #={}", world.rank);
     // SPDLOG_INFO("basis B");
     // for(const auto& [q, pos, plain] : B.data_) { SPDLOG_INFO("QN: {}, deg={}", q.data[0], plain.dim()); }
     // SPDLOG_INFO("basis C");

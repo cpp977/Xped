@@ -34,9 +34,9 @@ public:
     typedef typename PlainLib::template cMapTType<Scalar, Rank + CoRank> TensorcMapType;
     typedef typename PlainLib::Indextype IndexType;
 
-    inline XPED_CONST ScaledOp<Derived> operator*(const Scalar scale) const { return ScaledOp<Derived>(derived(), scale); }
+    XPED_CONST ScaledOp<Derived> operator*(const Scalar scale) const;
 
-    inline XPED_CONST AdjointOp<Derived> adjoint() XPED_CONST { return AdjointOp<Derived>(derived()); }
+    XPED_CONST AdjointOp<Derived> adjoint() XPED_CONST;
 
     template <typename OtherDerived>
     Xped<typename XpedTraits<Derived>::Scalar,
@@ -48,7 +48,7 @@ public:
 
     Scalar trace() XPED_CONST;
 
-    inline Scalar squaredNorm() XPED_CONST { return (*this * this->adjoint()).trace(); }
+    Scalar squaredNorm() XPED_CONST;
 
     inline Scalar norm() XPED_CONST { return std::sqrt(squaredNorm()); }
 

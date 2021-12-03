@@ -1,6 +1,8 @@
 #ifndef SCALAR_TRAITS_H_
 #define SCALAR_TRAITS_H_
 
+#include <complex>
+
 template <typename Scalar>
 struct ScalarTraits
 {};

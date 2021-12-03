@@ -93,4 +93,14 @@ CacheManager<shift, Rank, CoRank, Symmetry> VARIABLE_NAME(CACHE_SIZE);
 #    define XPED_MPI_BARRIER(comm)
 #endif
 
+#if defined XPED_USE_EIGEN_TENSOR_LIB && defined XPED_USE_EIGEN_MATRIX_LIB && defined XPED_USE_EIGEN_VECTOR_LIB
+#    define XPED_CONST const
+#elif defined XPED_USE_ARRAY_TENSOR_LIB && defined XPED_USE_EIGEN_MATRIX_LIB && defined XPED_USE_EIGEN_VECTOR_LIB
+#    define XPED_CONST const
+#elif defined XPED_USE_CYCLOPS_TENSOR_LIB && defined XPED_USE_CYCLOPS_MATRIX_LIB && defined XPED_USE_CYCLOPS_VECTOR_LIB
+#    define XPED_CONST
+#else
+#    error "You specified an invalid combination of plain matrix library, plain tensor library and plain vector library."
+#endif
+
 #endif

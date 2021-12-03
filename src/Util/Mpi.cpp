@@ -60,6 +60,11 @@ void broadcast(T&& t, int process_rank, int root_process, XpedWorld& world)
 
 } // namespace util::mpi
 #else
+#    include "Xped/Core/Qbasis.hpp"
+#    include "Xped/Symmetry/SU2.hpp"
+#    include "Xped/Symmetry/U0.hpp"
+#    include "Xped/Symmetry/U1.hpp"
+
 namespace util::mpi {
 
 template <typename T>

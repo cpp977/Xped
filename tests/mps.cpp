@@ -18,7 +18,7 @@ using std::endl;
 using std::size_t;
 using std::string;
 
-// #define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_WARN
+#include "spdlog/spdlog.h"
 
 #include "Xped/Util/Macros.hpp"
 
@@ -35,8 +35,11 @@ XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100)
 #include "Xped/Symmetry/U0.hpp"
 #include "Xped/Symmetry/U1.hpp"
 
+#include "Xped/Core/AdjointOp.hpp"
+
 #include "Xped/MPS/Mps.hpp"
 #include "Xped/MPS/MpsAlgebra.hpp"
+#include "Xped/MPS/MpsContractions.hpp"
 
 #include "doctest/doctest.h"
 #ifdef XPED_USE_MPI

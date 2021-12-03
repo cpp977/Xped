@@ -97,13 +97,10 @@ struct PlainInterface
 
 #if defined XPED_USE_EIGEN_TENSOR_LIB && defined XPED_USE_EIGEN_MATRIX_LIB && defined XPED_USE_EIGEN_VECTOR_LIB
 #    include "Xped/Interfaces/PlainInterface_Eigen_impl.hpp"
-#    define XPED_CONST const
 #elif defined XPED_USE_ARRAY_TENSOR_LIB && defined XPED_USE_EIGEN_MATRIX_LIB && defined XPED_USE_EIGEN_VECTOR_LIB
 #    include "Xped/Interfaces/PlainInterface_Eigen_Array_impl.hpp"
-#    define XPED_CONST const
 #elif defined XPED_USE_CYCLOPS_TENSOR_LIB && defined XPED_USE_CYCLOPS_MATRIX_LIB && defined XPED_USE_CYCLOPS_VECTOR_LIB
 #    include "Xped/Interfaces/PlainInterface_Cyclops_impl.hpp"
-#    define XPED_CONST
 #else
 #    error "You specified an invalid combination of plain matrix library, plain tensor library and plain vector library."
 #endif

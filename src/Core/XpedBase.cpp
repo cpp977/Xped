@@ -1,5 +1,7 @@
 #include <unordered_set>
 
+#include "Xped/Util/Macros.hpp"
+
 #include "Xped/Symmetry/SU2.hpp"
 #include "Xped/Symmetry/U0.hpp"
 #include "Xped/Symmetry/U1.hpp"
@@ -20,6 +22,24 @@ typename XpedTraits<Derived>::Scalar XpedBase<Derived>::trace() XPED_CONST
         // out += derived().block(i).trace() * Symmetry::degeneracy(derived().sector(i));
     }
     return out;
+}
+
+template <typename Derived>
+typename XpedTraits<Derived>::Scalar XpedBase<Derived>::squaredNorm() XPED_CONST
+{
+    return (*this * this->adjoint()).trace();
+}
+
+template <typename Derived>
+XPED_CONST AdjointOp<Derived> XpedBase<Derived>::adjoint() XPED_CONST
+{
+    return AdjointOp<Derived>(derived());
+}
+
+template <typename Derived>
+XPED_CONST ScaledOp<Derived> XpedBase<Derived>::operator*(const Scalar scale) const
+{
+    return ScaledOp<Derived>(derived(), scale);
 }
 
 template <typename Derived>

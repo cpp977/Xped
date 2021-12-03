@@ -59,6 +59,9 @@ else()
     ${XPED_DIR}/src/Core/XpedHelper.cpp
     ${XPED_DIR}/src/Core/Xped.cpp
     ${XPED_DIR}/src/Util/Mpi.cpp
+    ${XPED_DIR}/src/MPS/Mps.cpp
+    ${XPED_DIR}/src/MPS/MpsAlgebra.cpp
+    ${XPED_DIR}/src/MPS/MpsContractions.cpp
     )
   target_include_directories(Xped BEFORE PUBLIC ${XPED_DIR}/include)
   target_link_libraries(Xped PUBLIC

@@ -44,6 +44,6 @@ void broadcast(T&&, int, int, XpedWorld&);
 #endif
 
 #ifndef XPED_COMPILED_LIB
-#    include "src/Mpi.hpp"
+#    include "src/Util/Mpi.hpp"
 #endif
 #endif

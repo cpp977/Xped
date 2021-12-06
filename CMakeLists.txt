@@ -298,7 +298,12 @@ CPMAddPackage(
   OPTIONS "USE_CPP17 ON"
   )
 
-CPMAddPackage("gh:n0phx/seq@0.2.1")
+CPMAddPackage(
+  NAME seq
+  VERSION 0.2.1
+  GIT_REPOSITORY https://github.com/n0phx/seq
+  OPTIONS "SEQ_BUILD_TESTS OFF"
+  )
 
 if(XPED_ENABLE_LRU_CACHE)
   CPMAddPackage(

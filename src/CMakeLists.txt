@@ -62,6 +62,7 @@ else()
     ${XPED_DIR}/src/MPS/Mps.cpp
     ${XPED_DIR}/src/MPS/MpsAlgebra.cpp
     ${XPED_DIR}/src/MPS/MpsContractions.cpp
+    ${XPED_DIR}/src/Interfaces/MatrixInterface_Eigen_impl.cpp
     )
   target_include_directories(Xped BEFORE PUBLIC ${XPED_DIR}/include)
   target_link_libraries(Xped PUBLIC

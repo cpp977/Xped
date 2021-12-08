@@ -16,89 +16,52 @@ struct VectorInterface<EigenVectorLib>
 
     // constructors
     template <typename Scalar>
-    static VType<Scalar> construct(const VIndextype& elems, util::mpi::XpedWorld& world = util::mpi::getUniverse())
-    {
-        return VType<Scalar>(elems);
-    }
+    static VType<Scalar> construct(const VIndextype& elems, util::mpi::XpedWorld& world = util::mpi::getUniverse());
 
     template <typename Scalar>
-    static VType<Scalar> construct_with_zero(const VIndextype& elems, util::mpi::XpedWorld& world = util::mpi::getUniverse())
-    {
-        VType<Scalar> vec(elems);
-        vec.setZero();
-        return vec;
-    }
+    static VType<Scalar> construct_with_zero(const VIndextype& elems, util::mpi::XpedWorld& world = util::mpi::getUniverse());
 
     template <typename Scalar>
-    static void resize(VType<Scalar>& V, const VIndextype& new_elems)
-    {
-        V.resize(new_elems);
-    }
+    static void resize(VType<Scalar>& V, const VIndextype& new_elems);
 
     // initialization
     template <typename Scalar>
-    static void setZero(VType<Scalar>& V)
-    {
-        V.setZero();
-    }
+    static void setZero(VType<Scalar>& V);
 
     template <typename Scalar>
-    static void setRandom(VType<Scalar>& V)
-    {
-        V.setRandom();
-    }
+    static void setRandom(VType<Scalar>& V);
 
     template <typename Scalar>
-    static void setConstant(VType<Scalar>& V, const Scalar& val)
-    {
-        V.setConstant(val);
-    }
+    static void setConstant(VType<Scalar>& V, const Scalar& val);
 
     // shape
     template <typename Scalar>
-    static VIndextype length(const VType<Scalar>& V)
-    {
-        return V.size();
-    }
+    static VIndextype length(const VType<Scalar>& V);
 
     template <typename Scalar>
-    static auto sum(const VType<Scalar>& V1, const VType<Scalar>& V2)
-    {
-        return (V1 + V2);
-    }
+    static const Eigen::CwiseBinaryOp<Eigen::internal::scalar_sum_op<Scalar, Scalar>, const VType<Scalar>, const VType<Scalar>>
+    sum(const VType<Scalar>& V1, const VType<Scalar>& V2);
 
     template <typename Scalar>
-    static auto substract(const VType<Scalar>& V1, const VType<Scalar>& V2)
-    {
-        return (V1 - V2);
-    }
+    static const Eigen::CwiseBinaryOp<Eigen::internal::scalar_difference_op<Scalar, Scalar>, const VType<Scalar>, const VType<Scalar>>
+    substract(const VType<Scalar>& V1, const VType<Scalar>& V2);
 
     template <typename Scalar>
-    static auto scale(const VType<Scalar>& V, const Scalar& val)
-    {
-        return (val * V);
-    }
+    static const Eigen::CwiseBinaryOp<Eigen::internal::scalar_product_op<Scalar, Scalar>, Scalar, const VType<Scalar>> scale(const VType<Scalar>& V,
+                                                                                                                             const Scalar& val);
 
     // block
     template <typename Scalar>
-    static auto sub(const VType<Scalar>& V, const VIndextype& off, const VIndextype& elems)
-    {
-        return V(Eigen::seqN(off, elems));
-    }
+    static const Eigen::VectorBlock<const VType<Scalar>> sub(const VType<Scalar>& V, const VIndextype& off, const VIndextype& elems);
 
     template <typename Scalar>
-    static std::string print(const VType<Scalar>& V)
-    {
-        std::stringstream ss;
-        ss << V;
-        return ss.str();
-    }
+    static std::string print(const VType<Scalar>& V);
 
     template <typename Scalar>
-    static void vec_to_stdvec(const VType<Scalar>& V, std::vector<Scalar>& vec)
-    {
-        vec = std::vector<Scalar>(V.data(), V.data() + V.size());
-    }
+    static void vec_to_stdvec(const VType<Scalar>& V, std::vector<Scalar>& vec);
 };
 
+#ifndef XPED_COMPILED_LIB
+#    include "Interfaces/VectorInterface_Eigen_impl.cpp"
+#endif
 #endif

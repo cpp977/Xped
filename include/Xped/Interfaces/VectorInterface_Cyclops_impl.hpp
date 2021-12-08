@@ -74,7 +74,7 @@ struct VectorInterface<CyclopsVectorLib>
     // }
 
     template <typename Scalar, typename VT1>
-    static auto scale(VT1&& V, const Scalar& val)
+    static VType<Scalar> scale(VT1&& V, const Scalar& val)
     {
         VType<Scalar> res(V.len, *V.wrld);
         res["i"] = val * V["i"];

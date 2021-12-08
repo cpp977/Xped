@@ -258,11 +258,11 @@ struct TensorInterface<CyclopsTensorLib>
     // methods rvalue
 
     template <typename Scalar, std::size_t Rank1, std::size_t Rank2, Indextype... Is1, Indextype... Is2, Indextype... Ist>
-    static auto contract_helper(TType<Scalar, Rank1>& T1,
-                                TType<Scalar, Rank2>& T2,
-                                seq::iseq<Indextype, Is1...> S1,
-                                seq::iseq<Indextype, Is2...> S2,
-                                seq::iseq<Indextype, Ist...> St)
+    static TType<Scalar, sizeof...(Ist)> contract_helper(TType<Scalar, Rank1>& T1,
+                                                         TType<Scalar, Rank2>& T2,
+                                                         seq::iseq<Indextype, Is1...> S1,
+                                                         seq::iseq<Indextype, Is2...> S2,
+                                                         seq::iseq<Indextype, Ist...> St)
     {
         assert(*T1.wrld == *T2.wrld and "Tensors should live on the same world for contraction");
 
@@ -381,7 +381,7 @@ struct TensorInterface<CyclopsTensorLib>
     }
 
     template <typename Expr, Indextype... p>
-    static auto shuffle_view(const Expr& T)
+    static Expr shuffle_view(const Expr& T)
     {
         assert(false and "Shuffle view is not supported with CTF tensor lib");
     }
@@ -421,7 +421,7 @@ struct TensorInterface<CyclopsTensorLib>
     }
 
     template <typename Scalar, int Rank1, std::size_t Rank2>
-    static auto slice(TType<Scalar, Rank1>& T, const std::array<Indextype, Rank2>& offsets, const std::array<Indextype, Rank2>& extents)
+    static TType<Scalar> slice(TType<Scalar, Rank1>& T, const std::array<Indextype, Rank2>& offsets, const std::array<Indextype, Rank2>& extents)
     {
         std::array<Indextype, Rank2> ends;
         for(std::size_t i = 0; i < Rank2; i++) { ends[i] = offsets[i] + extents[i]; }

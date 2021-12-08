@@ -180,7 +180,7 @@ struct MatrixInterface<CyclopsMatrixLib>
     }
 
     template <typename Scalar, typename MT1, typename MT2>
-    static auto add(MT1&& M1, MT2&& M2)
+    static MType<Scalar> add(MT1&& M1, MT2&& M2)
     {
         assert(*M1.wrld == *M2.wrld and "Tensors needs to live on the same world for add().");
         MType<Scalar> res(M1.nrow, M2.ncol, *M1.wrld);
@@ -189,7 +189,7 @@ struct MatrixInterface<CyclopsMatrixLib>
     }
 
     template <typename Scalar, typename MT1, typename MT2>
-    static auto difference(MT1&& M1, MT2&& M2)
+    static MType<Scalar> difference(MT1&& M1, MT2&& M2)
     {
         assert(*M1.wrld == *M2.wrld and "Tensors needs to live on the same world for difference().");
         MType<Scalar> res(M1.nrow, M2.ncol, *M1.wrld);
@@ -204,7 +204,7 @@ struct MatrixInterface<CyclopsMatrixLib>
     }
 
     template <typename Scalar, typename MT>
-    static auto adjoint(MT&& M)
+    static MType<Scalar> adjoint(MT&& M)
     {
         MType<Scalar> N(M.ncol, M.nrow, *M.wrld);
         N["ij"] = M["ji"];

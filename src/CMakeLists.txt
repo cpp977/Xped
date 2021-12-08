@@ -65,6 +65,7 @@ else()
     ${XPED_DIR}/src/Interfaces/MatrixInterface_Eigen_impl.cpp
     ${XPED_DIR}/src/Interfaces/TensorInterface_Eigen_impl.cpp
     ${XPED_DIR}/src/Interfaces/VectorInterface_Eigen_impl.cpp
+    ${XPED_DIR}/src/Interfaces/PlainInterface_Eigen_impl.cpp
     )
   target_include_directories(Xped BEFORE PUBLIC ${XPED_DIR}/include)
   target_link_libraries(Xped PUBLIC

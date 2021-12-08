@@ -2,7 +2,6 @@
 #define PLAIN_INTERFACE_EIGEN_IMPL_H_
 
 #include <Eigen/Core>
-#include <Eigen/SVD>
 #include <unsupported/Eigen/CXX11/Tensor>
 
 template <>
@@ -43,10 +42,7 @@ struct PlainInterface<EigenMatrixLib, EigenTensorLib, EigenVectorLib>
                                       const Indextype& rows,
                                       const Indextype& cols,
                                       const Scalar& scale,
-                                      const TType<Scalar, Rank>& T)
-    {
-        M.block(row, col, rows, cols) = scale * Eigen::Map<cMType<Scalar>>(T.data(), rows, cols);
-    }
+                                      const TType<Scalar, Rank>& T);
 
     template <typename Scalar, std::size_t Rank>
     static void add_to_block_from_tensor(MType<Scalar>& M,
@@ -55,10 +51,7 @@ struct PlainInterface<EigenMatrixLib, EigenTensorLib, EigenVectorLib>
                                          const Indextype& rows,
                                          const Indextype& cols,
                                          const Scalar& scale,
-                                         const TType<Scalar, Rank>& T)
-    {
-        M.block(row, col, rows, cols) += scale * Eigen::Map<cMType<Scalar>>(T.data(), rows, cols);
-    }
+                                         const TType<Scalar, Rank>& T);
 
     template <typename Scalar, std::size_t Rank>
     static TType<Scalar, Rank> tensor_from_matrix_block(const MType<Scalar>& M,
@@ -66,36 +59,20 @@ struct PlainInterface<EigenMatrixLib, EigenTensorLib, EigenVectorLib>
                                                         const Indextype& col,
                                                         const Indextype& rows,
                                                         const Indextype& cols,
-                                                        const std::array<Indextype, Rank>& dims)
-    {
-        MType<Scalar> submatrix = M.block(row, col, rows, cols);
-        cMapTType<Scalar, Rank> tensorview = cMap(submatrix.data(), dims);
-        return construct<Scalar, Rank>(tensorview);
-    }
+                                                        const std::array<Indextype, Rank>& dims);
 
     template <typename Scalar>
-    static void diagonal_head_matrix_to_vector(VType<Scalar>& V, const MType<Scalar>& M, const Indextype& n_elems)
-    {
-        V = M.diagonal().head(n_elems);
-    }
+    static void diagonal_head_matrix_to_vector(VType<Scalar>& V, const MType<Scalar>& M, const Indextype& n_elems);
 
     template <typename Scalar>
-    static std::tuple<MType<Scalar>, VType<Scalar>, MType<Scalar>> svd(const MType<Scalar>& M)
-    {
-#ifdef XPED_DONT_USE_BDCSVD
-        Eigen::JacobiSVD<MType<Scalar>> Jack; // standard SVD
-#else
-        Eigen::BDCSVD<MType<Scalar>> Jack; // "Divide and conquer" SVD (only available in Eigen)
+    static std::tuple<MType<Scalar>, VType<Scalar>, MType<Scalar>> svd(const MType<Scalar>& M);
+
+    template <typename Scalar>
+    static MType<Scalar> vec_to_diagmat(const VType<Scalar>& V);
+};
+
+#ifndef XPED_COMPILED_LIB
+#    include "Interfaces/PlainInterface_Eigen_impl.cpp"
 #endif
 
-        Jack.compute(M, Eigen::ComputeThinU | Eigen::ComputeThinV);
-        return std::make_tuple(Jack.matrixU(), Jack.singularValues(), Jack.matrixV().adjoint());
-    }
-
-    template <typename Scalar>
-    static MType<Scalar> vec_to_diagmat(const VType<Scalar>& V)
-    {
-        return V.matrix().asDiagonal();
-    }
-};
 #endif

@@ -64,4 +64,5 @@ struct VectorInterface<EigenVectorLib>
 #ifndef XPED_COMPILED_LIB
 #    include "Interfaces/VectorInterface_Eigen_impl.cpp"
 #endif
+
 #endif

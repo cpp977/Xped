@@ -421,7 +421,7 @@ struct TensorInterface<CyclopsTensorLib>
     }
 
     template <typename Scalar, int Rank1, std::size_t Rank2>
-    static TType<Scalar> slice(TType<Scalar, Rank1>& T, const std::array<Indextype, Rank2>& offsets, const std::array<Indextype, Rank2>& extents)
+    static TType<Scalar, Rank1> slice(TType<Scalar, Rank1>& T, const std::array<Indextype, Rank2>& offsets, const std::array<Indextype, Rank2>& extents)
     {
         std::array<Indextype, Rank2> ends;
         for(std::size_t i = 0; i < Rank2; i++) { ends[i] = offsets[i] + extents[i]; }

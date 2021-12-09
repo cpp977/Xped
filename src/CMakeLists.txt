@@ -13,9 +13,9 @@ if(NOT XPED_COMPILED_LIB)
     yas
     seq
     )
-  if(${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR")
+  if(${XPED_TENSOR_LIB} STREQUAL "Cyclops")
     target_link_libraries(Xped INTERFACE cyclops_lib::all)
-  elseif(${XPED_TENSOR_LIB} STREQUAL "ARRAY_TENSOR")
+  elseif(${XPED_TENSOR_LIB} STREQUAL "Array")
     target_link_libraries(Xped INTERFACE ndarray)
   endif()
 
@@ -80,9 +80,9 @@ else()
     seq
     )
 
-  if(${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR")
+  if(${XPED_TENSOR_LIB} STREQUAL "Cyclops")
     target_link_libraries(Xped PUBLIC cyclops_lib::all)
-  elseif(${XPED_TENSOR_LIB} STREQUAL "ARRAY_TENSOR")
+  elseif(${XPED_TENSOR_LIB} STREQUAL "Array")
     target_link_libraries(Xped PUBLIC ndarray)
   endif()
 
@@ -117,7 +117,7 @@ else()
   endif()
 endif()
 
-if(${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR" AND ${XPED_BUILD_CYCLOPS})
+if(${XPED_TENSOR_LIB} STREQUAL "Cyclops" AND ${XPED_BUILD_CYCLOPS})
   add_dependencies(Xped cyclops)
 endif()
 

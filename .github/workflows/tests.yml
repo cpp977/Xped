@@ -18,27 +18,27 @@ jobs:
       matrix:
         compiler: [g++-10, clang++]
         LIBCXX: [ON, OFF]
-        TENSOR_LIB: [EIGEN_TENSOR, ARRAY_TENSOR, CYCLOPS_TENSOR]
+        TENSOR_LIB: [Eigen, Array, Cyclops]
         exclude:
           # excludes libcxx for g++
           - compiler: g++-10
             LIBCXX: ON
           - compiler: clang++
-            TENSOR_LIB: CYCLOPS_TENSOR
+            TENSOR_LIB: Cyclops
           - compiler: clang++
-            TENSOR_LIB: ARRAY_TENSOR
+            TENSOR_LIB: Array
         include:
-          - TENSOR_LIB: EIGEN_TENSOR
-            MATRIX_LIB: EIGEN_MATRIX
-            VECTOR_LIB: EIGEN_VECTOR
+          - TENSOR_LIB: Eigen
+            MATRIX_LIB: Eigen
+            VECTOR_LIB: Eigen
             USE_MPI: OFF
-          - TENSOR_LIB: ARRAY_TENSOR
-            MATRIX_LIB: EIGEN_MATRIX
-            VECTOR_LIB: EIGEN_VECTOR
+          - TENSOR_LIB: Array
+            MATRIX_LIB: Eigen
+            VECTOR_LIB: Eigen
             USE_MPI: OFF
-          - TENSOR_LIB: CYCLOPS_TENSOR
-            MATRIX_LIB: CYCLOPS_MATRIX
-            VECTOR_LIB: CYCLOPS_VECTOR
+          - TENSOR_LIB: Cyclops
+            MATRIX_LIB: Cyclops
+            VECTOR_LIB: Cyclops
             USE_MPI: ON
 
     steps:

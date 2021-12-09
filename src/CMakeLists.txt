@@ -62,10 +62,10 @@ else()
     ${XPED_DIR}/src/MPS/Mps.cpp
     ${XPED_DIR}/src/MPS/MpsAlgebra.cpp
     ${XPED_DIR}/src/MPS/MpsContractions.cpp
-    ${XPED_DIR}/src/Interfaces/MatrixInterface_Eigen_impl.cpp
-    ${XPED_DIR}/src/Interfaces/TensorInterface_Eigen_impl.cpp
-    ${XPED_DIR}/src/Interfaces/VectorInterface_Eigen_impl.cpp
-    ${XPED_DIR}/src/Interfaces/PlainInterface_Eigen_impl.cpp
+    ${XPED_DIR}/src/Interfaces/MatrixInterface_${XPED_MATRIX_LIB}_impl.cpp
+    ${XPED_DIR}/src/Interfaces/TensorInterface_${XPED_TENSOR_LIB}_impl.cpp
+    ${XPED_DIR}/src/Interfaces/VectorInterface_${XPED_VECTOR_LIB}_impl.cpp
+    ${XPED_DIR}/src/Interfaces/PlainInterface_${XPED_PLAIN_LIB}_impl.cpp
     )
   target_include_directories(Xped BEFORE PUBLIC ${XPED_DIR}/include)
   target_link_libraries(Xped PUBLIC

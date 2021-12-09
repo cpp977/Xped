@@ -24,7 +24,8 @@ jobs:
           - compiler: g++-10
             LIBCXX: ON
           - compiler: clang++
-            TENSOR_LIB: CYCLOPS_TENSOR
+            TENSOR_LIB: Cyclops
+            LIBCXX: ON
         include:
           - TENSOR_LIB: Eigen
             MATRIX_LIB: Eigen

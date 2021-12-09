@@ -332,7 +332,7 @@ if(yas_ADDED)
   target_include_directories(yas INTERFACE ${yas_SOURCE_DIR}/include)
 endif()
 
-if(${XPED_TENSOR_LIB} STREQUAL "ARRAY_TENSOR")
+if(${XPED_TENSOR_LIB} STREQUAL "Array")
   CPMAddPackage(
     NAME array
     DOWNLOAD_ONLY YES

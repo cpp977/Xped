@@ -8,6 +8,29 @@
 using Indextype = int;
 
 template <typename Scalar, std::size_t Rank>
+using TType = CTF::Tensor<Scalar>;
+template <typename Scalar, std::size_t Rank>
+using cTType = const CTF::Tensor<Scalar>;
+
+template <typename Scalar, std::size_t Rank>
+using MapTType = CTF::Tensor<Scalar>;
+template <typename Scalar, std::size_t Rank>
+using cMapTType = const CTF::Tensor<Scalar>;
+
+template <typename Scalar>
+using MType = CTF::Matrix<Scalar>;
+template <typename Scalar>
+using cMType = const CTF::Matrix<Scalar>;
+
+template <typename Scalar>
+using MapMType = CTF::Matrix<Scalar>;
+template <typename Scalar>
+using cMapMType = const CTF::Matrix<Scalar>;
+
+template <typename Scalar>
+using VType = CTF::Vector<Scalar>;
+
+template <typename Scalar, std::size_t Rank>
 void PlainInterface<CyclopsMatrixLib, CyclopsTensorLib, CyclopsVectorLib>::set_block_from_tensor(MType<Scalar>& M,
                                                                                                  const Indextype& row_off,
                                                                                                  const Indextype& col_off,

@@ -1,6 +1,8 @@
 include(ExternalProject)
 
 if(${XPED_TENSOR_LIB} STREQUAL "Cyclops" AND XPED_BUILD_CYCLOPS)
+  find_package(Wget REQUIRED) #needed for extra downloads performed by cyclops build.
+  
   set(CYCLOPS_ROOT ${CMAKE_BINARY_DIR}/thirdparty/cyclops)
   set(CYCLOPS_INCLUDE_DIR ${CYCLOPS_ROOT}/include)
   set(CYCLOPS_LIB_DIR ${CYCLOPS_ROOT}/lib)

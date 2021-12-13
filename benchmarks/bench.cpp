@@ -57,7 +57,9 @@ XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100)
 
 int main(int argc, char* argv[])
 {
+#ifdef XPED_USE_MPI
     int err = MPI_Init(&argc, &argv);
+#endif
     {
         spdlog::cfg::load_argv_levels(argc, argv);
 #ifdef XPED_USE_MPI

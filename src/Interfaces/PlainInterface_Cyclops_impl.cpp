@@ -127,10 +127,25 @@ std::tuple<MType<Scalar>, VType<Scalar>, MType<Scalar>> PlainInterface<CyclopsMa
 {
     MType<Scalar> U, Vdag;
     CTF::Vector<Scalar> S;
+    // Handle 1x2 matrix because of ScaLAPACK build.. Maybe do not do it if intel scalapack is used.
+    if(M.nrow == 1 && M.ncol == 2) {
+        U = MType<Scalar>(1, 1, *M.wrld);
+        U["ii"] = 1.;
+        Vdag = M;
+        S = CTF::Vector<Scalar>(1, *M.wrld);
+        // Todo: Handle complex case?
+        Scalar d = M.norm2();
+        S["i"] = d;
+        if(d != 0.)
+            Vdag.scale(1. / d, "ij");
+        else {
+            Vdag["ij"] = 1. / std::sqrt(2);
+        } // this is what lapack seems to do
+        return std::make_tuple(U, S, Vdag);
+    }
     M.svd(U, S, Vdag);
     // MType<Scalar> S(S_tmp.len, S_tmp.len);
     // S["ii"] = S_tmp["i"];
-
     return std::make_tuple(U, S, Vdag);
 }
 

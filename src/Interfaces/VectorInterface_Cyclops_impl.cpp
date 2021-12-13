@@ -27,7 +27,7 @@ void VectorInterface<CyclopsVectorLib>::resize(VType<Scalar>& V, const VIndextyp
     V = VType<Scalar>(new_elems, *V.wrld);
 }
 
-    // initialization
+// initialization
 template <typename Scalar>
 void VectorInterface<CyclopsVectorLib>::setZero(VType<Scalar>& V)
 {
@@ -46,7 +46,7 @@ void VectorInterface<CyclopsVectorLib>::setConstant(VType<Scalar>& V, const Scal
     V["i"] = val;
 }
 
-    // shape
+// shape
 template <typename Scalar>
 VIndextype VectorInterface<CyclopsVectorLib>::length(const VType<Scalar>& V)
 {
@@ -77,7 +77,7 @@ VType<Scalar> VectorInterface<CyclopsVectorLib>::scale(VT1&& V, const Scalar& va
     return res;
 }
 
-    // block
+// block
 template <typename Scalar>
 VType<Scalar> VectorInterface<CyclopsVectorLib>::sub(const VType<Scalar>& V, const VIndextype& off, const VIndextype& elems)
 {

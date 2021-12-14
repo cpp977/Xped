@@ -109,7 +109,7 @@ option(XPED_ENABLE_CLANG_TIDY "Enable static analysis with clang-tidy" OFF)
 add_feature_info("Tool clang-tidy is enabled." XPED_ENABLE_CLANG_TIDY "")
 option(XPED_ENABLE_INCLUDE_WHAT_YOU_USE "Enable static analysis with include-what-you-use" OFF)
 add_feature_info("Tool include-what-you-use is enabled." XPED_ENABLE_INCLUDE_WHAT_YOU_USE "")
-option(XPED_ENABLE_CLANG_FORMAT "Enable clang-format target." OFF)
+option(XPED_ENABLE_CLANG_FORMAT "Enable clang-format target." ON)
 add_feature_info("Clang format target is included." XPED_ENABLE_CLANG_FORMAT "")
 
 option(XPED_ENABLE_LRU_CACHE "Use lru cache library from github." OFF)

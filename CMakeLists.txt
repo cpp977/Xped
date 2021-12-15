@@ -332,7 +332,7 @@ if(yas_ADDED)
   target_include_directories(yas INTERFACE ${yas_SOURCE_DIR}/include)
 endif()
 
-find_path(TOOLS_INCLUDE_DIR NAMES ArgParser.h PATHS ${TOOLS_ROOT} PATH_SUFFIXES REQUIRED)
+find_path(TOOLS_INCLUDE_DIR NAMES ArgParser.h PATHS ${TOOLS_ROOT} PATH_SUFFIXES TOOLS REQUIRED)
 add_library(tools INTERFACE IMPORTED)
 target_include_directories(tools INTERFACE ${TOOLS_INCLUDE_DIR}/..)
   

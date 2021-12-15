@@ -12,6 +12,7 @@ if(NOT XPED_COMPILED_LIB)
     spdlog
     yas
     seq
+    tools
     )
   if(${XPED_TENSOR_LIB} STREQUAL "Cyclops")
     target_link_libraries(Xped INTERFACE cyclops_lib::all)
@@ -78,6 +79,7 @@ else()
     spdlog
     yas
     seq
+    tools
     )
 
   if(${XPED_TENSOR_LIB} STREQUAL "Cyclops")

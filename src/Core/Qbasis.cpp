@@ -431,14 +431,15 @@ template <typename Symmetry, std::size_t depth>
 tabulate::Table Qbasis<Symmetry, depth>::print() const
 {
     tabulate::Table t;
-    t.add_row({"Q", "Dim(Q)", "num"});
+    using Row_t = std::vector<variant<std::string, const char *, tabulate::Table>>;
+    t.add_row(Row_t({"Q", "Dim(Q)", "num"}));
     for(const auto& entry : data_) {
         auto [q_Phys, curr_num, plain] = entry;
         std::stringstream ss, tt, uu;
         ss << Sym::format<Symmetry>(q_Phys);
         tt << plain.dim();
         uu << curr_num;
-        t.add_row({ss.str(), tt.str(), uu.str()});
+        t.add_row(Row_t({ss.str(), tt.str(), uu.str()}));
     }
     t.format()
         .font_align(tabulate::FontAlign::center)

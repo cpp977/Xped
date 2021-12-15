@@ -1,3 +1,5 @@
+#include <numeric>
+
 #include "Xped/MPS/Mps.hpp"
 
 #include "spdlog/spdlog.h"
@@ -90,11 +92,10 @@ void Mps<Scalar_, Symmetry_>::gen_auxBasis(const std::size_t Minit, const std::s
                     dist_q1[q] = (q1[q] - mean[q]) / Delta;
                     dist_q2[q] = (q2[q] - mean[q]) / Delta;
                 }
-                return (std::sqrt(std::transform_reduce(dist_q1.begin(), dist_q1.end(), dist_q1.begin(), 0.)) <
-                        std::sqrt(std::transform_reduce(dist_q2.begin(), dist_q2.end(), dist_q2.begin(), 0.)))
+                return (std::sqrt(std::inner_product(dist_q1.begin(), dist_q1.end(), dist_q1.begin(), 0.)) <
+                        std::sqrt(std::inner_product(dist_q2.begin(), dist_q2.end(), dist_q2.begin(), 0.)))
                            ? true
                            : false;
-                // return (dist_q1.norm() < dist_q2.norm()) ? true : false;
             });
 
             vec.erase(vec.begin() + Qinit, vec.end());

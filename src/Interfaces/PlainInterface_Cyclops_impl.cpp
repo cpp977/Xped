@@ -127,7 +127,7 @@ std::tuple<MType<Scalar>, VType<Scalar>, MType<Scalar>> PlainInterface<CyclopsMa
 {
     MType<Scalar> U, Vdag;
     CTF::Vector<Scalar> S;
-    // Handle 1x2 matrix because of ScaLAPACK build.. Maybe do not do it if intel scalapack is used.
+    // Handle 1x2 matrix because of ScaLAPACK bug
     if(M.nrow == 1 && M.ncol == 2) {
         U = MType<Scalar>(1, 1, *M.wrld);
         U["ii"] = 1.;

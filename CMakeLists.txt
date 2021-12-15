@@ -332,6 +332,10 @@ if(yas_ADDED)
   target_include_directories(yas INTERFACE ${yas_SOURCE_DIR}/include)
 endif()
 
+find_path(TOOLS_INCLUDE_DIR NAMES ArgParser.h PATHS ${TOOLS_ROOT} PATH_SUFFIXES REQUIRED)
+add_library(tools INTERFACE IMPORTED)
+target_include_directories(tools INTERFACE ${TOOLS_INCLUDE_DIR}/..)
+  
 if(${XPED_TENSOR_LIB} STREQUAL "Array")
   CPMAddPackage(
     NAME array
@@ -345,9 +349,11 @@ if(${XPED_TENSOR_LIB} STREQUAL "Array")
   endif()  
 endif()
 
-if(${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR" AND NOT XPED_BUILD_CYCLOPS)
-  find_library(CYCLOPS_LIB NAMES ctf REQUIRED)
-  find_library(HPTT_LIB NAMES hptt REQUIRED)
+if(${XPED_TENSOR_LIB} STREQUAL "Cyclops" AND NOT XPED_BUILD_CYCLOPS)
+  message(STATUS ${CYCLOPS_ROOT})
+  message(STATUS ${HPTT_ROOT})
+  find_library(CYCLOPS_LIB NAMES ctf PATHS ${CYCLOPS_ROOT} PATH_SUFFIXES lib REQUIRED)
+  find_library(HPTT_LIB NAMES hptt PATHS ${HPTT_ROOT} PATH_SUFFIXES lib REQUIRED)
   
   add_library(cyclops_lib::all UNKNOWN IMPORTED)
   target_link_libraries(cyclops_lib::all INTERFACE ${CYCLOPS_LIB})
@@ -357,7 +363,7 @@ if(${XPED_TENSOR_LIB} STREQUAL "CYCLOPS_TENSOR" AND NOT XPED_BUILD_CYCLOPS)
     )
   message(STATUS ${CYCLOPS_LIB})
 
-  find_path(CYCLOPS_INCLUDE_DIR NAMES ctf.hpp REQUIRED)
+  find_path(CYCLOPS_INCLUDE_DIR NAMES ctf.hpp PATHS ${CYCLOPS_ROOT} PATH_SUFFIXES include REQUIRED)
   target_include_directories(cyclops_lib::all INTERFACE ${CYCLOPS_INCLUDE_DIR})
   message(STATUS ${CYCLOPS_INCLUDE_DIR})
   include(cmake/PrintProperties.cmake)

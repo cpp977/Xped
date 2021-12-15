@@ -23,14 +23,15 @@ Basis Basis::combine(const Basis& other) const
 auto Basis::print() const
 {
     tabulate::Table t;
+    using Row_t = std::vector<variant<std::string, const char *, tabulate::Table>>;
     // TextTable t('-', '|', '+');
-    t.add_row({"num"});
+    t.add_row(Row_t({"num"}));
     // t.add("num");
     // t.endOfRow();
     for(std::size_t i = 0; i < dim_; i++) {
         std::stringstream ss;
         ss << i;
-        t.add_row({ss.str()});
+        t.add_row(Row_t({ss.str()}));
         // t.add(ss.str());
         // t.endOfRow();
     }
@@ -47,12 +48,13 @@ auto Basis::print() const
 auto Basis::printHistory() const
 {
     tabulate::Table t;
-    t.add_row({"num", "source"});
+    using Row_t = std::vector<variant<std::string, const char *, tabulate::Table>>;
+    t.add_row(Row_t({"num", "source"}));
     for(std::size_t i = 0; i < dim_; i++) {
         std::stringstream ss, tt;
         ss << i;
         tt << "<-- " << history.source(i)[0] << "," << history.source(i)[1];
-        t.add_row({ss.str(), tt.str()});
+        t.add_row(Row_t({ss.str(), tt.str()}));
     }
     t.format().font_style({tabulate::FontStyle::bold}).border_top("_").border_bottom("_").border_left("|").border_right("|").corner("+");
     t[0].format()

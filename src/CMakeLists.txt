@@ -125,6 +125,4 @@ endif()
 
 add_executable(run main.cpp)
 
-target_include_directories(run BEFORE PUBLIC ${XPED_DIR}/inlcude)
-
 target_link_libraries (run Xped)

@@ -431,7 +431,7 @@ template <typename Symmetry, std::size_t depth>
 tabulate::Table Qbasis<Symmetry, depth>::print() const
 {
     tabulate::Table t;
-    using Row_t = std::vector<variant<std::string, const char *, tabulate::Table>>;
+    using Row_t = std::vector<variant<std::string, const char*, tabulate::Table>>;
     t.add_row(Row_t({"Q", "Dim(Q)", "num"}));
     for(const auto& entry : data_) {
         auto [q_Phys, curr_num, plain] = entry;

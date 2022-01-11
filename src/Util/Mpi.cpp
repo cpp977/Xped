@@ -10,7 +10,7 @@
 #    include "Xped/Symmetry/U0.hpp"
 #    include "Xped/Symmetry/U1.hpp"
 #    include "Xped/Util/Macros.hpp"
-namespace util::mpi {
+namespace Xped::mpi {
 
 template <typename T>
 void broadcast(T&& t, int process_rank, int root_process, XpedWorld& world)
@@ -58,14 +58,14 @@ void broadcast(T&& t, int process_rank, int root_process, XpedWorld& world)
     SPDLOG_TRACE("Leaving broadcast.");
 }
 
-} // namespace util::mpi
+} // namespace Xped::mpi
 #else
 #    include "Xped/Core/Qbasis.hpp"
 #    include "Xped/Symmetry/SU2.hpp"
 #    include "Xped/Symmetry/U0.hpp"
 #    include "Xped/Symmetry/U1.hpp"
 
-namespace util::mpi {
+namespace Xped::mpi {
 
 template <typename T>
 inline void broadcast(T&&, int, int, XpedWorld&)
@@ -73,5 +73,5 @@ inline void broadcast(T&&, int, int, XpedWorld&)
     return;
 }
 
-} // namespace util::mpi
+} // namespace Xped::mpi
 #endif

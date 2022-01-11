@@ -19,6 +19,8 @@
 #include "Xped/Core/TensorBase.hpp"
 #include "Xped/Core/TensorHelper.hpp"
 
+namespace Xped {
+
 template <typename Scalar_, std::size_t Rank_, std::size_t CoRank_, typename Symmetry_, typename PlainLib_>
 struct TensorTraits<Tensor<Scalar_, Rank_, CoRank_, Symmetry_, PlainLib_>>
 {
@@ -78,7 +80,7 @@ public:
 
     Tensor(const std::array<Qbasis<Symmetry, 1>, Rank> basis_domain,
            const std::array<Qbasis<Symmetry, 1>, CoRank> basis_codomain,
-           util::mpi::XpedWorld& world = util::mpi::getUniverse());
+           mpi::XpedWorld& world = mpi::getUniverse());
 
     template <typename OtherDerived>
     inline Tensor(const TensorBase<OtherDerived>& other);
@@ -95,7 +97,7 @@ public:
 
     const std::unordered_map<qType, std::size_t> dict() const { return dict_; }
 
-    const std::shared_ptr<util::mpi::XpedWorld> world() const { return world_; }
+    const std::shared_ptr<mpi::XpedWorld> world() const { return world_; }
 
     const std::array<Qbasis<Symmetry, 1>, Rank> uncoupledDomain() const { return uncoupled_domain; }
     const std::array<Qbasis<Symmetry, 1>, CoRank> uncoupledCodomain() const { return uncoupled_codomain; }
@@ -198,7 +200,7 @@ public:
     Qbasis<Symmetry, Rank> domain;
     Qbasis<Symmetry, CoRank> codomain;
 
-    std::shared_ptr<util::mpi::XpedWorld> world_;
+    std::shared_ptr<mpi::XpedWorld> world_;
 
     void push_back(const qType& q, const MatrixType& M)
     {
@@ -228,6 +230,8 @@ Tensor<Scalar_, Rank, CoRank, Symmetry, PlainLib_>::Tensor(const TensorBase<Othe
     domain = other.derived().coupledDomain();
     codomain = other.derived().coupledCodomain();
 }
+
+} // namespace Xped
 
 #ifndef XPED_COMPILED_LIB
 #    include "Core/Tensor.cpp"

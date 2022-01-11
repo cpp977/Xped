@@ -4,6 +4,8 @@
 #include <Eigen/Core>
 #include <unsupported/Eigen/CXX11/Tensor>
 
+namespace Xped {
+
 template <>
 struct PlainInterface<EigenMatrixLib, EigenTensorLib, EigenVectorLib>
     : public MatrixInterface<EigenMatrixLib>, public TensorInterface<EigenTensorLib>, public VectorInterface<EigenVectorLib>
@@ -70,6 +72,8 @@ struct PlainInterface<EigenMatrixLib, EigenTensorLib, EigenVectorLib>
     template <typename Scalar>
     static MType<Scalar> vec_to_diagmat(const VType<Scalar>& V);
 };
+
+} // namespace Xped
 
 #ifndef XPED_COMPILED_LIB
 #    include "Interfaces/PlainInterface_Eigen_impl.cpp"

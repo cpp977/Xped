@@ -50,8 +50,8 @@ TEST_CASE("Testing the elementary swap.")
 {
     SUBCASE("SU2")
     {
-        typedef Sym::SU2<Sym::SpinSU2> Symmetry;
-        Qbasis<Symmetry, 1> B, C, D, E;
+        typedef Xped::Sym::SU2<Xped::Sym::SpinSU2> Symmetry;
+        Xped::Qbasis<Symmetry, 1> B, C, D, E;
         B.setRandom(20);
         C.setRandom(20);
         D.setRandom(20);
@@ -61,8 +61,8 @@ TEST_CASE("Testing the elementary swap.")
 
     SUBCASE("U1")
     {
-        typedef Sym::U1<Sym::SpinU1> Symmetry;
-        Qbasis<Symmetry, 1> B, C, D, E;
+        typedef Xped::Sym::U1<Xped::Sym::SpinU1> Symmetry;
+        Xped::Qbasis<Symmetry, 1> B, C, D, E;
         B.setRandom(10);
         C.setRandom(10);
         D.setRandom(10);
@@ -72,8 +72,8 @@ TEST_CASE("Testing the elementary swap.")
 
     SUBCASE("U0")
     {
-        typedef Sym::U0<> Symmetry;
-        Qbasis<Symmetry, 1> B, C, D, E;
+        typedef Xped::Sym::U0<> Symmetry;
+        Xped::Qbasis<Symmetry, 1> B, C, D, E;
         B.setRandom(5);
         C.setRandom(5);
         D.setRandom(5);
@@ -90,8 +90,8 @@ TEST_CASE("Testing the permutation.")
 {
     SUBCASE("SU2")
     {
-        typedef Sym::SU2<Sym::SpinSU2> Symmetry;
-        Qbasis<Symmetry, 1> B, C, D, E;
+        typedef Xped::Sym::SU2<Xped::Sym::SpinSU2> Symmetry;
+        Xped::Qbasis<Symmetry, 1> B, C, D, E;
         B.setRandom(20);
         C.setRandom(20);
         D.setRandom(20);
@@ -101,8 +101,8 @@ TEST_CASE("Testing the permutation.")
 
     SUBCASE("U1")
     {
-        typedef Sym::U1<Sym::SpinU1> Symmetry;
-        Qbasis<Symmetry, 1> B, C, D, E;
+        typedef Xped::Sym::U1<Xped::Sym::SpinU1> Symmetry;
+        Xped::Qbasis<Symmetry, 1> B, C, D, E;
         B.setRandom(10);
         C.setRandom(10);
         D.setRandom(10);
@@ -112,8 +112,8 @@ TEST_CASE("Testing the permutation.")
 
     SUBCASE("U0")
     {
-        typedef Sym::U0<> Symmetry;
-        Qbasis<Symmetry, 1> B, C, D, E;
+        typedef Xped::Sym::U0<> Symmetry;
+        Xped::Qbasis<Symmetry, 1> B, C, D, E;
         B.setRandom(5);
         C.setRandom(5);
         D.setRandom(5);
@@ -130,8 +130,8 @@ TEST_CASE("Testing the turn operation for FusionTree pairs.")
 {
     SUBCASE("SU2")
     {
-        typedef Sym::SU2<Sym::SpinSU2> Symmetry;
-        Qbasis<Symmetry, 1> B, C;
+        typedef Xped::Sym::SU2<Xped::Sym::SpinSU2> Symmetry;
+        Xped::Qbasis<Symmetry, 1> B, C;
         B.setRandom(20);
         C.setRandom(20);
         test_tree_pair_turn<-2>(B, C);
@@ -142,8 +142,8 @@ TEST_CASE("Testing the turn operation for FusionTree pairs.")
     }
     SUBCASE("U1")
     {
-        typedef Sym::U1<Sym::SpinU1> Symmetry;
-        Qbasis<Symmetry, 1> B, C;
+        typedef Xped::Sym::U1<Xped::Sym::SpinU1> Symmetry;
+        Xped::Qbasis<Symmetry, 1> B, C;
         B.setRandom(10);
         C.setRandom(10);
         test_tree_pair_turn<-2>(B, C);
@@ -154,8 +154,8 @@ TEST_CASE("Testing the turn operation for FusionTree pairs.")
     }
     SUBCASE("U0")
     {
-        typedef Sym::U0<> Symmetry;
-        Qbasis<Symmetry, 1> B, C;
+        typedef Xped::Sym::U0<> Symmetry;
+        Xped::Qbasis<Symmetry, 1> B, C;
         B.setRandom(5);
         C.setRandom(5);
         test_tree_pair_turn<-2>(B, C);
@@ -174,8 +174,8 @@ TEST_CASE("Testing the permutation for FusionTree pairs.")
 {
     SUBCASE("SU2")
     {
-        typedef Sym::SU2<Sym::SpinSU2> Symmetry;
-        Qbasis<Symmetry, 1> B, C;
+        typedef Xped::Sym::SU2<Xped::Sym::SpinSU2> Symmetry;
+        Xped::Qbasis<Symmetry, 1> B, C;
         B.setRandom(20);
         C.setRandom(20);
         test_tree_pair_permute<-2>(B, C);
@@ -186,8 +186,8 @@ TEST_CASE("Testing the permutation for FusionTree pairs.")
     }
     SUBCASE("U1")
     {
-        typedef Sym::U1<Sym::SpinU1> Symmetry;
-        Qbasis<Symmetry, 1> B, C;
+        typedef Xped::Sym::U1<Xped::Sym::SpinU1> Symmetry;
+        Xped::Qbasis<Symmetry, 1> B, C;
         B.setRandom(10);
         C.setRandom(10);
         test_tree_pair_permute<-2>(B, C);
@@ -198,8 +198,8 @@ TEST_CASE("Testing the permutation for FusionTree pairs.")
     }
     SUBCASE("U0")
     {
-        typedef Sym::U0<> Symmetry;
-        Qbasis<Symmetry, 1> B, C;
+        typedef Xped::Sym::U0<> Symmetry;
+        Xped::Qbasis<Symmetry, 1> B, C;
         B.setRandom(5);
         C.setRandom(5);
         test_tree_pair_permute<-2>(B, C);

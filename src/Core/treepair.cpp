@@ -20,6 +20,8 @@ using std::size_t;
 #include "Xped/Core/FusionTree.hpp"
 #include "Xped/Core/treepair.hpp"
 
+namespace Xped {
+
 namespace treepair {
 //                           ☐
 //                           _
@@ -189,3 +191,5 @@ permute(const FusionTree<Rank, Symmetry>& t1, const FusionTree<CoRank, Symmetry>
 }
 
 } // namespace treepair
+
+} // namespace Xped

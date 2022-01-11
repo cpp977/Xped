@@ -4,7 +4,9 @@
 #include "Xped/Symmetry/U0.hpp"
 #include "Xped/Symmetry/U1.hpp"
 
-namespace XpedHelper {
+namespace Xped {
+
+namespace internal {
 
 template <std::size_t Rank1, std::size_t Rank2, typename Symmetry>
 std::pair<Qbasis<Symmetry, Rank2 + Rank1>, std::array<Qbasis<Symmetry, 1>, 0>>
@@ -37,4 +39,6 @@ Qbasis<Symmetry, Rank> build_FusionTree(const std::array<Qbasis<Symmetry, 1>, Ra
     }
 }
 
-} // namespace XpedHelper
+} // namespace internal
+
+} // namespace Xped

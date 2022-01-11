@@ -47,8 +47,8 @@ TEST_CASE("Testing combine() in Qbasis.")
 {
     SUBCASE("SU2")
     {
-        typedef Sym::SU2<Sym::SpinSU2> Symmetry;
-        Qbasis<Symmetry, 1> B, C;
+        typedef Xped::Sym::SU2<Xped::Sym::SpinSU2> Symmetry;
+        Xped::Qbasis<Symmetry, 1> B, C;
         B.setRandom(50);
         C.setRandom(50);
         auto BC = B.combine(C);
@@ -61,8 +61,8 @@ TEST_CASE("Testing combine() in Qbasis.")
 
     SUBCASE("U1")
     {
-        typedef Sym::U1<Sym::SpinU1> Symmetry;
-        Qbasis<Symmetry, 1> B, C;
+        typedef Xped::Sym::U1<Xped::Sym::SpinU1> Symmetry;
+        Xped::Qbasis<Symmetry, 1> B, C;
         B.setRandom(50);
         C.setRandom(50);
         auto BC = B.combine(C);
@@ -75,8 +75,8 @@ TEST_CASE("Testing combine() in Qbasis.")
 
     SUBCASE("U0")
     {
-        typedef Sym::U0<> Symmetry;
-        Qbasis<Symmetry, 1> B, C;
+        typedef Xped::Sym::U0<> Symmetry;
+        Xped::Qbasis<Symmetry, 1> B, C;
         B.setRandom(100);
         C.setRandom(100);
         auto BC = B.combine(C);

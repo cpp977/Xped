@@ -1,5 +1,8 @@
 template <typename Symmetry>
-void test_tree_swap(const Qbasis<Symmetry, 1>& B, const Qbasis<Symmetry, 1>& C, const Qbasis<Symmetry, 1>& D, const Qbasis<Symmetry, 1>& E)
+void test_tree_swap(const Xped::Qbasis<Symmetry, 1>& B,
+                    const Xped::Qbasis<Symmetry, 1>& C,
+                    const Xped::Qbasis<Symmetry, 1>& D,
+                    const Xped::Qbasis<Symmetry, 1>& E)
 {
     auto BC = B.combine(C);
     auto BCD = BC.combine(D);
@@ -8,7 +11,7 @@ void test_tree_swap(const Qbasis<Symmetry, 1>& B, const Qbasis<Symmetry, 1>& C, 
     for(std::size_t pos = 0ul; pos < 3; pos++) {
         for(const auto& [q, num, plain] : BCDE) {
             for(const auto& tree : BCDE.tree(q)) {
-                std::unordered_map<FusionTree<4, Symmetry>, typename Symmetry::Scalar> check;
+                std::unordered_map<Xped::FusionTree<4, Symmetry>, typename Symmetry::Scalar> check;
                 auto transformed = tree.swap(pos);
                 for(const auto& [tree_p, coeff] : transformed) {
                     auto inv = tree_p.swap(pos);
@@ -33,7 +36,10 @@ void test_tree_swap(const Qbasis<Symmetry, 1>& B, const Qbasis<Symmetry, 1>& C, 
 };
 
 template <typename Symmetry>
-void test_tree_permute(const Qbasis<Symmetry, 1>& B, const Qbasis<Symmetry, 1>& C, const Qbasis<Symmetry, 1>& D, const Qbasis<Symmetry, 1>& E)
+void test_tree_permute(const Xped::Qbasis<Symmetry, 1>& B,
+                       const Xped::Qbasis<Symmetry, 1>& C,
+                       const Xped::Qbasis<Symmetry, 1>& D,
+                       const Xped::Qbasis<Symmetry, 1>& E)
 {
     auto BC = B.combine(C);
     auto BCD = BC.combine(D);
@@ -43,7 +49,7 @@ void test_tree_permute(const Qbasis<Symmetry, 1>& B, const Qbasis<Symmetry, 1>& 
         // std::cout << "p:" << std::endl << p.print() << std::endl;
         for(const auto& [q, num, plain] : BCDE) {
             for(const auto& tree : BCDE.tree(q)) {
-                std::unordered_map<FusionTree<4, Symmetry>, typename Symmetry::Scalar> check;
+                std::unordered_map<Xped::FusionTree<4, Symmetry>, typename Symmetry::Scalar> check;
                 auto transformed = tree.permute(p);
                 for(const auto& [tree_p, coeff] : transformed) {
                     auto inv = tree_p.permute(p.inverse());
@@ -68,17 +74,17 @@ void test_tree_permute(const Qbasis<Symmetry, 1>& B, const Qbasis<Symmetry, 1>& 
 };
 
 template <int shift, typename Symmetry>
-void test_tree_pair_turn(const Qbasis<Symmetry, 1>& B, const Qbasis<Symmetry, 1>& C)
+void test_tree_pair_turn(const Xped::Qbasis<Symmetry, 1>& B, const Xped::Qbasis<Symmetry, 1>& C)
 {
     auto BC = B.combine(C);
 
     for(const auto& [q, num, plain] : BC) {
         for(const auto& t1 : BC.tree({q})) {
             for(const auto& t2 : BC.tree({q})) {
-                std::unordered_map<std::pair<FusionTree<2, Symmetry>, FusionTree<2, Symmetry>>, typename Symmetry::Scalar> check;
-                for(const auto& [trees, coeff] : treepair::turn<shift>(t1, t2)) {
+                std::unordered_map<std::pair<Xped::FusionTree<2, Symmetry>, Xped::FusionTree<2, Symmetry>>, typename Symmetry::Scalar> check;
+                for(const auto& [trees, coeff] : Xped::treepair::turn<shift>(t1, t2)) {
                     auto [t1p, t2p] = trees;
-                    for(const auto& [retrees, recoeff] : treepair::turn<-shift>(t1p, t2p)) {
+                    for(const auto& [retrees, recoeff] : Xped::treepair::turn<-shift>(t1p, t2p)) {
                         // auto [t1pp,t2pp] = retrees;
                         auto it = check.find(retrees);
                         if(it == check.end()) {
@@ -101,17 +107,17 @@ void test_tree_pair_turn(const Qbasis<Symmetry, 1>& B, const Qbasis<Symmetry, 1>
 };
 
 template <int shift, typename Symmetry>
-void test_tree_pair_permute(const Qbasis<Symmetry, 1>& B, const Qbasis<Symmetry, 1>& C)
+void test_tree_pair_permute(const Xped::Qbasis<Symmetry, 1>& B, const Xped::Qbasis<Symmetry, 1>& C)
 {
     auto BC = B.combine(C);
     for(const auto& p : Permutation::all(4)) {
         for(const auto& [q, num, plain] : BC) {
             for(const auto& t1 : BC.tree({q})) {
                 for(const auto& t2 : BC.tree({q})) {
-                    std::unordered_map<std::pair<FusionTree<2, Symmetry>, FusionTree<2, Symmetry>>, typename Symmetry::Scalar> check;
-                    for(const auto& [trees, coeff] : treepair::permute<shift>(t1, t2, p)) {
+                    std::unordered_map<std::pair<Xped::FusionTree<2, Symmetry>, Xped::FusionTree<2, Symmetry>>, typename Symmetry::Scalar> check;
+                    for(const auto& [trees, coeff] : Xped::treepair::permute<shift>(t1, t2, p)) {
                         auto [t1p, t2p] = trees;
-                        for(const auto& [retrees, recoeff] : treepair::permute<-shift>(t1p, t2p, p.inverse())) {
+                        for(const auto& [retrees, recoeff] : Xped::treepair::permute<-shift>(t1p, t2p, p.inverse())) {
                             // auto [t1pp,t2pp] = retrees;
                             auto it = check.find(retrees);
                             if(it == check.end()) {

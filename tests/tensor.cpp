@@ -48,6 +48,8 @@ XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100)
 #    include "doctest/extensions/doctest_mpi.h"
 #endif
 
+using namespace Xped;
+
 #include "tensor_tests.hpp"
 
 #ifdef XPED_USE_MPI
@@ -73,9 +75,9 @@ TEST_CASE("Testing the transformation to plain Tensor.")
 #endif
 {
 #ifdef XPED_USE_MPI
-    util::mpi::XpedWorld test_world(test_comm);
+    mpi::XpedWorld test_world(test_comm);
 #else
-    util::mpi::XpedWorld test_world;
+    mpi::XpedWorld test_world;
 #endif
 
     SUBCASE("SU2")
@@ -87,8 +89,8 @@ TEST_CASE("Testing the transformation to plain Tensor.")
             B.setRandom(SU2_TENSOR_SIZE);
             C.setRandom(SU2_TENSOR_SIZE);
         }
-        util::mpi::broadcast(B, test_world.rank, 0, test_world);
-        util::mpi::broadcast(C, test_world.rank, 0, test_world);
+        mpi::broadcast(B, test_world.rank, 0, test_world);
+        mpi::broadcast(C, test_world.rank, 0, test_world);
         test_tensor_transformation_to_plain(B, C, test_world);
     }
 
@@ -100,8 +102,8 @@ TEST_CASE("Testing the transformation to plain Tensor.")
             B.setRandom(U1_TENSOR_SIZE);
             C.setRandom(U1_TENSOR_SIZE);
         }
-        util::mpi::broadcast(B, test_world.rank, 0, test_world);
-        util::mpi::broadcast(C, test_world.rank, 0, test_world);
+        mpi::broadcast(B, test_world.rank, 0, test_world);
+        mpi::broadcast(C, test_world.rank, 0, test_world);
         test_tensor_transformation_to_plain(B, C, test_world);
     }
 
@@ -113,8 +115,8 @@ TEST_CASE("Testing the transformation to plain Tensor.")
             B.setRandom(U0_TENSOR_SIZE);
             C.setRandom(U0_TENSOR_SIZE);
         }
-        util::mpi::broadcast(B, test_world.rank, 0, test_world);
-        util::mpi::broadcast(C, test_world.rank, 0, test_world);
+        mpi::broadcast(B, test_world.rank, 0, test_world);
+        mpi::broadcast(C, test_world.rank, 0, test_world);
         test_tensor_transformation_to_plain(B, C, test_world);
     }
 }
@@ -126,9 +128,9 @@ TEST_CASE("Testing the permutation within the domain.")
 #endif
 {
 #ifdef XPED_USE_MPI
-    util::mpi::XpedWorld test_world(test_comm);
+    mpi::XpedWorld test_world(test_comm);
 #else
-    util::mpi::XpedWorld test_world;
+    mpi::XpedWorld test_world;
 #endif
     SUBCASE("SU2")
     {
@@ -156,9 +158,9 @@ TEST_CASE("Testing the permutation within the codomain.")
 #endif
 {
 #ifdef XPED_USE_MPI
-    util::mpi::XpedWorld test_world(test_comm);
+    mpi::XpedWorld test_world(test_comm);
 #else
-    util::mpi::XpedWorld test_world;
+    mpi::XpedWorld test_world;
 #endif
     SUBCASE("SU2")
     {
@@ -186,9 +188,9 @@ TEST_CASE("Testing the general permutation of legs.")
 #endif
 {
 #ifdef XPED_USE_MPI
-    util::mpi::XpedWorld test_world(test_comm);
+    mpi::XpedWorld test_world(test_comm);
 #else
-    util::mpi::XpedWorld test_world;
+    mpi::XpedWorld test_world;
 #endif
     SUBCASE("SU2")
     {
@@ -228,9 +230,9 @@ TEST_CASE("Testing operations with SU(2)-spin matrices.")
 #endif
 {
 #ifdef XPED_USE_MPI
-    util::mpi::XpedWorld test_world(test_comm);
+    mpi::XpedWorld test_world(test_comm);
 #else
-    util::mpi::XpedWorld test_world;
+    mpi::XpedWorld test_world;
 #endif
     typedef Sym::SU2<Sym::SpinSU2> Symmetry;
 

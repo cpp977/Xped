@@ -2,10 +2,6 @@
 #include <string>
 #include <unordered_map>
 
-using std::cout;
-using std::endl;
-using std::size_t;
-
 #include "TOOLS/numeric_limits.h"
 
 #include "Xped/Util/Macros.hpp"
@@ -20,6 +16,12 @@ using std::size_t;
 #include "Xped/Symmetry/functions.hpp"
 
 #include "Xped/Core/FusionTree.hpp"
+
+using std::cout;
+using std::endl;
+using std::size_t;
+
+namespace Xped {
 
 template <std::size_t Rank, typename Symmetry>
 bool FusionTree<Rank, Symmetry>::operator<(const FusionTree<Rank, Symmetry>& other) const
@@ -114,7 +116,7 @@ std::string FusionTree<Rank, Symmetry>::print() const
 template <std::size_t Rank, typename Symmetry>
 template <typename PlainLib>
 typename PlainLib::template TType<typename FusionTree<Rank, Symmetry>::Scalar, Rank + 1>
-FusionTree<Rank, Symmetry>::asTensor(util::mpi::XpedWorld& world) const
+FusionTree<Rank, Symmetry>::asTensor(mpi::XpedWorld& world) const
 {
     typedef typename Symmetry::Scalar Scalar;
 
@@ -508,3 +510,5 @@ std::string FusionTree<Rank, Symmetry>::printTree(const std::array<std::string, 
         return ss.str();
     }
 }
+
+} // namespace Xped

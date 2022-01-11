@@ -5,6 +5,8 @@
 
 #include "Xped/Core/Basis.hpp"
 
+namespace Xped {
+
 Basis Basis::add(const Basis& other) const
 {
     Basis out(dim() + other.dim());
@@ -72,3 +74,5 @@ std::ostream& operator<<(std::ostream& os, const Basis& basis)
     os << basis.print();
     return os;
 }
+
+} // namespace Xped

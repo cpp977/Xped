@@ -5,7 +5,8 @@
 #include <random>
 #include <thread>
 
-namespace util::random {
+namespace Xped::random {
+
 template <typename Scalar, typename RealScalar>
 inline Scalar threadSafeRandUniform(RealScalar, RealScalar, bool = false){};
 
@@ -35,5 +36,5 @@ inline int threadSafeRandUniform<int, int>(int min, int max, bool FIXED_SEED)
     std::uniform_int_distribution<int> distribution(min, max);
     return distribution(generatorUniformInt);
 }
-} // namespace util::random
+} // namespace Xped::random
 #endif

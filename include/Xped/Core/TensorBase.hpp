@@ -3,6 +3,8 @@
 
 #include "Xped/Interfaces/PlainInterface.hpp"
 
+namespace Xped {
+
 template <typename Derived>
 struct TensorTraits
 {};
@@ -63,6 +65,8 @@ protected:
     inline const Derived& derived() const { return *static_cast<const Derived*>(this); }
     inline Derived& derived() { return *static_cast<Derived*>(this); }
 };
+
+} // namespace Xped
 
 #ifndef XPED_COMPILED_LIB
 #    include "Core/TensorBase.cpp"

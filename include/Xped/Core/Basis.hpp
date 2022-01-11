@@ -6,6 +6,8 @@
 #include "yas/std_types.hpp"
 /// \endcond
 
+namespace Xped {
+
 // forward declaration
 template <typename Symmetry, std::size_t depth>
 class Qbasis;
@@ -74,6 +76,8 @@ private:
 
     Basis::fuseData history;
 };
+
+} // namespace Xped
 
 #ifndef XPED_COMPILED_LIB
 #    include "Core/Basis.cpp"

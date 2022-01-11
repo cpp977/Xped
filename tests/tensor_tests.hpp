@@ -1,5 +1,5 @@
 template <typename Symmetry, int shift, std::size_t... per>
-void perform_tensor_permute(const std::size_t& size, util::mpi::XpedWorld& world)
+void perform_tensor_permute(const std::size_t& size, mpi::XpedWorld& world)
 {
     // CTF::World world(comm);
     SPDLOG_WARN("Permute: Number of processes in tensor-test #={}", world.np);
@@ -11,8 +11,8 @@ void perform_tensor_permute(const std::size_t& size, util::mpi::XpedWorld& world
     }
 
     XPED_MPI_BARRIER(world.comm)
-    util::mpi::broadcast(B, world.rank, 0, world);
-    util::mpi::broadcast(C, world.rank, 0, world);
+    mpi::broadcast(B, world.rank, 0, world);
+    mpi::broadcast(C, world.rank, 0, world);
 
     std::array<std::size_t, 4> perm{per...};
     SPDLOG_CRITICAL("Permutation: {} {} {} {}. Shift={}", perm[0], perm[1], perm[2], perm[3], shift);
@@ -46,7 +46,7 @@ void perform_tensor_permute(const std::size_t& size, util::mpi::XpedWorld& world
 }
 
 template <typename Symmetry, int shift>
-void test_tensor_permute(const std::size_t& size, util::mpi::XpedWorld& world = util::mpi::getUniverse())
+void test_tensor_permute(const std::size_t& size, mpi::XpedWorld& world = mpi::getUniverse())
 {
     perform_tensor_permute<Symmetry, shift, 0, 1, 2, 3>(size, world);
     perform_tensor_permute<Symmetry, shift, 0, 1, 3, 2>(size, world);
@@ -107,7 +107,7 @@ void test_tensor_permute(const std::size_t& size, util::mpi::XpedWorld& world = 
 };
 
 template <typename Symmetry, std::size_t... per>
-void perform_tensor_permute_intern(const std::size_t size, util::mpi::XpedWorld& world = util::mpi::getUniverse())
+void perform_tensor_permute_intern(const std::size_t size, mpi::XpedWorld& world = mpi::getUniverse())
 {
     // CTF::World world(comm);
     SPDLOG_WARN("Permute intern: Number of processes in tensor-test #={}", world.np);
@@ -125,10 +125,10 @@ void perform_tensor_permute_intern(const std::size_t size, util::mpi::XpedWorld&
         // std::cout << E << std::endl;
     }
     XPED_MPI_BARRIER(world.comm)
-    util::mpi::broadcast(B, world.rank, 0, world);
-    util::mpi::broadcast(C, world.rank, 0, world);
-    util::mpi::broadcast(D, world.rank, 0, world);
-    util::mpi::broadcast(E, world.rank, 0, world);
+    mpi::broadcast(B, world.rank, 0, world);
+    mpi::broadcast(C, world.rank, 0, world);
+    mpi::broadcast(D, world.rank, 0, world);
+    mpi::broadcast(E, world.rank, 0, world);
     // if(world.rank == 1) {
     //     std::cout << "process " << world.rank << std::endl;
     //     std::cout << B << std::endl;
@@ -196,7 +196,7 @@ void perform_tensor_permute_intern(const std::size_t size, util::mpi::XpedWorld&
 }
 
 template <typename Symmetry>
-void test_tensor_permute_within_codomain(const std::size_t size, util::mpi::XpedWorld& world)
+void test_tensor_permute_within_codomain(const std::size_t size, mpi::XpedWorld& world)
 {
     // Qbasis<Symmetry,1> F; F.setRandom(50);
     // Tensor<0,3,Symmetry> three({{}},{{F,F,F}}); three.setRandom();
@@ -253,7 +253,7 @@ void test_tensor_permute_within_codomain(const std::size_t size, util::mpi::Xped
 }
 
 template <typename Symmetry>
-void test_tensor_permute_within_domain(const std::size_t size, util::mpi::XpedWorld& world)
+void test_tensor_permute_within_domain(const std::size_t size, mpi::XpedWorld& world)
 {
     // Tensor<double, 4, 0, Symmetry> t({{B, C, D, E}}, {{}});
     // t.setRandom();
@@ -300,7 +300,7 @@ void test_tensor_permute_within_domain(const std::size_t size, util::mpi::XpedWo
 }
 
 template <typename Symmetry>
-void test_tensor_transformation_to_plain(const Qbasis<Symmetry, 1>& B, const Qbasis<Symmetry, 1>& C, util::mpi::XpedWorld& world)
+void test_tensor_transformation_to_plain(const Qbasis<Symmetry, 1>& B, const Qbasis<Symmetry, 1>& C, mpi::XpedWorld& world)
 {
     // CTF::World world(comm);
     SPDLOG_CRITICAL("Number of processes in tensor-test #={}", world.np);

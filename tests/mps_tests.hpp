@@ -1,13 +1,13 @@
 template <typename Symmetry>
-void perform_mps_contraction(std::size_t basis_size, util::mpi::XpedWorld& world)
+void perform_mps_contraction(std::size_t basis_size, mpi::XpedWorld& world)
 {
     Qbasis<Symmetry, 1> in, loc;
     if(world.rank == 0) {
         in.setRandom(basis_size);
         loc.setRandom(8);
     }
-    util::mpi::broadcast(in, world.rank, 0, world);
-    util::mpi::broadcast(loc, world.rank, 0, world);
+    mpi::broadcast(in, world.rank, 0, world);
+    mpi::broadcast(loc, world.rank, 0, world);
 
     auto out = in.combine(loc).forgetHistory();
     Tensor<double, 2, 1, Symmetry> T1({{in, loc}}, {{out}}, world);

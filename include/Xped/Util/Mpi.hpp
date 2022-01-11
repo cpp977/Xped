@@ -3,7 +3,7 @@
 
 #ifdef XPED_USE_MPI
 #    include "ctf.hpp"
-namespace util::mpi {
+namespace Xped::mpi {
 
 template <typename T>
 struct TrivialDeleter
@@ -17,9 +17,9 @@ inline XpedWorld& getUniverse() { return CTF::get_universe(); }
 template <typename T>
 void broadcast(T&& t, int process_rank, int root_process = 0, XpedWorld& world = getUniverse());
 
-} // namespace util::mpi
+} // namespace Xped::mpi
 #else
-namespace util::mpi {
+namespace Xped::mpi {
 
 template <typename T>
 struct TrivialDeleter
@@ -39,7 +39,7 @@ inline XpedWorld& getUniverse() { return universe; };
 template <typename T>
 void broadcast(T&&, int, int, XpedWorld&);
 
-} // namespace util::mpi
+} // namespace Xped::mpi
 
 #endif
 

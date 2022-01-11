@@ -18,6 +18,8 @@
 #include "Xped/Core/FusionTree.hpp"
 #include "Xped/Hash/hash.hpp"
 
+namespace Xped {
+
 /** \class Qbasis
  *
  * \ingroup Tensors
@@ -234,6 +236,8 @@ std::ostream& operator<<(std::ostream& os, const Qbasis<Symmetry, depth>& basis)
     os << basis.print();
     return os;
 }
+
+} // namespace Xped
 
 #ifndef XPED_COMPILED_LIB
 #    include "Core/Qbasis.cpp"

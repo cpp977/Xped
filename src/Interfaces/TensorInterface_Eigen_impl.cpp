@@ -2,6 +2,8 @@
 
 #include "Xped/Interfaces/TensorInterface_Eigen_impl.hpp"
 
+namespace Xped {
+
 template <typename Scalar, std::size_t Rank>
 using TType = Eigen::Tensor<Scalar, Rank>;
 template <typename Scalar, std::size_t Rank>
@@ -16,7 +18,7 @@ using Indextype = Eigen::Index;
 
 // constructors
 template <typename Scalar, std::size_t Rank>
-TType<Scalar, Rank> TensorInterface<EigenTensorLib>::construct(const std::array<Indextype, Rank>& dims, util::mpi::XpedWorld& world)
+TType<Scalar, Rank> TensorInterface<EigenTensorLib>::construct(const std::array<Indextype, Rank>& dims, mpi::XpedWorld& world)
 {
     return TType<Scalar, Rank>(dims);
 }
@@ -259,3 +261,5 @@ std::string TensorInterface<EigenTensorLib>::print(const TType<Scalar, Rank>& T)
     ss << T;
     return ss.str();
 }
+
+} // namespace Xped

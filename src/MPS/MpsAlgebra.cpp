@@ -9,6 +9,8 @@
 #include "Xped/Symmetry/U0.hpp"
 #include "Xped/Symmetry/U1.hpp"
 
+namespace Xped {
+
 template <typename Scalar, typename Symmetry>
 typename Symmetry::Scalar dot(XPED_CONST Mps<Scalar, Symmetry>& Bra, XPED_CONST Mps<Scalar, Symmetry>& Ket, const DMRG::DIRECTION DIR)
 {
@@ -47,3 +49,5 @@ typename Symmetry::Scalar dot(XPED_CONST Mps<Scalar, Symmetry>& Bra, XPED_CONST 
         return Bnext.norm();
     }
 }
+
+} // namespace Xped

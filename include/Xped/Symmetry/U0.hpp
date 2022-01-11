@@ -11,7 +11,7 @@
 #include "Xped/Symmetry/kind_dummies.hpp"
 #include "Xped/Symmetry/qarray.hpp"
 
-namespace Sym {
+namespace Xped::Sym {
 
 template <typename Scalar_>
 struct U0;
@@ -74,7 +74,7 @@ struct U0 : SymBase<U0<Scalar_>>
     inline static Scalar coeff_FS(const qType&) { return Scalar(1.); }
 
     template <typename PlainLib>
-    inline static typename PlainLib::template TType<Scalar, 2> one_j_tensor(const qType&, util::mpi::XpedWorld& world = util::mpi::getUniverse())
+    inline static typename PlainLib::template TType<Scalar, 2> one_j_tensor(const qType&, mpi::XpedWorld& world = mpi::getUniverse())
     {
         typedef typename PlainLib::Indextype IndexType;
         auto T = PlainLib::template construct<Scalar>(std::array<IndexType, 2>{1, 1}, world);
@@ -89,7 +89,7 @@ struct U0 : SymBase<U0<Scalar_>>
 
     template <typename PlainLib>
     inline static typename PlainLib::template TType<Scalar, 3>
-    CGC(const qType&, const qType&, const qType&, const std::size_t, util::mpi::XpedWorld& world = util::mpi::getUniverse())
+    CGC(const qType&, const qType&, const qType&, const std::size_t, mpi::XpedWorld& world = mpi::getUniverse())
     {
         typedef typename PlainLib::Indextype IndexType;
         auto T = PlainLib::template construct<Scalar>(std::array<IndexType, 3>{1, 1, 1}, world);
@@ -116,5 +116,5 @@ struct U0 : SymBase<U0<Scalar_>>
     inline static bool triangle(const qType& q1, const qType& q2, const qType& q3) { return true; }
 };
 
-} // end namespace Sym
+} // namespace Xped::Sym
 #endif

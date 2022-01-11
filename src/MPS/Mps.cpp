@@ -10,6 +10,8 @@
 #include "Xped/Symmetry/U0.hpp"
 #include "Xped/Symmetry/U1.hpp"
 
+namespace Xped {
+
 template <typename Scalar_, typename Symmetry_>
 Mps<Scalar_, Symmetry_>::Mps(std::size_t L)
     : N_sites(L)
@@ -222,3 +224,5 @@ void Mps<Scalar_, Symmetry_>::rightSweepStep(const std::size_t loc, const DMRG::
     }
     SPDLOG_INFO("Leaving Mps::rightSweepStep()");
 }
+
+} // namespace Xped

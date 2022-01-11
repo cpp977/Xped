@@ -5,6 +5,8 @@
 
 #include "Xped/Util/Mpi.hpp"
 
+namespace Xped {
+
 template <>
 struct VectorInterface<EigenVectorLib>
 {
@@ -16,10 +18,10 @@ struct VectorInterface<EigenVectorLib>
 
     // constructors
     template <typename Scalar>
-    static VType<Scalar> construct(const VIndextype& elems, util::mpi::XpedWorld& world = util::mpi::getUniverse());
+    static VType<Scalar> construct(const VIndextype& elems, mpi::XpedWorld& world = mpi::getUniverse());
 
     template <typename Scalar>
-    static VType<Scalar> construct_with_zero(const VIndextype& elems, util::mpi::XpedWorld& world = util::mpi::getUniverse());
+    static VType<Scalar> construct_with_zero(const VIndextype& elems, mpi::XpedWorld& world = mpi::getUniverse());
 
     template <typename Scalar>
     static void resize(VType<Scalar>& V, const VIndextype& new_elems);
@@ -60,6 +62,8 @@ struct VectorInterface<EigenVectorLib>
     template <typename Scalar>
     static void vec_to_stdvec(const VType<Scalar>& V, std::vector<Scalar>& vec);
 };
+
+} // namespace Xped
 
 #ifndef XPED_COMPILED_LIB
 #    include "Interfaces/VectorInterface_Eigen_impl.cpp"

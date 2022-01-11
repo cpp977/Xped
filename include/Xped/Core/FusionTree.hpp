@@ -12,6 +12,8 @@
 
 #include "Xped/Hash/hash.hpp"
 
+namespace Xped {
+
 namespace util {
 constexpr std::size_t inter_dim(std::size_t Rank) { return (Rank == 1 or Rank == 0) ? 0 : Rank - 2; }
 constexpr std::size_t mult_dim(std::size_t Rank) { return (Rank == 0) ? 0 : Rank - 1; }
@@ -77,7 +79,7 @@ struct FusionTree
     std::string print() const;
 
     template <typename PlainLib>
-    typename PlainLib::template TType<Scalar, Rank + 1> asTensor(util::mpi::XpedWorld& world = util::mpi::getUniverse()) const;
+    typename PlainLib::template TType<Scalar, Rank + 1> asTensor(mpi::XpedWorld& world = mpi::getUniverse()) const;
 
     FusionTree<Rank + 1, Symmetry> enlarge(const FusionTree<1, Symmetry>& other) const;
 
@@ -92,6 +94,8 @@ std::ostream& operator<<(std::ostream& os, const FusionTree<depth, Symmetry>& tr
     os << tree.print();
     return os;
 }
+
+} // namespace Xped
 
 #ifndef XPED_COMPILED_LIB
 #    include "Core/FusionTree.cpp"

@@ -6,15 +6,18 @@
 #include "Xped/Symmetry/qarray.hpp"
 
 // forward declaration
+namespace Xped {
 template <std::size_t Rank, typename Symmetry>
 struct FusionTree;
+}
+
 struct Permutation;
 
 namespace std {
 template <size_t Nq>
-struct hash<qarray<Nq>>
+struct hash<Xped::qarray<Nq>>
 {
-    inline size_t operator()(const qarray<Nq>& ix) const
+    inline size_t operator()(const Xped::qarray<Nq>& ix) const
     {
         size_t seed = 0;
         boost::hash_combine(seed, ix);
@@ -24,9 +27,9 @@ struct hash<qarray<Nq>>
 
 /**Hashes an array of quantum numbers using boost's \p hash_combine.*/
 template <size_t Nq, size_t Nlegs>
-struct hash<array<qarray<Nq>, Nlegs>>
+struct hash<array<Xped::qarray<Nq>, Nlegs>>
 {
-    inline size_t operator()(const array<qarray<Nq>, Nlegs>& ix) const
+    inline size_t operator()(const array<Xped::qarray<Nq>, Nlegs>& ix) const
     {
         size_t seed = 0;
         boost::hash_combine(seed, ix);
@@ -35,9 +38,9 @@ struct hash<array<qarray<Nq>, Nlegs>>
 };
 
 template <size_t Rank, typename Symmetry>
-struct hash<FusionTree<Rank, Symmetry>>
+struct hash<Xped::FusionTree<Rank, Symmetry>>
 {
-    inline size_t operator()(const FusionTree<Rank, Symmetry>& ix) const
+    inline size_t operator()(const Xped::FusionTree<Rank, Symmetry>& ix) const
     {
         size_t seed = 0;
         boost::hash_combine(seed, ix);
@@ -46,9 +49,9 @@ struct hash<FusionTree<Rank, Symmetry>>
 };
 
 template <size_t Rank, size_t CoRank, typename Symmetry>
-struct hash<std::pair<FusionTree<Rank, Symmetry>, FusionTree<CoRank, Symmetry>>>
+struct hash<std::pair<Xped::FusionTree<Rank, Symmetry>, Xped::FusionTree<CoRank, Symmetry>>>
 {
-    inline size_t operator()(const std::pair<FusionTree<Rank, Symmetry>, FusionTree<CoRank, Symmetry>>& ix) const
+    inline size_t operator()(const std::pair<Xped::FusionTree<Rank, Symmetry>, Xped::FusionTree<CoRank, Symmetry>>& ix) const
     {
         size_t seed = 0;
         boost::hash_combine(seed, ix.first);
@@ -58,9 +61,9 @@ struct hash<std::pair<FusionTree<Rank, Symmetry>, FusionTree<CoRank, Symmetry>>>
 };
 
 template <size_t Rank, size_t CoRank, typename Symmetry>
-struct hash<std::tuple<FusionTree<Rank, Symmetry>, FusionTree<CoRank, Symmetry>, Permutation>>
+struct hash<std::tuple<Xped::FusionTree<Rank, Symmetry>, Xped::FusionTree<CoRank, Symmetry>, Permutation>>
 {
-    inline size_t operator()(const std::tuple<FusionTree<Rank, Symmetry>, FusionTree<CoRank, Symmetry>, Permutation>& ix) const
+    inline size_t operator()(const std::tuple<Xped::FusionTree<Rank, Symmetry>, Xped::FusionTree<CoRank, Symmetry>, Permutation>& ix) const
     {
         size_t seed = 0;
         boost::hash_combine(seed, std::get<0>(ix));

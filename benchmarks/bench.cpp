@@ -63,10 +63,10 @@ int main(int argc, char* argv[])
     {
         spdlog::cfg::load_argv_levels(argc, argv);
 #ifdef XPED_USE_MPI
-        util::mpi::XpedWorld world(argc, argv);
+        Xped::mpi::XpedWorld world(argc, argv);
         auto my_logger = spdlog::basic_logger_mt("info", "logs/log_" + to_string(world.rank) + ".txt");
 #else
-        util::mpi::XpedWorld world;
+        Xped::mpi::XpedWorld world;
         auto my_logger = spdlog::basic_logger_mt("info", "logs/log.txt");
 #endif
 
@@ -90,7 +90,7 @@ int main(int argc, char* argv[])
 
         SPDLOG_INFO("Number of MPI processes: {}", world.np);
 
-        typedef Sym::SU2<Sym::SpinSU2> Symmetry;
+        typedef Xped::Sym::SU2<Xped::Sym::SpinSU2> Symmetry;
         // typedef Sym::U1<Sym::SpinU1> Symmetry;
         // typedef Sym::U0 Symmetry;
         typedef Symmetry::qType qType;
@@ -99,23 +99,23 @@ int main(int argc, char* argv[])
         auto Minit = args.get<std::size_t>("Minit", 10);
         auto Qinit = args.get<std::size_t>("Qinit", 10);
         auto reps = args.get<std::size_t>("reps", 10);
-        auto DIR = static_cast<DMRG::DIRECTION>(args.get<int>("DIR", 0));
+        auto DIR = static_cast<Xped::DMRG::DIRECTION>(args.get<int>("DIR", 0));
         auto NORM = args.get<bool>("NORM", true);
         auto SWEEP = args.get<bool>("SWEEP", true);
         auto INFO = args.get<bool>("INFO", true);
         auto outfile = args.get<std::string>("outfile", "./out.csv");
 
         qType Qtot = {D};
-        Qbasis<Symmetry, 1> qloc_;
+        Xped::Qbasis<Symmetry, 1> qloc_;
         // qloc_.push_back({}, 2);
         qloc_.push_back({2}, 1);
         // qloc_.push_back({3}, 1);
         // qloc_.push_back({4}, 1);
         // qloc_.push_back({-2}, 1);
-        std::vector<Qbasis<Symmetry, 1>> qloc(L, qloc_);
+        std::vector<Xped::Qbasis<Symmetry, 1>> qloc(L, qloc_);
 
         Stopwatch<> construct;
-        Mps<double, Symmetry> Psi(L, qloc, Qtot, Minit, Qinit);
+        Xped::Mps<double, Symmetry> Psi(L, qloc, Qtot, Minit, Qinit);
         SPDLOG_CRITICAL(construct.info("Time for constructor"));
 
         XPED_MPI_BARRIER(world.comm)
@@ -138,17 +138,17 @@ int main(int argc, char* argv[])
         }
         if(SWEEP) {
             Stopwatch<> Sweep;
-            if(DIR == DMRG::DIRECTION::RIGHT) {
+            if(DIR == Xped::DMRG::DIRECTION::RIGHT) {
                 for(std::size_t l = 0; l < L; l++) {
                     SPDLOG_CRITICAL("l={}", l);
-                    Psi.rightSweepStep(l, DMRG::BROOM::SVD);
+                    Psi.rightSweepStep(l, Xped::DMRG::BROOM::SVD);
                 }
             } else {
                 for(std::size_t l = L - 1; l > 0; l--) {
                     SPDLOG_CRITICAL("l={}", l);
-                    Psi.leftSweepStep(l, DMRG::BROOM::SVD);
+                    Psi.leftSweepStep(l, Xped::DMRG::BROOM::SVD);
                 }
-                Psi.leftSweepStep(0, DMRG::BROOM::SVD);
+                Psi.leftSweepStep(0, Xped::DMRG::BROOM::SVD);
             }
             SPDLOG_CRITICAL(Sweep.info("Time for sweep"));
         }

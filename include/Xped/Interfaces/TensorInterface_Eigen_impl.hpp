@@ -6,6 +6,8 @@
 
 #include "Xped/Util/Mpi.hpp"
 
+namespace Xped {
+
 template <>
 struct TensorInterface<EigenTensorLib>
 {
@@ -25,7 +27,7 @@ struct TensorInterface<EigenTensorLib>
 
     // constructors
     template <typename Scalar, std::size_t Rank>
-    static TType<Scalar, Rank> construct(const std::array<Indextype, Rank>& dims, util::mpi::XpedWorld& world = util::mpi::getUniverse());
+    static TType<Scalar, Rank> construct(const std::array<Indextype, Rank>& dims, mpi::XpedWorld& world = mpi::getUniverse());
 
     template <typename Scalar, int Rank>
     static TType<Scalar, Rank> construct(const MapTType<Scalar, Rank>& map);
@@ -117,6 +119,8 @@ struct TensorInterface<EigenTensorLib>
     template <typename Scalar, int Rank>
     static std::string print(const TType<Scalar, Rank>& T);
 };
+
+} // namespace Xped
 
 #ifndef XPED_COMPILED_LIB
 #    include "Interfaces/TensorInterface_Eigen_impl.cpp"

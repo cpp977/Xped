@@ -5,7 +5,7 @@
 #include <set>
 #include <unordered_set>
 
-namespace Sym {
+namespace Xped::Sym {
 template <typename Derived>
 struct SymTraits;
 
@@ -100,5 +100,5 @@ struct SymBase
     }
 };
 
-} // end namespace Sym
+} // namespace Xped::Sym
 #endif

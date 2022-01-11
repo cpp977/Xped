@@ -3,7 +3,9 @@
 
 #include "Qbasis.hpp"
 
-namespace XpedHelper {
+namespace Xped {
+
+namespace internal {
 
 template <std::size_t Rank1, std::size_t Rank2, typename Symmetry>
 std::pair<Qbasis<Symmetry, Rank2 + Rank1>, std::array<Qbasis<Symmetry, 1>, 0>>
@@ -12,7 +14,9 @@ build_FusionTree_Helper(const Qbasis<Symmetry, Rank2>& coupled, const std::array
 template <std::size_t Rank, typename Symmetry>
 Qbasis<Symmetry, Rank> build_FusionTree(const std::array<Qbasis<Symmetry, 1>, Rank>& uncoupled);
 
-} // namespace XpedHelper
+} // namespace internal
+
+} // namespace Xped
 
 #ifndef XPED_COMPILED_LIB
 #    include "Core/TensorHelper.cpp"

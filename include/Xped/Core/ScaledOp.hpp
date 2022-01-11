@@ -5,6 +5,8 @@
 
 #include "TensorBase.hpp"
 
+namespace Xped {
+
 template <typename XprType>
 class ScaledOp;
 
@@ -65,7 +67,7 @@ public:
 
     inline const std::unordered_map<qType, std::size_t> dict() const { return refxpr_.dict(); }
 
-    inline const std::shared_ptr<util::mpi::XpedWorld> world() const { return refxpr_.world(); }
+    inline const std::shared_ptr<mpi::XpedWorld> world() const { return refxpr_.world(); }
 
     inline const std::array<Qbasis<Symmetry, 1>, Rank> uncoupledDomain() const { return refxpr_.uncoupledDomain(); }
     inline const std::array<Qbasis<Symmetry, 1>, CoRank> uncoupledCodomain() const { return refxpr_.uncoupledCodomain(); }
@@ -80,4 +82,6 @@ protected:
     XPED_CONST XprType& refxpr_;
     const Scalar scale_;
 };
+
+} // namespace Xped
 #endif

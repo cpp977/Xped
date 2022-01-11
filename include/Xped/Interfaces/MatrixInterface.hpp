@@ -1,6 +1,8 @@
 #ifndef MATRIXINTERFACE_H_
 #define MATRIXINTERFACE_H_
 
+namespace Xped {
+
 struct EigenMatrixLib
 {};
 
@@ -54,6 +56,8 @@ struct MatrixInterface
 
     // adjoint
 };
+
+} // namespace Xped
 
 #if defined XPED_USE_EIGEN_MATRIX_LIB
 #    include "Xped/Interfaces/MatrixInterface_Eigen_impl.hpp"

@@ -3,6 +3,8 @@
 
 #include <string>
 
+namespace Xped {
+
 struct EigenTensorLib
 {
     const std::string name() const { return "Eigen"; }
@@ -49,6 +51,8 @@ struct TensorInterface
 
     // return dimensions [x] [x]
 };
+
+} // namespace Xped
 
 #include "TOOLS/NestedLoopIterator.h"
 #include "seq/seq.h"

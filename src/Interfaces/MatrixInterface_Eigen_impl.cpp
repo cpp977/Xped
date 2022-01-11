@@ -8,6 +8,8 @@
 
 #include "Xped/Interfaces/MatrixMultiplication.hpp"
 
+namespace Xped {
+
 template <typename Scalar>
 using MType = MatrixInterface<EigenMatrixLib>::MType<Scalar>;
 
@@ -15,13 +17,13 @@ using MIndextype = MatrixInterface<EigenMatrixLib>::MIndextype;
 
 // constructors
 template <typename Scalar>
-MType<Scalar> MatrixInterface<EigenMatrixLib>::construct(const MIndextype& rows, const MIndextype& cols, util::mpi::XpedWorld& world)
+MType<Scalar> MatrixInterface<EigenMatrixLib>::construct(const MIndextype& rows, const MIndextype& cols, mpi::XpedWorld& world)
 {
     return MType<Scalar>(rows, cols);
 }
 
 template <typename Scalar>
-MType<Scalar> MatrixInterface<EigenMatrixLib>::construct_with_zero(const MIndextype& rows, const MIndextype& cols, util::mpi::XpedWorld& world)
+MType<Scalar> MatrixInterface<EigenMatrixLib>::construct_with_zero(const MIndextype& rows, const MIndextype& cols, mpi::XpedWorld& world)
 {
     MType<Scalar> mat(rows, cols);
     mat.setZero();
@@ -60,7 +62,7 @@ void MatrixInterface<EigenMatrixLib>::setConstant(MType<Scalar>& M, const Scalar
 }
 
 template <typename Scalar>
-MType<Scalar> MatrixInterface<EigenMatrixLib>::Identity(const MIndextype& rows, const MIndextype& cols, util::mpi::XpedWorld& world)
+MType<Scalar> MatrixInterface<EigenMatrixLib>::Identity(const MIndextype& rows, const MIndextype& cols, mpi::XpedWorld& world)
 {
     return Eigen::MatrixXd::Identity(rows, cols);
 }
@@ -214,3 +216,5 @@ std::string MatrixInterface<EigenMatrixLib>::print(const MType<Scalar>& M)
     ss << M;
     return ss.str();
 }
+
+} // namespace Xped

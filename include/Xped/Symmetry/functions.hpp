@@ -6,7 +6,10 @@
 
 #include <boost/rational.hpp>
 
+namespace Xped {
+
 namespace util {
+
 /**Calculates mod N ensuring the result is positive for positive N*/
 #ifndef POSMOD_FUNCTION
 #    define POSMOD_FUNCTION
@@ -173,7 +176,7 @@ inline void finalize(bool PRINT_STATS = false)
 #endif
 }
 
-} // end namespace Sym
+} // namespace Sym
 
 template <typename Symmetry>
 qarray<Symmetry::Nq> adjustQN(const qarray<Symmetry::Nq>& qin, const size_t number_cells, bool BACK = false)
@@ -194,4 +197,6 @@ qarray<Symmetry::Nq> adjustQN(const qarray<Symmetry::Nq>& qin, const size_t numb
     }
     return out;
 };
+
+} // namespace Xped
 #endif

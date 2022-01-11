@@ -21,16 +21,18 @@ using std::size_t;
 
 #include "Xped/Core/Tensor.hpp"
 
+namespace Xped {
+
 template <typename Scalar_, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename PlainLib_>
 Tensor<Scalar_, Rank, CoRank, Symmetry, PlainLib_>::Tensor(const std::array<Qbasis<Symmetry, 1>, Rank> basis_domain,
                                                            const std::array<Qbasis<Symmetry, 1>, CoRank> basis_codomain,
-                                                           util::mpi::XpedWorld& world)
+                                                           mpi::XpedWorld& world)
     : uncoupled_domain(basis_domain)
     , uncoupled_codomain(basis_codomain)
-    , world_(&world, util::mpi::TrivialDeleter<util::mpi::XpedWorld>{})
+    , world_(&world, mpi::TrivialDeleter<mpi::XpedWorld>{})
 {
-    domain = XpedHelper::build_FusionTree(basis_domain);
-    codomain = XpedHelper::build_FusionTree(basis_codomain);
+    domain = internal::build_FusionTree(basis_domain);
+    codomain = internal::build_FusionTree(basis_codomain);
 }
 
 template <typename Scalar_, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename PlainLib_>
@@ -209,8 +211,8 @@ Tensor<Scalar_, Rank, CoRank, Symmetry, PlainLib_>::permute_impl(seq::iseq<std::
     out.uncoupled_domain = uncoupled_domain;
     p_domain.apply(out.uncoupled_domain);
 
-    out.domain = XpedHelper::build_FusionTree(out.uncoupled_domain);
-    out.codomain = XpedHelper::build_FusionTree(out.uncoupled_codomain);
+    out.domain = internal::build_FusionTree(out.uncoupled_domain);
+    out.codomain = internal::build_FusionTree(out.uncoupled_codomain);
 
     for(size_t i = 0; i < sector_.size(); i++) {
         auto domain_trees = domain.tree(sector_[i]);
@@ -315,8 +317,8 @@ Tensor<Scalar_, Rank, CoRank, Symmetry, PlainLib_>::permute_impl(seq::iseq<std::
         }
     }
 
-    out.domain = XpedHelper::build_FusionTree(out.uncoupled_domain);
-    out.codomain = XpedHelper::build_FusionTree(out.uncoupled_codomain);
+    out.domain = internal::build_FusionTree(out.uncoupled_domain);
+    out.codomain = internal::build_FusionTree(out.uncoupled_codomain);
 
     for(size_t i = 0; i < sector_.size(); i++) {
         auto domain_trees = domain.tree(sector_[i]);
@@ -409,12 +411,12 @@ std::tuple<Tensor<Scalar_, Rank, 1, Symmetry, PlainLib_>,
            Tensor<typename ScalarTraits<Scalar_>::Real, 1, 1, Symmetry, PlainLib_>,
            Tensor<Scalar_, 1, CoRank, Symmetry, PlainLib_>>
 Tensor<Scalar_, Rank, CoRank, Symmetry, PlainLib_>::tSVD(size_t maxKeep,
-                                                       RealScalar eps_svd,
-                                                       RealScalar& truncWeight,
-                                                       RealScalar& entropy,
-                                                       std::map<qarray<Symmetry::Nq>, VectorType>& SVspec,
-                                                       bool PRESERVE_MULTIPLETS,
-                                                       bool RETURN_SPEC) XPED_CONST
+                                                         RealScalar eps_svd,
+                                                         RealScalar& truncWeight,
+                                                         RealScalar& entropy,
+                                                         std::map<qarray<Symmetry::Nq>, VectorType>& SVspec,
+                                                         bool PRESERVE_MULTIPLETS,
+                                                         bool RETURN_SPEC) XPED_CONST
 {
     SPDLOG_INFO("Entering Xped::tSVD()");
     SPDLOG_INFO("Input param eps_svd={}", eps_svd);
@@ -576,8 +578,8 @@ auto Tensor<Scalar_, Rank, CoRank, Symmetry, PlainLib_>::view(const FusionTree<R
 
 template <typename Scalar_, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename PlainLib_>
 auto Tensor<Scalar_, Rank, CoRank, Symmetry, PlainLib_>::view(const FusionTree<Rank, Symmetry>& f1,
-                                                            const FusionTree<CoRank, Symmetry>& f2,
-                                                            std::size_t block_number)
+                                                              const FusionTree<CoRank, Symmetry>& f2,
+                                                              std::size_t block_number)
 {
     assert(block_number < sector().size());
     assert(f1.q_coupled == f2.q_coupled);
@@ -638,8 +640,8 @@ auto Tensor<Scalar_, Rank, CoRank, Symmetry, PlainLib_>::view(const FusionTree<R
 
 template <typename Scalar_, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename PlainLib_>
 auto Tensor<Scalar_, Rank, CoRank, Symmetry, PlainLib_>::view(const FusionTree<Rank, Symmetry>& f1,
-                                                            const FusionTree<CoRank, Symmetry>& f2,
-                                                            std::size_t block_number) const
+                                                              const FusionTree<CoRank, Symmetry>& f2,
+                                                              std::size_t block_number) const
 {
     assert(block_number < sector().size());
     assert(f1.q_coupled == f2.q_coupled);
@@ -697,8 +699,8 @@ Tensor<Scalar_, Rank, CoRank, Symmetry, PlainLib_>::subBlock(const FusionTree<Ra
 template <typename Scalar_, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename PlainLib_>
 typename PlainLib_::template TType<Scalar_, Rank + CoRank>
 Tensor<Scalar_, Rank, CoRank, Symmetry, PlainLib_>::subBlock(const FusionTree<Rank, Symmetry>& f1,
-                                                           const FusionTree<CoRank, Symmetry>& f2,
-                                                           std::size_t block_number) const
+                                                             const FusionTree<CoRank, Symmetry>& f2,
+                                                             std::size_t block_number) const
 {
     assert(block_number < sector().size());
     assert(f1.q_coupled == f2.q_coupled);
@@ -721,8 +723,8 @@ Tensor<Scalar_, Rank, CoRank, Symmetry, PlainLib_>::subBlock(const FusionTree<Ra
 }
 
 template <typename Scalar_, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename PlainLib_>
-typename PlainLib_::template MType<Scalar_> Tensor<Scalar_, Rank, CoRank, Symmetry, PlainLib_>::subMatrix(const FusionTree<Rank, Symmetry>& f1,
-                                                                                                        const FusionTree<CoRank, Symmetry>& f2) const
+typename PlainLib_::template MType<Scalar_>
+Tensor<Scalar_, Rank, CoRank, Symmetry, PlainLib_>::subMatrix(const FusionTree<Rank, Symmetry>& f1, const FusionTree<CoRank, Symmetry>& f2) const
 {
     if(f1.q_coupled != f2.q_coupled) { assert(false); }
 
@@ -1013,7 +1015,7 @@ std::ostream& operator<<(std::ostream& os, XPED_CONST Tensor<Scalar_, Rank, CoRa
 
 template <typename Scalar_, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename PlainLib_>
 Tensor<Scalar_, Rank, CoRank, Symmetry, PlainLib_> operator+(XPED_CONST Tensor<Scalar_, Rank, CoRank, Symmetry, PlainLib_>& T1,
-                                                           XPED_CONST Tensor<Scalar_, Rank, CoRank, Symmetry, PlainLib_>& T2)
+                                                             XPED_CONST Tensor<Scalar_, Rank, CoRank, Symmetry, PlainLib_>& T2)
 {
     assert(T1.domain == T2.domain);
     assert(T1.codomain == T2.codomain);
@@ -1034,7 +1036,7 @@ Tensor<Scalar_, Rank, CoRank, Symmetry, PlainLib_> operator+(XPED_CONST Tensor<S
 
 template <typename Scalar_, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename PlainLib_>
 Tensor<Scalar_, Rank, CoRank, Symmetry, PlainLib_> operator-(XPED_CONST Tensor<Scalar_, Rank, CoRank, Symmetry, PlainLib_>& T1,
-                                                           XPED_CONST Tensor<Scalar_, Rank, CoRank, Symmetry, PlainLib_>& T2)
+                                                             XPED_CONST Tensor<Scalar_, Rank, CoRank, Symmetry, PlainLib_>& T2)
 {
     assert(T1.domain == T2.domain);
     assert(T1.codomain == T2.codomain);
@@ -1052,3 +1054,5 @@ Tensor<Scalar_, Rank, CoRank, Symmetry, PlainLib_> operator-(XPED_CONST Tensor<S
     }
     return Tout;
 }
+
+} // namespace Xped

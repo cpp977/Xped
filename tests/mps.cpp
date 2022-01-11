@@ -46,6 +46,8 @@ XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100)
 #    include "doctest/extensions/doctest_mpi.h"
 #endif
 
+using namespace Xped;
+
 #include "mps_tests.hpp"
 
 #ifdef XPED_USE_MPI
@@ -71,9 +73,9 @@ TEST_CASE("Testing contract_L() and contract_R().")
 #endif
 {
 #ifdef XPED_USE_MPI
-    util::mpi::XpedWorld test_world(test_comm);
+    mpi::XpedWorld test_world(test_comm);
 #else
-    util::mpi::XpedWorld test_world;
+    mpi::XpedWorld test_world;
 #endif
     SUBCASE("SU2") { perform_mps_contraction<Sym::SU2<Sym::SpinSU2>>(SU2_BASIS_SIZE, test_world); }
     SUBCASE("U1") { perform_mps_contraction<Sym::U1<Sym::SpinU1>>(U1_BASIS_SIZE, test_world); }

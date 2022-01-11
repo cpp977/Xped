@@ -1,6 +1,8 @@
 #ifndef VECTORINTERFACE_H_
 #define VECTORINTERFACE_H_
 
+namespace Xped {
+
 struct EigenVectorLib
 {};
 
@@ -38,6 +40,8 @@ struct VectorInterface
 
     // operations +, - , *, coefficient-wise
 };
+
+} // namespace Xped
 
 #if defined XPED_USE_EIGEN_VECTOR_LIB
 #    include "Xped/Interfaces/VectorInterface_Eigen_impl.hpp"

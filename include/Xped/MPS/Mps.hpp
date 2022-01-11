@@ -4,6 +4,8 @@
 #include "Xped/Core/ScalarTraits.hpp"
 #include "Xped/Core/Tensor.hpp"
 
+namespace Xped {
+
 template <typename TL, typename TR, typename TC>
 struct GaugeTriple
 {
@@ -122,6 +124,8 @@ public:
     //     S.resize(N_sites);
     // }
 };
+
+} // namespace Xped
 
 #ifndef XPED_COMPILED_LIB
 #    include "MPS/Mps.cpp"

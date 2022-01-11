@@ -4,12 +4,12 @@
 
 #include "Xped/Symmetry/SU2.hpp"
 
-namespace Sym {
+namespace Xped::Sym {
 
 template <typename Kind, typename Scalar_>
 typename SU2<Kind, Scalar_>::qType SU2<Kind, Scalar_>::random_q()
 {
-    int qval = util::random::threadSafeRandUniform<int, int>(1, 20);
+    int qval = random::threadSafeRandUniform<int, int>(1, 20);
     qType out = {qval};
     return out;
 }
@@ -38,7 +38,7 @@ Scalar_ SU2<Kind, Scalar_>::coeff_FS(const qType& q1)
 
 template <typename Kind, typename Scalar_>
 template <typename PlainLib>
-typename PlainLib::template TType<Scalar_, 2> SU2<Kind, Scalar_>::one_j_tensor(const qType& q1, util::mpi::XpedWorld& world)
+typename PlainLib::template TType<Scalar_, 2> SU2<Kind, Scalar_>::one_j_tensor(const qType& q1, mpi::XpedWorld& world)
 {
     typedef typename PlainLib::Indextype IndexType;
 
@@ -68,7 +68,7 @@ Scalar_ SU2<Kind, Scalar_>::coeff_3j(const qType& q1, const qType& q2, const qTy
 template <typename Kind, typename Scalar_>
 template <typename PlainLib>
 typename PlainLib::template TType<Scalar_, 3>
-SU2<Kind, Scalar_>::CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t, util::mpi::XpedWorld& world)
+SU2<Kind, Scalar_>::CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t, mpi::XpedWorld& world)
 {
     typedef typename PlainLib::Indextype IndexType;
     // typename TensorInterface<TensorLib>::template TType<Scalar_,3> out(degeneracy(q1),degeneracy(q2),degeneracy(q3));
@@ -116,4 +116,4 @@ bool SU2<Kind, Scalar_>::triangle(const qType& q1, const qType& q2, const qType&
     return false;
 }
 
-} // end namespace Sym
+} // namespace Xped::Sym

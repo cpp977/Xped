@@ -49,10 +49,10 @@ int main(int argc, char* argv[])
 {
 #ifdef XPED_USE_MPI
     MPI_Init(&argc, &argv);
-    util::mpi::XpedWorld world(argc, argv);
+    Xped::mpi::XpedWorld world(argc, argv);
     auto my_logger = spdlog::basic_logger_mt("info", "logs/log_" + to_string(world.rank) + ".txt");
 #else
-    util::mpi::XpedWorld world;
+    Xped::mpi::XpedWorld world;
     auto my_logger = spdlog::basic_logger_mt("info", "logs/log.txt");
 #endif
     spdlog::set_default_logger(my_logger);
@@ -100,15 +100,15 @@ int main(int argc, char* argv[])
 
     // std::cout << std::endl << C << std::endl;
 
-    typedef Sym::SU2<Sym::SpinSU2> Symmetry;
+    typedef Xped::Sym::SU2<Xped::Sym::SpinSU2> Symmetry;
     // typedef Sym::U1<Sym::SpinU1> Symmetry;
     // typedef Sym::U0 Symmetry;
 
-    Qbasis<Symmetry, 1> in;
+    Xped::Qbasis<Symmetry, 1> in;
     in.setRandom(Minit);
     std::cout << in << std::endl;
     auto out = in.combine(in).forgetHistory();
-    Tensor<double, 2, 1, Symmetry> T({{in, in}}, {{out}});
+    Xped::Tensor<double, 2, 1, Symmetry> T({{in, in}}, {{out}});
     T.setRandom();
     auto F = T.permute<0, 2, 0, 1>();
     auto X = T * T.adjoint();

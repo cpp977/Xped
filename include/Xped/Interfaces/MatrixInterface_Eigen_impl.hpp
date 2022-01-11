@@ -5,6 +5,8 @@
 
 #include "Xped/Util/Mpi.hpp"
 
+namespace Xped {
+
 template <>
 struct MatrixInterface<EigenMatrixLib>
 {
@@ -22,10 +24,10 @@ struct MatrixInterface<EigenMatrixLib>
     typedef Eigen::Index MIndextype;
     // constructors
     template <typename Scalar>
-    static MType<Scalar> construct(const MIndextype& rows, const MIndextype& cols, util::mpi::XpedWorld& world = util::mpi::getUniverse());
+    static MType<Scalar> construct(const MIndextype& rows, const MIndextype& cols, mpi::XpedWorld& world = mpi::getUniverse());
 
     template <typename Scalar>
-    static MType<Scalar> construct_with_zero(const MIndextype& rows, const MIndextype& cols, util::mpi::XpedWorld& world = util::mpi::getUniverse());
+    static MType<Scalar> construct_with_zero(const MIndextype& rows, const MIndextype& cols, mpi::XpedWorld& world = mpi::getUniverse());
 
     template <typename Scalar>
     static void resize(MType<Scalar>& M, const MIndextype& new_rows, const MIndextype& new_cols);
@@ -44,7 +46,7 @@ struct MatrixInterface<EigenMatrixLib>
     static void setConstant(MType<Scalar>& M, const Scalar& val);
 
     template <typename Scalar>
-    static MType<Scalar> Identity(const MIndextype& rows, const MIndextype& cols, util::mpi::XpedWorld& world = util::mpi::getUniverse());
+    static MType<Scalar> Identity(const MIndextype& rows, const MIndextype& cols, mpi::XpedWorld& world = mpi::getUniverse());
 
     // shape
     template <typename Scalar>
@@ -112,6 +114,7 @@ struct MatrixInterface<EigenMatrixLib>
     static std::string print(const MType<Scalar>& M);
 };
 
+} // namespace Xped
 #ifndef XPED_COMPILED_LIB
 #    include "Interfaces/MatrixInterface_Eigen_impl.cpp"
 #endif

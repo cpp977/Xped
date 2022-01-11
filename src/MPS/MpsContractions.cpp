@@ -6,6 +6,8 @@
 #include "Xped/Symmetry/U0.hpp"
 #include "Xped/Symmetry/U1.hpp"
 
+namespace Xped {
+
 template <typename Scalar, typename Symmetry, typename PlainLib>
 void contract_L(XPED_CONST Tensor<Scalar, 1, 1, Symmetry, PlainLib>& Bold,
                 XPED_CONST Tensor<Scalar, 2, 1, Symmetry, PlainLib>& Bra,
@@ -116,3 +118,5 @@ void contract_R(XPED_CONST Tensor<Scalar, 1, 1, Symmetry, PlainLib>& Bold,
     }
     SPDLOG_INFO("Leaving contract_R().");
 }
+
+} // namespace Xped

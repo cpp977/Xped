@@ -3,7 +3,7 @@
 
 #include "functions.hpp"
 
-namespace Sym {
+namespace Xped::Sym {
 
 struct SpinSU2
 {
@@ -45,5 +45,5 @@ struct ChargeZ2
     static const KIND name = KIND::Z2;
 };
 
-} // end namespace Sym
+} // namespace Xped::Sym
 #endif // LABEL_DUMMIES_H

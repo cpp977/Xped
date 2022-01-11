@@ -12,6 +12,8 @@
 
 #include "Xped/Core/TensorBase.hpp"
 
+namespace Xped {
+
 template <typename Derived>
 typename TensorTraits<Derived>::Scalar TensorBase<Derived>::trace() XPED_CONST
 {
@@ -45,10 +47,10 @@ XPED_CONST ScaledOp<Derived> TensorBase<Derived>::operator*(const Scalar scale) 
 template <typename Derived>
 template <typename OtherDerived>
 Tensor<typename TensorTraits<Derived>::Scalar,
-     TensorTraits<Derived>::Rank,
-     TensorTraits<typename std::remove_const<std::remove_reference_t<OtherDerived>>::type>::CoRank,
-     typename TensorTraits<Derived>::Symmetry,
-     typename TensorTraits<Derived>::PlainLib>
+       TensorTraits<Derived>::Rank,
+       TensorTraits<typename std::remove_const<std::remove_reference_t<OtherDerived>>::type>::CoRank,
+       typename TensorTraits<Derived>::Symmetry,
+       typename TensorTraits<Derived>::PlainLib>
 TensorBase<Derived>::operator*(OtherDerived&& other) XPED_CONST
 {
     typedef typename std::remove_const<std::remove_reference_t<OtherDerived>>::type OtherDerived_;
@@ -87,3 +89,5 @@ TensorBase<Derived>::operator*(OtherDerived&& other) XPED_CONST
     }
     return Tout;
 }
+
+} // namespace Xped

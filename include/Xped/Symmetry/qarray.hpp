@@ -16,6 +16,8 @@
 
 #include "TOOLS/JoinArray.h"
 
+namespace Xped {
+
 /**
  * Array of quantum numbers corresponding to Abelian or non Abelian symmetries.
  * Just a thin wrapper over \p std::array<int,Nq> with some bracket operators, boolean functions, coefficient-wise arithmetics and output to with a
@@ -191,4 +193,5 @@ qarray<Nq> qminusinf()
     return aout;
 }
 
+} // namespace Xped
 #endif

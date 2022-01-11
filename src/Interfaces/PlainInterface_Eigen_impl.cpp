@@ -4,6 +4,8 @@
 
 #include <Eigen/SVD>
 
+namespace Xped {
+
 using Indextype = Eigen::Index;
 
 template <typename Scalar>
@@ -80,3 +82,5 @@ MType<Scalar> PlainInterface<EigenMatrixLib, EigenTensorLib, EigenVectorLib>::ve
 {
     return V.matrix().asDiagonal();
 }
+
+} // namespace Xped

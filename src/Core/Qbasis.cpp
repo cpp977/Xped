@@ -1,9 +1,5 @@
 #include <iostream>
 
-using std::cout;
-using std::endl;
-using std::size_t;
-
 #include "Xped/Symmetry/functions.hpp"
 #include "Xped/Util/Random.hpp"
 
@@ -12,6 +8,12 @@ using std::size_t;
 #include "Xped/Symmetry/U1.hpp"
 
 #include "Xped/Core/Qbasis.hpp"
+
+using std::cout;
+using std::endl;
+using std::size_t;
+
+namespace Xped {
 
 template <typename Symmetry, std::size_t depth>
 void Qbasis<Symmetry, depth>::push_back(const qType& q, const size_t& inner_dim)
@@ -78,8 +80,7 @@ void Qbasis<Symmetry, depth>::setRandom(const std::size_t& fullSize, const std::
     assert(depth == 1);
     while(fullDim() < fullSize) {
         qType q = Symmetry::random_q();
-        std::size_t inner_dim =
-            static_cast<std::size_t>(util::random::threadSafeRandUniform<int, int>(1, std::min(max_sectorSize, fullSize - fullDim())));
+        std::size_t inner_dim = static_cast<std::size_t>(random::threadSafeRandUniform<int, int>(1, std::min(max_sectorSize, fullSize - fullDim())));
         if((fullDim() + Symmetry::degeneracy(q) * inner_dim) <= fullSize) { push_back(q, inner_dim); }
     }
 }
@@ -466,3 +467,5 @@ std::string Qbasis<Symmetry, depth>::printTrees() const
     }
     return out.str();
 }
+
+} // namespace Xped

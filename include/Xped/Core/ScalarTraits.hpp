@@ -3,6 +3,8 @@
 
 #include <complex>
 
+namespace Xped {
+
 template <typename Scalar>
 struct ScalarTraits
 {};
@@ -18,4 +20,6 @@ struct ScalarTraits<std::complex<RealScalar_>>
 {
     typedef RealScalar_ Real;
 };
+
+} // namespace Xped
 #endif

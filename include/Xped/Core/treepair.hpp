@@ -11,6 +11,8 @@
 
 #include "Xped/Hash/hash.hpp"
 
+namespace Xped {
+
 namespace treepair {
 //                           ☐
 //                           _
@@ -37,6 +39,8 @@ std::unordered_map<std::pair<FusionTree<Rank - shift, Symmetry>, FusionTree<CoRa
 permute(const FusionTree<Rank, Symmetry>& t1, const FusionTree<CoRank, Symmetry>& t2, const Permutation& p);
 
 } // end namespace treepair
+
+} // namespace Xped
 
 #ifndef XPED_COMPILED_LIB
 #    include "Core/treepair.cpp"

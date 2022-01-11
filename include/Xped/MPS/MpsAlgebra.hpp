@@ -5,7 +5,8 @@
 
 #include "Xped/Util/Macros.hpp"
 
-//#include "Xped/MPS/Mps.hpp"
+namespace Xped {
+
 template <typename Scalar, typename Symmetry>
 class Mps;
 
@@ -20,6 +21,8 @@ enum class DIRECTION
 template <typename Scalar, typename Symmetry>
 typename Symmetry::Scalar
 dot(XPED_CONST Mps<Scalar, Symmetry>& Bra, XPED_CONST Mps<Scalar, Symmetry>& Ket, const DMRG::DIRECTION DIR = DMRG::DIRECTION::RIGHT);
+
+} // namespace Xped
 
 #ifndef XPED_COMPILED_LIB
 #    include "MPS/MpsAlgebra.cpp"

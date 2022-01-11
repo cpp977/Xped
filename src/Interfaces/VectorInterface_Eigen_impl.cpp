@@ -2,6 +2,8 @@
 
 #include "Xped/Interfaces/VectorInterface_Eigen_impl.hpp"
 
+namespace Xped {
+
 // typedefs
 template <typename Scalar>
 using VType = Eigen::Array<Scalar, Eigen::Dynamic, 1>;
@@ -10,13 +12,13 @@ typedef Eigen::Index VIndextype;
 
 // constructors
 template <typename Scalar>
-VType<Scalar> VectorInterface<EigenVectorLib>::construct(const VIndextype& elems, util::mpi::XpedWorld& world)
+VType<Scalar> VectorInterface<EigenVectorLib>::construct(const VIndextype& elems, mpi::XpedWorld& world)
 {
     return VType<Scalar>(elems);
 }
 
 template <typename Scalar>
-VType<Scalar> VectorInterface<EigenVectorLib>::construct_with_zero(const VIndextype& elems, util::mpi::XpedWorld& world)
+VType<Scalar> VectorInterface<EigenVectorLib>::construct_with_zero(const VIndextype& elems, mpi::XpedWorld& world)
 {
     VType<Scalar> vec(elems);
     vec.setZero();
@@ -97,3 +99,5 @@ void VectorInterface<EigenVectorLib>::vec_to_stdvec(const VType<Scalar>& V, std:
 {
     vec = std::vector<Scalar>(V.data(), V.data() + V.size());
 }
+
+} // namespace Xped

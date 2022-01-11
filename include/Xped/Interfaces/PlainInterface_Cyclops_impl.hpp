@@ -3,6 +3,8 @@
 
 #include "ctf.hpp"
 
+namespace Xped {
+
 template <>
 struct PlainInterface<CyclopsMatrixLib, CyclopsTensorLib, CyclopsVectorLib>
     : public MatrixInterface<CyclopsMatrixLib>, public TensorInterface<CyclopsTensorLib>, public VectorInterface<CyclopsVectorLib>
@@ -70,6 +72,8 @@ struct PlainInterface<CyclopsMatrixLib, CyclopsTensorLib, CyclopsVectorLib>
     template <typename Scalar, typename VT>
     static MType<Scalar> vec_to_diagmat(VT&& V);
 };
+
+} // namespace Xped
 
 #ifndef XPED_COMPILED_LIB
 #    include "Interfaces/PlainInterface_Cyclops_impl.cpp"

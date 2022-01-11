@@ -3,6 +3,8 @@
 
 #include "ctf.hpp"
 
+namespace Xped {
+
 template <>
 struct MatrixInterface<CyclopsMatrixLib>
 {
@@ -106,6 +108,8 @@ struct MatrixInterface<CyclopsMatrixLib>
     template <typename Scalar, typename MT>
     static void print(MT&& M);
 };
+
+} // namespace Xped
 
 #ifndef XPED_COMPILED_LIB
 #    include "Interfaces/MatrixInterface_Cyclops_impl.cpp"

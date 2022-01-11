@@ -3,6 +3,8 @@
 
 #include "ctf.hpp"
 
+namespace Xped {
+
 template <>
 struct VectorInterface<CyclopsVectorLib>
 {
@@ -65,6 +67,8 @@ struct VectorInterface<CyclopsVectorLib>
     template <typename Scalar, typename VT>
     static void vec_to_stdvec(VT&& V, std::vector<Scalar>& vec);
 };
+
+} // namespace Xped
 
 #ifndef XPED_COMPILED_LIB
 #    include "Interfaces/VectorInterface_Cyclops_impl.cpp"

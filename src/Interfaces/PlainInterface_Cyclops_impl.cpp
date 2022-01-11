@@ -4,6 +4,8 @@
 
 #include "spdlog/spdlog.h"
 
+namespace Xped {
+
 // typedefs
 using Indextype = int;
 
@@ -156,3 +158,5 @@ MType<Scalar> PlainInterface<CyclopsMatrixLib, CyclopsTensorLib, CyclopsVectorLi
     mat["ii"] = V["i"];
     return mat;
 }
+
+} // namespace Xped

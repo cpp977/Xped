@@ -5,6 +5,8 @@
 #include <Eigen/SVD>
 #include <unsupported/Eigen/CXX11/Tensor>
 
+namespace Xped {
+
 template <>
 struct PlainInterface<EigenMatrixLib, ArrayTensorLib, EigenVectorLib>
     : public MatrixInterface<EigenMatrixLib>, public TensorInterface<ArrayTensorLib>, public VectorInterface<EigenVectorLib>
@@ -111,4 +113,7 @@ struct PlainInterface<EigenMatrixLib, ArrayTensorLib, EigenVectorLib>
         return V.matrix().asDiagonal();
     }
 };
+
+} // namespace Xped
+
 #endif

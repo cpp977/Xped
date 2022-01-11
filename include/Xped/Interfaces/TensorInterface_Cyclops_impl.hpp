@@ -3,6 +3,8 @@
 
 #include <ctf.hpp>
 
+namespace Xped {
+
 template <>
 struct TensorInterface<CyclopsTensorLib>
 {
@@ -160,6 +162,8 @@ struct TensorInterface<CyclopsTensorLib>
     template <typename Scalar, std::size_t Rank>
     static std::string print(const TType<Scalar, Rank>& T);
 };
+
+} // namespace Xped
 
 #ifndef XPED_COMPILED_LIB
 #    include "Interfaces/TensorInterface_Cyclops_impl.cpp"

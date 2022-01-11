@@ -6,8 +6,7 @@
 
 #include "Xped/Interfaces/MatrixMultiplication.hpp"
 
-// #define XPED_CONST
-// #define XPED_REF &&
+namespace Xped {
 
 // typedefs
 template <typename Scalar>
@@ -268,3 +267,5 @@ void MatrixInterface<CyclopsMatrixLib>::print(MT&& M)
 {
     M.print_matrix();
 }
+
+} // namespace Xped

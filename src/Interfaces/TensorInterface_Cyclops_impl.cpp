@@ -4,6 +4,8 @@
 
 #include "spdlog/spdlog.h"
 
+namespace Xped {
+
 template <typename Index, Index oldVal, Index newVal, typename S>
 using seq_replace = seq::insert<seq::index_of<oldVal, S>, newVal, seq::remove<oldVal, S>>;
 
@@ -402,3 +404,5 @@ std::string TensorInterface<CyclopsTensorLib>::print(const TType<Scalar, Rank>& 
 {
     return T.print();
 }
+
+} // namespace Xped

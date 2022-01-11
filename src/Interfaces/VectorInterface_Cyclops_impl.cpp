@@ -2,6 +2,8 @@
 
 #include "Xped/Interfaces/VectorInterface_Cyclops_impl.hpp"
 
+namespace Xped {
+
 // typedefs
 template <typename Scalar>
 using VType = CTF::Vector<Scalar>;
@@ -101,3 +103,5 @@ void VectorInterface<CyclopsVectorLib>::vec_to_stdvec(VT&& V, std::vector<Scalar
     vec = std::vector<Scalar>(data, data + nvals);
     delete[] data;
 }
+
+} // namespace Xped

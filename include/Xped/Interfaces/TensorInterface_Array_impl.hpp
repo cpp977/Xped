@@ -7,6 +7,8 @@
 #include "Xped/Util/Mpi.hpp"
 #include "Xped/Util/Random.hpp"
 
+namespace Xped {
+
 template <typename Index, Index oldVal, Index newVal, typename S>
 using seq_replace = seq::insert<seq::index_of<oldVal, S>, newVal, seq::remove<oldVal, S>>;
 
@@ -356,5 +358,7 @@ struct TensorInterface<ArrayTensorLib>
         return ss.str();
     }
 };
+
+} // namespace Xped
 
 #endif

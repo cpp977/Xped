@@ -17,7 +17,7 @@ void perform_tensor_permute(const std::size_t& size, util::mpi::XpedWorld& world
     std::array<std::size_t, 4> perm{per...};
     SPDLOG_CRITICAL("Permutation: {} {} {} {}. Shift={}", perm[0], perm[1], perm[2], perm[3], shift);
 
-    Xped<double, 2, 2, Symmetry> t({{B, C}}, {{B, C}}, world);
+    Tensor<double, 2, 2, Symmetry> t({{B, C}}, {{B, C}}, world);
     t.setRandom();
     XPED_MPI_BARRIER(world.comm)
     auto tplain = t.plainTensor();
@@ -156,7 +156,7 @@ void perform_tensor_permute_intern(const std::size_t size, util::mpi::XpedWorld&
     std::array<std::size_t, 4> perm{per...};
     SPDLOG_CRITICAL("Permutation: {} {} {} {}", perm[0], perm[1], perm[2], perm[3]);
     XPED_MPI_BARRIER(world.comm)
-    Xped<double, 4, 0, Symmetry> t({{B, B, B, B}}, {{}}, world);
+    Tensor<double, 4, 0, Symmetry> t({{B, B, B, B}}, {{}}, world);
     // if(world.rank == 0) { std::cout << t << std::endl; }
     t.setRandom();
     SPDLOG_WARN("Tensor t set to Random.");
@@ -199,14 +199,14 @@ template <typename Symmetry>
 void test_tensor_permute_within_codomain(const std::size_t size, util::mpi::XpedWorld& world)
 {
     // Qbasis<Symmetry,1> F; F.setRandom(50);
-    // Xped<0,3,Symmetry> three({{}},{{F,F,F}}); three.setRandom();
+    // Tensor<0,3,Symmetry> three({{}},{{F,F,F}}); three.setRandom();
     // auto threep = three.plainTensor();
     // auto tp=three.template permute<0,2,0,1>();
     // XPED_DEFAULT_PLAININTERFACE::TType<double,3> tplainshuffle = PlainInterface<M_MATRIXLIB,
     // M_TENSORLIB>::shuffle<double,3,2,0,1>(threep); auto tplainp = tp.plainTensor(); auto check =
     // nda::make_ein_sum<double,0,1,2,3>(nda::ein<0,1,2,3>(tplainshuffle) - nda::ein<0,1,2,3>(tplainshuffle));
 
-    // Xped<double, 0, 4, Symmetry> t({{}}, {{B, C, D, E}});
+    // Tensor<double, 0, 4, Symmetry> t({{}}, {{B, C, D, E}});
     // t.setRandom();
     // auto tplain = t.plainTensor();
     // Permutation ptriv(std::array<std::size_t,0>{{}});
@@ -255,7 +255,7 @@ void test_tensor_permute_within_codomain(const std::size_t size, util::mpi::Xped
 template <typename Symmetry>
 void test_tensor_permute_within_domain(const std::size_t size, util::mpi::XpedWorld& world)
 {
-    // Xped<double, 4, 0, Symmetry> t({{B, C, D, E}}, {{}});
+    // Tensor<double, 4, 0, Symmetry> t({{B, C, D, E}}, {{}});
     // t.setRandom();
     // auto tplain = t.plainTensor();
     perform_tensor_permute_intern<Symmetry, 0, 1, 2, 3>(size, world);
@@ -310,7 +310,7 @@ void test_tensor_transformation_to_plain(const Qbasis<Symmetry, 1>& B, const Qba
     // SPDLOG_INFO("basis C");
     // for(const auto& [q, pos, plain] : C.data_) { SPDLOG_INFO("QN: {}, deg={}", q.data[0], plain.dim()); }
 
-    Xped<double, 2, 2, Symmetry> t({{B, C}}, {{B, C}}, world);
+    Tensor<double, 2, 2, Symmetry> t({{B, C}}, {{B, C}}, world);
     t.setRandom();
     // if(world.rank == 0) { std::cout << t << std::endl; }
     // SPDLOG_INFO(t);

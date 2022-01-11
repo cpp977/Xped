@@ -1,4 +1,4 @@
-#include "Xped/Core/XpedHelper.hpp"
+#include "Xped/Core/TensorHelper.hpp"
 
 #include "Xped/Symmetry/SU2.hpp"
 #include "Xped/Symmetry/U0.hpp"

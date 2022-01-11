@@ -3,13 +3,13 @@
 
 #include "Xped/Core/Qbasis.hpp"
 
-#include "XpedBase.hpp"
+#include "TensorBase.hpp"
 
 template <typename XprType>
 class ScaledOp;
 
 template <typename XprType>
-struct XpedTraits<ScaledOp<XprType>>
+struct TensorTraits<ScaledOp<XprType>>
 {
     static constexpr std::size_t Rank = XprType::Rank;
     static constexpr std::size_t CoRank = XprType::CoRank;
@@ -22,7 +22,7 @@ struct XpedTraits<ScaledOp<XprType>>
 };
 
 template <typename XprType>
-class ScaledOp : public XpedBase<ScaledOp<XprType>>
+class ScaledOp : public TensorBase<ScaledOp<XprType>>
 {
 public:
     static inline constexpr std::size_t Rank = XprType::Rank;

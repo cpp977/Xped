@@ -41,7 +41,7 @@ XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100)
 
 #include "Xped/Core/AdjointOp.hpp"
 #include "Xped/Core/FusionTree.hpp"
-#include "Xped/Core/Xped.hpp"
+#include "Xped/Core/Tensor.hpp"
 
 #include "doctest/doctest.h"
 #ifdef XPED_USE_MPI
@@ -274,7 +274,7 @@ TEST_CASE("Testing operations with SU(2)-spin matrices.")
         pauli_vec1[2] *= std::sqrt(0.5);
 
         // set s to the reduced Spin operator
-        Xped<double, 2, 1, Symmetry> s1({{B1, C}}, {{B1}}, test_world);
+        Tensor<double, 2, 1, Symmetry> s1({{B1, C}}, {{B1}}, test_world);
         s1.setConstant(std::sqrt(S1 * (S1 + 1.)));
 
         // transform to plain tensor and check against pauli_vec1
@@ -300,7 +300,7 @@ TEST_CASE("Testing operations with SU(2)-spin matrices.")
         }
 
         // build the product to QN K=0
-        Xped<double, 2, 1, Symmetry> couple1({{C, one}}, {{C}}, test_world);
+        Tensor<double, 2, 1, Symmetry> couple1({{C, one}}, {{C}}, test_world);
         couple1.setConstant(1.);
         auto prod1 = (s1.adjoint().eval().permute<-1, 0, 1, 2>() * couple1.permute<+1, 0, 2, 1>()).permute<0, 0, 3, 1, 2>() * s1;
         // transform to plain tensor and check against S^2
@@ -326,7 +326,7 @@ TEST_CASE("Testing operations with SU(2)-spin matrices.")
         }
 
         // build the product to QN K=1
-        Xped<double, 2, 1, Symmetry> couple3({{C, three}}, {{C}}, test_world);
+        Tensor<double, 2, 1, Symmetry> couple3({{C, three}}, {{C}}, test_world);
         couple3.setConstant(1.);
         auto prod3 = (s1.adjoint().eval().permute<-1, 0, 1, 2>() * couple3.permute<+1, 0, 2, 1>()).permute<0, 0, 3, 1, 2>() * s1;
         // transform to plain tensor and check against SxS
@@ -351,7 +351,7 @@ TEST_CASE("Testing operations with SU(2)-spin matrices.")
             CHECK((mat - std::sqrt(0.5) * pauli_vec1[k]).norm() == doctest::Approx(0.));
         }
         // build the product to QN K=2
-        Xped<double, 2, 1, Symmetry> couple5({{C, five}}, {{C}}, test_world);
+        Tensor<double, 2, 1, Symmetry> couple5({{C, five}}, {{C}}, test_world);
         couple5.setConstant(1.);
         auto prod5 = (s1.adjoint().eval().permute<-1, 0, 1, 2>() * couple5.permute<+1, 0, 2, 1>()).permute<0, 0, 3, 1, 2>() * s1;
         // transform to plain tensor and check against SxS
@@ -390,7 +390,7 @@ TEST_CASE("Testing operations with SU(2)-spin matrices.")
             B2.push_back({twoS2 + 1}, 1);
             double S2 = 0.5 * twoS2;
 
-            Xped<double, 2, 1, Symmetry> s2({{B2, C}}, {{B2}}, test_world);
+            Tensor<double, 2, 1, Symmetry> s2({{B2, C}}, {{B2}}, test_world);
             s2.setConstant(std::sqrt(S2 * (S2 + 1.)));
 
             // build the outer product to QN K=0 between s1 and s2

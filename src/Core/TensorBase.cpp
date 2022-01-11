@@ -8,12 +8,12 @@
 
 #include "Xped/Core/AdjointOp.hpp"
 #include "Xped/Core/ScaledOp.hpp"
-#include "Xped/Core/Xped.hpp"
+#include "Xped/Core/Tensor.hpp"
 
-#include "Xped/Core/XpedBase.hpp"
+#include "Xped/Core/TensorBase.hpp"
 
 template <typename Derived>
-typename XpedTraits<Derived>::Scalar XpedBase<Derived>::trace() XPED_CONST
+typename TensorTraits<Derived>::Scalar TensorBase<Derived>::trace() XPED_CONST
 {
     assert(derived().coupledDomain() == derived().coupledCodomain());
     Scalar out = 0.;
@@ -25,40 +25,40 @@ typename XpedTraits<Derived>::Scalar XpedBase<Derived>::trace() XPED_CONST
 }
 
 template <typename Derived>
-typename XpedTraits<Derived>::Scalar XpedBase<Derived>::squaredNorm() XPED_CONST
+typename TensorTraits<Derived>::Scalar TensorBase<Derived>::squaredNorm() XPED_CONST
 {
     return (*this * this->adjoint()).trace();
 }
 
 template <typename Derived>
-XPED_CONST AdjointOp<Derived> XpedBase<Derived>::adjoint() XPED_CONST
+XPED_CONST AdjointOp<Derived> TensorBase<Derived>::adjoint() XPED_CONST
 {
     return AdjointOp<Derived>(derived());
 }
 
 template <typename Derived>
-XPED_CONST ScaledOp<Derived> XpedBase<Derived>::operator*(const Scalar scale) const
+XPED_CONST ScaledOp<Derived> TensorBase<Derived>::operator*(const Scalar scale) const
 {
     return ScaledOp<Derived>(derived(), scale);
 }
 
 template <typename Derived>
 template <typename OtherDerived>
-Xped<typename XpedTraits<Derived>::Scalar,
-     XpedTraits<Derived>::Rank,
-     XpedTraits<typename std::remove_const<std::remove_reference_t<OtherDerived>>::type>::CoRank,
-     typename XpedTraits<Derived>::Symmetry,
-     typename XpedTraits<Derived>::PlainLib>
-XpedBase<Derived>::operator*(OtherDerived&& other) XPED_CONST
+Tensor<typename TensorTraits<Derived>::Scalar,
+     TensorTraits<Derived>::Rank,
+     TensorTraits<typename std::remove_const<std::remove_reference_t<OtherDerived>>::type>::CoRank,
+     typename TensorTraits<Derived>::Symmetry,
+     typename TensorTraits<Derived>::PlainLib>
+TensorBase<Derived>::operator*(OtherDerived&& other) XPED_CONST
 {
     typedef typename std::remove_const<std::remove_reference_t<OtherDerived>>::type OtherDerived_;
-    static_assert(CoRank == XpedTraits<OtherDerived_>::Rank);
+    static_assert(CoRank == TensorTraits<OtherDerived_>::Rank);
     auto derived_ref = derived();
     auto other_derived_ref = other.derived();
     assert(derived_ref.world() == other_derived_ref.world());
     assert(derived_ref.coupledCodomain() == other_derived_ref.coupledDomain());
 
-    Xped<Scalar, Rank, XpedTraits<OtherDerived_>::CoRank, Symmetry, PlainLib> Tout;
+    Tensor<Scalar, Rank, TensorTraits<OtherDerived_>::CoRank, Symmetry, PlainLib> Tout;
     Tout.world_ = derived_ref.world();
     Tout.domain = derived_ref.coupledDomain();
     Tout.codomain = other_derived_ref.coupledCodomain();

@@ -56,9 +56,9 @@ else()
     ${XPED_DIR}/src/Core/Qbasis.cpp
     ${XPED_DIR}/src/Core/FusionTree.cpp
     ${XPED_DIR}/src/Core/treepair.cpp
-    ${XPED_DIR}/src/Core/XpedBase.cpp
-    ${XPED_DIR}/src/Core/XpedHelper.cpp
-    ${XPED_DIR}/src/Core/Xped.cpp
+    ${XPED_DIR}/src/Core/TensorBase.cpp
+    ${XPED_DIR}/src/Core/TensorHelper.cpp
+    ${XPED_DIR}/src/Core/Tensor.cpp
     ${XPED_DIR}/src/Util/Mpi.cpp
     ${XPED_DIR}/src/MPS/Mps.cpp
     ${XPED_DIR}/src/MPS/MpsAlgebra.cpp

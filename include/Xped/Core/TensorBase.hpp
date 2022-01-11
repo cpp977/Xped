@@ -4,7 +4,7 @@
 #include "Xped/Interfaces/PlainInterface.hpp"
 
 template <typename Derived>
-struct XpedTraits
+struct TensorTraits
 {};
 
 // forward declarations
@@ -15,21 +15,21 @@ template <typename XprType>
 class ScaledOp;
 
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename PlainLib>
-class Xped;
+class Tensor;
 
 template <typename Derived>
-class XpedBase
+class TensorBase
 {
 public:
-    typedef typename XpedTraits<Derived>::Scalar Scalar;
-    typedef typename XpedTraits<Derived>::Symmetry Symmetry;
-    typedef typename XpedTraits<Derived>::PlainLib PlainLib;
-    typedef typename XpedTraits<Derived>::MatrixType MatrixType;
-    typedef typename XpedTraits<Derived>::TensorType TensorType;
-    typedef typename XpedTraits<Derived>::VectorType VectorType;
+    typedef typename TensorTraits<Derived>::Scalar Scalar;
+    typedef typename TensorTraits<Derived>::Symmetry Symmetry;
+    typedef typename TensorTraits<Derived>::PlainLib PlainLib;
+    typedef typename TensorTraits<Derived>::MatrixType MatrixType;
+    typedef typename TensorTraits<Derived>::TensorType TensorType;
+    typedef typename TensorTraits<Derived>::VectorType VectorType;
 
-    static constexpr std::size_t Rank = XpedTraits<Derived>::Rank;
-    static constexpr std::size_t CoRank = XpedTraits<Derived>::CoRank;
+    static constexpr std::size_t Rank = TensorTraits<Derived>::Rank;
+    static constexpr std::size_t CoRank = TensorTraits<Derived>::CoRank;
     typedef typename PlainLib::template MapTType<Scalar, Rank + CoRank> TensorMapType;
     typedef typename PlainLib::template cMapTType<Scalar, Rank + CoRank> TensorcMapType;
     typedef typename PlainLib::Indextype IndexType;
@@ -39,11 +39,11 @@ public:
     XPED_CONST AdjointOp<Derived> adjoint() XPED_CONST;
 
     template <typename OtherDerived>
-    Xped<typename XpedTraits<Derived>::Scalar,
-         XpedTraits<Derived>::Rank,
-         XpedTraits<typename std::remove_const<std::remove_reference_t<OtherDerived>>::type>::CoRank,
-         typename XpedTraits<Derived>::Symmetry,
-         typename XpedTraits<Derived>::PlainLib>
+    Tensor<typename TensorTraits<Derived>::Scalar,
+           TensorTraits<Derived>::Rank,
+           TensorTraits<typename std::remove_const<std::remove_reference_t<OtherDerived>>::type>::CoRank,
+           typename TensorTraits<Derived>::Symmetry,
+           typename TensorTraits<Derived>::PlainLib>
     operator*(OtherDerived&& other) XPED_CONST;
 
     Scalar trace() XPED_CONST;
@@ -52,20 +52,20 @@ public:
 
     inline Scalar norm() XPED_CONST { return std::sqrt(squaredNorm()); }
 
-    inline Xped<Scalar, Rank, CoRank, Symmetry, PlainLib> eval() const { return Xped<Scalar, Rank, CoRank, Symmetry, PlainLib>(derived()); };
+    inline Tensor<Scalar, Rank, CoRank, Symmetry, PlainLib> eval() const { return Tensor<Scalar, Rank, CoRank, Symmetry, PlainLib>(derived()); };
 
 protected:
     template <typename Scalar, std::size_t Rank__, std::size_t CoRank__, typename Symmetry__, typename PlainLib__>
-    friend class Xped;
+    friend class Tensor;
     template <typename OtherDerived>
-    friend class XpedBase;
+    friend class TensorBase;
 
     inline const Derived& derived() const { return *static_cast<const Derived*>(this); }
     inline Derived& derived() { return *static_cast<Derived*>(this); }
 };
 
 #ifndef XPED_COMPILED_LIB
-#    include "Core/XpedBase.cpp"
+#    include "Core/TensorBase.cpp"
 #endif
 
 #endif

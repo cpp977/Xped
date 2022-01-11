@@ -3,13 +3,13 @@
 
 #include "Xped/Core/Qbasis.hpp"
 
-#include "XpedBase.hpp"
+#include "TensorBase.hpp"
 
 template <typename XprType>
 class AdjointOp;
 
 template <typename XprType>
-struct XpedTraits<AdjointOp<XprType>>
+struct TensorTraits<AdjointOp<XprType>>
 {
     static constexpr std::size_t Rank = XprType::corank();
     static constexpr std::size_t CoRank = XprType::rank();
@@ -22,7 +22,7 @@ struct XpedTraits<AdjointOp<XprType>>
 };
 
 template <typename XprType>
-class AdjointOp : public XpedBase<AdjointOp<XprType>>
+class AdjointOp : public TensorBase<AdjointOp<XprType>>
 {
 public:
     static inline constexpr std::size_t Rank = XprType::corank();

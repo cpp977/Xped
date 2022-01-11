@@ -2,7 +2,7 @@
 #define MPS_H_
 
 #include "Xped/Core/ScalarTraits.hpp"
-#include "Xped/Core/Xped.hpp"
+#include "Xped/Core/Tensor.hpp"
 
 template <typename TL, typename TR, typename TC>
 struct GaugeTriple
@@ -28,11 +28,11 @@ public:
     typedef Scalar_ Scalar;
     typedef typename ScalarTraits<Scalar>::Real RealScalar;
     typedef typename Symmetry::qType qType;
-    typedef Xped<Scalar, 2, 1, Symmetry> ALType;
+    typedef Tensor<Scalar, 2, 1, Symmetry> ALType;
     typedef typename ALType::TensorType TensorType;
     typedef typename ALType::MatrixType MatrixType;
     typedef typename ALType::VectorType VectorType;
-    typedef Xped<Scalar, 1, 2, Symmetry> ARType;
+    typedef Tensor<Scalar, 1, 2, Symmetry> ARType;
 
     constexpr static std::size_t Nq = Symmetry::Nq;
 

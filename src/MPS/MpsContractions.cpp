@@ -7,14 +7,14 @@
 #include "Xped/Symmetry/U1.hpp"
 
 template <typename Scalar, typename Symmetry, typename PlainLib>
-void contract_L(XPED_CONST Xped<Scalar, 1, 1, Symmetry, PlainLib>& Bold,
-                XPED_CONST Xped<Scalar, 2, 1, Symmetry, PlainLib>& Bra,
-                XPED_CONST Xped<Scalar, 2, 1, Symmetry, PlainLib>& Ket,
-                Xped<Scalar, 1, 1, Symmetry, PlainLib>& Bnew)
+void contract_L(XPED_CONST Tensor<Scalar, 1, 1, Symmetry, PlainLib>& Bold,
+                XPED_CONST Tensor<Scalar, 2, 1, Symmetry, PlainLib>& Bra,
+                XPED_CONST Tensor<Scalar, 2, 1, Symmetry, PlainLib>& Ket,
+                Tensor<Scalar, 1, 1, Symmetry, PlainLib>& Bnew)
 {
     SPDLOG_INFO("Entering contract_L().");
     Bnew.clear();
-    Bnew = Xped<Scalar, 1, 1, Symmetry, PlainLib>({{Bra.uncoupledCodomain()[0]}}, {{Ket.uncoupledCodomain()[0]}}, *Bold.world());
+    Bnew = Tensor<Scalar, 1, 1, Symmetry, PlainLib>({{Bra.uncoupledCodomain()[0]}}, {{Ket.uncoupledCodomain()[0]}}, *Bold.world());
 
     for(std::size_t i = 0; i < Bra.sector().size(); i++) {
         std::size_t dimQ = PlainLib::template cols<Scalar>(Bra.block_[i]);
@@ -57,14 +57,14 @@ void contract_L(XPED_CONST Xped<Scalar, 1, 1, Symmetry, PlainLib>& Bold,
 }
 
 template <typename Scalar, typename Symmetry, typename PlainLib>
-void contract_R(XPED_CONST Xped<Scalar, 1, 1, Symmetry, PlainLib>& Bold,
-                XPED_CONST Xped<Scalar, 2, 1, Symmetry, PlainLib>& Bra,
-                XPED_CONST Xped<Scalar, 2, 1, Symmetry, PlainLib>& Ket,
-                Xped<Scalar, 1, 1, Symmetry, PlainLib>& Bnew)
+void contract_R(XPED_CONST Tensor<Scalar, 1, 1, Symmetry, PlainLib>& Bold,
+                XPED_CONST Tensor<Scalar, 2, 1, Symmetry, PlainLib>& Bra,
+                XPED_CONST Tensor<Scalar, 2, 1, Symmetry, PlainLib>& Ket,
+                Tensor<Scalar, 1, 1, Symmetry, PlainLib>& Bnew)
 {
     SPDLOG_INFO("Entering contract_R().");
     Bnew.clear();
-    Bnew = Xped<Scalar, 1, 1, Symmetry, PlainLib>({{Ket.uncoupledDomain()[0]}}, {{Bra.uncoupledDomain()[0]}}, *Bold.world());
+    Bnew = Tensor<Scalar, 1, 1, Symmetry, PlainLib>({{Ket.uncoupledDomain()[0]}}, {{Bra.uncoupledDomain()[0]}}, *Bold.world());
 
     for(std::size_t i = 0; i < Ket.sector().size(); i++) {
         std::size_t dimQ = PlainLib::template cols<Scalar>(Ket.block_[i]);

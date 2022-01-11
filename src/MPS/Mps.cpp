@@ -31,7 +31,7 @@ Mps<Scalar_, Symmetry_>::Mps(std::size_t L,
     gen_maxBasis();
     gen_auxBasis(Mmax_in, Nqmax_in);
     for(size_t l = 0; l < N_sites; l++) {
-        A.Ac[l] = Xped<Scalar, 2, 1, Symmetry>({{inBasis(l), locBasis(l)}}, {{outBasis(l)}});
+        A.Ac[l] = Tensor<Scalar, 2, 1, Symmetry>({{inBasis(l), locBasis(l)}}, {{outBasis(l)}});
         A.Ac[l].setRandom();
     }
 }
@@ -180,8 +180,8 @@ void Mps<Scalar_, Symmetry_>::leftSweepStep(const std::size_t loc, const DMRG::B
     if(loc != 0) { RETURN_SPEC = true; }
     double entropy;
     std::map<qType, VectorType> SVspec_;
-    Xped<Scalar, 1, 1, Symmetry> left;
-    Xped<Scalar, 2, 1, Symmetry> right;
+    Tensor<Scalar, 1, 1, Symmetry> left;
+    Tensor<Scalar, 2, 1, Symmetry> right;
     auto [U, Sigma, Vdag] = A.Ac[loc].template permute<+1, 0, 2, 1>().tSVD(max_Nsv, eps_svd, truncWeight[loc], entropy, SVspec_, false, RETURN_SPEC);
     // std::cout << Sigma << std::endl;
     if(loc != this->N_sites - 1) {
@@ -203,8 +203,8 @@ void Mps<Scalar_, Symmetry_>::rightSweepStep(const std::size_t loc, const DMRG::
     if(loc != N_sites - 1) { RETURN_SPEC = true; }
     double entropy;
     std::map<qType, VectorType> SVspec_;
-    Xped<Scalar, 2, 1, Symmetry> left;
-    Xped<Scalar, 1, 1, Symmetry> right;
+    Tensor<Scalar, 2, 1, Symmetry> left;
+    Tensor<Scalar, 1, 1, Symmetry> right;
     SPDLOG_INFO("Set up pre stuff.");
     auto [U, Sigma, Vdag] = A.Ac[loc].tSVD(max_Nsv, eps_svd, truncWeight[loc], entropy, SVspec_, false, RETURN_SPEC);
     SPDLOG_INFO("Applied the svd.");

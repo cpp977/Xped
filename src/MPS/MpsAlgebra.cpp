@@ -15,9 +15,9 @@ typename Symmetry::Scalar dot(XPED_CONST Mps<Scalar, Symmetry>& Bra, XPED_CONST 
     assert(Bra.length() == Ket.length());
     SPDLOG_INFO("Entering dot()");
     if(DIR == DMRG::DIRECTION::RIGHT) {
-        Xped<Scalar, 1, 1, Symmetry> B({{Ket.inBasis(0)}}, {{Bra.inBasis(0)}});
+        Tensor<Scalar, 1, 1, Symmetry> B({{Ket.inBasis(0)}}, {{Bra.inBasis(0)}});
         B.setIdentity();
-        Xped<Scalar, 1, 1, Symmetry> Bnext;
+        Tensor<Scalar, 1, 1, Symmetry> Bnext;
         for(size_t l = 0; l < Bra.length(); l++) {
             // Bnext = (Bra.A.Ac[l].adjoint().eval().template permute<-1, 0, 2, 1>() * B).template permute<+1, 0, 2, 1>() * Ket.A.Ac[l];
             // Bnext = (Bra.A.Ac[l].template permute<+1, 0, 1, 2>().adjoint() * B).template permute<+1, 1, 2, 0>() * Ket.A.Ac[l];
@@ -29,9 +29,9 @@ typename Symmetry::Scalar dot(XPED_CONST Mps<Scalar, Symmetry>& Bra, XPED_CONST 
         SPDLOG_INFO("Leaving dot()");
         return B.norm();
     } else {
-        Xped<Scalar, 1, 1, Symmetry> B({{Ket.outBasis(Ket.length() - 1)}}, {{Bra.outBasis(Bra.length() - 1)}});
+        Tensor<Scalar, 1, 1, Symmetry> B({{Ket.outBasis(Ket.length() - 1)}}, {{Bra.outBasis(Bra.length() - 1)}});
         B.setIdentity();
-        Xped<Scalar, 1, 1, Symmetry> Bnext;
+        Tensor<Scalar, 1, 1, Symmetry> Bnext;
         for(size_t l = Bra.length() - 1; l > 0; l--) {
             // Bnext = (Ket.A.Ac[l] * B).template permute<+1, 0, 1, 2>() * (Bra.A.Ac[l].adjoint().eval().template permute<-1, 2, 0, 1>());
             // Bnext = (Ket.A.Ac[l] * B).template permute<+1, 0, 1, 2>() * (Bra.A.Ac[l].template permute<+1, 0, 1, 2>().adjoint());

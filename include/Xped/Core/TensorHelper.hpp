@@ -15,7 +15,7 @@ Qbasis<Symmetry, Rank> build_FusionTree(const std::array<Qbasis<Symmetry, 1>, Ra
 } // namespace XpedHelper
 
 #ifndef XPED_COMPILED_LIB
-#    include "Core/XpedHelper.cpp"
+#    include "Core/TensorHelper.cpp"
 #endif
 // template <typename MatrixType_>
 // MatrixType_ zero_init()

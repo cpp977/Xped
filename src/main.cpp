@@ -41,7 +41,7 @@ XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100)
 #include "Xped/Symmetry/kind_dummies.hpp"
 
 #include "Xped/Core/AdjointOp.hpp"
-#include "Xped/Core/Xped.hpp"
+#include "Xped/Core/Tensor.hpp"
 #include "Xped/MPS/Mps.hpp"
 #include "Xped/MPS/MpsAlgebra.hpp"
 
@@ -108,7 +108,7 @@ int main(int argc, char* argv[])
     in.setRandom(Minit);
     std::cout << in << std::endl;
     auto out = in.combine(in).forgetHistory();
-    Xped<double, 2, 1, Symmetry> T({{in, in}}, {{out}});
+    Tensor<double, 2, 1, Symmetry> T({{in, in}}, {{out}});
     T.setRandom();
     auto F = T.permute<0, 2, 0, 1>();
     auto X = T * T.adjoint();

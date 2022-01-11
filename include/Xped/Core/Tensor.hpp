@@ -12,15 +12,15 @@
 #include "Xped/Core/FusionTree.hpp"
 #include "Xped/Core/Qbasis.hpp"
 #include "Xped/Core/ScalarTraits.hpp"
-#include "Xped/Core/XpedTypedefs.hpp"
+#include "Xped/Core/TensorTypedefs.hpp"
 #include "Xped/Core/treepair.hpp"
 #include "Xped/Interfaces/PlainInterface.hpp"
 
-#include "Xped/Core/XpedBase.hpp"
-#include "Xped/Core/XpedHelper.hpp"
+#include "Xped/Core/TensorBase.hpp"
+#include "Xped/Core/TensorHelper.hpp"
 
 template <typename Scalar_, std::size_t Rank_, std::size_t CoRank_, typename Symmetry_, typename PlainLib_>
-struct XpedTraits<Xped<Scalar_, Rank_, CoRank_, Symmetry_, PlainLib_>>
+struct TensorTraits<Tensor<Scalar_, Rank_, CoRank_, Symmetry_, PlainLib_>>
 {
     static constexpr std::size_t Rank = Rank_;
     static constexpr std::size_t CoRank = CoRank_;
@@ -34,18 +34,20 @@ struct XpedTraits<Xped<Scalar_, Rank_, CoRank_, Symmetry_, PlainLib_>>
 };
 
 template <typename Scalar_, std::size_t Rank, std::size_t CoRank, typename Symmetry_, typename PlainLib_ = XPED_DEFAULT_PLAININTERFACE>
-class Xped : public XpedBase<Xped<Scalar_, Rank, CoRank, Symmetry_, PlainLib_>>
+class Tensor : public TensorBase<Tensor<Scalar_, Rank, CoRank, Symmetry_, PlainLib_>>
 {
     template <typename Derived>
-    friend class XpedBase;
+    friend class TensorBase;
 
     template <typename Scalar__, std::size_t Rank_, std::size_t CoRank_, typename Symmetry__, typename PlainLib__>
-    friend Xped<Scalar__, Rank_, CoRank_, Symmetry__, PlainLib__> operator+(XPED_CONST Xped<Scalar__, Rank_, CoRank_, Symmetry__, PlainLib__>& T1,
-                                                                            XPED_CONST Xped<Scalar__, Rank_, CoRank_, Symmetry__, PlainLib__>& T2);
+    friend Tensor<Scalar__, Rank_, CoRank_, Symmetry__, PlainLib__>
+    operator+(XPED_CONST Tensor<Scalar__, Rank_, CoRank_, Symmetry__, PlainLib__>& T1,
+              XPED_CONST Tensor<Scalar__, Rank_, CoRank_, Symmetry__, PlainLib__>& T2);
 
     template <typename Scalar__, std::size_t Rank_, std::size_t CoRank_, typename Symmetry__, typename PlainLib__>
-    friend Xped<Scalar__, Rank_, CoRank_, Symmetry__, PlainLib__> operator-(XPED_CONST Xped<Scalar__, Rank_, CoRank_, Symmetry__, PlainLib__>& T1,
-                                                                            XPED_CONST Xped<Scalar__, Rank_, CoRank_, Symmetry__, PlainLib__>& T2);
+    friend Tensor<Scalar__, Rank_, CoRank_, Symmetry__, PlainLib__>
+    operator-(XPED_CONST Tensor<Scalar__, Rank_, CoRank_, Symmetry__, PlainLib__>& T1,
+              XPED_CONST Tensor<Scalar__, Rank_, CoRank_, Symmetry__, PlainLib__>& T2);
 
 public:
     typedef Scalar_ Scalar;
@@ -66,20 +68,20 @@ public:
     typedef typename Plain::template MapTType<Scalar, Rank + CoRank> TensorMapType;
     typedef typename Plain::template cMapTType<Scalar, Rank + CoRank> TensorcMapType;
 
-    typedef Xped<Scalar, Rank, CoRank, Symmetry, PlainLib> Self;
+    typedef Tensor<Scalar, Rank, CoRank, Symmetry, PlainLib> Self;
 
     /**Does nothing.*/
-    Xped(){};
+    Tensor(){};
 
     // Xped(const Xped& other) = default;
     // Xped(Xped&& other) = default;
 
-    Xped(const std::array<Qbasis<Symmetry, 1>, Rank> basis_domain,
-         const std::array<Qbasis<Symmetry, 1>, CoRank> basis_codomain,
-         util::mpi::XpedWorld& world = util::mpi::getUniverse());
+    Tensor(const std::array<Qbasis<Symmetry, 1>, Rank> basis_domain,
+           const std::array<Qbasis<Symmetry, 1>, CoRank> basis_codomain,
+           util::mpi::XpedWorld& world = util::mpi::getUniverse());
 
     template <typename OtherDerived>
-    inline Xped(const XpedBase<OtherDerived>& other);
+    inline Tensor(const TensorBase<OtherDerived>& other);
 
     static constexpr std::size_t rank() { return Rank; }
     static constexpr std::size_t corank() { return CoRank; }
@@ -159,9 +161,11 @@ public:
     // Scalar norm() const { return std::sqrt(squaredNorm()); }
 
     template <int shift, std::size_t...>
-    Xped<Scalar, Rank - shift, CoRank + shift, Symmetry, PlainLib_> permute() const;
+    Tensor<Scalar, Rank - shift, CoRank + shift, Symmetry, PlainLib_> permute() const;
 
-    std::tuple<Xped<Scalar, Rank, 1, Symmetry, PlainLib_>, Xped<RealScalar, 1, 1, Symmetry, PlainLib_>, Xped<Scalar, 1, CoRank, Symmetry, PlainLib_>>
+    std::tuple<Tensor<Scalar, Rank, 1, Symmetry, PlainLib_>,
+               Tensor<RealScalar, 1, 1, Symmetry, PlainLib_>,
+               Tensor<Scalar, 1, CoRank, Symmetry, PlainLib_>>
     tSVD(size_t maxKeep,
          RealScalar eps_svd,
          RealScalar& truncWeight,
@@ -170,7 +174,9 @@ public:
          bool PRESERVE_MULTIPLETS = true,
          bool RETURN_SPEC = true) XPED_CONST;
 
-    std::tuple<Xped<Scalar, Rank, 1, Symmetry, PlainLib_>, Xped<RealScalar, 1, 1, Symmetry, PlainLib_>, Xped<Scalar, 1, CoRank, Symmetry, PlainLib_>>
+    std::tuple<Tensor<Scalar, Rank, 1, Symmetry, PlainLib_>,
+               Tensor<RealScalar, 1, 1, Symmetry, PlainLib_>,
+               Tensor<Scalar, 1, CoRank, Symmetry, PlainLib_>>
     tSVD(size_t maxKeep, RealScalar eps_svd, RealScalar& truncWeight, bool PRESERVE_MULTIPLETS = true) XPED_CONST
     {
         RealScalar S_dumb;
@@ -205,12 +211,12 @@ public:
     Self permute_impl(seq::iseq<std::size_t, p_domain...> pd, seq::iseq<std::size_t, p_codomain...> pc) const;
 
     template <int shift, std::size_t... ps>
-    Xped<Scalar, Rank - shift, CoRank + shift, Symmetry, PlainLib_> permute_impl(seq::iseq<std::size_t, ps...> per) const;
+    Tensor<Scalar, Rank - shift, CoRank + shift, Symmetry, PlainLib_> permute_impl(seq::iseq<std::size_t, ps...> per) const;
 };
 
 template <typename Scalar_, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename PlainLib_>
 template <typename OtherDerived>
-Xped<Scalar_, Rank, CoRank, Symmetry, PlainLib_>::Xped(const XpedBase<OtherDerived>& other)
+Tensor<Scalar_, Rank, CoRank, Symmetry, PlainLib_>::Tensor(const TensorBase<OtherDerived>& other)
 {
     sector_ = other.derived().sector();
     block_.resize(sector_.size());
@@ -224,7 +230,7 @@ Xped<Scalar_, Rank, CoRank, Symmetry, PlainLib_>::Xped(const XpedBase<OtherDeriv
 }
 
 #ifndef XPED_COMPILED_LIB
-#    include "Core/Xped.cpp"
+#    include "Core/Tensor.cpp"
 #endif
 
 #endif

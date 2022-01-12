@@ -16,14 +16,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        compiler: [g++-10, clang++]
+        compiler: [g++-10, clang++-12]
         LIBCXX: [ON, OFF]
         TENSOR_LIB: [Eigen, Array, Cyclops]
         exclude:
           # excludes libcxx for g++
           - compiler: g++-10
             LIBCXX: ON
-          - compiler: clang++
+          - compiler: clang++-12
             TENSOR_LIB: Cyclops
             LIBCXX: ON
         include:
@@ -66,10 +66,10 @@ jobs:
     - run: sudo apt-get install g++-10
     - run: sudo apt-get install gcc-10
     - run: sudo apt-get install gfortran-10
-    - run: sudo apt-get install libc++abi1-11
-    - run: sudo apt-get install libc++1-11
-    - run: sudo apt-get install libc++-11-dev
-    - run: sudo apt-get install libc++abi-11-dev
+    - run: sudo apt-get install libc++abi1-12
+    - run: sudo apt-get install libc++1-12
+    - run: sudo apt-get install libc++-12-dev
+    - run: sudo apt-get install libc++abi-12-dev
     - run: sudo apt-get install libgsl-dev
     - run: sudo apt-get install libgslcblas0
     - run: sudo apt-get install libboost-all-dev
@@ -78,7 +78,6 @@ jobs:
     - run: sudo apt-get install liblapacke-dev
     - run: sudo apt-get install libomp-dev
 
-    - run: clang++ --version
     - run: clang++-12 --version
     - run: g++-10 --version
     - name: Create Build Environment

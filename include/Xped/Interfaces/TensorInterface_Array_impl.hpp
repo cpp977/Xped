@@ -88,7 +88,7 @@ struct TensorInterface<ArrayTensorLib>
     template <typename Scalar, std::size_t Rank>
     static void setRandom(TType<Scalar, Rank>& T)
     {
-        T.for_each_value([](Scalar& d) { d = util::random::threadSafeRandUniform<Scalar, Scalar>(-1., 1.); });
+        T.for_each_value([](Scalar& d) { d = random::threadSafeRandUniform<Scalar, Scalar>(-1., 1.); });
     }
 
     template <typename Scalar, std::size_t Rank>

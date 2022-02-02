@@ -64,16 +64,18 @@ const std::string XPED_BLAS_STR = "None";
 
 // clang-format off
 #define XPED_INIT_TREE_CACHE_VARIABLE(VARIABLE_NAME, CACHE_SIZE) \
+namespace Xped {\
 template <std::size_t Rank, typename Symmetry> \
 struct FusionTree; \
+}\
 struct Permutation; \
 template <int shift, std::size_t Rank, std::size_t CoRank, typename Symmetry> \
 struct CacheManager \
 { \
-    typedef FusionTree<CoRank, Symmetry> CoTree; \
-    typedef FusionTree<CoRank + shift, Symmetry> NewCoTree; \
-    typedef FusionTree<Rank, Symmetry> Tree; \
-    typedef FusionTree<Rank - shift, Symmetry> NewTree; \
+ typedef Xped::FusionTree<CoRank, Symmetry> CoTree;         \
+    typedef Xped::FusionTree<CoRank + shift, Symmetry> NewCoTree; \
+    typedef Xped::FusionTree<Rank, Symmetry> Tree; \
+    typedef Xped::FusionTree<Rank - shift, Symmetry> NewTree; \
     typedef typename Symmetry::Scalar Scalar; \
     typedef LRU::Cache<std::tuple<Tree, CoTree, Permutation>, std::unordered_map<std::pair<NewTree, NewCoTree>, Scalar>> CacheType; \
     CacheManager(std::size_t cache_size) \

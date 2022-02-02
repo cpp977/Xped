@@ -14,7 +14,10 @@ template <typename XprType>
 class AdjointOp;
 
 template <typename XprType>
-class ScaledOp;
+class CoeffUnaryOp;
+
+template <typename XprType>
+class DiagCoeffUnaryOp;
 
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename PlainLib>
 class Tensor;
@@ -36,9 +39,16 @@ public:
     typedef typename PlainLib::template cMapTType<Scalar, Rank + CoRank> TensorcMapType;
     typedef typename PlainLib::Indextype IndexType;
 
-    XPED_CONST ScaledOp<Derived> operator*(const Scalar scale) const;
-
     XPED_CONST AdjointOp<Derived> adjoint() XPED_CONST;
+
+    XPED_CONST CoeffUnaryOp<Derived> unaryExpr(const std::function<Scalar(Scalar)>& coeff_func) XPED_CONST;
+
+    XPED_CONST CoeffUnaryOp<Derived> sqrt() XPED_CONST;
+    XPED_CONST CoeffUnaryOp<Derived> operator*(const Scalar scale) const;
+
+    XPED_CONST DiagCoeffUnaryOp<Derived> diagUnaryExpr(const std::function<Scalar(Scalar)>& coeff_func) XPED_CONST;
+
+    XPED_CONST DiagCoeffUnaryOp<Derived> diag_inv() XPED_CONST;
 
     template <typename OtherDerived>
     Tensor<typename TensorTraits<Derived>::Scalar,
@@ -46,7 +56,7 @@ public:
            TensorTraits<typename std::remove_const<std::remove_reference_t<OtherDerived>>::type>::CoRank,
            typename TensorTraits<Derived>::Symmetry,
            typename TensorTraits<Derived>::PlainLib>
-    operator*(OtherDerived&& other) XPED_CONST;
+    operator*(const TensorBase<OtherDerived>& other) XPED_CONST;
 
     Scalar trace() XPED_CONST;
 
@@ -56,14 +66,17 @@ public:
 
     inline Tensor<Scalar, Rank, CoRank, Symmetry, PlainLib> eval() const { return Tensor<Scalar, Rank, CoRank, Symmetry, PlainLib>(derived()); };
 
+    inline const Derived& derived() const { return *static_cast<const Derived*>(this); }
+    inline Derived& derived() { return *static_cast<Derived*>(this); }
+
 protected:
     template <typename Scalar, std::size_t Rank__, std::size_t CoRank__, typename Symmetry__, typename PlainLib__>
     friend class Tensor;
     template <typename OtherDerived>
     friend class TensorBase;
 
-    inline const Derived& derived() const { return *static_cast<const Derived*>(this); }
-    inline Derived& derived() { return *static_cast<Derived*>(this); }
+    // inline const Derived& derived() const { return *static_cast<const Derived*>(this); }
+    // inline Derived& derived() { return *static_cast<Derived*>(this); }
 };
 
 } // namespace Xped

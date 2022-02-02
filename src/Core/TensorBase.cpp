@@ -7,7 +7,8 @@
 #include "Xped/Symmetry/U1.hpp"
 
 #include "Xped/Core/AdjointOp.hpp"
-#include "Xped/Core/ScaledOp.hpp"
+#include "Xped/Core/CoeffUnaryOp.hpp"
+#include "Xped/Core/DiagCoeffUnaryOp.hpp"
 #include "Xped/Core/Tensor.hpp"
 
 #include "Xped/Core/TensorBase.hpp"
@@ -39,9 +40,33 @@ XPED_CONST AdjointOp<Derived> TensorBase<Derived>::adjoint() XPED_CONST
 }
 
 template <typename Derived>
-XPED_CONST ScaledOp<Derived> TensorBase<Derived>::operator*(const Scalar scale) const
+XPED_CONST CoeffUnaryOp<Derived> TensorBase<Derived>::unaryExpr(const std::function<Scalar(Scalar)>& coeff_func) XPED_CONST
 {
-    return ScaledOp<Derived>(derived(), scale);
+    return CoeffUnaryOp<Derived>(derived(), coeff_func);
+}
+
+template <typename Derived>
+XPED_CONST CoeffUnaryOp<Derived> TensorBase<Derived>::operator*(const Scalar scale) const
+{
+    return unaryExpr([scale](const Scalar s) { return scale * s; });
+}
+
+template <typename Derived>
+XPED_CONST CoeffUnaryOp<Derived> TensorBase<Derived>::sqrt() XPED_CONST
+{
+    return unaryExpr([](const Scalar s) { return std::sqrt(s); });
+}
+
+template <typename Derived>
+XPED_CONST DiagCoeffUnaryOp<Derived> TensorBase<Derived>::diagUnaryExpr(const std::function<Scalar(Scalar)>& coeff_func) XPED_CONST
+{
+    return DiagCoeffUnaryOp<Derived>(derived(), coeff_func);
+}
+
+template <typename Derived>
+XPED_CONST DiagCoeffUnaryOp<Derived> TensorBase<Derived>::diag_inv() XPED_CONST
+{
+    return diagUnaryExpr([](const Scalar s) { return 1. / s; });
 }
 
 template <typename Derived>
@@ -51,7 +76,7 @@ Tensor<typename TensorTraits<Derived>::Scalar,
        TensorTraits<typename std::remove_const<std::remove_reference_t<OtherDerived>>::type>::CoRank,
        typename TensorTraits<Derived>::Symmetry,
        typename TensorTraits<Derived>::PlainLib>
-TensorBase<Derived>::operator*(OtherDerived&& other) XPED_CONST
+TensorBase<Derived>::operator*(const TensorBase<OtherDerived>& other) XPED_CONST
 {
     typedef typename std::remove_const<std::remove_reference_t<OtherDerived>>::type OtherDerived_;
     static_assert(CoRank == TensorTraits<OtherDerived_>::Rank);
@@ -77,6 +102,11 @@ TensorBase<Derived>::operator*(OtherDerived&& other) XPED_CONST
         auto it = other_dict.find(derived_ref.sector(i));
         if(it == other_dict.end()) { continue; }
         // Tout.push_back(derived_ref.sector(i), Plain::template prod<Scalar>(derived_ref.block(i), other_derived_ref.block(it->second)));
+        // SPDLOG_CRITICAL("({},{})x({},{})",
+        //                 derived_ref.block(i).rows(),
+        //                 derived_ref.block(i).cols(),
+        //                 other_derived_ref.block(it->second).rows(),
+        //                 other_derived_ref.block(it->second).cols());
         Tout.push_back(derived_ref.sector(i), PlainLib::template prod<Scalar>(derived_ref.block(i), other_derived_ref.block(it->second)));
         // Tout.block_[i] = T1.block_[i] * T2.block_[it->second];
     }

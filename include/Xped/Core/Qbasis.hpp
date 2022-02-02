@@ -54,6 +54,8 @@ public:
         for(const auto& qin : qins) { push_back(qin, dim); }
     }
 
+    static Qbasis<Symmetry, 1> TrivialBasis();
+
     ///\{
     /**Returns the number of (reduced) basis states.*/
     inline std::size_t dim() const

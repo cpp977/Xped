@@ -1,4 +1,6 @@
 #include <iostream>
+#include <variant>
+#include <vector>
 
 #include "Xped/Symmetry/functions.hpp"
 #include "Xped/Util/Random.hpp"
@@ -14,6 +16,14 @@ using std::endl;
 using std::size_t;
 
 namespace Xped {
+
+template <typename Symmetry, std::size_t depth>
+Qbasis<Symmetry, 1> Qbasis<Symmetry, depth>::TrivialBasis()
+{
+    Qbasis<Symmetry, 1> out;
+    out.push_back(Symmetry::qvacuum(), 1);
+    return out;
+}
 
 template <typename Symmetry, std::size_t depth>
 void Qbasis<Symmetry, depth>::push_back(const qType& q, const size_t& inner_dim)
@@ -277,6 +287,7 @@ void Qbasis<Symmetry, depth>::truncate(const std::unordered_set<qType>& qs, cons
 template <typename Symmetry, std::size_t depth>
 void Qbasis<Symmetry, depth>::sort()
 {
+    if(data_.size() < 2) { return; }
     std::vector<std::size_t> index_sort(data_.size());
     std::iota(index_sort.begin(), index_sort.end(), 0);
     std::sort(index_sort.begin(), index_sort.end(), [&](std::size_t n1, std::size_t n2) {
@@ -302,6 +313,19 @@ void Qbasis<Symmetry, depth>::sort()
 template <typename Symmetry, std::size_t depth>
 bool Qbasis<Symmetry, depth>::operator==(const Qbasis<Symmetry, depth>& other) const
 {
+    // std::cout << "this tree" << std::endl;
+    // for(const auto& [q, tree] : this->trees) {
+    //     std::cout << "Q=" << q << std::endl;
+    //     for(const auto& t : tree) { std::cout << t.draw() << std::endl; }
+    //     std::cout << std::endl;
+    // }
+    // std::cout << "other tree" << std::endl;
+    // for(const auto& [q, tree] : other.trees) {
+    //     std::cout << "Q=" << q << std::endl;
+    //     for(const auto& t : tree) { std::cout << t.draw() << std::endl; }
+    //     std::cout << std::endl;
+    // }
+    // std::cout << std::boolalpha << (this->data_ == other.data_) << ", " << (this->trees == other.trees) << std::endl;
     return (this->data_ == other.data_) and (this->trees == other.trees);
 }
 
@@ -432,7 +456,7 @@ template <typename Symmetry, std::size_t depth>
 tabulate::Table Qbasis<Symmetry, depth>::print() const
 {
     tabulate::Table t;
-    using Row_t = std::vector<variant<std::string, const char*, tabulate::Table>>;
+    using Row_t = std::vector<std::variant<std::string, const char*, tabulate::Table>>;
     t.add_row(Row_t({"Q", "Dim(Q)", "num"}));
     for(const auto& entry : data_) {
         auto [q_Phys, curr_num, plain] = entry;

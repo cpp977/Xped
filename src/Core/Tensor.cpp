@@ -1,6 +1,7 @@
 #include <iostream>
 #include <sstream>
 #include <unordered_set>
+// #include <utility>
 
 #include "spdlog/spdlog.h"
 
@@ -302,7 +303,7 @@ Tensor<Scalar_, Rank, CoRank, Symmetry, PlainLib_>::permute_impl(seq::iseq<std::
     Tensor<Scalar, newRank, newCoRank, Symmetry, PlainLib_> out;
     out.world_ = this->world_;
     for(std::size_t i = 0; i < newRank; i++) {
-        if(p.pi[i] > Rank - 1) {
+        if(p.pi[i] > Rank - 1 or Rank == 0) {
             out.uncoupled_domain[i] = uncoupled_codomain[p.pi[i] - Rank].conj();
         } else {
             out.uncoupled_domain[i] = uncoupled_domain[p.pi[i]];
@@ -310,7 +311,7 @@ Tensor<Scalar_, Rank, CoRank, Symmetry, PlainLib_>::permute_impl(seq::iseq<std::
     }
 
     for(std::size_t i = 0; i < newCoRank; i++) {
-        if(p.pi[i + newRank] > Rank - 1) {
+        if(p.pi[i + newRank] > Rank - 1 or Rank == 0) {
             out.uncoupled_codomain[i] = uncoupled_codomain[p.pi[i + newRank] - Rank];
         } else {
             out.uncoupled_codomain[i] = uncoupled_domain[p.pi[i + newRank]].conj();
@@ -394,6 +395,8 @@ template <typename Scalar_, std::size_t Rank, std::size_t CoRank, typename Symme
 template <int shift, std::size_t... p>
 Tensor<Scalar_, Rank - shift, CoRank + shift, Symmetry, PlainLib_> Tensor<Scalar_, Rank, CoRank, Symmetry, PlainLib_>::permute() const
 {
+    // static_assert(std::cmp_greater_equal(Rank, shift), "Invalid call to permute()"); c++-20
+    // static_assert(std::cmp_greater_equal(CoRank, -shift), "Invalid call to permute()"); c++-20
     using s = seq::iseq<std::size_t, p...>;
     using p_domain = seq::take<Rank - shift, s>;
     using p_codomain = seq::after<Rank - shift, s>;
@@ -503,10 +506,11 @@ Tensor<Scalar_, Rank, CoRank, Symmetry, PlainLib_>::tSVD(size_t maxKeep,
     std::map<typename Symmetry::qType, std::vector<Scalar>> qn_orderedSV;
     Qbasis<Symmetry, 1> truncBasis;
     for(const auto& [q, s] : allSV) {
-        truncBasis.push_back(q, 1ul);
+        // truncBasis.push_back(q, 1ul);
         qn_orderedSV[q].push_back(s);
         entropy += -Symmetry::degeneracy(q) * s * s * std::log(s * s);
     }
+    for(const auto& [q, vec_sv] : qn_orderedSV) { truncBasis.push_back(q, vec_sv.size()); }
     SPDLOG_INFO("Set up the truncated basis.");
     std::stringstream ss;
     ss << truncBasis.print();
@@ -536,10 +540,10 @@ Tensor<Scalar_, Rank, CoRank, Symmetry, PlainLib_>::tSVD(size_t maxKeep,
         auto itU = U.dict_.find({q});
         trunc_U.push_back(q, Plain::template block(U.block_[itU->second], 0, 0, Plain::rows(U.block_[itU->second]), Nret));
         auto itVdag = Vdag.dict_.find({q});
-        trunc_Vdag.push_back(q, Plain::template block(Vdag.block_[itVdag->second], 0, 0, Nret, Plain::cols(U.block_[itU->second])));
+        trunc_Vdag.push_back(q, Plain::template block(Vdag.block_[itVdag->second], 0, 0, Nret, Plain::cols(Vdag.block_[itVdag->second])));
     }
     SPDLOG_INFO("Leaving Xped::tSVD()");
-    return std::make_tuple(U, Sigma, Vdag);
+    return std::make_tuple(trunc_U, trunc_Sigma, trunc_Vdag);
 }
 
 // template<std::size_t Rank, std::size_t CoRank, typename Symmetry, typename MatrixLib_, typename TensorLib_>
@@ -918,11 +922,11 @@ void Tensor<Scalar_, Rank, CoRank, Symmetry, PlainLib_>::print(std::ostream& o, 
     o << "codomain:" << endl << codomain << endl; // << "with trees:" << endl << codomain.printTrees() << endl;
     for(size_t i = 0; i < sector_.size(); i++) {
         o << "Sector with QN=" << Sym::format<Symmetry>(sector_[i]) << endl;
-        // if(PRINT_MATRICES) {
-        // o << std::fixed << block_[i] << endl;
-        // block_[i].print_matrix();
-        //     // Plain::template print<Scalar>(block_[i]);
-        // }
+        if(PRINT_MATRICES) {
+            // o << std::fixed << std::setprecision(12) << block_[i].diagonal() << endl;
+            // block_[i].print_matrix();
+            // Plain::template print<Scalar>(block_[i]);
+        }
     }
     // return ss;
 }

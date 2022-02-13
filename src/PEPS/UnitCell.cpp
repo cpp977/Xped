@@ -1,3 +1,7 @@
+#include <cassert>
+#include <string>
+#include <vector>
+
 #include "Xped/PEPS/UnitCell.hpp"
 
 namespace Xped {
@@ -6,7 +10,7 @@ UnitCell::UnitCell(const std::size_t Lx, const std::size_t Ly)
     : Lx(Lx)
     , Ly(Ly)
 {
-    string alphabet = "abcdefghijklmnopqrstuvwxyz";
+    std::string alphabet = "abcdefghijklmnopqrstuvwxyz";
     assert(Lx * Ly < alphabet.size());
     std::vector<std::vector<char>> pat(Lx);
     for(auto& row : pat) { row.resize(Ly); }

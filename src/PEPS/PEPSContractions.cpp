@@ -1,5 +1,13 @@
 #include "Xped/PEPS/PEPSContractions.hpp"
 
+#include "Xped/Core/AdjointOp.hpp"
+#include "Xped/Core/CoeffUnaryOp.hpp"
+#include "Xped/Core/DiagCoeffUnaryOp.hpp"
+
+#include "Xped/Symmetry/SU2.hpp"
+#include "Xped/Symmetry/U0.hpp"
+#include "Xped/Symmetry/U1.hpp"
+
 namespace Xped {
 
 template <typename Derived1, typename Derived2>

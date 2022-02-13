@@ -2,6 +2,12 @@
 
 #include "Xped/PEPS/iPEPS.hpp"
 
+#include "Xped/Core/AdjointOp.hpp"
+
+#include "Xped/Symmetry/SU2.hpp"
+#include "Xped/Symmetry/U0.hpp"
+#include "Xped/Symmetry/U1.hpp"
+
 namespace Xped {
 
 template <typename Scalar, typename Symmetry>

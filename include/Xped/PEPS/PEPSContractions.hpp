@@ -10,7 +10,7 @@ namespace Xped {
 template <typename Derived1, typename Derived2>
 std::pair<Tensor<typename TensorTraits<Derived1>::Scalar, 1, 3, typename TensorTraits<Derived1>::Symmetry>,
           Tensor<typename TensorTraits<Derived1>::Scalar, 3, 1, typename TensorTraits<Derived1>::Symmetry>>
-decompose(const TensorBase<Derived1>& T1, const TensorBase<Derived2>& T2, const std::size_t max_nsv);
+decompose(XPED_CONST TensorBase<Derived1>& T1, XPED_CONST TensorBase<Derived2>& T2, const std::size_t max_nsv);
 }
 
 #ifndef XPED_COMPILED_LIB

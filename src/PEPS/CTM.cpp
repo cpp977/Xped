@@ -73,11 +73,11 @@ void CTM<Scalar, Symmetry>::init(const iPEPS<Scalar, Symmetry>& A)
 }
 
 template <typename Scalar, typename Symmetry>
-void CTM<Scalar, Symmetry>::solve(const iPEPS<Scalar, Symmetry>& A)
+void CTM<Scalar, Symmetry>::solve(XPED_CONST iPEPS<Scalar, Symmetry>& A)
 {
     info();
     for(std::size_t step = 0; step < opts.max_iter; ++step) {
-        std::cout << "Step=" << step << std::endl;
+        SPDLOG_CRITICAL("Step={}", step);
         left_move(A);
         right_move(A);
         top_move(A);
@@ -104,7 +104,7 @@ void CTM<Scalar, Symmetry>::info() const
 }
 
 template <typename Scalar, typename Symmetry>
-void CTM<Scalar, Symmetry>::left_move(const iPEPS<Scalar, Symmetry>& A)
+void CTM<Scalar, Symmetry>::left_move(XPED_CONST iPEPS<Scalar, Symmetry>& A)
 {
     TMatrix<Tensor<Scalar, 1, 3, Symmetry>> P1(cell.pattern);
     TMatrix<Tensor<Scalar, 3, 1, Symmetry>> P2(cell.pattern);
@@ -132,29 +132,29 @@ void CTM<Scalar, Symmetry>::left_move(const iPEPS<Scalar, Symmetry>& A)
             assert(C1s.isChanged(x, y) == T4s.isChanged(x, y) and C1s.isChanged(x, y) == C4s.isChanged(x, y));
             if(C1s.isChanged(x, y)) { continue; }
             C1s(x, y) = std::as_const(C1_new)(x, y);
-            SPDLOG_INFO("site: ({},{})\tC1new: ([{}],[{}⊗{}])",
-                        x,
-                        y,
-                        C1s(x, y).coupledDomain().dim(),
-                        C1s(x, y).uncoupledCodomain()[0].dim(),
-                        C1s(x, y).uncoupledCodomain()[1].dim());
+            SPDLOG_CRITICAL("site: ({},{})\tC1new: ([{}],[{}⊗{}])",
+                            x,
+                            y,
+                            C1s(x, y).coupledDomain().dim(),
+                            C1s(x, y).uncoupledCodomain()[0].dim(),
+                            C1s(x, y).uncoupledCodomain()[1].dim());
             T4s(x, y) = std::as_const(T4_new)(x, y);
-            SPDLOG_INFO("site: ({},{})\tT4new: ([{}],[{}⊗{}⊗{}])",
-                        x,
-                        y,
-                        T4s(x, y).coupledDomain().dim(),
-                        T4s(x, y).uncoupledCodomain()[0].dim(),
-                        T4s(x, y).uncoupledCodomain()[1].dim(),
-                        T4s(x, y).uncoupledCodomain()[2].dim());
+            SPDLOG_CRITICAL("site: ({},{})\tT4new: ([{}],[{}⊗{}⊗{}])",
+                            x,
+                            y,
+                            T4s(x, y).coupledDomain().dim(),
+                            T4s(x, y).uncoupledCodomain()[0].dim(),
+                            T4s(x, y).uncoupledCodomain()[1].dim(),
+                            T4s(x, y).uncoupledCodomain()[2].dim());
 
             C4s(x, y) = std::as_const(C4_new)(x, y);
-            SPDLOG_INFO("site: ({},{})\tC4new: ([{}],[{}])", x, y, C4s(x, y).uncoupledDomain()[0].dim(), C4s(x, y).uncoupledCodomain()[0].dim());
+            SPDLOG_CRITICAL("site: ({},{})\tC4new: ([{}],[{}])", x, y, C4s(x, y).uncoupledDomain()[0].dim(), C4s(x, y).uncoupledCodomain()[0].dim());
         }
     }
 }
 
 template <typename Scalar, typename Symmetry>
-void CTM<Scalar, Symmetry>::right_move(const iPEPS<Scalar, Symmetry>& A)
+void CTM<Scalar, Symmetry>::right_move(XPED_CONST iPEPS<Scalar, Symmetry>& A)
 {
     TMatrix<Tensor<Scalar, 1, 3, Symmetry>> P1(cell.pattern);
     TMatrix<Tensor<Scalar, 3, 1, Symmetry>> P2(cell.pattern);
@@ -182,28 +182,28 @@ void CTM<Scalar, Symmetry>::right_move(const iPEPS<Scalar, Symmetry>& A)
             assert(C2s.isChanged(x, y) == T2s.isChanged(x, y) and C2s.isChanged(x, y) == C3s.isChanged(x, y));
             if(C2s.isChanged(x, y)) { continue; }
             C2s(x, y) = std::as_const(C2_new)(x, y);
-            SPDLOG_INFO("site: ({},{})\tC2new: ([{}],[{}])", x, y, C2s(x, y).uncoupledDomain()[0].dim(), C2s(x, y).uncoupledCodomain()[0].dim());
+            SPDLOG_CRITICAL("site: ({},{})\tC2new: ([{}],[{}])", x, y, C2s(x, y).uncoupledDomain()[0].dim(), C2s(x, y).uncoupledCodomain()[0].dim());
             T2s(x, y) = std::as_const(T2_new)(x, y);
-            SPDLOG_INFO("site: ({},{})\tT2new: ([{}],[{}⊗{}⊗{}])",
-                        x,
-                        y,
-                        T2s(x, y).uncoupledDomain()[0].dim(),
-                        T2s(x, y).uncoupledDomain()[1].dim(),
-                        T2s(x, y).uncoupledDomain()[2].dim(),
-                        T2s(x, y).coupledCodomain().dim());
+            SPDLOG_CRITICAL("site: ({},{})\tT2new: ([{}],[{}⊗{}⊗{}])",
+                            x,
+                            y,
+                            T2s(x, y).uncoupledDomain()[0].dim(),
+                            T2s(x, y).uncoupledDomain()[1].dim(),
+                            T2s(x, y).uncoupledDomain()[2].dim(),
+                            T2s(x, y).coupledCodomain().dim());
             C3s(x, y) = std::as_const(C3_new)(x, y);
-            SPDLOG_INFO("site: ({},{})\tC3new: ([{}⊗{}],[{}])",
-                        x,
-                        y,
-                        C3s(x, y).uncoupledDomain()[0].dim(),
-                        C3s(x, y).uncoupledDomain()[1].dim(),
-                        C3s(x, y).coupledCodomain().dim());
+            SPDLOG_CRITICAL("site: ({},{})\tC3new: ([{}⊗{}],[{}])",
+                            x,
+                            y,
+                            C3s(x, y).uncoupledDomain()[0].dim(),
+                            C3s(x, y).uncoupledDomain()[1].dim(),
+                            C3s(x, y).coupledCodomain().dim());
         }
     }
 }
 
 template <typename Scalar, typename Symmetry>
-void CTM<Scalar, Symmetry>::top_move(const iPEPS<Scalar, Symmetry>& A)
+void CTM<Scalar, Symmetry>::top_move(XPED_CONST iPEPS<Scalar, Symmetry>& A)
 {
     TMatrix<Tensor<Scalar, 1, 3, Symmetry>> P1(cell.pattern);
     TMatrix<Tensor<Scalar, 3, 1, Symmetry>> P2(cell.pattern);
@@ -231,28 +231,28 @@ void CTM<Scalar, Symmetry>::top_move(const iPEPS<Scalar, Symmetry>& A)
             assert(C1s.isChanged(x, y) == C2s.isChanged(x, y) and C1s.isChanged(x, y) == T1s.isChanged(x, y));
             if(C1s.isChanged(x, y)) { continue; }
             C1s(x, y) = std::as_const(C1_new)(x, y);
-            SPDLOG_INFO("site: ({},{})\tC1new: ([{}],[{}⊗{}])",
-                        x,
-                        y,
-                        C1s(x, y).coupledDomain().dim(),
-                        C1s(x, y).uncoupledCodomain()[0].dim(),
-                        C1s(x, y).uncoupledCodomain()[1].dim());
+            SPDLOG_CRITICAL("site: ({},{})\tC1new: ([{}],[{}⊗{}])",
+                            x,
+                            y,
+                            C1s(x, y).coupledDomain().dim(),
+                            C1s(x, y).uncoupledCodomain()[0].dim(),
+                            C1s(x, y).uncoupledCodomain()[1].dim());
             T1s(x, y) = std::as_const(T1_new)(x, y);
-            SPDLOG_INFO("site: ({},{})\tT1new: ([{}],[{}⊗{}⊗{}])",
-                        x,
-                        y,
-                        T1s(x, y).coupledDomain().dim(),
-                        T1s(x, y).uncoupledCodomain()[0].dim(),
-                        T1s(x, y).uncoupledCodomain()[1].dim(),
-                        T1s(x, y).uncoupledCodomain()[2].dim());
+            SPDLOG_CRITICAL("site: ({},{})\tT1new: ([{}],[{}⊗{}⊗{}])",
+                            x,
+                            y,
+                            T1s(x, y).coupledDomain().dim(),
+                            T1s(x, y).uncoupledCodomain()[0].dim(),
+                            T1s(x, y).uncoupledCodomain()[1].dim(),
+                            T1s(x, y).uncoupledCodomain()[2].dim());
             C2s(x, y) = std::as_const(C2_new)(x, y);
-            SPDLOG_INFO("site: ({},{})\tC2new: ([{}],[{}])", x, y, C2s(x, y).uncoupledDomain()[0].dim(), C2s(x, y).uncoupledCodomain()[0].dim());
+            SPDLOG_CRITICAL("site: ({},{})\tC2new: ([{}],[{}])", x, y, C2s(x, y).uncoupledDomain()[0].dim(), C2s(x, y).uncoupledCodomain()[0].dim());
         }
     }
 }
 
 template <typename Scalar, typename Symmetry>
-void CTM<Scalar, Symmetry>::bottom_move(const iPEPS<Scalar, Symmetry>& A)
+void CTM<Scalar, Symmetry>::bottom_move(XPED_CONST iPEPS<Scalar, Symmetry>& A)
 {
     TMatrix<Tensor<Scalar, 1, 3, Symmetry>> P1(cell.pattern);
     TMatrix<Tensor<Scalar, 3, 1, Symmetry>> P2(cell.pattern);
@@ -280,29 +280,29 @@ void CTM<Scalar, Symmetry>::bottom_move(const iPEPS<Scalar, Symmetry>& A)
             assert(C4s.isChanged(x, y) == C3s.isChanged(x, y) and C4s.isChanged(x, y) == T3s.isChanged(x, y));
             if(C4s.isChanged(x, y)) { continue; }
             C4s(x, y) = std::as_const(C4_new)(x, y);
-            SPDLOG_INFO("site: ({},{})\tC4new: ([{}],[{}])", x, y, C4s(x, y).uncoupledDomain()[0].dim(), C4s(x, y).uncoupledCodomain()[0].dim());
+            SPDLOG_CRITICAL("site: ({},{})\tC4new: ([{}],[{}])", x, y, C4s(x, y).uncoupledDomain()[0].dim(), C4s(x, y).uncoupledCodomain()[0].dim());
             T3s(x, y) = std::as_const(T3_new)(x, y);
-            SPDLOG_INFO("site: ({},{})\tT3new: ([{}],[{}⊗{}⊗{}])",
-                        x,
-                        y,
-                        T3s(x, y).uncoupledDomain()[0].dim(),
-                        T3s(x, y).uncoupledDomain()[1].dim(),
-                        T3s(x, y).uncoupledDomain()[2].dim(),
-                        T3s(x, y).coupledCodomain().dim());
+            SPDLOG_CRITICAL("site: ({},{})\tT3new: ([{}],[{}⊗{}⊗{}])",
+                            x,
+                            y,
+                            T3s(x, y).uncoupledDomain()[0].dim(),
+                            T3s(x, y).uncoupledDomain()[1].dim(),
+                            T3s(x, y).uncoupledDomain()[2].dim(),
+                            T3s(x, y).coupledCodomain().dim());
             C3s(x, y) = std::as_const(C3_new)(x, y);
-            SPDLOG_INFO("site: ({},{})\tC3new: ([{}⊗{}],[{}])",
-                        x,
-                        y,
-                        C3s(x, y).uncoupledDomain()[0].dim(),
-                        C3s(x, y).uncoupledDomain()[1].dim(),
-                        C3s(x, y).coupledCodomain().dim());
+            SPDLOG_CRITICAL("site: ({},{})\tC3new: ([{}⊗{}],[{}])",
+                            x,
+                            y,
+                            C3s(x, y).uncoupledDomain()[0].dim(),
+                            C3s(x, y).uncoupledDomain()[1].dim(),
+                            C3s(x, y).coupledCodomain().dim());
         }
     }
 }
 
 template <typename Scalar, typename Symmetry>
 std::pair<Tensor<Scalar, 1, 3, Symmetry>, Tensor<Scalar, 3, 1, Symmetry>>
-CTM<Scalar, Symmetry>::get_projectors(const int x, const int y, const iPEPS<Scalar, Symmetry>& A, const DIRECTION dir) const
+CTM<Scalar, Symmetry>::get_projectors(const int x, const int y, XPED_CONST iPEPS<Scalar, Symmetry>& A, const DIRECTION dir) XPED_CONST
 {
     Tensor<Scalar, 1, 3, Symmetry> P1;
     Tensor<Scalar, 3, 1, Symmetry> P2;
@@ -432,9 +432,9 @@ template <typename Scalar, typename Symmetry>
 std::tuple<Tensor<Scalar, 0, 2, Symmetry>, Tensor<Scalar, 1, 3, Symmetry>, Tensor<Scalar, 1, 1, Symmetry>>
 CTM<Scalar, Symmetry>::renormalize_left(const int x,
                                         const int y,
-                                        const iPEPS<Scalar, Symmetry>& A,
-                                        const TMatrix<Tensor<Scalar, 1, 3, Symmetry>>& P1,
-                                        const TMatrix<Tensor<Scalar, 3, 1, Symmetry>>& P2) const
+                                        XPED_CONST iPEPS<Scalar, Symmetry>& A,
+                                        XPED_CONST TMatrix<Tensor<Scalar, 1, 3, Symmetry>>& P1,
+                                        XPED_CONST TMatrix<Tensor<Scalar, 3, 1, Symmetry>>& P2) XPED_CONST
 {
     Tensor<Scalar, 0, 2, Symmetry> C1_new;
     Tensor<Scalar, 1, 3, Symmetry> T4_new;
@@ -458,9 +458,9 @@ template <typename Scalar, typename Symmetry>
 std::tuple<Tensor<Scalar, 1, 1, Symmetry>, Tensor<Scalar, 3, 1, Symmetry>, Tensor<Scalar, 2, 0, Symmetry>>
 CTM<Scalar, Symmetry>::renormalize_right(const int x,
                                          const int y,
-                                         const iPEPS<Scalar, Symmetry>& A,
-                                         const TMatrix<Tensor<Scalar, 1, 3, Symmetry>>& P1,
-                                         const TMatrix<Tensor<Scalar, 3, 1, Symmetry>>& P2) const
+                                         XPED_CONST iPEPS<Scalar, Symmetry>& A,
+                                         XPED_CONST TMatrix<Tensor<Scalar, 1, 3, Symmetry>>& P1,
+                                         XPED_CONST TMatrix<Tensor<Scalar, 3, 1, Symmetry>>& P2) XPED_CONST
 {
     Tensor<Scalar, 1, 1, Symmetry> C2_new;
     Tensor<Scalar, 3, 1, Symmetry> T2_new;
@@ -484,9 +484,9 @@ template <typename Scalar, typename Symmetry>
 std::tuple<Tensor<Scalar, 0, 2, Symmetry>, Tensor<Scalar, 1, 3, Symmetry>, Tensor<Scalar, 1, 1, Symmetry>>
 CTM<Scalar, Symmetry>::renormalize_top(const int x,
                                        const int y,
-                                       const iPEPS<Scalar, Symmetry>& A,
-                                       const TMatrix<Tensor<Scalar, 1, 3, Symmetry>>& P1,
-                                       const TMatrix<Tensor<Scalar, 3, 1, Symmetry>>& P2) const
+                                       XPED_CONST iPEPS<Scalar, Symmetry>& A,
+                                       XPED_CONST TMatrix<Tensor<Scalar, 1, 3, Symmetry>>& P1,
+                                       XPED_CONST TMatrix<Tensor<Scalar, 3, 1, Symmetry>>& P2) XPED_CONST
 {
     Tensor<Scalar, 0, 2, Symmetry> C1_new;
     Tensor<Scalar, 1, 3, Symmetry> T1_new;
@@ -509,9 +509,9 @@ template <typename Scalar, typename Symmetry>
 std::tuple<Tensor<Scalar, 1, 1, Symmetry>, Tensor<Scalar, 3, 1, Symmetry>, Tensor<Scalar, 2, 0, Symmetry>>
 CTM<Scalar, Symmetry>::renormalize_bottom(const int x,
                                           const int y,
-                                          const iPEPS<Scalar, Symmetry>& A,
-                                          const TMatrix<Tensor<Scalar, 1, 3, Symmetry>>& P1,
-                                          const TMatrix<Tensor<Scalar, 3, 1, Symmetry>>& P2) const
+                                          XPED_CONST iPEPS<Scalar, Symmetry>& A,
+                                          XPED_CONST TMatrix<Tensor<Scalar, 1, 3, Symmetry>>& P1,
+                                          XPED_CONST TMatrix<Tensor<Scalar, 3, 1, Symmetry>>& P2) XPED_CONST
 {
     Tensor<Scalar, 1, 1, Symmetry> C4_new;
     Tensor<Scalar, 3, 1, Symmetry> T3_new;
@@ -534,7 +534,7 @@ CTM<Scalar, Symmetry>::renormalize_bottom(const int x,
 
 template <typename Scalar, typename Symmetry>
 Tensor<Scalar, 3, 3, Symmetry>
-CTM<Scalar, Symmetry>::contractCorner(const int x, const int y, const iPEPS<Scalar, Symmetry>& A, const CORNER corner) const
+CTM<Scalar, Symmetry>::contractCorner(const int x, const int y, XPED_CONST iPEPS<Scalar, Symmetry>& A, const CORNER corner) XPED_CONST
 {
     Tensor<Scalar, 3, 3, Symmetry> Q;
     switch(corner) {

@@ -59,7 +59,7 @@ public:
     {}
 
     // void setAs(std::shared_ptr<const iPEPS<Symmetry, Scalar>>& As);
-    void solve(const iPEPS<Scalar, Symmetry>& A);
+    void solve(XPED_CONST iPEPS<Scalar, Symmetry>& A);
     void init(const iPEPS<Scalar, Symmetry>& A);
 
     void info() const;
@@ -85,44 +85,44 @@ private:
 
     std::pair<Tensor<Scalar, 3, 3, Symmetry>, Tensor<Scalar, 1, 1, Symmetry>> get_projectors_left(const iPEPS<Scalar, Symmetry>& A);
 
-    void left_move(const iPEPS<Scalar, Symmetry>& A);
-    void right_move(const iPEPS<Scalar, Symmetry>& A);
-    void top_move(const iPEPS<Scalar, Symmetry>& A);
-    void bottom_move(const iPEPS<Scalar, Symmetry>& A);
-    void symmetric_move(const iPEPS<Scalar, Symmetry>& A);
+    void left_move(XPED_CONST iPEPS<Scalar, Symmetry>& A);
+    void right_move(XPED_CONST iPEPS<Scalar, Symmetry>& A);
+    void top_move(XPED_CONST iPEPS<Scalar, Symmetry>& A);
+    void bottom_move(XPED_CONST iPEPS<Scalar, Symmetry>& A);
+    void symmetric_move(XPED_CONST iPEPS<Scalar, Symmetry>& A);
 
-    Tensor<Scalar, 3, 3, Symmetry> contractCorner(const int x, const int y, const iPEPS<Scalar, Symmetry>& A, const CORNER corner) const;
+    Tensor<Scalar, 3, 3, Symmetry> contractCorner(const int x, const int y, XPED_CONST iPEPS<Scalar, Symmetry>& A, const CORNER corner) XPED_CONST;
 
     std::pair<Tensor<Scalar, 1, 3, Symmetry>, Tensor<Scalar, 3, 1, Symmetry>>
-    get_projectors(const int x, const int y, const iPEPS<Scalar, Symmetry>& A, const DIRECTION dir) const;
+    get_projectors(const int x, const int y, XPED_CONST iPEPS<Scalar, Symmetry>& A, const DIRECTION dir) XPED_CONST;
 
     std::tuple<Tensor<Scalar, 0, 2, Symmetry>, Tensor<Scalar, 1, 3, Symmetry>, Tensor<Scalar, 1, 1, Symmetry>>
     renormalize_left(const int x,
                      const int y,
-                     const iPEPS<Scalar, Symmetry>& A,
-                     const TMatrix<Tensor<Scalar, 1, 3, Symmetry>>& P1,
-                     const TMatrix<Tensor<Scalar, 3, 1, Symmetry>>& P2) const;
+                     XPED_CONST iPEPS<Scalar, Symmetry>& A,
+                     XPED_CONST TMatrix<Tensor<Scalar, 1, 3, Symmetry>>& P1,
+                     XPED_CONST TMatrix<Tensor<Scalar, 3, 1, Symmetry>>& P2) XPED_CONST;
 
     std::tuple<Tensor<Scalar, 1, 1, Symmetry>, Tensor<Scalar, 3, 1, Symmetry>, Tensor<Scalar, 2, 0, Symmetry>>
     renormalize_right(const int x,
                       const int y,
-                      const iPEPS<Scalar, Symmetry>& A,
-                      const TMatrix<Tensor<Scalar, 1, 3, Symmetry>>& P1,
-                      const TMatrix<Tensor<Scalar, 3, 1, Symmetry>>& P2) const;
+                      XPED_CONST iPEPS<Scalar, Symmetry>& A,
+                      XPED_CONST TMatrix<Tensor<Scalar, 1, 3, Symmetry>>& P1,
+                      XPED_CONST TMatrix<Tensor<Scalar, 3, 1, Symmetry>>& P2) XPED_CONST;
 
     std::tuple<Tensor<Scalar, 0, 2, Symmetry>, Tensor<Scalar, 1, 3, Symmetry>, Tensor<Scalar, 1, 1, Symmetry>>
     renormalize_top(const int x,
                     const int y,
-                    const iPEPS<Scalar, Symmetry>& A,
-                    const TMatrix<Tensor<Scalar, 1, 3, Symmetry>>& P1,
-                    const TMatrix<Tensor<Scalar, 3, 1, Symmetry>>& P2) const;
+                    XPED_CONST iPEPS<Scalar, Symmetry>& A,
+                    XPED_CONST TMatrix<Tensor<Scalar, 1, 3, Symmetry>>& P1,
+                    XPED_CONST TMatrix<Tensor<Scalar, 3, 1, Symmetry>>& P2) XPED_CONST;
 
     std::tuple<Tensor<Scalar, 1, 1, Symmetry>, Tensor<Scalar, 3, 1, Symmetry>, Tensor<Scalar, 2, 0, Symmetry>>
     renormalize_bottom(const int x,
                        const int y,
-                       const iPEPS<Scalar, Symmetry>& A,
-                       const TMatrix<Tensor<Scalar, 1, 3, Symmetry>>& P1,
-                       const TMatrix<Tensor<Scalar, 3, 1, Symmetry>>& P2) const;
+                       XPED_CONST iPEPS<Scalar, Symmetry>& A,
+                       XPED_CONST TMatrix<Tensor<Scalar, 1, 3, Symmetry>>& P1,
+                       XPED_CONST TMatrix<Tensor<Scalar, 3, 1, Symmetry>>& P2) XPED_CONST;
 };
 
 } // namespace Xped

@@ -1,3 +1,5 @@
+#include <cassert>
+
 #include "Xped/PEPS/Pattern.hpp"
 
 namespace Xped {
@@ -75,6 +77,12 @@ tabulate::Table Pattern::print() const
     outer.add_row({pat_table});
     outer.format().font_style({tabulate::FontStyle::bold}).border_top(" ").border_bottom(" ").border_left(" ").border_right(" ").corner(" ");
     return outer;
+}
+
+std::ostream& operator<<(std::ostream& os, const Pattern& pat)
+{
+    os << pat.print();
+    return os;
 }
 
 } // namespace Xped

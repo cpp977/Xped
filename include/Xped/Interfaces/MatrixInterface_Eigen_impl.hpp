@@ -86,6 +86,18 @@ struct MatrixInterface<EigenMatrixLib>
     template <typename Scalar>
     static void scale(MType<Scalar>& M, const Scalar& val);
 
+    template <typename Scalar, typename Derived>
+    static auto unaryFunc(const Eigen::MatrixBase<Derived>& M, const std::function<Scalar(Scalar)>& func)
+    {
+        return M.unaryExpr(func);
+    }
+
+    template <typename Scalar, typename Derived>
+    static auto diagUnaryFunc(const Eigen::MatrixBase<Derived>& M, const std::function<Scalar(Scalar)>& func)
+    {
+        return M.diagonal().unaryExpr(func).asDiagonal();
+    }
+
     template <typename Scalar>
     static typename Eigen::MatrixBase<MType<Scalar>>::AdjointReturnType adjoint(const MType<Scalar>& M);
 

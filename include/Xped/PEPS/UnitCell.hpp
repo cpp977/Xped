@@ -1,7 +1,6 @@
 #ifndef XPED_UNIT_CELL_H_
 #define XPED_UNIT_CELL_H_
 
-#include <cstddef>
 #include <vector>
 
 #include "Xped/PEPS/Pattern.hpp"

@@ -113,7 +113,8 @@ int main(int argc, char* argv[])
     // in.push_back({+1}, 1);
     in.push_back({1}, 3);
     in.push_back({2}, 2);
-    std::cout << in << std::endl;
+    SPDLOG_CRITICAL("Auxiliary basis (dim={}):\n {}", in.fullDim(), in);
+    // std::cout << in << std::endl;
     Xped::Qbasis<Symmetry, 1> phys;
     phys.push_back({2}, 1);
     // phys.push_back({}, 2);
@@ -200,7 +201,8 @@ int main(int argc, char* argv[])
     // W.print(std::cout, true);
     // std::cout << std::endl << W.plainTensor() << std::endl;
     Xped::Pattern p({{'a', 'b'}, {'c', 'd'}});
-    std::cout << p << std::endl;
+    SPDLOG_CRITICAL("Pattern:\n {}", p);
+
     Xped::iPEPS<double, Symmetry> Psi(Xped::UnitCell(p), in, phys);
     // Psi.info();
     std::size_t chi = args.get<std::size_t>("chi", 100);

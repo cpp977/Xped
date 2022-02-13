@@ -63,6 +63,11 @@ else()
     ${XPED_DIR}/src/MPS/Mps.cpp
     ${XPED_DIR}/src/MPS/MpsAlgebra.cpp
     ${XPED_DIR}/src/MPS/MpsContractions.cpp
+    ${XPED_DIR}/src/PEPS/PEPSContractions.cpp
+    ${XPED_DIR}/src/PEPS/CTM.cpp
+    ${XPED_DIR}/src/PEPS/iPEPS.cpp
+    ${XPED_DIR}/src/PEPS/Pattern.cpp
+    ${XPED_DIR}/src/PEPS/UnitCell.cpp
     ${XPED_DIR}/src/Interfaces/MatrixInterface_${XPED_MATRIX_LIB}_impl.cpp
     ${XPED_DIR}/src/Interfaces/TensorInterface_${XPED_TENSOR_LIB}_impl.cpp
     ${XPED_DIR}/src/Interfaces/VectorInterface_${XPED_VECTOR_LIB}_impl.cpp

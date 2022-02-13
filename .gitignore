@@ -30,3 +30,4 @@ Makefile
 *.6j
 *.9j
 *.synctex.gz
+*.ast

@@ -287,8 +287,8 @@ CPMAddPackage(
   NAME Eigen
   DOWNLOAD_ONLY YES
   GIT_REPOSITORY https://gitlab.com/libeigen/eigen
-  # GIT_TAG 3.4.0
-  GIT_TAG master
+  GIT_TAG 3.4.0
+  # GIT_TAG master
   )
 if(Eigen_ADDED)
   add_library(Eigen INTERFACE IMPORTED)

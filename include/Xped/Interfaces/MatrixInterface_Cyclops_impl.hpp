@@ -83,6 +83,12 @@ struct MatrixInterface<CyclopsMatrixLib>
     static void scale(MType<Scalar>& M, const Scalar& val);
 
     template <typename Scalar, typename MT>
+    static MType<Scalar> unaryFunc(MT&& M, const std::function<Scalar(Scalar)>& func);
+
+    template <typename Scalar, typename MT>
+    static MType<Scalar> diagUnaryFunc(MT&& M, const std::function<Scalar(Scalar)>& func);
+
+    template <typename Scalar, typename MT>
     static MType<Scalar> adjoint(MT&& M);
 
     // template <typename Scalar>

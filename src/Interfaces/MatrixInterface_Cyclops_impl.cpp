@@ -203,6 +203,22 @@ void MatrixInterface<CyclopsMatrixLib>::scale(MType<Scalar>& M, const Scalar& va
 }
 
 template <typename Scalar, typename MT>
+MType<Scalar> MatrixInterface<CyclopsMatrixLib>::unaryFunc(MT&& M, const std::function<Scalar(Scalar)>& func)
+{
+    CTF::Function<Scalar> func_(func);
+    M["ij"] = func_(M["ij"]);
+    return M;
+}
+
+template <typename Scalar, typename MT>
+MType<Scalar> MatrixInterface<CyclopsMatrixLib>::diagUnaryFunc(MT&& M, const std::function<Scalar(Scalar)>& func)
+{
+    CTF::Function<Scalar> func_(func);
+    M["ii"] = func_(M["ii"]);
+    return M;
+}
+
+template <typename Scalar, typename MT>
 MType<Scalar> MatrixInterface<CyclopsMatrixLib>::adjoint(MT&& M)
 {
     MType<Scalar> N(M.ncol, M.nrow, *M.wrld);

@@ -46,7 +46,7 @@ XPED_CONST CoeffUnaryOp<Derived> TensorBase<Derived>::unaryExpr(const std::funct
 }
 
 template <typename Derived>
-XPED_CONST CoeffUnaryOp<Derived> TensorBase<Derived>::operator*(const Scalar scale) const
+XPED_CONST CoeffUnaryOp<Derived> TensorBase<Derived>::operator*(const Scalar scale) XPED_CONST
 {
     return unaryExpr([scale](const Scalar s) { return scale * s; });
 }
@@ -76,7 +76,7 @@ Tensor<typename TensorTraits<Derived>::Scalar,
        TensorTraits<typename std::remove_const<std::remove_reference_t<OtherDerived>>::type>::CoRank,
        typename TensorTraits<Derived>::Symmetry,
        typename TensorTraits<Derived>::PlainLib>
-TensorBase<Derived>::operator*(const TensorBase<OtherDerived>& other) XPED_CONST
+TensorBase<Derived>::operator*(XPED_CONST TensorBase<OtherDerived>& other) XPED_CONST
 {
     typedef typename std::remove_const<std::remove_reference_t<OtherDerived>>::type OtherDerived_;
     static_assert(CoRank == TensorTraits<OtherDerived_>::Rank);

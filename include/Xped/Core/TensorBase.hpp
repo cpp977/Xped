@@ -44,7 +44,7 @@ public:
     XPED_CONST CoeffUnaryOp<Derived> unaryExpr(const std::function<Scalar(Scalar)>& coeff_func) XPED_CONST;
 
     XPED_CONST CoeffUnaryOp<Derived> sqrt() XPED_CONST;
-    XPED_CONST CoeffUnaryOp<Derived> operator*(const Scalar scale) const;
+    XPED_CONST CoeffUnaryOp<Derived> operator*(const Scalar scale) XPED_CONST;
 
     XPED_CONST DiagCoeffUnaryOp<Derived> diagUnaryExpr(const std::function<Scalar(Scalar)>& coeff_func) XPED_CONST;
 
@@ -56,7 +56,19 @@ public:
            TensorTraits<typename std::remove_const<std::remove_reference_t<OtherDerived>>::type>::CoRank,
            typename TensorTraits<Derived>::Symmetry,
            typename TensorTraits<Derived>::PlainLib>
-    operator*(const TensorBase<OtherDerived>& other) XPED_CONST;
+    operator*(XPED_CONST TensorBase<OtherDerived>& other) XPED_CONST;
+
+    template <typename OtherDerived>
+    Tensor<typename TensorTraits<Derived>::Scalar,
+           TensorTraits<Derived>::Rank,
+           TensorTraits<typename std::remove_const<std::remove_reference_t<OtherDerived>>::type>::CoRank,
+           typename TensorTraits<Derived>::Symmetry,
+           typename TensorTraits<Derived>::PlainLib>
+    operator*(TensorBase<OtherDerived>&& other) XPED_CONST
+    {
+        TensorBase<OtherDerived>& tmp = other;
+        return this->operator*(tmp);
+    }
 
     Scalar trace() XPED_CONST;
 

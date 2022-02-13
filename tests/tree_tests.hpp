@@ -24,7 +24,7 @@ void test_tree_swap(const Xped::Qbasis<Symmetry, 1>& B,
                     }
                 }
                 for(const auto& [tree_check, coeff] : check) {
-		  auto coeff_ = coeff; //temporary needed because of clang compilation error
+                    auto coeff_ = coeff; // temporary needed because of clang compilation error
                     if(tree_check == tree) {
                         CHECK(coeff_ == doctest::Approx(1.));
                     } else {
@@ -63,7 +63,7 @@ void test_tree_permute(const Xped::Qbasis<Symmetry, 1>& B,
                     }
                 }
                 for(const auto& [tree_check, coeff] : check) {
-		    auto coeff_ = coeff; //temporary needed because of clang compilation error
+                    auto coeff_ = coeff; // temporary needed because of clang compilation error
                     if(tree_check == tree) {
                         CHECK(coeff_ == doctest::Approx(1.));
                     } else {
@@ -96,7 +96,7 @@ void test_tree_pair_turn(const Xped::Qbasis<Symmetry, 1>& B, const Xped::Qbasis<
                     }
                 }
                 for(const auto& [tree_check, coeff] : check) {
-		    auto coeff_ = coeff; //temporary needed because of clang compilation error
+                    auto coeff_ = coeff; // temporary needed because of clang compilation error
                     auto [t1_check, t2_check] = tree_check;
                     if(t1_check == t1 and t2_check == t2) {
                         CHECK(coeff_ == doctest::Approx(1.));
@@ -130,7 +130,7 @@ void test_tree_pair_permute(const Xped::Qbasis<Symmetry, 1>& B, const Xped::Qbas
                         }
                     }
                     for(const auto& [tree_check, coeff] : check) {
-		        auto coeff_ = coeff; //temporary needed because of clang compilation error
+                        auto coeff_ = coeff; // temporary needed because of clang compilation error
                         auto [t1_check, t2_check] = tree_check;
                         if(t1_check == t1 and t2_check == t2) {
                             CHECK(coeff_ == doctest::Approx(1.));

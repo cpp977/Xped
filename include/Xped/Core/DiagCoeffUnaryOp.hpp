@@ -52,9 +52,11 @@ public:
 
     // const std::vector<MatrixType> block() const { return refxpr_block(); }
 
-    inline const auto block(std::size_t i) const { return refxpr_.block(i).diagonal().unaryExpr(coeff_func_).asDiagonal(); }
+    inline const auto block(std::size_t i) const { return PlainLib::diagUnaryFunc(refxpr_.block(i), coeff_func_); }
+    // inline const auto block(std::size_t i) const { return refxpr_.block(i).diagonal().unaryExpr(coeff_func_).asDiagonal(); }
 
-    inline auto block(std::size_t i) { return refxpr_.block(i).diagonal().unaryExpr(coeff_func_).asDiagonal(); }
+    inline auto block(std::size_t i) { return PlainLib::diagUnaryFunc(refxpr_.block(i), coeff_func_); }
+    // inline auto block(std::size_t i) { return refxpr_.block(i).diagonal().unaryExpr(coeff_func_).asDiagonal(); }
 
     inline const std::unordered_map<qType, std::size_t> dict() const { return refxpr_.dict(); }
 

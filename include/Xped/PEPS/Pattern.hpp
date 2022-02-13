@@ -1,8 +1,7 @@
 #ifndef XPED_PATTERN_H_
 #define XPED_PATTERN_H_
 
-#include <string>
-#include <tuple>
+#include <map>
 #include <vector>
 
 #include "tabulate/table.hpp"
@@ -43,11 +42,7 @@ struct Pattern
     std::size_t Lx = 1, Ly = 1;
 };
 
-std::ostream& operator<<(std::ostream& os, const Pattern& pat)
-{
-    os << pat.print();
-    return os;
-}
+std::ostream& operator<<(std::ostream& os, const Pattern& pat);
 
 } // namespace Xped
 

@@ -38,6 +38,7 @@ Qbasis<Symmetry, 1> iPEPS<Scalar, Symmetry>::ketBasis(const int x, const int y, 
     case LEG::RIGHT: return As(x, y).uncoupledCodomain()[0]; break;
     case LEG::DOWN: return As(x, y).uncoupledCodomain()[1]; break;
     case LEG::PHYS: return As(x, y).uncoupledDomain()[2]; break;
+    default: std::terminate();
     }
 }
 
@@ -50,6 +51,7 @@ Qbasis<Symmetry, 1> iPEPS<Scalar, Symmetry>::braBasis(const int x, const int y, 
     case LEG::RIGHT: return Adags(x, y).uncoupledCodomain()[0]; break;
     case LEG::DOWN: return Adags(x, y).uncoupledCodomain()[1]; break;
     case LEG::PHYS: return Adags(x, y).uncoupledCodomain()[2]; break;
+    default: std::terminate();
     }
 }
 

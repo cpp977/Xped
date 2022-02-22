@@ -9,7 +9,7 @@ void Pattern::init()
     Lx = data.size();
     assert(Lx > 0);
     Ly = data[0].size();
-    for(const auto& row : data) { assert(row.size() == Ly); }
+    for([[maybe_unused]] const auto& row : data) { assert(row.size() == Ly); }
 
     for(int x = 0; x < Lx; x++) {
         for(int y = 0; y < Ly; y++) {

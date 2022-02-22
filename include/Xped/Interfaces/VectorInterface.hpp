@@ -20,26 +20,26 @@ struct CyclopsVectorLib
 #    define M_VECTORLIB CyclopsVectorLib
 #endif
 
-template <typename Library>
-struct VectorInterface
-{
-    // constructor (elems)
-    // constructor_with_zeros (elems)
+// template <typename Library>
+// struct VectorInterface
+// {
+// constructor (elems)
+// constructor_with_zeros (elems)
 
-    // resize(elems)
-    // length()
+// resize(elems)
+// length()
 
-    // initialization
-    // setZero
-    // setRandom
-    // setConstant
-    // setIdentity
+// initialization
+// setZero
+// setRandom
+// setConstant
+// setIdentity
 
-    // sub(off,elems) l and r value
-    // print
+// sub(off,elems) l and r value
+// print
 
-    // operations +, - , *, coefficient-wise
-};
+// operations +, - , *, coefficient-wise
+// };
 
 } // namespace Xped
 

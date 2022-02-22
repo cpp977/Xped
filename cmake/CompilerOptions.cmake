@@ -159,6 +159,12 @@ function(set_project_options project_name)
     target_compile_definitions(${project_name} INTERFACE XPED_CACHE_PERMUTE_OUTPUT=1)
   endif()
 
+  if(${XPED_STORAGE} STREQUAL "Contigous")
+    target_compile_definitions(${project_name} INTERFACE XPED_USE_CONTIGOUS_STORAGE=1)
+  elseif(${XPED_STORAGE} STREQUAL "VecOfMat")
+    target_compile_definitions(${project_name} INTERFACE XPED_USE_VECOFMAT_STORAGE=1)
+  endif()
+  
   if(${XPED_TENSOR_LIB} STREQUAL "Eigen")
     target_compile_definitions(${project_name} INTERFACE XPED_USE_EIGEN_TENSOR_LIB=1)
   elseif (${XPED_TENSOR_LIB} STREQUAL "Array")

@@ -8,8 +8,7 @@
 
 namespace Xped {
 
-template <>
-struct TensorInterface<EigenTensorLib>
+struct TensorInterface
 {
     // typedefs
     template <typename Scalar, std::size_t Rank>

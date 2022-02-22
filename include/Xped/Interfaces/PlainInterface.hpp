@@ -25,79 +25,77 @@
 #    define XPED_DEFAULT_VECTORLIB Xped::CyclopsVectorLib
 #endif
 
-#define XPED_DEFAULT_PLAININTERFACE Xped::PlainInterface<XPED_DEFAULT_MATRIXLIB, XPED_DEFAULT_TENSORLIB, XPED_DEFAULT_VECTORLIB>
-
 #include "Xped/Interfaces/MatrixInterface.hpp"
 #include "Xped/Interfaces/TensorInterface.hpp"
 #include "Xped/Interfaces/VectorInterface.hpp"
 
-namespace Xped {
+// namespace Xped {
 
-template <typename MatrixLibrary, typename TensorLibrary, typename VectorLibrary>
-struct PlainInterface
-{
-    // **********************************
-    // ******** Matrix Interface ********
-    // **********************************
+// template <typename MatrixLibrary, typename TensorLibrary, typename VectorLibrary>
+// struct PlainInterface
+// {
+// **********************************
+// ******** Matrix Interface ********
+// **********************************
 
-    // constructor (rows,cols)
-    // constructor with pointer, rows, cols <-- Interchange data with TensorLib!
+// constructor (rows,cols)
+// constructor with pointer, rows, cols <-- Interchange data with TensorLib!
 
-    // resize(rows, cols)
-    // rows(), cols()
+// resize(rows, cols)
+// rows(), cols()
 
-    // initialization
-    // setZero
-    // setRandom
-    // setConstant
-    // setIdentity
-    // static Identity
+// initialization
+// setZero
+// setRandom
+// setConstant
+// setIdentity
+// static Identity
 
-    // block(r,c,dr,dc) l and r value
-    // leftCols
-    // topRows
-    // head
-    // diagonal
+// block(r,c,dr,dc) l and r value
+// leftCols
+// topRows
+// head
+// diagonal
 
-    // svd
-    // qr
+// svd
+// qr
 
-    // data() <-- Interchange data with TensorLib!
+// data() <-- Interchange data with TensorLib!
 
-    // kroneckerProduct
+// kroneckerProduct
 
-    // print
+// print
 
-    // operations +, - , *, coefficient-wise
+// operations +, - , *, coefficient-wise
 
-    // adjoint
+// adjoint
 
-    // **********************************
-    // ******** Tensor Interface ********
-    // **********************************
+// **********************************
+// ******** Tensor Interface ********
+// **********************************
 
-    // constructor with dim array [x] [x]
-    // constructor with map [x] [x]
+// constructor with dim array [x] [x]
+// constructor with map [x] [x]
 
-    // initialization
-    // setZero [x] [x]
-    // setRandom [x] [x]
-    // setConstant [x] [x]
+// initialization
+// setZero [x] [x]
+// setRandom [x] [x]
+// setConstant [x] [x]
 
-    // contract [x] [x]
-    // shuffle [x] [x]
+// contract [x] [x]
+// shuffle [x] [x]
 
-    // lvalue methods
-    // shuffle ??? <-- not in Eigen
-    // reshape with dims [x] [x]
-    // slice [x] [x]
+// lvalue methods
+// shuffle ??? <-- not in Eigen
+// reshape with dims [x] [x]
+// slice [x] [x]
 
-    // tensorProd [x] [x]
+// tensorProd [x] [x]
 
-    // return dimensions [x] [x]
-};
+// return dimensions [x] [x]
+// };
 
-} // namespace Xped
+// } // namespace Xped
 
 #if defined XPED_USE_EIGEN_TENSOR_LIB && defined XPED_USE_EIGEN_MATRIX_LIB && defined XPED_USE_EIGEN_VECTOR_LIB
 #    include "Xped/Interfaces/PlainInterface_Eigen_impl.hpp"

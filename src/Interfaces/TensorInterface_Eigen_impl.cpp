@@ -18,63 +18,63 @@ using Indextype = Eigen::Index;
 
 // constructors
 template <typename Scalar, std::size_t Rank>
-TType<Scalar, Rank> TensorInterface<EigenTensorLib>::construct(const std::array<Indextype, Rank>& dims, mpi::XpedWorld& world)
+TType<Scalar, Rank> TensorInterface::construct(const std::array<Indextype, Rank>& dims, mpi::XpedWorld& world)
 {
     return TType<Scalar, Rank>(dims);
 }
 
 template <typename Scalar, int Rank>
-TType<Scalar, Rank> TensorInterface<EigenTensorLib>::construct(const MapTType<Scalar, Rank>& map)
+TType<Scalar, Rank> TensorInterface::construct(const MapTType<Scalar, Rank>& map)
 {
     return TType<Scalar, Rank>(map);
 }
 
 template <typename Scalar, int Rank>
-cTType<Scalar, Rank> TensorInterface<EigenTensorLib>::construct(const cMapTType<Scalar, Rank>& map)
+cTType<Scalar, Rank> TensorInterface::construct(const cMapTType<Scalar, Rank>& map)
 {
     return cTType<Scalar, Rank>(map);
 }
 
 // map constructors
 template <typename Scalar, std::size_t Rank>
-cMapTType<Scalar, Rank> TensorInterface<EigenTensorLib>::cMap(const Scalar* data, const std::array<Indextype, Rank>& dims)
+cMapTType<Scalar, Rank> TensorInterface::cMap(const Scalar* data, const std::array<Indextype, Rank>& dims)
 {
     return cMapTType<Scalar, Rank>(data, dims);
 }
 
 template <typename Scalar, std::size_t Rank>
-MapTType<Scalar, Rank> TensorInterface<EigenTensorLib>::Map(Scalar* data, const std::array<Indextype, Rank>& dims)
+MapTType<Scalar, Rank> TensorInterface::Map(Scalar* data, const std::array<Indextype, Rank>& dims)
 {
     return MapTType<Scalar, Rank>(data, dims);
 }
 
 // initialization
 template <typename Scalar, int Rank>
-void TensorInterface<EigenTensorLib>::setZero(TType<Scalar, Rank>& T)
+void TensorInterface::setZero(TType<Scalar, Rank>& T)
 {
     T.setZero();
 }
 
 template <typename Scalar, int Rank>
-void TensorInterface<EigenTensorLib>::setRandom(TType<Scalar, Rank>& T)
+void TensorInterface::setRandom(TType<Scalar, Rank>& T)
 {
     T.setRandom();
 }
 
 template <typename Scalar, int Rank>
-void TensorInterface<EigenTensorLib>::setConstant(TType<Scalar, Rank>& T, const Scalar& val)
+void TensorInterface::setConstant(TType<Scalar, Rank>& T, const Scalar& val)
 {
     T.setConstant(val);
 }
 
 template <typename Scalar, int Rank>
-void TensorInterface<EigenTensorLib>::setVal(TType<Scalar, Rank>& T, const std::array<Indextype, Rank>& index, const Scalar& val)
+void TensorInterface::setVal(TType<Scalar, Rank>& T, const std::array<Indextype, Rank>& index, const Scalar& val)
 {
     T(index) = val;
 }
 
 template <typename Scalar, int Rank>
-Scalar TensorInterface<EigenTensorLib>::getVal(const TType<Scalar, Rank>& T, const std::array<Indextype, Rank>& index)
+Scalar TensorInterface::getVal(const TType<Scalar, Rank>& T, const std::array<Indextype, Rank>& index)
 {
     if constexpr(Rank == 0) {
         return T(0);
@@ -85,20 +85,20 @@ Scalar TensorInterface<EigenTensorLib>::getVal(const TType<Scalar, Rank>& T, con
 
 // raw data
 template <typename Scalar, int Rank>
-const Scalar* TensorInterface<EigenTensorLib>::get_raw_data(const TType<Scalar, Rank>& T)
+const Scalar* TensorInterface::get_raw_data(const TType<Scalar, Rank>& T)
 {
     return T.data();
 }
 
 template <typename Scalar, int Rank>
-Scalar* TensorInterface<EigenTensorLib>::get_raw_data(TType<Scalar, Rank>& T)
+Scalar* TensorInterface::get_raw_data(TType<Scalar, Rank>& T)
 {
     return T.data();
 }
 
 // shape info
 template <typename Scalar, int Rank>
-std::array<Indextype, Rank> TensorInterface<EigenTensorLib>::dimensions(const TType<Scalar, Rank>& T)
+std::array<Indextype, Rank> TensorInterface::dimensions(const TType<Scalar, Rank>& T)
 {
     std::array<Indextype, Rank> out;
     auto dims = T.dimensions();
@@ -108,7 +108,7 @@ std::array<Indextype, Rank> TensorInterface<EigenTensorLib>::dimensions(const TT
 
 // tensorProd
 template <typename Scalar, int Rank>
-TType<Scalar, Rank> TensorInterface<EigenTensorLib>::tensorProd(const TType<Scalar, Rank>& T1, const TType<Scalar, Rank>& T2)
+TType<Scalar, Rank> TensorInterface::tensorProd(const TType<Scalar, Rank>& T1, const TType<Scalar, Rank>& T2)
 {
     typedef TType<Scalar, Rank> TensorType;
     typedef Indextype Index;
@@ -135,14 +135,14 @@ TType<Scalar, Rank> TensorInterface<EigenTensorLib>::tensorProd(const TType<Scal
 }
 
 template <typename Scalar, std::size_t Rank, typename Expr1, typename Expr2>
-void TensorInterface<EigenTensorLib>::addScale(const Expr1& src, Expr2& dst, const Scalar& scale)
+void TensorInterface::addScale(const Expr1& src, Expr2& dst, const Scalar& scale)
 {
     dst += scale * src;
 }
 
 // methods rvalue
 template <typename Scalar, std::size_t Rank1, std::size_t Rank2, Indextype... Is>
-TType<Scalar, Rank1 + Rank2 - sizeof...(Is)> TensorInterface<EigenTensorLib>::contract(const TType<Scalar, Rank1>& T1, const TType<Scalar, Rank2>& T2)
+TType<Scalar, Rank1 + Rank2 - sizeof...(Is)> TensorInterface::contract(const TType<Scalar, Rank1>& T1, const TType<Scalar, Rank2>& T2)
 {
     static_assert(sizeof...(Is) % 2 == 0);
     constexpr Indextype Ncon = sizeof...(Is) / 2;
@@ -189,7 +189,7 @@ TType<Scalar, Rank1 + Rank2 - sizeof...(Is)> TensorInterface<EigenTensorLib>::co
 }
 
 template <typename Scalar, std::size_t Rank, Indextype... p>
-TType<Scalar, Rank> TensorInterface<EigenTensorLib>::shuffle(const TType<Scalar, Rank>& T)
+TType<Scalar, Rank> TensorInterface::shuffle(const TType<Scalar, Rank>& T)
 {
     static_assert(Rank == sizeof...(p));
     std::array<Indextype, Rank> dims = {p...};
@@ -197,7 +197,7 @@ TType<Scalar, Rank> TensorInterface<EigenTensorLib>::shuffle(const TType<Scalar,
 }
 
 template <typename Scalar, std::size_t Rank, Indextype... p>
-TType<Scalar, Rank> TensorInterface<EigenTensorLib>::shuffle(const TType<Scalar, Rank>& T, seq::iseq<Indextype, p...> s)
+TType<Scalar, Rank> TensorInterface::shuffle(const TType<Scalar, Rank>& T, seq::iseq<Indextype, p...> s)
 {
     static_assert(Rank == sizeof...(p));
     std::array<Indextype, Rank> dims = {p...};
@@ -206,7 +206,7 @@ TType<Scalar, Rank> TensorInterface<EigenTensorLib>::shuffle(const TType<Scalar,
 
 template <typename Expr, Indextype... p>
 const Eigen::TensorShufflingOp<const std::array<Indextype, Eigen::internal::traits<Expr>::NumDimensions>, const Expr>
-TensorInterface<EigenTensorLib>::shuffle_view(const Expr& T)
+TensorInterface::shuffle_view(const Expr& T)
 {
     constexpr Indextype Rank = Eigen::internal::traits<Expr>::NumDimensions;
     static_assert(Rank == sizeof...(p));
@@ -223,39 +223,37 @@ TensorInterface<EigenTensorLib>::shuffle_view(const Expr& T)
 // }
 
 template <typename Scalar, int Rank1, std::size_t Rank2>
-TType<Scalar, Rank2> TensorInterface<EigenTensorLib>::reshape(const TType<Scalar, Rank1>& T, const std::array<Indextype, Rank2>& dims)
+TType<Scalar, Rank2> TensorInterface::reshape(const TType<Scalar, Rank1>& T, const std::array<Indextype, Rank2>& dims)
 {
     return T.reshape(dims);
 }
 
 // methods lvalue
 template <typename Scalar, std::size_t Rank1, std::size_t Rank2>
-void TensorInterface<EigenTensorLib>::setSubTensor(TType<Scalar, Rank1>& T,
-                                                   const std::array<Indextype, Rank2>& offsets,
-                                                   const std::array<Indextype, Rank2>& extents,
-                                                   const TType<Scalar, Rank1>& S)
+void TensorInterface::setSubTensor(TType<Scalar, Rank1>& T,
+                                   const std::array<Indextype, Rank2>& offsets,
+                                   const std::array<Indextype, Rank2>& extents,
+                                   const TType<Scalar, Rank1>& S)
 {
     T.slice(offsets, extents) = S;
 }
 
 template <typename Scalar, int Rank1, std::size_t Rank2>
 const Eigen::TensorSlicingOp<const std::array<Indextype, Rank2>, const std::array<Indextype, Rank2>, const TType<Scalar, Rank1>>
-TensorInterface<EigenTensorLib>::slice(TType<Scalar, Rank1>& T,
-                                       const std::array<Indextype, Rank2>& offsets,
-                                       const std::array<Indextype, Rank2>& extents)
+TensorInterface::slice(TType<Scalar, Rank1>& T, const std::array<Indextype, Rank2>& offsets, const std::array<Indextype, Rank2>& extents)
 {
     return T.slice(offsets, extents);
 }
 
 template <typename Scalar, int Rank1, std::size_t Rank2>
 const Eigen::TensorReshapingOp<const std::array<Indextype, Rank2>, const TType<Scalar, Rank1>>
-TensorInterface<EigenTensorLib>::reshape(TType<Scalar, Rank1>& T, const std::array<Indextype, Rank2>& dims)
+TensorInterface::reshape(TType<Scalar, Rank1>& T, const std::array<Indextype, Rank2>& dims)
 {
     return T.reshape(dims);
 }
 
 template <typename Scalar, int Rank>
-std::string TensorInterface<EigenTensorLib>::print(const TType<Scalar, Rank>& T)
+std::string TensorInterface::print(const TType<Scalar, Rank>& T)
 {
     std::stringstream ss;
     ss << T;

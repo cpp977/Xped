@@ -1,5 +1,6 @@
 #include "spdlog/spdlog.h"
 
+#include "Xped/Interfaces/PlainInterface.hpp"
 #include "Xped/PEPS/PEPSContractions.hpp"
 
 #include "Xped/Core/AdjointOp.hpp"
@@ -23,7 +24,7 @@ decompose(XPED_CONST TensorBase<Derived1>& T1, XPED_CONST TensorBase<Derived2>& 
     auto prod = T1 * T2;
     [[maybe_unused]] double t_weight;
     auto [U, S, Vdag] = prod.tSVD(max_nsv, 1.e-10, t_weight, false);
-    SPDLOG_CRITICAL("Leading sv: {}", Derived1::PlainLib::getVal(S.block(0), 0, 0));
+    SPDLOG_CRITICAL("Leading sv: {}", PlainInterface::getVal(S.block(0), 0, 0));
     // std::cout << "Leading sv: " << S.block(0)(0, 0) << " in sector q: " << S.sector(0) << std::endl;
     // S.print(std::cout, true);
     // Svs(x, y) = S;

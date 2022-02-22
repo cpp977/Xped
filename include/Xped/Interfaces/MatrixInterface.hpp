@@ -20,42 +20,42 @@ struct CyclopsMatrixLib
 #    define M_MATRIXLIB CyclopsMatrixLib
 #endif
 
-template <typename Library>
-struct MatrixInterface
-{
-    // constructor (rows,cols)
-    // constructor_with_zeros (rows,cols)
-    // constructor with pointer, rows, cols <-- Interchange data with TensorLib!
+// template <typename Library>
+// struct MatrixInterface
+// {
+// constructor (rows,cols)
+// constructor_with_zeros (rows,cols)
+// constructor with pointer, rows, cols <-- Interchange data with TensorLib!
 
-    // resize(rows, cols)
-    // rows(), cols()
+// resize(rows, cols)
+// rows(), cols()
 
-    // initialization
-    // setZero
-    // setRandom
-    // setConstant
-    // setIdentity
-    // static Identity
+// initialization
+// setZero
+// setRandom
+// setConstant
+// setIdentity
+// static Identity
 
-    // block(r,c,dr,dc) l and r value
-    // leftCols
-    // topRows
-    // head
-    // diagonal
+// block(r,c,dr,dc) l and r value
+// leftCols
+// topRows
+// head
+// diagonal
 
-    // svd
-    // qr
+// svd
+// qr
 
-    // data() <-- Interchange data with TensorLib!
+// data() <-- Interchange data with TensorLib!
 
-    // kroneckerProduct
+// kroneckerProduct
 
-    // print
+// print
 
-    // operations +, - , *, coefficient-wise
+// operations +, - , *, coefficient-wise
 
-    // adjoint
-};
+// adjoint
+// };
 
 } // namespace Xped
 

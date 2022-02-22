@@ -7,8 +7,7 @@
 
 namespace Xped {
 
-template <>
-struct MatrixInterface<EigenMatrixLib>
+struct MatrixInterface
 {
     // typedefs
     template <typename Scalar>

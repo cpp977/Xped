@@ -5,17 +5,17 @@
 
 namespace Xped {
 
-template <typename Scalar, typename Symmetry, typename PlainLib>
-void contract_L(XPED_CONST Tensor<Scalar, 1, 1, Symmetry, PlainLib>& Bold,
-                XPED_CONST Tensor<Scalar, 2, 1, Symmetry, PlainLib>& Bra,
-                XPED_CONST Tensor<Scalar, 2, 1, Symmetry, PlainLib>& Ket,
-                Tensor<Scalar, 1, 1, Symmetry, PlainLib>& Bnew);
+template <typename Scalar, typename Symmetry, typename AllocationPolicy>
+void contract_L(XPED_CONST Tensor<Scalar, 1, 1, Symmetry, AllocationPolicy>& Bold,
+                XPED_CONST Tensor<Scalar, 2, 1, Symmetry, AllocationPolicy>& Bra,
+                XPED_CONST Tensor<Scalar, 2, 1, Symmetry, AllocationPolicy>& Ket,
+                Tensor<Scalar, 1, 1, Symmetry, AllocationPolicy>& Bnew);
 
-template <typename Scalar, typename Symmetry, typename PlainLib>
-void contract_R(XPED_CONST Tensor<Scalar, 1, 1, Symmetry, PlainLib>& Bold,
-                XPED_CONST Tensor<Scalar, 2, 1, Symmetry, PlainLib>& Bra,
-                XPED_CONST Tensor<Scalar, 2, 1, Symmetry, PlainLib>& Ket,
-                Tensor<Scalar, 1, 1, Symmetry, PlainLib>& Bnew);
+template <typename Scalar, typename Symmetry, typename AllocationPolicy>
+void contract_R(XPED_CONST Tensor<Scalar, 1, 1, Symmetry, AllocationPolicy>& Bold,
+                XPED_CONST Tensor<Scalar, 2, 1, Symmetry, AllocationPolicy>& Bra,
+                XPED_CONST Tensor<Scalar, 2, 1, Symmetry, AllocationPolicy>& Ket,
+                Tensor<Scalar, 1, 1, Symmetry, AllocationPolicy>& Bnew);
 
 } // namespace Xped
 

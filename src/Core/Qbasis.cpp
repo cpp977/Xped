@@ -17,16 +17,16 @@ using std::size_t;
 
 namespace Xped {
 
-template <typename Symmetry, std::size_t depth>
-Qbasis<Symmetry, 1> Qbasis<Symmetry, depth>::TrivialBasis()
+template <typename Symmetry, std::size_t depth, typename AllocationPolicy>
+Qbasis<Symmetry, 1, AllocationPolicy> Qbasis<Symmetry, depth, AllocationPolicy>::TrivialBasis()
 {
-    Qbasis<Symmetry, 1> out;
+    Qbasis<Symmetry, 1, AllocationPolicy> out;
     out.push_back(Symmetry::qvacuum(), 1);
     return out;
 }
 
-template <typename Symmetry, std::size_t depth>
-void Qbasis<Symmetry, depth>::push_back(const qType& q, const size_t& inner_dim)
+template <typename Symmetry, std::size_t depth, typename AllocationPolicy>
+void Qbasis<Symmetry, depth, AllocationPolicy>::push_back(const qType& q, const size_t& inner_dim)
 {
     assert(depth == 1 or depth == 0);
     auto it = find(q);
@@ -65,8 +65,10 @@ void Qbasis<Symmetry, depth>::push_back(const qType& q, const size_t& inner_dim)
     curr_dim += inner_dim;
 }
 
-template <typename Symmetry, std::size_t depth>
-void Qbasis<Symmetry, depth>::push_back(const qType& q, const size_t& inner_dim, const std::vector<FusionTree<depth, Symmetry>>& tree)
+template <typename Symmetry, std::size_t depth, typename AllocationPolicy>
+void Qbasis<Symmetry, depth, AllocationPolicy>::push_back(const qType& q,
+                                                          const size_t& inner_dim,
+                                                          const std::vector<FusionTree<depth, Symmetry>>& tree)
 {
     auto it = find(q);
     if(it == data_.end()) // insert quantum number if it is not there (sorting is lost then)
@@ -83,8 +85,8 @@ void Qbasis<Symmetry, depth>::push_back(const qType& q, const size_t& inner_dim,
     curr_dim += inner_dim;
 }
 
-template <typename Symmetry, std::size_t depth>
-void Qbasis<Symmetry, depth>::setRandom(const std::size_t& fullSize, const std::size_t& max_sectorSize)
+template <typename Symmetry, std::size_t depth, typename AllocationPolicy>
+void Qbasis<Symmetry, depth, AllocationPolicy>::setRandom(const std::size_t& fullSize, const std::size_t& max_sectorSize)
 {
     clear();
     assert(depth == 1);
@@ -95,8 +97,8 @@ void Qbasis<Symmetry, depth>::setRandom(const std::size_t& fullSize, const std::
     }
 }
 
-template <typename Symmetry, std::size_t depth>
-std::size_t Qbasis<Symmetry, depth>::largestSector() const
+template <typename Symmetry, std::size_t depth, typename AllocationPolicy>
+std::size_t Qbasis<Symmetry, depth, AllocationPolicy>::largestSector() const
 {
     std::size_t out = 0;
     for(const auto& entry : data_) {
@@ -106,22 +108,26 @@ std::size_t Qbasis<Symmetry, depth>::largestSector() const
     return out;
 }
 
-template <typename Symmetry, std::size_t depth>
-typename std::vector<std::tuple<typename Symmetry::qType, size_t, Basis>>::const_iterator Qbasis<Symmetry, depth>::cfind(const qType& q) const
+template <typename Symmetry, std::size_t depth, typename AllocationPolicy>
+typename std::vector<std::tuple<typename Symmetry::qType, size_t, Basis>,
+                     typename AllocationPolicy::template Allocator<std::tuple<typename Symmetry::qType, size_t, Basis>>>::const_iterator
+Qbasis<Symmetry, depth, AllocationPolicy>::cfind(const qType& q) const
 {
     auto it = std::find_if(data_.cbegin(), data_.cend(), [&q](const std::tuple<qType, size_t, Basis>& entry) { return std::get<0>(entry) == q; });
     return it;
 }
 
-template <typename Symmetry, std::size_t depth>
-typename std::vector<std::tuple<typename Symmetry::qType, size_t, Basis>>::iterator Qbasis<Symmetry, depth>::find(const qType& q)
+template <typename Symmetry, std::size_t depth, typename AllocationPolicy>
+typename std::vector<std::tuple<typename Symmetry::qType, size_t, Basis>,
+                     typename AllocationPolicy::template Allocator<std::tuple<typename Symmetry::qType, size_t, Basis>>>::iterator
+Qbasis<Symmetry, depth, AllocationPolicy>::find(const qType& q)
 {
     auto it = std::find_if(data_.begin(), data_.end(), [&q](const std::tuple<qType, size_t, Basis>& entry) { return std::get<0>(entry) == q; });
     return it;
 }
 
-template <typename Symmetry, std::size_t depth>
-typename Symmetry::qType Qbasis<Symmetry, depth>::getQ(const size_t& num_in) const
+template <typename Symmetry, std::size_t depth, typename AllocationPolicy>
+typename Symmetry::qType Qbasis<Symmetry, depth, AllocationPolicy>::getQ(const size_t& num_in) const
 {
     assert(num_in < dim() and "The number is larger than the size of this basis.");
     for(const auto& [qVal, num, basis] : data_) {
@@ -131,8 +137,8 @@ typename Symmetry::qType Qbasis<Symmetry, depth>::getQ(const size_t& num_in) con
     return Symmetry::qvacuum();
 }
 
-template <typename Symmetry, std::size_t depth>
-size_t Qbasis<Symmetry, depth>::inner_num(const size_t& outer_num) const
+template <typename Symmetry, std::size_t depth, typename AllocationPolicy>
+size_t Qbasis<Symmetry, depth, AllocationPolicy>::inner_num(const size_t& outer_num) const
 {
     assert(outer_num < dim() and "The number is larger than the size of this basis.");
     for(const auto& [qVal, num, plain] : data_) {
@@ -142,8 +148,8 @@ size_t Qbasis<Symmetry, depth>::inner_num(const size_t& outer_num) const
     return 0;
 }
 
-template <typename Symmetry, std::size_t depth>
-size_t Qbasis<Symmetry, depth>::inner_dim(const qType& q) const
+template <typename Symmetry, std::size_t depth, typename AllocationPolicy>
+size_t Qbasis<Symmetry, depth, AllocationPolicy>::inner_dim(const qType& q) const
 {
     if(auto it = cfind(q); it == data_.end()) {
         return 0;
@@ -153,16 +159,16 @@ size_t Qbasis<Symmetry, depth>::inner_dim(const qType& q) const
     return 0;
 }
 
-template <typename Symmetry, std::size_t depth>
-size_t Qbasis<Symmetry, depth>::outer_num(const qType& q) const
+template <typename Symmetry, std::size_t depth, typename AllocationPolicy>
+size_t Qbasis<Symmetry, depth, AllocationPolicy>::outer_num(const qType& q) const
 {
     auto it = cfind(q);
     if(it == data_.end()) { assert(false and "The quantum number is not in the basis"); }
     return std::get<1>(*it);
 }
 
-template <typename Symmetry, std::size_t depth>
-size_t Qbasis<Symmetry, depth>::full_outer_num(const qType& q) const
+template <typename Symmetry, std::size_t depth, typename AllocationPolicy>
+size_t Qbasis<Symmetry, depth, AllocationPolicy>::full_outer_num(const qType& q) const
 {
     size_t out = 0ul;
     for(const auto& [p, num, plain] : data_) {
@@ -175,8 +181,8 @@ size_t Qbasis<Symmetry, depth>::full_outer_num(const qType& q) const
     return out;
 }
 
-template <typename Symmetry, std::size_t depth>
-size_t Qbasis<Symmetry, depth>::inner_dim(const size_t& num_in) const
+template <typename Symmetry, std::size_t depth, typename AllocationPolicy>
+size_t Qbasis<Symmetry, depth, AllocationPolicy>::inner_dim(const size_t& num_in) const
 {
     for(const auto& elem : data_) {
         auto [qVal, num, plain] = elem;
@@ -186,8 +192,8 @@ size_t Qbasis<Symmetry, depth>::inner_dim(const size_t& num_in) const
     return 0;
 }
 
-template <typename Symmetry, std::size_t depth>
-size_t Qbasis<Symmetry, depth>::leftOffset(const FusionTree<depth, Symmetry>& tree, const std::array<size_t, depth>& plain) const
+template <typename Symmetry, std::size_t depth, typename AllocationPolicy>
+size_t Qbasis<Symmetry, depth, AllocationPolicy>::leftOffset(const FusionTree<depth, Symmetry>& tree, const std::array<size_t, depth>& plain) const
 {
     assert(trees.size() == data_.size() and "The history for this basis is not defined properly");
     auto it = trees.find(tree.q_coupled);
@@ -205,8 +211,8 @@ size_t Qbasis<Symmetry, depth>::leftOffset(const FusionTree<depth, Symmetry>& tr
     return out;
 }
 
-template <typename Symmetry, std::size_t depth>
-size_t Qbasis<Symmetry, depth>::rightOffset(const FusionTree<depth, Symmetry>& tree, const std::array<size_t, depth>& plain) const
+template <typename Symmetry, std::size_t depth, typename AllocationPolicy>
+size_t Qbasis<Symmetry, depth, AllocationPolicy>::rightOffset(const FusionTree<depth, Symmetry>& tree, const std::array<size_t, depth>& plain) const
 {
     assert(trees.size() == data_.size() and "The history for this basis is not defined properly");
 
@@ -227,8 +233,8 @@ size_t Qbasis<Symmetry, depth>::rightOffset(const FusionTree<depth, Symmetry>& t
     return out;
 }
 
-template <typename Symmetry, std::size_t depth>
-void Qbasis<Symmetry, depth>::remove(const qType& Q)
+template <typename Symmetry, std::size_t depth, typename AllocationPolicy>
+void Qbasis<Symmetry, depth, AllocationPolicy>::remove(const qType& Q)
 {
     auto it = find(Q);
     if(it != data_.end()) {
@@ -255,8 +261,8 @@ void Qbasis<Symmetry, depth>::remove(const qType& Q)
 //         }
 // }
 
-template <typename Symmetry, std::size_t depth>
-void Qbasis<Symmetry, depth>::truncate(const std::unordered_set<qType>& qs, const std::size_t& M)
+template <typename Symmetry, std::size_t depth, typename AllocationPolicy>
+void Qbasis<Symmetry, depth, AllocationPolicy>::truncate(const std::unordered_set<qType>& qs, const std::size_t& M)
 {
     assert(depth == 1 and "Cannot truncate a Qbasis with a depth != 1.");
     if(qs.size() < Nq()) {
@@ -284,8 +290,8 @@ void Qbasis<Symmetry, depth>::truncate(const std::unordered_set<qType>& qs, cons
     }
 }
 
-template <typename Symmetry, std::size_t depth>
-void Qbasis<Symmetry, depth>::sort()
+template <typename Symmetry, std::size_t depth, typename AllocationPolicy>
+void Qbasis<Symmetry, depth, AllocationPolicy>::sort()
 {
     if(data_.size() < 2) { return; }
     std::vector<std::size_t> index_sort(data_.size());
@@ -310,8 +316,8 @@ void Qbasis<Symmetry, depth>::sort()
     IS_SORTED_ = true;
 }
 
-template <typename Symmetry, std::size_t depth>
-bool Qbasis<Symmetry, depth>::operator==(const Qbasis<Symmetry, depth>& other) const
+template <typename Symmetry, std::size_t depth, typename AllocationPolicy>
+bool Qbasis<Symmetry, depth, AllocationPolicy>::operator==(const Qbasis<Symmetry, depth, AllocationPolicy>& other) const
 {
     // std::cout << "this tree" << std::endl;
     // for(const auto& [q, tree] : this->trees) {
@@ -329,11 +335,11 @@ bool Qbasis<Symmetry, depth>::operator==(const Qbasis<Symmetry, depth>& other) c
     return (this->data_ == other.data_) and (this->trees == other.trees);
 }
 
-template <typename Symmetry, std::size_t depth>
-Qbasis<Symmetry, depth> Qbasis<Symmetry, depth>::add(const Qbasis<Symmetry, depth>& other) const
+template <typename Symmetry, std::size_t depth, typename AllocationPolicy>
+Qbasis<Symmetry, depth, AllocationPolicy> Qbasis<Symmetry, depth, AllocationPolicy>::add(const Qbasis<Symmetry, depth, AllocationPolicy>& other) const
 {
     std::unordered_set<qType> uniqueController;
-    Qbasis out;
+    Qbasis<Symmetry, depth, AllocationPolicy> out;
     for(const auto& [q1, num1, plain1] : this->data_) {
         auto it_other = std::find_if(
             other.data_.begin(), other.data_.end(), [q1 = q1](std::tuple<qType, size_t, Basis> entry) { return std::get<0>(entry) == q1; });
@@ -353,10 +359,11 @@ Qbasis<Symmetry, depth> Qbasis<Symmetry, depth>::add(const Qbasis<Symmetry, dept
     return out;
 }
 
-template <typename Symmetry, std::size_t depth>
-Qbasis<Symmetry, depth> Qbasis<Symmetry, depth>::intersection(const Qbasis<Symmetry, depth>& other) const
+template <typename Symmetry, std::size_t depth, typename AllocationPolicy>
+Qbasis<Symmetry, depth, AllocationPolicy>
+Qbasis<Symmetry, depth, AllocationPolicy>::intersection(const Qbasis<Symmetry, depth, AllocationPolicy>& other) const
 {
-    Qbasis out;
+    Qbasis<Symmetry, depth, AllocationPolicy> out;
     for(const auto& triple : this->data_) {
         if(auto it = other.cfind(std::get<0>(triple)); it != other.cend()) {
             auto dim = std::min(std::get<2>(triple).dim(), std::get<2>(*it).dim());
@@ -366,19 +373,19 @@ Qbasis<Symmetry, depth> Qbasis<Symmetry, depth>::intersection(const Qbasis<Symme
     return out;
 }
 
-template <typename Symmetry, std::size_t depth>
-Qbasis<Symmetry, 1> Qbasis<Symmetry, depth>::forgetHistory() const
+template <typename Symmetry, std::size_t depth, typename AllocationPolicy>
+Qbasis<Symmetry, 1, AllocationPolicy> Qbasis<Symmetry, depth, AllocationPolicy>::forgetHistory() const
 {
-    Qbasis<Symmetry, 1> out;
+    Qbasis<Symmetry, 1, AllocationPolicy> out;
     for(const auto& [q, num, plain] : data_) { out.push_back(q, plain.dim()); }
     return out;
 }
 
-template <typename Symmetry, std::size_t depth>
-Qbasis<Symmetry, depth> Qbasis<Symmetry, depth>::conj() const
+template <typename Symmetry, std::size_t depth, typename AllocationPolicy>
+Qbasis<Symmetry, depth, AllocationPolicy> Qbasis<Symmetry, depth, AllocationPolicy>::conj() const
 {
     assert(depth == 1);
-    Qbasis<Symmetry, depth> out;
+    Qbasis<Symmetry, depth, AllocationPolicy> out;
     out.CONJ = !this->CONJ;
     for(const auto& [q, num, plain] : data_) {
         auto oldtrees = tree(q);
@@ -396,10 +403,11 @@ Qbasis<Symmetry, depth> Qbasis<Symmetry, depth>::conj() const
     return out;
 }
 
-template <typename Symmetry, std::size_t depth>
-Qbasis<Symmetry, depth + 1> Qbasis<Symmetry, depth>::combine(const Qbasis<Symmetry, 1>& other, bool CONJ) const
+template <typename Symmetry, std::size_t depth, typename AllocationPolicy>
+Qbasis<Symmetry, depth + 1, AllocationPolicy> Qbasis<Symmetry, depth, AllocationPolicy>::combine(const Qbasis<Symmetry, 1, AllocationPolicy>& other,
+                                                                                                 bool CONJ) const
 {
-    Qbasis<Symmetry, depth + 1> out;
+    Qbasis<Symmetry, depth + 1, AllocationPolicy> out;
     // build the history of the combination. Data is relevant for MultipedeQ contractions which include a fuse of two leg.
     for(const auto& elem1 : this->data_) {
         auto [q1, num1, plain1] = elem1;
@@ -452,8 +460,8 @@ Qbasis<Symmetry, depth + 1> Qbasis<Symmetry, depth>::combine(const Qbasis<Symmet
     return out;
 }
 
-template <typename Symmetry, std::size_t depth>
-tabulate::Table Qbasis<Symmetry, depth>::print() const
+template <typename Symmetry, std::size_t depth, typename AllocationPolicy>
+tabulate::Table Qbasis<Symmetry, depth, AllocationPolicy>::print() const
 {
     tabulate::Table t;
     using Row_t = std::vector<std::variant<std::string, const char*, tabulate::Table>>;
@@ -479,8 +487,8 @@ tabulate::Table Qbasis<Symmetry, depth>::print() const
     return t;
 }
 
-template <typename Symmetry, std::size_t depth>
-std::string Qbasis<Symmetry, depth>::printTrees() const
+template <typename Symmetry, std::size_t depth, typename AllocationPolicy>
+std::string Qbasis<Symmetry, depth, AllocationPolicy>::printTrees() const
 {
     std::stringstream out;
     for(auto it = trees.begin(); it != trees.end(); it++) {

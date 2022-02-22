@@ -13,6 +13,8 @@
 #include "Xped/Core/Qbasis.hpp"
 #include "Xped/Core/ScalarTraits.hpp"
 #include "Xped/Core/TensorTypedefs.hpp"
+#include "Xped/Core/allocators/HeapPolicy.hpp"
+#include "Xped/Core/storage/StorageType.hpp"
 #include "Xped/Core/treepair.hpp"
 #include "Xped/Interfaces/PlainInterface.hpp"
 
@@ -21,66 +23,80 @@
 
 namespace Xped {
 
-template <typename Scalar_, std::size_t Rank_, std::size_t CoRank_, typename Symmetry_, typename PlainLib_>
-struct TensorTraits<Tensor<Scalar_, Rank_, CoRank_, Symmetry_, PlainLib_>>
+template <typename Scalar_, std::size_t Rank_, std::size_t CoRank_, typename Symmetry_, typename AllocationPolicy_>
+struct TensorTraits<Tensor<Scalar_, Rank_, CoRank_, Symmetry_, AllocationPolicy_>>
 {
     static constexpr std::size_t Rank = Rank_;
     static constexpr std::size_t CoRank = CoRank_;
     typedef Scalar_ Scalar;
     typedef Symmetry_ Symmetry;
     typedef typename Symmetry::qType qType;
-    typedef PlainLib_ PlainLib;
-    typedef typename PlainLib::template MType<Scalar> MatrixType;
-    typedef typename PlainLib::template TType<Scalar, Rank + CoRank> TensorType;
-    typedef typename PlainLib::template VType<Scalar> VectorType;
+    using AllocationPolicy = AllocationPolicy_;
 };
 
-template <typename Scalar_, std::size_t Rank, std::size_t CoRank, typename Symmetry_, typename PlainLib_ = XPED_DEFAULT_PLAININTERFACE>
-class Tensor : public TensorBase<Tensor<Scalar_, Rank, CoRank, Symmetry_, PlainLib_>>
+template <typename Scalar_, std::size_t Rank, std::size_t CoRank, typename Symmetry_, typename AllocationPolicy_ = HeapPolicy>
+class Tensor : public TensorBase<Tensor<Scalar_, Rank, CoRank, Symmetry_, AllocationPolicy_>>
 {
     template <typename Derived>
     friend class TensorBase;
 
-    template <typename Scalar__, std::size_t Rank_, std::size_t CoRank_, typename Symmetry__, typename PlainLib__>
-    friend Tensor<Scalar__, Rank_, CoRank_, Symmetry__, PlainLib__>
-    operator+(XPED_CONST Tensor<Scalar__, Rank_, CoRank_, Symmetry__, PlainLib__>& T1,
-              XPED_CONST Tensor<Scalar__, Rank_, CoRank_, Symmetry__, PlainLib__>& T2);
+    template <typename Scalar__, std::size_t Rank_, std::size_t CoRank_, typename Symmetry__, typename AllocationPolicy__>
+    friend Tensor<Scalar__, Rank_, CoRank_, Symmetry__, AllocationPolicy__>
+    operator+(XPED_CONST Tensor<Scalar__, Rank_, CoRank_, Symmetry__, AllocationPolicy__>& T1,
+              XPED_CONST Tensor<Scalar__, Rank_, CoRank_, Symmetry__, AllocationPolicy__>& T2);
 
-    template <typename Scalar__, std::size_t Rank_, std::size_t CoRank_, typename Symmetry__, typename PlainLib__>
-    friend Tensor<Scalar__, Rank_, CoRank_, Symmetry__, PlainLib__>
-    operator-(XPED_CONST Tensor<Scalar__, Rank_, CoRank_, Symmetry__, PlainLib__>& T1,
-              XPED_CONST Tensor<Scalar__, Rank_, CoRank_, Symmetry__, PlainLib__>& T2);
+    template <typename Scalar__, std::size_t Rank_, std::size_t CoRank_, typename Symmetry__, typename AllocationPolicy__>
+    friend Tensor<Scalar__, Rank_, CoRank_, Symmetry__, AllocationPolicy__>
+    operator-(XPED_CONST Tensor<Scalar__, Rank_, CoRank_, Symmetry__, AllocationPolicy__>& T1,
+              XPED_CONST Tensor<Scalar__, Rank_, CoRank_, Symmetry__, AllocationPolicy__>& T2);
 
 public:
-    typedef Scalar_ Scalar;
-    typedef typename ScalarTraits<Scalar>::Real RealScalar;
+    using Scalar = Scalar_;
+    using RealScalar = typename ScalarTraits<Scalar>::Real;
 
-    typedef Symmetry_ Symmetry;
-    typedef typename Symmetry::qType qType;
+    using Symmetry = Symmetry_;
+    using qType = typename Symmetry::qType;
 
-    typedef PlainLib_ PlainLib;
+    using AllocationPolicy = AllocationPolicy_;
 
-    typedef PlainLib Plain;
-    typedef typename Plain::Indextype IndexType;
-    typedef typename Plain::template VType<Scalar> VectorType;
-    typedef typename Plain::template MType<Scalar> MatrixType;
-    typedef typename Plain::template MapMType<Scalar> MatrixMapType;
-    typedef typename Plain::template cMapMType<Scalar> MatrixcMapType;
-    typedef typename Plain::template TType<Scalar, Rank + CoRank> TensorType;
-    typedef typename Plain::template MapTType<Scalar, Rank + CoRank> TensorMapType;
-    typedef typename Plain::template cMapTType<Scalar, Rank + CoRank> TensorcMapType;
+    using IndexType = PlainInterface::Indextype;
+    using VectorType = PlainInterface::VType<Scalar>;
+    using MatrixType = PlainInterface::MType<Scalar>;
+    using MatrixMapType = PlainInterface::MapMType<Scalar>;
+    using MatrixcMapType = PlainInterface::cMapMType<Scalar>;
+    using TensorType = PlainInterface::TType<Scalar, Rank + CoRank>;
+    using TensorMapType = PlainInterface::MapTType<Scalar, Rank + CoRank>;
+    using TensorcMapType = PlainInterface::cMapTType<Scalar, Rank + CoRank>;
 
-    typedef Tensor<Scalar, Rank, CoRank, Symmetry, PlainLib> Self;
+private:
+    using Self = Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>;
 
+    using DictType = std::unordered_map<qType,
+                                        std::size_t,
+                                        std::hash<qType>,
+                                        std::equal_to<qType>,
+                                        typename AllocationPolicy::template Allocator<std::pair<const qType, std::size_t>>>;
+
+public:
     /**Does nothing.*/
     Tensor(){};
 
     // Xped(const Xped& other) = default;
     // Xped(Xped&& other) = default;
 
-    Tensor(const std::array<Qbasis<Symmetry, 1>, Rank> basis_domain,
-           const std::array<Qbasis<Symmetry, 1>, CoRank> basis_codomain,
-           mpi::XpedWorld& world = mpi::getUniverse());
+    Tensor(const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, Rank>& basis_domain,
+           const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, CoRank>& basis_codomain,
+           mpi::XpedWorld& world = mpi::getUniverse())
+        : storage_(basis_domain, basis_codomain)
+        , world_(&world, mpi::TrivialDeleter<mpi::XpedWorld>{})
+    {}
+
+    Tensor(const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, Rank>& basis_domain,
+           const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, CoRank>& basis_codomain,
+           std::shared_ptr<mpi::XpedWorld> world)
+        : storage_(basis_domain, basis_codomain)
+        , world_(world)
+    {}
 
     template <typename OtherDerived>
     inline Tensor(const TensorBase<OtherDerived>& other);
@@ -88,29 +104,27 @@ public:
     static constexpr std::size_t rank() { return Rank; }
     static constexpr std::size_t corank() { return CoRank; }
 
-    inline const std::vector<qType> sector() const { return sector_; }
-    inline const qType sector(std::size_t i) const { return sector_[i]; }
+    inline const std::vector<qType, typename AllocationPolicy::template Allocator<qType>>& sector() const { return storage_.sector(); }
+    inline const qType sector(std::size_t i) const { return storage_.sector(i); }
 
     // inline const std::vector<MatrixType> block() const { return block_; }
-    const MatrixType& block(std::size_t i) const { return block_[i]; }
-    MatrixType& block(std::size_t i) { return block_[i]; }
+    const MatrixType& block(std::size_t i) const { return storage_.block(i); }
+    MatrixType& block(std::size_t i) { return storage_.block(i); }
 
-    const std::unordered_map<qType, std::size_t> dict() const { return dict_; }
+    const DictType& dict() const { return storage_.dict(); }
+
+    const StorageType<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>& storage() const { return storage_; }
 
     const std::shared_ptr<mpi::XpedWorld> world() const { return world_; }
 
-    const std::array<Qbasis<Symmetry, 1>, Rank> uncoupledDomain() const { return uncoupled_domain; }
-    const std::array<Qbasis<Symmetry, 1>, CoRank> uncoupledCodomain() const { return uncoupled_codomain; }
+    const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, Rank>& uncoupledDomain() const { return storage_.uncoupledDomain(); }
+    const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, CoRank>& uncoupledCodomain() const { return storage_.uncoupledCodomain(); }
 
-    const Qbasis<Symmetry, Rank> coupledDomain() const { return domain; }
-    const Qbasis<Symmetry, CoRank> coupledCodomain() const { return codomain; }
+    const Qbasis<Symmetry, Rank, AllocationPolicy>& coupledDomain() const { return storage_.coupledDomain(); }
+    const Qbasis<Symmetry, CoRank, AllocationPolicy>& coupledCodomain() const { return storage_.coupledCodomain(); }
 
-    const MatrixType operator()(const qType& q_coupled) const
-    {
-        auto it = dict_.find(q_coupled);
-        assert(it != dict_.end());
-        return block_[it->second];
-    }
+    const MatrixType& operator()(const qType& q_coupled) const { return storage_.block(q_coupled); }
+
     const std::string name() const { return "Xped"; }
     // Eigen::TensorMap<TensorType> operator() (const FusionTree<Rank,Symmetry>& f1, const FusionTree<CoRank,Symmetry>& f2);
     // Eigen::TensorMap<TensorType> operator() (const FusionTree<Rank,Symmetry>& f1, const FusionTree<CoRank,Symmetry>& f2) const;
@@ -132,19 +146,14 @@ public:
     MatrixType subMatrix(const FusionTree<Rank, Symmetry>& f1, const FusionTree<CoRank, Symmetry>& f2) const;
     // MatrixType& operator() (const FusionTree<Rank,Symmetry>& f1, const FusionTree<CoRank,Symmetry>& f2);
 
-    void print(std::ostream& o, bool PRINT_MATRICES = true) XPED_CONST;
+    void print(std::ostream& o, bool PRINT_MATRICES = true) const;
 
     void setRandom();
     void setZero();
     void setIdentity();
     void setConstant(const Scalar& val);
 
-    void clear()
-    {
-        block_.clear();
-        dict_.clear();
-        sector_.clear();
-    }
+    void clear() { storage_.clear(); }
 
     // Apply the basis transformation of domain and codomain to the block matrices to get a plain array/tensor
     TensorType plainTensor() const;
@@ -163,12 +172,12 @@ public:
     // Scalar norm() const { return std::sqrt(squaredNorm()); }
 
     template <int shift, std::size_t...>
-    Tensor<Scalar, Rank - shift, CoRank + shift, Symmetry, PlainLib_> permute() const;
+    Tensor<Scalar, Rank - shift, CoRank + shift, Symmetry, AllocationPolicy> permute() const;
 
-    std::tuple<Tensor<Scalar, Rank, 1, Symmetry, PlainLib_>,
-               Tensor<RealScalar, 1, 1, Symmetry, PlainLib_>,
-               Tensor<Scalar, 1, CoRank, Symmetry, PlainLib_>>
-    tSVD(size_t maxKeep,
+    std::tuple<Tensor<Scalar, Rank, 1, Symmetry, AllocationPolicy>,
+               Tensor<RealScalar, 1, 1, Symmetry, AllocationPolicy>,
+               Tensor<Scalar, 1, CoRank, Symmetry, AllocationPolicy>>
+    tSVD(std::size_t maxKeep,
          RealScalar eps_svd,
          RealScalar& truncWeight,
          RealScalar& entropy,
@@ -176,59 +185,42 @@ public:
          bool PRESERVE_MULTIPLETS = true,
          bool RETURN_SPEC = true) XPED_CONST;
 
-    std::tuple<Tensor<Scalar, Rank, 1, Symmetry, PlainLib_>,
-               Tensor<RealScalar, 1, 1, Symmetry, PlainLib_>,
-               Tensor<Scalar, 1, CoRank, Symmetry, PlainLib_>>
-    tSVD(size_t maxKeep, RealScalar eps_svd, RealScalar& truncWeight, bool PRESERVE_MULTIPLETS = true) XPED_CONST
+    std::tuple<Tensor<Scalar, Rank, 1, Symmetry, AllocationPolicy>,
+               Tensor<RealScalar, 1, 1, Symmetry, AllocationPolicy>,
+               Tensor<Scalar, 1, CoRank, Symmetry, AllocationPolicy>>
+    tSVD(std::size_t maxKeep, RealScalar eps_svd, RealScalar& truncWeight, bool PRESERVE_MULTIPLETS = true) XPED_CONST
     {
         RealScalar S_dumb;
         std::map<qarray<Symmetry::Nq>, VectorType> SVspec_dumb;
         return tSVD(maxKeep, eps_svd, truncWeight, S_dumb, SVspec_dumb, PRESERVE_MULTIPLETS, false); // false: Dont return singular value spectrum
     }
 
-    std::vector<FusionTree<Rank, Symmetry>> domainTrees(const qType& q) const { return domain.tree(q); }
-    std::vector<FusionTree<CoRank, Symmetry>> codomainTrees(const qType& q) const { return codomain.tree(q); }
+    std::vector<FusionTree<Rank, Symmetry>>& domainTrees(const qType& q) const { return coupledDomain().tree(q); }
+    std::vector<FusionTree<CoRank, Symmetry>>& codomainTrees(const qType& q) const { return coupledCodomain().tree(q); }
 
-    // private:
-    std::vector<MatrixType> block_;
+    void push_back(const qType& q, const MatrixType& M) { storage_.push_back(q, M); }
 
-    std::unordered_map<qType, std::size_t> dict_; // sector --> number
-    std::vector<qType> sector_;
-
-    std::array<Qbasis<Symmetry, 1>, Rank> uncoupled_domain;
-    std::array<Qbasis<Symmetry, 1>, CoRank> uncoupled_codomain;
-    Qbasis<Symmetry, Rank> domain;
-    Qbasis<Symmetry, CoRank> codomain;
+private:
+    StorageType<Scalar, Rank, CoRank, Symmetry, AllocationPolicy> storage_;
 
     std::shared_ptr<mpi::XpedWorld> world_;
-
-    void push_back(const qType& q, const MatrixType& M)
-    {
-        block_.push_back(M);
-        sector_.push_back(q);
-        dict_.insert(std::make_pair(q, sector_.size() - 1));
-    }
 
     template <std::size_t... p_domain, std::size_t... p_codomain>
     Self permute_impl(seq::iseq<std::size_t, p_domain...> pd, seq::iseq<std::size_t, p_codomain...> pc) const;
 
     template <int shift, std::size_t... ps>
-    Tensor<Scalar, Rank - shift, CoRank + shift, Symmetry, PlainLib_> permute_impl(seq::iseq<std::size_t, ps...> per) const;
+    Tensor<Scalar, Rank - shift, CoRank + shift, Symmetry, AllocationPolicy> permute_impl(seq::iseq<std::size_t, ps...> per) const;
 };
 
-template <typename Scalar_, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename PlainLib_>
+template <typename Scalar_, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
 template <typename OtherDerived>
-Tensor<Scalar_, Rank, CoRank, Symmetry, PlainLib_>::Tensor(const TensorBase<OtherDerived>& other)
+Tensor<Scalar_, Rank, CoRank, Symmetry, AllocationPolicy>::Tensor(const TensorBase<OtherDerived>& other)
 {
-    sector_ = other.derived().sector();
-    block_.resize(sector_.size());
-    for(std::size_t i = 0; i < sector_.size(); i++) { block_[i] = other.derived().block(i); }
-    dict_ = other.derived().dict();
+    StorageType<Scalar_, Rank, CoRank, Symmetry, AllocationPolicy> tmp(other.derived().uncoupledDomain(), other.derived().uncoupledCodomain());
+    storage_ = tmp;
+    // StorageType<Scalar_, Rank, CoRank, Symmetry, Allocator_>(other.derived().uncoupledDomain(), other.derived().uncoupledCodomain());
+    for(std::size_t i = 0; i < sector().size(); ++i) { block(i) = other.derived().block(i); }
     world_ = other.derived().world();
-    uncoupled_domain = other.derived().uncoupledDomain();
-    uncoupled_codomain = other.derived().uncoupledCodomain();
-    domain = other.derived().coupledDomain();
-    codomain = other.derived().coupledCodomain();
 }
 
 } // namespace Xped

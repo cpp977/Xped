@@ -7,8 +7,7 @@
 
 namespace Xped {
 
-template <>
-struct VectorInterface<EigenVectorLib>
+struct VectorInterface
 {
     // typedefs
     template <typename Scalar>

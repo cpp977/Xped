@@ -28,29 +28,29 @@ struct CyclopsTensorLib
 #    define M_TENSORLIB CyclopsTensorLib
 #endif
 
-template <typename Library>
-struct TensorInterface
-{
-    // constructor with dim array [x] [x]
-    // constructor with map [x] [x]
+// template <typename Library>
+// struct TensorInterface
+// {
+// constructor with dim array [x] [x]
+// constructor with map [x] [x]
 
-    // initialization
-    // setZero [x] [x]
-    // setRandom [x] [x]
-    // setConstant [x] [x]
+// initialization
+// setZero [x] [x]
+// setRandom [x] [x]
+// setConstant [x] [x]
 
-    // contract [x] [x]
-    // shuffle [x] [x]
+// contract [x] [x]
+// shuffle [x] [x]
 
-    // lvalue methods
-    // shuffle ??? <-- not in Eigen
-    // reshape with dims [x] [x]
-    // slice [x] [x]
+// lvalue methods
+// shuffle ??? <-- not in Eigen
+// reshape with dims [x] [x]
+// slice [x] [x]
 
-    // tensorProd [x] [x]
+// tensorProd [x] [x]
 
-    // return dimensions [x] [x]
-};
+// return dimensions [x] [x]
+// };
 
 } // namespace Xped
 

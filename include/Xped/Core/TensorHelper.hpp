@@ -7,12 +7,13 @@ namespace Xped {
 
 namespace internal {
 
-template <std::size_t Rank1, std::size_t Rank2, typename Symmetry>
-std::pair<Qbasis<Symmetry, Rank2 + Rank1>, std::array<Qbasis<Symmetry, 1>, 0>>
-build_FusionTree_Helper(const Qbasis<Symmetry, Rank2>& coupled, const std::array<Qbasis<Symmetry, 1>, Rank1>& uncoupled);
+template <std::size_t Rank1, std::size_t Rank2, typename Symmetry, typename AllocationPolicy>
+std::pair<Qbasis<Symmetry, Rank2 + Rank1, AllocationPolicy>, std::array<Qbasis<Symmetry, 1, AllocationPolicy>, 0>>
+build_FusionTree_Helper(const Qbasis<Symmetry, Rank2, AllocationPolicy>& coupled,
+                        const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, Rank1>& uncoupled);
 
-template <std::size_t Rank, typename Symmetry>
-Qbasis<Symmetry, Rank> build_FusionTree(const std::array<Qbasis<Symmetry, 1>, Rank>& uncoupled);
+template <std::size_t Rank, typename Symmetry, typename AllocationPolicy>
+Qbasis<Symmetry, Rank> build_FusionTree(const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, Rank>& uncoupled);
 
 } // namespace internal
 

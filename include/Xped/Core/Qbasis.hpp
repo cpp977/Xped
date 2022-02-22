@@ -16,6 +16,7 @@
 
 #include "Xped/Core/Basis.hpp"
 #include "Xped/Core/FusionTree.hpp"
+#include "Xped/Core/allocators/HeapPolicy.hpp"
 #include "Xped/Hash/hash.hpp"
 
 namespace Xped {
@@ -33,10 +34,10 @@ namespace Xped {
  * already proper sorted into irreps.
  *
  */
-template <typename Symmetry, std::size_t depth>
+template <typename Symmetry, std::size_t depth, typename AllocationPolicy = HeapPolicy>
 class Qbasis
 {
-    template <typename Symmetry_, std::size_t depth_>
+    template <typename Symmetry_, std::size_t depth_, typename AllocationPolicy_>
     friend class Qbasis;
 
     typedef typename Symmetry::qType qType;
@@ -54,7 +55,7 @@ public:
         for(const auto& qin : qins) { push_back(qin, dim); }
     }
 
-    static Qbasis<Symmetry, 1> TrivialBasis();
+    static Qbasis<Symmetry, 1, AllocationPolicy> TrivialBasis();
 
     ///\{
     /**Returns the number of (reduced) basis states.*/
@@ -171,17 +172,17 @@ public:
      * Returns the tensor product basis, already properly sorted with respect to the resulting irreps.
      * This function also saves the history of the combination process for later use. See leftOffset() and rightOffset().
      */
-    Qbasis<Symmetry, depth + 1> combine(const Qbasis<Symmetry, 1>& other, bool CONJ = false) const;
+    Qbasis<Symmetry, depth + 1, AllocationPolicy> combine(const Qbasis<Symmetry, 1, AllocationPolicy>& other, bool CONJ = false) const;
 
     /**Adds two bases together.*/
-    Qbasis<Symmetry, depth> add(const Qbasis<Symmetry, depth>& other) const;
+    Qbasis<Symmetry, depth, AllocationPolicy> add(const Qbasis<Symmetry, depth, AllocationPolicy>& other) const;
 
     /**Returns the intersection of this and \p other.*/
-    Qbasis<Symmetry, depth> intersection(const Qbasis<Symmetry, depth>& other) const;
+    Qbasis<Symmetry, depth, AllocationPolicy> intersection(const Qbasis<Symmetry, depth, AllocationPolicy>& other) const;
 
-    Qbasis<Symmetry, depth> conj() const;
+    Qbasis<Symmetry, depth, AllocationPolicy> conj() const;
 
-    Qbasis<Symmetry, 1> forgetHistory() const;
+    Qbasis<Symmetry, 1, AllocationPolicy> forgetHistory() const;
 
     /**Prints the basis.*/
     tabulate::Table print() const;
@@ -189,7 +190,7 @@ public:
     /**Prints the trees.*/
     std::string printTrees() const;
 
-    bool operator==(const Qbasis<Symmetry, depth>& other) const;
+    bool operator==(const Qbasis<Symmetry, depth, AllocationPolicy>& other) const;
 
     inline typename std::vector<std::tuple<qType, size_t, Basis>>::iterator begin() { return data_.begin(); }
     inline typename std::vector<std::tuple<qType, size_t, Basis>>::iterator end() { return data_.end(); }
@@ -204,7 +205,7 @@ public:
 
     inline bool IS_SORTED() const { return IS_SORTED_; }
 
-    inline std::vector<FusionTree<depth, Symmetry>> tree(const qType& q) const
+    inline const std::vector<FusionTree<depth, Symmetry>>& tree(const qType& q) const
     {
         auto it = trees.find(q);
         if(it == trees.end()) { assert(false); }
@@ -218,22 +219,32 @@ public:
     }
 
 private:
-    typename std::vector<std::tuple<qType, size_t, Basis>>::const_iterator cfind(const qType& q) const;
+    using ContainerType =
+        std::vector<std::tuple<qType, size_t, Basis>, typename AllocationPolicy::template Allocator<std::tuple<qType, std::size_t, Basis>>>;
+    using TreeType = std::unordered_map<
+        qType,
+        std::vector<FusionTree<depth, Symmetry>, typename AllocationPolicy::template Allocator<FusionTree<depth, Symmetry>>>,
+        std::hash<qType>,
+        std::equal_to<qType>,
+        typename AllocationPolicy::template Allocator<
+            std::pair<const qType,
+                      std::vector<FusionTree<depth, Symmetry>, typename AllocationPolicy::template Allocator<FusionTree<depth, Symmetry>>>>>>;
+    typename ContainerType::const_iterator cfind(const qType& q) const;
 
-    typename std::vector<std::tuple<qType, size_t, Basis>>::iterator find(const qType& q);
+    typename ContainerType::iterator find(const qType& q);
 
     // vector with entry: {Quantumnumber (QN), state number of the first plain state for this QN, all plain states for this QN in a Basis object.}
     //[{q1,0,plain_q1}, {q2,dim(plain_q1),plain_q2}, {q3,dim(plain_q1)+dim(plain_q2),plain_q3}, ..., {qi, sum_j^(i-1)dim(plain_qj), plain_qi}]
-    std::vector<std::tuple<qType, size_t, Basis>> data_;
-    size_t curr_dim = 0;
-    std::unordered_map<qType, std::vector<FusionTree<depth, Symmetry>>> trees;
+    ContainerType data_;
+    std::size_t curr_dim = 0;
+    TreeType trees;
 
     bool IS_SORTED_ = false;
     bool CONJ = false;
 };
 
-template <typename Symmetry, std::size_t depth>
-std::ostream& operator<<(std::ostream& os, const Qbasis<Symmetry, depth>& basis)
+template <typename Symmetry, std::size_t depth, typename AllocationPolicy>
+std::ostream& operator<<(std::ostream& os, const Qbasis<Symmetry, depth, AllocationPolicy>& basis)
 {
     os << basis.print();
     return os;

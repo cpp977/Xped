@@ -9,7 +9,7 @@
 namespace Xped {
 
 // forward declaration
-template <typename Symmetry, std::size_t depth>
+template <typename Symmetry, std::size_t depth, typename AllocationPolicy>
 class Qbasis;
 
 /** \class Basis
@@ -19,7 +19,7 @@ class Qbasis;
  */
 class Basis
 {
-    template <typename Symmetry_, std::size_t depth>
+    template <typename Symmetry_, std::size_t depth, typename AllocationPolicy>
     friend class Qbasis;
 
 public:

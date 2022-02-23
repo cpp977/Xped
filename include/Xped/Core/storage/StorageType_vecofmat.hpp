@@ -74,6 +74,20 @@ public:
         return m_data[i];
     }
 
+    const MatrixType& block(qType q) const
+    {
+        auto it = m_dict.find(q);
+        assert(it != dict_.end());
+        return m_data[it->second];
+    }
+
+    MatrixType& block(qType q)
+    {
+        auto it = m_dict.find(q);
+        assert(it != m_dict.end());
+        return m_data[it->second];
+    }
+
     const DictType& dict() const { return m_dict; }
     DictType& dict() { return m_dict; }
 

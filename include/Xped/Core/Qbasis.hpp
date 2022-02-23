@@ -205,7 +205,7 @@ public:
 
     inline bool IS_SORTED() const { return IS_SORTED_; }
 
-    inline const std::vector<FusionTree<depth, Symmetry>>& tree(const qType& q) const
+    inline const auto& tree(const qType& q) const
     {
         auto it = trees.find(q);
         if(it == trees.end()) { assert(false); }

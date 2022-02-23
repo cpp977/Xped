@@ -195,8 +195,8 @@ public:
         return tSVD(maxKeep, eps_svd, truncWeight, S_dumb, SVspec_dumb, PRESERVE_MULTIPLETS, false); // false: Dont return singular value spectrum
     }
 
-    std::vector<FusionTree<Rank, Symmetry>>& domainTrees(const qType& q) const { return coupledDomain().tree(q); }
-    std::vector<FusionTree<CoRank, Symmetry>>& codomainTrees(const qType& q) const { return coupledCodomain().tree(q); }
+    const auto& domainTrees(const qType& q) const { return coupledDomain().tree(q); }
+    const auto& codomainTrees(const qType& q) const { return coupledCodomain().tree(q); }
 
     void push_back(const qType& q, const MatrixType& M) { storage_.push_back(q, M); }
 

@@ -96,6 +96,12 @@ public:
         m_data.push_back(M);
     }
 
+    void clear()
+    {
+        m_data.clear();
+        m_sector.clear();
+    }
+
 private:
     std::vector<MatrixType, typename AllocationPolicy::template Allocator<MatrixType>> m_data;
 

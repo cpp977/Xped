@@ -24,23 +24,23 @@ void perform_tensor_permute(const std::size_t& size, mpi::XpedWorld& world)
     XPED_MPI_BARRIER(world.comm)
     auto tp = t.template permute<shift, per...>();
     XPED_MPI_BARRIER(world.comm)
-    XPED_DEFAULT_PLAININTERFACE::TType<double, 4> tplainshuffle = XPED_DEFAULT_PLAININTERFACE::shuffle<double, 4, per...>(tplain);
+    PlainInterface::TType<double, 4> tplainshuffle = PlainInterface::shuffle<double, 4, per...>(tplain);
     XPED_MPI_BARRIER(world.comm)
     auto tplainp = tp.plainTensor();
     XPED_MPI_BARRIER(world.comm)
 #ifdef XPED_USE_ARRAY_TENSOR_LIB
     auto check = nda::make_ein_sum<double, 0, 1, 2, 3>(nda::ein<0, 1, 2, 3>(tplainp) - nda::ein<0, 1, 2, 3>(tplainshuffle));
 #elif defined(XPED_USE_CYCLOPS_TENSOR_LIB)
-    auto dims = XPED_DEFAULT_PLAININTERFACE::dimensions<double, 4>(tplainshuffle);
-    auto check = XPED_DEFAULT_PLAININTERFACE::construct<double>(dims, world);
+    auto dims = PlainInterface::dimensions<double, 4>(tplainshuffle);
+    auto check = PlainInterface::construct<double>(dims, world);
     check["ijkl"] = tplainshuffle["ijkl"] - tplainp["ijkl"];
 #else
     Eigen::Tensor<double, 4> check = tplainshuffle - tplainp;
 #endif
     XPED_MPI_BARRIER(world.comm)
-    auto zero_ = XPED_DEFAULT_PLAININTERFACE::contract<double, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3>(check, check);
+    auto zero_ = PlainInterface::contract<double, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3>(check, check);
     XPED_MPI_BARRIER(world.comm)
-    double zero = XPED_DEFAULT_PLAININTERFACE::getVal<double, 0>(zero_, {{}});
+    double zero = PlainInterface::getVal<double, 0>(zero_, {{}});
     SPDLOG_INFO("zero={}.", zero);
     CHECK(zero == doctest::Approx(0.));
 }
@@ -168,7 +168,7 @@ void perform_tensor_permute_intern(const std::size_t size, mpi::XpedWorld& world
     SPDLOG_WARN("Computed permutation of tensor.");
     XPED_MPI_BARRIER(world.comm)
 
-    XPED_DEFAULT_PLAININTERFACE::TType<double, 4> tplainshuffle = XPED_DEFAULT_PLAININTERFACE::shuffle<double, 4, per...>(tplain);
+    PlainInterface::TType<double, 4> tplainshuffle = PlainInterface::shuffle<double, 4, per...>(tplain);
     SPDLOG_WARN("Computed plain shuffle of tensor.");
     XPED_MPI_BARRIER(world.comm)
     auto tplainp = tp.plainTensor();
@@ -177,13 +177,13 @@ void perform_tensor_permute_intern(const std::size_t size, mpi::XpedWorld& world
 #ifdef XPED_USE_ARRAY_TENSOR_LIB
     auto check = nda::make_ein_sum<double, 0, 1, 2, 3>(nda::ein<0, 1, 2, 3>(tplainp) - nda::ein<0, 1, 2, 3>(tplainshuffle));
 #elif defined(XPED_USE_CYCLOPS_TENSOR_LIB)
-    auto dims = XPED_DEFAULT_PLAININTERFACE::dimensions<double, 4>(tplainshuffle);
-    auto check = XPED_DEFAULT_PLAININTERFACE::construct<double>(dims, world);
+    auto dims = PlainInterface::dimensions<double, 4>(tplainshuffle);
+    auto check = PlainInterface::construct<double>(dims, world);
     check["ijkl"] = tplainshuffle["ijkl"] - tplainp["ijkl"];
 #else
     Eigen::Tensor<double, 4> check = tplainshuffle - tplainp;
 #endif
-    auto zero_ = XPED_DEFAULT_PLAININTERFACE::contract<double, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3>(check, check);
+    auto zero_ = PlainInterface::contract<double, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3>(check, check);
     // Eigen::Tensor<double,4> tplainshuffle = tplain.shuffle(p);
     // auto tplainp = tp.plainTensor();
     // auto check = tplainshuffle - tplainp;
@@ -191,7 +191,7 @@ void perform_tensor_permute_intern(const std::size_t size, mpi::XpedWorld& world
     //                                                                                                               Eigen::IndexPair<Eigen::Index>(1,1),
     //                                                                                                               Eigen::IndexPair<Eigen::Index>(2,2),
     //                                                                                                               Eigen::IndexPair<Eigen::Index>(3,3)}});
-    double zero = XPED_DEFAULT_PLAININTERFACE::getVal<double, 0>(zero_, {{}});
+    double zero = PlainInterface::getVal<double, 0>(zero_, {{}});
     CHECK(zero == doctest::Approx(0.));
 }
 
@@ -202,7 +202,7 @@ void test_tensor_permute_within_codomain(const std::size_t size, mpi::XpedWorld&
     // Tensor<0,3,Symmetry> three({{}},{{F,F,F}}); three.setRandom();
     // auto threep = three.plainTensor();
     // auto tp=three.template permute<0,2,0,1>();
-    // XPED_DEFAULT_PLAININTERFACE::TType<double,3> tplainshuffle = PlainInterface<M_MATRIXLIB,
+    // PlainInterface::TType<double,3> tplainshuffle = PlainInterface<M_MATRIXLIB,
     // M_TENSORLIB>::shuffle<double,3,2,0,1>(threep); auto tplainp = tp.plainTensor(); auto check =
     // nda::make_ein_sum<double,0,1,2,3>(nda::ein<0,1,2,3>(tplainshuffle) - nda::ein<0,1,2,3>(tplainshuffle));
 
@@ -316,7 +316,7 @@ void test_tensor_transformation_to_plain(const Qbasis<Symmetry, 1>& B, const Qba
     // SPDLOG_INFO(t);
     auto tplain = t.plainTensor();
     // tplain.print();
-    auto norm_ = XPED_DEFAULT_PLAININTERFACE::contract<double, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3>(tplain, tplain);
-    double norm = XPED_DEFAULT_PLAININTERFACE::getVal<double, 0>(norm_, {{}});
+    auto norm_ = PlainInterface::contract<double, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3>(tplain, tplain);
+    double norm = PlainInterface::getVal<double, 0>(norm_, {{}});
     CHECK(t.squaredNorm() == doctest::Approx(norm));
 }

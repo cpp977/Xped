@@ -65,7 +65,7 @@ void Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::setConstant(const
     SPDLOG_TRACE("Entering setConstant().");
     SPDLOG_TRACE("Start loop with #={} iterations.", sector_.size());
     for(size_t i = 0; i < sector().size(); i++) {
-        PlainInterface::setConstant<Scalar>(block(i));
+        PlainInterface::setConstant<Scalar>(block(i), val);
         SPDLOG_TRACE("Set block #={} to zero.", i);
     }
     SPDLOG_TRACE("Leaving setConstant().");
@@ -625,178 +625,178 @@ Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::subMatrix(const Fusion
     return submatrix;
 }
 
-// template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
-// typename PlainInterface::TType<Scalar, Rank + CoRank> Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::plainTensor() const
-// {
-//     SPDLOG_INFO("Entering plainTensor()");
-//     auto sorted_domain = domain;
-//     sorted_domain.sort();
-//     auto sorted_codomain = codomain;
-//     sorted_codomain.sort();
-//     auto sorted_uncoupledDomain() = uncoupled_domain;
-//     std::for_each(sorted_uncoupled_domain.begin(), sorted_uncoupled_domain.end(), [](Qbasis<Symmetry, 1>& q) { q.sort(); });
-//     auto sorted_uncoupled_codomain = uncoupled_codomain;
-//     std::for_each(sorted_uncoupled_codomain.begin(), sorted_uncoupled_codomain.end(), [](Qbasis<Symmetry, 1>& q) { q.sort(); });
+template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
+typename PlainInterface::TType<Scalar, Rank + CoRank> Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::plainTensor() const
+{
+    SPDLOG_INFO("Entering plainTensor()");
+    auto sorted_domain = coupledDomain();
+    sorted_domain.sort();
+    auto sorted_codomain = coupledCodomain();
+    sorted_codomain.sort();
+    auto sorted_uncoupled_domain = uncoupledDomain();
+    std::for_each(sorted_uncoupled_domain.begin(), sorted_uncoupled_domain.end(), [](Qbasis<Symmetry, 1>& q) { q.sort(); });
+    auto sorted_uncoupled_codomain = uncoupledCodomain();
+    std::for_each(sorted_uncoupled_codomain.begin(), sorted_uncoupled_codomain.end(), [](Qbasis<Symmetry, 1>& q) { q.sort(); });
 
-//     std::vector<std::size_t> index_sort(sector_.size());
-//     std::iota(index_sort.begin(), index_sort.end(), 0);
-//     std::sort(index_sort.begin(), index_sort.end(), [this](std::size_t n1, std::size_t n2) {
-//         qarray<Symmetry::Nq> q1 = sector_[n1];
-//         qarray<Symmetry::Nq> q2 = sector_[n2];
-//         return Symmetry::compare(q1, q2);
-//     });
+    std::vector<std::size_t> index_sort(sector().size());
+    std::iota(index_sort.begin(), index_sort.end(), 0);
+    std::sort(index_sort.begin(), index_sort.end(), [this](std::size_t n1, std::size_t n2) {
+        qarray<Symmetry::Nq> q1 = sector(n1);
+        qarray<Symmetry::Nq> q2 = sector(n2);
+        return Symmetry::compare(q1, q2);
+    });
 
-//     auto sorted_sector = sector_;
-//     auto sorted_block = block_;
-//     for(std::size_t i = 0; i < sector_.size(); i++) {
-//         sorted_sector[i] = sector_[index_sort[i]];
-//         sorted_block[i] = block_[index_sort[i]];
-//     }
-//     SPDLOG_INFO("sorted everything");
+    auto sorted_sector = sector();
+    auto sorted_block = storage().data();
+    for(std::size_t i = 0; i < sector().size(); i++) {
+        sorted_sector[i] = sector(index_sort[i]);
+        sorted_block[i] = block(index_sort[i]);
+    }
+    SPDLOG_INFO("sorted everything");
 
-//     auto inner_mat = PlainInterface::construct_with_zero<Scalar>(sorted_domain.fullDim(), sorted_codomain.fullDim(), *world_);
-//     SPDLOG_INFO("Constructed inner_mat (size={},{}) and perform loop with {} steps.",
-//                 sorted_domain.fullDim(),
-//                 sorted_codomain.fullDim(),
-//                 sorted_sector.size());
-//     for(std::size_t i = 0; i < sorted_sector.size(); i++) {
-//         SPDLOG_INFO("step #={}", i);
-//         auto id_cgc = PlainInterface::Identity<Scalar>(Symmetry::degeneracy(sorted_sector[i]), Symmetry::degeneracy(sorted_sector[i]), *world_);
-//         SPDLOG_INFO("Static identity done");
-//         // SPDLOG_INFO("block[{}]", i);
-//         // sorted_block[i].print();
-//         auto mat = PlainInterface::kronecker_prod<Scalar>(sorted_block[i], id_cgc);
-//         SPDLOG_INFO("Kronecker Product done.");
-//         // mat.print();
-//         PlainInterface::add_to_block<Scalar>(inner_mat,
-//                                                 sorted_domain.full_outer_num(sorted_sector[i]),
-//                                                 sorted_codomain.full_outer_num(sorted_sector[i]),
-//                                                 Symmetry::degeneracy(sorted_sector[i]) * PlainInterface::rows<Scalar>(sorted_block[i]),
-//                                                 Symmetry::degeneracy(sorted_sector[i]) * PlainInterface::cols<Scalar>(sorted_block[i]),
-//                                                 mat);
-//         SPDLOG_INFO("Block added.");
-//         // inner_mat.block(sorted_domain.full_outer_num(sorted_sector[i]),
-//         //                 sorted_codomain.full_outer_num(sorted_sector[i]),
-//         //                 Symmetry::degeneracy(sorted_sector[i]) * sorted_block[i].rows(),
-//         //                 Symmetry::degeneracy(sorted_sector[i]) * sorted_block[i].cols()) =
-//         //     Eigen::kroneckerProduct(sorted_block[i],
-//         //                             MatrixType::Identity(Symmetry::degeneracy(sorted_sector[i]), Symmetry::degeneracy(sorted_sector[i])));
-//     }
-//     // cout << "inner_mat:" << endl << std::fixed << inner_mat << endl;
-//     std::array<IndexType, 2> full_dims = {static_cast<IndexType>(sorted_domain.fullDim()), static_cast<IndexType>(sorted_codomain.fullDim())};
-//     // typename PlainInterface::MapTType<Scalar, 2> map = PlainInterface::Map(inner_mat.data(), full_dims);
-//     // typename PlainInterface::TType<Scalar, 2> inner_tensor = PlainInterface::construct<Scalar, 2>(map);
+    auto inner_mat = PlainInterface::construct_with_zero<Scalar>(sorted_domain.fullDim(), sorted_codomain.fullDim(), *world_);
+    SPDLOG_INFO("Constructed inner_mat (size={},{}) and perform loop with {} steps.",
+                sorted_domain.fullDim(),
+                sorted_codomain.fullDim(),
+                sorted_sector.size());
+    for(std::size_t i = 0; i < sorted_sector.size(); i++) {
+        SPDLOG_INFO("step #={}", i);
+        auto id_cgc = PlainInterface::Identity<Scalar>(Symmetry::degeneracy(sorted_sector[i]), Symmetry::degeneracy(sorted_sector[i]), *world_);
+        SPDLOG_INFO("Static identity done");
+        // SPDLOG_INFO("block[{}]", i);
+        // sorted_block[i].print();
+        auto mat = PlainInterface::kronecker_prod<Scalar>(sorted_block[i], id_cgc);
+        SPDLOG_INFO("Kronecker Product done.");
+        // mat.print();
+        PlainInterface::add_to_block<Scalar>(inner_mat,
+                                             sorted_domain.full_outer_num(sorted_sector[i]),
+                                             sorted_codomain.full_outer_num(sorted_sector[i]),
+                                             Symmetry::degeneracy(sorted_sector[i]) * PlainInterface::rows<Scalar>(sorted_block[i]),
+                                             Symmetry::degeneracy(sorted_sector[i]) * PlainInterface::cols<Scalar>(sorted_block[i]),
+                                             mat);
+        SPDLOG_INFO("Block added.");
+        // inner_mat.block(sorted_domain.full_outer_num(sorted_sector[i]),
+        //                 sorted_codomain.full_outer_num(sorted_sector[i]),
+        //                 Symmetry::degeneracy(sorted_sector[i]) * sorted_block[i].rows(),
+        //                 Symmetry::degeneracy(sorted_sector[i]) * sorted_block[i].cols()) =
+        //     Eigen::kroneckerProduct(sorted_block[i],
+        //                             MatrixType::Identity(Symmetry::degeneracy(sorted_sector[i]), Symmetry::degeneracy(sorted_sector[i])));
+    }
+    // cout << "inner_mat:" << endl << std::fixed << inner_mat << endl;
+    std::array<IndexType, 2> full_dims = {static_cast<IndexType>(sorted_domain.fullDim()), static_cast<IndexType>(sorted_codomain.fullDim())};
+    // typename PlainInterface::MapTType<Scalar, 2> map = PlainInterface::Map(inner_mat.data(), full_dims);
+    // typename PlainInterface::TType<Scalar, 2> inner_tensor = PlainInterface::construct<Scalar, 2>(map);
 
-//     typename PlainInterface::TType<Scalar, 2> inner_tensor = PlainInterface::tensor_from_matrix_block<Scalar, 2>(
-//         inner_mat, 0, 0::template rows<Scalar>(inner_mat)::template cols<Scalar>(inner_mat), full_dims);
-//     SPDLOG_INFO("constructed inner_tensor");
-//     //    inner_tensor.print();
-//     std::array<IndexType, Rank + 1> dims_domain;
-//     for(size_t i = 0; i < Rank; i++) { dims_domain[i] = sorted_uncoupled_domain[i].fullDim(); }
-//     dims_domain[Rank] = sorted_domain.fullDim();
-//     SPDLOG_INFO("dims domain: {}", dims_domain);
-//     typename PlainInterface::TType<Scalar, Rank + 1> unitary_domain = PlainInterface::construct<Scalar>(dims_domain, *world_);
-//     PlainInterface::setZero<Scalar, Rank + 1>(unitary_domain);
+    typename PlainInterface::TType<Scalar, 2> inner_tensor = PlainInterface::tensor_from_matrix_block<Scalar, 2>(
+        inner_mat, 0, 0, PlainInterface::rows<Scalar>(inner_mat), PlainInterface::cols<Scalar>(inner_mat), full_dims);
+    SPDLOG_INFO("constructed inner_tensor");
+    //    inner_tensor.print();
+    std::array<IndexType, Rank + 1> dims_domain;
+    for(size_t i = 0; i < Rank; i++) { dims_domain[i] = sorted_uncoupled_domain[i].fullDim(); }
+    dims_domain[Rank] = sorted_domain.fullDim();
+    SPDLOG_INFO("dims domain: {}", dims_domain);
+    typename PlainInterface::TType<Scalar, Rank + 1> unitary_domain = PlainInterface::construct<Scalar>(dims_domain, *world_);
+    PlainInterface::setZero<Scalar, Rank + 1>(unitary_domain);
 
-//     for(const auto& [q, num, plain] : sorted_domain) {
-//         for(const auto& tree : sorted_domain.tree(q)) {
-//             std::size_t uncoupled_dim = 1;
-//             for(std::size_t i = 0; i < Rank; i++) { uncoupled_dim *= sorted_uncoupled_domain[i].inner_dim(tree.q_uncoupled[i]); }
-//             MatrixType id = PlainInterface::construct<Scalar>(uncoupled_dim, uncoupled_dim, *world_);
-//             PlainInterface::setIdentity<Scalar>(id);
-//             // id.setIdentity();
-//             typename PlainInterface::cTType<Scalar, 2> Tid_mat = PlainInterface::tensor_from_matrix_block<Scalar, 2>(
-//                 id,
-//                 0,
-//                 0,
-//                 PlainInterface::rows<Scalar>(id),
-//                 PlainInterface::cols<Scalar>(id),
-//                 std::array<IndexType, 2>{PlainInterface::rows<Scalar>(id)::template cols<Scalar>(id)});
+    for(const auto& [q, num, plain] : sorted_domain) {
+        for(const auto& tree : sorted_domain.tree(q)) {
+            std::size_t uncoupled_dim = 1;
+            for(std::size_t i = 0; i < Rank; i++) { uncoupled_dim *= sorted_uncoupled_domain[i].inner_dim(tree.q_uncoupled[i]); }
+            MatrixType id = PlainInterface::construct<Scalar>(uncoupled_dim, uncoupled_dim, *world_);
+            PlainInterface::setIdentity<Scalar>(id);
+            // id.setIdentity();
+            typename PlainInterface::cTType<Scalar, 2> Tid_mat = PlainInterface::tensor_from_matrix_block<Scalar, 2>(
+                id,
+                0,
+                0,
+                PlainInterface::rows<Scalar>(id),
+                PlainInterface::cols<Scalar>(id),
+                std::array<IndexType, 2>{PlainInterface::rows<Scalar>(id), PlainInterface::cols<Scalar>(id)});
 
-//             std::array<IndexType, Rank + 1> dims;
-//             for(std::size_t i = 0; i < Rank; i++) { dims[i] = sorted_uncoupled_domain[i].inner_dim(tree.q_uncoupled[i]); }
-//             dims[Rank] = uncoupled_dim;
-//             typename PlainInterface::TType<Scalar, Rank + 1> Tid = PlainInterface::reshape<Scalar, 2>(Tid_mat, dims);
+            std::array<IndexType, Rank + 1> dims;
+            for(std::size_t i = 0; i < Rank; i++) { dims[i] = sorted_uncoupled_domain[i].inner_dim(tree.q_uncoupled[i]); }
+            dims[Rank] = uncoupled_dim;
+            typename PlainInterface::TType<Scalar, Rank + 1> Tid = PlainInterface::reshape<Scalar, 2>(Tid_mat, dims);
 
-//             auto T = tree.template asTensor<PlainInterface>(*world_);
-//             typename PlainInterface::TType<Scalar, Rank + 1> Tfull = PlainInterface::tensorProd<Scalar, Rank + 1>(Tid, T);
-//             std::array<IndexType, Rank + 1> offsets;
-//             for(std::size_t i = 0; i < Rank; i++) { offsets[i] = sorted_uncoupled_domain[i].full_outer_num(tree.q_uncoupled[i]); }
-//             offsets[Rank] = sorted_domain.full_outer_num(q) + sorted_domain.leftOffset(tree) * Symmetry::degeneracy(q);
+            auto T = tree.template asTensor<PlainInterface>(*world_);
+            typename PlainInterface::TType<Scalar, Rank + 1> Tfull = PlainInterface::tensorProd<Scalar, Rank + 1>(Tid, T);
+            std::array<IndexType, Rank + 1> offsets;
+            for(std::size_t i = 0; i < Rank; i++) { offsets[i] = sorted_uncoupled_domain[i].full_outer_num(tree.q_uncoupled[i]); }
+            offsets[Rank] = sorted_domain.full_outer_num(q) + sorted_domain.leftOffset(tree) * Symmetry::degeneracy(q);
 
-//             std::array<IndexType, Rank + 1> extents;
-//             for(std::size_t i = 0; i < Rank; i++) {
-//                 extents[i] = sorted_uncoupled_domain[i].inner_dim(tree.q_uncoupled[i]) * Symmetry::degeneracy(tree.q_uncoupled[i]);
-//             }
-//             extents[Rank] = PlainInterface::dimensions<Scalar, Rank + 1>(Tfull)[Rank];
-//             PlainInterface::setSubTensor<Scalar, Rank + 1>(unitary_domain, offsets, extents, Tfull); // this amounts to =. Do we need +=?
-//         }
-//     }
-//     SPDLOG_INFO("constructed domain unitary");
-//     // std::cout << "domain" << std::endl;
-//     //    unitary_domain.print();
-//     // unitary_domain.for_each_value([](double d) { std::cout << d << std::endl; });
+            std::array<IndexType, Rank + 1> extents;
+            for(std::size_t i = 0; i < Rank; i++) {
+                extents[i] = sorted_uncoupled_domain[i].inner_dim(tree.q_uncoupled[i]) * Symmetry::degeneracy(tree.q_uncoupled[i]);
+            }
+            extents[Rank] = PlainInterface::dimensions<Scalar, Rank + 1>(Tfull)[Rank];
+            PlainInterface::setSubTensor<Scalar, Rank + 1>(unitary_domain, offsets, extents, Tfull); // this amounts to =. Do we need +=?
+        }
+    }
+    SPDLOG_INFO("constructed domain unitary");
+    // std::cout << "domain" << std::endl;
+    //    unitary_domain.print();
+    // unitary_domain.for_each_value([](double d) { std::cout << d << std::endl; });
 
-//     std::array<IndexType, CoRank + 1> dims_codomain;
-//     for(size_t i = 0; i < CoRank; i++) { dims_codomain[i] = sorted_uncoupled_codomain[i].fullDim(); }
-//     dims_codomain[CoRank] = sorted_codomain.fullDim();
-//     SPDLOG_INFO("dims codomain: {}", dims_codomain);
-//     typename PlainInterface::TType<Scalar, CoRank + 1> unitary_codomain = PlainInterface::construct<Scalar>(dims_codomain, *world_);
-//     PlainInterface::setZero<Scalar, CoRank + 1>(unitary_codomain);
-//     // std::cout << "codomain" << std::endl;
-//     // unitary_codomain.print();
-//     for(const auto& [q, num, plain] : sorted_codomain) {
-//         for(const auto& tree : sorted_codomain.tree(q)) {
-//             IndexType uncoupled_dim = 1;
-//             for(std::size_t i = 0; i < CoRank; i++) { uncoupled_dim *= sorted_uncoupled_codomain[i].inner_dim(tree.q_uncoupled[i]); }
-//             MatrixType id = PlainInterface::construct<Scalar>(uncoupled_dim, uncoupled_dim, *world_);
-//             PlainInterface::setIdentity<Scalar>(id);
-//             // id.setIdentity();
-//             typename PlainInterface::cTType<Scalar, 2> Tid_mat = PlainInterface::tensor_from_matrix_block<Scalar, 2>(
-//                 id,
-//                 0,
-//                 0,
-//                 PlainInterface::rows<Scalar>(id),
-//                 PlainInterface::cols<Scalar>(id),
-//                 std::array<IndexType, 2>{PlainInterface::rows<Scalar>(id)::template cols<Scalar>(id)});
+    std::array<IndexType, CoRank + 1> dims_codomain;
+    for(size_t i = 0; i < CoRank; i++) { dims_codomain[i] = sorted_uncoupled_codomain[i].fullDim(); }
+    dims_codomain[CoRank] = sorted_codomain.fullDim();
+    SPDLOG_INFO("dims codomain: {}", dims_codomain);
+    typename PlainInterface::TType<Scalar, CoRank + 1> unitary_codomain = PlainInterface::construct<Scalar>(dims_codomain, *world_);
+    PlainInterface::setZero<Scalar, CoRank + 1>(unitary_codomain);
+    // std::cout << "codomain" << std::endl;
+    // unitary_codomain.print();
+    for(const auto& [q, num, plain] : sorted_codomain) {
+        for(const auto& tree : sorted_codomain.tree(q)) {
+            IndexType uncoupled_dim = 1;
+            for(std::size_t i = 0; i < CoRank; i++) { uncoupled_dim *= sorted_uncoupled_codomain[i].inner_dim(tree.q_uncoupled[i]); }
+            MatrixType id = PlainInterface::construct<Scalar>(uncoupled_dim, uncoupled_dim, *world_);
+            PlainInterface::setIdentity<Scalar>(id);
+            // id.setIdentity();
+            typename PlainInterface::cTType<Scalar, 2> Tid_mat = PlainInterface::tensor_from_matrix_block<Scalar, 2>(
+                id,
+                0,
+                0,
+                PlainInterface::rows<Scalar>(id),
+                PlainInterface::cols<Scalar>(id),
+                std::array<IndexType, 2>{PlainInterface::rows<Scalar>(id), PlainInterface::cols<Scalar>(id)});
 
-//             // MatrixType id(uncoupled_dim, uncoupled_dim);
-//             // id.setIdentity();
-//             // typename PlainInterface::cTType<Scalar, 2> Tid_mat =
-//             //     PlainInterface::construct<Scalar, 2>(PlainInterface::Map(id.data(), std::array<IndexType, 2>{id.rows(), id.cols()}));
+            // MatrixType id(uncoupled_dim, uncoupled_dim);
+            // id.setIdentity();
+            // typename PlainInterface::cTType<Scalar, 2> Tid_mat =
+            //     PlainInterface::construct<Scalar, 2>(PlainInterface::Map(id.data(), std::array<IndexType, 2>{id.rows(), id.cols()}));
 
-//             std::array<IndexType, CoRank + 1> dims;
-//             for(std::size_t i = 0; i < CoRank; i++) { dims[i] = sorted_uncoupled_codomain[i].inner_dim(tree.q_uncoupled[i]); }
-//             dims[CoRank] = uncoupled_dim;
-//             typename PlainInterface::TType<Scalar, CoRank + 1> Tid = PlainInterface::reshape<Scalar, 2>(Tid_mat, dims);
-//             auto T = tree.template asTensor<PlainInterface>(*world_);
-//             typename PlainInterface::TType<Scalar, CoRank + 1> Tfull = PlainInterface::tensorProd<Scalar, CoRank + 1>(Tid, T);
-//             std::array<IndexType, CoRank + 1> offsets;
-//             for(std::size_t i = 0; i < CoRank; i++) { offsets[i] = sorted_uncoupled_codomain[i].full_outer_num(tree.q_uncoupled[i]); }
-//             offsets[CoRank] = sorted_codomain.full_outer_num(q) + sorted_codomain.leftOffset(tree) * Symmetry::degeneracy(q);
-//             std::array<IndexType, CoRank + 1> extents;
-//             for(std::size_t i = 0; i < CoRank; i++) {
-//                 extents[i] = sorted_uncoupled_codomain[i].inner_dim(tree.q_uncoupled[i]) * Symmetry::degeneracy(tree.q_uncoupled[i]);
-//             }
-//             extents[CoRank] = PlainInterface::dimensions<Scalar, CoRank + 1>(Tfull)[CoRank];
-//             PlainInterface::setSubTensor<Scalar, CoRank + 1>(unitary_codomain, offsets, extents, Tfull); // this amounts to =. Do we need +=?
-//         }
-//     }
-//     SPDLOG_INFO("constructed codomain unitary");
-//     // std::cout << "codomain" << std::endl;
-//     //    unitary_codomain.print();
-//     // unitary_codomain.for_each_value([](double d) { std::cout << d << std::endl; });
-//     // XPED_MPI_BARRIER(world_->comm);
-//     std::array<IndexType, Rank + CoRank> dims_result;
-//     for(size_t i = 0; i < Rank; i++) { dims_result[i] = sorted_uncoupled_domain[i].fullDim(); }
-//     for(size_t i = 0; i < CoRank; i++) { dims_result[i + Rank] = sorted_uncoupled_codomain[i].fullDim(); }
-//     TensorType out = PlainInterface::construct<Scalar>(dims_result, *world_);
-//     PlainInterface::setZero<Scalar, Rank + CoRank>(out);
+            std::array<IndexType, CoRank + 1> dims;
+            for(std::size_t i = 0; i < CoRank; i++) { dims[i] = sorted_uncoupled_codomain[i].inner_dim(tree.q_uncoupled[i]); }
+            dims[CoRank] = uncoupled_dim;
+            typename PlainInterface::TType<Scalar, CoRank + 1> Tid = PlainInterface::reshape<Scalar, 2>(Tid_mat, dims);
+            auto T = tree.template asTensor<PlainInterface>(*world_);
+            typename PlainInterface::TType<Scalar, CoRank + 1> Tfull = PlainInterface::tensorProd<Scalar, CoRank + 1>(Tid, T);
+            std::array<IndexType, CoRank + 1> offsets;
+            for(std::size_t i = 0; i < CoRank; i++) { offsets[i] = sorted_uncoupled_codomain[i].full_outer_num(tree.q_uncoupled[i]); }
+            offsets[CoRank] = sorted_codomain.full_outer_num(q) + sorted_codomain.leftOffset(tree) * Symmetry::degeneracy(q);
+            std::array<IndexType, CoRank + 1> extents;
+            for(std::size_t i = 0; i < CoRank; i++) {
+                extents[i] = sorted_uncoupled_codomain[i].inner_dim(tree.q_uncoupled[i]) * Symmetry::degeneracy(tree.q_uncoupled[i]);
+            }
+            extents[CoRank] = PlainInterface::dimensions<Scalar, CoRank + 1>(Tfull)[CoRank];
+            PlainInterface::setSubTensor<Scalar, CoRank + 1>(unitary_codomain, offsets, extents, Tfull); // this amounts to =. Do we need +=?
+        }
+    }
+    SPDLOG_INFO("constructed codomain unitary");
+    // std::cout << "codomain" << std::endl;
+    //    unitary_codomain.print();
+    // unitary_codomain.for_each_value([](double d) { std::cout << d << std::endl; });
+    // XPED_MPI_BARRIER(world_->comm);
+    std::array<IndexType, Rank + CoRank> dims_result;
+    for(size_t i = 0; i < Rank; i++) { dims_result[i] = sorted_uncoupled_domain[i].fullDim(); }
+    for(size_t i = 0; i < CoRank; i++) { dims_result[i + Rank] = sorted_uncoupled_codomain[i].fullDim(); }
+    TensorType out = PlainInterface::construct<Scalar>(dims_result, *world_);
+    PlainInterface::setZero<Scalar, Rank + CoRank>(out);
 
-//     auto intermediate = PlainInterface::contract<Scalar, Rank + 1, 2, Rank, 0>(unitary_domain, inner_tensor);
-//     out = PlainInterface::contract<Scalar, Rank + 1, CoRank + 1, Rank, CoRank>(intermediate, unitary_codomain);
-//     return out;
-// }
+    auto intermediate = PlainInterface::contract<Scalar, Rank + 1, 2, Rank, 0>(unitary_domain, inner_tensor);
+    out = PlainInterface::contract<Scalar, Rank + 1, CoRank + 1, Rank, CoRank>(intermediate, unitary_codomain);
+    return out;
+}
 
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
 void Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::print(std::ostream& o, bool PRINT_MATRICES) XPED_CONST

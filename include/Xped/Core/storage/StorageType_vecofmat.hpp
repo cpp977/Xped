@@ -77,7 +77,7 @@ public:
     const MatrixType& block(qType q) const
     {
         auto it = m_dict.find(q);
-        assert(it != dict_.end());
+        assert(it != m_dict.end());
         return m_data[it->second];
     }
 

@@ -59,7 +59,7 @@ constexpr std::size_t U0_TENSOR_SIZE = 3;
 #else
 constexpr std::size_t SU2_TENSOR_SIZE = 7;
 constexpr std::size_t U1_TENSOR_SIZE = 5;
-constexpr std::size_t U0_TENSOR_SIZE = 5;
+constexpr std::size_t U0_TENSOR_SIZE = 4;
 #endif
 
 #ifdef XPED_USE_MPI

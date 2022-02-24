@@ -87,14 +87,14 @@ public:
     Tensor(const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, Rank>& basis_domain,
            const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, CoRank>& basis_codomain,
            mpi::XpedWorld& world = mpi::getUniverse())
-        : storage_(basis_domain, basis_codomain)
+        : storage_(basis_domain, basis_codomain, world)
         , world_(&world, mpi::TrivialDeleter<mpi::XpedWorld>{})
     {}
 
     Tensor(const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, Rank>& basis_domain,
            const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, CoRank>& basis_codomain,
-           std::shared_ptr<mpi::XpedWorld> world)
-        : storage_(basis_domain, basis_codomain)
+           const std::shared_ptr<mpi::XpedWorld>& world)
+        : storage_(basis_domain, basis_codomain, *world)
         , world_(world)
     {}
 

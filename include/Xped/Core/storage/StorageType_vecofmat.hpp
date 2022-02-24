@@ -25,9 +25,11 @@ public:
     StorageType() = default;
 
     StorageType(const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, Rank> basis_domain,
-                const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, CoRank> basis_codomain)
+                const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, CoRank> basis_codomain,
+                mpi::XpedWorld& world = mpi::getUniverse())
         : m_uncoupled_domain(basis_domain)
         , m_uncoupled_codomain(basis_codomain)
+        , m_world(&world, mpi::TrivialDeleter<mpi::XpedWorld>{})
     {
         m_domain = internal::build_FusionTree(m_uncoupled_domain);
         m_codomain = internal::build_FusionTree(m_uncoupled_codomain);
@@ -127,6 +129,8 @@ private:
     Qbasis<Symmetry, Rank, AllocationPolicy> m_domain;
     Qbasis<Symmetry, CoRank, AllocationPolicy> m_codomain;
 
+    std::shared_ptr<mpi::XpedWorld> m_world;
+
     void uninitialized_resize()
     {
         m_data.reserve(std::max(m_domain.dim(), m_codomain.dim()));
@@ -135,7 +139,9 @@ private:
             if(m_codomain.IS_PRESENT(q)) {
                 m_sector.push_back(q);
                 m_dict.insert(std::make_pair(q, m_sector.size() - 1));
-                m_data.emplace_back(m_domain.inner_dim(q), m_codomain.inner_dim(q));
+                MatrixType Mtmp = PlainInterface::construct<Scalar>(m_domain.inner_dim(q), m_codomain.inner_dim(q), *m_world);
+                m_data.push_back(Mtmp);
+                // m_data.emplace_back(m_domain.inner_dim(q), m_codomain.inner_dim(q));
             }
         }
 

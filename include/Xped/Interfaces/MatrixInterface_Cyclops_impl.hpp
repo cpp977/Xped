@@ -5,8 +5,7 @@
 
 namespace Xped {
 
-template <>
-struct MatrixInterface<CyclopsMatrixLib>
+struct MatrixInterface
 {
     // typedefs
     template <typename Scalar>

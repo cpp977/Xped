@@ -7,36 +7,34 @@
 
 namespace Xped {
 
-template <>
-struct PlainInterface<EigenMatrixLib, ArrayTensorLib, EigenVectorLib>
-    : public MatrixInterface<EigenMatrixLib>, public TensorInterface<ArrayTensorLib>, public VectorInterface<EigenVectorLib>
+struct PlainInterface : public MatrixInterface, public TensorInterface, public VectorInterface
 {
     using Indextype = Eigen::Index;
-    using MatrixInterface<EigenMatrixLib>::construct;
-    using MatrixInterface<EigenMatrixLib>::construct_with_zero;
-    using MatrixInterface<EigenMatrixLib>::setZero;
-    using MatrixInterface<EigenMatrixLib>::setRandom;
-    using MatrixInterface<EigenMatrixLib>::setConstant;
-    using MatrixInterface<EigenMatrixLib>::scale;
-    using MatrixInterface<EigenMatrixLib>::getVal;
-    using MatrixInterface<EigenMatrixLib>::add;
-    using MatrixInterface<EigenMatrixLib>::difference;
-    using MatrixInterface<EigenMatrixLib>::print;
+    using MatrixInterface::add;
+    using MatrixInterface::construct;
+    using MatrixInterface::construct_with_zero;
+    using MatrixInterface::difference;
+    using MatrixInterface::getVal;
+    using MatrixInterface::print;
+    using MatrixInterface::scale;
+    using MatrixInterface::setConstant;
+    using MatrixInterface::setRandom;
+    using MatrixInterface::setZero;
 
-    using TensorInterface<ArrayTensorLib>::construct;
-    using TensorInterface<ArrayTensorLib>::setZero;
-    using TensorInterface<ArrayTensorLib>::setRandom;
-    using TensorInterface<ArrayTensorLib>::setConstant;
-    using TensorInterface<ArrayTensorLib>::getVal;
-    using TensorInterface<ArrayTensorLib>::print;
+    using TensorInterface::construct;
+    using TensorInterface::getVal;
+    using TensorInterface::print;
+    using TensorInterface::setConstant;
+    using TensorInterface::setRandom;
+    using TensorInterface::setZero;
 
-    using VectorInterface<EigenVectorLib>::construct;
-    using VectorInterface<EigenVectorLib>::construct_with_zero;
-    using VectorInterface<EigenVectorLib>::setZero;
-    using VectorInterface<EigenVectorLib>::setRandom;
-    using VectorInterface<EigenVectorLib>::setConstant;
-    using VectorInterface<EigenVectorLib>::scale;
-    using VectorInterface<EigenVectorLib>::print;
+    using VectorInterface::construct;
+    using VectorInterface::construct_with_zero;
+    using VectorInterface::print;
+    using VectorInterface::scale;
+    using VectorInterface::setConstant;
+    using VectorInterface::setRandom;
+    using VectorInterface::setZero;
 
     template <typename Scalar, std::size_t Rank>
     static void set_block_from_tensor(MType<Scalar>& M,
@@ -78,7 +76,7 @@ struct PlainInterface<EigenMatrixLib, ArrayTensorLib, EigenVectorLib>
             shape_data[i - 1].set_extent(dims[i]);
             shape_data[i - 1].set_stride(std::accumulate(dims.begin(), dims.begin() + i, 1ul, std::multiplies<Scalar>()));
         }
-        auto dims_tuple = std::tuple_cat(std::make_tuple(first_dim), TensorInterface<ArrayTensorLib>::as_tuple(shape_data));
+        auto dims_tuple = std::tuple_cat(std::make_tuple(first_dim), TensorInterface::as_tuple(shape_data));
 
         nda::dense_shape<Rank> block_shape(dims_tuple);
 

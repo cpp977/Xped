@@ -5,8 +5,7 @@
 
 namespace Xped {
 
-template <>
-struct TensorInterface<CyclopsTensorLib>
+struct TensorInterface
 {
     // typedefs
     template <typename Scalar, std::size_t Rank>

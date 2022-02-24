@@ -5,37 +5,35 @@
 
 namespace Xped {
 
-template <>
-struct PlainInterface<CyclopsMatrixLib, CyclopsTensorLib, CyclopsVectorLib>
-    : public MatrixInterface<CyclopsMatrixLib>, public TensorInterface<CyclopsTensorLib>, public VectorInterface<CyclopsVectorLib>
+struct PlainInterface : public MatrixInterface, public TensorInterface, public VectorInterface
 {
     // typedefs
     using Indextype = int;
-    using MatrixInterface<CyclopsMatrixLib>::construct;
-    using MatrixInterface<CyclopsMatrixLib>::construct_with_zero;
-    using MatrixInterface<CyclopsMatrixLib>::setZero;
-    using MatrixInterface<CyclopsMatrixLib>::setRandom;
-    using MatrixInterface<CyclopsMatrixLib>::setConstant;
-    using MatrixInterface<CyclopsMatrixLib>::scale;
-    using MatrixInterface<CyclopsMatrixLib>::getVal;
-    using MatrixInterface<CyclopsMatrixLib>::add;
-    using MatrixInterface<CyclopsMatrixLib>::difference;
-    using MatrixInterface<CyclopsMatrixLib>::print;
+    using MatrixInterface::add;
+    using MatrixInterface::construct;
+    using MatrixInterface::construct_with_zero;
+    using MatrixInterface::difference;
+    using MatrixInterface::getVal;
+    using MatrixInterface::print;
+    using MatrixInterface::scale;
+    using MatrixInterface::setConstant;
+    using MatrixInterface::setRandom;
+    using MatrixInterface::setZero;
 
-    using TensorInterface<CyclopsTensorLib>::construct;
-    using TensorInterface<CyclopsTensorLib>::setZero;
-    using TensorInterface<CyclopsTensorLib>::setRandom;
-    using TensorInterface<CyclopsTensorLib>::setConstant;
-    using TensorInterface<CyclopsTensorLib>::getVal;
-    using TensorInterface<CyclopsTensorLib>::print;
+    using TensorInterface::construct;
+    using TensorInterface::getVal;
+    using TensorInterface::print;
+    using TensorInterface::setConstant;
+    using TensorInterface::setRandom;
+    using TensorInterface::setZero;
 
-    using VectorInterface<CyclopsVectorLib>::construct;
-    using VectorInterface<CyclopsVectorLib>::construct_with_zero;
-    using VectorInterface<CyclopsVectorLib>::setZero;
-    using VectorInterface<CyclopsVectorLib>::setRandom;
-    using VectorInterface<CyclopsVectorLib>::setConstant;
-    using VectorInterface<CyclopsVectorLib>::scale;
-    using VectorInterface<CyclopsVectorLib>::print;
+    using VectorInterface::construct;
+    using VectorInterface::construct_with_zero;
+    using VectorInterface::print;
+    using VectorInterface::scale;
+    using VectorInterface::setConstant;
+    using VectorInterface::setRandom;
+    using VectorInterface::setZero;
 
     template <typename Scalar, std::size_t Rank>
     static void set_block_from_tensor(MType<Scalar>& M,

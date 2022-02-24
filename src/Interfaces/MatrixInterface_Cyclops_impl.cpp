@@ -23,13 +23,13 @@ typedef int MIndextype;
 
 // constructors
 template <typename Scalar>
-MType<Scalar> MatrixInterface<CyclopsMatrixLib>::construct(const MIndextype& rows, const MIndextype& cols, CTF::World& world)
+MType<Scalar> MatrixInterface::construct(const MIndextype& rows, const MIndextype& cols, CTF::World& world)
 {
     return MType<Scalar>(rows, cols, world);
 }
 
 template <typename Scalar>
-MType<Scalar> MatrixInterface<CyclopsMatrixLib>::construct_with_zero(const MIndextype& rows, const MIndextype& cols, CTF::World& world)
+MType<Scalar> MatrixInterface::construct_with_zero(const MIndextype& rows, const MIndextype& cols, CTF::World& world)
 {
     SPDLOG_INFO("Entering construct with zero");
     SPDLOG_INFO("rows={}, cols={}", rows, cols);
@@ -37,38 +37,38 @@ MType<Scalar> MatrixInterface<CyclopsMatrixLib>::construct_with_zero(const MInde
 }
 
 template <typename Scalar>
-void MatrixInterface<CyclopsMatrixLib>::resize(MType<Scalar>& M, const MIndextype& new_rows, const MIndextype& new_cols)
+void MatrixInterface::resize(MType<Scalar>& M, const MIndextype& new_rows, const MIndextype& new_cols)
 {
     M = CTF::Matrix<Scalar>(new_rows, new_cols, *M.wrld);
 }
 
 // initialization
 template <typename Scalar>
-void MatrixInterface<CyclopsMatrixLib>::setZero(MType<Scalar>& M)
+void MatrixInterface::setZero(MType<Scalar>& M)
 {
     M["ij"] = Scalar(0.);
 }
 
 template <typename Scalar>
-void MatrixInterface<CyclopsMatrixLib>::setRandom(MType<Scalar>& M)
+void MatrixInterface::setRandom(MType<Scalar>& M)
 {
     M.fill_random(-1., 1.);
 }
 
 template <typename Scalar>
-void MatrixInterface<CyclopsMatrixLib>::setIdentity(MType<Scalar>& M)
+void MatrixInterface::setIdentity(MType<Scalar>& M)
 {
     M["ii"] = Scalar(1.);
 }
 
 template <typename Scalar>
-void MatrixInterface<CyclopsMatrixLib>::setConstant(MType<Scalar>& M, const Scalar& val)
+void MatrixInterface::setConstant(MType<Scalar>& M, const Scalar& val)
 {
     M["ij"] = val;
 }
 
 template <typename Scalar>
-MType<Scalar> MatrixInterface<CyclopsMatrixLib>::Identity(const MIndextype& rows, const MIndextype& cols, CTF::World& world)
+MType<Scalar> MatrixInterface::Identity(const MIndextype& rows, const MIndextype& cols, CTF::World& world)
 {
     SPDLOG_TRACE("Begin of Identity()");
     SPDLOG_TRACE("rows: " + std::to_string(rows) + ", cols: " + std::to_string(cols));
@@ -81,27 +81,27 @@ MType<Scalar> MatrixInterface<CyclopsMatrixLib>::Identity(const MIndextype& rows
 
 // shape
 template <typename Scalar>
-MIndextype MatrixInterface<CyclopsMatrixLib>::rows(const MType<Scalar>& M)
+MIndextype MatrixInterface::rows(const MType<Scalar>& M)
 {
     return M.nrow;
 }
 
 template <typename Scalar>
-MIndextype MatrixInterface<CyclopsMatrixLib>::cols(const MType<Scalar>& M)
+MIndextype MatrixInterface::cols(const MType<Scalar>& M)
 {
     return M.ncol;
 }
 
 // reduction
 template <typename Scalar, typename MT>
-Scalar MatrixInterface<CyclopsMatrixLib>::trace(MT&& M)
+Scalar MatrixInterface::trace(MT&& M)
 {
     Scalar out = M["ii"];
     return out;
 }
 
 template <typename Scalar>
-Scalar MatrixInterface<CyclopsMatrixLib>::getVal(const MType<Scalar>& M, const MIndextype& row, const MIndextype& col)
+Scalar MatrixInterface::getVal(const MType<Scalar>& M, const MIndextype& row, const MIndextype& col)
 {
     int64_t global_idx = 1 * row + M.nrow * col;
     Scalar out = 0.;
@@ -114,7 +114,7 @@ Scalar MatrixInterface<CyclopsMatrixLib>::getVal(const MType<Scalar>& M, const M
 }
 
 template <typename Scalar, typename MT1, typename MT2>
-MType<Scalar> MatrixInterface<CyclopsMatrixLib>::kronecker_prod(MT1&& M1, MT2&& M2)
+MType<Scalar> MatrixInterface::kronecker_prod(MT1&& M1, MT2&& M2)
 {
     assert(*M1.wrld == *M2.wrld and "Tensors needs to live on the same world for kroneckerProd().");
     std::array<int64_t, 4> dims = {M2.nrow, M1.nrow, M2.ncol, M1.ncol};
@@ -132,7 +132,7 @@ MType<Scalar> MatrixInterface<CyclopsMatrixLib>::kronecker_prod(MT1&& M1, MT2&& 
 }
 
 template <typename Scalar, typename MT1, typename MT2>
-MType<Scalar> MatrixInterface<CyclopsMatrixLib>::prod(MT1&& M1, MT2&& M2)
+MType<Scalar> MatrixInterface::prod(MT1&& M1, MT2&& M2)
 {
     assert(*M1.wrld == *M2.wrld and "Tensors needs to live on the same world for prod().");
     MType<Scalar> res(M1.nrow, M2.ncol, *M1.wrld);
@@ -141,7 +141,7 @@ MType<Scalar> MatrixInterface<CyclopsMatrixLib>::prod(MT1&& M1, MT2&& M2)
 }
 
 template <typename Scalar, typename MatrixExpr1, typename MatrixExpr2, typename MatrixExpr3, typename MatrixExprRes>
-void MatrixInterface<CyclopsMatrixLib>::optimal_prod(const Scalar& scale, MatrixExpr1&& M1, MatrixExpr2&& M2, MatrixExpr3&& M3, MatrixExprRes& Mres)
+void MatrixInterface::optimal_prod(const Scalar& scale, MatrixExpr1&& M1, MatrixExpr2&& M2, MatrixExpr3&& M3, MatrixExprRes& Mres)
 {
     std::vector<std::size_t> cost(2);
     cost = internal::mult_cost(
@@ -158,11 +158,7 @@ void MatrixInterface<CyclopsMatrixLib>::optimal_prod(const Scalar& scale, Matrix
 }
 
 template <typename Scalar, typename MatrixExpr1, typename MatrixExpr2, typename MatrixExpr3, typename MatrixExprRes>
-void MatrixInterface<CyclopsMatrixLib>::optimal_prod_add(const Scalar& scale,
-                                                         MatrixExpr1&& M1,
-                                                         MatrixExpr2&& M2,
-                                                         MatrixExpr3&& M3,
-                                                         MatrixExprRes& Mres)
+void MatrixInterface::optimal_prod_add(const Scalar& scale, MatrixExpr1&& M1, MatrixExpr2&& M2, MatrixExpr3&& M3, MatrixExprRes& Mres)
 {
     std::vector<std::size_t> cost(2);
     cost = internal::mult_cost(
@@ -179,7 +175,7 @@ void MatrixInterface<CyclopsMatrixLib>::optimal_prod_add(const Scalar& scale,
 }
 
 template <typename Scalar, typename MT1, typename MT2>
-MType<Scalar> MatrixInterface<CyclopsMatrixLib>::add(MT1&& M1, MT2&& M2)
+MType<Scalar> MatrixInterface::add(MT1&& M1, MT2&& M2)
 {
     assert(*M1.wrld == *M2.wrld and "Tensors needs to live on the same world for add().");
     MType<Scalar> res(M1.nrow, M2.ncol, *M1.wrld);
@@ -188,7 +184,7 @@ MType<Scalar> MatrixInterface<CyclopsMatrixLib>::add(MT1&& M1, MT2&& M2)
 }
 
 template <typename Scalar, typename MT1, typename MT2>
-MType<Scalar> MatrixInterface<CyclopsMatrixLib>::difference(MT1&& M1, MT2&& M2)
+MType<Scalar> MatrixInterface::difference(MT1&& M1, MT2&& M2)
 {
     assert(*M1.wrld == *M2.wrld and "Tensors needs to live on the same world for difference().");
     MType<Scalar> res(M1.nrow, M2.ncol, *M1.wrld);
@@ -197,13 +193,13 @@ MType<Scalar> MatrixInterface<CyclopsMatrixLib>::difference(MT1&& M1, MT2&& M2)
 }
 
 template <typename Scalar>
-void MatrixInterface<CyclopsMatrixLib>::scale(MType<Scalar>& M, const Scalar& val)
+void MatrixInterface::scale(MType<Scalar>& M, const Scalar& val)
 {
     M.scale(val, "ij");
 }
 
 template <typename Scalar, typename MT>
-MType<Scalar> MatrixInterface<CyclopsMatrixLib>::unaryFunc(MT&& M, const std::function<Scalar(Scalar)>& func)
+MType<Scalar> MatrixInterface::unaryFunc(MT&& M, const std::function<Scalar(Scalar)>& func)
 {
     CTF::Function<Scalar> func_(func);
     M["ij"] = func_(M["ij"]);
@@ -211,7 +207,7 @@ MType<Scalar> MatrixInterface<CyclopsMatrixLib>::unaryFunc(MT&& M, const std::fu
 }
 
 template <typename Scalar, typename MT>
-MType<Scalar> MatrixInterface<CyclopsMatrixLib>::diagUnaryFunc(MT&& M, const std::function<Scalar(Scalar)>& func)
+MType<Scalar> MatrixInterface::diagUnaryFunc(MT&& M, const std::function<Scalar(Scalar)>& func)
 {
     CTF::Function<Scalar> func_(func);
     M["ii"] = func_(M["ii"]);
@@ -219,7 +215,7 @@ MType<Scalar> MatrixInterface<CyclopsMatrixLib>::diagUnaryFunc(MT&& M, const std
 }
 
 template <typename Scalar, typename MT>
-MType<Scalar> MatrixInterface<CyclopsMatrixLib>::adjoint(MT&& M)
+MType<Scalar> MatrixInterface::adjoint(MT&& M)
 {
     MType<Scalar> N(M.ncol, M.nrow, *M.wrld);
     N["ij"] = M["ji"];
@@ -235,11 +231,8 @@ MType<Scalar> MatrixInterface<CyclopsMatrixLib>::adjoint(MT&& M)
 // }
 
 template <typename Scalar>
-MType<Scalar> MatrixInterface<CyclopsMatrixLib>::block(const MType<Scalar>& M,
-                                                       const MIndextype& row_off,
-                                                       const MIndextype& col_off,
-                                                       const MIndextype& rows,
-                                                       const MIndextype& cols)
+MType<Scalar>
+MatrixInterface::block(const MType<Scalar>& M, const MIndextype& row_off, const MIndextype& col_off, const MIndextype& rows, const MIndextype& cols)
 {
     SPDLOG_INFO("Entering MatrixInterface::block()");
     SPDLOG_INFO("Extract block of mat with dims=({},{})", M.nrow, M.ncol);
@@ -260,12 +253,12 @@ MType<Scalar> MatrixInterface<CyclopsMatrixLib>::block(const MType<Scalar>& M,
 }
 
 template <typename Scalar>
-void MatrixInterface<CyclopsMatrixLib>::add_to_block(MType<Scalar>& M1,
-                                                     const MIndextype& row_off,
-                                                     const MIndextype& col_off,
-                                                     const MIndextype& rows,
-                                                     const MIndextype& cols,
-                                                     const MType<Scalar>& M2)
+void MatrixInterface::add_to_block(MType<Scalar>& M1,
+                                   const MIndextype& row_off,
+                                   const MIndextype& col_off,
+                                   const MIndextype& rows,
+                                   const MIndextype& cols,
+                                   const MType<Scalar>& M2)
 {
     SPDLOG_INFO("Entering MatrixInterface::add_to_block().");
     SPDLOG_INFO("Add to block of mat with dims=({},{})", M1.nrow, M1.ncol);
@@ -279,7 +272,7 @@ void MatrixInterface<CyclopsMatrixLib>::add_to_block(MType<Scalar>& M1,
 }
 
 template <typename Scalar, typename MT>
-void MatrixInterface<CyclopsMatrixLib>::print(MT&& M)
+void MatrixInterface::print(MT&& M)
 {
     M.print_matrix();
 }

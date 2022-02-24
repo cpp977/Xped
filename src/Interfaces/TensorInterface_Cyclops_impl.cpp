@@ -24,13 +24,13 @@ using Indextype = int;
 
 // constructors
 template <typename Scalar, std::size_t Rank>
-TType<Scalar, Rank> TensorInterface<CyclopsTensorLib>::construct(const std::array<Indextype, Rank>& dims, CTF::World& world)
+TType<Scalar, Rank> TensorInterface::construct(const std::array<Indextype, Rank>& dims, CTF::World& world)
 {
     return TType<Scalar, Rank>(Rank, dims.data(), world);
 }
 
 template <typename Scalar, int Rank>
-TType<Scalar, Rank> TensorInterface<CyclopsTensorLib>::construct(const MapTType<Scalar, Rank>& map)
+TType<Scalar, Rank> TensorInterface::construct(const MapTType<Scalar, Rank>& map)
 {
     return TType<Scalar, Rank>(map);
 }
@@ -74,25 +74,25 @@ TType<Scalar, Rank> TensorInterface<CyclopsTensorLib>::construct(const MapTType<
 
 // initialization
 template <typename Scalar, int Rank>
-void TensorInterface<CyclopsTensorLib>::setZero(TType<Scalar, Rank>& T)
+void TensorInterface::setZero(TType<Scalar, Rank>& T)
 {
     T[get_idx<Rank>().data()] = 0.;
 }
 
 template <typename Scalar, int Rank>
-void TensorInterface<CyclopsTensorLib>::setRandom(TType<Scalar, Rank>& T)
+void TensorInterface::setRandom(TType<Scalar, Rank>& T)
 {
     T.fill_random(-1.0, 1.0);
 }
 
 template <typename Scalar, int Rank>
-void TensorInterface<CyclopsTensorLib>::setConstant(TType<Scalar, Rank>& T, const Scalar& val)
+void TensorInterface::setConstant(TType<Scalar, Rank>& T, const Scalar& val)
 {
     T[get_idx<Rank>().data()] = val;
 }
 
 template <typename Scalar, int Rank>
-void TensorInterface<CyclopsTensorLib>::setVal(TType<Scalar, Rank>& T, const std::array<Indextype, Rank>& index, const Scalar& val)
+void TensorInterface::setVal(TType<Scalar, Rank>& T, const std::array<Indextype, Rank>& index, const Scalar& val)
 {
     int64_t global_idx = 0;
     for(std::size_t i = 0; i < Rank; i++) {
@@ -114,7 +114,7 @@ void TensorInterface<CyclopsTensorLib>::setVal(TType<Scalar, Rank>& T, const std
 }
 
 template <typename Scalar, int Rank>
-Scalar TensorInterface<CyclopsTensorLib>::getVal(const TType<Scalar, Rank>& T, const std::array<Indextype, Rank>& index)
+Scalar TensorInterface::getVal(const TType<Scalar, Rank>& T, const std::array<Indextype, Rank>& index)
 {
     int64_t global_idx = 0;
     for(std::size_t i = 0; i < Rank; i++) {
@@ -133,7 +133,7 @@ Scalar TensorInterface<CyclopsTensorLib>::getVal(const TType<Scalar, Rank>& T, c
 
 // raw data
 template <typename Scalar, int Rank>
-Scalar* TensorInterface<CyclopsTensorLib>::get_raw_data(const TType<Scalar, Rank>& T)
+Scalar* TensorInterface::get_raw_data(const TType<Scalar, Rank>& T)
 {
     int64_t nvals;
     int64_t* indices;
@@ -145,7 +145,7 @@ Scalar* TensorInterface<CyclopsTensorLib>::get_raw_data(const TType<Scalar, Rank
 
 // shape info
 template <typename Scalar, int Rank>
-std::array<Indextype, Rank> TensorInterface<CyclopsTensorLib>::dimensions(const TType<Scalar, Rank>& T)
+std::array<Indextype, Rank> TensorInterface::dimensions(const TType<Scalar, Rank>& T)
 {
     std::array<Indextype, Rank> out;
     for(std::size_t i = 0; i < Rank; i++) { out[i] = T.lens[i]; }
@@ -154,7 +154,7 @@ std::array<Indextype, Rank> TensorInterface<CyclopsTensorLib>::dimensions(const 
 
 // tensorProd
 template <typename Scalar, int Rank>
-TType<Scalar, Rank> TensorInterface<CyclopsTensorLib>::tensorProd(TType<Scalar, Rank>& T1, TType<Scalar, Rank>& T2)
+TType<Scalar, Rank> TensorInterface::tensorProd(TType<Scalar, Rank>& T1, TType<Scalar, Rank>& T2)
 {
     std::array<Indextype, 2 * Rank> tmp_dims;
     std::array<Indextype, Rank> out_dims;
@@ -220,7 +220,7 @@ TType<Scalar, Rank> TensorInterface<CyclopsTensorLib>::tensorProd(TType<Scalar, 
 }
 
 template <typename Scalar, std::size_t Rank, typename Expr1, typename Expr2>
-void TensorInterface<CyclopsTensorLib>::addScale(const Expr1& src, Expr2& dst, const Scalar& scale)
+void TensorInterface::addScale(const Expr1& src, Expr2& dst, const Scalar& scale)
 {
     dst[get_idx<Rank>().data()] += src.scale[scale, get_idx<Rank>().data()];
 }
@@ -228,11 +228,11 @@ void TensorInterface<CyclopsTensorLib>::addScale(const Expr1& src, Expr2& dst, c
 // methods rvalue
 
 template <typename Scalar, std::size_t Rank1, std::size_t Rank2, Indextype... Is1, Indextype... Is2, Indextype... Ist>
-TType<Scalar, sizeof...(Ist)> TensorInterface<CyclopsTensorLib>::contract_helper(TType<Scalar, Rank1>& T1,
-                                                                                 TType<Scalar, Rank2>& T2,
-                                                                                 seq::iseq<Indextype, Is1...> S1,
-                                                                                 seq::iseq<Indextype, Is2...> S2,
-                                                                                 seq::iseq<Indextype, Ist...> St)
+TType<Scalar, sizeof...(Ist)> TensorInterface::contract_helper(TType<Scalar, Rank1>& T1,
+                                                               TType<Scalar, Rank2>& T2,
+                                                               seq::iseq<Indextype, Is1...> S1,
+                                                               seq::iseq<Indextype, Is2...> S2,
+                                                               seq::iseq<Indextype, Ist...> St)
 {
     assert(*T1.wrld == *T2.wrld and "Tensors should live on the same world for contraction");
 
@@ -268,7 +268,7 @@ TType<Scalar, sizeof...(Ist)> TensorInterface<CyclopsTensorLib>::contract_helper
 }
 
 template <typename Scalar, std::size_t Rank1, std::size_t Rank2, Indextype... Is>
-TType<Scalar, Rank1 + Rank2 - sizeof...(Is)> TensorInterface<CyclopsTensorLib>::contract(TType<Scalar, Rank1>& T1, TType<Scalar, Rank2>& T2)
+TType<Scalar, Rank1 + Rank2 - sizeof...(Is)> TensorInterface::contract(TType<Scalar, Rank1>& T1, TType<Scalar, Rank2>& T2)
 {
     static_assert(sizeof...(Is) % 2 == 0);
     constexpr Indextype Ncon = sizeof...(Is) / 2;
@@ -318,7 +318,7 @@ TType<Scalar, Rank1 + Rank2 - sizeof...(Is)> TensorInterface<CyclopsTensorLib>::
 }
 
 template <typename Scalar, std::size_t Rank, Indextype... p>
-TType<Scalar, Rank> TensorInterface<CyclopsTensorLib>::shuffle(TType<Scalar, Rank>& T)
+TType<Scalar, Rank> TensorInterface::shuffle(TType<Scalar, Rank>& T)
 {
     static_assert(Rank == sizeof...(p));
     std::array<Indextype, Rank> perm = {p...};
@@ -334,7 +334,7 @@ TType<Scalar, Rank> TensorInterface<CyclopsTensorLib>::shuffle(TType<Scalar, Ran
 }
 
 template <typename Scalar, std::size_t Rank, Indextype... p>
-TType<Scalar, Rank> TensorInterface<CyclopsTensorLib>::shuffle(TType<Scalar, Rank>& T, seq::iseq<Indextype, p...> s)
+TType<Scalar, Rank> TensorInterface::shuffle(TType<Scalar, Rank>& T, seq::iseq<Indextype, p...> s)
 {
     static_assert(Rank == sizeof...(p));
     std::array<Indextype, Rank> perm = {p...};
@@ -350,13 +350,13 @@ TType<Scalar, Rank> TensorInterface<CyclopsTensorLib>::shuffle(TType<Scalar, Ran
 }
 
 template <typename Expr, Indextype... p>
-Expr TensorInterface<CyclopsTensorLib>::shuffle_view(const Expr& T)
+Expr TensorInterface::shuffle_view(const Expr& T)
 {
     assert(false and "Shuffle view is not supported with CTF tensor lib");
 }
 
 template <typename Scalar, int Rank1, std::size_t Rank2>
-TType<Scalar, Rank2> TensorInterface<CyclopsTensorLib>::reshape(const TType<Scalar, Rank1>& T, const std::array<Indextype, Rank2>& dims)
+TType<Scalar, Rank2> TensorInterface::reshape(const TType<Scalar, Rank1>& T, const std::array<Indextype, Rank2>& dims)
 {
     TType<Scalar, Rank2> out(Rank2, dims.data(), *T.wrld);
     int64_t nvals;
@@ -371,10 +371,10 @@ TType<Scalar, Rank2> TensorInterface<CyclopsTensorLib>::reshape(const TType<Scal
 
 // methods lvalue
 template <typename Scalar, std::size_t Rank1, std::size_t Rank2>
-void TensorInterface<CyclopsTensorLib>::setSubTensor(TType<Scalar, Rank1>& T,
-                                                     const std::array<Indextype, Rank2>& offsets,
-                                                     const std::array<Indextype, Rank2>& extents,
-                                                     const TType<Scalar, Rank1>& S)
+void TensorInterface::setSubTensor(TType<Scalar, Rank1>& T,
+                                   const std::array<Indextype, Rank2>& offsets,
+                                   const std::array<Indextype, Rank2>& extents,
+                                   const TType<Scalar, Rank1>& S)
 {
     static_assert(Rank1 == Rank2);
 
@@ -390,9 +390,8 @@ void TensorInterface<CyclopsTensorLib>::setSubTensor(TType<Scalar, Rank1>& T,
 }
 
 template <typename Scalar, int Rank1, std::size_t Rank2>
-TType<Scalar, Rank1> TensorInterface<CyclopsTensorLib>::slice(TType<Scalar, Rank1>& T,
-                                                              const std::array<Indextype, Rank2>& offsets,
-                                                              const std::array<Indextype, Rank2>& extents)
+TType<Scalar, Rank1>
+TensorInterface::slice(TType<Scalar, Rank1>& T, const std::array<Indextype, Rank2>& offsets, const std::array<Indextype, Rank2>& extents)
 {
     std::array<Indextype, Rank2> ends;
     for(std::size_t i = 0; i < Rank2; i++) { ends[i] = offsets[i] + extents[i]; }
@@ -400,7 +399,7 @@ TType<Scalar, Rank1> TensorInterface<CyclopsTensorLib>::slice(TType<Scalar, Rank
 }
 
 template <typename Scalar, std::size_t Rank>
-std::string TensorInterface<CyclopsTensorLib>::print(const TType<Scalar, Rank>& T)
+std::string TensorInterface::print(const TType<Scalar, Rank>& T)
 {
     return T.print();
 }

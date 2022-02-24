@@ -5,8 +5,7 @@
 
 namespace Xped {
 
-template <>
-struct VectorInterface<CyclopsVectorLib>
+struct VectorInterface
 {
     // typedefs
     template <typename Scalar>

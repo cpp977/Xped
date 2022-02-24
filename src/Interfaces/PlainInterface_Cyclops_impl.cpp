@@ -33,13 +33,13 @@ template <typename Scalar>
 using VType = CTF::Vector<Scalar>;
 
 template <typename Scalar, std::size_t Rank>
-void PlainInterface<CyclopsMatrixLib, CyclopsTensorLib, CyclopsVectorLib>::set_block_from_tensor(MType<Scalar>& M,
-                                                                                                 const Indextype& row_off,
-                                                                                                 const Indextype& col_off,
-                                                                                                 const Indextype& rows,
-                                                                                                 const Indextype& cols,
-                                                                                                 const Scalar& scale,
-                                                                                                 const TType<Scalar, Rank>& T)
+void PlainInterface::set_block_from_tensor(MType<Scalar>& M,
+                                           const Indextype& row_off,
+                                           const Indextype& col_off,
+                                           const Indextype& rows,
+                                           const Indextype& cols,
+                                           const Scalar& scale,
+                                           const TType<Scalar, Rank>& T)
 {
     SPDLOG_INFO("Entering PlainInterface::set_block_from_tensor().");
     SPDLOG_INFO("Set block of mat with dims=({},{})", M.nrow, M.ncol);
@@ -60,13 +60,13 @@ void PlainInterface<CyclopsMatrixLib, CyclopsTensorLib, CyclopsVectorLib>::set_b
 }
 
 template <typename Scalar, std::size_t Rank>
-void PlainInterface<CyclopsMatrixLib, CyclopsTensorLib, CyclopsVectorLib>::add_to_block_from_tensor(MType<Scalar>& M,
-                                                                                                    const Indextype& row_off,
-                                                                                                    const Indextype& col_off,
-                                                                                                    const Indextype& rows,
-                                                                                                    const Indextype& cols,
-                                                                                                    const Scalar& scale,
-                                                                                                    const TType<Scalar, Rank>& T)
+void PlainInterface::add_to_block_from_tensor(MType<Scalar>& M,
+                                              const Indextype& row_off,
+                                              const Indextype& col_off,
+                                              const Indextype& rows,
+                                              const Indextype& cols,
+                                              const Scalar& scale,
+                                              const TType<Scalar, Rank>& T)
 {
     SPDLOG_INFO("Entering PlainInterface::add_to_block_from_tensor().");
     SPDLOG_INFO("Add to block of mat with dims=({},{})", M.nrow, M.ncol);
@@ -83,13 +83,12 @@ void PlainInterface<CyclopsMatrixLib, CyclopsTensorLib, CyclopsVectorLib>::add_t
 }
 
 template <typename Scalar, std::size_t Rank>
-TType<Scalar, Rank>
-PlainInterface<CyclopsMatrixLib, CyclopsTensorLib, CyclopsVectorLib>::tensor_from_matrix_block(const MType<Scalar>& M,
-                                                                                               const Indextype& row_off,
-                                                                                               const Indextype& col_off,
-                                                                                               const Indextype& rows,
-                                                                                               const Indextype& cols,
-                                                                                               const std::array<Indextype, Rank>& dims)
+TType<Scalar, Rank> PlainInterface::tensor_from_matrix_block(const MType<Scalar>& M,
+                                                             const Indextype& row_off,
+                                                             const Indextype& col_off,
+                                                             const Indextype& rows,
+                                                             const Indextype& cols,
+                                                             const std::array<Indextype, Rank>& dims)
 {
     std::array<Indextype, 2> offsets = {row_off, col_off};
     std::array<Indextype, 2> ends = {row_off + rows, col_off + cols};
@@ -106,9 +105,7 @@ PlainInterface<CyclopsMatrixLib, CyclopsTensorLib, CyclopsVectorLib>::tensor_fro
 }
 
 template <typename Scalar, typename MT>
-void PlainInterface<CyclopsMatrixLib, CyclopsTensorLib, CyclopsVectorLib>::diagonal_head_matrix_to_vector(VType<Scalar>& V,
-                                                                                                          MT&& M,
-                                                                                                          const Indextype& n_elems)
+void PlainInterface::diagonal_head_matrix_to_vector(VType<Scalar>& V, MT&& M, const Indextype& n_elems)
 {
     SPDLOG_INFO("Entering PlainInterface::diagonal_head_matrix_to_vector().");
     assert(n_elems <= M.nrow);
@@ -125,7 +122,7 @@ void PlainInterface<CyclopsMatrixLib, CyclopsTensorLib, CyclopsVectorLib>::diago
 }
 
 template <typename Scalar, typename MT>
-std::tuple<MType<Scalar>, VType<Scalar>, MType<Scalar>> PlainInterface<CyclopsMatrixLib, CyclopsTensorLib, CyclopsVectorLib>::svd(MT&& M)
+std::tuple<MType<Scalar>, VType<Scalar>, MType<Scalar>> PlainInterface::svd(MT&& M)
 {
     MType<Scalar> U, Vdag;
     CTF::Vector<Scalar> S;
@@ -152,7 +149,7 @@ std::tuple<MType<Scalar>, VType<Scalar>, MType<Scalar>> PlainInterface<CyclopsMa
 }
 
 template <typename Scalar, typename VT>
-MType<Scalar> PlainInterface<CyclopsMatrixLib, CyclopsTensorLib, CyclopsVectorLib>::vec_to_diagmat(VT&& V)
+MType<Scalar> PlainInterface::vec_to_diagmat(VT&& V)
 {
     CTF::Matrix<Scalar> mat(V.len, V.len, *V.wrld);
     mat["ii"] = V["i"];

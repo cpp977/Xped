@@ -12,8 +12,7 @@ namespace Xped {
 template <typename Index, Index oldVal, Index newVal, typename S>
 using seq_replace = seq::insert<seq::index_of<oldVal, S>, newVal, seq::remove<oldVal, S>>;
 
-template <>
-struct TensorInterface<ArrayTensorLib>
+struct TensorInterface
 {
     template <typename element_t, std::size_t N, size_t... Is>
     static nda::internal::tuple_of_n<element_t, N> as_tuple(std::array<element_t, N> const& arr, std::index_sequence<Is...>)

@@ -17,6 +17,7 @@ void contract_L(XPED_CONST Tensor<Scalar, 1, 1, Symmetry, AllocationPolicy>& Bol
     SPDLOG_INFO("Entering contract_L().");
     Bnew.clear();
     Bnew = Tensor<Scalar, 1, 1, Symmetry, AllocationPolicy>({{Bra.uncoupledCodomain()[0]}}, {{Ket.uncoupledCodomain()[0]}}, *Bold.world());
+    Bnew.setZero();
 
     for(std::size_t i = 0; i < Bra.sector().size(); i++) {
         std::size_t dimQ = PlainInterface::cols<Scalar>(Bra.block(i));
@@ -67,6 +68,7 @@ void contract_R(XPED_CONST Tensor<Scalar, 1, 1, Symmetry, AllocationPolicy>& Bol
     SPDLOG_INFO("Entering contract_R().");
     Bnew.clear();
     Bnew = Tensor<Scalar, 1, 1, Symmetry, AllocationPolicy>({{Ket.uncoupledDomain()[0]}}, {{Bra.uncoupledDomain()[0]}}, *Bold.world());
+    Bnew.setZero();
 
     for(std::size_t i = 0; i < Ket.sector().size(); i++) {
         std::size_t dimQ = PlainInterface::cols<Scalar>(Ket.block(i));

@@ -94,6 +94,7 @@ Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::permute_impl(seq::iseq
     p_codomain.apply(new_codomain);
 
     Self out(new_domain, new_codomain, this->world_);
+    out.setZero();
 
     for(size_t i = 0; i < sector().size(); i++) {
         auto domain_trees = coupledDomain().tree(sector(i));
@@ -200,6 +201,7 @@ Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::permute_impl(seq::iseq
     }
 
     Tensor<Scalar, newRank, newCoRank, Symmetry, AllocationPolicy> out(new_domain, new_codomain, this->world_);
+    out.setZero();
 
     for(size_t i = 0; i < sector().size(); i++) {
         auto domain_trees = coupledDomain().tree(sector(i));
@@ -506,7 +508,7 @@ auto Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::view(const Fusion
         shape_data[i + Rank - 1].set_stride(stride_correction *
                                             std::accumulate(dims.begin() + Rank, dims.begin() + Rank + i, 1ul, std::multiplies<Scalar>()));
     }
-    auto dims_tuple = std::tuple_cat(std::make_tuple(first_dim)::as_tuple(shape_data));
+    auto dims_tuple = std::tuple_cat(std::make_tuple(first_dim), PlainInterface::as_tuple(shape_data));
 
     nda::dense_shape<Rank + CoRank> block_shape(dims_tuple);
 
@@ -564,7 +566,7 @@ auto Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::view(const Fusion
         shape_data[i + Rank - 1].set_stride(stride_correction *
                                             std::accumulate(dims.begin() + Rank, dims.begin() + Rank + i, 1ul, std::multiplies<Scalar>()));
     }
-    auto dims_tuple = std::tuple_cat(std::make_tuple(first_dim)::as_tuple(shape_data));
+    auto dims_tuple = std::tuple_cat(std::make_tuple(first_dim), PlainInterface::as_tuple(shape_data));
 
     nda::dense_shape<Rank + CoRank> block_shape(dims_tuple);
 
@@ -799,7 +801,7 @@ typename PlainInterface::TType<Scalar, Rank + CoRank> Tensor<Scalar, Rank, CoRan
 }
 
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
-void Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::print(std::ostream& o, bool PRINT_MATRICES) XPED_CONST
+void Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::print(std::ostream& o, bool PRINT_MATRICES) const
 {
     // std::stringstream ss;
     o << "domain:" << endl << coupledDomain() << endl; // << "with trees:" << endl << domain.printTrees() << endl;
@@ -807,7 +809,7 @@ void Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::print(std::ostrea
     for(size_t i = 0; i < sector().size(); i++) {
         o << "Sector with QN=" << Sym::format<Symmetry>(sector(i)) << endl;
         if(PRINT_MATRICES) {
-            // o << std::fixed << std::setprecision(12) << storage_.block(i).diagonal() << endl;
+            // o << std::fixed << std::setprecision(12) << block(i) << endl;
             // storage_.block(i).print_matrix();
             // PlainInterface::print<Scalar>(storage_.block(i));
         }

@@ -104,7 +104,7 @@ public:
     static constexpr std::size_t rank() { return Rank; }
     static constexpr std::size_t corank() { return CoRank; }
 
-    inline const std::vector<qType, typename AllocationPolicy::template Allocator<qType>>& sector() const { return storage_.sector(); }
+    inline const auto& sector() const { return storage_.sector(); }
     inline const qType sector(std::size_t i) const { return storage_.sector(i); }
 
     // inline const std::vector<MatrixType> block() const { return block_; }
@@ -216,9 +216,9 @@ template <typename Scalar_, std::size_t Rank, std::size_t CoRank, typename Symme
 template <typename OtherDerived>
 Tensor<Scalar_, Rank, CoRank, Symmetry, AllocationPolicy>::Tensor(const TensorBase<OtherDerived>& other)
 {
-    StorageType<Scalar_, Rank, CoRank, Symmetry, AllocationPolicy> tmp(other.derived().uncoupledDomain(), other.derived().uncoupledCodomain());
-    storage_ = tmp;
-    // StorageType<Scalar_, Rank, CoRank, Symmetry, Allocator_>(other.derived().uncoupledDomain(), other.derived().uncoupledCodomain());
+    storage_ = StorageType<Scalar_, Rank, CoRank, Symmetry, AllocationPolicy>(
+        other.derived().uncoupledDomain(), other.derived().uncoupledCodomain(), *other.derived().world());
+    storage_.resize();
     for(std::size_t i = 0; i < sector().size(); ++i) { block(i) = other.derived().block(i); }
     world_ = other.derived().world();
 }

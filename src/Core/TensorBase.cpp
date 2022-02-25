@@ -95,14 +95,16 @@ TensorBase<Derived>::operator*(XPED_CONST TensorBase<OtherDerived>& other) XPED_
         auto it = other_dict.find(derived_ref.sector(i));
         if(it == other_dict.end()) { continue; }
         auto it_out = Tout.dict().find(derived_ref.sector(i));
-        assert(it_out != Tout.dict().end());
-        // Tout.push_back(derived_ref.sector(i), Plain::template prod<Scalar>(derived_ref.block(i), other_derived_ref.block(it->second)));
-        // SPDLOG_CRITICAL("({},{})x({},{})",
-        //                 derived_ref.block(i).rows(),
-        //                 derived_ref.block(i).cols(),
-        //                 other_derived_ref.block(it->second).rows(),
-        //                 other_derived_ref.block(it->second).cols());
-        Tout.block(it_out->second) = PlainInterface::prod<Scalar>(derived_ref.block(i), other_derived_ref.block(it->second));
+        if(it_out == Tout.dict().end()) {
+            Tout.push_back(derived_ref.sector(i), PlainInterface::prod<Scalar>(derived_ref.block(i), other_derived_ref.block(it->second)));
+            // SPDLOG_CRITICAL("({},{})x({},{})",
+            //                 derived_ref.block(i).rows(),
+            //                 derived_ref.block(i).cols(),
+            //                 other_derived_ref.block(it->second).rows(),
+            //                 other_derived_ref.block(it->second).cols());
+        } else {
+            Tout.block(it_out->second) += PlainInterface::prod<Scalar>(derived_ref.block(i), other_derived_ref.block(it->second));
+        }
         // Tout.push_back(derived_ref.sector(i), PlainInterface::prod<Scalar>(derived_ref.block(i), other_derived_ref.block(it->second)));
         // Tout.block_[i] = T1.block_[i] * T2.block_[it->second];
     }

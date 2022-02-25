@@ -33,7 +33,7 @@ public:
     {
         m_domain = internal::build_FusionTree(m_uncoupled_domain);
         m_codomain = internal::build_FusionTree(m_uncoupled_codomain);
-        uninitialized_resize();
+        // uninitialized_resize();
     }
 
     StorageType(const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, Rank> basis_domain,
@@ -63,6 +63,23 @@ public:
 
     // template <template <typename> typename OtherAllocator>
     // StorageType(const StorageType<Scalar, Rank, CoRank, Symmetry, OtherAllocator>& other);
+
+    void resize()
+    {
+        m_data.reserve(std::max(m_domain.dim(), m_codomain.dim()));
+
+        for(const auto& [q, dim, plain] : m_domain) {
+            if(m_codomain.IS_PRESENT(q)) {
+                m_sector.push_back(q);
+                m_dict.insert(std::make_pair(q, m_sector.size() - 1));
+                MatrixType Mtmp = PlainInterface::construct<Scalar>(m_domain.inner_dim(q), m_codomain.inner_dim(q), *m_world);
+                m_data.push_back(Mtmp);
+                // m_data.emplace_back(m_domain.inner_dim(q), m_codomain.inner_dim(q));
+            }
+        }
+
+        m_data.shrink_to_fit();
+    }
 
     const MatrixType& block(std::size_t i) const
     {
@@ -130,23 +147,6 @@ private:
     Qbasis<Symmetry, CoRank, AllocationPolicy> m_codomain;
 
     std::shared_ptr<mpi::XpedWorld> m_world;
-
-    void uninitialized_resize()
-    {
-        m_data.reserve(std::max(m_domain.dim(), m_codomain.dim()));
-
-        for(const auto& [q, dim, plain] : m_domain) {
-            if(m_codomain.IS_PRESENT(q)) {
-                m_sector.push_back(q);
-                m_dict.insert(std::make_pair(q, m_sector.size() - 1));
-                MatrixType Mtmp = PlainInterface::construct<Scalar>(m_domain.inner_dim(q), m_codomain.inner_dim(q), *m_world);
-                m_data.push_back(Mtmp);
-                // m_data.emplace_back(m_domain.inner_dim(q), m_codomain.inner_dim(q));
-            }
-        }
-
-        m_data.shrink_to_fit();
-    }
 
     void initialized_resize(const Scalar* data)
     {

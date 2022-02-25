@@ -27,6 +27,7 @@ namespace Xped {
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
 void Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::setRandom()
 {
+    storage_.resize();
     SPDLOG_TRACE("Entering setRandom().");
     SPDLOG_TRACE("Start randomization loop with #={} iterations.", sector_.size());
     for(size_t i = 0; i < sector().size(); i++) {
@@ -39,6 +40,7 @@ void Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::setRandom()
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
 void Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::setZero()
 {
+    storage_.resize();
     SPDLOG_TRACE("Entering setZero().");
     SPDLOG_TRACE("Start loop with #={} iterations.", sector_.size());
     for(size_t i = 0; i < sector().size(); i++) {
@@ -50,6 +52,7 @@ void Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::setZero()
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
 void Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::setIdentity()
 {
+    storage_.resize();
     SPDLOG_TRACE("Entering setIdentity().");
     SPDLOG_TRACE("Start loop with #={} iterations.", sector_.size());
     for(size_t i = 0; i < sector().size(); i++) {
@@ -62,6 +65,7 @@ void Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::setIdentity()
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
 void Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::setConstant(const Scalar& val)
 {
+    storage_.resize();
     SPDLOG_TRACE("Entering setConstant().");
     SPDLOG_TRACE("Start loop with #={} iterations.", sector_.size());
     for(size_t i = 0; i < sector().size(); i++) {
@@ -94,7 +98,7 @@ Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::permute_impl(seq::iseq
     p_codomain.apply(new_codomain);
 
     Self out(new_domain, new_codomain, this->world_);
-    out.setZero();
+    // out.setZero();
 
     for(size_t i = 0; i < sector().size(); i++) {
         auto domain_trees = coupledDomain().tree(sector(i));
@@ -201,7 +205,7 @@ Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::permute_impl(seq::iseq
     }
 
     Tensor<Scalar, newRank, newCoRank, Symmetry, AllocationPolicy> out(new_domain, new_codomain, this->world_);
-    out.setZero();
+    // out.setZero();
 
     for(size_t i = 0; i < sector().size(); i++) {
         auto domain_trees = coupledDomain().tree(sector(i));

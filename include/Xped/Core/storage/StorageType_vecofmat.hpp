@@ -66,7 +66,7 @@ public:
 
     void resize()
     {
-        m_data.reserve(std::max(m_domain.dim(), m_codomain.dim()));
+        m_data.reserve(std::max(m_domain.Nq(), m_codomain.Nq()));
 
         for(const auto& [q, dim, plain] : m_domain) {
             if(m_codomain.IS_PRESENT(q)) {
@@ -152,7 +152,7 @@ private:
 
     void initialized_resize(const Scalar* data)
     {
-        m_data.reserve(std::max(m_domain.dim(), m_codomain.dim()));
+        m_data.reserve(std::max(m_domain.Nq(), m_codomain.Nq()));
 
         std::size_t current_dim = 0;
         for(const auto& [q, dim, plain] : m_domain) {

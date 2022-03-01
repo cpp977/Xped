@@ -129,6 +129,8 @@ public:
         m_data.push_back(M);
     }
 
+    void reserve(std::size_t size) { m_data.reserve(size); }
+
     void clear()
     {
         m_data.clear();

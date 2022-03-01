@@ -218,8 +218,8 @@ Tensor<Scalar_, Rank, CoRank, Symmetry, AllocationPolicy>::Tensor(const TensorBa
 {
     storage_ = StorageType<Scalar_, Rank, CoRank, Symmetry, AllocationPolicy>(
         other.derived().uncoupledDomain(), other.derived().uncoupledCodomain(), *other.derived().world());
-    storage_.resize();
-    for(std::size_t i = 0; i < sector().size(); ++i) { block(i) = other.derived().block(i); }
+    storage_.reserve(other.derived().sector().size());
+    for(std::size_t i = 0; i < other.derived().sector().size(); ++i) { storage_.push_back(other.derived().sector(i), other.derived().block(i)); }
     world_ = other.derived().world();
 }
 

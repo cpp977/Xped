@@ -108,8 +108,8 @@ public:
     inline const qType sector(std::size_t i) const { return storage_.sector(i); }
 
     // inline const std::vector<MatrixType> block() const { return block_; }
-    const MatrixType& block(std::size_t i) const { return storage_.block(i); }
-    MatrixType& block(std::size_t i) { return storage_.block(i); }
+    const auto& block(std::size_t i) const { return storage_.block(i); }
+    auto& block(std::size_t i) { return storage_.block(i); }
 
     const DictType& dict() const { return storage_.dict(); }
 
@@ -123,7 +123,7 @@ public:
     const Qbasis<Symmetry, Rank, AllocationPolicy>& coupledDomain() const { return storage_.coupledDomain(); }
     const Qbasis<Symmetry, CoRank, AllocationPolicy>& coupledCodomain() const { return storage_.coupledCodomain(); }
 
-    const MatrixType& operator()(const qType& q_coupled) const { return storage_.block(q_coupled); }
+    const auto& operator()(const qType& q_coupled) const { return storage_.block(q_coupled); }
 
     const std::string name() const { return "Xped"; }
     // Eigen::TensorMap<TensorType> operator() (const FusionTree<Rank,Symmetry>& f1, const FusionTree<CoRank,Symmetry>& f2);
@@ -143,7 +143,7 @@ public:
     TensorType subBlock(const FusionTree<Rank, Symmetry>& f1, const FusionTree<CoRank, Symmetry>& f2) const;
     TensorType subBlock(const FusionTree<Rank, Symmetry>& f1, const FusionTree<CoRank, Symmetry>& f2, std::size_t block_number) const;
 
-    MatrixType subMatrix(const FusionTree<Rank, Symmetry>& f1, const FusionTree<CoRank, Symmetry>& f2) const;
+    const auto& subMatrix(const FusionTree<Rank, Symmetry>& f1, const FusionTree<CoRank, Symmetry>& f2) const;
     // MatrixType& operator() (const FusionTree<Rank,Symmetry>& f1, const FusionTree<CoRank,Symmetry>& f2);
 
     void print(std::ostream& o, bool PRINT_MATRICES = true) const;

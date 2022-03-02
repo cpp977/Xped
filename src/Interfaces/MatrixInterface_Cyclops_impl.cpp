@@ -93,10 +93,10 @@ MIndextype MatrixInterface::cols(const MType<Scalar>& M)
 }
 
 // reduction
-template <typename Scalar, typename MT>
-Scalar MatrixInterface::trace(MT&& M)
+template <typename MT>
+typename ctf_traits<MT>::Scalar MatrixInterface::trace(MT&& M)
 {
-    Scalar out = M["ii"];
+    typename ctf_traits<MT>::Scalar out = M["ii"];
     return out;
 }
 
@@ -113,17 +113,17 @@ Scalar MatrixInterface::getVal(const MType<Scalar>& M, const MIndextype& row, co
     return out;
 }
 
-template <typename Scalar, typename MT1, typename MT2>
-MType<Scalar> MatrixInterface::kronecker_prod(MT1&& M1, MT2&& M2)
+template <typename MT1, typename MT2>
+MType<typename ctf_traits<MT1>::Scalar> MatrixInterface::kronecker_prod(MT1&& M1, MT2&& M2)
 {
     assert(*M1.wrld == *M2.wrld and "Tensors needs to live on the same world for kroneckerProd().");
     std::array<int64_t, 4> dims = {M2.nrow, M1.nrow, M2.ncol, M1.ncol};
-    CTF::Tensor<Scalar> tmp(4, dims.data(), *M1.wrld);
+    CTF::Tensor<typename ctf_traits<MT1>::Scalar> tmp(4, dims.data(), *M1.wrld);
     tmp["kilj"] = M1["ij"] * M2["kl"];
-    MType<Scalar> res(M1.nrow * M2.nrow, M1.ncol * M2.ncol, *M1.wrld);
+    MType<typename ctf_traits<MT1>::Scalar> res(M1.nrow * M2.nrow, M1.ncol * M2.ncol, *M1.wrld);
     int64_t nvals;
     int64_t* indices;
-    Scalar* data;
+    typename ctf_traits<MT1>::Scalar* data;
     tmp.get_local_data(&nvals, &indices, &data);
     res.write(nvals, indices, data);
     free(indices);
@@ -131,11 +131,11 @@ MType<Scalar> MatrixInterface::kronecker_prod(MT1&& M1, MT2&& M2)
     return res;
 }
 
-template <typename Scalar, typename MT1, typename MT2>
-MType<Scalar> MatrixInterface::prod(MT1&& M1, MT2&& M2)
+template <typename MT1, typename MT2>
+MType<typename ctf_traits<MT1>::Scalar> MatrixInterface::prod(MT1&& M1, MT2&& M2)
 {
     assert(*M1.wrld == *M2.wrld and "Tensors needs to live on the same world for prod().");
-    MType<Scalar> res(M1.nrow, M2.ncol, *M1.wrld);
+    MType<typename ctf_traits<MT1>::Scalar> res(M1.nrow, M2.ncol, *M1.wrld);
     res["ik"] = M1["ij"] * M2["jk"];
     return res;
 }
@@ -149,10 +149,10 @@ void MatrixInterface::optimal_prod(const Scalar& scale, MatrixExpr1&& M1, Matrix
     std::size_t opt_mult = std::min_element(cost.begin(), cost.end()) - cost.begin();
 
     if(opt_mult == 0) {
-        MType<Scalar> Mtmp = prod<Scalar>(M1, M2);
+        MType<Scalar> Mtmp = prod(M1, M2);
         Mres["ij"] = scale * Mtmp["ik"] * M3["kj"];
     } else if(opt_mult == 1) {
-        MType<Scalar> Mtmp = prod<Scalar>(M2, M3);
+        MType<Scalar> Mtmp = prod(M2, M3);
         Mres["ij"] = scale * M1["ik"] * Mtmp["kj"];
     }
 }
@@ -166,28 +166,28 @@ void MatrixInterface::optimal_prod_add(const Scalar& scale, MatrixExpr1&& M1, Ma
     std::size_t opt_mult = std::min_element(cost.begin(), cost.end()) - cost.begin();
 
     if(opt_mult == 0) {
-        MType<Scalar> Mtmp = prod<Scalar>(M1, M2);
+        MType<Scalar> Mtmp = prod(M1, M2);
         Mres["ij"] = Mres["ij"] + scale * Mtmp["ik"] * M3["kj"];
     } else if(opt_mult == 1) {
-        MType<Scalar> Mtmp = prod<Scalar>(M2, M3);
+        MType<Scalar> Mtmp = prod(M2, M3);
         Mres["ij"] = Mres["ij"] + scale * M1["ik"] * Mtmp["kj"];
     }
 }
 
-template <typename Scalar, typename MT1, typename MT2>
-MType<Scalar> MatrixInterface::add(MT1&& M1, MT2&& M2)
+template <typename MT1, typename MT2>
+MType<typename ctf_traits<MT1>::Scalar> MatrixInterface::add(MT1&& M1, MT2&& M2)
 {
     assert(*M1.wrld == *M2.wrld and "Tensors needs to live on the same world for add().");
-    MType<Scalar> res(M1.nrow, M2.ncol, *M1.wrld);
+    MType<typename ctf_traits<MT1>::Scalar> res(M1.nrow, M2.ncol, *M1.wrld);
     res["ij"] = M1["ij"] + M2["ij"];
     return res;
 }
 
-template <typename Scalar, typename MT1, typename MT2>
-MType<Scalar> MatrixInterface::difference(MT1&& M1, MT2&& M2)
+template <typename MT1, typename MT2>
+MType<typename ctf_traits<MT1>::Scalar> MatrixInterface::difference(MT1&& M1, MT2&& M2)
 {
     assert(*M1.wrld == *M2.wrld and "Tensors needs to live on the same world for difference().");
-    MType<Scalar> res(M1.nrow, M2.ncol, *M1.wrld);
+    MType<typename ctf_traits<MT1>::Scalar> res(M1.nrow, M2.ncol, *M1.wrld);
     res["ij"] = M1["ij"] - M2["ij"];
     return res;
 }
@@ -214,10 +214,10 @@ MType<Scalar> MatrixInterface::diagUnaryFunc(MT&& M, const std::function<Scalar(
     return M;
 }
 
-template <typename Scalar, typename MT>
-MType<Scalar> MatrixInterface::adjoint(MT&& M)
+template <typename MT>
+MType<typename ctf_traits<MT>::Scalar> MatrixInterface::adjoint(MT&& M)
 {
-    MType<Scalar> N(M.ncol, M.nrow, *M.wrld);
+    MType<typename ctf_traits<MT>::Scalar> N(M.ncol, M.nrow, *M.wrld);
     N["ij"] = M["ji"];
     return N;
 }
@@ -271,7 +271,7 @@ void MatrixInterface::add_to_block(MType<Scalar>& M1,
     SPDLOG_INFO("Leaving MatrixInterface::add_to_block().");
 }
 
-template <typename Scalar, typename MT>
+template <typename MT>
 void MatrixInterface::print(MT&& M)
 {
     M.print_matrix();

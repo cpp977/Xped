@@ -1,6 +1,7 @@
 #ifndef MATRIX_INTERFACE_EIGEN_IMPL_H_
 #define MATRIX_INTERFACE_EIGEN_IMPL_H_
 
+#include "Eigen/Core"
 #include "Eigen/Dense"
 
 #include "Xped/Util/Mpi.hpp"
@@ -32,41 +33,41 @@ struct MatrixInterface
     static void resize(MType<Scalar>& M, const MIndextype& new_rows, const MIndextype& new_cols);
 
     // initialization
-    template <typename Scalar>
-    static void setZero(MType<Scalar>& M);
+    template <typename Derived>
+    static void setZero(Eigen::PlainObjectBase<Derived>& M);
 
-    template <typename Scalar>
-    static void setRandom(MType<Scalar>& M);
+    template <typename Derived>
+    static void setRandom(Eigen::PlainObjectBase<Derived>& M);
 
-    template <typename Scalar>
-    static void setIdentity(MType<Scalar>& M);
+    template <typename Derived>
+    static void setIdentity(Eigen::PlainObjectBase<Derived>& M);
 
-    template <typename Scalar>
-    static void setConstant(MType<Scalar>& M, const Scalar& val);
+    template <typename Derived>
+    static void setConstant(Eigen::PlainObjectBase<Derived>& M, const typename Derived::Scalar& val);
 
     template <typename Scalar>
     static MType<Scalar> Identity(const MIndextype& rows, const MIndextype& cols, mpi::XpedWorld& world = mpi::getUniverse());
 
     // shape
-    template <typename Scalar>
-    static MIndextype rows(const MType<Scalar>& M);
+    template <typename Derived>
+    static MIndextype rows(const Eigen::PlainObjectBase<Derived>& M);
 
-    template <typename Scalar>
-    static MIndextype cols(const MType<Scalar>& M);
+    template <typename Derived>
+    static MIndextype cols(const Eigen::PlainObjectBase<Derived>& M);
 
-    template <typename Scalar>
-    static Scalar getVal(const MType<Scalar>& M, const MIndextype& row, const MIndextype& col);
+    template <typename Derived>
+    static typename Derived::Scalar getVal(const Eigen::PlainObjectBase<Derived>& M, const MIndextype& row, const MIndextype& col);
 
     // reduction
-    template <typename Scalar>
-    static Scalar trace(const MType<Scalar>& M);
+    template <typename Derived>
+    static typename Derived::Scalar trace(const Eigen::PlainObjectBase<Derived>& M);
 
     // artithmetic
-    template <typename Scalar>
-    static MType<Scalar> kronecker_prod(const MType<Scalar>& M1, const MType<Scalar>& M2);
+    template <typename DerivedL, typename DerivedR>
+    static MType<typename DerivedL::Scalar> kronecker_prod(const Eigen::MatrixBase<DerivedL>& M1, const Eigen::MatrixBase<DerivedR>& M2);
 
-    template <typename Scalar>
-    static MType<Scalar> prod(const MType<Scalar>& M1, const MType<Scalar>& M2);
+    template <typename DerivedL, typename DerivedR>
+    static MType<typename DerivedL::Scalar> prod(const Eigen::MatrixBase<DerivedL>& M1, const Eigen::MatrixBase<DerivedR>& M2);
 
     template <typename Scalar, typename MatrixExpr1, typename MatrixExpr2, typename MatrixExpr3, typename MatrixExprRes>
     static void optimal_prod(const Scalar& scale, const MatrixExpr1& M1, const MatrixExpr2& M2, const MatrixExpr3& M3, MatrixExprRes& Mres);
@@ -74,16 +75,20 @@ struct MatrixInterface
     template <typename Scalar, typename MatrixExpr1, typename MatrixExpr2, typename MatrixExpr3, typename MatrixExprRes>
     static void optimal_prod_add(const Scalar& scale, const MatrixExpr1& M1, const MatrixExpr2& M2, const MatrixExpr3& M3, MatrixExprRes& Mres);
 
-    template <typename Scalar>
-    static const Eigen::CwiseBinaryOp<Eigen::internal::scalar_sum_op<Scalar, Scalar>, const MType<Scalar>, const MType<Scalar>>
-    add(const MType<Scalar>& M1, const MType<Scalar>& M2);
+    template <typename Derived>
+    // static const Eigen::CwiseBinaryOp<Eigen::internal::scalar_sum_op<typename Derived::Scalar, typename Derived::Scalar>,
+    //                                   const Eigen::PlainObjectBase<Derived>,
+    //                                   const Eigen::PlainObjectBase<Derived>>
+    static auto add(const Eigen::PlainObjectBase<Derived>& M1, const Eigen::PlainObjectBase<Derived>& M2);
 
-    template <typename Scalar>
-    static const Eigen::CwiseBinaryOp<Eigen::internal::scalar_difference_op<Scalar, Scalar>, const MType<Scalar>, const MType<Scalar>>
-    difference(const MType<Scalar>& M1, const MType<Scalar>& M2);
+    template <typename Derived>
+    // static const Eigen::CwiseBinaryOp<Eigen::internal::scalar_difference_op<typename Derived::Scalar, typename Derived::Scalar>,
+    //                                   const Eigen::PlainObjectBase<Derived>,
+    //                                   const Eigen::PlainObjectBase<Derived>>
+    static auto difference(const Eigen::PlainObjectBase<Derived>& M1, const Eigen::PlainObjectBase<Derived>& M2);
 
-    template <typename Scalar>
-    static void scale(MType<Scalar>& M, const Scalar& val);
+    template <typename Derived>
+    static void scale(Eigen::PlainObjectBase<Derived>& M, const typename Derived::Scalar& val);
 
     template <typename Scalar, typename Derived>
     static auto unaryFunc(const Eigen::MatrixBase<Derived>& M, const std::function<Scalar(Scalar)>& func)
@@ -97,32 +102,38 @@ struct MatrixInterface
         return M.diagonal().unaryExpr(func).asDiagonal();
     }
 
-    template <typename Scalar>
-    static typename Eigen::MatrixBase<MType<Scalar>>::AdjointReturnType adjoint(const MType<Scalar>& M);
+    template <typename Derived>
+    static auto adjoint(const Eigen::MatrixBase<Derived>& M)
+    {
+        return M.adjoint();
+    }
 
     // block
-    template <typename Scalar>
-    static const Eigen::Block<const MType<Scalar>>
-    block(const MType<Scalar>& M, const MIndextype& row_off, const MIndextype& col_off, const MIndextype& rows, const MIndextype& cols);
+    template <typename Derived>
+    static auto
+    block(const Eigen::MatrixBase<Derived>& M, const MIndextype& row_off, const MIndextype& col_off, const MIndextype& rows, const MIndextype& cols)
+    {
+        return M.block(row_off, col_off, rows, cols);
+    }
 
-    template <typename Scalar>
-    static void add_to_block(MType<Scalar>& M1,
+    template <typename Derived>
+    static void add_to_block(Eigen::MatrixBase<Derived>& M1,
                              const MIndextype& row_off,
                              const MIndextype& col_off,
                              const MIndextype& rows,
                              const MIndextype& cols,
-                             const MType<Scalar>& M2);
+                             const Eigen::MatrixBase<Derived>& M2);
 
-    template <typename Scalar>
-    static void set_block(MType<Scalar>& M1,
+    template <typename Derived>
+    static void set_block(Eigen::MatrixBase<Derived>& M1,
                           const MIndextype& row_off,
                           const MIndextype& col_off,
                           const MIndextype& rows,
                           const MIndextype& cols,
-                          const MType<Scalar>& M2);
+                          const Eigen::MatrixBase<Derived>& M2);
 
-    template <typename Scalar>
-    static std::string print(const MType<Scalar>& M);
+    template <typename Derived>
+    static std::string print(const Eigen::PlainObjectBase<Derived>& M);
 };
 
 } // namespace Xped

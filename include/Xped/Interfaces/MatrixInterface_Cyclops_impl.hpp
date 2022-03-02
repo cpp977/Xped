@@ -5,6 +5,34 @@
 
 namespace Xped {
 
+template <typename T>
+struct ctf_traits
+{};
+
+template <typename Scalar_>
+struct ctf_traits<CTF::Tensor<Scalar_>>
+{
+    using Scalar = Scalar_;
+};
+
+template <typename Scalar_>
+struct ctf_traits<CTF::Matrix<Scalar_>>
+{
+    using Scalar = Scalar_;
+};
+
+template <typename Scalar_>
+struct ctf_traits<CTF::Tensor<Scalar_>&>
+{
+    using Scalar = Scalar_;
+};
+
+template <typename Scalar_>
+struct ctf_traits<CTF::Matrix<Scalar_>&>
+{
+    using Scalar = Scalar_;
+};
+
 struct MatrixInterface
 {
     // typedefs
@@ -54,17 +82,17 @@ struct MatrixInterface
     static MIndextype cols(const MType<Scalar>& M);
 
     // reduction
-    template <typename Scalar, typename MT>
-    static Scalar trace(MT&& M);
+    template <typename MT>
+    static typename ctf_traits<MT>::Scalar trace(MT&& M);
 
     template <typename Scalar>
     static Scalar getVal(const MType<Scalar>& M, const MIndextype& row, const MIndextype& col);
 
-    template <typename Scalar, typename MT1, typename MT2>
-    static MType<Scalar> kronecker_prod(MT1&& M1, MT2&& M2);
+    template <typename MT1, typename MT2>
+    static MType<typename ctf_traits<MT1>::Scalar> kronecker_prod(MT1&& M1, MT2&& M2);
 
-    template <typename Scalar, typename MT1, typename MT2>
-    static MType<Scalar> prod(MT1&& M1, MT2&& M2);
+    template <typename MT1, typename MT2>
+    static MType<typename ctf_traits<MT1>::Scalar> prod(MT1&& M1, MT2&& M2);
 
     template <typename Scalar, typename MatrixExpr1, typename MatrixExpr2, typename MatrixExpr3, typename MatrixExprRes>
     static void optimal_prod(const Scalar& scale, MatrixExpr1&& M1, MatrixExpr2&& M2, MatrixExpr3&& M3, MatrixExprRes& Mres);
@@ -72,11 +100,11 @@ struct MatrixInterface
     template <typename Scalar, typename MatrixExpr1, typename MatrixExpr2, typename MatrixExpr3, typename MatrixExprRes>
     static void optimal_prod_add(const Scalar& scale, MatrixExpr1&& M1, MatrixExpr2&& M2, MatrixExpr3&& M3, MatrixExprRes& Mres);
 
-    template <typename Scalar, typename MT1, typename MT2>
-    static MType<Scalar> add(MT1&& M1, MT2&& M2);
+    template <typename MT1, typename MT2>
+    static MType<typename ctf_traits<MT1>::Scalar> add(MT1&& M1, MT2&& M2);
 
-    template <typename Scalar, typename MT1, typename MT2>
-    static MType<Scalar> difference(MT1&& M1, MT2&& M2);
+    template <typename MT1, typename MT2>
+    static MType<typename ctf_traits<MT1>::Scalar> difference(MT1&& M1, MT2&& M2);
 
     template <typename Scalar>
     static void scale(MType<Scalar>& M, const Scalar& val);
@@ -87,8 +115,8 @@ struct MatrixInterface
     template <typename Scalar, typename MT>
     static MType<Scalar> diagUnaryFunc(MT&& M, const std::function<Scalar(Scalar)>& func);
 
-    template <typename Scalar, typename MT>
-    static MType<Scalar> adjoint(MT&& M);
+    template <typename MT>
+    static MType<typename ctf_traits<MT>::Scalar> adjoint(MT&& M);
 
     // template <typename Scalar>
     // static auto adjoint(CTF::Tensor<Scalar>& M)
@@ -110,7 +138,7 @@ struct MatrixInterface
                              const MIndextype& cols,
                              const MType<Scalar>& M2);
 
-    template <typename Scalar, typename MT>
+    template <typename MT>
     static void print(MT&& M);
 };
 

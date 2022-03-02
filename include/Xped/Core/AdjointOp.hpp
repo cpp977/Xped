@@ -44,8 +44,8 @@ public:
 
     // const std::vector<MatrixType> block() const { return refxpr_block(); }
     // const MatrixType block(std::size_t i) const { return Plain::template adjoint(refxpr_.block(i)); }
-    inline const auto block(std::size_t i) const { return PlainInterface::adjoint<Scalar>(refxpr_.block(i)); }
-    inline auto block(std::size_t i) { return PlainInterface::adjoint<Scalar>(refxpr_.block(i)); }
+    inline const auto block(std::size_t i) const { return PlainInterface::adjoint(refxpr_.block(i)); }
+    inline auto block(std::size_t i) { return PlainInterface::adjoint(refxpr_.block(i)); }
 
     inline const auto dict() const { return refxpr_.dict(); }
 

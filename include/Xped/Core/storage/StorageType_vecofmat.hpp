@@ -14,6 +14,9 @@ struct StorageType
     using cMapMatrixType = PlainInterface::cMapMType<Scalar>;
     using qType = typename Symmetry::qType;
 
+    using MatrixReturnType = MatrixType&;
+    using ConstMatrixReturnType = const MatrixType&;
+
 private:
     using DictType = std::unordered_map<qType,
                                         std::size_t,

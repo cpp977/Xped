@@ -20,7 +20,7 @@ void contract_L(XPED_CONST Tensor<Scalar, 1, 1, Symmetry, AllocationPolicy>& Bol
     // Bnew.setZero();
 
     for(std::size_t i = 0; i < Bra.sector().size(); i++) {
-        std::size_t dimQ = PlainInterface::cols<Scalar>(Bra.block(i));
+        std::size_t dimQ = PlainInterface::cols(Bra.block(i));
         typename Symmetry::qType Q = Bra.sector(i);
         auto itKet = Ket.dict().find(Q);
         if(itKet == Ket.dict().end()) { continue; }
@@ -40,11 +40,11 @@ void contract_L(XPED_CONST Tensor<Scalar, 1, 1, Symmetry, AllocationPolicy>& Bol
             if(itBold == Bold.dict().end()) { continue; }
             for(std::size_t s = 0; s < domainTree.dims[1]; s++) {
                 typename PlainInterface::MType<Scalar> Mbrablock = PlainInterface::block(Mbra, s * domainTree.dims[0], 0, domainTree.dims[0], dimQ);
-                PlainInterface::optimal_prod_add<Scalar>(1.,
-                                                         PlainInterface::adjoint<Scalar>(Mbrablock),
-                                                         Bold.block(itBold->second),
-                                                         PlainInterface::block(Mket, s * domainTree.dims[0], 0, domainTree.dims[0], dimQ),
-                                                         Mtmp);
+                PlainInterface::optimal_prod_add(1.,
+                                                 PlainInterface::adjoint(Mbrablock),
+                                                 Bold.block(itBold->second),
+                                                 PlainInterface::block(Mket, s * domainTree.dims[0], 0, domainTree.dims[0], dimQ),
+                                                 Mtmp);
                 // Mtmp += Mbra.block(s * domainTree.dims[0], 0, domainTree.dims[0], dimQ).adjoint() * Bold.block_[itBold->second] *
                 //         Mket.block(s * domainTree.dims[0], 0, domainTree.dims[0], dimQ);
             }
@@ -53,7 +53,7 @@ void contract_L(XPED_CONST Tensor<Scalar, 1, 1, Symmetry, AllocationPolicy>& Bol
         if(it == Bnew.dict().end()) {
             Bnew.push_back(Q, Mtmp);
         } else {
-            Bnew.block(it->second) = PlainInterface::add<Scalar>(Bnew.block(it->second), Mtmp);
+            Bnew.block(it->second) = PlainInterface::add(Bnew.block(it->second), Mtmp);
         }
     }
     SPDLOG_INFO("Leaving contract_L().");
@@ -71,7 +71,7 @@ void contract_R(XPED_CONST Tensor<Scalar, 1, 1, Symmetry, AllocationPolicy>& Bol
     // Bnew.setZero();
 
     for(std::size_t i = 0; i < Ket.sector().size(); i++) {
-        std::size_t dimQ = PlainInterface::cols<Scalar>(Ket.block(i));
+        std::size_t dimQ = PlainInterface::cols(Ket.block(i));
         typename Symmetry::qType Q = Ket.sector(i);
         auto itBold = Bold.dict().find(Q);
         if(itBold == Bold.dict().end()) { continue; }
@@ -93,11 +93,11 @@ void contract_R(XPED_CONST Tensor<Scalar, 1, 1, Symmetry, AllocationPolicy>& Bol
             auto Mket = Ket.subMatrix(domainTree, trivial);
             for(std::size_t s = 0; s < domainTree.dims[1]; s++) {
                 typename PlainInterface::MType<Scalar> Mbrablock = PlainInterface::block(Mbra, s * domainTree.dims[0], 0, domainTree.dims[0], dimQ);
-                PlainInterface::optimal_prod_add<Scalar>(1.,
-                                                         PlainInterface::block(Mket, s * domainTree.dims[0], 0, domainTree.dims[0], dimQ),
-                                                         Bold.block(itBold->second),
-                                                         PlainInterface::adjoint<Scalar>(Mbrablock),
-                                                         Mtmp);
+                PlainInterface::optimal_prod_add(1.,
+                                                 PlainInterface::block(Mket, s * domainTree.dims[0], 0, domainTree.dims[0], dimQ),
+                                                 Bold.block(itBold->second),
+                                                 PlainInterface::adjoint(Mbrablock),
+                                                 Mtmp);
                 // PlainInterface::optimal_prod_add(
                 //     1.,
                 //     Mket.block(s * domainTree.dims[0], 0, domainTree.dims[0], dimQ),
@@ -113,7 +113,7 @@ void contract_R(XPED_CONST Tensor<Scalar, 1, 1, Symmetry, AllocationPolicy>& Bol
             if(it == Bnew.dict().end()) {
                 Bnew.push_back(Qin, Mtmp);
             } else {
-                Bnew.block(it->second) = PlainInterface::add<Scalar>(Bnew.block(it->second), Mtmp);
+                Bnew.block(it->second) = PlainInterface::add(Bnew.block(it->second), Mtmp);
                 // Bnew.block_[it->second] += Mtmp;
             }
         }

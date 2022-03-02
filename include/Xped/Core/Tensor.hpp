@@ -69,6 +69,8 @@ public:
     using TensorcMapType = PlainInterface::cMapTType<Scalar, Rank + CoRank>;
 
 private:
+    using Storage = StorageType<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>;
+
     using Self = Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>;
 
     using DictType = std::unordered_map<qType,
@@ -108,12 +110,12 @@ public:
     inline const qType sector(std::size_t i) const { return storage_.sector(i); }
 
     // inline const std::vector<MatrixType> block() const { return block_; }
-    const auto& block(std::size_t i) const { return storage_.block(i); }
-    auto& block(std::size_t i) { return storage_.block(i); }
+    typename Storage::ConstMatrixReturnType block(std::size_t i) const { return storage_.block(i); }
+    typename Storage::MatrixReturnType block(std::size_t i) { return storage_.block(i); }
 
     const DictType& dict() const { return storage_.dict(); }
 
-    const StorageType<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>& storage() const { return storage_; }
+    const Storage& storage() const { return storage_; }
 
     const std::shared_ptr<mpi::XpedWorld> world() const { return world_; }
 
@@ -123,7 +125,7 @@ public:
     const Qbasis<Symmetry, Rank, AllocationPolicy>& coupledDomain() const { return storage_.coupledDomain(); }
     const Qbasis<Symmetry, CoRank, AllocationPolicy>& coupledCodomain() const { return storage_.coupledCodomain(); }
 
-    const auto& operator()(const qType& q_coupled) const { return storage_.block(q_coupled); }
+    typename Storage::ConstMatrixReturnType operator()(const qType& q_coupled) const { return storage_.block(q_coupled); }
 
     const std::string name() const { return "Xped"; }
     // Eigen::TensorMap<TensorType> operator() (const FusionTree<Rank,Symmetry>& f1, const FusionTree<CoRank,Symmetry>& f2);
@@ -143,7 +145,7 @@ public:
     TensorType subBlock(const FusionTree<Rank, Symmetry>& f1, const FusionTree<CoRank, Symmetry>& f2) const;
     TensorType subBlock(const FusionTree<Rank, Symmetry>& f1, const FusionTree<CoRank, Symmetry>& f2, std::size_t block_number) const;
 
-    const auto& subMatrix(const FusionTree<Rank, Symmetry>& f1, const FusionTree<CoRank, Symmetry>& f2) const;
+    const MatrixType subMatrix(const FusionTree<Rank, Symmetry>& f1, const FusionTree<CoRank, Symmetry>& f2) const;
     // MatrixType& operator() (const FusionTree<Rank,Symmetry>& f1, const FusionTree<CoRank,Symmetry>& f2);
 
     void print(std::ostream& o, bool PRINT_MATRICES = true) const;
@@ -201,7 +203,7 @@ public:
     void push_back(const qType& q, const MatrixType& M) { storage_.push_back(q, M); }
 
 private:
-    StorageType<Scalar, Rank, CoRank, Symmetry, AllocationPolicy> storage_;
+    Storage storage_;
 
     std::shared_ptr<mpi::XpedWorld> world_;
 
@@ -216,8 +218,7 @@ template <typename Scalar_, std::size_t Rank, std::size_t CoRank, typename Symme
 template <typename OtherDerived>
 Tensor<Scalar_, Rank, CoRank, Symmetry, AllocationPolicy>::Tensor(const TensorBase<OtherDerived>& other)
 {
-    storage_ = StorageType<Scalar_, Rank, CoRank, Symmetry, AllocationPolicy>(
-        other.derived().uncoupledDomain(), other.derived().uncoupledCodomain(), *other.derived().world());
+    storage_ = Storage(other.derived().uncoupledDomain(), other.derived().uncoupledCodomain(), *other.derived().world());
     storage_.reserve(other.derived().sector().size());
     for(std::size_t i = 0; i < other.derived().sector().size(); ++i) { storage_.push_back(other.derived().sector(i), other.derived().block(i)); }
     world_ = other.derived().world();

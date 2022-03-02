@@ -374,8 +374,7 @@ TEST_CASE("Testing operations with SU(2)-spin matrices.")
             for(const auto& q : outerprod1.sector()) {
                 CHECK(PlainInterface::rows(outerprod1(q)) * PlainInterface::cols(outerprod1(q)) == 1);
                 double Stot = 0.5 * (q[0] - 1.);
-                CHECK(PlainInterface::getVal<double>(outerprod1(q), 0, 0) ==
-                      doctest::Approx(0.5 * (Stot * (Stot + 1) - S1 * (S1 + 1.) - S2 * (S2 + 1.))));
+                CHECK(PlainInterface::getVal(outerprod1(q), 0, 0) == doctest::Approx(0.5 * (Stot * (Stot + 1) - S1 * (S1 + 1.) - S2 * (S2 + 1.))));
             }
         }
     }

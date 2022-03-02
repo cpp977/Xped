@@ -21,7 +21,7 @@ typename TensorTraits<Derived>::Scalar TensorBase<Derived>::trace() XPED_CONST
     assert(derived().coupledDomain() == derived().coupledCodomain());
     Scalar out = 0.;
     for(size_t i = 0; i < derived().sector().size(); i++) {
-        out += PlainInterface::trace<Scalar>(derived().block(i)) * Symmetry::degeneracy(derived().sector(i));
+        out += PlainInterface::trace(derived().block(i)) * Symmetry::degeneracy(derived().sector(i));
         // out += derived().block(i).trace() * Symmetry::degeneracy(derived().sector(i));
     }
     return out;
@@ -96,7 +96,7 @@ TensorBase<Derived>::operator*(XPED_CONST TensorBase<OtherDerived>& other) XPED_
         if(it == other_dict.end()) { continue; }
         // auto it_out = Tout.dict().find(derived_ref.sector(i));
         // if(it_out == Tout.dict().end()) {
-        Tout.push_back(derived_ref.sector(i), PlainInterface::prod<Scalar>(derived_ref.block(i), other_derived_ref.block(it->second)));
+        Tout.push_back(derived_ref.sector(i), PlainInterface::prod(derived_ref.block(i), other_derived_ref.block(it->second)));
         // SPDLOG_CRITICAL("({},{})x({},{})",
         //                 derived_ref.block(i).rows(),
         //                 derived_ref.block(i).cols(),

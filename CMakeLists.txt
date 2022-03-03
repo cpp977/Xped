@@ -25,7 +25,7 @@ option(XPED_BUILD_BENCHMARKS "Build the benchmarks." ON)
 add_feature_info("The benchmarks will be build." XPED_BUILD_BENCHMARKS "")
 
 set(XPED_STORAGE "VecOfMat" CACHE STRING "Used storage for Xped::Tensor.")
-set(XPED_SUPPORTED_STORAGES "Contigous;VecOfMat")
+set(XPED_SUPPORTED_STORAGES "Contiguous;VecOfMat")
 set_property(CACHE XPED_STORAGE PROPERTY STRINGS ${XPED_SUPPORTED_STORAGES})
 if(NOT (${XPED_STORAGE} IN_LIST XPED_SUPPORTED_STORAGES))
   message( STATUS "Build wanted to use the storage type ${XPED_STORAGE}.")

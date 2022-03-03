@@ -19,6 +19,7 @@ jobs:
         compiler: [g++-10, clang++-12]
         LIBCXX: [ON, OFF]
         TENSOR_LIB: [Eigen, Array, Cyclops]
+        STORAGE: [VecOfMat, Contiguous]
         exclude:
           # excludes libcxx for g++
           - compiler: g++-10
@@ -26,6 +27,8 @@ jobs:
           - compiler: clang++-12
             TENSOR_LIB: Cyclops
             LIBCXX: ON
+          - STORAGE: Contiguous
+            TENSOR_LIB: Cyclops
         include:
           - TENSOR_LIB: Eigen
             MATRIX_LIB: Eigen
@@ -90,7 +93,7 @@ jobs:
       working-directory: ${{runner.workspace}}/build
       env:
         CXX: ${{ matrix.compiler }}
-      run: cmake $GITHUB_WORKSPACE -DBLA_VENDOR=OpenBLAS -DXPED_USE_BLAS=ON -DXPED_USE_LAPACK=ON -DXPED_USE_OPENMP=ON -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DXPED_USE_LIBCXX=${{ matrix.LIBCXX }} -DXPED_ENABLE_CCACHE=OFF -DXPED_TENSOR_LIB=${{ matrix.TENSOR_LIB }} -DXPED_MATRIX_LIB=${{ matrix.MATRIX_LIB }} -DXPED_VECTOR_LIB=${{ matrix.VECTOR_LIB }} -DXPED_BUILD_CYCLOPS=ON -DXPED_USE_MPI=${{ matrix.USE_MPI }}
+      run: cmake $GITHUB_WORKSPACE -DBLA_VENDOR=OpenBLAS -DXPED_USE_BLAS=ON -DXPED_USE_LAPACK=ON -DXPED_USE_OPENMP=ON -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DXPED_USE_LIBCXX=${{ matrix.LIBCXX }} -DXPED_ENABLE_CCACHE=OFF -DXPED_TENSOR_LIB=${{ matrix.TENSOR_LIB }} -DXPED_MATRIX_LIB=${{ matrix.MATRIX_LIB }} -DXPED_VECTOR_LIB=${{ matrix.VECTOR_LIB }} -DXPED_BUILD_CYCLOPS=ON -DXPED_USE_MPI=${{ matrix.USE_MPI }} -DXPED_STORAGE=${{ STORAGE }}
 
     - name: Build
       working-directory: ${{runner.workspace}}/build

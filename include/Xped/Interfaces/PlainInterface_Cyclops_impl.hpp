@@ -35,7 +35,7 @@ struct PlainInterface : public MatrixInterface, public TensorInterface, public V
     using VectorInterface::setRandom;
     using VectorInterface::setZero;
 
-    template <typename Scalar, std::size_t Rank>
+    template <std::size_t Rank, typename Scalar>
     static void set_block_from_tensor(MType<Scalar>& M,
                                       const Indextype& row_off,
                                       const Indextype& col_off,
@@ -44,7 +44,7 @@ struct PlainInterface : public MatrixInterface, public TensorInterface, public V
                                       const Scalar& scale,
                                       const TType<Scalar, Rank>& T);
 
-    template <typename Scalar, std::size_t Rank>
+    template <std::size_t Rank, typename Scalar>
     static void add_to_block_from_tensor(MType<Scalar>& M,
                                          const Indextype& row_off,
                                          const Indextype& col_off,
@@ -53,7 +53,7 @@ struct PlainInterface : public MatrixInterface, public TensorInterface, public V
                                          const Scalar& scale,
                                          const TType<Scalar, Rank>& T);
 
-    template <typename Scalar, std::size_t Rank>
+    template <std::size_t Rank, typename Scalar>
     static TType<Scalar, Rank> tensor_from_matrix_block(const MType<Scalar>& M,
                                                         const Indextype& row_off,
                                                         const Indextype& col_off,
@@ -61,11 +61,12 @@ struct PlainInterface : public MatrixInterface, public TensorInterface, public V
                                                         const Indextype& cols,
                                                         const std::array<Indextype, Rank>& dims);
 
-    template <typename Scalar, typename MT>
-    static void diagonal_head_matrix_to_vector(VType<Scalar>& V, MT&& M, const Indextype& n_elems);
+    template <typename MT>
+    static void diagonal_head_matrix_to_vector(VType<typename ctf_traits<MT>::Scalar>& V, MT&& M, const Indextype& n_elems);
 
-    template <typename Scalar, typename MT>
-    static std::tuple<MType<Scalar>, VType<Scalar>, MType<Scalar>> svd(MT&& M);
+    template <typename MT>
+    static std::tuple<MType<typename ctf_traits<MT>::Scalar>, VType<typename ctf_traits<MT>::Scalar>, MType<typename ctf_traits<MT>::Scalar>>
+    svd(MT&& M);
 
     template <typename Scalar, typename VT>
     static MType<Scalar> vec_to_diagmat(VT&& V);

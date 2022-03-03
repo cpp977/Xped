@@ -32,7 +32,7 @@ using cMapMType = const CTF::Matrix<Scalar>;
 template <typename Scalar>
 using VType = CTF::Vector<Scalar>;
 
-template <typename Scalar, std::size_t Rank>
+template <std::size_t Rank, typename Scalar>
 void PlainInterface::set_block_from_tensor(MType<Scalar>& M,
                                            const Indextype& row_off,
                                            const Indextype& col_off,
@@ -59,7 +59,7 @@ void PlainInterface::set_block_from_tensor(MType<Scalar>& M,
     SPDLOG_INFO("Leaving PlainInterface::set_block_from_tensor().");
 }
 
-template <typename Scalar, std::size_t Rank>
+template <std::size_t Rank, typename Scalar>
 void PlainInterface::add_to_block_from_tensor(MType<Scalar>& M,
                                               const Indextype& row_off,
                                               const Indextype& col_off,
@@ -82,7 +82,7 @@ void PlainInterface::add_to_block_from_tensor(MType<Scalar>& M,
     SPDLOG_INFO("Leaving PlainInterface::add_to_block_from_tensor().");
 }
 
-template <typename Scalar, std::size_t Rank>
+template <std::size_t Rank, typename Scalar>
 TType<Scalar, Rank> PlainInterface::tensor_from_matrix_block(const MType<Scalar>& M,
                                                              const Indextype& row_off,
                                                              const Indextype& col_off,
@@ -104,14 +104,14 @@ TType<Scalar, Rank> PlainInterface::tensor_from_matrix_block(const MType<Scalar>
     return T;
 }
 
-template <typename Scalar, typename MT>
-void PlainInterface::diagonal_head_matrix_to_vector(VType<Scalar>& V, MT&& M, const Indextype& n_elems)
+template <typename MT>
+void PlainInterface::diagonal_head_matrix_to_vector(VType<typename ctf_traits<MT>::Scalar>& V, MT&& M, const Indextype& n_elems)
 {
     SPDLOG_INFO("Entering PlainInterface::diagonal_head_matrix_to_vector().");
     assert(n_elems <= M.nrow);
     assert(n_elems <= M.ncol);
     SPDLOG_INFO("Got mat with size=({},{}) and cut size={}", M.nrow, M.ncol, n_elems);
-    CTF::Vector<Scalar> tmp(M.nrow, *M.wrld);
+    CTF::Vector<typename ctf_traits<MT>::Scalar> tmp(M.nrow, *M.wrld);
     SPDLOG_INFO("Constructed vector of size={}", M.nrow);
     tmp["i"] = M["ii"];
     SPDLOG_INFO("Set the elements of the tmp vec.");
@@ -121,19 +121,20 @@ void PlainInterface::diagonal_head_matrix_to_vector(VType<Scalar>& V, MT&& M, co
     SPDLOG_INFO("Leaving PlainInterface::diagonal_head_matrix_to_vector().");
 }
 
-template <typename Scalar, typename MT>
-std::tuple<MType<Scalar>, VType<Scalar>, MType<Scalar>> PlainInterface::svd(MT&& M)
+template <typename MT>
+std::tuple<MType<typename ctf_traits<MT>::Scalar>, VType<typename ctf_traits<MT>::Scalar>, MType<typename ctf_traits<MT>::Scalar>>
+PlainInterface::svd(MT&& M)
 {
-    MType<Scalar> U, Vdag;
-    CTF::Vector<Scalar> S;
+    MType<typename ctf_traits<MT>::Scalar> U, Vdag;
+    CTF::Vector<typename ctf_traits<MT>::Scalar> S;
     // Handle 1x2 matrix because of ScaLAPACK bug
     if(M.nrow == 1 && M.ncol == 2) {
-        U = MType<Scalar>(1, 1, *M.wrld);
+        U = MType<typename ctf_traits<MT>::Scalar>(1, 1, *M.wrld);
         U["ii"] = 1.;
         Vdag = M;
-        S = CTF::Vector<Scalar>(1, *M.wrld);
+        S = CTF::Vector<typename ctf_traits<MT>::Scalar>(1, *M.wrld);
         // Todo: Handle complex case?
-        Scalar d = M.norm2();
+        typename ctf_traits<MT>::Scalar d = M.norm2();
         S["i"] = d;
         if(d != 0.)
             Vdag.scale(1. / d, "ij");

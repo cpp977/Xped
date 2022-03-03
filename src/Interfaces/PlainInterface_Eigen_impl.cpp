@@ -17,8 +17,8 @@ using TType = Eigen::Tensor<Scalar, Rank>;
 template <typename Scalar>
 using VType = Eigen::Array<Scalar, Eigen::Dynamic, 1>;
 
-template <typename Scalar, std::size_t Rank>
-void PlainInterface::set_block_from_tensor(MType<Scalar>& M,
+template <std::size_t Rank, typename Derived, typename Scalar>
+void PlainInterface::set_block_from_tensor(Eigen::MatrixBase<Derived>& M,
                                            const Indextype& row,
                                            const Indextype& col,
                                            const Indextype& rows,
@@ -29,8 +29,8 @@ void PlainInterface::set_block_from_tensor(MType<Scalar>& M,
     M.block(row, col, rows, cols) = scale * Eigen::Map<cMType<Scalar>>(T.data(), rows, cols);
 }
 
-template <typename Scalar, std::size_t Rank>
-void PlainInterface::add_to_block_from_tensor(MType<Scalar>& M,
+template <std::size_t Rank, typename Derived, typename Scalar>
+void PlainInterface::add_to_block_from_tensor(Eigen::MatrixBase<Derived>& M,
                                               const Indextype& row,
                                               const Indextype& col,
                                               const Indextype& rows,
@@ -41,32 +41,57 @@ void PlainInterface::add_to_block_from_tensor(MType<Scalar>& M,
     M.block(row, col, rows, cols) += scale * Eigen::Map<cMType<Scalar>>(T.data(), rows, cols);
 }
 
-template <typename Scalar, std::size_t Rank>
-TType<Scalar, Rank> PlainInterface::tensor_from_matrix_block(const MType<Scalar>& M,
-                                                             const Indextype& row,
-                                                             const Indextype& col,
-                                                             const Indextype& rows,
-                                                             const Indextype& cols,
-                                                             const std::array<Indextype, Rank>& dims)
+template <std::size_t Rank, typename Derived, typename Scalar>
+void PlainInterface::set_block_from_tensor(Eigen::MatrixBase<Derived>&& M,
+                                           const Indextype& row,
+                                           const Indextype& col,
+                                           const Indextype& rows,
+                                           const Indextype& cols,
+                                           const Scalar& scale,
+                                           const TType<Scalar, Rank>& T)
 {
-    MType<Scalar> submatrix = M.block(row, col, rows, cols);
-    cMapTType<Scalar, Rank> tensorview = cMap(submatrix.data(), dims);
-    return construct<Scalar, Rank>(tensorview);
+    M.block(row, col, rows, cols) = scale * Eigen::Map<cMType<Scalar>>(T.data(), rows, cols);
 }
 
-template <typename Scalar>
-void PlainInterface::diagonal_head_matrix_to_vector(VType<Scalar>& V, const MType<Scalar>& M, const Indextype& n_elems)
+template <std::size_t Rank, typename Derived, typename Scalar>
+void PlainInterface::add_to_block_from_tensor(Eigen::MatrixBase<Derived>&& M,
+                                              const Indextype& row,
+                                              const Indextype& col,
+                                              const Indextype& rows,
+                                              const Indextype& cols,
+                                              const Scalar& scale,
+                                              const TType<Scalar, Rank>& T)
+{
+    M.block(row, col, rows, cols) += scale * Eigen::Map<cMType<Scalar>>(T.data(), rows, cols);
+}
+
+template <std::size_t Rank, typename Derived>
+TType<typename Derived::Scalar, Rank> PlainInterface::tensor_from_matrix_block(const Eigen::MatrixBase<Derived>& M,
+                                                                               const Indextype& row,
+                                                                               const Indextype& col,
+                                                                               const Indextype& rows,
+                                                                               const Indextype& cols,
+                                                                               const std::array<Indextype, Rank>& dims)
+{
+    MType<typename Derived::Scalar> submatrix = M.block(row, col, rows, cols);
+    cMapTType<typename Derived::Scalar, Rank> tensorview = cMap(submatrix.data(), dims);
+    return construct<typename Derived::Scalar, Rank>(tensorview);
+}
+
+template <typename Derived>
+void PlainInterface::diagonal_head_matrix_to_vector(VType<typename Derived::Scalar>& V, const Eigen::MatrixBase<Derived>& M, const Indextype& n_elems)
 {
     V = M.diagonal().head(n_elems);
 }
 
-template <typename Scalar>
-std::tuple<MType<Scalar>, VType<Scalar>, MType<Scalar>> PlainInterface::svd(const MType<Scalar>& M)
+template <typename Derived>
+std::tuple<MType<typename Derived::Scalar>, VType<typename Derived::Scalar>, MType<typename Derived::Scalar>>
+PlainInterface::svd(const Eigen::MatrixBase<Derived>& M)
 {
 #ifdef XPED_DONT_USE_BDCSVD
-    Eigen::JacobiSVD<MType<Scalar>> Jack; // standard SVD
+    Eigen::JacobiSVD<MType<typename Derived::Scalar>> Jack; // standard SVD
 #else
-    Eigen::BDCSVD<MType<Scalar>> Jack; // "Divide and conquer" SVD (only available in Eigen)
+    Eigen::BDCSVD<MType<typename Derived::Scalar>> Jack; // "Divide and conquer" SVD (only available in Eigen)
 #endif
 
     Jack.compute(M, Eigen::ComputeThinU | Eigen::ComputeThinV);

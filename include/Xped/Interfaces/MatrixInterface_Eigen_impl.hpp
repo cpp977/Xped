@@ -34,33 +34,45 @@ struct MatrixInterface
 
     // initialization
     template <typename Derived>
-    static void setZero(Eigen::PlainObjectBase<Derived>& M);
+    static void setZero(Eigen::MatrixBase<Derived>& M);
 
     template <typename Derived>
-    static void setRandom(Eigen::PlainObjectBase<Derived>& M);
+    static void setZero(Eigen::MatrixBase<Derived>&& M);
 
     template <typename Derived>
-    static void setIdentity(Eigen::PlainObjectBase<Derived>& M);
+    static void setRandom(Eigen::MatrixBase<Derived>& M);
 
     template <typename Derived>
-    static void setConstant(Eigen::PlainObjectBase<Derived>& M, const typename Derived::Scalar& val);
+    static void setRandom(Eigen::MatrixBase<Derived>&& M);
+
+    template <typename Derived>
+    static void setIdentity(Eigen::MatrixBase<Derived>& M);
+
+    template <typename Derived>
+    static void setIdentity(Eigen::MatrixBase<Derived>&& M);
+
+    template <typename Derived>
+    static void setConstant(Eigen::MatrixBase<Derived>& M, const typename Derived::Scalar& val);
+
+    template <typename Derived>
+    static void setConstant(Eigen::MatrixBase<Derived>&& M, const typename Derived::Scalar& val);
 
     template <typename Scalar>
     static MType<Scalar> Identity(const MIndextype& rows, const MIndextype& cols, mpi::XpedWorld& world = mpi::getUniverse());
 
     // shape
     template <typename Derived>
-    static MIndextype rows(const Eigen::PlainObjectBase<Derived>& M);
+    static MIndextype rows(const Eigen::DenseBase<Derived>& M);
 
     template <typename Derived>
-    static MIndextype cols(const Eigen::PlainObjectBase<Derived>& M);
+    static MIndextype cols(const Eigen::DenseBase<Derived>& M);
 
     template <typename Derived>
-    static typename Derived::Scalar getVal(const Eigen::PlainObjectBase<Derived>& M, const MIndextype& row, const MIndextype& col);
+    static typename Derived::Scalar getVal(const Eigen::DenseBase<Derived>& M, const MIndextype& row, const MIndextype& col);
 
     // reduction
     template <typename Derived>
-    static typename Derived::Scalar trace(const Eigen::PlainObjectBase<Derived>& M);
+    static typename Derived::Scalar trace(const Eigen::MatrixBase<Derived>& M);
 
     // artithmetic
     template <typename DerivedL, typename DerivedR>
@@ -75,20 +87,26 @@ struct MatrixInterface
     template <typename Scalar, typename MatrixExpr1, typename MatrixExpr2, typename MatrixExpr3, typename MatrixExprRes>
     static void optimal_prod_add(const Scalar& scale, const MatrixExpr1& M1, const MatrixExpr2& M2, const MatrixExpr3& M3, MatrixExprRes& Mres);
 
-    template <typename Derived>
+    template <typename DerivedL, typename DerivedR>
     // static const Eigen::CwiseBinaryOp<Eigen::internal::scalar_sum_op<typename Derived::Scalar, typename Derived::Scalar>,
     //                                   const Eigen::PlainObjectBase<Derived>,
     //                                   const Eigen::PlainObjectBase<Derived>>
-    static auto add(const Eigen::PlainObjectBase<Derived>& M1, const Eigen::PlainObjectBase<Derived>& M2);
+    static auto add(const Eigen::MatrixBase<DerivedL>& M1, const Eigen::MatrixBase<DerivedR>& M2)
+    {
+        return (M1 + M2);
+    }
 
-    template <typename Derived>
+    template <typename DerivedL, typename DerivedR>
     // static const Eigen::CwiseBinaryOp<Eigen::internal::scalar_difference_op<typename Derived::Scalar, typename Derived::Scalar>,
     //                                   const Eigen::PlainObjectBase<Derived>,
     //                                   const Eigen::PlainObjectBase<Derived>>
-    static auto difference(const Eigen::PlainObjectBase<Derived>& M1, const Eigen::PlainObjectBase<Derived>& M2);
+    static auto difference(const Eigen::MatrixBase<DerivedL>& M1, const Eigen::MatrixBase<DerivedR>& M2)
+    {
+        return (M1 - M2);
+    }
 
     template <typename Derived>
-    static void scale(Eigen::PlainObjectBase<Derived>& M, const typename Derived::Scalar& val);
+    static void scale(Eigen::MatrixBase<Derived>& M, const typename Derived::Scalar& val);
 
     template <typename Scalar, typename Derived>
     static auto unaryFunc(const Eigen::MatrixBase<Derived>& M, const std::function<Scalar(Scalar)>& func)
@@ -133,7 +151,23 @@ struct MatrixInterface
                           const Eigen::MatrixBase<Derived>& M2);
 
     template <typename Derived>
-    static std::string print(const Eigen::PlainObjectBase<Derived>& M);
+    static void add_to_block(Eigen::MatrixBase<Derived>&& M1,
+                             const MIndextype& row_off,
+                             const MIndextype& col_off,
+                             const MIndextype& rows,
+                             const MIndextype& cols,
+                             const Eigen::MatrixBase<Derived>& M2);
+
+    template <typename Derived>
+    static void set_block(Eigen::MatrixBase<Derived>&& M1,
+                          const MIndextype& row_off,
+                          const MIndextype& col_off,
+                          const MIndextype& rows,
+                          const MIndextype& cols,
+                          const Eigen::MatrixBase<Derived>& M2);
+
+    template <typename Derived>
+    static std::string print(const Eigen::DenseBase<Derived>& M);
 };
 
 } // namespace Xped

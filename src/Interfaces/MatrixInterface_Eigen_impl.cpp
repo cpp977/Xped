@@ -36,25 +36,49 @@ void MatrixInterface::resize(MType<Scalar>& M, const MIndextype& new_rows, const
 
 // initialization
 template <typename Derived>
-void MatrixInterface::setZero(Eigen::PlainObjectBase<Derived>& M)
+void MatrixInterface::setZero(Eigen::MatrixBase<Derived>& M)
 {
     M.setZero();
 }
 
 template <typename Derived>
-void MatrixInterface::setRandom(Eigen::PlainObjectBase<Derived>& M)
+void MatrixInterface::setZero(Eigen::MatrixBase<Derived>&& M)
+{
+    M.setZero();
+}
+
+template <typename Derived>
+void MatrixInterface::setRandom(Eigen::MatrixBase<Derived>& M)
 {
     M.setRandom();
 }
 
 template <typename Derived>
-void MatrixInterface::setIdentity(Eigen::PlainObjectBase<Derived>& M)
+void MatrixInterface::setRandom(Eigen::MatrixBase<Derived>&& M)
+{
+    M.setRandom();
+}
+
+template <typename Derived>
+void MatrixInterface::setIdentity(Eigen::MatrixBase<Derived>& M)
 {
     M.setIdentity();
 }
 
 template <typename Derived>
-void MatrixInterface::setConstant(Eigen::PlainObjectBase<Derived>& M, const typename Derived::Scalar& val)
+void MatrixInterface::setIdentity(Eigen::MatrixBase<Derived>&& M)
+{
+    M.setIdentity();
+}
+
+template <typename Derived>
+void MatrixInterface::setConstant(Eigen::MatrixBase<Derived>& M, const typename Derived::Scalar& val)
+{
+    M.setConstant(val);
+}
+
+template <typename Derived>
+void MatrixInterface::setConstant(Eigen::MatrixBase<Derived>&& M, const typename Derived::Scalar& val)
 {
     M.setConstant(val);
 }
@@ -67,26 +91,26 @@ MType<Scalar> MatrixInterface::Identity(const MIndextype& rows, const MIndextype
 
 // shape
 template <typename Derived>
-MIndextype MatrixInterface::rows(const Eigen::PlainObjectBase<Derived>& M)
+MIndextype MatrixInterface::rows(const Eigen::DenseBase<Derived>& M)
 {
     return M.rows();
 }
 
 template <typename Derived>
-MIndextype MatrixInterface::cols(const Eigen::PlainObjectBase<Derived>& M)
+MIndextype MatrixInterface::cols(const Eigen::DenseBase<Derived>& M)
 {
     return M.cols();
 }
 
 template <typename Derived>
-typename Derived::Scalar MatrixInterface::getVal(const Eigen::PlainObjectBase<Derived>& M, const MIndextype& row, const MIndextype& col)
+typename Derived::Scalar MatrixInterface::getVal(const Eigen::DenseBase<Derived>& M, const MIndextype& row, const MIndextype& col)
 {
     return M(row, col);
 }
 
 // reduction
 template <typename Derived>
-typename Derived::Scalar MatrixInterface::trace(const Eigen::PlainObjectBase<Derived>& M)
+typename Derived::Scalar MatrixInterface::trace(const Eigen::MatrixBase<Derived>& M)
 {
     return M.trace();
 }
@@ -141,25 +165,7 @@ void MatrixInterface::optimal_prod_add(const Scalar& scale, const MatrixExpr1& M
 }
 
 template <typename Derived>
-// const Eigen::CwiseBinaryOp<Eigen::internal::scalar_sum_op<typename Derived::Scalar, typename Derived::Scalar>,
-//                            const Eigen::PlainObjectBase<Derived>,
-//                            const Eigen::PlainObjectBase<Derived>>
-auto MatrixInterface::add(const Eigen::PlainObjectBase<Derived>& M1, const Eigen::PlainObjectBase<Derived>& M2)
-{
-    return (M1 + M2);
-}
-
-template <typename Derived>
-// const Eigen::CwiseBinaryOp<Eigen::internal::scalar_difference_op<typename Derived::Scalar, typename Derived::Scalar>,
-//                            const Eigen::PlainObjectBase<Derived>,
-//                            const Eigen::PlainObjectBase<Derived>>
-auto MatrixInterface::difference(const Eigen::PlainObjectBase<Derived>& M1, const Eigen::PlainObjectBase<Derived>& M2)
-{
-    return (M1 - M2);
-}
-
-template <typename Derived>
-void MatrixInterface::scale(Eigen::PlainObjectBase<Derived>& M, const typename Derived::Scalar& val)
+void MatrixInterface::scale(Eigen::MatrixBase<Derived>& M, const typename Derived::Scalar& val)
 {
     M = (val * M);
 }
@@ -188,7 +194,29 @@ void MatrixInterface::set_block(Eigen::MatrixBase<Derived>& M1,
 }
 
 template <typename Derived>
-std::string MatrixInterface::print(const Eigen::PlainObjectBase<Derived>& M)
+void MatrixInterface::add_to_block(Eigen::MatrixBase<Derived>&& M1,
+                                   const MIndextype& row_off,
+                                   const MIndextype& col_off,
+                                   const MIndextype& rows,
+                                   const MIndextype& cols,
+                                   const Eigen::MatrixBase<Derived>& M2)
+{
+    M1.block(row_off, col_off, rows, cols) += M2;
+}
+
+template <typename Derived>
+void MatrixInterface::set_block(Eigen::MatrixBase<Derived>&& M1,
+                                const MIndextype& row_off,
+                                const MIndextype& col_off,
+                                const MIndextype& rows,
+                                const MIndextype& cols,
+                                const Eigen::MatrixBase<Derived>& M2)
+{
+    M1.block(row_off, col_off, rows, cols) = M2;
+}
+
+template <typename Derived>
+std::string MatrixInterface::print(const Eigen::DenseBase<Derived>& M)
 {
     std::stringstream ss;
     ss << M;

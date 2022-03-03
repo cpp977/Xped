@@ -1,82 +1,181 @@
 #ifndef XPED_STORAGE_TYPE_CONTIGOUS_HPP_
 #define XPED_STORAGE_TYPE_CONTIGOUS_HPP_
 
+#include "Xped/Core/Qbasis.hpp"
+#include "Xped/Core/TensorHelper.hpp"
+
 namespace Xped {
 
-template <typename Scalar, template <typename> typename Allocator>
+template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
 struct StorageType
 {
-    StorageType()
-        : block_size(0)
-        , m_rows(0)
-        , m_cols(0)
-        , block_dim(0)
-    {}
+    using MatrixType = PlainInterface::MType<Scalar>;
+    using MapMatrixType = PlainInterface::MapMType<Scalar>;
+    using cMapMatrixType = PlainInterface::cMapMType<Scalar>;
+    using qType = typename Symmetry::qType;
 
-    StorageType(std::size_t block_size, std::size_t rows, std::size_t cols)
-        : block_size(block_size)
-        , m_rows(rows)
-        , m_cols(cols)
+    using MatrixReturnType = MapMatrixType;
+    using ConstMatrixReturnType = cMapMatrixType;
+
+private:
+    using DictType = std::unordered_map<qType,
+                                        std::size_t,
+                                        std::hash<qType>,
+                                        std::equal_to<qType>,
+                                        typename AllocationPolicy::template Allocator<std::pair<const qType, std::size_t>>>;
+
+public:
+    StorageType() = default;
+
+    StorageType(const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, Rank> basis_domain,
+                const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, CoRank> basis_codomain,
+                mpi::XpedWorld& world = mpi::getUniverse())
+        : m_uncoupled_domain(basis_domain)
+        , m_uncoupled_codomain(basis_codomain)
+        , m_world(&world, mpi::TrivialDeleter<mpi::XpedWorld>{})
     {
-        block_dim = m_rows * m_cols;
-        m_data.resize(block_size * block_dim);
+        m_domain = internal::build_FusionTree(m_uncoupled_domain);
+        m_codomain = internal::build_FusionTree(m_uncoupled_codomain);
+        // uninitialized_resize();
     }
 
-    StorageType(std::size_t block_size, std::size_t rows, std::size_t cols, const Scalar* data)
-        : block_size(block_size)
-        , m_rows(rows)
-        , m_cols(cols)
+    StorageType(const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, Rank> basis_domain,
+                const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, CoRank> basis_codomain,
+                const Scalar* data)
+        : m_uncoupled_domain(basis_domain)
+        , m_uncoupled_codomain(basis_codomain)
     {
-        block_dim = m_rows * m_cols;
-        m_data = std::vector<Scalar, Allocator<Scalar>>(data, data + block_size * block_dim);
+        m_domain = internal::build_FusionTree(m_uncoupled_domain);
+        m_codomain = internal::build_FusionTree(m_uncoupled_codomain);
+        initialized_resize(data);
     }
+
+    StorageType(const StorageType<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>& other) = default;
+    // {
+    //     sector_ = other.derived().sector();
+    //     // block_.resize(sector_.size());
+    //     storage_ = other.storage();
+    //     // for(std::size_t i = 0; i < sector_.size(); i++) { block_[i] = other.derived().block(i); }
+    //     dict_ = other.derived().dict();
+    //     world_ = other.derived().world();
+    //     uncoupled_domain = other.derived().uncoupledDomain();
+    //     uncoupled_codomain = other.derived().uncoupledCodomain();
+    //     domain = other.derived().coupledDomain();
+    //     codomain = other.derived().coupledCodomain();
+    // }
 
     // template <template <typename> typename OtherAllocator>
-    // StorageType(const StorageType<Scalar, OtherAllocator>& other)
-    //     : block_size(other.blockSize())
-    //     , m_rows(other.rows())
-    //     , m_cols(other.cols())
-    //     , block_dim(other.blockDim())
-    // {
-    //     m_data = stan::math::to_arena(other.data());
-    // };
+    // StorageType(const StorageType<Scalar, Rank, CoRank, Symmetry, OtherAllocator>& other);
 
-    Eigen::Map<const Eigen::Matrix<Scalar, -1, -1>> block(std::size_t i) const
+    void resize()
     {
-        assert(i < block_size);
-        return Eigen::Map<const Eigen::Matrix<Scalar, -1, -1>>(m_data.data() + block_dim * i, m_rows, m_cols);
+        std::size_t curr = 0;
+        for(const auto& [q, dim, plain] : m_domain) {
+            if(m_codomain.IS_PRESENT(q)) {
+                m_sector.push_back(q);
+                m_dict.insert(std::make_pair(q, m_sector.size() - 1));
+                m_offsets.push_back(curr);
+                curr += m_domain.inner_dim(q) * m_codomain.inner_dim(q);
+            }
+        }
+        m_data.resize(curr);
     }
 
-    Eigen::Map<Eigen::Matrix<Scalar, -1, -1>> block(std::size_t i)
+    cMapMatrixType block(std::size_t i) const
     {
-        assert(i < block_size);
-        return Eigen::Map<Eigen::Matrix<Scalar, -1, -1>>(m_data.data() + block_dim * i, m_rows, m_cols);
+        assert(i < m_offsets.size());
+        return cMapMatrixType(m_data.data() + m_offsets[i], m_domain.inner_dim(m_sector[i]), m_codomain.inner_dim(m_sector[i]));
     }
 
-    void resize(std::size_t new_size, std::size_t new_rows, std::size_t new_cols)
+    MapMatrixType block(std::size_t i)
     {
-        block_size = new_size;
-        m_rows = new_rows;
-        m_cols = new_cols;
-        block_dim = m_rows * m_cols;
-        m_data.resize(new_size * block_dim);
+        assert(i < m_offsets.size());
+        return MapMatrixType(m_data.data() + m_offsets[i], m_domain.inner_dim(m_sector[i]), m_codomain.inner_dim(m_sector[i]));
     }
 
-    std::size_t blockSize() const { return block_size; }
-    std::size_t blockDim() const { return block_dim; }
-    std::size_t rows() const { return m_rows; }
-    std::size_t cols() const { return m_cols; }
+    cMapMatrixType block(qType q) const
+    {
+        auto it = m_dict.find(q);
+        assert(it != m_dict.end());
+        return block(it->second);
+    }
+
+    MapMatrixType block(qType q)
+    {
+        auto it = m_dict.find(q);
+        assert(it != m_dict.end());
+        return block(it->second);
+    }
+
+    const DictType& dict() const { return m_dict; }
+    DictType& dict() { return m_dict; }
+
+    const std::vector<qType, typename AllocationPolicy::template Allocator<qType>>& sector() const { return m_sector; }
+    qType sector(std::size_t i) const { return m_sector[i]; }
 
     const auto& data() const { return m_data; }
     auto& data() { return m_data; }
 
-private:
-    std::size_t block_size;
-    std::size_t block_dim;
-    std::size_t m_rows, m_cols;
+    const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, Rank>& uncoupledDomain() const { return m_uncoupled_domain; }
+    const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, CoRank>& uncoupledCodomain() const { return m_uncoupled_codomain; }
 
-    std::vector<Scalar, Allocator<Scalar>> m_data;
+    const Qbasis<Symmetry, Rank, AllocationPolicy>& coupledDomain() const { return m_domain; }
+    const Qbasis<Symmetry, CoRank, AllocationPolicy>& coupledCodomain() const { return m_codomain; }
+
+    void push_back(const qType& q, const MatrixType& M)
+    {
+        if(m_offsets.size() == 0) {
+            m_offsets.push_back(0);
+        } else {
+            m_offsets.push_back(m_offsets.back() + m_domain.inner_dim(m_sector.back()) * m_codomain.inner_dim(m_sector.back()));
+        }
+        m_sector.push_back(q);
+        m_dict.insert(std::make_pair(q, m_sector.size() - 1));
+        m_data.insert(m_data.end(), M.data(), M.data() + M.size());
+    }
+
+    void reserve(std::size_t size) { m_data.reserve(size); }
+
+    void clear()
+    {
+        m_data.clear();
+        m_sector.clear();
+    }
+
+private:
+    std::vector<Scalar, typename AllocationPolicy::template Allocator<Scalar>> m_data;
+
+    DictType m_dict; // sector --> number
+    std::vector<qType, typename AllocationPolicy::template Allocator<qType>> m_sector;
+
+    std::array<Qbasis<Symmetry, 1, AllocationPolicy>, Rank> m_uncoupled_domain;
+    std::array<Qbasis<Symmetry, 1, AllocationPolicy>, CoRank> m_uncoupled_codomain;
+    Qbasis<Symmetry, Rank, AllocationPolicy> m_domain;
+    Qbasis<Symmetry, CoRank, AllocationPolicy> m_codomain;
+
+    std::shared_ptr<mpi::XpedWorld> m_world;
+
+    std::vector<std::size_t, typename AllocationPolicy::template Allocator<std::size_t>> m_offsets;
+
+    void initialized_resize(const Scalar* data)
+    {
+        m_data.reserve(std::max(m_domain.dim(), m_codomain.dim()));
+
+        std::size_t current_dim = 0;
+        for(const auto& [q, dim, plain] : m_domain) {
+            if(m_codomain.IS_PRESENT(q)) {
+                m_sector.push_back(q);
+                m_dict.insert(std::make_pair(q, m_sector.size() - 1));
+                MapMatrixType tmp(data + current_dim, m_domain.inner_dim(q), m_codomain.inner_dim(q));
+                m_data.emplace_back(tmp);
+                current_dim += m_domain.inner_dim(q) * m_codomain.inner_dim(q);
+            }
+        }
+
+        m_data.shrink_to_fit();
+    }
 };
 
 } // namespace Xped
+
 #endif

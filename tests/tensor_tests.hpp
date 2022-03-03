@@ -14,7 +14,7 @@ void perform_tensor_permute(const std::size_t& size, mpi::XpedWorld& world)
     mpi::broadcast(B, world.rank, 0, world);
     mpi::broadcast(C, world.rank, 0, world);
 
-    std::array<std::size_t, 4> perm{per...};
+    [[maybe_unused]] std::array<std::size_t, 4> perm{per...};
     SPDLOG_CRITICAL("Permutation: {} {} {} {}. Shift={}", perm[0], perm[1], perm[2], perm[3], shift);
 
     Tensor<double, 2, 2, Symmetry> t({{B, C}}, {{B, C}}, world);
@@ -153,7 +153,7 @@ void perform_tensor_permute_intern(const std::size_t size, mpi::XpedWorld& world
     //     std::cout << E << std::endl;
     // }
 
-    std::array<std::size_t, 4> perm{per...};
+    [[maybe_unused]] std::array<std::size_t, 4> perm{per...};
     SPDLOG_CRITICAL("Permutation: {} {} {} {}", perm[0], perm[1], perm[2], perm[3]);
     XPED_MPI_BARRIER(world.comm)
     Tensor<double, 4, 0, Symmetry> t({{B, B, B, B}}, {{}}, world);

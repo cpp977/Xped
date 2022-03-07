@@ -159,6 +159,10 @@ function(set_project_options project_name)
     target_compile_definitions(${project_name} INTERFACE XPED_CACHE_PERMUTE_OUTPUT=1)
   endif()
 
+  if(XPED_USE_AD)
+    target_compile_definitions(${project_name} INTERFACE XPED_USE_AD=1)
+  endif()
+
   if(${XPED_STORAGE} STREQUAL "Contiguous")
     target_compile_definitions(${project_name} INTERFACE XPED_USE_CONTIGUOUS_STORAGE=1)
   elseif(${XPED_STORAGE} STREQUAL "VecOfMat")

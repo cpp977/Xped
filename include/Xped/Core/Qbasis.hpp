@@ -42,6 +42,19 @@ class Qbasis
 
     typedef typename Symmetry::qType qType;
 
+    using ContainerType =
+        std::vector<std::tuple<qType, size_t, Basis>, typename AllocationPolicy::template Allocator<std::tuple<qType, std::size_t, Basis>>>;
+    template <std::size_t tree_depth>
+    using TreeVector = std::vector<FusionTree<tree_depth, Symmetry>, typename AllocationPolicy::template Allocator<FusionTree<tree_depth, Symmetry>>>;
+    using TreeType = std::unordered_map<
+        qType,
+        TreeVector<depth>,
+        std::hash<qType>,
+        std::equal_to<qType>,
+        typename AllocationPolicy::template Allocator<
+            std::pair<const qType,
+                      std::vector<FusionTree<depth, Symmetry>, typename AllocationPolicy::template Allocator<FusionTree<depth, Symmetry>>>>>>;
+
 public:
     /**Does nothing.*/
     Qbasis(){};
@@ -156,7 +169,7 @@ public:
     /**Insert the quantum number \p q with dimension \p inner_dim into the basis.*/
     void push_back(const qType& q, const size_t& inner_dim);
 
-    void push_back(const qType& q, const size_t& inner_dim, const std::vector<FusionTree<depth, Symmetry>>& tree);
+    void push_back(const qType& q, const size_t& inner_dim, const TreeVector<depth>& tree);
 
     void setRandom(const std::size_t& fullSize, const std::size_t& max_sectorSize = 5ul);
 
@@ -192,11 +205,11 @@ public:
 
     bool operator==(const Qbasis<Symmetry, depth, AllocationPolicy>& other) const;
 
-    inline typename std::vector<std::tuple<qType, size_t, Basis>>::iterator begin() { return data_.begin(); }
-    inline typename std::vector<std::tuple<qType, size_t, Basis>>::iterator end() { return data_.end(); }
+    inline auto begin() { return data_.begin(); }
+    inline auto end() { return data_.end(); }
 
-    inline typename std::vector<std::tuple<qType, size_t, Basis>>::const_iterator cbegin() const { return data_.cbegin(); }
-    inline typename std::vector<std::tuple<qType, size_t, Basis>>::const_iterator cend() const { return data_.cend(); }
+    inline auto cbegin() const { return data_.cbegin(); }
+    inline auto cend() const { return data_.cend(); }
 
     /**Swaps with another Qbasis.*/
     // void swap (Qbasis<Symmetry,depth> &other) { this->data.swap(other.data()); }
@@ -219,16 +232,6 @@ public:
     }
 
 private:
-    using ContainerType =
-        std::vector<std::tuple<qType, size_t, Basis>, typename AllocationPolicy::template Allocator<std::tuple<qType, std::size_t, Basis>>>;
-    using TreeType = std::unordered_map<
-        qType,
-        std::vector<FusionTree<depth, Symmetry>, typename AllocationPolicy::template Allocator<FusionTree<depth, Symmetry>>>,
-        std::hash<qType>,
-        std::equal_to<qType>,
-        typename AllocationPolicy::template Allocator<
-            std::pair<const qType,
-                      std::vector<FusionTree<depth, Symmetry>, typename AllocationPolicy::template Allocator<FusionTree<depth, Symmetry>>>>>>;
     typename ContainerType::const_iterator cfind(const qType& q) const;
 
     typename ContainerType::iterator find(const qType& q);

@@ -41,13 +41,13 @@ void Qbasis<Symmetry, depth, AllocationPolicy>::push_back(const qType& q, const 
             trivial.IS_DUAL[0] = false;
             trivial.dims[0] = inner_dim;
             trivial.dim = inner_dim;
-            std::vector<FusionTree<1, Symmetry>> tree(1, trivial);
+            TreeVector<1> tree(1, trivial);
             trees.insert(std::make_pair(q, tree));
         } else if constexpr(depth == 0) {
             FusionTree<0, Symmetry> trivial;
             trivial.dim = 1;
             trivial.q_coupled = q;
-            std::vector<FusionTree<0, Symmetry>> tree(1, trivial);
+            TreeVector<0> tree(1, trivial);
             trees.insert(std::make_pair(q, tree));
         }
         data_.push_back(entry);
@@ -66,9 +66,7 @@ void Qbasis<Symmetry, depth, AllocationPolicy>::push_back(const qType& q, const 
 }
 
 template <typename Symmetry, std::size_t depth, typename AllocationPolicy>
-void Qbasis<Symmetry, depth, AllocationPolicy>::push_back(const qType& q,
-                                                          const size_t& inner_dim,
-                                                          const std::vector<FusionTree<depth, Symmetry>>& tree)
+void Qbasis<Symmetry, depth, AllocationPolicy>::push_back(const qType& q, const size_t& inner_dim, const TreeVector<depth>& tree)
 {
     auto it = find(q);
     if(it == data_.end()) // insert quantum number if it is not there (sorting is lost then)
@@ -390,7 +388,7 @@ Qbasis<Symmetry, depth, AllocationPolicy> Qbasis<Symmetry, depth, AllocationPoli
     for(const auto& [q, num, plain] : data_) {
         auto oldtrees = tree(q);
         assert(oldtrees.size() == 1);
-        std::vector<FusionTree<depth, Symmetry>> trees;
+        TreeVector<depth> trees;
         FusionTree<depth, Symmetry> tree;
         tree.q_uncoupled[0] = Symmetry::conj(q);
         tree.q_coupled = Symmetry::conj(q);
@@ -423,7 +421,7 @@ Qbasis<Symmetry, depth + 1, AllocationPolicy> Qbasis<Symmetry, depth, Allocation
                         totalTree.q_coupled = q;
                         auto it = out.trees.find(q);
                         if(it == out.trees.end()) {
-                            std::vector<FusionTree<depth + 1, Symmetry>> tree(1, totalTree);
+                            TreeVector<depth + 1> tree(1, totalTree);
                             out.trees.insert(std::make_pair(q, tree));
                         } else {
                             auto it_tree = std::find(it->second.begin(), it->second.end(), totalTree);
@@ -446,7 +444,7 @@ Qbasis<Symmetry, depth + 1, AllocationPolicy> Qbasis<Symmetry, depth, Allocation
             // return Symmetry::compare((it->second)[n1].source,(it->second)[n2].source);
             return (it->second)[n1] < (it->second)[n2];
         });
-        std::vector<FusionTree<depth + 1, Symmetry>> tree = it->second;
+        TreeVector<depth + 1> tree = it->second;
         for(std::size_t i = 0; i < tree.size(); i++) { (it->second)[i] = tree[index_sort[i]]; }
     }
 

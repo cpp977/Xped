@@ -26,7 +26,7 @@ build_FusionTree_Helper(const Qbasis<Symmetry, Rank2, AllocationPolicy>& coupled
 }
 
 template <std::size_t Rank, typename Symmetry, typename AllocationPolicy>
-Qbasis<Symmetry, Rank> build_FusionTree(const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, Rank>& uncoupled)
+Qbasis<Symmetry, Rank, AllocationPolicy> build_FusionTree(const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, Rank>& uncoupled)
 {
     if constexpr(Rank == 0) {
         Qbasis<Symmetry, 0, AllocationPolicy> tmp;

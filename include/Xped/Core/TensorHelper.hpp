@@ -13,7 +13,7 @@ build_FusionTree_Helper(const Qbasis<Symmetry, Rank2, AllocationPolicy>& coupled
                         const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, Rank1>& uncoupled);
 
 template <std::size_t Rank, typename Symmetry, typename AllocationPolicy>
-Qbasis<Symmetry, Rank> build_FusionTree(const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, Rank>& uncoupled);
+Qbasis<Symmetry, Rank, AllocationPolicy> build_FusionTree(const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, Rank>& uncoupled);
 
 } // namespace internal
 

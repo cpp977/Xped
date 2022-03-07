@@ -145,6 +145,9 @@ if(NOT CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
  endif()
 endif()
 
+option(XPED_USE_AD "Use automatic differentiation (AD) with Xped Tensors." OFF)
+add_feature_info("Build uses the stan math library for automatic differentitation of algorithms performed with Xped::Tensor." XPED_USE_AD "")
+
 set(XPED_LOG_LEVEL "SPDLOG_LEVEL_OFF" CACHE STRING "Compile time log level.")
 set(XPED_SUPPORTED_LOG_LEVELS "SPDLOG_LEVEL_TRACE;SPDLOG_LEVEL_DEBUG;SPDLOG_LEVEL_INFO;SPDLOG_LEVEL_WARN;SPDLOG_LEVEL_ERROR;SPDLOG_LEVEL_CRITICAL;SPDLOG_LEVEL_OFF")
 set_property(CACHE XPED_LOG_LEVEL PROPERTY STRINGS ${XPED_SUPPORTED_LOG_LEVELS})
@@ -340,6 +343,38 @@ CPMAddPackage(
 if(yas_ADDED)
   add_library(yas INTERFACE IMPORTED)
   target_include_directories(yas INTERFACE ${yas_SOURCE_DIR}/include)
+endif()
+
+if(XPED_USE_AD)
+  CPMAddPackage(
+    NAME stan
+    GIT_REPOSITORY https://github.com/stan-dev/math
+    VERSION 4.3.1
+    DOWNLOAD_ONLY YES
+    )
+
+  if (stan_ADDED)
+    # stan has no CMake support, so we create our own target
+    
+    add_library(stan INTERFACE)
+    target_include_directories(stan INTERFACE ${stan_SOURCE_DIR})
+
+    set(TBB_ROOT ${stan_SOURCE_DIR}/lib/tbb_2020.3)
+    set(TBB_DIR ${TBB_ROOT}/cmake)
+    include(${TBB_DIR}/TBBBuild.cmake)
+    tbb_build(TBB_ROOT ${TBB_ROOT} CONFIG_DIR ${TBB_DIR}) # MAKE_ARGS
+    find_package(TBB REQUIRED tbb)
+    
+    target_link_libraries(stan INTERFACE TBB::tbb)
+    # FILE(GLOB stan_sources ${lua_SOURCE_DIR}/*.c)
+    # list(REMOVE_ITEM stan_sources "${stan_SOURCE_DIR}/stan.c" "${stan_SOURCE_DIR}/stan.c")
+    # add_library(stan STATIC ${stan_sources})
+    
+    # target_include_directories(stan
+    #   PUBLIC
+    #   $<BUILD_INTERFACE:${stan_SOURCE_DIR}>
+    #   )
+  endif()
 endif()
 
 find_path(TOOLS_INCLUDE_DIR NAMES ArgParser.h PATHS ${TOOLS_ROOT} PATH_SUFFIXES TOOLS REQUIRED)

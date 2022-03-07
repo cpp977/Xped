@@ -20,6 +20,10 @@ if(NOT XPED_COMPILED_LIB)
     target_link_libraries(Xped INTERFACE ndarray)
   endif()
 
+  if(XPED_USE_AD)
+    target_link_libraries(Xped INTERFACE stan)
+  endif()
+  
   if(XPED_ENABLE_LRU_CACHE)
     target_link_libraries(Xped INTERFACE lrucache)
   endif()

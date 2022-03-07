@@ -13,10 +13,15 @@
 #include "Xped/Core/Qbasis.hpp"
 #include "Xped/Core/ScalarTraits.hpp"
 #include "Xped/Core/TensorTypedefs.hpp"
-#include "Xped/Core/allocators/HeapPolicy.hpp"
 #include "Xped/Core/storage/StorageType.hpp"
 #include "Xped/Core/treepair.hpp"
 #include "Xped/Interfaces/PlainInterface.hpp"
+
+#include "Xped/Core/allocators/HeapPolicy.hpp"
+#include "Xped/Core/allocators/PmrPolicy.hpp"
+#ifdef XPED_USE_AD
+#    include "Xped/Core/allocators/StanArenaPolicy.hpp"
+#endif
 
 #include "Xped/Core/TensorBase.hpp"
 #include "Xped/Core/TensorHelper.hpp"
@@ -112,6 +117,8 @@ public:
     // inline const std::vector<MatrixType> block() const { return block_; }
     typename Storage::ConstMatrixReturnType block(std::size_t i) const { return storage_.block(i); }
     typename Storage::MatrixReturnType block(std::size_t i) { return storage_.block(i); }
+
+    const std::size_t plainSize() const { return storage_.data().size(); }
 
     const DictType& dict() const { return storage_.dict(); }
 
@@ -223,6 +230,11 @@ Tensor<Scalar_, Rank, CoRank, Symmetry, AllocationPolicy>::Tensor(const TensorBa
     for(std::size_t i = 0; i < other.derived().sector().size(); ++i) { storage_.push_back(other.derived().sector(i), other.derived().block(i)); }
     world_ = other.derived().world();
 }
+
+#ifdef XPED_USE_AD
+template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry>
+using ArenaTensor = Tensor<Scalar, Rank, CoRank, Symmetry, StanArenaPolicy>;
+#endif
 
 } // namespace Xped
 

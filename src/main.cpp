@@ -24,11 +24,13 @@ using std::string;
 
 #include "TOOLS/ArgParser.h"
 
-#include "stan/math/rev/core/autodiffstackstorage.hpp"
-#include "stan/math/rev/core/chainablestack.hpp"
-#include "stan/math/rev/core/init_chainablestack.hpp"
-#include "stan/math/rev/core/print_stack.hpp"
-#include "stan/math/rev/core/var.hpp"
+#ifdef XPED_USE_AD
+#    include "stan/math/rev/core/autodiffstackstorage.hpp"
+#    include "stan/math/rev/core/chainablestack.hpp"
+#    include "stan/math/rev/core/init_chainablestack.hpp"
+#    include "stan/math/rev/core/print_stack.hpp"
+#    include "stan/math/rev/core/var.hpp"
+#endif
 
 #include "Xped/Util/Macros.hpp"
 #include "Xped/Util/Mpi.hpp"

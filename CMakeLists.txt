@@ -349,7 +349,8 @@ if(XPED_USE_AD)
   CPMAddPackage(
     NAME stan
     GIT_REPOSITORY https://github.com/cpp977/math
-    VERSION 4.3.1
+    GIT_TAG master
+    #VERSION 4.3.1
     DOWNLOAD_ONLY YES
     )
 

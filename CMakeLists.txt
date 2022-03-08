@@ -145,7 +145,7 @@ if(NOT CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
  endif()
 endif()
 
-option(XPED_USE_AD "Use automatic differentiation (AD) with Xped Tensors." OFF)
+option(XPED_USE_AD "Use automatic differentiation (AD) with Xped Tensors." ON)
 add_feature_info("Build uses the stan math library for automatic differentitation of algorithms performed with Xped::Tensor." XPED_USE_AD "")
 
 set(XPED_LOG_LEVEL "SPDLOG_LEVEL_OFF" CACHE STRING "Compile time log level.")
@@ -348,7 +348,7 @@ endif()
 if(XPED_USE_AD)
   CPMAddPackage(
     NAME stan
-    GIT_REPOSITORY https://github.com/stan-dev/math
+    GIT_REPOSITORY https://github.com/cpp977/math
     VERSION 4.3.1
     DOWNLOAD_ONLY YES
     )

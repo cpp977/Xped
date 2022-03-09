@@ -56,8 +56,8 @@ XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100)
 #include "Xped/PEPS/CTM.hpp"
 #include "Xped/PEPS/iPEPS.hpp"
 
-#include "Xped/AD/var_value.hpp"
-
+#ifdef XPED_USE_AD
+#    include "Xped/AD/var_value.hpp"
 template <typename T, require_tensor_var_t<T>* = nullptr>
 inline stan::math::var dot_self(const T& v)
 {
@@ -65,6 +65,7 @@ inline stan::math::var dot_self(const T& v)
     stan::math::reverse_pass_callback([res, v]() mutable { v.adj() = v.adj() + (v.val() * (2.0 * res.adj())).eval(); });
     return res;
 }
+#endif
 
 int main(int argc, char* argv[])
 {
@@ -122,8 +123,9 @@ int main(int argc, char* argv[])
     // std::cout << std::endl << C << std::endl;
 
     typedef Xped::Sym::SU2<Xped::Sym::SpinSU2> Symmetry;
-    // typedef Xped::Sym::U1<Xped::Sym::SpinU1> Symmetry;
-    // typedef Xped::Sym::U0<double> Symmetry;
+// typedef Xped::Sym::U1<Xped::Sym::SpinU1> Symmetry;
+// typedef Xped::Sym::U0<double> Symmetry;
+#ifdef XPED_USE_AD
     {
         Xped::Qbasis<Symmetry, 1, Xped::StanArenaPolicy> B;
         B.setRandom(Minit);
@@ -132,6 +134,11 @@ int main(int argc, char* argv[])
         // phys.push_back({}, 2);
         Xped::ArenaTensor<double, 2, 3, Symmetry> t({{B, B}}, {{B, B, phys}}, world);
         t.setRandom();
+        t.print(std::cout, true);
+        t += 7.;
+        t.print(std::cout, true);
+        t = 3 * t;
+        t.print(std::cout, true);
         stan::math::var_value<Xped::ArenaTensor<double, 2, 3, Symmetry>> ta(t);
         auto res = dot_self(ta);
         stan::math::print_stack(std::cout);
@@ -139,6 +146,7 @@ int main(int argc, char* argv[])
         std::cout << ta.vi_ << std::endl;
     }
     return 0;
+#endif
 
     Xped::Qbasis<Symmetry, 1> in;
     // in.push_back({0}, 2);

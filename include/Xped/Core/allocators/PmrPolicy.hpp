@@ -1,7 +1,11 @@
 #ifndef XPED_PMR_POLICY_HPP_
 #define XPED_PMR_POLICY_HPP_
 
-#include <memory_resource>
+#ifdef _LIBCPP_VERSION /*libc++'s memory_resource header is still in experimental.*/
+#    include <experimental/memory_resource>
+#else
+#    include <memory_resource>
+#endif
 
 namespace Xped {
 

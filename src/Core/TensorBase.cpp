@@ -7,6 +7,7 @@
 #include "Xped/Symmetry/U1.hpp"
 
 #include "Xped/Core/AdjointOp.hpp"
+#include "Xped/Core/CoeffBinaryOp.hpp"
 #include "Xped/Core/CoeffUnaryOp.hpp"
 #include "Xped/Core/DiagCoeffUnaryOp.hpp"
 #include "Xped/Core/Tensor.hpp"
@@ -46,9 +47,31 @@ XPED_CONST CoeffUnaryOp<Derived> TensorBase<Derived>::unaryExpr(const std::funct
 }
 
 template <typename Derived>
-XPED_CONST CoeffUnaryOp<Derived> TensorBase<Derived>::operator*(const Scalar scale) XPED_CONST
+Derived& TensorBase<Derived>::operator+=(const Scalar offset)
 {
-    return unaryExpr([scale](const Scalar s) { return scale * s; });
+    derived() = unaryExpr([offset](const Scalar s) { return offset + s; });
+    return derived();
+}
+
+template <typename Derived>
+Derived& TensorBase<Derived>::operator-=(const Scalar offset)
+{
+    derived() = unaryExpr([offset](const Scalar s) { return s - offset; });
+    return derived();
+}
+
+template <typename Derived>
+Derived& TensorBase<Derived>::operator*=(const Scalar scale)
+{
+    derived() = unaryExpr([scale](const Scalar s) { return scale * s; });
+    return derived();
+}
+
+template <typename Derived>
+Derived& TensorBase<Derived>::operator/=(const Scalar divisor)
+{
+    derived() = unaryExpr([divisor](const Scalar s) { return s / divisor; });
+    return derived();
 }
 
 template <typename Derived>
@@ -67,6 +90,30 @@ template <typename Derived>
 XPED_CONST DiagCoeffUnaryOp<Derived> TensorBase<Derived>::diag_inv() XPED_CONST
 {
     return diagUnaryExpr([](const Scalar s) { return 1. / s; });
+}
+
+template <typename Derived>
+template <typename OtherDerived>
+XPED_CONST CoeffBinaryOp<Derived, OtherDerived> TensorBase<Derived>::binaryExpr(XPED_CONST TensorBase<OtherDerived>& other,
+                                                                                const std::function<Scalar(Scalar, Scalar)>& coeff_func) XPED_CONST
+{
+    return CoeffBinaryOp<Derived, OtherDerived>(derived(), other.derived(), coeff_func);
+}
+
+template <typename Derived>
+template <typename OtherDerived>
+Derived& TensorBase<Derived>::operator+=(XPED_CONST TensorBase<OtherDerived>& other)
+{
+    derived() = binaryExpr(other, [](const Scalar s1, const Scalar s2) { return s1 + s2; });
+    return derived();
+}
+
+template <typename Derived>
+template <typename OtherDerived>
+Derived& TensorBase<Derived>::operator-=(XPED_CONST TensorBase<OtherDerived>& other)
+{
+    derived() = binaryExpr(other, [](const Scalar s1, const Scalar s2) { return s1 - s2; });
+    return derived();
 }
 
 template <typename Derived>

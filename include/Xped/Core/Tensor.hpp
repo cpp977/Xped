@@ -18,7 +18,6 @@
 #include "Xped/Interfaces/PlainInterface.hpp"
 
 #include "Xped/Core/allocators/HeapPolicy.hpp"
-#include "Xped/Core/allocators/PmrPolicy.hpp"
 #ifdef XPED_USE_AD
 #    include "Xped/Core/allocators/StanArenaPolicy.hpp"
 #endif

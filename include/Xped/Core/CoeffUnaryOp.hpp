@@ -38,7 +38,7 @@ public:
 
     inline const std::string name() const { return "CoeffUnaryOp"; }
     constexpr std::size_t rank() const { return refxpr_.rank(); }
-    constexpr std::size_t corank() const { return refxpr_.rank(); }
+    constexpr std::size_t corank() const { return refxpr_.corank(); }
 
     inline const auto sector() const { return refxpr_.sector(); }
     inline const qType sector(std::size_t i) const { return refxpr_.sector(i); }

@@ -202,16 +202,27 @@ template <typename Scalar, typename MT>
 MType<Scalar> MatrixInterface::unaryFunc(MT&& M, const std::function<Scalar(Scalar)>& func)
 {
     CTF::Function<Scalar> func_(func);
-    M["ij"] = func_(M["ij"]);
-    return M;
+    MType<typename ctf_traits<MT>::Scalar> res(M.ncol, M.nrow, *M.wrld);
+    res["ij"] = func_(M["ij"]);
+    return res;
 }
 
 template <typename Scalar, typename MT>
 MType<Scalar> MatrixInterface::diagUnaryFunc(MT&& M, const std::function<Scalar(Scalar)>& func)
 {
     CTF::Function<Scalar> func_(func);
-    M["ii"] = func_(M["ii"]);
-    return M;
+    MType<typename ctf_traits<MT>::Scalar> res = M;
+    res["ii"] = func_(M["ii"]);
+    return res;
+}
+
+template <typename Scalar, typename MTL, typename MTR>
+MType<Scalar> binaryFunc(MTL&& M_left, const MTR&& M_right, const std::function<Scalar(Scalar, Scalar)>& func)
+{
+    CTF::Function<Scalar> func_(func);
+    MType<typename ctf_traits<MTL>::Scalar> res(M_left.ncol, M_left.nrow, *M_left.wrld);
+    res["ij"] = func_(M_left["ij"], M_right["ij"]);
+    return res;
 }
 
 template <typename MT>

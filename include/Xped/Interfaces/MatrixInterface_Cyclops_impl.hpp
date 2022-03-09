@@ -115,6 +115,9 @@ struct MatrixInterface
     template <typename Scalar, typename MT>
     static MType<Scalar> diagUnaryFunc(MT&& M, const std::function<Scalar(Scalar)>& func);
 
+    template <typename Scalar, typename MTL, typename MTR>
+    static MType<Scalar> binaryFunc(MTL&& M_left, MTR&& M_right, const std::function<Scalar(Scalar, Scalar)>& func);
+
     template <typename MT>
     static MType<typename ctf_traits<MT>::Scalar> adjoint(MT&& M);
 

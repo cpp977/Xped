@@ -114,6 +114,13 @@ struct MatrixInterface
         return M.unaryExpr(func);
     }
 
+    template <typename Scalar, typename Derived, typename OtherDerived>
+    static auto
+    binaryFunc(const Eigen::MatrixBase<Derived>& M_left, const Eigen::MatrixBase<Derived>& M_right, const std::function<Scalar(Scalar, Scalar)>& func)
+    {
+        return M_left.binaryExpr(M_right, func);
+    }
+
     template <typename Scalar, typename Derived>
     static auto diagUnaryFunc(const Eigen::MatrixBase<Derived>& M, const std::function<Scalar(Scalar)>& func)
     {

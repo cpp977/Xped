@@ -59,7 +59,7 @@ endif()
 add_feature_info("Build uses the ${XPED_VECTOR_LIB} library for vector operations." XPED_VECTOR_LIB "")
 
 create_plain_name(XPED_PLAIN_LIB ${XPED_VECTOR_LIB} ${XPED_MATRIX_LIB} ${XPED_TENSOR_LIB})
-message( STATUS "Build will use the ${XPED_PLAIN_LIB} for linear algebra operations." )
+message( STATUS "Build will use ${XPED_PLAIN_LIB} for linear algebra operations." )
 
 option(XPED_BUILD_CYCLOPS "Build the cyclops library from source." OFF)
 add_feature_info("Cyclops library will be build in ${CMAKE_BINARY_DIR}/thirdparty/cyclops." XPED_BUILD_CYCLOPS "")

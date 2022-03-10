@@ -50,7 +50,7 @@ jobs:
     - run: sudo apt-get install liblapacke-dev
     - run: sudo apt-get install libomp-12-dev
 
-    - uses: actions/Document-CMake-options@v0
+    - uses: actions/document-cmake-options@v0
       with:
         source_dir: $GITHUB_WORKSPACE
         option_filter: 'Xped'

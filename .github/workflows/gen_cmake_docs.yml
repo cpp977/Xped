@@ -50,7 +50,7 @@ jobs:
     - run: sudo apt-get install liblapacke-dev
     - run: sudo apt-get install libomp-12-dev
 
-    - uses: actions/GenCMakeDoc
+    - uses: actions/GenCMakeDoc@v0
       with:
         source_dir: $GITHUB_WORKSPACE
         option_filter: 'Xped'

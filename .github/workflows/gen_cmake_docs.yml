@@ -1,0 +1,56 @@
+name: Generate docs for cmake options
+
+on: [push]
+
+jobs:
+  gen_options:
+    # The CMake configure and build commands are platform agnostic and should work equally
+    # well on Windows or Mac.  You can convert this to a matrix build if you need
+    # cross-platform coverage.
+    # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+
+    steps:
+    - uses: actions/checkout@v2
+    - run: sudo add-apt-repository ppa:ubuntu-toolchain-r/ppa
+    - run: sudo apt-get update
+    - run: sudo apt-get install openmpi-bin libopenmpi-dev
+    - uses: actions/checkout@v2
+      with:
+        repository: onqtam/doctest
+        ref: master
+        path: doctest-src
+    - run: cd $GITHUB_WORKSPACE/doctest-src && cmake .
+    - run: cd $GITHUB_WORKSPACE/doctest-src && cmake --build .
+    - run: cd $GITHUB_WORKSPACE/doctest-src && sudo cmake --build . --target install
+    - run: sudo cp -r $GITHUB_WORKSPACE/doctest-src/doctest/extensions /usr/local/include/doctest/
+    - uses: actions/checkout@v2
+      with:
+        repository: cpp977/TOOLS
+        token: ${{ secrets.TOOLS_CLONE }}
+        ref: master
+        path: tools-src
+    - run: sudo mkdir -p /usr/local/include/TOOLS
+    - run: sudo cp -r $GITHUB_WORKSPACE/tools-src/* /usr/local/include/TOOLS/
+            
+    - run: sudo apt-get install g++-10
+    - run: sudo apt-get install gcc-10
+    - run: sudo apt-get install gfortran-10
+    - run: sudo apt-get install libc++abi1-12
+    - run: sudo apt-get install libc++1-12
+    - run: sudo apt-get install libc++-12-dev
+    - run: sudo apt-get install libc++abi-12-dev
+    - run: sudo apt-get install libgsl-dev
+    - run: sudo apt-get install libgslcblas0
+    - run: sudo apt-get install libboost-all-dev
+    - run: sudo apt-get install lcov
+    - run: sudo apt-get install libopenblas-dev
+    - run: sudo apt-get install liblapacke-dev
+    - run: sudo apt-get install libomp-12-dev
+
+    - uses: actions/GenCMakeDoc@v0
+      with:
+        source_dir: $GITHUB_WORKSPACE
+        option_filter: 'Xped'

@@ -1,12 +1,49 @@
 ## Xped
 Library for the manipulation of symmetric (block-sparse) tensors with arbitrary (**X**) amount of indices (**ped**).
+
 ## Status
+
 |Builds  | Tests | 	Coverage |
 |:-: | :-: | :-: |
 | [![Builds](https://github.com/cpp977/Xped/workflows/Builds/badge.svg)](https://github.com/cpp977/Xped/actions)|[![Tests](https://github.com/cpp977/Xped/workflows/Tests/badge.svg)](https://github.com/cpp977/Xped/actions)|[![codecov](https://codecov.io/gh/cpp977/Xped/branch/master/graph/badge.svg?token=MRQLD834VO)](https://codecov.io/gh/cpp977/Xped)|
+
 ## License
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
+## Build Options
 
-
-
+| Option | Default | Description |
+| --- | --- | --- |
+| `XPED_BUILD_BENCHMARKS` | `ON` | Build the benchmarks. |
+| `XPED_BUILD_CYCLOPS` | `OFF` | Build the cyclops library from source. |
+| `XPED_BUILD_TESTS` | `ON` | Build the tests. |
+| `XPED_COMPILED_LIB` | `OFF` | Configure the library as a compiled library. Long compile times. |
+| `XPED_EFFICIENCY_MODEL` | `XPED_TIME_EFFICIENT` | Xped tries to be time efficient. |
+| `XPED_ENABLE_BUILD_WITH_TIME_TRACE` | `OFF` | Enable -ftime-trace to generate time tracing .json files on clang |
+| `XPED_ENABLE_CCACHE` | `OFF` | Enable a compiler cache if available |
+| `XPED_ENABLE_CLANG_FORMAT` | `ON` | Enable clang-format target. |
+| `XPED_ENABLE_CLANG_TIDY` | `OFF` | Enable static analysis with clang-tidy |
+| `XPED_ENABLE_COVERAGE` | `OFF` | Enable coverage reporting for gcc/clang |
+| `XPED_ENABLE_CPPCHECK` | `OFF` | Enable static analysis with cppcheck |
+| `XPED_ENABLE_DOXYGEN` | `OFF` | Enable doxygen doc builds of source |
+| `XPED_ENABLE_INCLUDE_WHAT_YOU_USE` | `OFF` | Enable static analysis with include-what-you-use |
+| `XPED_ENABLE_IPO` | `OFF` | Enable Interprocedural Optimization, aka Link Time Optimization (LTO) |
+| `XPED_ENABLE_LRU_CACHE` | `OFF` | Use lru cache library from github. |
+| `XPED_ENABLE_SANITIZER_ADDRESS` | `OFF` | Enable address sanitizer |
+| `XPED_ENABLE_SANITIZER_LEAK` | `OFF` | Enable leak sanitizer |
+| `XPED_ENABLE_SANITIZER_MEMORY` | `OFF` | Enable memory sanitizer |
+| `XPED_ENABLE_SANITIZER_THREAD` | `OFF` | Enable thread sanitizer |
+| `XPED_ENABLE_SANITIZER_UNDEFINED_BEHAVIOR` | `OFF` | Enable undefined behavior sanitizer |
+| `XPED_LOG_LEVEL` | `SPDLOG_LEVEL_OFF` | Compile time log level. |
+| `XPED_MATRIX_LIB` | `Eigen` | Used matrix library for plain tensor operations. |
+| `XPED_STORAGE` | `VecOfMat` | Used storage for Xped::Tensor. |
+| `XPED_TENSOR_LIB` | `Eigen` | Used tensor library for plain tensor operations. |
+| `XPED_USE_AD` | `ON` | Use automatic differentiation (AD) with Xped Tensors. |
+| `XPED_USE_BLAS` | `ON` | Enable blas linking. |
+| `XPED_USE_LAPACK` | `ON` | Enable lapack linking. |
+| `XPED_USE_LIBCXX` | `OFF` | Use libc++ from llvm. |
+| `XPED_USE_MKL` | `OFF` | Enable use of intel math kernel library (MKL). |
+| `XPED_USE_MPI` | `OFF` | Enable message parsing interface (mpi) parallelization |
+| `XPED_USE_OPENMP` | `ON` | Enable openmp parallelization |
+| `XPED_USE_SCALAPACK` | `OFF` | Enable scalapack linking (only useful for MPI programs). |
+| `XPED_VECTOR_LIB` | `Eigen` | Used matrix library for plain tensor operations. |

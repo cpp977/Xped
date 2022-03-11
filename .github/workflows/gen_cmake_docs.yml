@@ -4,10 +4,6 @@ on: [push]
 
 jobs:
   gen_options:
-    # The CMake configure and build commands are platform agnostic and should work equally
-    # well on Windows or Mac.  You can convert this to a matrix build if you need
-    # cross-platform coverage.
-    # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
     runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
@@ -38,14 +34,9 @@ jobs:
     - run: sudo apt-get install g++-10
     - run: sudo apt-get install gcc-10
     - run: sudo apt-get install gfortran-10
-    - run: sudo apt-get install libc++abi1-12
-    - run: sudo apt-get install libc++1-12
-    - run: sudo apt-get install libc++-12-dev
-    - run: sudo apt-get install libc++abi-12-dev
     - run: sudo apt-get install libgsl-dev
     - run: sudo apt-get install libgslcblas0
     - run: sudo apt-get install libboost-all-dev
-    - run: sudo apt-get install lcov
     - run: sudo apt-get install libopenblas-dev
     - run: sudo apt-get install liblapacke-dev
     - run: sudo apt-get install libomp-12-dev
@@ -53,4 +44,11 @@ jobs:
     - uses: cpp977/GenCMakeDoc@main
       with:
         source_dir: $GITHUB_WORKSPACE
-        option_filter: 'Xped'
+        option_filter: 'XPED'
+        
+    - uses: EndBug/add-and-commit@v8
+      with:
+        message: 'Updated documentation for cmake build parameters.'
+        committer_name: GitHub Actions
+        committer_email: actions@github.com
+        add: 'README.md'

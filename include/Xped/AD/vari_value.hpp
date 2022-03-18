@@ -19,7 +19,7 @@ class vari_value<T, require_tensor_v<T>> : public vari_base
     template <typename S>
     explicit vari_value(const S& x)
         : val_(x)
-        , adj_(x.uncoupledDomain(), x.uncoupledCodomain())
+        , adj_(x.uncoupledDomain(), x.uncoupledCodomain(), x.world())
     {
         adj_.setZero();
         stan::math::ChainableStack::instance_->var_stack_.push_back(this);
@@ -28,7 +28,7 @@ class vari_value<T, require_tensor_v<T>> : public vari_base
     template <typename S>
     explicit vari_value(const S& x, bool stacked)
         : val_(x)
-        , adj_(x.uncoupledDomain(), x.uncoupledCodomain())
+        , adj_(x.uncoupledDomain(), x.uncoupledCodomain(), x.world())
     {
         adj_.setZero();
         if(stacked) {

@@ -148,6 +148,20 @@ endif()
 option(XPED_USE_AD "Use automatic differentiation (AD) with Xped Tensors." ON)
 add_feature_info("Build uses the stan math library for automatic differentitation of algorithms performed with Xped::Tensor." XPED_USE_AD "")
 
+option(XPED_USE_NLO "Use nonlinear optimization algorithms." OFF)
+add_feature_info("Build uses nonlinear optimization algorithms." XPED_USE_NLO "")
+
+if(XPED_USE_NLO)
+  set(XPED_OPTIM_LIB "ceres" CACHE STRING "Used library for nonlinear gradient-based optimization.")
+  set(XPED_SUPPORTED_OPTIM_LIBS "ceres")
+  set_property(CACHE XPED_OPTIM_LIB PROPERTY STRINGS ${XPED_SUPPORTED_OPTIM_LIBS})
+  if(NOT (${XPED_OPTIM_LIB} IN_LIST XPED_SUPPORTED_OPTIM_LIBS))
+    message(STATUS "Build wanted to use the ${XPED_OPTIM_LIB} library for nonlinear optimization.")
+    message(FATAL_ERROR "You specified a library which is not supported.")
+  endif()
+  add_feature_info("Build uses the ${XPED_OPTIM_LIB} library for nonlinear gradient-based optimization." XPED_OPTIM_LIB "")
+endif()
+
 set(XPED_LOG_LEVEL "SPDLOG_LEVEL_OFF" CACHE STRING "Compile time log level.")
 set(XPED_SUPPORTED_LOG_LEVELS "SPDLOG_LEVEL_TRACE;SPDLOG_LEVEL_DEBUG;SPDLOG_LEVEL_INFO;SPDLOG_LEVEL_WARN;SPDLOG_LEVEL_ERROR;SPDLOG_LEVEL_CRITICAL;SPDLOG_LEVEL_OFF")
 set_property(CACHE XPED_LOG_LEVEL PROPERTY STRINGS ${XPED_SUPPORTED_LOG_LEVELS})
@@ -365,8 +379,14 @@ if(XPED_USE_AD)
     include(${TBB_DIR}/TBBBuild.cmake)
     tbb_build(TBB_ROOT ${TBB_ROOT} CONFIG_DIR ${TBB_DIR}) # MAKE_ARGS
     find_package(TBB REQUIRED tbb)
-    
-    target_link_libraries(stan INTERFACE TBB::tbb)
+
+    CPMAddPackage(
+      NAME sundials
+      GIT_REPOSITORY https://github.com/LLNL/sundials
+      VERSION 6.0.0
+      )
+
+    target_link_libraries(stan INTERFACE TBB::tbb sundials_kinsol)
     # FILE(GLOB stan_sources ${lua_SOURCE_DIR}/*.c)
     # list(REMOVE_ITEM stan_sources "${stan_SOURCE_DIR}/stan.c" "${stan_SOURCE_DIR}/stan.c")
     # add_library(stan STATIC ${stan_sources})
@@ -375,6 +395,25 @@ if(XPED_USE_AD)
     #   PUBLIC
     #   $<BUILD_INTERFACE:${stan_SOURCE_DIR}>
     #   )
+  endif()
+endif()
+
+if(XPED_USE_NLO)
+  if(${XPED_OPTIM_LIB} STREQUAL "ceres")
+    CPMAddPackage(
+      NAME glog
+      GIT_REPOSITORY https://github.com/google/glog
+      VERSION 0.5.0
+      OPTIONS "WITH_GFLAGS OFF"
+      )
+
+    CPMAddPackage(
+      NAME ceres
+      GIT_REPOSITORY https://github.com/ceres-solver/ceres-solver
+      GIT_TAG 2.0.0
+      OPTIONS "GFLAGS OFF" "SUITESPARSE OFF" "CXSPARSE OFF" "ACCELERATESPARSE OFF" "CERES_THREADING_MODEL OPENMP" "BUILD_TESTING OFF" "BUILD_EXAMPLES OFF" "BUILD_BENCHMARKS OFF" "MINIGLOG ON"
+      )
+    target_link_libraries(ceres PRIVATE glog)
   endif()
 endif()
 

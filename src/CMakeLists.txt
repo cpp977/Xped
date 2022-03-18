@@ -23,6 +23,13 @@ if(NOT XPED_COMPILED_LIB)
   if(XPED_USE_AD)
     target_link_libraries(Xped INTERFACE stan)
   endif()
+
+  if(XPED_USE_NLO)
+    if(${XPED_OPTIM_LIB} STREQUAL "ceres")
+      target_link_libraries(Xped INTERFACE glog)
+      target_link_libraries(Xped INTERFACE ceres)
+    endif()
+  endif()
   
   if(XPED_ENABLE_LRU_CACHE)
     target_link_libraries(Xped INTERFACE lrucache)

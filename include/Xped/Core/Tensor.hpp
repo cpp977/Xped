@@ -44,16 +44,6 @@ class Tensor : public TensorBase<Tensor<Scalar_, Rank, CoRank, Symmetry_, Alloca
     template <typename Derived>
     friend class TensorBase;
 
-    template <typename Scalar__, std::size_t Rank_, std::size_t CoRank_, typename Symmetry__, typename AllocationPolicy__>
-    friend Tensor<Scalar__, Rank_, CoRank_, Symmetry__, AllocationPolicy__>
-    operator+(XPED_CONST Tensor<Scalar__, Rank_, CoRank_, Symmetry__, AllocationPolicy__>& T1,
-              XPED_CONST Tensor<Scalar__, Rank_, CoRank_, Symmetry__, AllocationPolicy__>& T2);
-
-    template <typename Scalar__, std::size_t Rank_, std::size_t CoRank_, typename Symmetry__, typename AllocationPolicy__>
-    friend Tensor<Scalar__, Rank_, CoRank_, Symmetry__, AllocationPolicy__>
-    operator-(XPED_CONST Tensor<Scalar__, Rank_, CoRank_, Symmetry__, AllocationPolicy__>& T1,
-              XPED_CONST Tensor<Scalar__, Rank_, CoRank_, Symmetry__, AllocationPolicy__>& T2);
-
 public:
     using Scalar = Scalar_;
     using RealScalar = typename ScalarTraits<Scalar>::Real;
@@ -104,6 +94,15 @@ public:
         , world_(world)
     {}
 
+    Tensor(const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, Rank>& basis_domain,
+           const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, CoRank>& basis_codomain,
+           const Scalar* data,
+           std::size_t size,
+           const std::shared_ptr<mpi::XpedWorld>& world)
+        : storage_(basis_domain, basis_codomain, data, size, *world)
+        , world_(world)
+    {}
+
     template <typename OtherDerived>
     inline Tensor(const TensorBase<OtherDerived>& other);
 
@@ -122,6 +121,7 @@ public:
     const DictType& dict() const { return storage_.dict(); }
 
     const Storage& storage() const { return storage_; }
+    Storage& storage() { return storage_; }
 
     const std::shared_ptr<mpi::XpedWorld> world() const { return world_; }
 

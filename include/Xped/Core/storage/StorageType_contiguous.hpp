@@ -41,13 +41,16 @@ public:
 
     StorageType(const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, Rank> basis_domain,
                 const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, CoRank> basis_codomain,
-                const Scalar* data)
+                const Scalar* data,
+                std::size_t size,
+                mpi::XpedWorld& world = mpi::getUniverse())
         : m_uncoupled_domain(basis_domain)
         , m_uncoupled_codomain(basis_codomain)
+        , m_world(&world, mpi::TrivialDeleter<mpi::XpedWorld>{})
     {
         m_domain = internal::build_FusionTree(m_uncoupled_domain);
         m_codomain = internal::build_FusionTree(m_uncoupled_codomain);
-        initialized_resize(data);
+        initialized_resize(data, size);
     }
 
     StorageType(const StorageType<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>& other) = default;
@@ -157,22 +160,20 @@ private:
 
     std::vector<std::size_t, typename AllocationPolicy::template Allocator<std::size_t>> m_offsets;
 
-    void initialized_resize(const Scalar* data)
+    void initialized_resize(const Scalar* data, std::size_t size)
     {
-        m_data.reserve(std::max(m_domain.dim(), m_codomain.dim()));
+        m_data.assign(data, data + size);
 
-        std::size_t current_dim = 0;
+        std::size_t curr = 0;
         for(const auto& [q, dim, plain] : m_domain) {
             if(m_codomain.IS_PRESENT(q)) {
                 m_sector.push_back(q);
                 m_dict.insert(std::make_pair(q, m_sector.size() - 1));
-                MapMatrixType tmp(data + current_dim, m_domain.inner_dim(q), m_codomain.inner_dim(q));
-                m_data.emplace_back(tmp);
-                current_dim += m_domain.inner_dim(q) * m_codomain.inner_dim(q);
+                m_offsets.push_back(curr);
+                curr += m_domain.inner_dim(q) * m_codomain.inner_dim(q);
             }
         }
-
-        m_data.shrink_to_fit();
+        assert(curr = size and "You specified an incompatible data array for this tensor.");
     }
 };
 

@@ -216,6 +216,13 @@ void MatrixInterface::set_block(Eigen::MatrixBase<Derived>&& M1,
 }
 
 template <typename Derived>
+std::pair<MType<typename Derived::Scalar>, MType<typename Derived::Scalar>> MatrixInterface::eigh(const Eigen::MatrixBase<Derived>& M)
+{
+    Eigen::SelfAdjointEigenSolver<MType<typename Derived::Scalar>> Jack(M, Eigen::ComputeEigenvectors);
+    return std::make_pair(Jack.eigenvalues().asDiagonal(), Jack.eigenvectors());
+}
+
+template <typename Derived>
 std::string MatrixInterface::print(const Eigen::DenseBase<Derived>& M)
 {
     std::stringstream ss;

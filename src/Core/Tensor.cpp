@@ -328,13 +328,6 @@ Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::tSVD(size_t maxKeep,
         SPDLOG_INFO("Step i={} for mat with dim=({},{})", i, PlainInterface::rows<Scalar>(block(i)), PlainInterface::rows<Scalar>(block(i)));
         auto [Umat, Sigmavec, Vmatdag] = PlainInterface::svd(block(i));
         SPDLOG_INFO("Performed svd for step i={}", i);
-        // #ifdef XPED_DONT_USE_BDCSVD
-        //         Eigen::JacobiSVD<MatrixType> Jack; // standard SVD
-        // #else
-        //         Eigen::BDCSVD<MatrixType> Jack; // "Divide and conquer" SVD (only available in Eigen)
-        // #endif
-
-        //         Jack.compute(block(i), Eigen::ComputeThinU | Eigen::ComputeThinV);
         std::vector<Scalar> svs;
         PlainInterface::vec_to_stdvec<Scalar>(Sigmavec, svs);
 
@@ -436,6 +429,27 @@ Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::tSVD(size_t maxKeep,
     return std::make_tuple(trunc_U, trunc_Sigma, trunc_Vdag);
 }
 
+template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
+std::pair<Tensor<typename ScalarTraits<Scalar>::Real, 1, 1, Symmetry, AllocationPolicy>,
+          Tensor<typename ScalarTraits<Scalar>::Real, Rank, 1, Symmetry, AllocationPolicy>>
+Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::eigh() XPED_CONST
+{
+    static_assert(Rank == CoRank, "Eigenvalue decomposition only possible for tensors with Rank==CoRank");
+    assert(coupledDomain() == coupledCodomain() and "Eigenvalue decomposition only possible for square matrices.");
+    assert(*this == this->adjoint().eval() and "Input for eigh() needs to be Hermitian.");
+
+    Tensor<RealScalar, 1, 1, Symmetry, AllocationPolicy> D({{coupledDomain().forgetHistory()}}, {{coupledCodomain().forgetHistory()}}, world());
+    Tensor<RealScalar, Rank, 1, Symmetry, AllocationPolicy> V(uncoupledDomain(), {{coupledCodomain().forgetHistory()}}, world());
+
+    for(size_t i = 0; i < sector().size(); ++i) {
+        auto [Eigvals, Eigvecs] = PlainInterface::eigh(block(i));
+
+        D.push_back(sector(i), Eigvals);
+        V.push_back(sector(i), Eigvecs);
+    }
+
+    return std::make_pair(D, V);
+}
 // template<std::size_t Rank, std::size_t CoRank, typename Symmetry, typename MatrixLib_, typename TensorLib_>
 // MatrixLib_& Xped<Rank, CoRank, Symmetry, MatrixLib_>::
 // operator() (const FusionTree<Rank,Symmetry>& f1, const FusionTree<CoRank,Symmetry>& f2)

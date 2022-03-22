@@ -175,6 +175,9 @@ struct MatrixInterface
                           const Eigen::MatrixBase<Derived>& M2);
 
     template <typename Derived>
+    static std::pair<MType<typename Derived::Scalar>, MType<typename Derived::Scalar>> eigh(const Eigen::MatrixBase<Derived>& M);
+
+    template <typename Derived>
     static std::string print(const Eigen::DenseBase<Derived>& M);
 };
 

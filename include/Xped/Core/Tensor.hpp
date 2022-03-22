@@ -203,6 +203,8 @@ public:
         return tSVD(maxKeep, eps_svd, truncWeight, S_dumb, SVspec_dumb, PRESERVE_MULTIPLETS, false); // false: Dont return singular value spectrum
     }
 
+    std::pair<Tensor<RealScalar, 1, 1, Symmetry, AllocationPolicy>, Tensor<RealScalar, Rank, 1, Symmetry, AllocationPolicy>> eigh() XPED_CONST;
+
     const auto& domainTrees(const qType& q) const { return coupledDomain().tree(q); }
     const auto& codomainTrees(const qType& q) const { return coupledCodomain().tree(q); }
 

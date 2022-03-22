@@ -1,6 +1,8 @@
 #ifndef VAR_VALUE_HPP_
 #define VAR_VALUE_HPP_
 
+#include "Xped/Core/Tensor.hpp"
+
 template <typename T>
 struct is_arena_tensor
 {
@@ -84,11 +86,17 @@ public:
 
     inline vari_type* operator->() { return vi_; }
 
+    // auto adjoint() const
+    // {
+    //     using vari_type = decltype(vi_->adjoint());
+    //     var_value<typename vari_type::value_type> out(new vari_type(vi_->adjoint()));
+    //     return out;
+    // }
+
     template <typename Scalar>
     var_value& operator-=(const Scalar s)
     {
         val_op() = val() - s;
-        // stan::math::reverse_pass_callback([this]() mutable { adj() += adj(); });
         return *this;
     }
 
@@ -98,5 +106,71 @@ public:
         return os << v.val();
     }
 };
+
+template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry>
+stan::math::var_value<Xped::ArenaTensor<Scalar, Rank, CoRank, Symmetry>>
+operator-(const stan::math::var_value<Xped::ArenaTensor<Scalar, Rank, CoRank, Symmetry>>& t, Scalar s)
+{
+    stan::math::var_value<Xped::ArenaTensor<Scalar, Rank, CoRank, Symmetry>> out(t.val() - s);
+    return out;
+}
+
+template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry>
+stan::math::var_value<Xped::ArenaTensor<Scalar, Rank, CoRank, Symmetry>>
+operator+(const stan::math::var_value<Xped::ArenaTensor<Scalar, Rank, CoRank, Symmetry>>& t, Scalar s)
+{
+    stan::math::var_value<Xped::ArenaTensor<Scalar, Rank, CoRank, Symmetry>> out(t.val() + s);
+    return out;
+}
+
+template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry>
+stan::math::var_value<Xped::ArenaTensor<Scalar, Rank, CoRank, Symmetry>>
+operator*(const stan::math::var_value<Xped::ArenaTensor<Scalar, Rank, CoRank, Symmetry>>& t, Scalar s)
+{
+    stan::math::var_value<Xped::ArenaTensor<Scalar, Rank, CoRank, Symmetry>> out((t.val() * s).eval());
+    stan::math::reverse_pass_callback([out, t, s]() mutable { t.adj() += (out.adj() * s).eval(); });
+    return out;
+}
+
+template <typename Scalar, std::size_t Rank, std::size_t MiddleRank, std::size_t CoRank, typename Symmetry>
+stan::math::var_value<Xped::ArenaTensor<Scalar, Rank, CoRank, Symmetry>>
+operator*(const Xped::ArenaTensor<Scalar, Rank, MiddleRank, Symmetry>& left,
+          const stan::math::var_value<Xped::ArenaTensor<Scalar, MiddleRank, CoRank, Symmetry>>& right)
+{
+    stan::math::var_value<Xped::ArenaTensor<Scalar, Rank, CoRank, Symmetry>> res(left * right.val());
+    stan::math::reverse_pass_callback([res, left, right]() mutable { right.adj() += (left.adjoint() * res.adj()); });
+    return res;
+}
+
+template <typename Scalar, std::size_t Rank, typename Symmetry>
+stan::math::var operator*(const stan::math::var_value<Xped::ArenaTensor<Scalar, 0, Rank, Symmetry>>& left,
+                          const stan::math::var_value<Xped::ArenaTensor<Scalar, Rank, 0, Symmetry>>& right)
+{
+    stan::math::var res = (left.val() * right.val()).block(0)(0, 0);
+    stan::math::reverse_pass_callback([res, left, right]() mutable {
+        right.adj() += left.val().adjoint() * res.adj();
+        left.adj() += res.adj() * right.val().adjoint();
+    });
+    return res;
+}
+
+template <typename Scalar, std::size_t Rank, typename Symmetry>
+stan::math::var operator*(const Xped::ArenaTensor<Scalar, 0, Rank, Symmetry>& left,
+                          const stan::math::var_value<Xped::ArenaTensor<Scalar, Rank, 0, Symmetry>>& right)
+{
+    stan::math::var res = (left * right.val()).block(0)(0, 0);
+    stan::math::reverse_pass_callback([res, left, right]() mutable { right.adj() += left.adjoint() * res.adj(); });
+    return res;
+}
+
+template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry>
+stan::math::var_value<Xped::ArenaTensor<Scalar, CoRank, Rank, Symmetry>>
+adjoint(const stan::math::var_value<Xped::ArenaTensor<Scalar, Rank, CoRank, Symmetry>>& t)
+{
+    stan::math::var_value<Xped::ArenaTensor<Scalar, CoRank, Rank, Symmetry>> res(t.val().adjoint().eval());
+    stan::math::reverse_pass_callback([res, t]() mutable { t.adj() += res.adj().adjoint().eval(); });
+    return res;
+}
+
 } // namespace stan::math
 #endif

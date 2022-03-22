@@ -28,8 +28,13 @@ using std::string;
 #    include "stan/math/rev/core/autodiffstackstorage.hpp"
 #    include "stan/math/rev/core/chainablestack.hpp"
 #    include "stan/math/rev/core/init_chainablestack.hpp"
+#    include "stan/math/rev/core/operator_division.hpp"
 #    include "stan/math/rev/core/print_stack.hpp"
 #    include "stan/math/rev/core/var.hpp"
+
+#    include "ceres/first_order_function.h"
+#    include "ceres/gradient_problem.h"
+#    include "ceres/gradient_problem_solver.h"
 #endif
 
 #include "Xped/Util/Macros.hpp"
@@ -62,9 +67,66 @@ template <typename T, require_tensor_var_t<T>* = nullptr>
 inline stan::math::var dot_self(const T& v)
 {
     stan::math::var res = v.val().squaredNorm();
-    stan::math::reverse_pass_callback([res, v]() mutable { v.adj() = v.adj() + (v.val() * (2.0 * res.adj())).eval(); });
+    stan::math::reverse_pass_callback([res, v]() mutable { v.adj() += (v.val() * (2.0 * res.adj())).eval(); });
     return res;
 }
+
+template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry>
+inline stan::math::var my_func(const stan::math::var_value<Xped::ArenaTensor<Scalar, Rank, CoRank, Symmetry>>& t)
+{
+    return dot_self(t - Scalar(5));
+}
+
+template <typename Scalar, typename Symmetry>
+inline stan::math::var avg(const Xped::ArenaTensor<Scalar, 0, 2, Symmetry>& bra,
+                           const Xped::ArenaTensor<Scalar, 2, 2, Symmetry>& op,
+                           const stan::math::var_value<Xped::ArenaTensor<Scalar, 2, 0, Symmetry>>& ket)
+{
+    auto opvec = op * ket;
+    auto res = bra.eval() * opvec;
+    return res;
+}
+
+template <typename Scalar, typename Symmetry>
+inline stan::math::var avg2(const Xped::ArenaTensor<Scalar, 2, 2, Symmetry>& op,
+                            const stan::math::var_value<Xped::ArenaTensor<Scalar, 2, 0, Symmetry>>& ket)
+{
+    auto opvec = op * ket;
+    auto energy = stan::math::adjoint(ket) * opvec;
+    auto norm = stan::math::adjoint(ket) * ket;
+    auto res = energy / norm;
+    return res;
+}
+
+template <typename Scalar, typename Symmetry>
+class Energy final : public ceres::FirstOrderFunction
+{
+public:
+    Energy(const Xped::ArenaTensor<Scalar, 2, 2, Symmetry>& op)
+        : op(op)
+    {}
+
+    ~Energy() override {}
+
+    bool Evaluate(const double* parameters, double* cost, double* gradient) const override
+    {
+        Xped::ArenaTensor<Scalar, 2, 0, Symmetry> t_(op.uncoupledCodomain(), {{}}, parameters, NumParameters(), op.world());
+        stan::math::nested_rev_autodiff nested;
+        stan::math::var_value<Xped::ArenaTensor<Scalar, 2, 0, Symmetry>> t(t_);
+        auto res = avg2(op, t);
+        cost[0] = res.val();
+        if(gradient != nullptr) {
+            stan::math::grad(res.vi_);
+            memcpy(gradient, t.adj().storage().data().data(), NumParameters() * sizeof(Scalar));
+        }
+        return true;
+    }
+
+    Xped::ArenaTensor<Scalar, 2, 2, Symmetry> op;
+
+    int NumParameters() const override { return op.coupledDomain().inner_dim(Symmetry::qvacuum()); }
+};
+
 #endif
 
 int main(int argc, char* argv[])
@@ -123,27 +185,58 @@ int main(int argc, char* argv[])
     // std::cout << std::endl << C << std::endl;
 
     typedef Xped::Sym::SU2<Xped::Sym::SpinSU2> Symmetry;
-// typedef Xped::Sym::U1<Xped::Sym::SpinU1> Symmetry;
-// typedef Xped::Sym::U0<double> Symmetry;
+    // typedef Xped::Sym::U1<Xped::Sym::SpinU1> Symmetry;
+    // typedef Xped::Sym::U0<double> Symmetry;
 #ifdef XPED_USE_AD
     {
         Xped::Qbasis<Symmetry, 1, Xped::StanArenaPolicy> B;
         B.setRandom(Minit);
-        Xped::Qbasis<Symmetry, 1, Xped::StanArenaPolicy> phys;
-        phys.push_back({2}, 1);
+        // Xped::Qbasis<Symmetry, 1, Xped::StanArenaPolicy> phys;
+        // phys.push_back({2}, 1);
         // phys.push_back({}, 2);
-        Xped::ArenaTensor<double, 2, 3, Symmetry> t({{B, B}}, {{B, B, phys}}, world);
-        t.setRandom();
-        t.print(std::cout, true);
-        t += 7.;
-        t.print(std::cout, true);
-        t = 3 * t;
-        t.print(std::cout, true);
-        stan::math::var_value<Xped::ArenaTensor<double, 2, 3, Symmetry>> ta(t);
-        auto res = dot_self(ta);
-        stan::math::print_stack(std::cout);
-        stan::math::grad(res.vi_);
-        std::cout << ta.vi_ << std::endl;
+        // Xped::ArenaTensor<double, 2, 3, Symmetry> t({{B, B}}, {{B, B, phys}}, world);
+        // t.setRandom();
+        Xped::ArenaTensor<double, 2, 0, Symmetry> vec_({{B, B}}, {{}}, world);
+        vec_.setRandom();
+        // vec_.print(std::cout, true);
+        Xped::ArenaTensor<double, 2, 2, Symmetry> op({{B, B}}, {{B, B}}, world);
+        op.setRandom();
+        op = op + op.adjoint();
+        // auto check = (vec_.adjoint() * op).adjoint().eval();
+        // auto check = (op + op.adjoint()) * vec_;
+        ceres::GradientProblem problem(new Energy<double, Symmetry>(op));
+
+        double* parameters = nullptr;
+        parameters = (double*)malloc(problem.NumParameters() * sizeof(double));
+        for(std::size_t i = 0; i < problem.NumParameters(); ++i) { parameters[i] = Xped::random::threadSafeRandUniform<double>(-1., 1., false); }
+
+        ceres::GradientProblemSolver::Options options;
+        options.line_search_direction_type = ceres::NONLINEAR_CONJUGATE_GRADIENT;
+        options.minimizer_progress_to_stdout = true;
+        options.max_num_iterations = 500;
+        options.function_tolerance = 1.e-10;
+        options.parameter_tolerance = 1.e-10;
+        ceres::GradientProblemSolver::Summary summary;
+        ceres::Solve(options, problem, parameters, &summary);
+
+        std::cout << summary.FullReport() << "\n";
+        free(parameters);
+        auto [eigvals, eigvecs] = op.eigh();
+        for(auto i = 0ul; i < eigvals.sector().size(); ++i) {
+            std::cout << "Q=" << Xped::Sym::format<Symmetry>(eigvals.sector(i)) << ", E=" << eigvals.block(i)(0, 0) << std::endl;
+        }
+        // t.print(std::cout, true);
+        // t += 7.;
+        // t.print(std::cout, true);
+        // t = 3 * t;
+        // t.print(std::cout, true);
+        // stan::math::var_value<Xped::ArenaTensor<double, 2, 0, Symmetry>> vec(vec_);
+        // // auto res = avg(vec_.adjoint().eval(), op, vec);
+        // auto res = avg2(op, vec);
+        // stan::math::print_stack(std::cout);
+        // stan::math::grad(res.vi_);
+        // std::cout << vec.vi_ << std::endl;
+        // check.print(std::cout, true);
     }
     return 0;
 #endif

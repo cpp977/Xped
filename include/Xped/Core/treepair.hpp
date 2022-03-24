@@ -7,9 +7,8 @@
 #    include "lru/lru.hpp"
 #endif
 
-#include "TOOLS/Permutations.h"
-
 #include "Xped/Hash/hash.hpp"
+#include "Xped/Util/Permutations.hpp"
 
 namespace Xped {
 
@@ -36,7 +35,7 @@ turn(const FusionTree<Rank, Symmetry>& t1, const FusionTree<CoRank, Symmetry>& t
 
 template <int shift, std::size_t Rank, std::size_t CoRank, typename Symmetry>
 std::unordered_map<std::pair<FusionTree<Rank - shift, Symmetry>, FusionTree<CoRank + shift, Symmetry>>, typename Symmetry::Scalar>
-permute(const FusionTree<Rank, Symmetry>& t1, const FusionTree<CoRank, Symmetry>& t2, const Permutation& p);
+permute(const FusionTree<Rank, Symmetry>& t1, const FusionTree<CoRank, Symmetry>& t2, const util::Permutation& p);
 
 } // end namespace treepair
 

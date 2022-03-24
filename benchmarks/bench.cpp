@@ -19,7 +19,6 @@ const int XPED_MAX_THREADS = 1;
 #endif
 
 #include "TOOLS/ArgParser.h"
-#include "TOOLS/Stopwatch.h"
 
 using std::cout;
 using std::endl;
@@ -54,6 +53,8 @@ XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100)
 #include "Xped/Core/Tensor.hpp"
 #include "Xped/MPS/Mps.hpp"
 #include "Xped/MPS/MpsAlgebra.hpp"
+
+#include "Xped/Util/Stopwatch.hpp"
 
 int main(int argc, char* argv[])
 {

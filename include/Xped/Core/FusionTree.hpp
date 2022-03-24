@@ -6,11 +6,9 @@
 #include "yas/serialize.hpp"
 #include "yas/std_types.hpp"
 
-#include "TOOLS/Permutations.h"
-
-#include "Xped/Util/Mpi.hpp"
-
 #include "Xped/Hash/hash.hpp"
+#include "Xped/Util/Mpi.hpp"
+#include "Xped/Util/Permutations.hpp"
 
 namespace Xped {
 
@@ -83,7 +81,7 @@ struct FusionTree
 
     FusionTree<Rank + 1, Symmetry> enlarge(const FusionTree<1, Symmetry>& other) const;
 
-    std::unordered_map<FusionTree<Rank, Symmetry>, typename Symmetry::Scalar> permute(const Permutation& p) const;
+    std::unordered_map<FusionTree<Rank, Symmetry>, typename Symmetry::Scalar> permute(const util::Permutation& p) const;
 
     std::unordered_map<FusionTree<Rank, Symmetry>, typename Symmetry::Scalar> swap(const std::size_t& pos) const; // swaps sites pos and pos+1
 };

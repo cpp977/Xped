@@ -54,7 +54,6 @@ struct CyclopsTensorLib
 
 } // namespace Xped
 
-#include "TOOLS/NestedLoopIterator.h"
 #include "seq/seq.h"
 
 #if defined XPED_USE_EIGEN_TENSOR_LIB

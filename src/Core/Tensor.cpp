@@ -5,8 +5,8 @@
 
 #include "spdlog/spdlog.h"
 
-#include "spdlog/fmt/bundled/ranges.h"
-#include "spdlog/fmt/ostr.h"
+#include "fmt/os.h"
+#include "fmt/ranges.h"
 
 #include "Xped/Util/Constfct.hpp"
 #include "Xped/Util/Macros.hpp"
@@ -82,8 +82,8 @@ Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::permute_impl(seq::iseq
 {
     std::array<std::size_t, Rank> arr_domain = {pds...};
     std::array<std::size_t, CoRank> arr_codomain = {(pcs - Rank)...};
-    Permutation p_domain(arr_domain);
-    Permutation p_codomain(arr_codomain);
+    util::Permutation p_domain(arr_domain);
+    util::Permutation p_codomain(arr_codomain);
 
     std::array<IndexType, Rank + CoRank> arr_total;
     auto it_total = std::copy(p_domain.pi.begin(), p_domain.pi.end(), arr_total.begin());
@@ -183,7 +183,7 @@ Tensor<Scalar, Rank - shift, CoRank + shift, Symmetry, AllocationPolicy>
 Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::permute_impl(seq::iseq<std::size_t, ps...> per) const
 {
     std::array<std::size_t, Rank + CoRank> p_ = {ps...};
-    Permutation p(p_);
+    util::Permutation p(p_);
     constexpr std::size_t newRank = Rank - shift;
     constexpr std::size_t newCoRank = CoRank + shift;
     std::array<Qbasis<Symmetry, 1, AllocationPolicy>, newRank> new_domain;
@@ -436,7 +436,7 @@ Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::eigh() XPED_CONST
 {
     static_assert(Rank == CoRank, "Eigenvalue decomposition only possible for tensors with Rank==CoRank");
     assert(coupledDomain() == coupledCodomain() and "Eigenvalue decomposition only possible for square matrices.");
-    assert(*this == this->adjoint().eval() and "Input for eigh() needs to be Hermitian.");
+    // assert(*this == this->adjoint().eval() and "Input for eigh() needs to be Hermitian.");
 
     Tensor<RealScalar, 1, 1, Symmetry, AllocationPolicy> D({{coupledDomain().forgetHistory()}}, {{coupledCodomain().forgetHistory()}}, world());
     Tensor<RealScalar, Rank, 1, Symmetry, AllocationPolicy> V(uncoupledDomain(), {{coupledCodomain().forgetHistory()}}, world());

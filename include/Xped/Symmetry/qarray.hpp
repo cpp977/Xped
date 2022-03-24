@@ -14,7 +14,7 @@
 #include "yas/serialize.hpp"
 #include "yas/std_types.hpp"
 
-#include "TOOLS/JoinArray.h"
+#include "Xped/Util/JoinArray.hpp"
 
 namespace Xped {
 
@@ -140,7 +140,7 @@ qarray<Nq> operator*(const size_t& alpha, const qarray<Nq>& a)
 template <std::size_t Nq1, std::size_t Nq2>
 constexpr qarray<Nq1 + Nq2> join(qarray<Nq1> rhs, qarray<Nq2> lhs)
 {
-    auto new_array = thirdparty::join(rhs.data, lhs.data);
+    auto new_array = util::join(rhs.data, lhs.data);
     qarray<Nq1 + Nq2> out;
     out.data = new_array;
     return out;

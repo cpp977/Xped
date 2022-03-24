@@ -11,14 +11,11 @@ using std::size_t;
 #    include "lru/lru.hpp"
 #endif
 
-#include "TOOLS/numeric_limits.h"
-
+#include "Xped/Core/FusionTree.hpp"
+#include "Xped/Core/treepair.hpp"
 #include "Xped/Symmetry/SU2.hpp"
 #include "Xped/Symmetry/U0.hpp"
 #include "Xped/Symmetry/U1.hpp"
-
-#include "Xped/Core/FusionTree.hpp"
-#include "Xped/Core/treepair.hpp"
 
 namespace Xped {
 
@@ -81,7 +78,7 @@ turn_right(const FusionTree<Rank, Symmetry>& t1, const FusionTree<CoRank, Symmet
     auto coeff = Symmetry::coeff_turn(a, b, c);
     if(t2.IS_DUAL.back()) { coeff *= Symmetry::coeff_FS(Symmetry::conj(b)); }
     std::unordered_map<std::pair<FusionTree<Rank + 1, Symmetry>, FusionTree<CoRank - 1, Symmetry>>, typename Symmetry::Scalar> out;
-    if(std::abs(coeff) < mynumeric_limits<typename Symmetry::Scalar>::epsilon()) { return out; }
+    if(std::abs(coeff) < ScalarTraits<typename Symmetry::Scalar>::epsilon()) { return out; }
     out.insert(std::make_pair(std::make_pair(t1p, t2p), coeff));
     return out;
 }
@@ -141,7 +138,7 @@ turn(const FusionTree<Rank, Symmetry>& t1, const FusionTree<CoRank, Symmetry>& t
 
 template <int shift, std::size_t Rank, std::size_t CoRank, typename Symmetry>
 std::unordered_map<std::pair<FusionTree<Rank - shift, Symmetry>, FusionTree<CoRank + shift, Symmetry>>, typename Symmetry::Scalar>
-permute(const FusionTree<Rank, Symmetry>& t1, const FusionTree<CoRank, Symmetry>& t2, const Permutation& p)
+permute(const FusionTree<Rank, Symmetry>& t1, const FusionTree<CoRank, Symmetry>& t2, const util::Permutation& p)
 {
 #ifdef XPED_CACHE_PERMUTE_OUTPUT
     if constexpr(Symmetry::NON_ABELIAN) {
@@ -163,7 +160,7 @@ permute(const FusionTree<Rank, Symmetry>& t1, const FusionTree<CoRank, Symmetry>
     std::array<std::size_t, Rank + CoRank> pi_corrected;
     std::copy(pi_tmp.begin(), pi_tmp.begin() + newRank, pi_corrected.begin());
     for(std::size_t i = 0; i < newCoRank; i++) { pi_corrected[i + newRank] = pi_tmp[(newCoRank - 1) - i + newRank]; }
-    Permutation p_corrected(pi_corrected);
+    util::Permutation p_corrected(pi_corrected);
 
     constexpr int reshift = CoRank + shift;
     std::unordered_map<std::pair<FusionTree<Rank - shift, Symmetry>, FusionTree<CoRank + shift, Symmetry>>, typename Symmetry::Scalar> out;

@@ -9,9 +9,11 @@
 namespace Xped {
 template <std::size_t Rank, typename Symmetry>
 struct FusionTree;
-}
 
+namespace util {
 struct Permutation;
+}
+} // namespace Xped
 
 namespace std {
 template <size_t Nq>
@@ -61,9 +63,10 @@ struct hash<std::pair<Xped::FusionTree<Rank, Symmetry>, Xped::FusionTree<CoRank,
 };
 
 template <size_t Rank, size_t CoRank, typename Symmetry>
-struct hash<std::tuple<Xped::FusionTree<Rank, Symmetry>, Xped::FusionTree<CoRank, Symmetry>, Permutation>>
+struct hash<std::tuple<Xped::FusionTree<Rank, Symmetry>, Xped::FusionTree<CoRank, Symmetry>, Xped::util::Permutation>>
 {
-    inline size_t operator()(const std::tuple<Xped::FusionTree<Rank, Symmetry>, Xped::FusionTree<CoRank, Symmetry>, Permutation>& ix) const
+    inline size_t
+    operator()(const std::tuple<Xped::FusionTree<Rank, Symmetry>, Xped::FusionTree<CoRank, Symmetry>, Xped::util::Permutation>& ix) const
     {
         size_t seed = 0;
         boost::hash_combine(seed, std::get<0>(ix));

@@ -2,20 +2,15 @@
 #include <string>
 #include <unordered_map>
 
-#include "TOOLS/numeric_limits.h"
-
-#include "Xped/Util/Macros.hpp"
-
-#include "Xped/Interfaces/PlainInterface.hpp"
-
+#include "Xped/Core/FusionTree.hpp"
+#include "Xped/Core/ScalarTraits.hpp"
 #include "Xped/Hash/hash.hpp"
-
+#include "Xped/Interfaces/PlainInterface.hpp"
 #include "Xped/Symmetry/SU2.hpp"
 #include "Xped/Symmetry/U0.hpp"
 #include "Xped/Symmetry/U1.hpp"
 #include "Xped/Symmetry/functions.hpp"
-
-#include "Xped/Core/FusionTree.hpp"
+#include "Xped/Util/Macros.hpp"
 
 using std::cout;
 using std::endl;
@@ -287,7 +282,7 @@ FusionTree<Rank + 1, Symmetry> FusionTree<Rank, Symmetry>::enlarge(const FusionT
 }
 
 template <std::size_t Rank, typename Symmetry>
-std::unordered_map<FusionTree<Rank, Symmetry>, typename Symmetry::Scalar> FusionTree<Rank, Symmetry>::permute(const Permutation& p) const
+std::unordered_map<FusionTree<Rank, Symmetry>, typename Symmetry::Scalar> FusionTree<Rank, Symmetry>::permute(const util::Permutation& p) const
 {
     std::unordered_map<FusionTree<Rank, Symmetry>, typename Symmetry::Scalar> tmp;
     std::unordered_map<FusionTree<Rank, Symmetry>, typename Symmetry::Scalar> out;
@@ -299,7 +294,7 @@ std::unordered_map<FusionTree<Rank, Symmetry>, typename Symmetry::Scalar> Fusion
                 if(it == tmp.end()) {
                     tmp.insert(std::make_pair(tree2, coeff * coeff2));
                 } else {
-                    if(std::abs(tmp[tree2] + coeff * coeff2) < mynumeric_limits<Scalar>::epsilon()) {
+                    if(std::abs(tmp[tree2] + coeff * coeff2) < ScalarTraits<Scalar>::epsilon()) {
                         tmp.erase(tree2);
                     } else {
                         tmp[tree2] += coeff * coeff2;
@@ -338,7 +333,7 @@ FusionTree<Rank, Symmetry>::swap(const std::size_t& pos) const // swaps sites po
             tree.q_intermediates = q_intermediates;
             tree.multiplicities = multiplicities;
             Scalar coeff = Symmetry::coeff_swap(ql, qr, qf);
-            if(std::abs(coeff) < mynumeric_limits<typename Symmetry::Scalar>::epsilon()) { return out; }
+            if(std::abs(coeff) < ScalarTraits<typename Symmetry::Scalar>::epsilon()) { return out; }
             out.insert(std::make_pair(tree, coeff));
             return out;
         }
@@ -367,7 +362,7 @@ FusionTree<Rank, Symmetry>::swap(const std::size_t& pos) const // swaps sites po
             // auto cgc = Symmetry::coeff_swap(Q12,q3,Q) * std::conj(Symmetry::coeff_recouple(q1,q3,q2,Q,Q13,Q12)) *
             // Symmetry::coeff_swap(q1,q3,Q13);
             auto cgc = Symmetry::coeff_swap(Q12, q3, Q) * Symmetry::coeff_recouple(q3, q1, q2, Q, Q31, Q12) * Symmetry::coeff_swap(q3, q1, Q31);
-            if(std::abs(cgc) < mynumeric_limits<typename Symmetry::Scalar>::epsilon()) { continue; }
+            if(std::abs(cgc) < ScalarTraits<typename Symmetry::Scalar>::epsilon()) { continue; }
             out.insert(std::make_pair(tree, cgc));
         }
         return out;

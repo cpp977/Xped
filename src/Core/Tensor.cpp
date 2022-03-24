@@ -1,7 +1,6 @@
 #include <iostream>
 #include <sstream>
 #include <unordered_set>
-// #include <utility>
 
 #include "spdlog/spdlog.h"
 
@@ -98,7 +97,7 @@ Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::permute_impl(seq::iseq
     p_codomain.apply(new_codomain);
 
     Self out(new_domain, new_codomain, this->world_);
-    // out.setZero();
+    out.setZero();
 
     for(size_t i = 0; i < sector().size(); i++) {
         auto domain_trees = coupledDomain().tree(sector(i));
@@ -121,56 +120,18 @@ Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::permute_impl(seq::iseq
                         if(std::abs(coeff_domain * coeff_codomain) < 1.e-10) { continue; }
 
                         auto it = out.dict().find(sector(i));
-                        if(it == out.dict().end()) {
-                            // MatrixType mat(out.domain.inner_dim(sector_[i]), out.codomain.inner_dim(sector_[i]));
-                            // mat.setZero();
-                            auto mat = PlainInterface::construct_with_zero<Scalar>(
-                                out.coupledDomain().inner_dim(sector(i)), out.coupledCodomain().inner_dim(sector(i)), *world_);
-#ifdef XPED_TIME_EFFICIENT
-                            IndexType row = out.coupledDomain().leftOffset(permuted_domain_tree);
-                            IndexType col = out.coupledCodomain().leftOffset(permuted_codomain_tree);
-                            IndexType rows = permuted_domain_tree.dim;
-                            IndexType cols = permuted_codomain_tree.dim;
-                            // PlainInterface::set_block_from_tensor<Scalar, Rank + CoRank>(
-                            //     mat, row, col, rows, cols, coeff_domain * coeff_codomain, Tshuffle);
-                            PlainInterface::set_block_from_tensor<Rank + CoRank>(mat, row, col, rows, cols, coeff_domain * coeff_codomain, Tshuffle);
-                            // assert(permuted_domain_tree.dim == domain_tree.dim);
-                            // assert(permuted_codomain_tree.dim == codomain_tree.dim);
-                            // mat.block(out.domain.leftOffset(permuted_domain_tree),
-                            //             out.codomain.leftOffset(permuted_codomain_tree),
-                            //             permuted_domain_tree.dim,
-                            //             permuted_codomain_tree.dim) =
-                            //     coeff_domain * coeff_codomain *
-                            //     Eigen::Map<MatrixType>(
-                            //         PlainInterface::get_raw_data<Scalar, Rank + CoRank>(Tshuffle), domain_tree.dim, codomain_tree.dim);
-#endif
-                            out.push_back(sector(i), mat);
+                        assert(it != out.dict.end());
 #ifdef XPED_MEMORY_EFFICIENT
-                            auto t = out.view(permuted_domain_tree, permuted_codomain_tree, i);
-                            PlainInterface::addScale<Scalar, Rank + CoRank>(Tshuffle, t, coeff_domain * coeff_codomain);
-#endif
-                        } else {
-#ifdef XPED_MEMORY_EFFICIENT
-                            auto t = out.view(permuted_domain_tree, permuted_codomain_tree, it->second);
-                            PlainInterface::addScale<Scalar, Rank + CoRank>(Tshuffle, t, coeff_domain * coeff_codomain);
+                        auto t = out.view(permuted_domain_tree, permuted_codomain_tree, it->second);
+                        PlainInterface::addScale<Scalar, Rank + CoRank>(Tshuffle, t, coeff_domain * coeff_codomain);
 #elif defined(XPED_TIME_EFFICIENT)
-                            IndexType row = out.coupledDomain().leftOffset(permuted_domain_tree);
-                            IndexType col = out.coupledCodomain().leftOffset(permuted_codomain_tree);
-                            IndexType rows = permuted_domain_tree.dim;
-                            IndexType cols = permuted_codomain_tree.dim;
-                            PlainInterface::add_to_block_from_tensor<Rank + CoRank>(
-                                out.block(it->second), row, col, rows, cols, coeff_domain * coeff_codomain, Tshuffle);
-                            // assert(permuted_domain_tree.dim == domain_tree.dim);
-                            // assert(permuted_codomain_tree.dim == codomain_tree.dim);
-                            // out.block_[it->second].block(out.domain.leftOffset(permuted_domain_tree),
-                            //                              out.codomain.leftOffset(permuted_codomain_tree),
-                            //                              permuted_domain_tree.dim,
-                            //                              permuted_codomain_tree.dim) +=
-                            //     coeff_domain * coeff_codomain *
-                            //     Eigen::Map<MatrixType>(
-                            //         PlainInterface::get_raw_data<Scalar, Rank + CoRank>(Tshuffle), domain_tree.dim, codomain_tree.dim);
+                        IndexType row = out.coupledDomain().leftOffset(permuted_domain_tree);
+                        IndexType col = out.coupledCodomain().leftOffset(permuted_codomain_tree);
+                        IndexType rows = permuted_domain_tree.dim;
+                        IndexType cols = permuted_codomain_tree.dim;
+                        PlainInterface::add_to_block_from_tensor<Rank + CoRank>(
+                            out.block(it->second), row, col, rows, cols, coeff_domain * coeff_codomain, Tshuffle);
 #endif
-                        }
                     }
             }
     }
@@ -206,7 +167,7 @@ Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::permute_impl(seq::iseq
     }
 
     Tensor<Scalar, newRank, newCoRank, Symmetry, AllocationPolicy> out(new_domain, new_codomain, this->world_);
-    // out.setZero();
+    out.setZero();
 
     for(size_t i = 0; i < sector().size(); i++) {
         auto domain_trees = coupledDomain().tree(sector(i));
@@ -228,51 +189,17 @@ Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::permute_impl(seq::iseq
                     assert(permuted_domain_tree.q_coupled == permuted_codomain_tree.q_coupled);
 
                     auto it = out.dict().find(permuted_domain_tree.q_coupled);
-                    if(it == out.dict().end()) {
-                        auto mat = PlainInterface::construct_with_zero<Scalar>(out.coupledDomain().inner_dim(permuted_domain_tree.q_coupled),
-                                                                               out.coupledCodomain().inner_dim(permuted_domain_tree.q_coupled),
-                                                                               *world_);
-                        // MatrixType mat(out.domain.inner_dim(permuted_domain_tree.q_coupled),
-                        // out.codomain.inner_dim(permuted_domain_tree.q_coupled)); mat.setZero();
-#ifdef XPED_TIME_EFFICIENT
-                        IndexType row = out.coupledDomain().leftOffset(permuted_domain_tree);
-                        IndexType col = out.coupledCodomain().leftOffset(permuted_codomain_tree);
-                        IndexType rows = permuted_domain_tree.dim;
-                        IndexType cols = permuted_codomain_tree.dim;
-                        // PlainInterface::set_block_from_tensor<Scalar, Rank + CoRank>(mat, row, col, rows, cols, coeff, Tshuffle);
-                        PlainInterface::set_block_from_tensor<Rank + CoRank>(mat, row, col, rows, cols, coeff, Tshuffle);
-                        // mat.block(out.domain.leftOffset(permuted_domain_tree),
-                        //           out.codomain.leftOffset(permuted_codomain_tree),
-                        //           permuted_domain_tree.dim,
-                        //           permuted_codomain_tree.dim) =
-                        //     coeff * Eigen::Map<MatrixType>(PlainInterface::get_raw_data<Scalar, Rank + CoRank>(Tshuffle),
-                        //                                    permuted_domain_tree.dim,
-                        //                                    permuted_codomain_tree.dim);
-#endif
-                        out.push_back(permuted_domain_tree.q_coupled, mat);
+                    assert(dict != out.dict().end());
 #ifdef XPED_MEMORY_EFFICIENT
-                        auto t = out.view(permuted_domain_tree, permuted_codomain_tree, out.storage_.size() - 1);
-                        PlainInterface::addScale<Scalar, Rank + CoRank>(Tshuffle, t, coeff);
-#endif
-                    } else {
-#ifdef XPED_MEMORY_EFFICIENT
-                        auto t = out.view(permuted_domain_tree, permuted_codomain_tree, it->second);
-                        PlainInterface::addScale<Scalar, Rank + CoRank>(Tshuffle, t, coeff);
+                    auto t = out.view(permuted_domain_tree, permuted_codomain_tree, it->second);
+                    PlainInterface::addScale<Scalar, Rank + CoRank>(Tshuffle, t, coeff);
 #elif defined(XPED_TIME_EFFICIENT)
-                        IndexType row = out.coupledDomain().leftOffset(permuted_domain_tree);
-                        IndexType col = out.coupledCodomain().leftOffset(permuted_codomain_tree);
-                        IndexType rows = permuted_domain_tree.dim;
-                        IndexType cols = permuted_codomain_tree.dim;
-                        PlainInterface::add_to_block_from_tensor<Rank + CoRank>(out.block(it->second), row, col, rows, cols, coeff, Tshuffle);
-                        // out.block_[it->second].block(out.domain.leftOffset(permuted_domain_tree),
-                        //                              out.codomain.leftOffset(permuted_codomain_tree),
-                        //                              permuted_domain_tree.dim,
-                        //                              permuted_codomain_tree.dim) +=
-                        //     coeff * Eigen::Map<MatrixType>(PlainInterface::get_raw_data<Scalar, Rank + CoRank>(Tshuffle),
-                        //                                    permuted_domain_tree.dim,
-                        //                                    permuted_codomain_tree.dim);
+                    IndexType row = out.coupledDomain().leftOffset(permuted_domain_tree);
+                    IndexType col = out.coupledCodomain().leftOffset(permuted_codomain_tree);
+                    IndexType rows = permuted_domain_tree.dim;
+                    IndexType cols = permuted_codomain_tree.dim;
+                    PlainInterface::add_to_block_from_tensor<Rank + CoRank>(out.block(it->second), row, col, rows, cols, coeff, Tshuffle);
 #endif
-                    }
                 }
             }
     }

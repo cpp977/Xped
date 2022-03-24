@@ -13,8 +13,8 @@ class AdjointOp;
 template <typename XprType>
 struct TensorTraits<AdjointOp<XprType>>
 {
-    static constexpr std::size_t Rank = XprType::corank();
-    static constexpr std::size_t CoRank = XprType::rank();
+    static constexpr std::size_t Rank = XprType::CoRank;
+    static constexpr std::size_t CoRank = XprType::Rank;
     typedef typename XprType::Symmetry Symmetry;
     using AllocationPolicy = typename XprType::AllocationPolicy;
     typedef typename XprType::Scalar Scalar;
@@ -24,8 +24,8 @@ template <typename XprType>
 class AdjointOp : public TensorBase<AdjointOp<XprType>>
 {
 public:
-    static inline constexpr std::size_t Rank = XprType::corank();
-    static inline constexpr std::size_t CoRank = XprType::rank();
+    static inline constexpr std::size_t Rank = XprType::CoRank;
+    static inline constexpr std::size_t CoRank = XprType::Rank;
     typedef typename XprType::Scalar Scalar;
     typedef typename XprType::Symmetry Symmetry;
     using AllocationPolicy = typename XprType::AllocationPolicy;
@@ -53,11 +53,11 @@ public:
 
     // inline const std::array<Qbasis<Symmetry, 1, Allocator>, XprType::CoRank> uncoupledDomain() const { return refxpr_.uncoupledCodomain(); }
     // inline const std::array<Qbasis<Symmetry, 1, Allocator>, XprType::Rank> uncoupledCodomain() const { return refxpr_.uncoupledDomain(); }
-    inline const auto& uncoupledDomain() const { return refxpr_.uncoupledCodomain(); }
-    inline const auto& uncoupledCodomain() const { return refxpr_.uncoupledDomain(); }
+    inline const auto uncoupledDomain() const { return refxpr_.uncoupledCodomain(); }
+    inline const auto uncoupledCodomain() const { return refxpr_.uncoupledDomain(); }
 
-    inline const auto& coupledDomain() const { return refxpr_.coupledCodomain(); }
-    inline const auto& coupledCodomain() const { return refxpr_.coupledDomain(); }
+    inline const auto coupledDomain() const { return refxpr_.coupledCodomain(); }
+    inline const auto coupledCodomain() const { return refxpr_.coupledDomain(); }
 
     inline auto domainTrees(const qType& q) const { return refxpr_.codomainTrees(q); }
     inline auto codomainTrees(const qType& q) const { return refxpr_.domainTrees(q); }

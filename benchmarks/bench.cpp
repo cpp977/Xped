@@ -115,7 +115,7 @@ int main(int argc, char* argv[])
         // qloc_.push_back({-2}, 1);
         std::vector<Xped::Qbasis<Symmetry, 1>> qloc(L, qloc_);
 
-        Stopwatch<> construct;
+        Xped::util::Stopwatch<> construct;
         Xped::Mps<double, Symmetry> Psi(L, qloc, Qtot, Minit, Qinit);
         SPDLOG_CRITICAL(construct.info("Time for constructor"));
 
@@ -130,7 +130,7 @@ int main(int argc, char* argv[])
         if(NORM) {
             norm_times.resize(reps);
             for(std::size_t i = 0; i < reps; i++) {
-                Stopwatch<> norm;
+                Xped::util::Stopwatch<> norm;
                 double normsq __attribute__((unused)) = dot(Psi, Psi, DIR);
                 norm_times(i) = norm.time();
                 SPDLOG_WARN("<Psi|Psi>= {:03.2e}", normsq);
@@ -138,7 +138,7 @@ int main(int argc, char* argv[])
             SPDLOG_CRITICAL("Time for norm: {}", norm_times.sum());
         }
         if(SWEEP) {
-            Stopwatch<> Sweep;
+            Xped::util::Stopwatch<> Sweep;
             if(DIR == Xped::DMRG::DIRECTION::RIGHT) {
                 for(std::size_t l = 0; l < L; l++) {
                     SPDLOG_CRITICAL("l={}", l);

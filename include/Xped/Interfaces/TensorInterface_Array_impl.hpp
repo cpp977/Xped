@@ -9,6 +9,19 @@
 
 namespace Xped {
 
+namespace util {
+
+template <typename T, T... Nums>
+void print(seq::iseq<T, Nums...> seq)
+{
+    std::array<T, sizeof...(Nums)> s = {Nums...};
+    std::cout << "seq=";
+    for(auto x : s) { std::cout << x << " "; }
+    std::cout << std::endl;
+}
+
+} // namespace util
+
 template <typename Index, Index oldVal, Index newVal, typename S>
 using seq_replace = seq::insert<seq::index_of<oldVal, S>, newVal, seq::remove<oldVal, S>>;
 
@@ -139,49 +152,72 @@ struct TensorInterface
     template <typename Scalar, std::size_t Rank>
     static TType<Scalar, Rank> tensorProd(const TType<Scalar, Rank>& T1, const TType<Scalar, Rank>& T2)
     {
-        cMapTType<Scalar, Rank> T2m(T2.data(), T2.shape());
-        typedef TType<Scalar, Rank> TensorType;
-        typedef Indextype Index;
-        std::array<Index, Rank> dims;
-        std::array<Index, Rank> dim1_array;
-        std::size_t tmp = 0;
-        for(const auto& d : nda::internal::tuple_to_array<nda::dim<>>(T1.shape().dims())) {
-            dim1_array[tmp] = d.extent();
-            tmp++;
+        std::array<Indextype, 2 * Rank> tmp_dims;
+        std::array<Indextype, Rank> out_dims;
+        auto dim1 = dimensions<Scalar, Rank>(T1);
+        auto dim2 = dimensions<Scalar, Rank>(T2);
+        for(std::size_t i = 0; i < Rank; i++) {
+            tmp_dims[i] = dim2[i];
+            tmp_dims[i + Rank] = dim1[i];
+            out_dims[i] = dim1[i] * dim2[i];
         }
-        std::array<Index, Rank> dim2_array;
-        tmp = 0;
-        for(const auto& d : nda::internal::tuple_to_array<nda::dim<>>(T2.shape().dims())) {
-            dim2_array[tmp] = d.extent();
-            tmp++;
-        }
+        TType<Scalar, 2 * Rank> tmp(as_tuple(tmp_dims));
 
-        for(Index i = 0; i < T1.rank(); i++) { dims[i] = dim1_array[i] * dim2_array[i]; }
+        tmp = contract<Scalar, Rank, Rank>(T2, T1);
 
-        TensorType res(as_tuple(dims));
-        res.for_each_value([](Scalar& d) { d = 0.; });
-        std::array<Index, Rank> extents = dim2_array;
+        TType<Scalar, Rank> res(as_tuple(out_dims));
 
-        std::vector<std::size_t> vec_dims;
-        for(const auto& d : dim1_array) { vec_dims.push_back(d); }
-        NestedLoopIterator Nelly(T1.rank(), vec_dims);
-
-        for(std::size_t i = Nelly.begin(); i != Nelly.end(); i++) {
-            std::array<Index, Rank> indices;
-            for(Index j = 0; j < T1.rank(); j++) { indices[j] = Nelly(j); }
-            std::array<Index, Rank> offsets;
-            for(Index i = 0; i < T1.rank(); i++) { offsets[i] = indices[i] * dim2_array[i]; }
-
-            std::array<nda::interval<>, Rank> slices;
-            for(std::size_t r = 0; r < Rank; r++) { slices[r] = nda::interval<>(offsets[r], extents[r]); }
-            nda::dense_shape<Rank> new_s(as_tuple(slices));
-            new_s.resolve();
-            T2m.set_shape(new_s);
-            nda::copy(T2m, res(as_tuple(slices)));
-            res(as_tuple(slices)).for_each_value([&T1, &indices](Scalar& val) { val = val * T1(as_tuple(indices)); });
-            ++Nelly;
+        if constexpr(Rank == 1) {
+            res = reshape<Scalar, 2 * Rank, Rank>(shuffle<Scalar, 2 * Rank>(tmp, seq::make<Indextype, 2>{}), out_dims);
+        } else {
+            seq::zip<seq::make<Indextype, Rank>, seq::make<Indextype, Rank, Rank>> shuffle_dims{};
+            res = reshape<Scalar, 2 * Rank, Rank>(shuffle<Scalar, 2 * Rank>(tmp, shuffle_dims), out_dims);
         }
         return res;
+
+        // cMapTType<Scalar, Rank> T2m(T2.data(), T2.shape());
+        // typedef TType<Scalar, Rank> TensorType;
+        // typedef Indextype Index;
+        // std::array<Index, Rank> dims;
+        // std::array<Index, Rank> dim1_array;
+        // std::size_t tmp = 0;
+        // for(const auto& d : nda::internal::tuple_to_array<nda::dim<>>(T1.shape().dims())) {
+        //     dim1_array[tmp] = d.extent();
+        //     tmp++;
+        // }
+        // std::array<Index, Rank> dim2_array;
+        // tmp = 0;
+        // for(const auto& d : nda::internal::tuple_to_array<nda::dim<>>(T2.shape().dims())) {
+        //     dim2_array[tmp] = d.extent();
+        //     tmp++;
+        // }
+
+        // for(Index i = 0; i < T1.rank(); i++) { dims[i] = dim1_array[i] * dim2_array[i]; }
+
+        // TensorType res(as_tuple(dims));
+        // res.for_each_value([](Scalar& d) { d = 0.; });
+        // std::array<Index, Rank> extents = dim2_array;
+
+        // std::vector<std::size_t> vec_dims;
+        // for(const auto& d : dim1_array) { vec_dims.push_back(d); }
+        // NestedLoopIterator Nelly(T1.rank(), vec_dims);
+
+        // for(std::size_t i = Nelly.begin(); i != Nelly.end(); i++) {
+        //     std::array<Index, Rank> indices;
+        //     for(Index j = 0; j < T1.rank(); j++) { indices[j] = Nelly(j); }
+        //     std::array<Index, Rank> offsets;
+        //     for(Index i = 0; i < T1.rank(); i++) { offsets[i] = indices[i] * dim2_array[i]; }
+
+        //     std::array<nda::interval<>, Rank> slices;
+        //     for(std::size_t r = 0; r < Rank; r++) { slices[r] = nda::interval<>(offsets[r], extents[r]); }
+        //     nda::dense_shape<Rank> new_s(as_tuple(slices));
+        //     new_s.resolve();
+        //     T2m.set_shape(new_s);
+        //     nda::copy(T2m, res(as_tuple(slices)));
+        //     res(as_tuple(slices)).for_each_value([&T1, &indices](Scalar& val) { val = val * T1(as_tuple(indices)); });
+        //     ++Nelly;
+        // }
+        // return res;
     }
 
     template <typename Scalar, std::size_t Rank, Indextype... Is, typename Expr1, typename Expr2>

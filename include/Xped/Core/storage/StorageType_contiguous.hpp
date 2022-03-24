@@ -173,7 +173,7 @@ private:
                 curr += m_domain.inner_dim(q) * m_codomain.inner_dim(q);
             }
         }
-        assert(curr = size and "You specified an incompatible data array for this tensor.");
+        assert(curr == size and "You specified an incompatible data array for this tensor.");
     }
 };
 

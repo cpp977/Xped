@@ -17,7 +17,7 @@ void contract_L(XPED_CONST Tensor<Scalar, 1, 1, Symmetry, AllocationPolicy>& Bol
     SPDLOG_INFO("Entering contract_L().");
     Bnew.clear();
     Bnew = Tensor<Scalar, 1, 1, Symmetry, AllocationPolicy>({{Bra.uncoupledCodomain()[0]}}, {{Ket.uncoupledCodomain()[0]}}, *Bold.world());
-    // Bnew.setZero();
+    Bnew.setZero();
 
     for(std::size_t i = 0; i < Bra.sector().size(); i++) {
         std::size_t dimQ = PlainInterface::cols(Bra.block(i));
@@ -25,8 +25,6 @@ void contract_L(XPED_CONST Tensor<Scalar, 1, 1, Symmetry, AllocationPolicy>& Bol
         auto itKet = Ket.dict().find(Q);
         if(itKet == Ket.dict().end()) { continue; }
         auto Mtmp = PlainInterface::construct_with_zero<Scalar>(dimQ, dimQ, *Bold.world());
-        // typename Xped<Scalar, 1, 1, Symmetry, MatrixLib, TensorLib>::MatrixType Mtmp(dimQ, dimQ);
-        // Mtmp.setZero();
         for(const auto& domainTree : Bra.domainTrees(Q)) {
             FusionTree<1, Symmetry> trivial;
             trivial.q_coupled = Q;
@@ -45,16 +43,10 @@ void contract_L(XPED_CONST Tensor<Scalar, 1, 1, Symmetry, AllocationPolicy>& Bol
                                                  Bold.block(itBold->second),
                                                  PlainInterface::block(Mket, s * domainTree.dims[0], 0, domainTree.dims[0], dimQ),
                                                  Mtmp);
-                // Mtmp += Mbra.block(s * domainTree.dims[0], 0, domainTree.dims[0], dimQ).adjoint() * Bold.block_[itBold->second] *
-                //         Mket.block(s * domainTree.dims[0], 0, domainTree.dims[0], dimQ);
             }
         }
         auto it = Bnew.dict().find(Q);
-        if(it == Bnew.dict().end()) {
-            Bnew.push_back(Q, Mtmp);
-        } else {
-            Bnew.block(it->second) = PlainInterface::add(Bnew.block(it->second), Mtmp);
-        }
+        Bnew.block(it->second) = PlainInterface::add(Bnew.block(it->second), Mtmp);
     }
     SPDLOG_INFO("Leaving contract_L().");
 }
@@ -68,7 +60,7 @@ void contract_R(XPED_CONST Tensor<Scalar, 1, 1, Symmetry, AllocationPolicy>& Bol
     SPDLOG_INFO("Entering contract_R().");
     Bnew.clear();
     Bnew = Tensor<Scalar, 1, 1, Symmetry, AllocationPolicy>({{Ket.uncoupledDomain()[0]}}, {{Bra.uncoupledDomain()[0]}}, *Bold.world());
-    // Bnew.setZero();
+    Bnew.setZero();
 
     for(std::size_t i = 0; i < Ket.sector().size(); i++) {
         std::size_t dimQ = PlainInterface::cols(Ket.block(i));
@@ -86,8 +78,6 @@ void contract_R(XPED_CONST Tensor<Scalar, 1, 1, Symmetry, AllocationPolicy>& Bol
 
             auto Qin = domainTree.q_uncoupled[0];
             auto Mtmp = PlainInterface::construct_with_zero<Scalar>(domainTree.dims[0], domainTree.dims[0], *Bold.world());
-            // typename Xped<Scalar, 1, 1, Symmetry, MatrixLib, TensorLib>::MatrixType Mtmp(domainTree.dims[0], domainTree.dims[0]);
-            // Mtmp.setZero();
 
             auto Mbra = Bra.subMatrix(domainTree, trivial);
             auto Mket = Ket.subMatrix(domainTree, trivial);
@@ -107,15 +97,9 @@ void contract_R(XPED_CONST Tensor<Scalar, 1, 1, Symmetry, AllocationPolicy>& Bol
                 // Mtmp += Mket.block(s * domainTree.dims[0], 0, domainTree.dims[0], dimQ) * Bold.block_[itBold->second] *
                 //         Mbra.block(s * domainTree.dims[0], 0, domainTree.dims[0], dimQ).adjoint();
             }
-            // Mtmp *= Symmetry::coeff_rightOrtho(Q, Qin);
             PlainInterface::scale(Mtmp, Symmetry::coeff_rightOrtho(Q, Qin));
             auto it = Bnew.dict().find(Qin);
-            if(it == Bnew.dict().end()) {
-                Bnew.push_back(Qin, Mtmp);
-            } else {
-                Bnew.block(it->second) = PlainInterface::add(Bnew.block(it->second), Mtmp);
-                // Bnew.block_[it->second] += Mtmp;
-            }
+            Bnew.block(it->second) = PlainInterface::add(Bnew.block(it->second), Mtmp);
         }
     }
     SPDLOG_INFO("Leaving contract_R().");

@@ -35,7 +35,9 @@ jobs:
     - run: sudo apt-get install libopenblas-dev
     - run: sudo apt-get install liblapacke-dev
     - run: sudo apt-get install libomp-12-dev
-
+    - run: sudo apt-get install libc++-12-dev
+    - run: sudo apt-get install libc++abi-12-dev
+      
     - uses: actions/checkout@v3
       with:
         repository: cpp977/TOOLS

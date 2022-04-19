@@ -31,11 +31,7 @@
             "description": "Tensor operations with Eigen backend with automatic differentiation using the stan math and nonlinear optimization with google ceres.",
             "dependencies": [
                 "stan-math",
-                {
-                    "name": "ceres",
-                    "default-features": false,
-                    "features": [ "eigensparse" ]
-                }
+                "ceres"
             ]
         }
     }

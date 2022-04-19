@@ -1,0 +1,42 @@
+{
+    "name": "xped",
+    "version": "0.4.0",
+    "dependencies": [
+        "seq",
+        "eigen3",
+        "spdlog",
+        "tabulate",
+        "yas",
+        "gsl",
+        "boost-rational",
+        "boost-algorithm",
+        "boost-functional",
+        "wignersun"
+    ],
+    "default-features": [ "ad-eigen" ],
+    "features": {
+        "basic-eigen": {
+            "description": "Tensor operations with Eigen backend without extras."
+        },
+        "basic-ctf": {
+            "description": "Tensor operations with ctf backend (distributed memory) without extras."
+        },
+        "basic-array": {
+            "description": "Tensor operations with array backend without extras.",
+            "dependencies": [
+                "array"
+            ]
+        },
+        "ad-eigen": {
+            "description": "Tensor operations with Eigen backend with automatic differentiation using the stan math and nonlinear optimization with google ceres.",
+            "dependencies": [
+                "stan-math",
+                {
+                    "name": "ceres",
+                    "default-features": false,
+                    "features": [ "eigensparse" ]
+                }
+            ]
+        }
+    }
+}

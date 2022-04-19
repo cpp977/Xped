@@ -1,0 +1,11 @@
+vcpkg_from_github(
+    OUT_SOURCE_PATH SOURCE_PATH
+    REPO dsharlet/array
+    REF a8b42e241ca50bee73e200a952ea8c936d03a856
+    SHA512 6f3496adfeffb3e5130dc7ee7705aea22648eab946ae29be212d3581b2dd9d0b4abf86b52644dceffbccb74751327c8bd69541fb806ed5071cb24a5a6b4ae9f4
+    HEAD_REF master
+)
+
+file(INSTALL "${SOURCE_PATH}/array.h" "${SOURCE_PATH}/ein_reduce.h" DESTINATION "${CURRENT_PACKAGES_DIR}/include")
+
+file(INSTALL "${SOURCE_PATH}/LICENSE" DESTINATION "${CURRENT_PACKAGES_DIR}/share/${PORT}" RENAME copyright)

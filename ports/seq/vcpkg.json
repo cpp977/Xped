@@ -1,0 +1,15 @@
+{
+  "name": "seq",
+  "version-string": "0.2.1",
+  "description": "seq provides tools to manipulate compile time integer sequences.",
+  "dependencies": [
+    {
+      "name": "vcpkg-cmake",
+      "host": true
+    },
+    {
+      "name": "vcpkg-cmake-config",
+      "host": true
+    }
+  ]
+}

@@ -1,0 +1,81 @@
+{
+    "version": 3,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 18,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+        "name": "vcpkg",
+        "hidden": true,
+        "cacheVariables": {
+            "VCPKG_OVERLAY_PORTS": "${sourceDir}/ports",
+            "CMAKE_TOOLCHAIN_FILE": "$penv{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+        }
+    },
+        {
+        "name": "logging",
+        "hidden": true,
+        "cacheVariables": {
+            "XPED_LOG_LEVEL": "SPDLOG_LEVEL_CRITICAL"
+        }
+    },
+        {
+        "name": "basic-eigen",
+        "inherits": ["vcpkg","logging"],
+        "cacheVariables": {
+            "XPED_TENSOR_LIB": "Eigen",
+            "XPED_VECTOR_LIB": "Eigen",
+            "XPED_MATRIX_LIB": "Eigen",
+            "XPED_USE_OPENMP": "ON",
+            "XPED_USE_AD": "OFF",
+            "VCPKG_MANIFEST_FEATURES": "basic-eigen",
+            "VCPKG_MANIFEST_NO_DEFAULT_FEATURES": "ON"
+        }
+    },
+        {
+        "name": "basic-array",
+        "inherits": ["vcpkg","logging"],
+        "cacheVariables": {
+            "XPED_TENSOR_LIB": "Array",
+            "XPED_VECTOR_LIB": "Eigen",
+            "XPED_MATRIX_LIB": "Eigen",
+            "XPED_USE_OPENMP": "ON",
+            "XPED_USE_AD": "OFF",
+            "VCPKG_MANIFEST_FEATURES": "basic-array",
+            "VCPKG_MANIFEST_NO_DEFAULT_FEATURES": "ON"
+        }
+    },
+        {
+        "name": "basic-ctf",
+        "inherits": ["vcpkg","logging"],
+        "cacheVariables": {
+            "XPED_TENSOR_LIB": "Cyclops",
+            "XPED_VECTOR_LIB": "Cyclops",
+            "XPED_MATRIX_LIB": "Cyclops",
+            "XPED_USE_OPENMP": "ON",
+            "XPED_USE_MPI": "ON",
+            "XPED_USE_SCALAPACK": "ON",
+            "XPED_USE_AD": "OFF",
+            "VCPKG_MANIFEST_FEATURES": "basic-ctf",
+            "VCPKG_MANIFEST_NO_DEFAULT_FEATURES": "ON"
+        }
+    },
+        {
+        "name": "ad-eigen",
+        "inherits": ["vcpkg","logging"],
+        "cacheVariables": {
+            "XPED_TENSOR_LIB": "Eigen",
+            "XPED_VECTOR_LIB": "Eigen",
+            "XPED_MATRIX_LIB": "Eigen",
+            "XPED_USE_OPENMP": "OFF",
+            "XPED_USE_AD": "ON",
+            "XPED_USE_NLO": "ON",
+            "XPED_OPTIM_LIB": "ceres",
+            "VCPKG_MANIFEST_FEATURES": "ad-eigen",
+            "VCPKG_MANIFEST_NO_DEFAULT_FEATURES": "ON"
+        }
+    }
+    ]
+}

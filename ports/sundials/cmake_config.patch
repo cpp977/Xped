@@ -1,0 +1,17 @@
+diff --git a/cmake/SUNDIALSConfig.cmake.in b/cmake/SUNDIALSConfig.cmake.in
+index 4c6be5d..d7eaf21 100644
+--- a/cmake/SUNDIALSConfig.cmake.in
++++ b/cmake/SUNDIALSConfig.cmake.in
+@@ -55,8 +55,10 @@ endforeach()
+ 
+ ### ------- Create TPL imported targets
+ 
+-if(@ENABLE_CALIPER@ AND NOT TARGET caliper)
+-  find_package(CALIPER PATHS @CALIPER_DIR@)
++if(@SUNDIALS_BUILD_WITH_PROFILING@)
++  if(@ENABLE_CALIPER@ AND NOT TARGET caliper)
++    find_package(CALIPER PATHS @CALIPER_DIR@)
++  endif()
+ endif()
+ 
+ if(@ENABLE_HYPRE@ AND NOT TARGET SUNDIALS::HYPRE)

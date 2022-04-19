@@ -2,32 +2,36 @@ if(NOT XPED_COMPILED_LIB)
   add_library(Xped INTERFACE)
   target_include_directories(Xped BEFORE INTERFACE ${XPED_DIR}/src)
   target_include_directories(Xped BEFORE INTERFACE ${XPED_DIR}/include)
+  target_include_directories(Xped BEFORE INTERFACE ${YAS_INCLUDE_DIRS})
   target_link_libraries(Xped INTERFACE
     project_options
     project_warnings
     GSL::gsl
     GSL::gslcblas
-    Eigen
-    tabulate
-    spdlog
-    yas
-    seq
-    tools
+    Boost::boost
+    Eigen3::Eigen
+    tabulate::tabulate
+    spdlog::spdlog
+    seq::seq
+    WignerSUN::wignersun
     )
   if(${XPED_TENSOR_LIB} STREQUAL "Cyclops")
     target_link_libraries(Xped INTERFACE cyclops_lib::all)
   elseif(${XPED_TENSOR_LIB} STREQUAL "Array")
-    target_link_libraries(Xped INTERFACE ndarray)
+    target_include_directories(Xped BEFORE INTERFACE ${ARRAY_INCLUDE_DIRS})
   endif()
 
   if(XPED_USE_AD)
-    target_link_libraries(Xped INTERFACE stan)
+    target_link_libraries(Xped INTERFACE SUNDIALS::kinsol)
+    target_link_libraries(Xped INTERFACE TBB::tbb)
+    target_include_directories(Xped BEFORE INTERFACE ${STAN_MATH_INCLUDE_DIRS})
+    target_compile_definitions(Xped INTERFACE STAN_THREADS)
+    target_compile_definitions(Xped INTERFACE TBB_INTERFACE_NEW)
   endif()
 
   if(XPED_USE_NLO)
     if(${XPED_OPTIM_LIB} STREQUAL "ceres")
-      target_link_libraries(Xped INTERFACE glog)
-      target_link_libraries(Xped INTERFACE ceres)
+      target_link_libraries(Xped INTERFACE Ceres::ceres)
     endif()
   endif()
   
@@ -85,23 +89,26 @@ else()
     ${XPED_DIR}/src/Interfaces/PlainInterface_${XPED_PLAIN_LIB}_impl.cpp
     )
   target_include_directories(Xped BEFORE PUBLIC ${XPED_DIR}/include)
+  target_include_directories(Xped BEFORE PUBLIC ${YAS_INCLUDE_DIRS})
+  if(XPED_USE_AD)
+    target_include_directories(Xped BEFORE INTERFACE ${STAN_MATH_INCLUDE_DIRS})
+  endif()
   target_link_libraries(Xped PUBLIC
     project_options
     project_warnings
     GSL::gsl
     GSL::gslcblas
-    Eigen
-    tabulate
-    spdlog
-    yas
-    seq
-    tools
+    Boost::boost
+    Eigen3::Eigen
+    tabulate::tabulate
+    spdlog::spdlog
+    seq::seq
     )
 
   if(${XPED_TENSOR_LIB} STREQUAL "Cyclops")
     target_link_libraries(Xped PUBLIC cyclops_lib::all)
   elseif(${XPED_TENSOR_LIB} STREQUAL "Array")
-    target_link_libraries(Xped PUBLIC ndarray)
+    target_include_directories(Xped BEFORE INTERFACE ${ARRAY_INCLUDE_DIRS})
   endif()
 
   if(XPED_ENABLE_LRU_CACHE)

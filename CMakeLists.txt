@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.18)
 
-project(Xped CXX C Fortran)
+project(Xped CXX C)
 set(XPED_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
 include(cmake/StandardProjectSettings.cmake)
@@ -274,8 +274,7 @@ if(XPED_USE_MKL)
 endif()
 
 find_package(GSL 1.16 REQUIRED)
-set(Boost_NO_BOOST_CMAKE ON)
-find_package(Boost 1.34.0 REQUIRED)
+find_package(Boost 1.34 REQUIRED)
 
 # Link this 'library' to set the c++ standard / compile-time options requested
 add_library(project_options INTERFACE)
@@ -296,170 +295,187 @@ find_package(Git 1.6.5 REQUIRED)
 
 include(cmake/addGitLibs.cmake)
 
-include(cmake/CPM.cmake)
-
-set(CMAKE_POLICY_DEFAULT_CMP0075 NEW)
-CPMAddPackage(
-  NAME spdlog
-  VERSION 1.9.2
-  GIT_REPOSITORY https://github.com/gabime/spdlog
-  )
-target_compile_definitions(spdlog PRIVATE SPDLOG_ACTIVE_LEVEL=${XPED_LOG_LEVEL})
-if(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
-  target_compile_options(spdlog PRIVATE -stdlib=${USED_LIBCXX})
-endif()
-
-CPMAddPackage(
-  NAME Eigen
-  DOWNLOAD_ONLY YES
-  GIT_REPOSITORY https://gitlab.com/libeigen/eigen
-  GIT_TAG 3.4.0
-  # GIT_TAG master
-  )
-if(Eigen_ADDED)
-  add_library(Eigen INTERFACE IMPORTED)
-  target_include_directories(Eigen INTERFACE ${Eigen_SOURCE_DIR})
-endif()
-
-CPMAddPackage(
-  NAME tabulate
-  VERSION 1.4
-  GIT_REPOSITORY https://github.com/p-ranav/tabulate
-  OPTIONS "USE_CPP17 ON"
-  )
-
-CPMAddPackage(
-  NAME seq
-  VERSION 0.2.1
-  GIT_REPOSITORY https://github.com/n0phx/seq
-  OPTIONS "SEQ_BUILD_TESTS OFF"
-  )
-
-if(XPED_ENABLE_LRU_CACHE)
-  CPMAddPackage(
-    NAME lrucache
-    DOWNLOAD_ONLY YES
-    GIT_REPOSITORY https://github.com/goldsborough/lru-cache
-    GIT_TAG master
-    )
-  if(lrucache_ADDED)
-    add_library(lrucache INTERFACE IMPORTED)
-    target_include_directories(lrucache INTERFACE ${lrucache_SOURCE_DIR}/include)
-  endif()
-endif()
-
-CPMAddPackage(
-  NAME yas
-  DOWNLOAD_ONLY YES
-  GIT_REPOSITORY https://github.com/niXman/yas
-  GIT_TAG 7.1.0
-)
-if(yas_ADDED)
-  add_library(yas INTERFACE IMPORTED)
-  target_include_directories(yas INTERFACE ${yas_SOURCE_DIR}/include)
-endif()
-
-if(XPED_USE_AD)
-  CPMAddPackage(
-    NAME stan
-    GIT_REPOSITORY https://github.com/cpp977/math
-    GIT_TAG develop
-    #VERSION 4.3.1
-    DOWNLOAD_ONLY YES
-    )
-
-  if (stan_ADDED)
-    # stan has no CMake support, so we create our own target
-    
-    add_library(stan INTERFACE)
-    target_include_directories(stan INTERFACE ${stan_SOURCE_DIR})
-
-    set(TBB_ROOT ${stan_SOURCE_DIR}/lib/tbb_2020.3)
-    set(TBB_DIR ${TBB_ROOT}/cmake)
-    include(${TBB_DIR}/TBBBuild.cmake)
-    tbb_build(TBB_ROOT ${TBB_ROOT} CONFIG_DIR ${TBB_DIR}) # MAKE_ARGS
-    find_package(TBB REQUIRED tbb)
-
-    CPMAddPackage(
-      NAME sundials
-      GIT_REPOSITORY https://github.com/LLNL/sundials
-      VERSION 6.0.0
-      )
-
-    target_link_libraries(stan INTERFACE TBB::tbb sundials_kinsol)
-    # FILE(GLOB stan_sources ${lua_SOURCE_DIR}/*.c)
-    # list(REMOVE_ITEM stan_sources "${stan_SOURCE_DIR}/stan.c" "${stan_SOURCE_DIR}/stan.c")
-    # add_library(stan STATIC ${stan_sources})
-    
-    # target_include_directories(stan
-    #   PUBLIC
-    #   $<BUILD_INTERFACE:${stan_SOURCE_DIR}>
-    #   )
-  endif()
-endif()
-
-if(XPED_USE_NLO)
-  if(${XPED_OPTIM_LIB} STREQUAL "ceres")
-    CPMAddPackage(
-      NAME glog
-      GIT_REPOSITORY https://github.com/google/glog
-      VERSION 0.5.0
-      OPTIONS "WITH_GFLAGS OFF"
-      )
-
-    CPMAddPackage(
-      NAME ceres
-      GIT_REPOSITORY https://github.com/ceres-solver/ceres-solver
-      GIT_TAG 2.0.0
-      OPTIONS "GFLAGS OFF" "SUITESPARSE OFF" "CXSPARSE OFF" "ACCELERATESPARSE OFF" "CERES_THREADING_MODEL OPENMP" "BUILD_TESTING OFF" "BUILD_EXAMPLES OFF" "BUILD_BENCHMARKS OFF" "MINIGLOG ON"
-      )
-    target_link_libraries(ceres PRIVATE glog)
-  endif()
-endif()
-
-find_path(TOOLS_INCLUDE_DIR NAMES ArgParser.h PATHS ${TOOLS_ROOT} PATH_SUFFIXES TOOLS REQUIRED)
-add_library(tools INTERFACE IMPORTED)
-target_include_directories(tools INTERFACE ${TOOLS_INCLUDE_DIR}/..)
-  
+find_package(spdlog CONFIG REQUIRED)
+find_package(Eigen3 CONFIG REQUIRED)
+find_package(tabulate CONFIG REQUIRED)
+find_package(seq CONFIG REQUIRED)
+find_package(wignersun CONFIG REQUIRED)
+find_path(YAS_INCLUDE_DIRS "yas/abseil_types.hpp")
 if(${XPED_TENSOR_LIB} STREQUAL "Array")
-  CPMAddPackage(
-    NAME array
-    DOWNLOAD_ONLY YES
-    GIT_REPOSITORY https://github.com/dsharlet/array
-    GIT_TAG a8b42e241ca50bee73e200a952ea8c936d03a856
-    )
-  if(array_ADDED)
-    add_library(ndarray INTERFACE IMPORTED)
-    target_include_directories(ndarray INTERFACE ${array_SOURCE_DIR})
-  endif()  
+  find_path(ARRAY_INCLUDE_DIRS "array.h")
 endif()
+if(XPED_USE_NLO)
+  find_package(Ceres CONFIG REQUIRED)
+endif()
+if(XPED_USE_AD)
+  find_path(STAN-MATH_INCLUDE_DIRS "stan/math.hpp")
+  find_package(SUNDIALS CONFIG REQUIRED)
+  find_package(TBB CONFIG REQUIRED)
+endif()
+# include(cmake/CPM.cmake)
 
-if(${XPED_TENSOR_LIB} STREQUAL "Cyclops" AND NOT XPED_BUILD_CYCLOPS)
-  message(STATUS ${CYCLOPS_ROOT})
-  message(STATUS ${HPTT_ROOT})
-  find_library(CYCLOPS_LIB NAMES ctf PATHS ${CYCLOPS_ROOT} PATH_SUFFIXES lib REQUIRED)
-  find_library(HPTT_LIB NAMES hptt PATHS ${HPTT_ROOT} PATH_SUFFIXES lib REQUIRED)
+# set(CMAKE_POLICY_DEFAULT_CMP0075 NEW)
+# CPMAddPackage(
+#   NAME spdlog
+#   VERSION 1.9.2
+#   GIT_REPOSITORY https://github.com/gabime/spdlog
+#   )
+# target_compile_definitions(spdlog PRIVATE SPDLOG_ACTIVE_LEVEL=${XPED_LOG_LEVEL})
+# if(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
+#   target_compile_options(spdlog PRIVATE -stdlib=${USED_LIBCXX})
+# endif()
+
+# CPMAddPackage(
+#   NAME Eigen
+#   DOWNLOAD_ONLY YES
+#   GIT_REPOSITORY https://gitlab.com/libeigen/eigen
+#   GIT_TAG 3.4.0
+#   # GIT_TAG master
+#   )
+# if(Eigen_ADDED)
+#   add_library(Eigen INTERFACE IMPORTED)
+#   target_include_directories(Eigen INTERFACE ${Eigen_SOURCE_DIR})
+# endif()
+
+# CPMAddPackage(
+#   NAME tabulate
+#   VERSION 1.4
+#   GIT_REPOSITORY https://github.com/p-ranav/tabulate
+#   OPTIONS "USE_CPP17 ON"
+#   )
+
+# CPMAddPackage(
+#   NAME seq
+#   VERSION 0.2.1
+#   GIT_REPOSITORY https://github.com/n0phx/seq
+#   OPTIONS "SEQ_BUILD_TESTS OFF"
+#   )
+
+# if(XPED_ENABLE_LRU_CACHE)
+#   CPMAddPackage(
+#     NAME lrucache
+#     DOWNLOAD_ONLY YES
+#     GIT_REPOSITORY https://github.com/goldsborough/lru-cache
+#     GIT_TAG master
+#     )
+#   if(lrucache_ADDED)
+#     add_library(lrucache INTERFACE IMPORTED)
+#     target_include_directories(lrucache INTERFACE ${lrucache_SOURCE_DIR}/include)
+#   endif()
+# endif()
+
+# CPMAddPackage(
+#   NAME yas
+#   DOWNLOAD_ONLY YES
+#   GIT_REPOSITORY https://github.com/niXman/yas
+#   GIT_TAG 7.1.0
+# )
+# if(yas_ADDED)
+#   add_library(yas INTERFACE IMPORTED)
+#   target_include_directories(yas INTERFACE ${yas_SOURCE_DIR}/include)
+# endif()
+
+# if(XPED_USE_AD)
+#   CPMAddPackage(
+#     NAME stan
+#     GIT_REPOSITORY https://github.com/cpp977/math
+#     GIT_TAG develop
+#     #VERSION 4.3.1
+#     DOWNLOAD_ONLY YES
+#     )
+
+#   if (stan_ADDED)
+#     # stan has no CMake support, so we create our own target
+    
+#     add_library(stan INTERFACE)
+#     target_include_directories(stan INTERFACE ${stan_SOURCE_DIR})
+
+#     set(TBB_ROOT ${stan_SOURCE_DIR}/lib/tbb_2020.3)
+#     set(TBB_DIR ${TBB_ROOT}/cmake)
+#     include(${TBB_DIR}/TBBBuild.cmake)
+#     tbb_build(TBB_ROOT ${TBB_ROOT} CONFIG_DIR ${TBB_DIR}) # MAKE_ARGS
+#     find_package(TBB REQUIRED tbb)
+
+#     CPMAddPackage(
+#       NAME sundials
+#       GIT_REPOSITORY https://github.com/LLNL/sundials
+#       VERSION 6.0.0
+#       )
+
+#     target_link_libraries(stan INTERFACE TBB::tbb sundials_kinsol)
+#     # FILE(GLOB stan_sources ${lua_SOURCE_DIR}/*.c)
+#     # list(REMOVE_ITEM stan_sources "${stan_SOURCE_DIR}/stan.c" "${stan_SOURCE_DIR}/stan.c")
+#     # add_library(stan STATIC ${stan_sources})
+    
+#     # target_include_directories(stan
+#     #   PUBLIC
+#     #   $<BUILD_INTERFACE:${stan_SOURCE_DIR}>
+#     #   )
+#   endif()
+# endif()
+
+# if(XPED_USE_NLO)
+#   if(${XPED_OPTIM_LIB} STREQUAL "ceres")
+#     CPMAddPackage(
+#       NAME glog
+#       GIT_REPOSITORY https://github.com/google/glog
+#       VERSION 0.5.0
+#       OPTIONS "WITH_GFLAGS OFF"
+#       )
+
+#     CPMAddPackage(
+#       NAME ceres
+#       GIT_REPOSITORY https://github.com/ceres-solver/ceres-solver
+#       GIT_TAG 2.0.0
+#       OPTIONS "GFLAGS OFF" "SUITESPARSE OFF" "CXSPARSE OFF" "ACCELERATESPARSE OFF" "CERES_THREADING_MODEL OPENMP" "BUILD_TESTING OFF" "BUILD_EXAMPLES OFF" "BUILD_BENCHMARKS OFF" "MINIGLOG ON"
+#       )
+#     target_link_libraries(ceres PRIVATE glog)
+#   endif()
+# endif()
+
+# find_path(TOOLS_INCLUDE_DIR NAMES ArgParser.h PATHS ${TOOLS_ROOT} PATH_SUFFIXES TOOLS REQUIRED)
+# add_library(tools INTERFACE IMPORTED)
+# target_include_directories(tools INTERFACE ${TOOLS_INCLUDE_DIR}/..)
   
-  add_library(cyclops_lib::all UNKNOWN IMPORTED)
-  target_link_libraries(cyclops_lib::all INTERFACE ${CYCLOPS_LIB})
-  target_link_libraries(cyclops_lib::all INTERFACE ${HPTT_LIB})
-  set_target_properties(cyclops_lib::all PROPERTIES
-    IMPORTED_LOCATION "${CYCLOPS_LIB}"
-    )
-  message(STATUS ${CYCLOPS_LIB})
+# if(${XPED_TENSOR_LIB} STREQUAL "Array")
+#   CPMAddPackage(
+#     NAME array
+#     DOWNLOAD_ONLY YES
+#     GIT_REPOSITORY https://github.com/dsharlet/array
+#     GIT_TAG a8b42e241ca50bee73e200a952ea8c936d03a856
+#     )
+#   if(array_ADDED)
+#     add_library(ndarray INTERFACE IMPORTED)
+#     target_include_directories(ndarray INTERFACE ${array_SOURCE_DIR})
+#   endif()  
+# endif()
 
-  find_path(CYCLOPS_INCLUDE_DIR NAMES ctf.hpp PATHS ${CYCLOPS_ROOT} PATH_SUFFIXES include REQUIRED)
-  target_include_directories(cyclops_lib::all INTERFACE ${CYCLOPS_INCLUDE_DIR})
-  message(STATUS ${CYCLOPS_INCLUDE_DIR})
-  include(cmake/PrintProperties.cmake)
-  print_target_properties(cyclops_lib::all)
-endif()
+# if(${XPED_TENSOR_LIB} STREQUAL "Cyclops" AND NOT XPED_BUILD_CYCLOPS)
+#   message(STATUS ${CYCLOPS_ROOT})
+#   message(STATUS ${HPTT_ROOT})
+#   find_library(CYCLOPS_LIB NAMES ctf PATHS ${CYCLOPS_ROOT} PATH_SUFFIXES lib REQUIRED)
+#   find_library(HPTT_LIB NAMES hptt PATHS ${HPTT_ROOT} PATH_SUFFIXES lib REQUIRED)
+  
+#   add_library(cyclops_lib::all UNKNOWN IMPORTED)
+#   target_link_libraries(cyclops_lib::all INTERFACE ${CYCLOPS_LIB})
+#   target_link_libraries(cyclops_lib::all INTERFACE ${HPTT_LIB})
+#   set_target_properties(cyclops_lib::all PROPERTIES
+#     IMPORTED_LOCATION "${CYCLOPS_LIB}"
+#     )
+#   message(STATUS ${CYCLOPS_LIB})
 
-if(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
-  if(XPED_ENABLE_BUILD_WITH_TIME_TRACE)
-    target_compile_options(project_options INTERFACE -ftime-trace)
-  endif()
-endif()
+#   find_path(CYCLOPS_INCLUDE_DIR NAMES ctf.hpp PATHS ${CYCLOPS_ROOT} PATH_SUFFIXES include REQUIRED)
+#   target_include_directories(cyclops_lib::all INTERFACE ${CYCLOPS_INCLUDE_DIR})
+#   message(STATUS ${CYCLOPS_INCLUDE_DIR})
+#   include(cmake/PrintProperties.cmake)
+#   print_target_properties(cyclops_lib::all)
+# endif()
+
+# if(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
+#   if(XPED_ENABLE_BUILD_WITH_TIME_TRACE)
+#     target_compile_options(project_options INTERFACE -ftime-trace)
+#   endif()
+# endif()
 
 # enable cache system
 include(cmake/Cache.cmake)

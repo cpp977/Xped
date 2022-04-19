@@ -1,0 +1,17 @@
+vcpkg_from_github(
+    OUT_SOURCE_PATH SOURCE_PATH
+    REPO cpp977/math
+    REF 6433a04245e466e65106164489173573e8b1f843
+    SHA512 c5aaeba51d1f99f55110c63190d7ab45128de14e1fe14f5ac7444f67fddd44918af77bdb9cf8a69473a588f0e27beefaa40a4ae3fa8d065b98265dd36151807a
+    HEAD_REF develop
+)
+
+file(INSTALL "${SOURCE_PATH}/stan" DESTINATION "${CURRENT_PACKAGES_DIR}/include")
+
+file(INSTALL "${SOURCE_PATH}/LICENSE.md" DESTINATION "${CURRENT_PACKAGES_DIR}/share/${PORT}" RENAME copyright)
+
+# set(TBB_ROOT ${SOURCE_PATH}/lib/tbb_2020.3)
+# set(TBB_DIR ${TBB_ROOT}/cmake)
+
+# include(${TBB_DIR}/TBBBuild.cmake)
+# tbb_build(TBB_ROOT ${TBB_ROOT} MAKE_ARGS compiler=g++ CONFIG_DIR ${CURRENT_PACKAGES_DIR}/share/tbb)

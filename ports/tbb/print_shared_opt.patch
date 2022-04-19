@@ -1,0 +1,12 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 2ad5f7a..9d1b653 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -104,6 +104,7 @@ option(TBB_CPF "Enable preview features of the library" OFF)
+ option(TBB_FIND_PACKAGE "Enable search for external oneTBB using find_package instead of build from sources" OFF)
+ option(TBB_DISABLE_HWLOC_AUTOMATIC_SEARCH "Disable HWLOC automatic search by pkg-config tool" OFF)
+ 
++message(STATUS ${BUILD_SHARED_LIBS})
+ if (NOT DEFINED BUILD_SHARED_LIBS)
+     set(BUILD_SHARED_LIBS ON)
+ endif()

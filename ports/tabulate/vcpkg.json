@@ -1,0 +1,7 @@
+{
+  "name": "tabulate",
+  "version-string": "1.4",
+  "port-version": 1,
+  "description": "Table maker for modern C++",
+  "homepage": "https://github.com/p-ranav/tabulate"
+}

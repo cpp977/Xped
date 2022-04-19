@@ -263,6 +263,14 @@ MatrixInterface::block(const MType<Scalar>& M, const MIndextype& row_off, const 
     return out;
 }
 
+template <typename MT>
+std::pair<MType<typename ctf_traits<MT>::Scalar>, MType<typename ctf_traits<MT>::Scalar>> PlainInterface::eigh(MT&& M)
+{
+    static_assert(false, "This method is not present for cyclops tensors.");
+    MType<typename ctf_traits<MT>::Scalar> eigvals, eigvecs;
+    return std::make_tuple(eigvals, eigvecs);
+}
+
 template <typename Scalar>
 void MatrixInterface::add_to_block(MType<Scalar>& M1,
                                    const MIndextype& row_off,

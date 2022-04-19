@@ -133,6 +133,9 @@ struct MatrixInterface
     static MType<Scalar>
     block(const MType<Scalar>& M, const MIndextype& row_off, const MIndextype& col_off, const MIndextype& rows, const MIndextype& cols);
 
+    template <typename MT>
+    static std::pair<MType<typename ctf_traits<MT>::Scalar>, MType<typename ctf_traits<MT>::Scalar>> PlainInterface::eigh(MT&& M);
+
     template <typename Scalar>
     static void add_to_block(MType<Scalar>& M1,
                              const MIndextype& row_off,

@@ -11,6 +11,7 @@
         "boost-rational",
         "boost-algorithm",
         "boost-functional",
+        "boost-math",
         "wignersun",
         "doctest"
     ],

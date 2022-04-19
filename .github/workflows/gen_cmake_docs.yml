@@ -9,20 +9,17 @@ jobs:
       fail-fast: false
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
+      with:
+        submodules: 'true'
     - run: sudo add-apt-repository ppa:ubuntu-toolchain-r/ppa
     - run: sudo apt-get update
-    - run: sudo apt-get install openmpi-bin libopenmpi-dev
-    - uses: actions/checkout@v2
-      with:
-        repository: onqtam/doctest
-        ref: master
-        path: doctest-src
-    - run: cd $GITHUB_WORKSPACE/doctest-src && cmake .
-    - run: cd $GITHUB_WORKSPACE/doctest-src && cmake --build .
-    - run: cd $GITHUB_WORKSPACE/doctest-src && sudo cmake --build . --target install
-    - run: sudo cp -r $GITHUB_WORKSPACE/doctest-src/doctest/extensions /usr/local/include/doctest/
-    - uses: actions/checkout@v2
+    - run: sudo apt-get install openmpi-bin libopenmpi-dev        
+    - run: sudo apt-get install libopenblas-dev
+    - run: sudo apt-get install liblapacke-dev
+    - run: sudo apt-get install libomp-12-dev
+
+    - uses: actions/checkout@v3
       with:
         repository: cpp977/TOOLS
         token: ${{ secrets.TOOLS_CLONE }}
@@ -30,21 +27,12 @@ jobs:
         path: tools-src
     - run: sudo mkdir -p /usr/local/include/TOOLS
     - run: sudo cp -r $GITHUB_WORKSPACE/tools-src/* /usr/local/include/TOOLS/
-            
-    - run: sudo apt-get install g++-10
-    - run: sudo apt-get install gcc-10
-    - run: sudo apt-get install gfortran-10
-    - run: sudo apt-get install libgsl-dev
-    - run: sudo apt-get install libgslcblas0
-    - run: sudo apt-get install libboost-all-dev
-    - run: sudo apt-get install libopenblas-dev
-    - run: sudo apt-get install liblapacke-dev
-    - run: sudo apt-get install libomp-12-dev
 
     - uses: cpp977/GenCMakeDoc@main
       with:
         source_dir: $GITHUB_WORKSPACE
         option_filter: 'XPED'
+        configure_opts: '--preset=basic-eigen'
         
     - uses: EndBug/add-and-commit@v8
       with:

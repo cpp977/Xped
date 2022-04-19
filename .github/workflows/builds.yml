@@ -76,7 +76,7 @@ jobs:
       working-directory: ${{runner.workspace}}/build
       env:
         CXX: ${{ matrix.compiler }}
-      run: cmake $GITHUB_WORKSPACE --preset=ad-eigen -DBLA_VENDOR=OpenBLAS -DXPED_USE_BLAS=ON -DXPED_USE_LAPACK=ON -DXPED_USE_OPENMP=ON -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DXPED_USE_LIBCXX=${{ matrix.LIBCXX }} -DXPED_ENABLE_CCACHE=OFF -DXPED_BUILD_CYCLOPS=ON -DXPED_STORAGE=${{ matrix.STORAGE }}
+      run: cmake $GITHUB_WORKSPACE --preset=ad-eigen -DBLA_VENDOR=OpenBLAS -DXPED_USE_BLAS=ON -DXPED_USE_LAPACK=ON -DXPED_USE_OPENMP=OFF -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DXPED_USE_LIBCXX=${{ matrix.LIBCXX }} -DXPED_ENABLE_CCACHE=OFF -DXPED_BUILD_CYCLOPS=ON -DXPED_STORAGE=${{ matrix.STORAGE }}
 
     - name: Build
       working-directory: ${{runner.workspace}}/build

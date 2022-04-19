@@ -35,6 +35,8 @@ jobs:
     - run: sudo apt-get install libopenblas-dev
     - run: sudo apt-get install liblapacke-dev
     - run: sudo apt-get install libomp-12-dev
+    - run: sudo apt-get install libc++1-12-dev
+    - run: sudo apt-get install libc++abi1-12-dev
     - run: sudo apt-get install libc++-12-dev
     - run: sudo apt-get install libc++abi-12-dev
       

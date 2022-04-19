@@ -1,0 +1,19 @@
+{
+  "name": "ceres",
+  "version": "2.1.0",
+  "description": "non-linear optimization package",
+  "homepage": "https://github.com/ceres-solver/ceres-solver",
+  "license": "Apache-2.0",
+  "dependencies": [
+    "eigen3",
+    "glog",
+    {
+      "name": "vcpkg-cmake",
+      "host": true
+    },
+    {
+      "name": "vcpkg-cmake-config",
+      "host": true
+    }
+  ]
+}

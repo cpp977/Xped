@@ -15,14 +15,10 @@
 #    include "omp.h"
 #endif
 
-#include "TOOLS/Stopwatch.h"
-
 using std::cout;
 using std::endl;
 using std::size_t;
 using std::string;
-
-#include "TOOLS/ArgParser.h"
 
 #ifdef XPED_USE_AD
 #    include "stan/math/rev/core/autodiffstackstorage.hpp"
@@ -61,6 +57,10 @@ XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100)
 #include "Xped/PEPS/CTM.hpp"
 #include "Xped/PEPS/iPEPS.hpp"
 
+#include "Xped/Util/Stopwatch.hpp"
+
+#include "TOOLS/ArgParser.h"
+
 #ifdef XPED_USE_AD
 #    include "Xped/AD/var_value.hpp"
 template <typename T, require_tensor_var_t<T>* = nullptr>
@@ -78,22 +78,23 @@ inline stan::math::var my_func(const stan::math::var_value<Xped::ArenaTensor<Sca
 }
 
 template <typename Scalar, typename Symmetry>
-inline stan::math::var avg(const Xped::ArenaTensor<Scalar, 0, 2, Symmetry>& bra,
-                           const Xped::ArenaTensor<Scalar, 2, 2, Symmetry>& op,
-                           const stan::math::var_value<Xped::ArenaTensor<Scalar, 2, 0, Symmetry>>& ket)
+inline stan::math::var avg(const Xped::Tensor<Scalar, 0, 2, Symmetry>& bra,
+                           const Xped::Tensor<Scalar, 2, 2, Symmetry>& op,
+                           const stan::math::var_value<Xped::Tensor<Scalar, 2, 0, Symmetry>>& ket)
 {
     auto opvec = op * ket;
-    auto res = bra.eval() * opvec;
+    auto energy = bra * opvec;
+    auto norm = bra * ket;
+    auto res = energy / norm;
     return res;
 }
 
 template <typename Scalar, typename Symmetry>
-inline stan::math::var avg2(const Xped::ArenaTensor<Scalar, 2, 2, Symmetry>& op,
-                            const stan::math::var_value<Xped::ArenaTensor<Scalar, 2, 0, Symmetry>>& ket)
+inline stan::math::var avg2(const Xped::Tensor<Scalar, 2, 2, Symmetry>& op, const stan::math::var_value<Xped::Tensor<Scalar, 2, 0, Symmetry>>& ket)
 {
     auto opvec = op * ket;
-    auto energy = stan::math::adjoint(ket) * opvec;
-    auto norm = stan::math::adjoint(ket) * ket;
+    auto energy = ket.adjoint() * opvec;
+    auto norm = ket.adjoint() * ket;
     auto res = energy / norm;
     return res;
 }
@@ -102,7 +103,7 @@ template <typename Scalar, typename Symmetry>
 class Energy final : public ceres::FirstOrderFunction
 {
 public:
-    Energy(const Xped::ArenaTensor<Scalar, 2, 2, Symmetry>& op)
+    Energy(const Xped::Tensor<Scalar, 2, 2, Symmetry>& op)
         : op(op)
     {}
 
@@ -110,19 +111,24 @@ public:
 
     bool Evaluate(const double* parameters, double* cost, double* gradient) const override
     {
-        Xped::ArenaTensor<Scalar, 2, 0, Symmetry> t_(op.uncoupledCodomain(), {{}}, parameters, NumParameters(), op.world());
+        Xped::Tensor<Scalar, 2, 0, Symmetry> t_(op.uncoupledCodomain(), {{}}, parameters, NumParameters(), op.world());
         stan::math::nested_rev_autodiff nested;
-        stan::math::var_value<Xped::ArenaTensor<Scalar, 2, 0, Symmetry>> t(t_);
-        auto res = avg2(op, t);
+        stan::math::var_value<Xped::Tensor<Scalar, 2, 0, Symmetry>> t(t_);
+        // std::cout << t << std::endl;
+        // auto res = avg2(op, t);
+        auto res = avg(t.val().adjoint().eval(), op, t);
         cost[0] = res.val();
         if(gradient != nullptr) {
             stan::math::grad(res.vi_);
             memcpy(gradient, t.adj().storage().data().data(), NumParameters() * sizeof(Scalar));
+            // std::cout << "gradient=";
+            // for(auto i = 0; i < NumParameters(); ++i) { std::cout << gradient[i] << " "; }
+            // std::cout << std::endl;
         }
         return true;
     }
 
-    Xped::ArenaTensor<Scalar, 2, 2, Symmetry> op;
+    Xped::Tensor<Scalar, 2, 2, Symmetry> op;
 
     int NumParameters() const override { return op.coupledDomain().inner_dim(Symmetry::qvacuum()); }
 };
@@ -184,31 +190,34 @@ int main(int argc, char* argv[])
 
     // std::cout << std::endl << C << std::endl;
 
+    typedef double Scalar;
     typedef Xped::Sym::SU2<Xped::Sym::SpinSU2> Symmetry;
     // typedef Xped::Sym::U1<Xped::Sym::SpinU1> Symmetry;
     // typedef Xped::Sym::U0<double> Symmetry;
 #ifdef XPED_USE_AD
     {
-        Xped::Qbasis<Symmetry, 1, Xped::StanArenaPolicy> B;
+        Xped::Qbasis<Symmetry, 1> B;
         B.setRandom(Minit);
+        Xped::Tensor<Scalar, 2, 0, Symmetry> t_({{B, B}}, {{}}, world);
+        t_.setRandom();
+        stan::math::var_value<Xped::Tensor<Scalar, 2, 0, Symmetry>> t(t_);
+        // std::cout << t << std::endl;
         // Xped::Qbasis<Symmetry, 1, Xped::StanArenaPolicy> phys;
         // phys.push_back({2}, 1);
         // phys.push_back({}, 2);
         // Xped::ArenaTensor<double, 2, 3, Symmetry> t({{B, B}}, {{B, B, phys}}, world);
         // t.setRandom();
-        Xped::ArenaTensor<double, 2, 0, Symmetry> vec_({{B, B}}, {{}}, world);
-        vec_.setRandom();
         // vec_.print(std::cout, true);
-        Xped::ArenaTensor<double, 2, 2, Symmetry> op({{B, B}}, {{B, B}}, world);
+        Xped::Tensor<Scalar, 2, 2, Symmetry> op({{B, B}}, {{B, B}}, world);
         op.setRandom();
         op = op + op.adjoint();
         // auto check = (vec_.adjoint() * op).adjoint().eval();
         // auto check = (op + op.adjoint()) * vec_;
-        ceres::GradientProblem problem(new Energy<double, Symmetry>(op));
+        ceres::GradientProblem problem(new Energy<Scalar, Symmetry>(op));
 
-        double* parameters = nullptr;
-        parameters = (double*)malloc(problem.NumParameters() * sizeof(double));
-        for(std::size_t i = 0; i < problem.NumParameters(); ++i) { parameters[i] = Xped::random::threadSafeRandUniform<double>(-1., 1., false); }
+        Scalar* parameters = nullptr;
+        parameters = (Scalar*)malloc(problem.NumParameters() * sizeof(Scalar));
+        for(std::size_t i = 0; i < problem.NumParameters(); ++i) { parameters[i] = Xped::random::threadSafeRandUniform<Scalar>(-1., 1., false); }
 
         ceres::GradientProblemSolver::Options options;
         options.line_search_direction_type = ceres::NONLINEAR_CONJUGATE_GRADIENT;
@@ -216,6 +225,7 @@ int main(int argc, char* argv[])
         options.max_num_iterations = 500;
         options.function_tolerance = 1.e-10;
         options.parameter_tolerance = 1.e-10;
+        options.update_state_every_iteration = true;
         ceres::GradientProblemSolver::Summary summary;
         ceres::Solve(options, problem, parameters, &summary);
 
@@ -223,7 +233,7 @@ int main(int argc, char* argv[])
         free(parameters);
         auto [eigvals, eigvecs] = op.eigh();
         for(auto i = 0ul; i < eigvals.sector().size(); ++i) {
-            std::cout << "Q=" << Xped::Sym::format<Symmetry>(eigvals.sector(i)) << ", E=" << eigvals.block(i)(0, 0) << std::endl;
+            std::cout << "Q=" << Xped::Sym::format<Symmetry>(eigvals.sector(i)) << std::setprecision(15) << eigvals.block(i)(0, 0) << std::endl;
         }
         // t.print(std::cout, true);
         // t += 7.;

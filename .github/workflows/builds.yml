@@ -16,51 +16,25 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        compiler: [g++-10, clang++-12]
+        compiler: [g++, clang++]
         LIBCXX: [ON, OFF]
-        TENSOR_LIB: [Eigen, Array, Cyclops]
         STORAGE: [VecOfMat, Contiguous]
         exclude:
           # excludes libcxx for g++
-          - compiler: g++-10
+          - compiler: g++
             LIBCXX: ON
-          - compiler: clang++-12
-            TENSOR_LIB: Cyclops
-            LIBCXX: ON
-          - STORAGE: Contiguous
-            TENSOR_LIB: Cyclops
-        include:
-          - TENSOR_LIB: Eigen
-            MATRIX_LIB: Eigen
-            VECTOR_LIB: Eigen
-            XPED_USE_AD: ON
-            USE_MPI: OFF
-          - TENSOR_LIB: Array
-            MATRIX_LIB: Eigen
-            VECTOR_LIB: Eigen
-            XPED_USE_AD: ON
-            USE_MPI: OFF
-          - TENSOR_LIB: Cyclops
-            MATRIX_LIB: Cyclops
-            VECTOR_LIB: Cyclops
-            XPED_USE_AD: OFF
-            USE_MPI: ON
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - run: sudo add-apt-repository ppa:ubuntu-toolchain-r/ppa
     - run: sudo apt-get update
-    - run: sudo apt-get install openmpi-bin libopenmpi-dev
-    - uses: actions/checkout@v2
-      with:
-        repository: onqtam/doctest
-        ref: master
-        path: doctest-src
-    - run: cd $GITHUB_WORKSPACE/doctest-src && cmake .
-    - run: cd $GITHUB_WORKSPACE/doctest-src && cmake --build .
-    - run: cd $GITHUB_WORKSPACE/doctest-src && sudo cmake --build . --target install
-    - run: sudo cp -r $GITHUB_WORKSPACE/doctest-src/doctest/extensions /usr/local/include/doctest/
-    - uses: actions/checkout@v2
+    - run: sudo apt-get install openmpi-bin libopenmpi-dev        
+    - run: sudo apt-get install lcov
+    - run: sudo apt-get install libopenblas-dev
+    - run: sudo apt-get install liblapacke-dev
+    - run: sudo apt-get install libomp-12-dev
+
+    - uses: actions/checkout@v3
       with:
         repository: cpp977/TOOLS
         token: ${{ secrets.TOOLS_CLONE }}
@@ -68,35 +42,37 @@ jobs:
         path: tools-src
     - run: sudo mkdir -p /usr/local/include/TOOLS
     - run: sudo cp -r $GITHUB_WORKSPACE/tools-src/* /usr/local/include/TOOLS/
-            
-    - run: sudo apt-get install g++-10
-    - run: sudo apt-get install gcc-10
-    - run: sudo apt-get install gfortran-10
-    - run: sudo apt-get install libc++abi1-12
-    - run: sudo apt-get install libc++1-12
-    - run: sudo apt-get install libc++-12-dev
-    - run: sudo apt-get install libc++abi-12-dev
-    - run: sudo apt-get install libgsl-dev
-    - run: sudo apt-get install libgslcblas0
-    - run: sudo apt-get install libboost-all-dev
-    - run: sudo apt-get install lcov
-    - run: sudo apt-get install libopenblas-dev
-    - run: sudo apt-get install liblapacke-dev
-    - run: sudo apt-get install libomp-12-dev
 
-    - run: clang++-12 --version
-    - run: g++-10 --version
+    - name: Set up GCC
+      uses: egor-tensin/setup-gcc@v1
+      with:
+        version: 10
+        platform: x64    
+      - run: g++ --version
+
+    - name: Set up Clang
+      uses: egor-tensin/setup-clang@v1
+      with:
+        version: 12
+        platform: x64
+      - run: clang++ --version
+        
     - name: Create Build Environment
       # Some projects don't allow in-source building, so create a separate build directory
       # We'll use this as our working directory for all subsequent commands
       run: cmake -E make_directory ${{runner.workspace}}/build
 
+    - uses: lukka/get-cmake@latest
+
+    - name: Restore artifacts, or setup vcpkg (do not install any package)
+      uses: lukka/run-vcpkg@v10
+        
     - name: Configure CMake
       shell: bash
       working-directory: ${{runner.workspace}}/build
       env:
         CXX: ${{ matrix.compiler }}
-      run: cmake $GITHUB_WORKSPACE -DBLA_VENDOR=OpenBLAS -DXPED_USE_BLAS=ON -DXPED_USE_LAPACK=ON -DXPED_USE_OPENMP=ON -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DXPED_USE_LIBCXX=${{ matrix.LIBCXX }} -DXPED_ENABLE_CCACHE=OFF -DXPED_TENSOR_LIB=${{ matrix.TENSOR_LIB }} -DXPED_MATRIX_LIB=${{ matrix.MATRIX_LIB }} -DXPED_VECTOR_LIB=${{ matrix.VECTOR_LIB }} -DXPED_BUILD_CYCLOPS=ON -DXPED_USE_MPI=${{ matrix.USE_MPI }} -DXPED_STORAGE=${{ matrix.STORAGE }} -DXPED_USE_AD=${{ matrix.XPED_USE_AD }}
+      run: cmake $GITHUB_WORKSPACE --preset=ad-eigen -DBLA_VENDOR=OpenBLAS -DXPED_USE_BLAS=ON -DXPED_USE_LAPACK=ON -DXPED_USE_OPENMP=ON -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DXPED_USE_LIBCXX=${{ matrix.LIBCXX }} -DXPED_ENABLE_CCACHE=OFF -DXPED_BUILD_CYCLOPS=ON -DXPED_STORAGE=${{ matrix.STORAGE }}
 
     - name: Build
       working-directory: ${{runner.workspace}}/build

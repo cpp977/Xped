@@ -1,11 +1,26 @@
-#ifndef VARI_VALUE_HPP_
-#define VARI_VALUE_HPP_
+#ifndef XPED_VARI_VALUE_HPP_
+#define XPED_VARI_VALUE_HPP_
 
 #include "stan/math/rev/core/vari.hpp"
 
+class Empty
+{};
+
+// template <typename Derived>
+// class vari_view_base
+// {
+//     vari_view_base() = default;
+//     friend Derived;
+
+//     inline Derived& derived() { return static_cast<Derived&>(*this); }
+//     inline const Derived& derived() const { return static_cast<const Derived&>(*this); }
+
+// public:
+// };
+
 namespace stan::math {
 template <typename T>
-class vari_value<T, require_tensor_v<T>> : public vari_base
+class vari_value<T, require_tensor_v<T>> : public vari_base, public std::conditional_t<is_arena_tensor<T>::value, Empty, chainable_alloc>
 {
     using value_type = T; // The underlying type for this class
     using Scalar = typename T::Scalar; // A floating point type
@@ -22,7 +37,7 @@ class vari_value<T, require_tensor_v<T>> : public vari_base
         , adj_(x.uncoupledDomain(), x.uncoupledCodomain(), x.world())
     {
         adj_.setZero();
-        stan::math::ChainableStack::instance_->var_stack_.push_back(this);
+        if constexpr(is_arena_tensor<T>::value) { stan::math::ChainableStack::instance_->var_stack_.push_back(this); }
     }
 
     template <typename S>
@@ -32,9 +47,9 @@ class vari_value<T, require_tensor_v<T>> : public vari_base
     {
         adj_.setZero();
         if(stacked) {
-            ChainableStack::instance_->var_stack_.push_back(this);
+            if constexpr(is_arena_tensor<T>::value) { stan::math::ChainableStack::instance_->var_stack_.push_back(this); }
         } else {
-            ChainableStack::instance_->var_nochain_stack_.push_back(this);
+            if constexpr(is_arena_tensor<T>::value) { stan::math::ChainableStack::instance_->var_nochain_stack_.push_back(this); }
         }
     }
 

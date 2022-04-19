@@ -11,7 +11,8 @@
         "boost-rational",
         "boost-algorithm",
         "boost-functional",
-        "wignersun"
+        "wignersun",
+        "doctest"
     ],
     "default-features": [ "ad-eigen" ],
     "features": {

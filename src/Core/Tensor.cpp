@@ -120,7 +120,7 @@ Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::permute_impl(seq::iseq
                         if(std::abs(coeff_domain * coeff_codomain) < 1.e-10) { continue; }
 
                         auto it = out.dict().find(sector(i));
-                        assert(it != out.dict.end());
+                        assert(it != out.dict().end());
 #ifdef XPED_MEMORY_EFFICIENT
                         auto t = out.view(permuted_domain_tree, permuted_codomain_tree, it->second);
                         PlainInterface::addScale<Scalar, Rank + CoRank>(Tshuffle, t, coeff_domain * coeff_codomain);
@@ -189,7 +189,7 @@ Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::permute_impl(seq::iseq
                     assert(permuted_domain_tree.q_coupled == permuted_codomain_tree.q_coupled);
 
                     auto it = out.dict().find(permuted_domain_tree.q_coupled);
-                    assert(dict != out.dict().end());
+                    assert(it != out.dict().end());
 #ifdef XPED_MEMORY_EFFICIENT
                     auto t = out.view(permuted_domain_tree, permuted_codomain_tree, it->second);
                     PlainInterface::addScale<Scalar, Rank + CoRank>(Tshuffle, t, coeff);

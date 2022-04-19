@@ -182,6 +182,12 @@ public:
     template <int shift, std::size_t...>
     Tensor<Scalar, Rank - shift, CoRank + shift, Symmetry, AllocationPolicy> permute() const;
 
+    template <int shift, std::size_t... p>
+    Tensor<Scalar, Rank - shift, CoRank + shift, Symmetry, AllocationPolicy> permute(seq::iseq<std::size_t, p...>) const
+    {
+        return permute<shift, p...>();
+    }
+
     std::tuple<Tensor<Scalar, Rank, 1, Symmetry, AllocationPolicy>,
                Tensor<RealScalar, 1, 1, Symmetry, AllocationPolicy>,
                Tensor<Scalar, 1, CoRank, Symmetry, AllocationPolicy>>

@@ -497,7 +497,7 @@ include(cmake/clang-format.cmake)
 add_subdirectory(src)
 
 if (XPED_BUILD_TESTS)
-  find_package(doctest 2.4.6 REQUIRED)
+  find_package(doctest 2.4.8 REQUIRED)
   add_subdirectory(tests)
 endif()
 

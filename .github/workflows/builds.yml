@@ -16,14 +16,18 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        compiler: [g++, clang++]
-        LIBCXX: [ON, OFF]
+        triplet: [x64-linux-gcc, x64-linux-clang, x64-liux-clang-libcxx]
         STORAGE: [VecOfMat, Contiguous]
-        exclude:
-          # excludes libcxx for g++
-          - compiler: g++
+        include:
+          - triplet: x64-linux-gcc
+            compiler: g++
+            LIBCXX: OFF
+          - triplet: x64-linux-clang
+            compiler: clang++
+            LIBCXX: OFF
+          - triplet: x64-linux-clang-libcxx
+            compiler: clang++
             LIBCXX: ON
-
     steps:
     - uses: actions/checkout@v3
       with:
@@ -80,7 +84,7 @@ jobs:
       working-directory: ${{runner.workspace}}/build
       env:
         CXX: ${{ matrix.compiler }}
-      run: cmake $GITHUB_WORKSPACE --preset=ad-eigen -DBLA_VENDOR=OpenBLAS -DXPED_USE_BLAS=ON -DXPED_USE_LAPACK=ON -DXPED_USE_OPENMP=OFF -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DXPED_USE_LIBCXX=${{ matrix.LIBCXX }} -DXPED_ENABLE_CCACHE=OFF -DXPED_BUILD_CYCLOPS=ON -DXPED_STORAGE=${{ matrix.STORAGE }}
+      run: cmake $GITHUB_WORKSPACE --preset=ad-eigen -DVCPKG_TARGET_TRIPLET=${{ matrix.triplet }} -DBLA_VENDOR=OpenBLAS -DXPED_USE_BLAS=ON -DXPED_USE_LAPACK=ON -DXPED_USE_OPENMP=OFF -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DXPED_USE_LIBCXX=${{ matrix.LIBCXX }} -DXPED_ENABLE_CCACHE=OFF -DXPED_BUILD_CYCLOPS=ON -DXPED_STORAGE=${{ matrix.STORAGE }}
 
     - run: cat $GITHUB_WORKSPACE/vcpkg/buildtrees/tbb/install-x64-linux-rel-out.log
     - run: cat $GITHUB_WORKSPACE/vcpkg/buildtrees/tbb/install-x64-linux-rel-err.log

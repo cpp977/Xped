@@ -28,7 +28,7 @@ jobs:
     - run: sudo mkdir -p /usr/local/include/TOOLS
     - run: sudo cp -r $GITHUB_WORKSPACE/tools-src/* /usr/local/include/TOOLS/
 
-    - uses: cpp977/GenCMakeDoc@1
+    - uses: cpp977/GenCMakeDoc@v1
       with:
         source_dir: $GITHUB_WORKSPACE
         option_filter: 'XPED'

@@ -16,10 +16,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        triplet: [x64-linux-gcc, x64-linux-clang, x64-linux-clang-libcxx]
+        triplet: [x64-linux, x64-linux-clang, x64-linux-clang-libcxx]
         STORAGE: [VecOfMat, Contiguous]
         include:
-          - triplet: x64-linux-gcc
+          - triplet: x64-linux
             compiler: g++
             LIBCXX: OFF
           - triplet: x64-linux-clang

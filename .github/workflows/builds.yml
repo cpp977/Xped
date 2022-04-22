@@ -17,7 +17,7 @@ jobs:
       fail-fast: false
       matrix:
         triplet: [x64-linux, x64-linux-clang, x64-linux-clang-libcxx]
-        STORAGE: [VecOfMat, Contiguous]
+        STORAGE: [Contiguous]
         include:
           - triplet: x64-linux
             compiler: g++
@@ -56,7 +56,7 @@ jobs:
     - name: Set up GCC
       uses: egor-tensin/setup-gcc@v1
       with:
-        version: 11
+        version: 10
         platform: x64
         
     - run: g++ --version
@@ -86,8 +86,12 @@ jobs:
         CXX: ${{ matrix.compiler }}
       run: cmake $GITHUB_WORKSPACE --preset=ad-eigen -DVCPKG_TARGET_TRIPLET=${{ matrix.triplet }} -DBLA_VENDOR=OpenBLAS -DXPED_USE_BLAS=ON -DXPED_USE_LAPACK=ON -DXPED_USE_OPENMP=OFF -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DXPED_USE_LIBCXX=${{ matrix.LIBCXX }} -DXPED_ENABLE_CCACHE=OFF -DXPED_BUILD_CYCLOPS=ON -DXPED_STORAGE=${{ matrix.STORAGE }}
 
-    - run: cat $GITHUB_WORKSPACE/vcpkg/buildtrees/tbb/install-x64-linux-rel-out.log
-    - run: cat $GITHUB_WORKSPACE/vcpkg/buildtrees/tbb/install-x64-linux-rel-err.log
+    - name: Archive Test Results
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: show-debug
+        path: $GITHUB_WORKSPACE/vcpkg/buildtrees/tbb
       
     - name: Build
       working-directory: ${{runner.workspace}}/build

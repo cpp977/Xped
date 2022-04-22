@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        triplet: [x64-linux, x64-linux-clang, x64-linux-clang-libcxx]
+        triplet: [x64-linux] #, x64-linux-clang, x64-linux-clang-libcxx
         STORAGE: [Contiguous]
         include:
           - triplet: x64-linux
@@ -91,7 +91,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: show-debug
-        path: $GITHUB_WORKSPACE/vcpkg/buildtrees/tbb
+        path: $GITHUB_WORKSPACE/Xped/vcpkg/buildtrees/tbb
       
     - name: Build
       working-directory: ${{runner.workspace}}/build

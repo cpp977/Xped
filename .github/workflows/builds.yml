@@ -18,16 +18,17 @@ jobs:
       matrix:
         triplet: [x64-linux] #, x64-linux-clang, x64-linux-clang-libcxx
         STORAGE: [Contiguous]
-        include:
-          - triplet: x64-linux
-            compiler: g++
-            LIBCXX: OFF
-          - triplet: x64-linux-clang
-            compiler: clang++
-            LIBCXX: OFF
-          - triplet: x64-linux-clang-libcxx
-            compiler: clang++
-            LIBCXX: ON
+        LIBCXX: [OFF]
+        # include:
+        #   - triplet: x64-linux
+        #     compiler: g++
+        #     LIBCXX: OFF
+        #   - triplet: x64-linux-clang
+        #     compiler: clang++
+        #     LIBCXX: OFF
+        #   - triplet: x64-linux-clang-libcxx
+        #     compiler: clang++
+        #     LIBCXX: ON
     steps:
     - uses: actions/checkout@v3
       with:

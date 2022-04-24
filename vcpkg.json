@@ -12,6 +12,7 @@
         "boost-algorithm",
         "boost-functional",
         "boost-math",
+        "boost-iterator",
         "wignersun",
         "doctest"
     ],

@@ -13,6 +13,7 @@ struct PlainInterface : public MatrixInterface, public TensorInterface, public V
     using MatrixInterface::construct;
     using MatrixInterface::construct_with_zero;
     using MatrixInterface::difference;
+    using MatrixInterface::get_raw_data;
     using MatrixInterface::getVal;
     using MatrixInterface::print;
     using MatrixInterface::scale;
@@ -21,6 +22,7 @@ struct PlainInterface : public MatrixInterface, public TensorInterface, public V
     using MatrixInterface::setZero;
 
     using TensorInterface::construct;
+    using TensorInterface::get_raw_data;
     using TensorInterface::getVal;
     using TensorInterface::print;
     using TensorInterface::setConstant;

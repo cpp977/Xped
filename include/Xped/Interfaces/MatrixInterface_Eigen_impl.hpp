@@ -70,6 +70,19 @@ struct MatrixInterface
     template <typename Derived>
     static typename Derived::Scalar getVal(const Eigen::DenseBase<Derived>& M, const MIndextype& row, const MIndextype& col);
 
+    // raw data
+    template <typename Scalar>
+    static const Scalar* get_raw_data(const Eigen::Matrix<Scalar, -1, -1>& M)
+    {
+        return M.data();
+    }
+
+    template <typename Scalar>
+    static Scalar* get_raw_data(Eigen::Matrix<Scalar, -1, -1>& M)
+    {
+        return M.data();
+    }
+
     // reduction
     template <typename Derived>
     static typename Derived::Scalar trace(const Eigen::MatrixBase<Derived>& M);

@@ -3,6 +3,7 @@
 
 #include "Xped/Core/Qbasis.hpp"
 #include "Xped/Core/TensorHelper.hpp"
+#include "Xped/Core/VecOfMatIterator.hpp"
 
 namespace Xped {
 
@@ -41,13 +42,16 @@ public:
 
     StorageType(const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, Rank> basis_domain,
                 const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, CoRank> basis_codomain,
-                const Scalar* data)
+                const Scalar* data,
+                std::size_t size,
+                mpi::XpedWorld& world = mpi::getUniverse())
         : m_uncoupled_domain(basis_domain)
         , m_uncoupled_codomain(basis_codomain)
+        , m_world(&world, mpi::TrivialDeleter<mpi::XpedWorld>{})
     {
         m_domain = internal::build_FusionTree(m_uncoupled_domain);
         m_codomain = internal::build_FusionTree(m_uncoupled_codomain);
-        initialized_resize(data);
+        initialized_resize(data, size);
     }
 
     StorageType(const StorageType<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>& other) = default;
@@ -66,6 +70,8 @@ public:
 
     // template <template <typename> typename OtherAllocator>
     // StorageType(const StorageType<Scalar, Rank, CoRank, Symmetry, OtherAllocator>& other);
+
+    static constexpr bool IS_CONTIGUOUS() { return false; }
 
     void resize()
     {
@@ -116,9 +122,6 @@ public:
     const std::vector<qType, typename AllocationPolicy::template Allocator<qType>>& sector() const { return m_sector; }
     qType sector(std::size_t i) const { return m_sector[i]; }
 
-    const auto& data() const { return m_data; }
-    auto& data() { return m_data; }
-
     const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, Rank>& uncoupledDomain() const { return m_uncoupled_domain; }
     const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, CoRank>& uncoupledCodomain() const { return m_uncoupled_codomain; }
 
@@ -140,6 +143,17 @@ public:
         m_sector.clear();
     }
 
+    VecOfMatIterator<Scalar> begin()
+    {
+        VecOfMatIterator<Scalar> out(&m_data);
+        return out;
+    }
+    VecOfMatIterator<Scalar> end()
+    {
+        VecOfMatIterator<Scalar> out(&m_data, m_data.size());
+        return out;
+    }
+
 private:
     std::vector<MatrixType, typename AllocationPolicy::template Allocator<MatrixType>> m_data;
 
@@ -153,20 +167,21 @@ private:
 
     std::shared_ptr<mpi::XpedWorld> m_world;
 
-    void initialized_resize(const Scalar* data)
+    void initialized_resize(const Scalar* data, std::size_t size)
     {
-        m_data.reserve(std::max(m_domain.Nq(), m_codomain.Nq()));
+        m_data.reserve(std::min(m_domain.Nq(), m_codomain.Nq()));
 
         std::size_t current_dim = 0;
         for(const auto& [q, dim, plain] : m_domain) {
             if(m_codomain.IS_PRESENT(q)) {
                 m_sector.push_back(q);
                 m_dict.insert(std::make_pair(q, m_sector.size() - 1));
-                MapMatrixType tmp(data + current_dim, m_domain.inner_dim(q), m_codomain.inner_dim(q));
+                cMapMatrixType tmp(data + current_dim, m_domain.inner_dim(q), m_codomain.inner_dim(q));
                 m_data.emplace_back(tmp);
                 current_dim += m_domain.inner_dim(q) * m_codomain.inner_dim(q);
             }
         }
+        assert(current_dim == size and "You specified an incompatible data array for this tensor.");
 
         m_data.shrink_to_fit();
     }

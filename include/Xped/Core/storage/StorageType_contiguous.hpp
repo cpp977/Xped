@@ -70,6 +70,8 @@ public:
     // template <template <typename> typename OtherAllocator>
     // StorageType(const StorageType<Scalar, Rank, CoRank, Symmetry, OtherAllocator>& other);
 
+    static constexpr bool IS_CONTIGUOUS() { return true; }
+
     void resize()
     {
         std::size_t curr = 0;
@@ -116,8 +118,8 @@ public:
     const std::vector<qType, typename AllocationPolicy::template Allocator<qType>>& sector() const { return m_sector; }
     qType sector(std::size_t i) const { return m_sector[i]; }
 
-    const auto& data() const { return m_data; }
-    auto& data() { return m_data; }
+    const Scalar* data() const { return m_data.data(); }
+    Scalar* data() { return m_data.data(); }
 
     const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, Rank>& uncoupledDomain() const { return m_uncoupled_domain; }
     const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, CoRank>& uncoupledCodomain() const { return m_uncoupled_codomain; }

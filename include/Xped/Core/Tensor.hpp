@@ -106,6 +106,7 @@ public:
     template <typename OtherDerived>
     inline Tensor(const TensorBase<OtherDerived>& other);
 
+    constexpr bool CONTIGUOUS_STORAGE() { return Storage::IS_CONTIGUOUS(); }
     static constexpr std::size_t rank() { return Rank; }
     static constexpr std::size_t corank() { return CoRank; }
 
@@ -115,6 +116,17 @@ public:
     // inline const std::vector<MatrixType> block() const { return block_; }
     typename Storage::ConstMatrixReturnType block(std::size_t i) const { return storage_.block(i); }
     typename Storage::MatrixReturnType block(std::size_t i) { return storage_.block(i); }
+
+    const Scalar* data() const
+    {
+        static_assert(Storage::IS_CONTIGUOUS());
+        return storage_.data();
+    }
+    Scalar* data()
+    {
+        static_assert(Storage::IS_CONTIGUOUS());
+        return storage_.data();
+    }
 
     const std::size_t plainSize() const { return storage_.data().size(); }
 
@@ -215,6 +227,9 @@ public:
     const auto& codomainTrees(const qType& q) const { return coupledCodomain().tree(q); }
 
     void push_back(const qType& q, const MatrixType& M) { storage_.push_back(q, M); }
+
+    auto begin() { return storage_.begin(); }
+    auto end() { return storage_.end(); }
 
 private:
     Storage storage_;

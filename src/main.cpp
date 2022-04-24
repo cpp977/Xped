@@ -120,7 +120,15 @@ public:
         cost[0] = res.val();
         if(gradient != nullptr) {
             stan::math::grad(res.vi_);
-            memcpy(gradient, t.adj().storage().data().data(), NumParameters() * sizeof(Scalar));
+            if constexpr(t_.CONTIGUOUS_STORAGE()) {
+                memcpy(gradient, t.adj().data(), NumParameters() * sizeof(Scalar));
+            } else {
+                std::size_t count = 0;
+                for(auto it = t.adj().begin(); it != t.adj().end(); ++it) {
+                    gradient[count] = *it;
+                    ++count;
+                }
+            }
             // std::cout << "gradient=";
             // for(auto i = 0; i < NumParameters(); ++i) { std::cout << gradient[i] << " "; }
             // std::cout << std::endl;
@@ -233,7 +241,8 @@ int main(int argc, char* argv[])
         free(parameters);
         auto [eigvals, eigvecs] = op.eigh();
         for(auto i = 0ul; i < eigvals.sector().size(); ++i) {
-            std::cout << "Q=" << Xped::Sym::format<Symmetry>(eigvals.sector(i)) << std::setprecision(15) << eigvals.block(i)(0, 0) << std::endl;
+            std::cout << "Q=" << Xped::Sym::format<Symmetry>(eigvals.sector(i)) << ": " << std::setprecision(15) << eigvals.block(i)(0, 0)
+                      << std::endl;
         }
         // t.print(std::cout, true);
         // t += 7.;

@@ -9,14 +9,14 @@
 namespace Xped {
 
 template <typename Scalar, typename Symmetry, typename AllocationPolicy>
-void contract_L(XPED_CONST Tensor<Scalar, 1, 1, Symmetry, AllocationPolicy>& Bold,
-                XPED_CONST Tensor<Scalar, 2, 1, Symmetry, AllocationPolicy>& Bra,
-                XPED_CONST Tensor<Scalar, 2, 1, Symmetry, AllocationPolicy>& Ket,
-                Tensor<Scalar, 1, 1, Symmetry, AllocationPolicy>& Bnew)
+void contract_L(XPED_CONST Tensor<Scalar, 1, 1, Symmetry, false, AllocationPolicy>& Bold,
+                XPED_CONST Tensor<Scalar, 2, 1, Symmetry, false, AllocationPolicy>& Bra,
+                XPED_CONST Tensor<Scalar, 2, 1, Symmetry, false, AllocationPolicy>& Ket,
+                Tensor<Scalar, 1, 1, Symmetry, false, AllocationPolicy>& Bnew)
 {
     SPDLOG_INFO("Entering contract_L().");
     Bnew.clear();
-    Bnew = Tensor<Scalar, 1, 1, Symmetry, AllocationPolicy>({{Bra.uncoupledCodomain()[0]}}, {{Ket.uncoupledCodomain()[0]}}, *Bold.world());
+    Bnew = Tensor<Scalar, 1, 1, Symmetry, false, AllocationPolicy>({{Bra.uncoupledCodomain()[0]}}, {{Ket.uncoupledCodomain()[0]}}, *Bold.world());
     Bnew.setZero();
 
     for(std::size_t i = 0; i < Bra.sector().size(); i++) {
@@ -52,14 +52,14 @@ void contract_L(XPED_CONST Tensor<Scalar, 1, 1, Symmetry, AllocationPolicy>& Bol
 }
 
 template <typename Scalar, typename Symmetry, typename AllocationPolicy>
-void contract_R(XPED_CONST Tensor<Scalar, 1, 1, Symmetry, AllocationPolicy>& Bold,
-                XPED_CONST Tensor<Scalar, 2, 1, Symmetry, AllocationPolicy>& Bra,
-                XPED_CONST Tensor<Scalar, 2, 1, Symmetry, AllocationPolicy>& Ket,
-                Tensor<Scalar, 1, 1, Symmetry, AllocationPolicy>& Bnew)
+void contract_R(XPED_CONST Tensor<Scalar, 1, 1, Symmetry, false, AllocationPolicy>& Bold,
+                XPED_CONST Tensor<Scalar, 2, 1, Symmetry, false, AllocationPolicy>& Bra,
+                XPED_CONST Tensor<Scalar, 2, 1, Symmetry, false, AllocationPolicy>& Ket,
+                Tensor<Scalar, 1, 1, Symmetry, false, AllocationPolicy>& Bnew)
 {
     SPDLOG_INFO("Entering contract_R().");
     Bnew.clear();
-    Bnew = Tensor<Scalar, 1, 1, Symmetry, AllocationPolicy>({{Ket.uncoupledDomain()[0]}}, {{Bra.uncoupledDomain()[0]}}, *Bold.world());
+    Bnew = Tensor<Scalar, 1, 1, Symmetry, false, AllocationPolicy>({{Ket.uncoupledDomain()[0]}}, {{Bra.uncoupledDomain()[0]}}, *Bold.world());
     Bnew.setZero();
 
     for(std::size_t i = 0; i < Ket.sector().size(); i++) {

@@ -122,6 +122,7 @@ Tensor<typename TensorTraits<Derived>::Scalar,
        TensorTraits<Derived>::Rank,
        TensorTraits<typename std::remove_const<std::remove_reference_t<OtherDerived>>::type>::CoRank,
        typename TensorTraits<Derived>::Symmetry,
+       false,
        typename TensorTraits<Derived>::AllocationPolicy>
 TensorBase<Derived>::operator*(XPED_CONST TensorBase<OtherDerived>& other) XPED_CONST
 {
@@ -132,7 +133,7 @@ TensorBase<Derived>::operator*(XPED_CONST TensorBase<OtherDerived>& other) XPED_
     assert(derived_ref.world() == other_derived_ref.world());
     assert(derived_ref.coupledCodomain() == other_derived_ref.coupledDomain());
 
-    Tensor<Scalar, Rank, TensorTraits<OtherDerived_>::CoRank, Symmetry, AllocationPolicy> Tout(
+    Tensor<Scalar, Rank, TensorTraits<OtherDerived_>::CoRank, Symmetry, false, AllocationPolicy> Tout(
         derived_ref.uncoupledDomain(), other_derived_ref.uncoupledCodomain(), derived_ref.world());
     // std::unordered_set<typename Symmetry::qType> uniqueController;
     auto other_dict = other_derived_ref.dict();

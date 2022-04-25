@@ -24,7 +24,7 @@ using std::size_t;
 namespace Xped {
 
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
-void Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::setRandom()
+void Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::setRandom()
 {
     storage_.resize();
     SPDLOG_TRACE("Entering setRandom().");
@@ -37,7 +37,7 @@ void Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::setRandom()
 }
 
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
-void Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::setZero()
+void Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::setZero()
 {
     storage_.resize();
     SPDLOG_TRACE("Entering setZero().");
@@ -49,7 +49,7 @@ void Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::setZero()
     SPDLOG_TRACE("Leaving setZero().");
 }
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
-void Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::setIdentity()
+void Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::setIdentity()
 {
     storage_.resize();
     SPDLOG_TRACE("Entering setIdentity().");
@@ -62,7 +62,7 @@ void Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::setIdentity()
 }
 
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
-void Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::setConstant(const Scalar& val)
+void Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::setConstant(const Scalar& val)
 {
     storage_.resize();
     SPDLOG_TRACE("Entering setConstant().");
@@ -76,8 +76,9 @@ void Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::setConstant(const
 
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
 template <std::size_t... pds, std::size_t... pcs>
-Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>
-Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::permute_impl(seq::iseq<std::size_t, pds...> pd, seq::iseq<std::size_t, pcs...> pc) const
+Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>
+Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::permute_impl(seq::iseq<std::size_t, pds...> pd,
+                                                                              seq::iseq<std::size_t, pcs...> pc) const
 {
     std::array<std::size_t, Rank> arr_domain = {pds...};
     std::array<std::size_t, CoRank> arr_codomain = {(pcs - Rank)...};
@@ -140,8 +141,8 @@ Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::permute_impl(seq::iseq
 
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
 template <int shift, std::size_t... ps>
-Tensor<Scalar, Rank - shift, CoRank + shift, Symmetry, AllocationPolicy>
-Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::permute_impl(seq::iseq<std::size_t, ps...> per) const
+Tensor<Scalar, Rank - shift, CoRank + shift, Symmetry, false, AllocationPolicy>
+Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::permute_impl(seq::iseq<std::size_t, ps...> per) const
 {
     std::array<std::size_t, Rank + CoRank> p_ = {ps...};
     util::Permutation p(p_);
@@ -166,7 +167,7 @@ Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::permute_impl(seq::iseq
         }
     }
 
-    Tensor<Scalar, newRank, newCoRank, Symmetry, AllocationPolicy> out(new_domain, new_codomain, this->world_);
+    Tensor<Scalar, newRank, newCoRank, Symmetry, false, AllocationPolicy> out(new_domain, new_codomain, this->world_);
     out.setZero();
 
     for(size_t i = 0; i < sector().size(); i++) {
@@ -208,7 +209,8 @@ Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::permute_impl(seq::iseq
 
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
 template <int shift, std::size_t... p>
-Tensor<Scalar, Rank - shift, CoRank + shift, Symmetry, AllocationPolicy> Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::permute() const
+Tensor<Scalar, Rank - shift, CoRank + shift, Symmetry, false, AllocationPolicy>
+Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::permute() const
 {
     // static_assert(std::cmp_greater_equal(Rank, shift), "Invalid call to permute()"); c++-20
     // static_assert(std::cmp_greater_equal(CoRank, -shift), "Invalid call to permute()"); c++-20
@@ -225,16 +227,16 @@ Tensor<Scalar, Rank - shift, CoRank + shift, Symmetry, AllocationPolicy> Tensor<
 }
 
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
-std::tuple<Tensor<Scalar, Rank, 1, Symmetry, AllocationPolicy>,
-           Tensor<typename ScalarTraits<Scalar>::Real, 1, 1, Symmetry, AllocationPolicy>,
-           Tensor<Scalar, 1, CoRank, Symmetry, AllocationPolicy>>
-Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::tSVD(size_t maxKeep,
-                                                               RealScalar eps_svd,
-                                                               RealScalar& truncWeight,
-                                                               RealScalar& entropy,
-                                                               std::map<qarray<Symmetry::Nq>, VectorType>& SVspec,
-                                                               bool PRESERVE_MULTIPLETS,
-                                                               bool RETURN_SPEC) XPED_CONST
+std::tuple<Tensor<Scalar, Rank, 1, Symmetry, false, AllocationPolicy>,
+           Tensor<typename ScalarTraits<Scalar>::Real, 1, 1, Symmetry, false, AllocationPolicy>,
+           Tensor<Scalar, 1, CoRank, Symmetry, false, AllocationPolicy>>
+Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::tSVD(size_t maxKeep,
+                                                                      RealScalar eps_svd,
+                                                                      RealScalar& truncWeight,
+                                                                      RealScalar& entropy,
+                                                                      std::map<qarray<Symmetry::Nq>, VectorType>& SVspec,
+                                                                      bool PRESERVE_MULTIPLETS,
+                                                                      bool RETURN_SPEC) XPED_CONST
 {
     SPDLOG_INFO("Entering Xped::tSVD()");
     SPDLOG_INFO("Input param eps_svd={}", eps_svd);
@@ -245,9 +247,9 @@ Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::tSVD(size_t maxKeep,
         middle.push_back(sector(i), std::min(PlainInterface::rows(block(i)), PlainInterface::cols(block(i))));
     }
 
-    Tensor<Scalar, Rank, 1, Symmetry, AllocationPolicy> U(uncoupledDomain(), {{middle}});
-    Tensor<RealScalar, 1, 1, Symmetry, AllocationPolicy> Sigma({{middle}}, {{middle}});
-    Tensor<Scalar, 1, CoRank, Symmetry, AllocationPolicy> Vdag({{middle}}, uncoupledCodomain());
+    Tensor<Scalar, Rank, 1, Symmetry, false, AllocationPolicy> U(uncoupledDomain(), {{middle}});
+    Tensor<RealScalar, 1, 1, Symmetry, false, AllocationPolicy> Sigma({{middle}}, {{middle}});
+    Tensor<Scalar, 1, CoRank, Symmetry, false, AllocationPolicy> Vdag({{middle}}, uncoupledCodomain());
 
     std::vector<std::pair<typename Symmetry::qType, RealScalar>> allSV;
     SPDLOG_INFO("Performing the svd loop (size={})", sector().size());
@@ -326,9 +328,9 @@ Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::tSVD(size_t maxKeep,
     ss << truncBasis.print();
     SPDLOG_INFO(ss.str());
 
-    Tensor<Scalar, Rank, 1, Symmetry, AllocationPolicy> trunc_U(uncoupledDomain(), {{truncBasis}});
-    Tensor<RealScalar, 1, 1, Symmetry, AllocationPolicy> trunc_Sigma({{truncBasis}}, {{truncBasis}});
-    Tensor<Scalar, 1, CoRank, Symmetry, AllocationPolicy> trunc_Vdag({{truncBasis}}, uncoupledCodomain());
+    Tensor<Scalar, Rank, 1, Symmetry, false, AllocationPolicy> trunc_U(uncoupledDomain(), {{truncBasis}});
+    Tensor<RealScalar, 1, 1, Symmetry, false, AllocationPolicy> trunc_Sigma({{truncBasis}}, {{truncBasis}});
+    Tensor<Scalar, 1, CoRank, Symmetry, false, AllocationPolicy> trunc_Vdag({{truncBasis}}, uncoupledCodomain());
     SPDLOG_INFO("Starting the loop for truncating U,S,V (size={})", qn_orderedSV.size());
     for(const auto& [q, vec_sv] : qn_orderedSV) {
         SPDLOG_INFO("Step with q={}", q.data[0]);
@@ -357,16 +359,17 @@ Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::tSVD(size_t maxKeep,
 }
 
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
-std::pair<Tensor<typename ScalarTraits<Scalar>::Real, 1, 1, Symmetry, AllocationPolicy>,
-          Tensor<typename ScalarTraits<Scalar>::Real, Rank, 1, Symmetry, AllocationPolicy>>
-Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::eigh() XPED_CONST
+std::pair<Tensor<typename ScalarTraits<Scalar>::Real, 1, 1, Symmetry, false, AllocationPolicy>,
+          Tensor<typename ScalarTraits<Scalar>::Real, Rank, 1, Symmetry, false, AllocationPolicy>>
+Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::eigh() XPED_CONST
 {
     static_assert(Rank == CoRank, "Eigenvalue decomposition only possible for tensors with Rank==CoRank");
     assert(coupledDomain() == coupledCodomain() and "Eigenvalue decomposition only possible for square matrices.");
     // assert(*this == this->adjoint().eval() and "Input for eigh() needs to be Hermitian.");
 
-    Tensor<RealScalar, 1, 1, Symmetry, AllocationPolicy> D({{coupledDomain().forgetHistory()}}, {{coupledCodomain().forgetHistory()}}, world());
-    Tensor<RealScalar, Rank, 1, Symmetry, AllocationPolicy> V(uncoupledDomain(), {{coupledCodomain().forgetHistory()}}, world());
+    Tensor<RealScalar, 1, 1, Symmetry, false, AllocationPolicy> D(
+        {{coupledDomain().forgetHistory()}}, {{coupledCodomain().forgetHistory()}}, world());
+    Tensor<RealScalar, Rank, 1, Symmetry, false, AllocationPolicy> V(uncoupledDomain(), {{coupledCodomain().forgetHistory()}}, world());
 
     for(size_t i = 0; i < sector().size(); ++i) {
         auto [Eigvals, Eigvecs] = PlainInterface::eigh(block(i));
@@ -404,7 +407,8 @@ Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::eigh() XPED_CONST
 // }
 
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
-auto Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::view(const FusionTree<Rank, Symmetry>& f1, const FusionTree<CoRank, Symmetry>& f2)
+auto Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::view(const FusionTree<Rank, Symmetry>& f1,
+                                                                           const FusionTree<CoRank, Symmetry>& f2)
 {
     const auto it = dict().find(f1.q_coupled);
     assert(it != dict().end());
@@ -412,9 +416,9 @@ auto Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::view(const Fusion
 }
 
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
-auto Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::view(const FusionTree<Rank, Symmetry>& f1,
-                                                                    const FusionTree<CoRank, Symmetry>& f2,
-                                                                    std::size_t block_number)
+auto Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::view(const FusionTree<Rank, Symmetry>& f1,
+                                                                           const FusionTree<CoRank, Symmetry>& f2,
+                                                                           std::size_t block_number)
 {
     assert(block_number < sector().size());
     assert(f1.q_coupled == f2.q_coupled);
@@ -466,8 +470,8 @@ auto Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::view(const Fusion
 }
 
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
-auto Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::view(const FusionTree<Rank, Symmetry>& f1,
-                                                                    const FusionTree<CoRank, Symmetry>& f2) const
+auto Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::view(const FusionTree<Rank, Symmetry>& f1,
+                                                                           const FusionTree<CoRank, Symmetry>& f2) const
 {
     const auto it = dict().find(f1.q_coupled);
     assert(it != dict().end());
@@ -475,9 +479,9 @@ auto Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::view(const Fusion
 }
 
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
-auto Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::view(const FusionTree<Rank, Symmetry>& f1,
-                                                                    const FusionTree<CoRank, Symmetry>& f2,
-                                                                    std::size_t block_number) const
+auto Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::view(const FusionTree<Rank, Symmetry>& f1,
+                                                                           const FusionTree<CoRank, Symmetry>& f2,
+                                                                           std::size_t block_number) const
 {
     assert(block_number < sector().size());
     assert(f1.q_coupled == f2.q_coupled);
@@ -525,7 +529,8 @@ auto Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::view(const Fusion
 
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
 typename PlainInterface::TType<Scalar, Rank + CoRank>
-Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::subBlock(const FusionTree<Rank, Symmetry>& f1, const FusionTree<CoRank, Symmetry>& f2) const
+Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::subBlock(const FusionTree<Rank, Symmetry>& f1,
+                                                                          const FusionTree<CoRank, Symmetry>& f2) const
 {
     const auto it = dict().find(f1.q_coupled);
     assert(it != dict().end());
@@ -534,9 +539,9 @@ Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::subBlock(const FusionT
 
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
 typename PlainInterface::TType<Scalar, Rank + CoRank>
-Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::subBlock(const FusionTree<Rank, Symmetry>& f1,
-                                                                   const FusionTree<CoRank, Symmetry>& f2,
-                                                                   std::size_t block_number) const
+Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::subBlock(const FusionTree<Rank, Symmetry>& f1,
+                                                                          const FusionTree<CoRank, Symmetry>& f2,
+                                                                          std::size_t block_number) const
 {
     assert(block_number < sector().size());
     assert(f1.q_coupled == f2.q_coupled);
@@ -560,8 +565,8 @@ Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::subBlock(const FusionT
 
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
 const typename PlainInterface::MType<Scalar>
-Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::subMatrix(const FusionTree<Rank, Symmetry>& f1,
-                                                                    const FusionTree<CoRank, Symmetry>& f2) const
+Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::subMatrix(const FusionTree<Rank, Symmetry>& f1,
+                                                                           const FusionTree<CoRank, Symmetry>& f2) const
 {
     if(f1.q_coupled != f2.q_coupled) { assert(false); }
 
@@ -575,7 +580,7 @@ Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::subMatrix(const Fusion
 }
 
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
-typename PlainInterface::TType<Scalar, Rank + CoRank> Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::plainTensor() const
+typename PlainInterface::TType<Scalar, Rank + CoRank> Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::plainTensor() const
 {
     SPDLOG_INFO("Entering plainTensor()");
     auto sorted_domain = coupledDomain();
@@ -748,7 +753,7 @@ typename PlainInterface::TType<Scalar, Rank + CoRank> Tensor<Scalar, Rank, CoRan
 }
 
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
-void Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::print(std::ostream& o, bool PRINT_MATRICES) const
+void Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::print(std::ostream& o, bool PRINT_MATRICES) const
 {
     // std::stringstream ss;
     o << "domain:" << endl << coupledDomain() << endl; // << "with trees:" << endl << domain.printTrees() << endl;
@@ -765,7 +770,7 @@ void Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>::print(std::ostrea
 }
 
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
-std::ostream& operator<<(std::ostream& os, XPED_CONST Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>& t)
+std::ostream& operator<<(std::ostream& os, XPED_CONST Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>& t)
 {
     t.print(os);
     return os;

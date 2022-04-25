@@ -27,8 +27,11 @@
 
 namespace Xped {
 
+template <typename, std::size_t, std::size_t, typename, bool = false, typename = HeapPolicy>
+class Tensor;
+
 template <typename Scalar_, std::size_t Rank_, std::size_t CoRank_, typename Symmetry_, typename AllocationPolicy_>
-struct TensorTraits<Tensor<Scalar_, Rank_, CoRank_, Symmetry_, AllocationPolicy_>>
+struct TensorTraits<Tensor<Scalar_, Rank_, CoRank_, Symmetry_, false, AllocationPolicy_>>
 {
     static constexpr std::size_t Rank = Rank_;
     static constexpr std::size_t CoRank = CoRank_;
@@ -38,8 +41,9 @@ struct TensorTraits<Tensor<Scalar_, Rank_, CoRank_, Symmetry_, AllocationPolicy_
     using AllocationPolicy = AllocationPolicy_;
 };
 
-template <typename Scalar_, std::size_t Rank, std::size_t CoRank, typename Symmetry_, typename AllocationPolicy_ = HeapPolicy>
-class Tensor : public TensorBase<Tensor<Scalar_, Rank, CoRank, Symmetry_, AllocationPolicy_>>
+template <typename Scalar_, std::size_t Rank, std::size_t CoRank, typename Symmetry_, typename AllocationPolicy_>
+class Tensor<Scalar_, Rank, CoRank, Symmetry_, false, AllocationPolicy_>
+    : public TensorBase<Tensor<Scalar_, Rank, CoRank, Symmetry_, false, AllocationPolicy_>>
 {
     template <typename Derived>
     friend class TensorBase;
@@ -65,7 +69,7 @@ public:
 private:
     using Storage = StorageType<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>;
 
-    using Self = Tensor<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>;
+    using Self = Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>;
 
     using DictType = std::unordered_map<qType,
                                         std::size_t,
@@ -75,10 +79,10 @@ private:
 
 public:
     /**Does nothing.*/
-    Tensor(){};
+    Tensor() = default;
 
-    // Xped(const Xped& other) = default;
-    // Xped(Xped&& other) = default;
+    // Tensor(const Tensor& other) = default;
+    // Tensor(Tensor&& other) = default;
 
     Tensor(const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, Rank>& basis_domain,
            const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, CoRank>& basis_codomain,
@@ -192,17 +196,17 @@ public:
     // Scalar norm() const { return std::sqrt(squaredNorm()); }
 
     template <int shift, std::size_t...>
-    Tensor<Scalar, Rank - shift, CoRank + shift, Symmetry, AllocationPolicy> permute() const;
+    Tensor<Scalar, Rank - shift, CoRank + shift, Symmetry, false, AllocationPolicy> permute() const;
 
     template <int shift, std::size_t... p>
-    Tensor<Scalar, Rank - shift, CoRank + shift, Symmetry, AllocationPolicy> permute(seq::iseq<std::size_t, p...>) const
+    Tensor<Scalar, Rank - shift, CoRank + shift, Symmetry, false, AllocationPolicy> permute(seq::iseq<std::size_t, p...>) const
     {
         return permute<shift, p...>();
     }
 
-    std::tuple<Tensor<Scalar, Rank, 1, Symmetry, AllocationPolicy>,
-               Tensor<RealScalar, 1, 1, Symmetry, AllocationPolicy>,
-               Tensor<Scalar, 1, CoRank, Symmetry, AllocationPolicy>>
+    std::tuple<Tensor<Scalar, Rank, 1, Symmetry, false, AllocationPolicy>,
+               Tensor<RealScalar, 1, 1, Symmetry, false, AllocationPolicy>,
+               Tensor<Scalar, 1, CoRank, Symmetry, false, AllocationPolicy>>
     tSVD(std::size_t maxKeep,
          RealScalar eps_svd,
          RealScalar& truncWeight,
@@ -211,9 +215,9 @@ public:
          bool PRESERVE_MULTIPLETS = true,
          bool RETURN_SPEC = true) XPED_CONST;
 
-    std::tuple<Tensor<Scalar, Rank, 1, Symmetry, AllocationPolicy>,
-               Tensor<RealScalar, 1, 1, Symmetry, AllocationPolicy>,
-               Tensor<Scalar, 1, CoRank, Symmetry, AllocationPolicy>>
+    std::tuple<Tensor<Scalar, Rank, 1, Symmetry, false, AllocationPolicy>,
+               Tensor<RealScalar, 1, 1, Symmetry, false, AllocationPolicy>,
+               Tensor<Scalar, 1, CoRank, Symmetry, false, AllocationPolicy>>
     tSVD(std::size_t maxKeep, RealScalar eps_svd, RealScalar& truncWeight, bool PRESERVE_MULTIPLETS = true) XPED_CONST
     {
         RealScalar S_dumb;
@@ -221,7 +225,8 @@ public:
         return tSVD(maxKeep, eps_svd, truncWeight, S_dumb, SVspec_dumb, PRESERVE_MULTIPLETS, false); // false: Dont return singular value spectrum
     }
 
-    std::pair<Tensor<RealScalar, 1, 1, Symmetry, AllocationPolicy>, Tensor<RealScalar, Rank, 1, Symmetry, AllocationPolicy>> eigh() XPED_CONST;
+    std::pair<Tensor<RealScalar, 1, 1, Symmetry, false, AllocationPolicy>, Tensor<RealScalar, Rank, 1, Symmetry, false, AllocationPolicy>>
+    eigh() XPED_CONST;
 
     const auto& domainTrees(const qType& q) const { return coupledDomain().tree(q); }
     const auto& codomainTrees(const qType& q) const { return coupledCodomain().tree(q); }
@@ -240,12 +245,12 @@ private:
     Self permute_impl(seq::iseq<std::size_t, p_domain...> pd, seq::iseq<std::size_t, p_codomain...> pc) const;
 
     template <int shift, std::size_t... ps>
-    Tensor<Scalar, Rank - shift, CoRank + shift, Symmetry, AllocationPolicy> permute_impl(seq::iseq<std::size_t, ps...> per) const;
+    Tensor<Scalar, Rank - shift, CoRank + shift, Symmetry, false, AllocationPolicy> permute_impl(seq::iseq<std::size_t, ps...> per) const;
 };
 
 template <typename Scalar_, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
 template <typename OtherDerived>
-Tensor<Scalar_, Rank, CoRank, Symmetry, AllocationPolicy>::Tensor(const TensorBase<OtherDerived>& other)
+Tensor<Scalar_, Rank, CoRank, Symmetry, false, AllocationPolicy>::Tensor(const TensorBase<OtherDerived>& other)
 {
     storage_ = Storage(other.derived().uncoupledDomain(), other.derived().uncoupledCodomain(), *other.derived().world());
     storage_.reserve(other.derived().sector().size());
@@ -255,7 +260,7 @@ Tensor<Scalar_, Rank, CoRank, Symmetry, AllocationPolicy>::Tensor(const TensorBa
 
 #ifdef XPED_USE_AD
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry>
-using ArenaTensor = Tensor<Scalar, Rank, CoRank, Symmetry, StanArenaPolicy>;
+using ArenaTensor = Tensor<Scalar, Rank, CoRank, Symmetry, false, StanArenaPolicy>;
 #endif
 
 } // namespace Xped

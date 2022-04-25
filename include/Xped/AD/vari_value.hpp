@@ -3,6 +3,78 @@
 
 #include "stan/math/rev/core/vari.hpp"
 
+template <typename T>
+struct is_tensor
+{
+    static const bool value = false;
+};
+
+template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
+struct is_tensor<Xped::Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>>
+{
+    static const bool value = true;
+};
+
+template <typename T>
+struct is_tensor_var
+{
+    static const bool value = false;
+};
+
+template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry>
+struct is_tensor_var<Xped::Tensor<Scalar, Rank, CoRank, Symmetry, true>>
+{
+    static const bool value = true;
+};
+
+template <typename T>
+struct is_arena_tensor
+{
+    static const bool value = false;
+};
+
+template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry>
+struct is_arena_tensor<Xped::ArenaTensor<Scalar, Rank, CoRank, Symmetry, false>>
+{
+    static const bool value = true;
+};
+
+template <typename T>
+struct is_arena_tensor_var
+{
+    static const bool value = false;
+};
+
+template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry>
+struct is_arena_tensor_var<Xped::ArenaTensor<Scalar, Rank, CoRank, Symmetry, true>>
+{
+    static const bool value = true;
+};
+
+template <typename T>
+using require_tensor_v = stan::require_t<stan::bool_constant<is_tensor<T>::value>>;
+
+template <typename T>
+using require_tensor_t = stan::bool_constant<is_tensor<T>::value>;
+
+template <typename T>
+using require_tensor_var_t = stan::bool_constant<is_tensor_var<T>::value>;
+
+template <typename T>
+using require_tensor_var_v = stan::require_t<stan::bool_constant<is_tensor_var<T>::value>>;
+
+template <typename T>
+using require_arena_tensor_v = stan::require_t<stan::bool_constant<is_arena_tensor<T>::value>>;
+
+template <typename T>
+using require_arena_tensor_t = stan::bool_constant<is_arena_tensor<T>::value>;
+
+template <typename T>
+using require_arena_tensor_var_t = stan::bool_constant<is_arena_tensor_var<T>::value>;
+
+template <typename T>
+using require_arena_tensor_var_v = stan::require_t<stan::bool_constant<is_arena_tensor_var<T>::value>>;
+
 class Empty
 {};
 
@@ -72,8 +144,8 @@ class vari_value<T, require_tensor_v<T>> : public vari_base, public std::conditi
     friend std::ostream& operator<<(std::ostream& os, const vari_value<T>* v) { return os << "val: \n" << v->val_ << " \nadj: \n" << v->adj_; }
 
 private:
-    template <typename, typename>
-    friend class var_value;
+    template <typename, std::size_t, std::size_t, typename, bool, typename>
+    friend class Xped::Tensor;
 };
 } // namespace stan::math
 #endif

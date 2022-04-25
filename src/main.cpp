@@ -62,9 +62,9 @@ XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100)
 #include "TOOLS/ArgParser.h"
 
 #ifdef XPED_USE_AD
-#    include "Xped/AD/var_value.hpp"
-template <typename T, require_tensor_var_t<T>* = nullptr>
-inline stan::math::var dot_self(const T& v)
+#    include "Xped/AD/ADTensor.hpp"
+template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry>
+inline stan::math::var dot_self(const Xped::ArenaTensor<Scalar, Rank, CoRank, Symmetry, true>& v)
 {
     stan::math::var res = v.val().squaredNorm();
     stan::math::reverse_pass_callback([res, v]() mutable { v.adj() += (v.val() * (2.0 * res.adj())).eval(); });
@@ -72,15 +72,15 @@ inline stan::math::var dot_self(const T& v)
 }
 
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry>
-inline stan::math::var my_func(const stan::math::var_value<Xped::ArenaTensor<Scalar, Rank, CoRank, Symmetry>>& t)
+inline stan::math::var my_func(const Xped::ArenaTensor<Scalar, Rank, CoRank, Symmetry, true>& t)
 {
     return dot_self(t - Scalar(5));
 }
 
 template <typename Scalar, typename Symmetry>
-inline stan::math::var avg(const Xped::Tensor<Scalar, 0, 2, Symmetry>& bra,
-                           const Xped::Tensor<Scalar, 2, 2, Symmetry>& op,
-                           const stan::math::var_value<Xped::Tensor<Scalar, 2, 0, Symmetry>>& ket)
+inline stan::math::var avg(const Xped::Tensor<Scalar, 0, 2, Symmetry, false>& bra,
+                           const Xped::Tensor<Scalar, 2, 2, Symmetry, false>& op,
+                           const Xped::Tensor<Scalar, 2, 0, Symmetry, true>& ket)
 {
     auto opvec = op * ket;
     auto energy = bra * opvec;
@@ -90,7 +90,7 @@ inline stan::math::var avg(const Xped::Tensor<Scalar, 0, 2, Symmetry>& bra,
 }
 
 template <typename Scalar, typename Symmetry>
-inline stan::math::var avg2(const Xped::Tensor<Scalar, 2, 2, Symmetry>& op, const stan::math::var_value<Xped::Tensor<Scalar, 2, 0, Symmetry>>& ket)
+inline stan::math::var avg2(const Xped::Tensor<Scalar, 2, 2, Symmetry>& op, const Xped::Tensor<Scalar, 2, 0, Symmetry, true>& ket)
 {
     auto opvec = op * ket;
     auto energy = ket.adjoint() * opvec;
@@ -111,9 +111,9 @@ public:
 
     bool Evaluate(const double* parameters, double* cost, double* gradient) const override
     {
-        Xped::Tensor<Scalar, 2, 0, Symmetry> t_(op.uncoupledCodomain(), {{}}, parameters, NumParameters(), op.world());
+        Xped::Tensor<Scalar, 2, 0, Symmetry, false> t_(op.uncoupledCodomain(), {{}}, parameters, NumParameters(), op.world());
         stan::math::nested_rev_autodiff nested;
-        stan::math::var_value<Xped::Tensor<Scalar, 2, 0, Symmetry>> t(t_);
+        Xped::Tensor<Scalar, 2, 0, Symmetry, true> t(t_);
         // std::cout << t << std::endl;
         // auto res = avg2(op, t);
         auto res = avg(t.val().adjoint().eval(), op, t);
@@ -136,7 +136,7 @@ public:
         return true;
     }
 
-    Xped::Tensor<Scalar, 2, 2, Symmetry> op;
+    Xped::Tensor<Scalar, 2, 2, Symmetry, false> op;
 
     int NumParameters() const override { return op.coupledDomain().inner_dim(Symmetry::qvacuum()); }
 };
@@ -208,7 +208,7 @@ int main(int argc, char* argv[])
         B.setRandom(Minit);
         Xped::Tensor<Scalar, 2, 0, Symmetry> t_({{B, B}}, {{}}, world);
         t_.setRandom();
-        stan::math::var_value<Xped::Tensor<Scalar, 2, 0, Symmetry>> t(t_);
+        Xped::Tensor<Scalar, 2, 0, Symmetry, true> t(t_);
         // std::cout << t << std::endl;
         // Xped::Qbasis<Symmetry, 1, Xped::StanArenaPolicy> phys;
         // phys.push_back({2}, 1);

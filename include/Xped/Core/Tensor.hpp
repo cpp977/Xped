@@ -259,8 +259,8 @@ Tensor<Scalar_, Rank, CoRank, Symmetry, false, AllocationPolicy>::Tensor(const T
 }
 
 #ifdef XPED_USE_AD
-template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry>
-using ArenaTensor = Tensor<Scalar, Rank, CoRank, Symmetry, false, StanArenaPolicy>;
+template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, bool ENABLE_AD = false>
+using ArenaTensor = Tensor<Scalar, Rank, CoRank, Symmetry, ENABLE_AD, StanArenaPolicy>;
 #endif
 
 } // namespace Xped

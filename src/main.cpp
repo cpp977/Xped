@@ -257,7 +257,7 @@ int main(int argc, char* argv[])
         // std::cout << vec.vi_ << std::endl;
         // check.print(std::cout, true);
     }
-    return 0;
+    // return 0;
 #endif
 
     Xped::Qbasis<Symmetry, 1> in;

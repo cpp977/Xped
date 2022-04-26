@@ -8,7 +8,7 @@
 
 namespace Xped {
 
-template <typename Scalar, typename Symmetry>
+template <typename Scalar, typename Symmetry, bool ENABLE_AD>
 class CTM;
 /**                   p(2)
  *             u(1)   /
@@ -23,14 +23,15 @@ class CTM;
  *              v
  *             d(4)
  */
-template <typename Scalar_, typename Symmetry_>
+template <typename Scalar_, typename Symmetry_, bool ENABLE_AD_ = false>
 class iPEPS
 {
-    friend class CTM<Scalar_, Symmetry_>;
+    friend class CTM<Scalar_, Symmetry_, ENABLE_AD_>;
 
 public:
     typedef Symmetry_ Symmetry;
     typedef Scalar_ Scalar;
+    static constexpr bool ENABLE_AD = ENABLE_AD_;
     typedef typename ScalarTraits<Scalar>::Real RealScalar;
     typedef typename Symmetry::qType qType;
 
@@ -53,8 +54,8 @@ private:
     std::size_t D;
 
     UnitCell cell;
-    TMatrix<Tensor<Scalar, 2, 3, Symmetry>> As;
-    TMatrix<Tensor<Scalar, 3, 2, Symmetry>> Adags;
+    TMatrix<Tensor<Scalar, 2, 3, Symmetry, ENABLE_AD>> As;
+    TMatrix<Tensor<Scalar, 3, 2, Symmetry, ENABLE_AD>> Adags;
 };
 
 } // namespace Xped

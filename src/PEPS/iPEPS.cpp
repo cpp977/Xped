@@ -10,8 +10,8 @@
 
 namespace Xped {
 
-template <typename Scalar, typename Symmetry>
-iPEPS<Scalar, Symmetry>::iPEPS(const UnitCell& cell, const Qbasis<Symmetry, 1>& auxBasis, const Qbasis<Symmetry, 1>& physBasis)
+template <typename Scalar, typename Symmetry, bool ENABLE_AD>
+iPEPS<Scalar, Symmetry, ENABLE_AD>::iPEPS(const UnitCell& cell, const Qbasis<Symmetry, 1>& auxBasis, const Qbasis<Symmetry, 1>& physBasis)
     : cell(cell)
 {
     D = auxBasis.fullDim();
@@ -29,8 +29,8 @@ iPEPS<Scalar, Symmetry>::iPEPS(const UnitCell& cell, const Qbasis<Symmetry, 1>& 
     }
 }
 
-template <typename Scalar, typename Symmetry>
-Qbasis<Symmetry, 1> iPEPS<Scalar, Symmetry>::ketBasis(const int x, const int y, const LEG leg) const
+template <typename Scalar, typename Symmetry, bool ENABLE_AD>
+Qbasis<Symmetry, 1> iPEPS<Scalar, Symmetry, ENABLE_AD>::ketBasis(const int x, const int y, const LEG leg) const
 {
     switch(leg) {
     case LEG::LEFT: return As(x, y).uncoupledDomain()[0]; break;
@@ -42,8 +42,8 @@ Qbasis<Symmetry, 1> iPEPS<Scalar, Symmetry>::ketBasis(const int x, const int y, 
     }
 }
 
-template <typename Scalar, typename Symmetry>
-Qbasis<Symmetry, 1> iPEPS<Scalar, Symmetry>::braBasis(const int x, const int y, const LEG leg) const
+template <typename Scalar, typename Symmetry, bool ENABLE_AD>
+Qbasis<Symmetry, 1> iPEPS<Scalar, Symmetry, ENABLE_AD>::braBasis(const int x, const int y, const LEG leg) const
 {
     switch(leg) {
     case LEG::LEFT: return Adags(x, y).uncoupledDomain()[0]; break;
@@ -55,8 +55,8 @@ Qbasis<Symmetry, 1> iPEPS<Scalar, Symmetry>::braBasis(const int x, const int y, 
     }
 }
 
-template <typename Scalar, typename Symmetry>
-void iPEPS<Scalar, Symmetry>::info() const
+template <typename Scalar, typename Symmetry, bool ENABLE_AD>
+void iPEPS<Scalar, Symmetry, ENABLE_AD>::info() const
 {
     std::cout << "iPEPS(D=" << D << "): UnitCell=(" << cell.Lx << "x" << cell.Ly << ")" << std::endl;
     std::cout << "Tensors:" << std::endl;

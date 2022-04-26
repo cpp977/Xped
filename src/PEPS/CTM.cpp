@@ -12,8 +12,8 @@
 
 namespace Xped {
 
-template <typename Scalar, typename Symmetry>
-void CTM<Scalar, Symmetry>::init(const iPEPS<Scalar, Symmetry>& A)
+template <typename Scalar, typename Symmetry, bool ENABLE_AD>
+void CTM<Scalar, Symmetry, ENABLE_AD>::init(const iPEPS<Scalar, Symmetry, ENABLE_AD>& A)
 {
     C1s.resize(cell.pattern);
     C2s.resize(cell.pattern);
@@ -32,33 +32,37 @@ void CTM<Scalar, Symmetry>::init(const iPEPS<Scalar, Symmetry>& A)
             auto pos = cell.pattern.uniqueIndex(x, y);
             switch(init_m) {
             case INIT::FROM_TRIVIAL: {
-                C1s[pos] = Tensor<Scalar, 0, 2, Symmetry>({{}}, {{Qbasis<Symmetry, 1>::TrivialBasis(), Qbasis<Symmetry, 1>::TrivialBasis()}});
+                C1s[pos] =
+                    Tensor<Scalar, 0, 2, Symmetry, ENABLE_AD>({{}}, {{Qbasis<Symmetry, 1>::TrivialBasis(), Qbasis<Symmetry, 1>::TrivialBasis()}});
                 C1s[pos].setRandom();
-                C2s[pos] = Tensor<Scalar, 1, 1, Symmetry>({{Qbasis<Symmetry, 1>::TrivialBasis()}}, {{Qbasis<Symmetry, 1>::TrivialBasis()}});
+                C2s[pos] =
+                    Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>({{Qbasis<Symmetry, 1>::TrivialBasis()}}, {{Qbasis<Symmetry, 1>::TrivialBasis()}});
                 C2s[pos].setRandom();
-                C3s[pos] = Tensor<Scalar, 2, 0, Symmetry>({{Qbasis<Symmetry, 1>::TrivialBasis(), Qbasis<Symmetry, 1>::TrivialBasis()}}, {{}});
+                C3s[pos] =
+                    Tensor<Scalar, 2, 0, Symmetry, ENABLE_AD>({{Qbasis<Symmetry, 1>::TrivialBasis(), Qbasis<Symmetry, 1>::TrivialBasis()}}, {{}});
                 C3s[pos].setRandom();
-                C4s[pos] = Tensor<Scalar, 1, 1, Symmetry>({{Qbasis<Symmetry, 1>::TrivialBasis()}}, {{Qbasis<Symmetry, 1>::TrivialBasis()}});
+                C4s[pos] =
+                    Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>({{Qbasis<Symmetry, 1>::TrivialBasis()}}, {{Qbasis<Symmetry, 1>::TrivialBasis()}});
                 C4s[pos].setRandom();
-                T1s[pos] = Tensor<Scalar, 1, 3, Symmetry>({{Qbasis<Symmetry, 1>::TrivialBasis()}},
-                                                          {{Qbasis<Symmetry, 1>::TrivialBasis(),
-                                                            A.ketBasis(x, y + 1, iPEPS<Scalar, Symmetry>::LEG::UP),
-                                                            A.braBasis(x, y + 1, iPEPS<Scalar, Symmetry>::LEG::UP)}});
+                T1s[pos] = Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>({{Qbasis<Symmetry, 1>::TrivialBasis()}},
+                                                                     {{Qbasis<Symmetry, 1>::TrivialBasis(),
+                                                                       A.ketBasis(x, y + 1, iPEPS<Scalar, Symmetry, ENABLE_AD>::LEG::UP),
+                                                                       A.braBasis(x, y + 1, iPEPS<Scalar, Symmetry, ENABLE_AD>::LEG::UP)}});
                 T1s[pos].setRandom();
-                T2s[pos] = Tensor<Scalar, 3, 1, Symmetry>({{A.ketBasis(x - 1, y, iPEPS<Scalar, Symmetry>::LEG::RIGHT),
-                                                            A.braBasis(x - 1, y, iPEPS<Scalar, Symmetry>::LEG::RIGHT),
-                                                            Qbasis<Symmetry, 1>::TrivialBasis()}},
-                                                          {{Qbasis<Symmetry, 1>::TrivialBasis()}});
+                T2s[pos] = Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>({{A.ketBasis(x - 1, y, iPEPS<Scalar, Symmetry, ENABLE_AD>::LEG::RIGHT),
+                                                                       A.braBasis(x - 1, y, iPEPS<Scalar, Symmetry, ENABLE_AD>::LEG::RIGHT),
+                                                                       Qbasis<Symmetry, 1>::TrivialBasis()}},
+                                                                     {{Qbasis<Symmetry, 1>::TrivialBasis()}});
                 T2s[pos].setRandom();
-                T3s[pos] = Tensor<Scalar, 3, 1, Symmetry>({{A.ketBasis(x, y - 1, iPEPS<Scalar, Symmetry>::LEG::DOWN),
-                                                            A.braBasis(x, y - 1, iPEPS<Scalar, Symmetry>::LEG::DOWN),
-                                                            Qbasis<Symmetry, 1>::TrivialBasis()}},
-                                                          {{Qbasis<Symmetry, 1>::TrivialBasis()}});
+                T3s[pos] = Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>({{A.ketBasis(x, y - 1, iPEPS<Scalar, Symmetry, ENABLE_AD>::LEG::DOWN),
+                                                                       A.braBasis(x, y - 1, iPEPS<Scalar, Symmetry, ENABLE_AD>::LEG::DOWN),
+                                                                       Qbasis<Symmetry, 1>::TrivialBasis()}},
+                                                                     {{Qbasis<Symmetry, 1>::TrivialBasis()}});
                 T3s[pos].setRandom();
-                T4s[pos] = Tensor<Scalar, 1, 3, Symmetry>({{Qbasis<Symmetry, 1>::TrivialBasis()}},
-                                                          {{Qbasis<Symmetry, 1>::TrivialBasis(),
-                                                            A.ketBasis(x + 1, y, iPEPS<Scalar, Symmetry>::LEG::LEFT),
-                                                            A.braBasis(x + 1, y, iPEPS<Scalar, Symmetry>::LEG::LEFT)}});
+                T4s[pos] = Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>({{Qbasis<Symmetry, 1>::TrivialBasis()}},
+                                                                     {{Qbasis<Symmetry, 1>::TrivialBasis(),
+                                                                       A.ketBasis(x + 1, y, iPEPS<Scalar, Symmetry, ENABLE_AD>::LEG::LEFT),
+                                                                       A.braBasis(x + 1, y, iPEPS<Scalar, Symmetry, ENABLE_AD>::LEG::LEFT)}});
                 T4s[pos].setRandom();
 
                 break;
@@ -72,8 +76,8 @@ void CTM<Scalar, Symmetry>::init(const iPEPS<Scalar, Symmetry>& A)
     }
 }
 
-template <typename Scalar, typename Symmetry>
-void CTM<Scalar, Symmetry>::solve(XPED_CONST iPEPS<Scalar, Symmetry>& A)
+template <typename Scalar, typename Symmetry, bool ENABLE_AD>
+void CTM<Scalar, Symmetry, ENABLE_AD>::solve(XPED_CONST iPEPS<Scalar, Symmetry, ENABLE_AD>& A)
 {
     info();
     for(std::size_t step = 0; step < opts.max_iter; ++step) {
@@ -85,8 +89,8 @@ void CTM<Scalar, Symmetry>::solve(XPED_CONST iPEPS<Scalar, Symmetry>& A)
     }
 }
 
-template <typename Scalar, typename Symmetry>
-void CTM<Scalar, Symmetry>::info() const
+template <typename Scalar, typename Symmetry, bool ENABLE_AD>
+void CTM<Scalar, Symmetry, ENABLE_AD>::info() const
 {
     std::cout << "CTM(χ=" << chi << "): UnitCell=(" << cell.Lx << "x" << cell.Ly << ")" << std::endl;
     // std::cout << "Tensors:" << std::endl;
@@ -103,15 +107,15 @@ void CTM<Scalar, Symmetry>::info() const
     // }
 }
 
-template <typename Scalar, typename Symmetry>
-void CTM<Scalar, Symmetry>::left_move(XPED_CONST iPEPS<Scalar, Symmetry>& A)
+template <typename Scalar, typename Symmetry, bool ENABLE_AD>
+void CTM<Scalar, Symmetry, ENABLE_AD>::left_move(XPED_CONST iPEPS<Scalar, Symmetry, ENABLE_AD>& A)
 {
-    TMatrix<Tensor<Scalar, 1, 3, Symmetry>> P1(cell.pattern);
-    TMatrix<Tensor<Scalar, 3, 1, Symmetry>> P2(cell.pattern);
+    TMatrix<Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>> P1(cell.pattern);
+    TMatrix<Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>> P2(cell.pattern);
 
-    TMatrix<Tensor<Scalar, 0, 2, Symmetry>> C1_new(cell.pattern);
-    TMatrix<Tensor<Scalar, 1, 3, Symmetry>> T4_new(cell.pattern);
-    TMatrix<Tensor<Scalar, 1, 1, Symmetry>> C4_new(cell.pattern);
+    TMatrix<Tensor<Scalar, 0, 2, Symmetry, ENABLE_AD>> C1_new(cell.pattern);
+    TMatrix<Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>> T4_new(cell.pattern);
+    TMatrix<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>> C4_new(cell.pattern);
 
     C1s.resetChange();
     C4s.resetChange();
@@ -153,15 +157,15 @@ void CTM<Scalar, Symmetry>::left_move(XPED_CONST iPEPS<Scalar, Symmetry>& A)
     }
 }
 
-template <typename Scalar, typename Symmetry>
-void CTM<Scalar, Symmetry>::right_move(XPED_CONST iPEPS<Scalar, Symmetry>& A)
+template <typename Scalar, typename Symmetry, bool ENABLE_AD>
+void CTM<Scalar, Symmetry, ENABLE_AD>::right_move(XPED_CONST iPEPS<Scalar, Symmetry, ENABLE_AD>& A)
 {
-    TMatrix<Tensor<Scalar, 1, 3, Symmetry>> P1(cell.pattern);
-    TMatrix<Tensor<Scalar, 3, 1, Symmetry>> P2(cell.pattern);
+    TMatrix<Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>> P1(cell.pattern);
+    TMatrix<Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>> P2(cell.pattern);
 
-    TMatrix<Tensor<Scalar, 1, 1, Symmetry>> C2_new(cell.pattern);
-    TMatrix<Tensor<Scalar, 3, 1, Symmetry>> T2_new(cell.pattern);
-    TMatrix<Tensor<Scalar, 2, 0, Symmetry>> C3_new(cell.pattern);
+    TMatrix<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>> C2_new(cell.pattern);
+    TMatrix<Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>> T2_new(cell.pattern);
+    TMatrix<Tensor<Scalar, 2, 0, Symmetry, ENABLE_AD>> C3_new(cell.pattern);
 
     C2s.resetChange();
     C3s.resetChange();
@@ -202,15 +206,15 @@ void CTM<Scalar, Symmetry>::right_move(XPED_CONST iPEPS<Scalar, Symmetry>& A)
     }
 }
 
-template <typename Scalar, typename Symmetry>
-void CTM<Scalar, Symmetry>::top_move(XPED_CONST iPEPS<Scalar, Symmetry>& A)
+template <typename Scalar, typename Symmetry, bool ENABLE_AD>
+void CTM<Scalar, Symmetry, ENABLE_AD>::top_move(XPED_CONST iPEPS<Scalar, Symmetry, ENABLE_AD>& A)
 {
-    TMatrix<Tensor<Scalar, 1, 3, Symmetry>> P1(cell.pattern);
-    TMatrix<Tensor<Scalar, 3, 1, Symmetry>> P2(cell.pattern);
+    TMatrix<Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>> P1(cell.pattern);
+    TMatrix<Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>> P2(cell.pattern);
 
-    TMatrix<Tensor<Scalar, 0, 2, Symmetry>> C1_new(cell.pattern);
-    TMatrix<Tensor<Scalar, 1, 3, Symmetry>> T1_new(cell.pattern);
-    TMatrix<Tensor<Scalar, 1, 1, Symmetry>> C2_new(cell.pattern);
+    TMatrix<Tensor<Scalar, 0, 2, Symmetry, ENABLE_AD>> C1_new(cell.pattern);
+    TMatrix<Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>> T1_new(cell.pattern);
+    TMatrix<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>> C2_new(cell.pattern);
 
     C1s.resetChange();
     C2s.resetChange();
@@ -251,15 +255,15 @@ void CTM<Scalar, Symmetry>::top_move(XPED_CONST iPEPS<Scalar, Symmetry>& A)
     }
 }
 
-template <typename Scalar, typename Symmetry>
-void CTM<Scalar, Symmetry>::bottom_move(XPED_CONST iPEPS<Scalar, Symmetry>& A)
+template <typename Scalar, typename Symmetry, bool ENABLE_AD>
+void CTM<Scalar, Symmetry, ENABLE_AD>::bottom_move(XPED_CONST iPEPS<Scalar, Symmetry, ENABLE_AD>& A)
 {
-    TMatrix<Tensor<Scalar, 1, 3, Symmetry>> P1(cell.pattern);
-    TMatrix<Tensor<Scalar, 3, 1, Symmetry>> P2(cell.pattern);
+    TMatrix<Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>> P1(cell.pattern);
+    TMatrix<Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>> P2(cell.pattern);
 
-    TMatrix<Tensor<Scalar, 1, 1, Symmetry>> C4_new(cell.pattern);
-    TMatrix<Tensor<Scalar, 3, 1, Symmetry>> T3_new(cell.pattern);
-    TMatrix<Tensor<Scalar, 2, 0, Symmetry>> C3_new(cell.pattern);
+    TMatrix<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>> C4_new(cell.pattern);
+    TMatrix<Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>> T3_new(cell.pattern);
+    TMatrix<Tensor<Scalar, 2, 0, Symmetry, ENABLE_AD>> C3_new(cell.pattern);
 
     C4s.resetChange();
     C3s.resetChange();
@@ -300,13 +304,14 @@ void CTM<Scalar, Symmetry>::bottom_move(XPED_CONST iPEPS<Scalar, Symmetry>& A)
     }
 }
 
-template <typename Scalar, typename Symmetry>
-std::pair<Tensor<Scalar, 1, 3, Symmetry>, Tensor<Scalar, 3, 1, Symmetry>>
-CTM<Scalar, Symmetry>::get_projectors(const int x, const int y, XPED_CONST iPEPS<Scalar, Symmetry>& A, const DIRECTION dir) XPED_CONST
+template <typename Scalar, typename Symmetry, bool ENABLE_AD>
+std::pair<Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>, Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>>
+CTM<Scalar, Symmetry, ENABLE_AD>::get_projectors(const int x, const int y, XPED_CONST iPEPS<Scalar, Symmetry, ENABLE_AD>& A, const DIRECTION dir)
+    XPED_CONST
 {
-    Tensor<Scalar, 1, 3, Symmetry> P1;
-    Tensor<Scalar, 3, 1, Symmetry> P2;
-    Tensor<Scalar, 3, 3, Symmetry> Q1, Q2, Q3, Q4;
+    Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD> P1;
+    Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD> P2;
+    Tensor<Scalar, 3, 3, Symmetry, ENABLE_AD> Q1, Q2, Q3, Q4;
     switch(dir) {
     case DIRECTION::LEFT: {
         switch(proj_m) {
@@ -428,17 +433,17 @@ CTM<Scalar, Symmetry>::get_projectors(const int x, const int y, XPED_CONST iPEPS
     return std::make_pair(P1, P2);
 }
 
-template <typename Scalar, typename Symmetry>
-std::tuple<Tensor<Scalar, 0, 2, Symmetry>, Tensor<Scalar, 1, 3, Symmetry>, Tensor<Scalar, 1, 1, Symmetry>>
-CTM<Scalar, Symmetry>::renormalize_left(const int x,
-                                        const int y,
-                                        XPED_CONST iPEPS<Scalar, Symmetry>& A,
-                                        XPED_CONST TMatrix<Tensor<Scalar, 1, 3, Symmetry>>& P1,
-                                        XPED_CONST TMatrix<Tensor<Scalar, 3, 1, Symmetry>>& P2) XPED_CONST
+template <typename Scalar, typename Symmetry, bool ENABLE_AD>
+std::tuple<Tensor<Scalar, 0, 2, Symmetry, ENABLE_AD>, Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>, Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>>
+CTM<Scalar, Symmetry, ENABLE_AD>::renormalize_left(const int x,
+                                                   const int y,
+                                                   XPED_CONST iPEPS<Scalar, Symmetry, ENABLE_AD>& A,
+                                                   XPED_CONST TMatrix<Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>>& P1,
+                                                   XPED_CONST TMatrix<Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>>& P2) XPED_CONST
 {
-    Tensor<Scalar, 0, 2, Symmetry> C1_new;
-    Tensor<Scalar, 1, 3, Symmetry> T4_new;
-    Tensor<Scalar, 1, 1, Symmetry> C4_new;
+    Tensor<Scalar, 0, 2, Symmetry, ENABLE_AD> C1_new;
+    Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD> T4_new;
+    Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD> C4_new;
     C1_new = (P1(x, y - 1) * (C1s(x - 1, y - 1).template permute<-1, 0, 1>() * T1s(x, y - 1)).template permute<-2, 0, 2, 3, 1>())
                  .template permute<+1, 0, 1>();
     C1_new = C1_new * (1. / C1_new.norm());
@@ -454,17 +459,17 @@ CTM<Scalar, Symmetry>::renormalize_left(const int x,
     return std::make_tuple(C1_new, T4_new, C4_new);
 }
 
-template <typename Scalar, typename Symmetry>
-std::tuple<Tensor<Scalar, 1, 1, Symmetry>, Tensor<Scalar, 3, 1, Symmetry>, Tensor<Scalar, 2, 0, Symmetry>>
-CTM<Scalar, Symmetry>::renormalize_right(const int x,
-                                         const int y,
-                                         XPED_CONST iPEPS<Scalar, Symmetry>& A,
-                                         XPED_CONST TMatrix<Tensor<Scalar, 1, 3, Symmetry>>& P1,
-                                         XPED_CONST TMatrix<Tensor<Scalar, 3, 1, Symmetry>>& P2) XPED_CONST
+template <typename Scalar, typename Symmetry, bool ENABLE_AD>
+std::tuple<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>, Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>, Tensor<Scalar, 2, 0, Symmetry, ENABLE_AD>>
+CTM<Scalar, Symmetry, ENABLE_AD>::renormalize_right(const int x,
+                                                    const int y,
+                                                    XPED_CONST iPEPS<Scalar, Symmetry, ENABLE_AD>& A,
+                                                    XPED_CONST TMatrix<Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>>& P1,
+                                                    XPED_CONST TMatrix<Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>>& P2) XPED_CONST
 {
-    Tensor<Scalar, 1, 1, Symmetry> C2_new;
-    Tensor<Scalar, 3, 1, Symmetry> T2_new;
-    Tensor<Scalar, 2, 0, Symmetry> C3_new;
+    Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD> C2_new;
+    Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD> T2_new;
+    Tensor<Scalar, 2, 0, Symmetry, ENABLE_AD> C3_new;
     C2_new = (T1s(x, y - 1).template permute<-2, 0, 2, 3, 1>() * C2s(x + 1, y - 1)).template permute<+2, 0, 3, 1, 2>() * P2(x, y - 1);
     C2_new = C2_new * (1. / C2_new.norm());
     C3_new = (P1(x, y) *
@@ -480,17 +485,17 @@ CTM<Scalar, Symmetry>::renormalize_right(const int x,
     return std::make_tuple(C2_new, T2_new, C3_new);
 }
 
-template <typename Scalar, typename Symmetry>
-std::tuple<Tensor<Scalar, 0, 2, Symmetry>, Tensor<Scalar, 1, 3, Symmetry>, Tensor<Scalar, 1, 1, Symmetry>>
-CTM<Scalar, Symmetry>::renormalize_top(const int x,
-                                       const int y,
-                                       XPED_CONST iPEPS<Scalar, Symmetry>& A,
-                                       XPED_CONST TMatrix<Tensor<Scalar, 1, 3, Symmetry>>& P1,
-                                       XPED_CONST TMatrix<Tensor<Scalar, 3, 1, Symmetry>>& P2) XPED_CONST
+template <typename Scalar, typename Symmetry, bool ENABLE_AD>
+std::tuple<Tensor<Scalar, 0, 2, Symmetry, ENABLE_AD>, Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>, Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>>
+CTM<Scalar, Symmetry, ENABLE_AD>::renormalize_top(const int x,
+                                                  const int y,
+                                                  XPED_CONST iPEPS<Scalar, Symmetry, ENABLE_AD>& A,
+                                                  XPED_CONST TMatrix<Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>>& P1,
+                                                  XPED_CONST TMatrix<Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>>& P2) XPED_CONST
 {
-    Tensor<Scalar, 0, 2, Symmetry> C1_new;
-    Tensor<Scalar, 1, 3, Symmetry> T1_new;
-    Tensor<Scalar, 1, 1, Symmetry> C2_new;
+    Tensor<Scalar, 0, 2, Symmetry, ENABLE_AD> C1_new;
+    Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD> T1_new;
+    Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD> C2_new;
     C1_new = ((T4s(x - 1, y).template permute<-2, 1, 2, 3, 0>() * C1s(x - 1, y - 1).template permute<-1, 0, 1>()).template permute<+2, 0, 3, 1, 2>() *
               P2(x - 1, y))
                  .template permute<+1, 0, 1>();
@@ -505,17 +510,17 @@ CTM<Scalar, Symmetry>::renormalize_top(const int x,
     return std::make_tuple(C1_new, T1_new, C2_new);
 }
 
-template <typename Scalar, typename Symmetry>
-std::tuple<Tensor<Scalar, 1, 1, Symmetry>, Tensor<Scalar, 3, 1, Symmetry>, Tensor<Scalar, 2, 0, Symmetry>>
-CTM<Scalar, Symmetry>::renormalize_bottom(const int x,
-                                          const int y,
-                                          XPED_CONST iPEPS<Scalar, Symmetry>& A,
-                                          XPED_CONST TMatrix<Tensor<Scalar, 1, 3, Symmetry>>& P1,
-                                          XPED_CONST TMatrix<Tensor<Scalar, 3, 1, Symmetry>>& P2) XPED_CONST
+template <typename Scalar, typename Symmetry, bool ENABLE_AD>
+std::tuple<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>, Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>, Tensor<Scalar, 2, 0, Symmetry, ENABLE_AD>>
+CTM<Scalar, Symmetry, ENABLE_AD>::renormalize_bottom(const int x,
+                                                     const int y,
+                                                     XPED_CONST iPEPS<Scalar, Symmetry, ENABLE_AD>& A,
+                                                     XPED_CONST TMatrix<Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>>& P1,
+                                                     XPED_CONST TMatrix<Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>>& P2) XPED_CONST
 {
-    Tensor<Scalar, 1, 1, Symmetry> C4_new;
-    Tensor<Scalar, 3, 1, Symmetry> T3_new;
-    Tensor<Scalar, 2, 0, Symmetry> C3_new;
+    Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD> C4_new;
+    Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD> T3_new;
+    Tensor<Scalar, 2, 0, Symmetry, ENABLE_AD> C3_new;
     C4_new = (P1(x - 1, y) * (T4s(x - 1, y).template permute<-2, 0, 2, 3, 1>() * C4s(x - 1, y + 1)).template permute<0, 3, 1, 2, 0>())
                  .template permute<0, 1, 0>();
     C4_new = C4_new * (1. / C4_new.norm());
@@ -532,11 +537,13 @@ CTM<Scalar, Symmetry>::renormalize_bottom(const int x,
     return std::make_tuple(C4_new, T3_new, C3_new);
 }
 
-template <typename Scalar, typename Symmetry>
-Tensor<Scalar, 3, 3, Symmetry>
-CTM<Scalar, Symmetry>::contractCorner(const int x, const int y, XPED_CONST iPEPS<Scalar, Symmetry>& A, const CORNER corner) XPED_CONST
+template <typename Scalar, typename Symmetry, bool ENABLE_AD>
+Tensor<Scalar, 3, 3, Symmetry, ENABLE_AD> CTM<Scalar, Symmetry, ENABLE_AD>::contractCorner(const int x,
+                                                                                           const int y,
+                                                                                           XPED_CONST iPEPS<Scalar, Symmetry, ENABLE_AD>& A,
+                                                                                           const CORNER corner) XPED_CONST
 {
-    Tensor<Scalar, 3, 3, Symmetry> Q;
+    Tensor<Scalar, 3, 3, Symmetry, ENABLE_AD> Q;
     switch(corner) {
     case CORNER::UPPER_LEFT: {
         auto tmp = C1s(x - 1, y - 1).template permute<-1, 0, 1>() * T1s(x, y - 1);

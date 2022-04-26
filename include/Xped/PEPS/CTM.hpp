@@ -15,7 +15,7 @@ namespace Xped {
  *  |    ||    |
  * C4 -- T3 -- C3
  */
-template <typename Scalar_, typename Symmetry_>
+template <typename Scalar_, typename Symmetry_, bool ENABLE_AD = false>
 class CTM
 {
 public:
@@ -59,8 +59,8 @@ public:
     {}
 
     // void setAs(std::shared_ptr<const iPEPS<Symmetry, Scalar>>& As);
-    void solve(XPED_CONST iPEPS<Scalar, Symmetry>& A);
-    void init(const iPEPS<Scalar, Symmetry>& A);
+    void solve(XPED_CONST iPEPS<Scalar, Symmetry, ENABLE_AD>& A);
+    void init(const iPEPS<Scalar, Symmetry, ENABLE_AD>& A);
 
     void info() const;
 
@@ -72,57 +72,59 @@ private:
     Options opts{};
     // std::shared_ptr<const iPEPS<Symmetry, Scalar>> As;
 
-    TMatrix<Tensor<Scalar, 0, 2, Symmetry>> C1s;
-    TMatrix<Tensor<Scalar, 1, 1, Symmetry>> C2s;
-    TMatrix<Tensor<Scalar, 2, 0, Symmetry>> C3s;
-    TMatrix<Tensor<Scalar, 1, 1, Symmetry>> C4s;
-    TMatrix<Tensor<Scalar, 1, 3, Symmetry>> T1s;
-    TMatrix<Tensor<Scalar, 3, 1, Symmetry>> T2s;
-    TMatrix<Tensor<Scalar, 3, 1, Symmetry>> T3s;
-    TMatrix<Tensor<Scalar, 1, 3, Symmetry>> T4s;
+    TMatrix<Tensor<Scalar, 0, 2, Symmetry, ENABLE_AD>> C1s;
+    TMatrix<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>> C2s;
+    TMatrix<Tensor<Scalar, 2, 0, Symmetry, ENABLE_AD>> C3s;
+    TMatrix<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>> C4s;
+    TMatrix<Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>> T1s;
+    TMatrix<Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>> T2s;
+    TMatrix<Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>> T3s;
+    TMatrix<Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>> T4s;
 
-    TMatrix<Tensor<Scalar, 1, 1, Symmetry>> Svs;
+    TMatrix<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>> Svs;
 
-    std::pair<Tensor<Scalar, 3, 3, Symmetry>, Tensor<Scalar, 1, 1, Symmetry>> get_projectors_left(const iPEPS<Scalar, Symmetry>& A);
+    std::pair<Tensor<Scalar, 3, 3, Symmetry, ENABLE_AD>, Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>>
+    get_projectors_left(const iPEPS<Scalar, Symmetry, ENABLE_AD>& A);
 
-    void left_move(XPED_CONST iPEPS<Scalar, Symmetry>& A);
-    void right_move(XPED_CONST iPEPS<Scalar, Symmetry>& A);
-    void top_move(XPED_CONST iPEPS<Scalar, Symmetry>& A);
-    void bottom_move(XPED_CONST iPEPS<Scalar, Symmetry>& A);
-    void symmetric_move(XPED_CONST iPEPS<Scalar, Symmetry>& A);
+    void left_move(XPED_CONST iPEPS<Scalar, Symmetry, ENABLE_AD>& A);
+    void right_move(XPED_CONST iPEPS<Scalar, Symmetry, ENABLE_AD>& A);
+    void top_move(XPED_CONST iPEPS<Scalar, Symmetry, ENABLE_AD>& A);
+    void bottom_move(XPED_CONST iPEPS<Scalar, Symmetry, ENABLE_AD>& A);
+    void symmetric_move(XPED_CONST iPEPS<Scalar, Symmetry, ENABLE_AD>& A);
 
-    Tensor<Scalar, 3, 3, Symmetry> contractCorner(const int x, const int y, XPED_CONST iPEPS<Scalar, Symmetry>& A, const CORNER corner) XPED_CONST;
+    Tensor<Scalar, 3, 3, Symmetry, ENABLE_AD>
+    contractCorner(const int x, const int y, XPED_CONST iPEPS<Scalar, Symmetry, ENABLE_AD>& A, const CORNER corner) XPED_CONST;
 
-    std::pair<Tensor<Scalar, 1, 3, Symmetry>, Tensor<Scalar, 3, 1, Symmetry>>
-    get_projectors(const int x, const int y, XPED_CONST iPEPS<Scalar, Symmetry>& A, const DIRECTION dir) XPED_CONST;
+    std::pair<Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>, Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>>
+    get_projectors(const int x, const int y, XPED_CONST iPEPS<Scalar, Symmetry, ENABLE_AD>& A, const DIRECTION dir) XPED_CONST;
 
-    std::tuple<Tensor<Scalar, 0, 2, Symmetry>, Tensor<Scalar, 1, 3, Symmetry>, Tensor<Scalar, 1, 1, Symmetry>>
+    std::tuple<Tensor<Scalar, 0, 2, Symmetry, ENABLE_AD>, Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>, Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>>
     renormalize_left(const int x,
                      const int y,
-                     XPED_CONST iPEPS<Scalar, Symmetry>& A,
-                     XPED_CONST TMatrix<Tensor<Scalar, 1, 3, Symmetry>>& P1,
-                     XPED_CONST TMatrix<Tensor<Scalar, 3, 1, Symmetry>>& P2) XPED_CONST;
+                     XPED_CONST iPEPS<Scalar, Symmetry, ENABLE_AD>& A,
+                     XPED_CONST TMatrix<Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>>& P1,
+                     XPED_CONST TMatrix<Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>>& P2) XPED_CONST;
 
-    std::tuple<Tensor<Scalar, 1, 1, Symmetry>, Tensor<Scalar, 3, 1, Symmetry>, Tensor<Scalar, 2, 0, Symmetry>>
+    std::tuple<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>, Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>, Tensor<Scalar, 2, 0, Symmetry, ENABLE_AD>>
     renormalize_right(const int x,
                       const int y,
-                      XPED_CONST iPEPS<Scalar, Symmetry>& A,
-                      XPED_CONST TMatrix<Tensor<Scalar, 1, 3, Symmetry>>& P1,
-                      XPED_CONST TMatrix<Tensor<Scalar, 3, 1, Symmetry>>& P2) XPED_CONST;
+                      XPED_CONST iPEPS<Scalar, Symmetry, ENABLE_AD>& A,
+                      XPED_CONST TMatrix<Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>>& P1,
+                      XPED_CONST TMatrix<Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>>& P2) XPED_CONST;
 
-    std::tuple<Tensor<Scalar, 0, 2, Symmetry>, Tensor<Scalar, 1, 3, Symmetry>, Tensor<Scalar, 1, 1, Symmetry>>
+    std::tuple<Tensor<Scalar, 0, 2, Symmetry, ENABLE_AD>, Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>, Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>>
     renormalize_top(const int x,
                     const int y,
-                    XPED_CONST iPEPS<Scalar, Symmetry>& A,
-                    XPED_CONST TMatrix<Tensor<Scalar, 1, 3, Symmetry>>& P1,
-                    XPED_CONST TMatrix<Tensor<Scalar, 3, 1, Symmetry>>& P2) XPED_CONST;
+                    XPED_CONST iPEPS<Scalar, Symmetry, ENABLE_AD>& A,
+                    XPED_CONST TMatrix<Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>>& P1,
+                    XPED_CONST TMatrix<Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>>& P2) XPED_CONST;
 
-    std::tuple<Tensor<Scalar, 1, 1, Symmetry>, Tensor<Scalar, 3, 1, Symmetry>, Tensor<Scalar, 2, 0, Symmetry>>
+    std::tuple<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>, Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>, Tensor<Scalar, 2, 0, Symmetry, ENABLE_AD>>
     renormalize_bottom(const int x,
                        const int y,
-                       XPED_CONST iPEPS<Scalar, Symmetry>& A,
-                       XPED_CONST TMatrix<Tensor<Scalar, 1, 3, Symmetry>>& P1,
-                       XPED_CONST TMatrix<Tensor<Scalar, 3, 1, Symmetry>>& P2) XPED_CONST;
+                       XPED_CONST iPEPS<Scalar, Symmetry, ENABLE_AD>& A,
+                       XPED_CONST TMatrix<Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>>& P1,
+                       XPED_CONST TMatrix<Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>>& P2) XPED_CONST;
 };
 
 } // namespace Xped

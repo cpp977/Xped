@@ -86,6 +86,14 @@ public:
         m_data.resize(curr);
     }
 
+    void set_data(const Scalar* data, std::size_t size)
+    {
+        assert(m_sector.size() > 0 and "Block data needs to already set. Use initialized_resize() instead.");
+        assert(m_offsets.size() == m_sector.size() and "Corrupted storage.");
+        assert(m_dict.size() == m_sector.size() and "Corrupted storage.");
+        m_data.assign(data, data + size);
+    }
+
     cMapMatrixType block(std::size_t i) const
     {
         assert(i < m_offsets.size());
@@ -120,6 +128,14 @@ public:
 
     const Scalar* data() const { return m_data.data(); }
     Scalar* data() { return m_data.data(); }
+
+    auto begin() { return m_data.begin(); }
+    auto end() { return m_data.end(); }
+
+    const auto cbegin() const { return m_data.cbegin(); }
+    const auto cend() const { return m_data.cend(); }
+
+    std::size_t plainSize() const { return m_data.size(); }
 
     const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, Rank>& uncoupledDomain() const { return m_uncoupled_domain; }
     const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, CoRank>& uncoupledCodomain() const { return m_uncoupled_codomain; }

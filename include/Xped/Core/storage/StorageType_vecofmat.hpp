@@ -73,6 +73,11 @@ public:
 
     static constexpr bool IS_CONTIGUOUS() { return false; }
 
+    std::size_t plainSize() const
+    {
+        return std::accumulate(m_data.cbegin(), m_data.cend(), 0, [](std::size_t cur, const MatrixType& mat) { return cur + mat.size(); });
+    }
+
     void resize()
     {
         m_data.reserve(std::max(m_domain.Nq(), m_codomain.Nq()));

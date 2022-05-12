@@ -7,6 +7,8 @@
 #include "seq/seq.h"
 
 #include "Xped/Util/Macros.hpp"
+
+#include "Xped/Util/Constfct.hpp"
 #include "Xped/Util/Mpi.hpp"
 
 #include "Xped/Core/FusionTree.hpp"
@@ -114,10 +116,11 @@ public:
     static constexpr std::size_t rank() { return Rank; }
     static constexpr std::size_t corank() { return CoRank; }
 
+    inline void set_data(const Scalar* data, std::size_t size) { storage_.set_data(data, size); }
+
     inline const auto& sector() const { return storage_.sector(); }
     inline const qType sector(std::size_t i) const { return storage_.sector(i); }
 
-    // inline const std::vector<MatrixType> block() const { return block_; }
     typename Storage::ConstMatrixReturnType block(std::size_t i) const { return storage_.block(i); }
     typename Storage::MatrixReturnType block(std::size_t i) { return storage_.block(i); }
 
@@ -132,7 +135,7 @@ public:
         return storage_.data();
     }
 
-    const std::size_t plainSize() const { return storage_.data().size(); }
+    const std::size_t plainSize() const { return storage_.plainSize(); }
 
     const DictType& dict() const { return storage_.dict(); }
 
@@ -175,9 +178,18 @@ public:
     void setRandom();
     void setZero();
     void setIdentity();
-    void setConstant(const Scalar& val);
+    void setConstant(Scalar val);
 
     void clear() { storage_.clear(); }
+
+    static Self Identity(const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, Rank>& basis_domain,
+                         const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, CoRank>& basis_codomain,
+                         mpi::XpedWorld& world = mpi::getUniverse())
+    {
+        Self out(basis_domain, basis_codomain, world);
+        out.setIdentity();
+        return out;
+    }
 
     // Apply the basis transformation of domain and codomain to the block matrices to get a plain array/tensor
     TensorType plainTensor() const;
@@ -203,6 +215,25 @@ public:
     {
         return permute<shift, p...>();
     }
+
+#if XPED_HAS_NTTP
+    template <auto a1, auto a2, std::size_t ResRank, std::size_t OtherRank, std::size_t OtherCoRank>
+    auto contract(const Tensor<Scalar, OtherRank, OtherCoRank, Symmetry, false, AllocationPolicy>& other) XPED_CONST
+    {
+        constexpr auto perms = util::constFct::get_permutations<a1, Rank, a2, OtherRank, ResRank>();
+        constexpr auto p1 = std::get<0>(perms);
+        constexpr auto shift1 = std::get<1>(perms);
+        SPDLOG_INFO("shift1={}, p1={}", shift1, p1);
+        constexpr auto p2 = std::get<2>(perms);
+        constexpr auto shift2 = std::get<3>(perms);
+        SPDLOG_INFO("shift2={}, p2={}", shift2, p2);
+        constexpr auto pres = std::get<4>(perms);
+        constexpr auto shiftres = std::get<5>(perms);
+        SPDLOG_INFO("shiftres={}, pres={}", shiftres, pres);
+        return (this->template permute<shift1>(util::constFct::as_sequence<p1>()) * other.template permute<shift2>(util::constFct::as_sequence<p2>()))
+            .template permute<shiftres>(util::constFct::as_sequence<pres>());
+    }
+#endif
 
     std::tuple<Tensor<Scalar, Rank, 1, Symmetry, false, AllocationPolicy>,
                Tensor<RealScalar, 1, 1, Symmetry, false, AllocationPolicy>,
@@ -235,6 +266,9 @@ public:
 
     auto begin() { return storage_.begin(); }
     auto end() { return storage_.end(); }
+
+    const auto cbegin() const { return storage_.cbegin(); }
+    const auto cend() const { return storage_.cend(); }
 
 private:
     Storage storage_;

@@ -1,5 +1,5 @@
-#ifndef RANDOM_H__
-#define RANDOM_H__
+#ifndef XPED_RANDOM_H__
+#define XPED_RANDOM_H__
 
 #include <complex>
 #include <random>

@@ -1,34 +1,21 @@
 #ifndef XPED_MACROS_H
 #define XPED_MACROS_H
 
+#include <boost/predef.h>
 #include <string>
 
 // Get infos to the used compiler and version. Taken from Eigen (Macros.h)
-#ifdef __GNUC__
-#    define XPED_COMP_GNUC 1
-#else
-#    define XPED_COMP_GNUC 0
-#endif
-
-#if COMP_GNUC
-#    define XPED_GNUC_AT_LEAST(x, y) ((__GNUC__ == x && __GNUC_MINOR__ >= y) || __GNUC__ > x)
-#    define XPED_GNUC_AT_MOST(x, y) ((__GNUC__ == x && __GNUC_MINOR__ <= y) || __GNUC__ < x)
-#    define XPED_GNUC_AT(x, y) (__GNUC__ == x && __GNUC_MINOR__ == y)
-#else
-#    define XPED_GNUC_AT_LEAST(x, y) 0
-#    define XPED_GNUC_AT_MOST(x, y) 0
-#    define XPED_GNUC_AT(x, y) 0
-#endif
-
-#if defined(__clang__)
-#    define XPED_COMP_CLANG (__clang_major__ * 100 + __clang_minor__)
+#if BOOST_COMP_CLANG
 const std::string XPED_COMPILER_STR = "clang++";
-#elif defined(__INTEL_COMPILER)
-#    define XPED_COMP_ICPC (__INTEL_COMPILER)
+#elif BOOST_COMP_INTEL
 const std::string XPED_COMPILER_STR = "icpc";
-#else
-#    define XPED_COMP_CLANG 0
+#elif BOOST_COMP_GNUC
 const std::string XPED_COMPILER_STR = "g++";
+#elif __INTEL_LLVM_COMPILER
+#    define BOOST_COMP_INTEL_LLVM __INTEL_LLVM_COMPILER
+const std::string XPED_COMPILER_STR = "icx";
+#else
+#    pragma error "Unsupported compiler."
 #endif
 
 #if defined(XPED_USE_MKL)
@@ -45,9 +32,33 @@ const std::string XPED_BLAS_STR = "None";
 #        define XPED_CXX11 1
 #    elif __cplusplus == 201402L
 #        define XPED_CXX14 1
-#    elif __cplusplus >= 201703L
+#    elif __cplusplus == 201703L
 #        define XPED_CXX17 1
+#    elif __cplusplus >= 202002L
+#        define XPED_CXX20 1
 #    endif
+#endif
+
+#if BOOST_COMP_GNUC
+#    if __GNUC__ > 9
+#        define XPED_HAS_NTTP 1
+#    else
+#        define XPED_HAS_NTTP 0
+#    endif
+#elif BOOST_COMP_CLANG
+#    if __clang_major__ > 11
+#        define XPED_HAS_NTTP 1
+#    else
+#        define XPED_HAS_NTTP 0
+#    endif
+#elif BOOST_COMP_INTEL_LLVM
+#    if __INTEL_LLVM_COMPILER >= 20210400
+#        define XPED_HAS_NTTP 1
+#    else
+#        define XPED_HAS_NTTP 0
+#    endif
+#elif BOOST_COMP_INTEL
+#    define XPED_HAS_NTTP 0
 #endif
 
 #if __has_include("boost/functional/hash.hpp")

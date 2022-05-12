@@ -22,6 +22,9 @@ class DiagCoeffUnaryOp;
 template <typename XprTypeLeft, typename XprTypeRight>
 class CoeffBinaryOp;
 
+template <typename XprTypeLeft, typename XprTypeRight>
+class DiagCoeffBinaryOp;
+
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, bool ENABLE_AD, typename AllocationPolicy>
 class Tensor;
 
@@ -42,6 +45,8 @@ public:
     XPED_CONST CoeffUnaryOp<Derived> unaryExpr(const std::function<Scalar(Scalar)>& coeff_func) XPED_CONST;
 
     XPED_CONST CoeffUnaryOp<Derived> sqrt() XPED_CONST;
+    XPED_CONST CoeffUnaryOp<Derived> inv() XPED_CONST;
+    XPED_CONST CoeffUnaryOp<Derived> square() XPED_CONST;
 
     Derived& operator+=(const Scalar offset);
     Derived& operator-=(const Scalar offset);
@@ -51,8 +56,13 @@ public:
     XPED_CONST DiagCoeffUnaryOp<Derived> diagUnaryExpr(const std::function<Scalar(Scalar)>& coeff_func) XPED_CONST;
 
     XPED_CONST DiagCoeffUnaryOp<Derived> diag_inv() XPED_CONST;
+    XPED_CONST DiagCoeffUnaryOp<Derived> diag_sqrt() XPED_CONST;
 
     // Binary operations
+    template <typename OtherDerived>
+    XPED_CONST DiagCoeffBinaryOp<Derived, OtherDerived> diagBinaryExpr(XPED_CONST TensorBase<OtherDerived>& other,
+                                                                       const std::function<Scalar(Scalar, Scalar)>& coeff_func) XPED_CONST;
+
     template <typename OtherDerived>
     XPED_CONST CoeffBinaryOp<Derived, OtherDerived> binaryExpr(XPED_CONST TensorBase<OtherDerived>& other,
                                                                const std::function<Scalar(Scalar, Scalar)>& coeff_func) XPED_CONST;

@@ -13,6 +13,7 @@
         "boost-functional",
         "boost-math",
         "boost-iterator",
+        "boost-predef",
         "wignersun",
         "doctest"
     ],

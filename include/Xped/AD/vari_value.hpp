@@ -3,6 +3,8 @@
 
 #include "stan/math/rev/core/vari.hpp"
 
+#include "Xped/Core/Tensor.hpp"
+
 template <typename T>
 struct is_tensor
 {
@@ -96,8 +98,12 @@ class vari_value<T, require_tensor_v<T>> : public vari_base, public std::conditi
 {
     using value_type = T; // The underlying type for this class
     using Scalar = typename T::Scalar; // A floating point type
+    using Symmetry = typename T::Symmetry;
+    using AllocationPolicy = typename T::AllocationPolicy;
     // using Storage = typename T::Storage;  // A floating point type
     using vari_type = vari_value<T>;
+    static constexpr std::size_t Rank = T::Rank;
+    static constexpr std::size_t CoRank = T::CoRank;
 
     T val_;
 
@@ -109,7 +115,7 @@ class vari_value<T, require_tensor_v<T>> : public vari_base, public std::conditi
         , adj_(x.uncoupledDomain(), x.uncoupledCodomain(), x.world())
     {
         adj_.setZero();
-        if constexpr(is_arena_tensor<T>::value) { stan::math::ChainableStack::instance_->var_stack_.push_back(this); }
+        stan::math::ChainableStack::instance_->var_stack_.push_back(this);
     }
 
     template <typename S>
@@ -119,10 +125,20 @@ class vari_value<T, require_tensor_v<T>> : public vari_base, public std::conditi
     {
         adj_.setZero();
         if(stacked) {
-            if constexpr(is_arena_tensor<T>::value) { stan::math::ChainableStack::instance_->var_stack_.push_back(this); }
+            stan::math::ChainableStack::instance_->var_stack_.push_back(this);
         } else {
-            if constexpr(is_arena_tensor<T>::value) { stan::math::ChainableStack::instance_->var_nochain_stack_.push_back(this); }
+            stan::math::ChainableStack::instance_->var_nochain_stack_.push_back(this);
         }
+    }
+
+    vari_value(const std::array<Xped::Qbasis<Symmetry, 1, AllocationPolicy>, Rank>& basis_domain,
+               const std::array<Xped::Qbasis<Symmetry, 1, AllocationPolicy>, CoRank>& basis_codomain,
+               Xped::mpi::XpedWorld& world = Xped::mpi::getUniverse())
+        : val_(basis_domain, basis_codomain, world)
+        , adj_(basis_domain, basis_codomain, world)
+    {
+        adj_.setZero();
+        stan::math::ChainableStack::instance_->var_nochain_stack_.push_back(this);
     }
 
     inline const auto& val() const noexcept { return val_; }

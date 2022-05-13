@@ -14,6 +14,7 @@ template <typename Scalar, typename Symmetry, bool ENABLE_AD>
 iPEPS<Scalar, Symmetry, ENABLE_AD>::iPEPS(const UnitCell& cell, const Qbasis<Symmetry, 1>& auxBasis, const Qbasis<Symmetry, 1>& physBasis)
     : cell(cell)
 {
+    // nograd();
     D = auxBasis.fullDim();
     As.resize(cell.pattern);
     Adags.resize(cell.pattern);
@@ -21,9 +22,70 @@ iPEPS<Scalar, Symmetry, ENABLE_AD>::iPEPS(const UnitCell& cell, const Qbasis<Sym
         for(int y = 0; y < cell.Ly; y++) {
             if(not cell.pattern.isUnique(x, y)) { continue; }
             auto pos = cell.pattern.uniqueIndex(x, y);
-            As[pos] = Tensor<Scalar, 2, 3, Symmetry>({{auxBasis, auxBasis}}, {{auxBasis, auxBasis, physBasis}});
+            As[pos] = Tensor<Scalar, 2, 3, Symmetry, ENABLE_AD>({{auxBasis, auxBasis}}, {{auxBasis, auxBasis, physBasis}});
+            // As[pos].setZero();
+            assert(As[pos].coupledDomain().dim() > 0 and "Bases of the A tensor have no fused blocks.");
+        }
+    }
+    // grad();
+}
+
+template <typename Scalar, typename Symmetry, bool ENABLE_AD>
+void iPEPS<Scalar, Symmetry, ENABLE_AD>::setZero()
+{
+    for(int x = 0; x < cell.Lx; x++) {
+        for(int y = 0; y < cell.Ly; y++) {
+            if(not cell.pattern.isUnique(x, y)) { continue; }
+            auto pos = cell.pattern.uniqueIndex(x, y);
+            As[pos].setZero();
+            // Adags[pos] = As[pos].adjoint().eval().template permute<0, 3, 4, 2, 0, 1>();
+        }
+    }
+}
+
+template <typename Scalar, typename Symmetry, bool ENABLE_AD>
+void iPEPS<Scalar, Symmetry, ENABLE_AD>::setRandom()
+{
+    for(int x = 0; x < cell.Lx; x++) {
+        for(int y = 0; y < cell.Ly; y++) {
+            if(not cell.pattern.isUnique(x, y)) { continue; }
+            auto pos = cell.pattern.uniqueIndex(x, y);
             As[pos].setRandom();
-            assert(As[pos].sector().size() > 0 and "Bases of the A tensor have no fused blocks.");
+            Adags[pos] = As[pos].adjoint().eval().template permute<0, 3, 4, 2, 0, 1>();
+        }
+    }
+}
+
+template <typename Scalar, typename Symmetry, bool ENABLE_AD>
+std::size_t iPEPS<Scalar, Symmetry, ENABLE_AD>::plainSize() const
+{
+    std::size_t res = 0;
+    for(auto it = As.cbegin(); it != As.cend(); ++it) { res += it->plainSize(); }
+    return res;
+}
+
+template <typename Scalar, typename Symmetry, bool ENABLE_AD>
+std::vector<Scalar> iPEPS<Scalar, Symmetry, ENABLE_AD>::data()
+{
+    std::vector<Scalar> out(plainSize());
+    std::size_t count = 0;
+    for(auto it = begin(); it != end(); ++it) { out[count++] = *it; }
+    return out;
+}
+
+template <typename Scalar, typename Symmetry, bool ENABLE_AD>
+void iPEPS<Scalar, Symmetry, ENABLE_AD>::set_data(const Scalar* data, bool NORMALIZE)
+{
+    for(auto& A : As) {
+        A.set_data(data, A.plainSize());
+        if(NORMALIZE) { A = A * (1. / A.norm()); }
+    }
+
+    for(int x = 0; x < cell.Lx; x++) {
+        for(int y = 0; y < cell.Ly; y++) {
+            if(not cell.pattern.isUnique(x, y)) { continue; }
+            auto pos = cell.pattern.uniqueIndex(x, y);
+
             Adags[pos] = As[pos].adjoint().eval().template permute<0, 3, 4, 2, 0, 1>();
         }
     }
@@ -37,7 +99,7 @@ Qbasis<Symmetry, 1> iPEPS<Scalar, Symmetry, ENABLE_AD>::ketBasis(const int x, co
     case LEG::UP: return As(x, y).uncoupledDomain()[1]; break;
     case LEG::RIGHT: return As(x, y).uncoupledCodomain()[0]; break;
     case LEG::DOWN: return As(x, y).uncoupledCodomain()[1]; break;
-    case LEG::PHYS: return As(x, y).uncoupledDomain()[2]; break;
+    case LEG::PHYS: return As(x, y).uncoupledCodomain()[2]; break;
     default: std::terminate();
     }
 }

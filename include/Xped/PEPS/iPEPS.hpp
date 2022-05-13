@@ -5,23 +5,24 @@
 #include "Xped/Core/Tensor.hpp"
 #include "Xped/PEPS/TMatrix.hpp"
 #include "Xped/PEPS/UnitCell.hpp"
+#include "Xped/PEPS/iPEPSIterator.hpp"
 
 namespace Xped {
 
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>
 class CTM;
-/**                   p(2)
+/**                   p(4)
  *             u(1)   /
  *              |    /
- *              |   v
+ *              |   ^
  *              v  /
  *           □□□□□/□
- * l(0) ---> □   / □ <--- r(3)
+ * l(0) ---> □   / □ -->- r(2)
  *           □□□□□□□
  *              |
  *              |
  *              v
- *             d(4)
+ *             d(3)
  */
 template <typename Scalar_, typename Symmetry_, bool ENABLE_AD_ = false>
 class iPEPS
@@ -46,11 +47,62 @@ public:
 
     iPEPS(const UnitCell& cell, const Qbasis<Symmetry, 1>& auxBasis, const Qbasis<Symmetry, 1>& physBasis);
 
+    void setRandom();
+    void setZero();
+
+    void set_As(const std::vector<Tensor<Scalar, 2, 3, Symmetry, ENABLE_AD>>& As_in)
+    {
+        As.fill(As_in);
+        for(auto i = 0ul; i < As.size(); ++i) { Adags[i] = As[i].adjoint().eval().template permute<0, 3, 4, 2, 0, 1>(); }
+    }
+
     Qbasis<Symmetry, 1> ketBasis(const int x, const int y, const LEG leg) const;
     Qbasis<Symmetry, 1> braBasis(const int x, const int y, const LEG leg) const;
     void info() const;
 
-private:
+    std::vector<Scalar> data();
+
+    void set_data(const Scalar* data, bool NORMALIZE = true);
+
+    std::size_t plainSize() const;
+
+    iPEPSIterator<Scalar, Symmetry, ENABLE_AD> begin()
+    {
+        iPEPSIterator<Scalar, Symmetry, ENABLE_AD> out(&As, /*ITER_GRAD=*/false);
+        return out;
+    }
+    iPEPSIterator<Scalar, Symmetry, ENABLE_AD> end()
+    {
+        iPEPSIterator<Scalar, Symmetry, ENABLE_AD> out(&As, /*ITER_GRAD=*/false, As.size());
+        return out;
+    }
+
+    iPEPSIterator<Scalar, Symmetry, ENABLE_AD> gradbegin()
+    {
+        iPEPSIterator<Scalar, Symmetry, ENABLE_AD> out(&As, /*ITER_GRAD=*/true);
+        return out;
+    }
+    iPEPSIterator<Scalar, Symmetry, ENABLE_AD> gradend()
+    {
+        iPEPSIterator<Scalar, Symmetry, ENABLE_AD> out(&As, /*ITER_GRAD=*/true, As.size());
+        return out;
+    }
+
+    inline void grad()
+    {
+        if constexpr(ENABLE_AD) {
+            As.grad();
+            Adags.grad();
+        }
+    }
+    inline void nograd()
+    {
+        if constexpr(ENABLE_AD) {
+            As.nograd();
+            Adags.nograd();
+        }
+    }
+    // private:
     std::size_t D;
 
     UnitCell cell;

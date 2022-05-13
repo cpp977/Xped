@@ -3,6 +3,7 @@
 #include "unsupported/Eigen/KroneckerProduct"
 
 #include "Xped/Util/Mpi.hpp"
+#include "Xped/Util/Random.hpp"
 
 #include "Xped/Interfaces/MatrixMultiplication.hpp"
 
@@ -50,13 +51,15 @@ void MatrixInterface::setZero(Eigen::MatrixBase<Derived>&& M)
 template <typename Derived>
 void MatrixInterface::setRandom(Eigen::MatrixBase<Derived>& M)
 {
-    M.setRandom();
+    M = M.NullaryExpr(M.rows(), M.cols(), []() { return random::threadSafeRandUniform<typename Derived::Scalar>(-1., 1.); });
+    // M.setRandom();
 }
 
 template <typename Derived>
 void MatrixInterface::setRandom(Eigen::MatrixBase<Derived>&& M)
 {
-    M.setRandom();
+    M = M.NullaryExpr(M.rows(), M.cols(), []() { return random::threadSafeRandUniform<typename Derived::Scalar>(-1., 1.); });
+    // M.setRandom();
 }
 
 template <typename Derived>

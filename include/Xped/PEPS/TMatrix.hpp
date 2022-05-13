@@ -20,7 +20,9 @@ struct TMatrix
     }
 
     inline std::size_t rows() const { return pat.Lx; }
-    inline std::size_t cols() const { return pat.Lx; }
+    inline std::size_t cols() const { return pat.Ly; }
+
+    inline std::size_t size() const { return tensors.size(); }
 
     inline Ttype& operator()(const int row, const int col)
     {
@@ -35,6 +37,7 @@ struct TMatrix
         return tensors[index];
     }
     inline const Ttype& operator[](const std::size_t index) const { return tensors[index]; }
+    inline const Ttype& at(const std::size_t index) const { return tensors.at(index); }
 
     inline bool isChanged(const int row, const int col) const { return is_changed[pat.uniqueIndex(row, col)]; }
     inline void resetChange() { std::fill(is_changed.begin(), is_changed.end(), false); }
@@ -46,6 +49,23 @@ struct TMatrix
         tensors.resize(pat.uniqueSize());
         is_changed.resize(pat.uniqueSize());
         std::fill(is_changed.begin(), is_changed.end(), false);
+    }
+
+    auto begin() { return tensors.begin(); }
+    auto end() { return tensors.end(); }
+
+    auto cbegin() const { return tensors.cbegin(); }
+    auto cend() const { return tensors.cend(); }
+
+    void fill(const std::vector<Ttype>& tensors_in) { tensors = tensors_in; }
+
+    void nograd()
+    {
+        std::for_each(tensors.begin(), tensors.end(), [](auto& t) { t.nograd(); });
+    }
+    void grad()
+    {
+        std::for_each(tensors.begin(), tensors.end(), [](auto& t) { t.grad(); });
     }
 
 private:

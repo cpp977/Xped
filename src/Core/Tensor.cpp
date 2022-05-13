@@ -28,7 +28,7 @@ void Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::setRandom(
 {
     storage_.resize();
     SPDLOG_TRACE("Entering setRandom().");
-    SPDLOG_TRACE("Start randomization loop with #={} iterations.", sector_.size());
+    SPDLOG_TRACE("Start randomization loop with #={} iterations.", sector().size());
     for(size_t i = 0; i < sector().size(); i++) {
         PlainInterface::setRandom(block(i));
         SPDLOG_TRACE("Set block #={} to random.", i);
@@ -62,7 +62,7 @@ void Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::setIdentit
 }
 
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
-void Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::setConstant(const Scalar& val)
+void Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::setConstant(Scalar val)
 {
     storage_.resize();
     SPDLOG_TRACE("Entering setConstant().");
@@ -212,9 +212,12 @@ template <int shift, std::size_t... p>
 Tensor<Scalar, Rank - shift, CoRank + shift, Symmetry, false, AllocationPolicy>
 Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::permute() const
 {
-    // static_assert(std::cmp_greater_equal(Rank, shift), "Invalid call to permute()"); c++-20
-    // static_assert(std::cmp_greater_equal(CoRank, -shift), "Invalid call to permute()"); c++-20
+    // if constexpr(Rank + CoRank == 0) { return *this; }
+    static_assert(std::cmp_greater_equal(Rank, shift), "Invalid call to permute()"); // c++ - 20
+    static_assert(std::cmp_greater_equal(CoRank, -shift), "Invalid call to permute()"); // c++ - 20
     using s = seq::iseq<std::size_t, p...>;
+    if constexpr(shift == 0 and std::is_same_v<s, seq::make<std::size_t, Rank + CoRank>>) { return *this; }
+
     using p_domain = seq::take<Rank - shift, s>;
     using p_codomain = seq::after<Rank - shift, s>;
 
@@ -759,7 +762,7 @@ void Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::print(std:
     o << "domain:" << endl << coupledDomain() << endl; // << "with trees:" << endl << domain.printTrees() << endl;
     o << "codomain:" << endl << coupledCodomain() << endl; // << "with trees:" << endl << codomain.printTrees() << endl;
     for(size_t i = 0; i < sector().size(); i++) {
-        o << "Sector with QN=" << Sym::format<Symmetry>(sector(i)) << endl;
+        o << "Sector i=" << i << " with QN=" << Sym::format<Symmetry>(sector(i)) << endl;
         if(PRINT_MATRICES) {
             o << std::fixed << std::setprecision(12) << block(i) << endl;
             // storage_.block(i).print_matrix();

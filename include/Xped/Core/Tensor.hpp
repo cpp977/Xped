@@ -152,7 +152,7 @@ public:
 
     typename Storage::ConstMatrixReturnType operator()(const qType& q_coupled) const { return storage_.block(q_coupled); }
 
-    const std::string name() const { return "Xped"; }
+    const std::string name() const { return "Xped(" + std::to_string(rank()) + "," + std::to_string(corank()) + ")"; }
     // Eigen::TensorMap<TensorType> operator() (const FusionTree<Rank,Symmetry>& f1, const FusionTree<CoRank,Symmetry>& f2);
     // Eigen::TensorMap<TensorType> operator() (const FusionTree<Rank,Symmetry>& f1, const FusionTree<CoRank,Symmetry>& f2) const;
 

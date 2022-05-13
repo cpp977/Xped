@@ -122,9 +122,23 @@ struct MatrixInterface
     static void scale(Eigen::MatrixBase<Derived>& M, const typename Derived::Scalar& val);
 
     template <typename Scalar, typename Derived>
+    static auto diagUnaryFunc(const Eigen::MatrixBase<Derived>& M, const std::function<Scalar(Scalar)>& func)
+    {
+        return M.diagonal().unaryExpr(func).asDiagonal();
+    }
+
+    template <typename Scalar, typename Derived>
     static auto unaryFunc(const Eigen::MatrixBase<Derived>& M, const std::function<Scalar(Scalar)>& func)
     {
         return M.unaryExpr(func);
+    }
+
+    template <typename Scalar, typename Derived, typename OtherDerived>
+    static auto diagBinaryFunc(const Eigen::MatrixBase<Derived>& M_left,
+                               const Eigen::MatrixBase<OtherDerived>& M_right,
+                               const std::function<Scalar(Scalar, Scalar)>& func)
+    {
+        return M_left.diagonal().binaryExpr(M_right.diagonal(), func).asDiagonal();
     }
 
     template <typename Scalar, typename Derived, typename OtherDerived>
@@ -133,12 +147,6 @@ struct MatrixInterface
                            const std::function<Scalar(Scalar, Scalar)>& func)
     {
         return M_left.binaryExpr(M_right, func);
-    }
-
-    template <typename Scalar, typename Derived>
-    static auto diagUnaryFunc(const Eigen::MatrixBase<Derived>& M, const std::function<Scalar(Scalar)>& func)
-    {
-        return M.diagonal().unaryExpr(func).asDiagonal();
     }
 
     template <typename Derived>

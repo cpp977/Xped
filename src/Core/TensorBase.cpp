@@ -9,6 +9,7 @@
 #include "Xped/Core/AdjointOp.hpp"
 #include "Xped/Core/CoeffBinaryOp.hpp"
 #include "Xped/Core/CoeffUnaryOp.hpp"
+#include "Xped/Core/DiagCoeffBinaryOp.hpp"
 #include "Xped/Core/DiagCoeffUnaryOp.hpp"
 #include "Xped/Core/Tensor.hpp"
 
@@ -81,6 +82,18 @@ XPED_CONST CoeffUnaryOp<Derived> TensorBase<Derived>::sqrt() XPED_CONST
 }
 
 template <typename Derived>
+XPED_CONST CoeffUnaryOp<Derived> TensorBase<Derived>::inv() XPED_CONST
+{
+    return unaryExpr([](const Scalar s) { return 1. / s; });
+}
+
+template <typename Derived>
+XPED_CONST CoeffUnaryOp<Derived> TensorBase<Derived>::square() XPED_CONST
+{
+    return unaryExpr([](const Scalar s) { return std::pow(s, 2); });
+}
+
+template <typename Derived>
 XPED_CONST DiagCoeffUnaryOp<Derived> TensorBase<Derived>::diagUnaryExpr(const std::function<Scalar(Scalar)>& coeff_func) XPED_CONST
 {
     return DiagCoeffUnaryOp<Derived>(derived(), coeff_func);
@@ -90,6 +103,20 @@ template <typename Derived>
 XPED_CONST DiagCoeffUnaryOp<Derived> TensorBase<Derived>::diag_inv() XPED_CONST
 {
     return diagUnaryExpr([](const Scalar s) { return 1. / s; });
+}
+
+template <typename Derived>
+XPED_CONST DiagCoeffUnaryOp<Derived> TensorBase<Derived>::diag_sqrt() XPED_CONST
+{
+    return diagUnaryExpr([](const Scalar s) { return std::sqrt(s); });
+}
+
+template <typename Derived>
+template <typename OtherDerived>
+XPED_CONST DiagCoeffBinaryOp<Derived, OtherDerived>
+TensorBase<Derived>::diagBinaryExpr(XPED_CONST TensorBase<OtherDerived>& other, const std::function<Scalar(Scalar, Scalar)>& coeff_func) XPED_CONST
+{
+    return DiagCoeffBinaryOp<Derived, OtherDerived>(derived(), other.derived(), coeff_func);
 }
 
 template <typename Derived>
@@ -135,6 +162,7 @@ TensorBase<Derived>::operator*(XPED_CONST TensorBase<OtherDerived>& other) XPED_
 
     Tensor<Scalar, Rank, TensorTraits<OtherDerived_>::CoRank, Symmetry, false, AllocationPolicy> Tout(
         derived_ref.uncoupledDomain(), other_derived_ref.uncoupledCodomain(), derived_ref.world());
+    Tout.setZero();
     // std::unordered_set<typename Symmetry::qType> uniqueController;
     auto other_dict = other_derived_ref.dict();
     auto this_dict = derived_ref.dict();
@@ -142,16 +170,16 @@ TensorBase<Derived>::operator*(XPED_CONST TensorBase<OtherDerived>& other) XPED_
         // uniqueController.insert(derived_ref.sector(i));
         auto it = other_dict.find(derived_ref.sector(i));
         if(it == other_dict.end()) { continue; }
-        // auto it_out = Tout.dict().find(derived_ref.sector(i));
+        auto it_out = Tout.dict().find(derived_ref.sector(i));
         // if(it_out == Tout.dict().end()) {
-        Tout.push_back(derived_ref.sector(i), PlainInterface::prod(derived_ref.block(i), other_derived_ref.block(it->second)));
+        // Tout.push_back(derived_ref.sector(i), PlainInterface::prod(derived_ref.block(i), other_derived_ref.block(it->second)));
         // SPDLOG_CRITICAL("({},{})x({},{})",
         //                 derived_ref.block(i).rows(),
         //                 derived_ref.block(i).cols(),
         //                 other_derived_ref.block(it->second).rows(),
         //                 other_derived_ref.block(it->second).cols());
         // } else {
-        //     Tout.block(it_out->second) += PlainInterface::prod<Scalar>(derived_ref.block(i), other_derived_ref.block(it->second));
+        Tout.block(it_out->second) += PlainInterface::prod(derived_ref.block(i), other_derived_ref.block(it->second));
         // }
         // Tout.push_back(derived_ref.sector(i), PlainInterface::prod<Scalar>(derived_ref.block(i), other_derived_ref.block(it->second)));
         // Tout.block_[i] = T1.block_[i] * T2.block_[it->second];

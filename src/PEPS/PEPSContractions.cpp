@@ -24,11 +24,11 @@ decompose(XPED_CONST TensorBase<Derived1>& T1, XPED_CONST TensorBase<Derived2>& 
     auto prod = T1 * T2;
     [[maybe_unused]] double t_weight;
     auto [U, S, Vdag] = prod.tSVD(max_nsv, 1.e-10, t_weight, false);
-    SPDLOG_CRITICAL("Leading sv: {}", PlainInterface::getVal(S.block(0), 0, 0));
+    SPDLOG_INFO("Leading sv: {}", PlainInterface::getVal(S.block(0), 0, 0));
     // std::cout << "Leading sv: " << S.block(0)(0, 0) << " in sector q: " << S.sector(0) << std::endl;
     // S.print(std::cout, true);
     // Svs(x, y) = S;
-    auto isqrtS = S.sqrt().diag_inv().eval();
+    auto isqrtS = S.diag_sqrt().diag_inv().eval();
     // SPDLOG_CRITICAL("svs: ({}[{}],{}[{}])",
     //                 isqrtS.coupledDomain().fullDim(),
     //                 isqrtS.coupledDomain().dim(),
@@ -36,6 +36,32 @@ decompose(XPED_CONST TensorBase<Derived1>& T1, XPED_CONST TensorBase<Derived2>& 
     //                 isqrtS.coupledCodomain().dim());
     Tensor<Scalar, 1, 3, Symmetry> P1 = isqrtS * U.adjoint() * T1;
     Tensor<Scalar, 3, 1, Symmetry> P2 = T2 * Vdag.adjoint() * isqrtS;
+    // (P1 * P2).eval().print(std::cout, true);
+    // (P2 * P1).eval().print(std::cout, true);
+    return std::make_pair(P1, P2);
+}
+
+template <typename Scalar, typename Symmetry, typename AllocationPolicy>
+std::pair<Tensor<Scalar, 1, 3, Symmetry, true, AllocationPolicy>, Tensor<Scalar, 3, 1, Symmetry, true, AllocationPolicy>>
+decompose(XPED_CONST Tensor<Scalar, 3, 3, Symmetry, true, AllocationPolicy>& T1,
+          XPED_CONST Tensor<Scalar, 3, 3, Symmetry, true, AllocationPolicy>& T2,
+          const std::size_t max_nsv)
+{
+    auto prod = T1 * T2;
+    [[maybe_unused]] double t_weight;
+    auto [U, S, Vdag] = prod.tSVD(max_nsv, 1.e-10, t_weight, false);
+    SPDLOG_INFO("Leading sv: {}", PlainInterface::getVal(S.val().block(0), 0, 0));
+    // std::cout << "Leading sv: " << S.block(0)(0, 0) << " in sector q: " << S.sector(0) << std::endl;
+    // S.print(std::cout, true);
+    // Svs(x, y) = S;
+    auto isqrtS = S.diag_sqrt().diag_inv().eval();
+    // SPDLOG_CRITICAL("svs: ({}[{}],{}[{}])",
+    //                 isqrtS.coupledDomain().fullDim(),
+    //                 isqrtS.coupledDomain().dim(),
+    //                 isqrtS.coupledCodomain().fullDim(),
+    //                 isqrtS.coupledCodomain().dim());
+    Tensor<Scalar, 1, 3, Symmetry, true> P1 = isqrtS * U.adjoint() * T1;
+    Tensor<Scalar, 3, 1, Symmetry, true> P2 = T2 * Vdag.adjoint() * isqrtS;
     return std::make_pair(P1, P2);
 }
 

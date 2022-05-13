@@ -84,6 +84,12 @@ struct PlainInterface : public MatrixInterface, public TensorInterface, public V
     template <typename Derived>
     static void diagonal_head_matrix_to_vector(VType<typename Derived::Scalar>& V, const Eigen::MatrixBase<Derived>& M, const Indextype& n_elems);
 
+    template <typename Scalar>
+    static void vec_diff(const Eigen::Matrix<Scalar, -1, 1>& vec, MType<Scalar>& res);
+
+    template <typename Scalar>
+    static void vec_add(const Eigen::Matrix<Scalar, -1, 1>& vec, MType<Scalar>& res);
+
     template <typename Derived>
     static std::tuple<MType<typename Derived::Scalar>, VType<typename Derived::Scalar>, MType<typename Derived::Scalar>>
     svd(const Eigen::MatrixBase<Derived>& M);

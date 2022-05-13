@@ -78,6 +78,33 @@ TType<typename Derived::Scalar, Rank> PlainInterface::tensor_from_matrix_block(c
     return construct<typename Derived::Scalar, Rank>(tensorview);
 }
 
+template <typename Scalar>
+void PlainInterface::vec_diff(const Eigen::Matrix<Scalar, -1, 1>& vec, MType<Scalar>& res)
+{
+    res = -(vec.replicate(1, vec.rows()).rowwise() - vec.transpose());
+    // res.resize(vec.size(), vec.size());
+    // res.diagonal().setZero();
+    // for(auto i = 0; i < vec.size(); ++i) {
+    //     for(auto j = 0; j < i; ++j) {
+    //         res(i, j) = vec(j) - vec(i);
+    //         res(j, i) = -res(i, j);
+    //     }
+    // }
+}
+
+template <typename Scalar>
+void PlainInterface::vec_add(const Eigen::Matrix<Scalar, -1, 1>& vec, MType<Scalar>& res)
+{
+    res = vec.replicate(1, vec.rows()).rowwise() + vec.transpose();
+    // res.resize(vec.size(), vec.size());
+    // for(auto i = 0; i < vec.size(); ++i) {
+    //     for(auto j = 0; j <= i; ++j) {
+    //         res(i, j) = vec(i) + vec(j);
+    //         if(i != j) res(j, i) = res(i, j);
+    //     }
+    // }
+}
+
 template <typename Derived>
 void PlainInterface::diagonal_head_matrix_to_vector(VType<typename Derived::Scalar>& V, const Eigen::MatrixBase<Derived>& M, const Indextype& n_elems)
 {

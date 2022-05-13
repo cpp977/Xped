@@ -24,6 +24,9 @@ struct UnitCell
 
     inline std::size_t uniqueSize() const { return pattern.uniqueSize(); }
     inline std::size_t size() const { return Lx * Ly; }
+
+    inline std::size_t rows() const { return Lx; }
+    inline std::size_t cols() const { return Ly; }
 };
 
 } // namespace Xped

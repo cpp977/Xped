@@ -8,15 +8,16 @@
 
 namespace Xped {
 
-template <typename Scalar>
-class VecOfMatIterator : public boost::iterator_facade<VecOfMatIterator<Scalar>, Scalar*, boost::forward_traversal_tag, Scalar>
+namespace internal {
+template <typename Element>
+class VecOfMatIterator : public boost::iterator_facade<VecOfMatIterator<Element>, Element*, boost::forward_traversal_tag, Element>
 {
 public:
     VecOfMatIterator()
         : data(nullptr)
     {}
 
-    VecOfMatIterator(std::vector<PlainInterface::MType<Scalar>>* o_val, std::size_t block_num = 0, std::size_t elem_num = 0)
+    VecOfMatIterator(std::vector<PlainInterface::MType<Element>>* o_val, std::size_t block_num = 0, std::size_t elem_num = 0)
         : data(o_val)
         , block_num(block_num)
         , elem_num(elem_num)
@@ -40,14 +41,21 @@ private:
         }
     }
 
-    bool equal(VecOfMatIterator<Scalar> const& other) const { return (this->block_num == other.block_num and this->elem_num == other.elem_num); }
+    bool equal(VecOfMatIterator<Element> const& other) const { return (this->block_num == other.block_num and this->elem_num == other.elem_num); }
 
-    Scalar dereference() const { return *(PlainInterface::get_raw_data(data->at(block_num)) + elem_num); }
+    Element dereference() const { return *(PlainInterface::get_raw_data(data->at(block_num)) + elem_num); }
 
-    std::vector<PlainInterface::MType<Scalar>>* data;
+    std::vector<PlainInterface::MType<Element>>* data;
     std::size_t block_num = 0;
     std::size_t elem_num = 0;
 };
+
+} // namespace internal
+
+template <typename Scalar>
+using VecOfMatIterator = internal::VecOfMatIterator<Scalar>;
+// template <typename Scalar>
+// using const_VecOfMatIterator = internal::VecOfMatIterator<const Scalar>;
 
 } // namespace Xped
 #endif

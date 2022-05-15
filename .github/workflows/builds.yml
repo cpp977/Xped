@@ -13,7 +13,7 @@ jobs:
     # cross-platform coverage.
     # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
     runs-on: ubuntu-20.04
-    strategy:
+    strategy: in
       fail-fast: false
       matrix:
         triplet: [x64-linux] #, x64-linux-clang, x64-linux-clang-libcxx
@@ -87,6 +87,11 @@ jobs:
       env:
         CXX: ${{ matrix.compiler }}
       run: cmake $GITHUB_WORKSPACE --preset=ad-eigen -DVCPKG_TARGET_TRIPLET=${{ matrix.triplet }} -DBLA_VENDOR=OpenBLAS -DXPED_USE_BLAS=ON -DXPED_USE_LAPACK=ON -DXPED_USE_OPENMP=OFF -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DXPED_USE_LIBCXX=${{ matrix.LIBCXX }} -DXPED_ENABLE_CCACHE=OFF -DXPED_BUILD_CYCLOPS=ON -DXPED_STORAGE=${{ matrix.STORAGE }}
+
+    - name: Print build error
+      if: always()
+      run: cat $GITHUB_WORKSPACE/vcpkg/buildtrees/tbb/install-x64-linux-rel-out.log
+      run: cat $GITHUB_WORKSPACE/vcpkg/buildtrees/tbb/install-x64-linux-rel-err.log
 
     - name: Archive Test Results
       if: always()

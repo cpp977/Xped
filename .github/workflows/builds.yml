@@ -91,14 +91,14 @@ jobs:
     - name: Print build error
       shell: bash
       if: always()
-      run: cat $GITHUB_WORKSPACE/vcpkg/buildtrees/tbb/install-x64-linux-rel-out.log && cat $GITHUB_WORKSPACE/vcpkg/buildtrees/tbb/install-x64-linux-rel-err.log
+      run: cat $GITHUB_WORKSPACE/vcpkg/buildtrees/tbb/config-x64-linux-rel-out.log && cat $GITHUB_WORKSPACE/vcpkg/buildtrees/tbb/config-x64-linux-rel-err.log
 
     - name: Archive Test Results
       if: always()
       uses: actions/upload-artifact@v3
       with:
         name: show-debug
-        path: $GITHUB_WORKSPACE/vcpkg/buildtrees/tbb
+        path: $GITHUB_WORKSPACE/vcpkg/buildtrees/tbb/
       
     - name: Build
       working-directory: ${{runner.workspace}}/build

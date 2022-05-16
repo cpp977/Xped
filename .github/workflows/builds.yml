@@ -91,7 +91,7 @@ jobs:
     - name: Print build error
       shell: bash
       if: always()
-      run: cat $GITHUB_WORKSPACE/vcpkg/buildtrees/tbb/config-x64-linux-rel-out.log && cat $GITHUB_WORKSPACE/vcpkg/buildtrees/tbb/config-x64-linux-rel-err.log
+      run: cat $GITHUB_WORKSPACE/vcpkg/buildtrees/tbb/config-x64-linux-rel-out.log; cat $GITHUB_WORKSPACE/vcpkg/buildtrees/tbb/config-x64-linux-rel-err.log
 
     - name: Archive Test Results
       if: always()

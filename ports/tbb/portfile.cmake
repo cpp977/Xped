@@ -14,7 +14,7 @@ vcpkg_cmake_configure(
     OPTIONS 
         -DBUILD_SHARED_LIBS=ON
         -DTBB_STRICT=OFF
-        -TBB_TEST=OFF
+        -DTBB_TEST=OFF
     )
   
 vcpkg_cmake_install()

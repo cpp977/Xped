@@ -57,3 +57,9 @@ if(XPED_USE_MPI)
 else()
   add_test(NAME MPS COMMAND mps_test)
 endif()
+
+#########################
+#        peps_ad_test      #
+#########################
+add_executable(peps_ad peps_ad.cpp)# $<TARGET_OBJECTS:test_suite>)
+target_link_libraries (peps_ad Xped)

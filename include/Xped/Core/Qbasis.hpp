@@ -106,6 +106,7 @@ public:
     inline std::vector<qType> qs() const
     {
         std::vector<qType> out;
+        out.reserve(data_.size());
         for(auto triple : data_) { out.push_back(std::get<0>(triple)); }
         return out;
     }
@@ -121,6 +122,7 @@ public:
     inline std::vector<std::size_t> dims() const
     {
         std::vector<std::size_t> out;
+        out.reserve(data_.size());
         for(auto triple : data_) { out.push_back(std::get<2>(triple).dim()); }
         return out;
     }
@@ -224,6 +226,8 @@ public:
         if(it == trees.end()) { assert(false); }
         return it->second;
     }
+
+    inline TreeType& allTrees() { return trees; }
 
     template <typename Ar>
     void serialize(Ar& ar)

@@ -201,7 +201,7 @@ size_t Qbasis<Symmetry, depth, AllocationPolicy>::leftOffset(const FusionTree<de
     for(const auto& i : it->second) {
         if(i != tree) { out += i.dim; }
         if(i == tree) {
-            plain.size(); // supresses gcc warning
+            [[maybe_unused]] auto tmp = plain.size(); // supresses gcc warning
             // maybe some code for plain
             break;
         }
@@ -297,11 +297,11 @@ void Qbasis<Symmetry, depth, AllocationPolicy>::sort()
     std::sort(index_sort.begin(), index_sort.end(), [&](std::size_t n1, std::size_t n2) {
         qarray<Symmetry::Nq> q1 = std::get<0>(data_[n1]);
         qarray<Symmetry::Nq> q2 = std::get<0>(data_[n2]);
-        if(CONJ) {
-            return Symmetry::compare(Symmetry::conj(q1), Symmetry::conj(q2));
-        } else {
-            return Symmetry::compare(q1, q2);
-        }
+        // if(CONJ) {
+        //     return Symmetry::compare(Symmetry::conj(q1), Symmetry::conj(q2));
+        // } else {
+        return Symmetry::compare(q1, q2);
+        // }
     });
     auto new_data_ = data_;
     for(std::size_t i = 0; i < data_.size(); i++) { new_data_[i] = data_[index_sort[i]]; }
@@ -317,6 +317,7 @@ void Qbasis<Symmetry, depth, AllocationPolicy>::sort()
 template <typename Symmetry, std::size_t depth, typename AllocationPolicy>
 bool Qbasis<Symmetry, depth, AllocationPolicy>::operator==(const Qbasis<Symmetry, depth, AllocationPolicy>& other) const
 {
+    // std::cout << *this << std::endl << other << std::endl;
     // std::cout << "this tree" << std::endl;
     // for(const auto& [q, tree] : this->trees) {
     //     std::cout << "Q=" << q << std::endl;
@@ -398,6 +399,7 @@ Qbasis<Symmetry, depth, AllocationPolicy> Qbasis<Symmetry, depth, AllocationPoli
         trees.push_back(tree);
         out.push_back(Symmetry::conj(q), plain.dim(), trees);
     }
+    out.sort();
     return out;
 }
 

@@ -171,6 +171,19 @@ public:
     TensorType subBlock(const FusionTree<Rank, Symmetry>& f1, const FusionTree<CoRank, Symmetry>& f2, std::size_t block_number) const;
 
     const MatrixType subMatrix(const FusionTree<Rank, Symmetry>& f1, const FusionTree<CoRank, Symmetry>& f2) const;
+    auto subMatrix(const FusionTree<Rank, Symmetry>& f1, const FusionTree<CoRank, Symmetry>& f2)
+    {
+        if(f1.q_coupled != f2.q_coupled) { assert(false); }
+
+        const auto left_offset_domain = coupledDomain().leftOffset(f1);
+        const auto left_offset_codomain = coupledCodomain().leftOffset(f2);
+        const auto it = dict().find(f1.q_coupled);
+
+        auto submatrix = PlainInterface::block(block(it->second), left_offset_domain, left_offset_codomain, f1.dim, f2.dim);
+        // auto submatrix = block_[it->second].block(left_offset_domain, left_offset_codomain, f1.dim, f2.dim);
+        return submatrix;
+    }
+
     // MatrixType& operator() (const FusionTree<Rank,Symmetry>& f1, const FusionTree<CoRank,Symmetry>& f2);
 
     void print(std::ostream& o, bool PRINT_MATRICES = true) const;

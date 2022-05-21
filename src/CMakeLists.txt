@@ -14,6 +14,10 @@ if(NOT XPED_COMPILED_LIB)
     spdlog::spdlog
     seq::seq
     WignerSUN::wignersun
+    libdeps
+    HighFive
+    HighFive_libdeps
+    HighFive_HighFive
     )
   if(${XPED_TENSOR_LIB} STREQUAL "Cyclops")
     target_link_libraries(Xped INTERFACE cyclops_lib::all)

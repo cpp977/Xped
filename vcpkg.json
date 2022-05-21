@@ -8,6 +8,7 @@
         "tabulate",
         "yas",
         "gsl",
+        "highfive",
         "boost-rational",
         "boost-algorithm",
         "boost-functional",

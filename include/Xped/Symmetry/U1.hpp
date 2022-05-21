@@ -1,5 +1,5 @@
-#ifndef U1_H_
-#define U1_H_
+#ifndef XPED_U1_H_
+#define XPED_U1_H_
 
 // include <array>
 // include <cstddef>

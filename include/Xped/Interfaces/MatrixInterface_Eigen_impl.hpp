@@ -164,6 +164,20 @@ struct MatrixInterface
     }
 
     template <typename Derived>
+    static auto
+    block(Eigen::MatrixBase<Derived>&& M, const MIndextype& row_off, const MIndextype& col_off, const MIndextype& rows, const MIndextype& cols)
+    {
+        return M.block(row_off, col_off, rows, cols);
+    }
+
+    template <typename Derived>
+    static auto
+    block(Eigen::MatrixBase<Derived>& M, const MIndextype& row_off, const MIndextype& col_off, const MIndextype& rows, const MIndextype& cols)
+    {
+        return M.block(row_off, col_off, rows, cols);
+    }
+
+    template <typename Derived>
     static void add_to_block(Eigen::MatrixBase<Derived>& M1,
                              const MIndextype& row_off,
                              const MIndextype& col_off,

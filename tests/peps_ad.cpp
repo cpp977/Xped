@@ -145,7 +145,7 @@ int main(int argc, char* argv[])
             ham = Xped::KondoNecklace<Symmetry>::twoSiteHamiltonian(Jk, J, I);
         } else if constexpr(std::is_same_v<Symmetry, Xped::Sym::U0<double>>) {
             aux.push_back({}, Minit);
-            ham = Xped::KondoNecklace<Symmetry>::twoSiteHamiltonian(Jk, Jk, J, J, I, I);
+            // ham = Xped::KondoNecklace<Symmetry>::twoSiteHamiltonian(Jk, Jk, J, J, I, I);
         }
 
         // Xped::Pattern p({{'a', 'b'}, {'c', 'd'}});

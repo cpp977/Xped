@@ -15,6 +15,7 @@
         "boost-math",
         "boost-iterator",
         "boost-predef",
+        "boost-odeint",
         "wignersun",
         "doctest"
     ],

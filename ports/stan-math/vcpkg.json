@@ -4,6 +4,7 @@
   "description": "stan math provides a framework for automatic differentation in reverse and forward mode.",
   "dependencies": [
       "sundials",
-      "tbb"
+      "tbb",
+      "boost-odeint"
   ]
 }

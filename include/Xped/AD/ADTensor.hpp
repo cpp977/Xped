@@ -1,5 +1,7 @@
-#ifndef VAR_VALUE_HPP_
-#define VAR_VALUE_HPP_
+#ifndef XPED_ADTENSOR_HPP_
+#define XPED_ADTENSOR_HPP_
+
+#include <cmath>
 
 #include "Xped/Core/Tensor.hpp"
 
@@ -256,6 +258,25 @@ public:
         if(grad_tracking) {
             stan::math::reverse_pass_callback([curr = *this, res]() mutable {
                 curr.adj() += (curr.val() * (res.adj() / res.val())).eval();
+                SPDLOG_WARN("reverse norm of {}, input adj norm={}, output adj norm={}", curr.name(), res.adj(), curr.adj().norm());
+            });
+        }
+        return res;
+    }
+
+    stan::math::var_value<Scalar> maxNorm() const
+    {
+        std::size_t max_block;
+        PlainInterface::MIndextype max_row;
+        PlainInterface::MIndextype max_col;
+        Scalar tmp = val().abs().maxCoeff(max_block, max_row, max_col);
+        stan::math::var_value<Scalar> res(tmp);
+        if(grad_tracking) {
+            stan::math::reverse_pass_callback([curr = *this, res, max_block, max_row, max_col]() mutable {
+                Tensor<Scalar, Rank, CoRank, Symmetry, false> Zero(curr.uncoupledDomain(), curr.uncoupledCodomain(), *curr.adj().world());
+                Zero.setZero();
+                Zero.block(max_block)(max_row, max_col) = std::signbit(curr.val().block(max_block)(max_row, max_col)) ? -1. : 1.;
+                curr.adj() += Zero * res.adj();
                 SPDLOG_WARN("reverse norm of {}, input adj norm={}, output adj norm={}", curr.name(), res.adj(), curr.adj().norm());
             });
         }

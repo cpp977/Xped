@@ -678,16 +678,16 @@ CTM<Scalar, Symmetry, ENABLE_AD>::renormalize_left(const int x,
     Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD> C4_new;
     C1_new = (P1(x, y - 1) * (C1s(x - 1, y - 1).template permute<-1, 0, 1>() * T1s(x, y - 1)).template permute<-2, 0, 2, 3, 1>())
                  .template permute<+1, 0, 1>();
-    if(NORMALIZE) C1_new = C1_new * (1. / C1_new.norm());
+    if(NORMALIZE) C1_new = C1_new * (1. / C1_new.maxNorm());
     C4_new = ((C4s(x - 1, y + 1) * T3s(x, y + 1).template permute<2, 2, 3, 0, 1>()).template permute<0, 1, 0, 2, 3>() * P2(x, y))
                  .template permute<0, 1, 0>();
-    if(NORMALIZE) C4_new = C4_new * (1. / C4_new.norm());
+    if(NORMALIZE) C4_new = C4_new * (1. / C4_new.maxNorm());
     auto tmp2 = P1(x, y).template permute<-2, 0, 2, 3, 1>() * T4s(x - 1, y).template permute<0, 1, 0, 2, 3>();
     auto tmp3 = tmp2.template permute<-1, 0, 2, 3, 5, 4, 1>() * A->As(x, y).template permute<0, 0, 3, 1, 2, 4>();
     auto tmp4 = (tmp3.template permute<0, 0, 2, 4, 5, 3, 1, 6>() * A->Adags(x, y).template permute<0, 0, 4, 2, 1, 3>())
                     .template permute<+1, 0, 3, 5, 1, 2, 4>();
     T4_new = (tmp4 * P2(x, y - 1)).template permute<+2, 3, 0, 1, 2>();
-    if(NORMALIZE) T4_new = T4_new * (1. / T4_new.norm());
+    if(NORMALIZE) T4_new = T4_new * (1. / T4_new.maxNorm());
     return std::make_tuple(C1_new, T4_new, C4_new);
 }
 
@@ -703,17 +703,17 @@ CTM<Scalar, Symmetry, ENABLE_AD>::renormalize_right(const int x,
     Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD> T2_new;
     Tensor<Scalar, 2, 0, Symmetry, ENABLE_AD> C3_new;
     C2_new = (T1s(x, y - 1).template permute<-2, 0, 2, 3, 1>() * C2s(x + 1, y - 1)).template permute<+2, 0, 3, 1, 2>() * P2(x, y - 1);
-    if(NORMALIZE) C2_new = C2_new * (1. / C2_new.norm());
+    if(NORMALIZE) C2_new = C2_new * (1. / C2_new.maxNorm());
     C3_new = (P1(x, y) *
               (C3s(x + 1, y + 1).template permute<+1, 0, 1>() * T3s(x, y + 1).template permute<+2, 3, 2, 0, 1>()).template permute<-2, 0, 2, 3, 1>())
                  .template permute<-1, 0, 1>();
-    if(NORMALIZE) C3_new = C3_new * (1. / C3_new.norm());
+    if(NORMALIZE) C3_new = C3_new * (1. / C3_new.maxNorm());
     auto tmp2 = P1(x, y - 1).template permute<-2, 0, 2, 3, 1>() * T2s(x + 1, y).template permute<+2, 2, 3, 0, 1>();
     auto tmp3 = tmp2.template permute<-1, 0, 2, 3, 5, 1, 4>() * A->As(x, y).template permute<0, 1, 2, 0, 3, 4>();
     auto tmp4 = (tmp3.template permute<0, 0, 2, 4, 5, 1, 3, 6>() * A->Adags(x, y).template permute<0, 1, 3, 2, 0, 4>())
                     .template permute<+1, 0, 2, 4, 1, 3, 5>();
     T2_new = (tmp4 * P2(x, y)).template permute<0, 1, 2, 0, 3>();
-    if(NORMALIZE) T2_new = T2_new * (1. / T2_new.norm());
+    if(NORMALIZE) T2_new = T2_new * (1. / T2_new.maxNorm());
     return std::make_tuple(C2_new, T2_new, C3_new);
 }
 
@@ -731,14 +731,14 @@ CTM<Scalar, Symmetry, ENABLE_AD>::renormalize_top(const int x,
     C1_new = ((T4s(x - 1, y).template permute<-2, 1, 2, 3, 0>() * C1s(x - 1, y - 1).template permute<-1, 0, 1>()).template permute<+2, 0, 3, 1, 2>() *
               P2(x - 1, y))
                  .template permute<+1, 0, 1>();
-    if(NORMALIZE) C1_new = C1_new * (1. / C1_new.norm());
+    if(NORMALIZE) C1_new = C1_new * (1. / C1_new.maxNorm());
     C2_new = (P1(x, y) * (C2s(x + 1, y - 1) * T2s(x + 1, y).template permute<+2, 2, 0, 1, 3>()).template permute<-2, 0, 1, 2, 3>());
-    if(NORMALIZE) C2_new = C2_new * (1. / C2_new.norm());
+    if(NORMALIZE) C2_new = C2_new * (1. / C2_new.maxNorm());
     auto tmp2 = P1(x - 1, y).template permute<-2, 0, 2, 3, 1>() * T1s(x, y - 1);
     auto tmp3 = tmp2.template permute<-1, 0, 2, 3, 5, 1, 4>() * A->As(x, y);
     auto tmp4 = (tmp3.template permute<0, 0, 2, 4, 5, 1, 3, 6>() * A->Adags(x, y)).template permute<+1, 0, 3, 5, 1, 2, 4>();
     T1_new = (tmp4 * P2(x, y)).template permute<+2, 0, 3, 1, 2>();
-    if(NORMALIZE) T1_new = T1_new * (1. / T1_new.norm());
+    if(NORMALIZE) T1_new = T1_new * (1. / T1_new.maxNorm());
     return std::make_tuple(C1_new, T1_new, C2_new);
 }
 
@@ -755,17 +755,17 @@ CTM<Scalar, Symmetry, ENABLE_AD>::renormalize_bottom(const int x,
     Tensor<Scalar, 2, 0, Symmetry, ENABLE_AD> C3_new;
     C4_new = (P1(x - 1, y) * (T4s(x - 1, y).template permute<-2, 0, 2, 3, 1>() * C4s(x - 1, y + 1)).template permute<0, 3, 1, 2, 0>())
                  .template permute<0, 1, 0>();
-    if(NORMALIZE) C4_new = C4_new * (1. / C4_new.norm());
+    if(NORMALIZE) C4_new = C4_new * (1. / C4_new.maxNorm());
     C3_new =
         ((T2s(x + 1, y) * C3s(x + 1, y + 1).template permute<+1, 0, 1>()).template permute<+2, 2, 3, 0, 1>() * P2(x, y)).template permute<-1, 0, 1>();
-    if(NORMALIZE) C3_new = C3_new * (1. / C3_new.norm());
+    if(NORMALIZE) C3_new = C3_new * (1. / C3_new.maxNorm());
     auto tmp2 = P1(x, y).template permute<-2, 0, 2, 3, 1>() * T3s(x, y + 1).template permute<+2, 3, 2, 0, 1>();
     auto tmp3 = tmp2.template permute<-1, 0, 2, 3, 5, 1, 4>() * A->As(x, y).template permute<0, 2, 3, 0, 1, 4>();
 
     auto tmp4 = (tmp3.template permute<0, 0, 2, 4, 5, 1, 3, 6>() * A->Adags(x, y).template permute<0, 3, 4, 2, 0, 1>())
                     .template permute<+1, 0, 3, 5, 1, 2, 4>();
     T3_new = (tmp4 * P2(x - 1, y)).template permute<0, 1, 2, 3, 0>();
-    if(NORMALIZE) T3_new = T3_new * (1. / T3_new.norm());
+    if(NORMALIZE) T3_new = T3_new * (1. / T3_new.maxNorm());
     return std::make_tuple(C4_new, T3_new, C3_new);
 }
 

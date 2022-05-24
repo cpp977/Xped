@@ -24,12 +24,15 @@ jobs:
           - triplet: x64-linux
             compiler: g++
             LIBCXX: OFF
+            STORAGE: Contiguous
           - triplet: x64-linux-clang
             compiler: clang++
             LIBCXX: OFF
+            STORAGE: Contiguous
           - triplet: x64-linux-clang-libcxx
             compiler: clang++
             LIBCXX: ON
+            STORAGE: Contiguous
     steps:
     - uses: actions/checkout@v3
       with:

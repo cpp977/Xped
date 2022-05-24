@@ -162,6 +162,7 @@ function(set_project_options project_name)
   if(XPED_USE_AD)
     target_compile_definitions(${project_name} INTERFACE XPED_USE_AD=1)
     target_compile_definitions(${project_name} INTERFACE _REENTRANT=1)
+    target_compile_definitions(${project_name} INTERFACE TBB_INTERFACE_NEW)
   endif()
 
   if(${XPED_STORAGE} STREQUAL "Contiguous")

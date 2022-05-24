@@ -118,6 +118,18 @@ typename Derived::Scalar MatrixInterface::trace(const Eigen::MatrixBase<Derived>
     return M.trace();
 }
 
+template <typename Derived>
+typename Derived::Scalar MatrixInterface::maxNorm(const Eigen::MatrixBase<Derived>& M)
+{
+    return M.template lpNorm<Eigen::Infinity>();
+}
+
+template <typename Derived>
+typename Derived::Scalar MatrixInterface::maxCoeff(const Eigen::MatrixBase<Derived>& M, MIndextype& maxrow, MIndextype& maxcol)
+{
+    return M.maxCoeff(&maxrow, &maxcol);
+}
+
 // artithmetic
 template <typename DerivedL, typename DerivedR>
 MType<typename DerivedL::Scalar> MatrixInterface::kronecker_prod(const Eigen::MatrixBase<DerivedL>& M1, const Eigen::MatrixBase<DerivedR>& M2)

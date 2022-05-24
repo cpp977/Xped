@@ -87,6 +87,12 @@ struct MatrixInterface
     template <typename Derived>
     static typename Derived::Scalar trace(const Eigen::MatrixBase<Derived>& M);
 
+    template <typename Derived>
+    static typename Derived::Scalar maxNorm(const Eigen::MatrixBase<Derived>& M);
+
+    template <typename Derived>
+    static typename Derived::Scalar maxCoeff(const Eigen::MatrixBase<Derived>& M, MIndextype& maxrow, MIndextype& maxcol);
+
     // artithmetic
     template <typename DerivedL, typename DerivedR>
     static MType<typename DerivedL::Scalar> kronecker_prod(const Eigen::MatrixBase<DerivedL>& M1, const Eigen::MatrixBase<DerivedR>& M2);

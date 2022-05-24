@@ -16,20 +16,20 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        triplet: [x64-linux] #, x64-linux-clang, x64-linux-clang-libcxx
-        STORAGE: [Contiguous]
-        LIBCXX: [OFF]
-        compiler: [g++]
-        # include:
-        #   - triplet: x64-linux
-        #     compiler: g++
-        #     LIBCXX: OFF
-        #   - triplet: x64-linux-clang
-        #     compiler: clang++
-        #     LIBCXX: OFF
-        #   - triplet: x64-linux-clang-libcxx
-        #     compiler: clang++
-        #     LIBCXX: ON
+        # triplet: [x64-linux, x64-linux-clang, x64-linux-clang-libcxx]
+        # STORAGE: [Contiguous]
+        # LIBCXX: [OFF]
+        # compiler: [g++]
+        include:
+          - triplet: x64-linux
+            compiler: g++
+            LIBCXX: OFF
+          - triplet: x64-linux-clang
+            compiler: clang++
+            LIBCXX: OFF
+          - triplet: x64-linux-clang-libcxx
+            compiler: clang++
+            LIBCXX: ON
     steps:
     - uses: actions/checkout@v3
       with:
@@ -87,13 +87,6 @@ jobs:
       env:
         CXX: ${{ matrix.compiler }}
       run: cmake $GITHUB_WORKSPACE --preset=ad-eigen -DVCPKG_TARGET_TRIPLET=${{ matrix.triplet }} -DBLA_VENDOR=OpenBLAS -DXPED_USE_BLAS=ON -DXPED_USE_LAPACK=ON -DXPED_USE_OPENMP=OFF -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DXPED_USE_LIBCXX=${{ matrix.LIBCXX }} -DXPED_ENABLE_CCACHE=OFF -DXPED_BUILD_CYCLOPS=ON -DXPED_STORAGE=${{ matrix.STORAGE }}
-
-    - name: Archive Test Results
-      if: always()
-      uses: actions/upload-artifact@v3
-      with:
-        name: show-debug
-        path: $GITHUB_WORKSPACE/vcpkg/buildtrees/tbb/
       
     - name: Build
       working-directory: ${{runner.workspace}}/build

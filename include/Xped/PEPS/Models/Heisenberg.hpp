@@ -8,6 +8,7 @@ namespace Xped {
 template <typename Symmetry>
 class Heisenberg
 {};
+// gs energy: E/N = -0.66944
 
 template <>
 class Heisenberg<Sym::SU2<Sym::SpinSU2>>

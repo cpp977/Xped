@@ -11,12 +11,12 @@ avg(XPED_CONST CTM<Scalar, Symmetry, ENABLE_AD>& env, XPED_CONST Tensor<Scalar, 
 {
     assert(env.RDM_COMPUTED());
 
-    PlainInterface::MType<std::conditional_t<ENABLE_AD, stan::math::var, Scalar>> o_h(env.cell.rows(), env.cell.cols());
-    PlainInterface::MType<std::conditional_t<ENABLE_AD, stan::math::var, Scalar>> o_v(env.cell.rows(), env.cell.cols());
-    for(int x = 0; x < env.cell.rows(); ++x) {
-        for(int y = 0; y < env.cell.cols(); ++y) {
-            if(not env.cell.pattern.isUnique(x, y)) {
-                auto [x_unique, y_unique] = env.cell.pattern.coords(env.cell.pattern.uniqueIndex(x, y));
+    PlainInterface::MType<std::conditional_t<ENABLE_AD, stan::math::var, Scalar>> o_h(env.cell().rows(), env.cell().cols());
+    PlainInterface::MType<std::conditional_t<ENABLE_AD, stan::math::var, Scalar>> o_v(env.cell().rows(), env.cell().cols());
+    for(int x = 0; x < env.cell().rows(); ++x) {
+        for(int y = 0; y < env.cell().cols(); ++y) {
+            if(not env.cell().pattern.isUnique(x, y)) {
+                auto [x_unique, y_unique] = env.cell().pattern.coords(env.cell().pattern.uniqueIndex(x, y));
                 o_h(x, y) = o_h(x_unique, y_unique);
                 o_v(x, y) = o_v(x_unique, y_unique);
                 continue;

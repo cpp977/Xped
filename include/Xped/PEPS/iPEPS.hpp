@@ -88,10 +88,12 @@ public:
         return out;
     }
 
-    // private:
+    const UnitCell& cell() const { return cell_; }
+
+private:
     std::size_t D;
 
-    UnitCell cell;
+    UnitCell cell_;
     TMatrix<Tensor<Scalar, 2, 3, Symmetry, ENABLE_AD>> As;
     TMatrix<Tensor<Scalar, 3, 2, Symmetry, ENABLE_AD>> Adags;
 };

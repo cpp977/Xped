@@ -24,7 +24,7 @@ class CTM
     template <typename Scalar__, typename Symmetry__, bool ENABLE_AD__>
     friend std::pair<PlainInterface::MType<std::conditional_t<ENABLE_AD__, stan::math::var, Scalar__>>,
                      PlainInterface::MType<std::conditional_t<ENABLE_AD__, stan::math::var, Scalar__>>>
-    avg(XPED_CONST CTM<Scalar__, Symmetry__, ENABLE_AD__>& env, XPED_CONST Tensor<Scalar__, 2, 2, Symmetry__, ENABLE_AD__>& op);
+    avg(XPED_CONST CTM<Scalar__, Symmetry__, ENABLE_AD__>& env, XPED_CONST Tensor<Scalar__, 2, 2, Symmetry__, false>& op);
 
 public:
     typedef Symmetry_ Symmetry;
@@ -67,7 +67,7 @@ public:
 
     CTM(std::shared_ptr<iPEPS<Scalar, Symmetry, ENABLE_AD>> A, std::size_t chi, const INIT init = INIT::FROM_A)
         : A(A)
-        , cell_(A->cell)
+        , cell_(A->cell())
         , chi(chi)
         , init_m(init)
     {}

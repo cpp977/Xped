@@ -12,7 +12,7 @@ namespace Xped {
 
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>
 iPEPS<Scalar, Symmetry, ENABLE_AD>::iPEPS(const UnitCell& cell, const Qbasis<Symmetry, 1>& auxBasis, const Qbasis<Symmetry, 1>& physBasis)
-    : cell(cell)
+    : cell_(cell)
 {
     D = auxBasis.fullDim();
     As.resize(cell.pattern);
@@ -31,10 +31,10 @@ iPEPS<Scalar, Symmetry, ENABLE_AD>::iPEPS(const UnitCell& cell, const Qbasis<Sym
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>
 void iPEPS<Scalar, Symmetry, ENABLE_AD>::setZero()
 {
-    for(int x = 0; x < cell.Lx; x++) {
-        for(int y = 0; y < cell.Ly; y++) {
-            if(not cell.pattern.isUnique(x, y)) { continue; }
-            auto pos = cell.pattern.uniqueIndex(x, y);
+    for(int x = 0; x < cell_.Lx; x++) {
+        for(int y = 0; y < cell_.Ly; y++) {
+            if(not cell_.pattern.isUnique(x, y)) { continue; }
+            auto pos = cell_.pattern.uniqueIndex(x, y);
             As[pos].setZero();
             // Adags[pos] = As[pos].adjoint().eval().template permute<0, 3, 4, 2, 0, 1>();
         }
@@ -44,10 +44,10 @@ void iPEPS<Scalar, Symmetry, ENABLE_AD>::setZero()
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>
 void iPEPS<Scalar, Symmetry, ENABLE_AD>::setRandom()
 {
-    for(int x = 0; x < cell.Lx; x++) {
-        for(int y = 0; y < cell.Ly; y++) {
-            if(not cell.pattern.isUnique(x, y)) { continue; }
-            auto pos = cell.pattern.uniqueIndex(x, y);
+    for(int x = 0; x < cell_.Lx; x++) {
+        for(int y = 0; y < cell_.Ly; y++) {
+            if(not cell_.pattern.isUnique(x, y)) { continue; }
+            auto pos = cell_.pattern.uniqueIndex(x, y);
             As[pos].setRandom();
             Adags[pos] = As[pos].adjoint().eval().template permute<0, 3, 4, 2, 0, 1>();
         }
@@ -79,10 +79,10 @@ void iPEPS<Scalar, Symmetry, ENABLE_AD>::set_data(const Scalar* data, bool NORMA
         if(NORMALIZE) { A = A * (1. / A.norm()); }
     }
 
-    for(int x = 0; x < cell.Lx; x++) {
-        for(int y = 0; y < cell.Ly; y++) {
-            if(not cell.pattern.isUnique(x, y)) { continue; }
-            auto pos = cell.pattern.uniqueIndex(x, y);
+    for(int x = 0; x < cell_.Lx; x++) {
+        for(int y = 0; y < cell_.Ly; y++) {
+            if(not cell_.pattern.isUnique(x, y)) { continue; }
+            auto pos = cell_.pattern.uniqueIndex(x, y);
 
             Adags[pos] = As[pos].adjoint().eval().template permute<0, 3, 4, 2, 0, 1>();
         }
@@ -118,11 +118,11 @@ Qbasis<Symmetry, 1> iPEPS<Scalar, Symmetry, ENABLE_AD>::braBasis(const int x, co
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>
 void iPEPS<Scalar, Symmetry, ENABLE_AD>::info() const
 {
-    std::cout << "iPEPS(D=" << D << "): UnitCell=(" << cell.Lx << "x" << cell.Ly << ")" << std::endl;
+    std::cout << "iPEPS(D=" << D << "): UnitCell=(" << cell_.Lx << "x" << cell_.Ly << ")" << std::endl;
     std::cout << "Tensors:" << std::endl;
-    for(int x = 0; x < cell.Lx; x++) {
-        for(int y = 0; y < cell.Lx; y++) {
-            if(not cell.pattern.isUnique(x, y)) {
+    for(int x = 0; x < cell_.Lx; x++) {
+        for(int y = 0; y < cell_.Lx; y++) {
+            if(not cell_.pattern.isUnique(x, y)) {
                 std::cout << "Cell site: (" << x << "," << y << "): not unique." << std::endl;
                 continue;
             }

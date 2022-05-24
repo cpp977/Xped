@@ -47,6 +47,7 @@ public:
     XPED_CONST CoeffUnaryOp<Derived> sqrt() XPED_CONST;
     XPED_CONST CoeffUnaryOp<Derived> inv() XPED_CONST;
     XPED_CONST CoeffUnaryOp<Derived> square() XPED_CONST;
+    XPED_CONST CoeffUnaryOp<Derived> abs() XPED_CONST;
 
     Derived& operator+=(const Scalar offset);
     Derived& operator-=(const Scalar offset);
@@ -96,9 +97,13 @@ public:
 
     Scalar trace() XPED_CONST;
 
+    Scalar maxNorm() XPED_CONST;
+
     Scalar squaredNorm() XPED_CONST;
 
     inline Scalar norm() XPED_CONST { return std::sqrt(squaredNorm()); }
+
+    Scalar maxCoeff(std::size_t& max_block, PlainInterface::MIndextype& max_row, PlainInterface::MIndextype& max_col) XPED_CONST;
 
     inline Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy> eval() const
     {

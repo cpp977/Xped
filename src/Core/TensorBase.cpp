@@ -24,7 +24,16 @@ typename TensorTraits<Derived>::Scalar TensorBase<Derived>::trace() XPED_CONST
     Scalar out = 0.;
     for(size_t i = 0; i < derived().sector().size(); i++) {
         out += PlainInterface::trace(derived().block(i)) * Symmetry::degeneracy(derived().sector(i));
-        // out += derived().block(i).trace() * Symmetry::degeneracy(derived().sector(i));
+    }
+    return out;
+}
+
+template <typename Derived>
+typename TensorTraits<Derived>::Scalar TensorBase<Derived>::maxNorm() XPED_CONST
+{
+    Scalar out = 0.;
+    for(size_t i = 0; i < derived().sector().size(); i++) {
+        if(out < PlainInterface::maxNorm(derived().block(i))) { out = PlainInterface::maxNorm(derived().block(i)); }
     }
     return out;
 }
@@ -33,6 +42,22 @@ template <typename Derived>
 typename TensorTraits<Derived>::Scalar TensorBase<Derived>::squaredNorm() XPED_CONST
 {
     return (*this * this->adjoint()).trace();
+}
+
+template <typename Derived>
+typename TensorTraits<Derived>::Scalar
+TensorBase<Derived>::maxCoeff(std::size_t& max_block, PlainInterface::MIndextype& max_row, PlainInterface::MIndextype& max_col) XPED_CONST
+{
+    Scalar out = 0.;
+    for(size_t i = 0; i < derived().sector().size(); i++) {
+        PlainInterface::MIndextype max_row_tmp;
+        PlainInterface::MIndextype max_col_tmp;
+        if(out < PlainInterface::maxCoeff(derived().block(i), max_row_tmp, max_col_tmp)) {
+            out = PlainInterface::maxCoeff(derived().block(i), max_row, max_col);
+            max_block = i;
+        }
+    }
+    return out;
 }
 
 template <typename Derived>
@@ -91,6 +116,12 @@ template <typename Derived>
 XPED_CONST CoeffUnaryOp<Derived> TensorBase<Derived>::square() XPED_CONST
 {
     return unaryExpr([](const Scalar s) { return std::pow(s, 2); });
+}
+
+template <typename Derived>
+XPED_CONST CoeffUnaryOp<Derived> TensorBase<Derived>::abs() XPED_CONST
+{
+    return unaryExpr([](const Scalar s) { return std::abs(s); });
 }
 
 template <typename Derived>
@@ -158,7 +189,7 @@ TensorBase<Derived>::operator*(XPED_CONST TensorBase<OtherDerived>& other) XPED_
     auto derived_ref = derived();
     auto other_derived_ref = other.derived();
     assert(derived_ref.world() == other_derived_ref.world());
-    assert(derived_ref.coupledCodomain() == other_derived_ref.coupledDomain());
+    assert(derived_ref.coubpledCodomain() == other_derived_ref.coupledDomain());
 
     Tensor<Scalar, Rank, TensorTraits<OtherDerived_>::CoRank, Symmetry, false, AllocationPolicy> Tout(
         derived_ref.uncoupledDomain(), other_derived_ref.uncoupledCodomain(), derived_ref.world());

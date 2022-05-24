@@ -28,7 +28,7 @@ decompose(XPED_CONST TensorBase<Derived1>& T1, XPED_CONST TensorBase<Derived2>& 
     // std::cout << "Leading sv: " << S.block(0)(0, 0) << " in sector q: " << S.sector(0) << std::endl;
     // S.print(std::cout, true);
     // Svs(x, y) = S;
-    auto isqrtS = S.diag_sqrt().diag_inv().eval();
+    auto isqrtS = S.diag_sqrt().eval().diag_inv().eval();
     // SPDLOG_CRITICAL("svs: ({}[{}],{}[{}])",
     //                 isqrtS.coupledDomain().fullDim(),
     //                 isqrtS.coupledDomain().dim(),

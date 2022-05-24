@@ -189,7 +189,7 @@ TensorBase<Derived>::operator*(XPED_CONST TensorBase<OtherDerived>& other) XPED_
     auto derived_ref = derived();
     auto other_derived_ref = other.derived();
     assert(derived_ref.world() == other_derived_ref.world());
-    assert(derived_ref.coubpledCodomain() == other_derived_ref.coupledDomain());
+    assert(derived_ref.coupledCodomain() == other_derived_ref.coupledDomain());
 
     Tensor<Scalar, Rank, TensorTraits<OtherDerived_>::CoRank, Symmetry, false, AllocationPolicy> Tout(
         derived_ref.uncoupledDomain(), other_derived_ref.uncoupledCodomain(), derived_ref.world());

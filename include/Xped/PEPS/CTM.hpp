@@ -22,7 +22,8 @@ template <typename Scalar_, typename Symmetry_, bool ENABLE_AD = false>
 class CTM
 {
     template <typename Scalar__, typename Symmetry__, bool ENABLE_AD__>
-    friend std::pair<PlainInterface::MType<Scalar__>, PlainInterface::MType<Scalar__>>
+    friend std::pair<PlainInterface::MType<std::conditional_t<ENABLE_AD__, stan::math::var, Scalar__>>,
+                     PlainInterface::MType<std::conditional_t<ENABLE_AD__, stan::math::var, Scalar__>>>
     avg(XPED_CONST CTM<Scalar__, Symmetry__, ENABLE_AD__>& env, XPED_CONST Tensor<Scalar__, 2, 2, Symmetry__, ENABLE_AD__>& op);
 
 public:
@@ -60,13 +61,13 @@ public:
 
     struct Options
     {
-        std::size_t max_steps = 4;
-        std::size_t pre_steps = 20;
+        std::size_t max_steps = 10;
+        std::size_t pre_steps = 0;
     };
 
     CTM(std::shared_ptr<iPEPS<Scalar, Symmetry, ENABLE_AD>> A, std::size_t chi, const INIT init = INIT::FROM_A)
         : A(A)
-        , cell(A->cell)
+        , cell_(A->cell)
         , chi(chi)
         , init_m(init)
     {}
@@ -74,47 +75,22 @@ public:
     void solve();
     void init();
 
+    void left_move();
+    void right_move();
+    void top_move();
+    void bottom_move();
+    void symmetric_move();
+
     void computeRDM();
     bool RDM_COMPUTED() const { return HAS_RDM; }
 
     void info() const;
 
-    inline void nograd()
-    {
-        if constexpr(ENABLE_AD) {
-            C1s.nograd();
-            C2s.nograd();
-            C3s.nograd();
-            C4s.nograd();
-            T1s.nograd();
-            T2s.nograd();
-            T3s.nograd();
-            T4s.nograd();
-            rho_h.nograd();
-            rho_v.nograd();
-            A->nograd();
-        }
-    }
-    inline void grad()
-    {
-        if constexpr(ENABLE_AD) {
-            C1s.grad();
-            C2s.grad();
-            C3s.grad();
-            C4s.grad();
-            T1s.grad();
-            T2s.grad();
-            T3s.grad();
-            T4s.grad();
-            rho_h.grad();
-            rho_v.grad();
-            A->grad();
-        }
-    }
+    const UnitCell& cell() const { return cell_; }
 
-    // private:
+private:
     std::shared_ptr<iPEPS<Scalar, Symmetry, ENABLE_AD>> A;
-    UnitCell cell;
+    UnitCell cell_;
     std::size_t chi;
     INIT init_m;
     PROJECTION proj_m = PROJECTION::CORNER;
@@ -136,12 +112,6 @@ public:
     TMatrix<Tensor<Scalar, 2, 2, Symmetry, ENABLE_AD>> rho_v;
 
     std::pair<Tensor<Scalar, 3, 3, Symmetry, ENABLE_AD>, Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>> get_projectors_left();
-
-    void left_move();
-    void right_move();
-    void top_move();
-    void bottom_move();
-    void symmetric_move();
 
     void computeRDM_h();
     void computeRDM_v();

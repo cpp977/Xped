@@ -14,7 +14,6 @@ template <typename Scalar, typename Symmetry, bool ENABLE_AD>
 iPEPS<Scalar, Symmetry, ENABLE_AD>::iPEPS(const UnitCell& cell, const Qbasis<Symmetry, 1>& auxBasis, const Qbasis<Symmetry, 1>& physBasis)
     : cell(cell)
 {
-    // nograd();
     D = auxBasis.fullDim();
     As.resize(cell.pattern);
     Adags.resize(cell.pattern);
@@ -27,7 +26,6 @@ iPEPS<Scalar, Symmetry, ENABLE_AD>::iPEPS(const UnitCell& cell, const Qbasis<Sym
             assert(As[pos].coupledDomain().dim() > 0 and "Bases of the A tensor have no fused blocks.");
         }
     }
-    // grad();
 }
 
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>

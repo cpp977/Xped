@@ -59,15 +59,6 @@ struct TMatrix
 
     void fill(const std::vector<Ttype>& tensors_in) { tensors = tensors_in; }
 
-    void nograd()
-    {
-        std::for_each(tensors.begin(), tensors.end(), [](auto& t) { t.nograd(); });
-    }
-    void grad()
-    {
-        std::for_each(tensors.begin(), tensors.end(), [](auto& t) { t.grad(); });
-    }
-
 private:
     std::vector<Ttype> tensors;
     std::vector<bool> is_changed;

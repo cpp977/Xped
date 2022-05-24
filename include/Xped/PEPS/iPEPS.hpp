@@ -88,20 +88,6 @@ public:
         return out;
     }
 
-    inline void grad()
-    {
-        if constexpr(ENABLE_AD) {
-            As.grad();
-            Adags.grad();
-        }
-    }
-    inline void nograd()
-    {
-        if constexpr(ENABLE_AD) {
-            As.nograd();
-            Adags.nograd();
-        }
-    }
     // private:
     std::size_t D;
 

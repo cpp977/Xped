@@ -34,10 +34,6 @@ public:
     using vari_type = stan::math::vari_value<value_type>;
 
     vari_type* vi_;
-    bool grad_tracking = true;
-
-    inline void nograd() { grad_tracking = false; }
-    inline void grad() { grad_tracking = true; }
 
     inline bool is_uninitialized() noexcept { return (vi_ == nullptr); }
 
@@ -111,12 +107,10 @@ public:
     auto adjoint() const
     {
         Xped::Tensor<Scalar, CoRank, Rank, Symmetry, true, AllocationPolicy> out(val().adjoint().eval());
-        if(grad_tracking) {
-            stan::math::reverse_pass_callback([curr = *this, out]() mutable {
-                curr.adj() += out.adj().adjoint().eval();
-                SPDLOG_WARN("reverse adjoint of {}, input adj norm={}, output adj norm={}", curr.name(), out.adj().norm(), curr.adj().norm());
-            });
-        }
+        stan::math::reverse_pass_callback([curr = *this, out]() mutable {
+            curr.adj() += out.adj().adjoint().eval();
+            SPDLOG_WARN("reverse adjoint of {}, input adj norm={}, output adj norm={}", curr.name(), out.adj().norm(), curr.adj().norm());
+        });
         return out;
     }
 
@@ -124,13 +118,11 @@ public:
     auto permute() const
     {
         Xped::Tensor<Scalar, Rank - shift, CoRank + shift, Symmetry, true, AllocationPolicy> out(val().template permute<shift, p...>());
-        if(grad_tracking) {
-            stan::math::reverse_pass_callback([curr = *this, out]() mutable {
-                using inverse = decltype(Xped::util::constFct::inverse_permutation<seq::iseq<std::size_t, p...>>());
-                curr.adj() += out.adj().template permute<-shift>(inverse{});
-                SPDLOG_WARN("reverse permute of {}, input adj norm={}, output adj norm={}", curr.name(), out.adj().norm(), curr.adj().norm());
-            });
-        }
+        stan::math::reverse_pass_callback([curr = *this, out]() mutable {
+            using inverse = decltype(Xped::util::constFct::inverse_permutation<seq::iseq<std::size_t, p...>>());
+            curr.adj() += out.adj().template permute<-shift>(inverse{});
+            SPDLOG_WARN("reverse permute of {}, input adj norm={}, output adj norm={}", curr.name(), out.adj().norm(), curr.adj().norm());
+        });
         return out;
     }
 
@@ -175,69 +167,68 @@ public:
         Tensor<Scalar, 1, 1, Symmetry, true, AllocationPolicy> S(Sval);
         Tensor<Scalar, 1, CoRank, Symmetry, true, AllocationPolicy> Vdag(Vdagval);
 
-        if(grad_tracking) {
-            stan::math::reverse_pass_callback([curr = *this, U, S, Vdag]() mutable {
-                for(std::size_t i = 0; i < curr.sector().size(); ++i) {
-                    SPDLOG_INFO("i={}", i);
-                    if(i >= S.val().sector().size()) {
-                        // curr.adj().block(i) = PlainInterface::construct_with_zero<Scalar>(
-                        //     PlainInterface::rows(curr.val().block(i)), PlainInterface::cols(curr.val().block(i)), *curr.val().world());
-                        continue;
-                    }
-                    auto U_b = U.val().block(i);
-                    auto S_b = S.val().block(i);
-                    auto Vdag_b = Vdag.val().block(i);
-
-                    SPDLOG_INFO("i={}:\tU.val: {}x{}, U.adj: {}x{}, Vdag.val: {}x{}, Vdag.adj: {}x{}, S.val: {}x{}",
-                                i,
-                                U_b.rows(),
-                                U_b.cols(),
-                                U.adj().block(i).rows(),
-                                U.adj().block(i).cols(),
-                                Vdag_b.rows(),
-                                Vdag_b.cols(),
-                                Vdag.adj().block(i).rows(),
-                                Vdag.adj().block(i).cols(),
-                                S_b.rows(),
-                                S_b.cols());
-
-                    auto F_inv = PlainInterface::construct<Scalar>(PlainInterface::rows(S_b), PlainInterface::cols(S_b), *S.val().world());
-                    PlainInterface::vec_diff(S_b.diagonal().eval(), F_inv);
-                    auto F = PlainInterface::unaryFunc<Scalar>(F_inv, [](Scalar d) { return (d < 1.e-12) ? d / (d * d + 1.e-12) : 1. / d; });
-                    // fmt::print("S={}\n", S_b.diagonal().transpose());
-                    PlainInterface::MType<Scalar> tmp = S_b.diagonal().asDiagonal().inverse();
-                    // fmt::print("S_inv={}\n", tmp.diagonal().transpose());
-                    // fmt::print("F=\n{}\n", F);
-                    auto G_inv = PlainInterface::construct<Scalar>(PlainInterface::rows(S_b), PlainInterface::cols(S_b), *S.val().world());
-                    PlainInterface::vec_add(S_b.diagonal().eval(), G_inv);
-                    PlainInterface::MType<Scalar> G =
-                        PlainInterface::unaryFunc<Scalar>(G_inv, [](Scalar d) { return (d < 1.e-12) ? d / (d * d + 1.e-12) : 1. / d; });
-                    G.diagonal().setZero();
-                    // fmt::print("G=\n{}\n", G);
-                    auto Udag_dU = U_b.adjoint() * U.adj().block(i);
-                    auto Vdag_dV = Vdag_b * Vdag.adj().block(i).adjoint();
-                    auto Su = ((F + G).array() * (Udag_dU - Udag_dU.adjoint()).array()).matrix() / 2;
-                    auto Sv = ((F - G).array() * (Vdag_dV - Vdag_dV.adjoint()).array()).matrix() / 2;
-                    curr.adj().block(i) += U_b * (Su + Sv + S.adj().block(i)) * Vdag_b;
-                    // fmt::print("dA=\n{}\n", curr.adj().block(i));
-                    if(U_b.rows() > S_b.rows()) {
-                        curr.adj().block(i) += (PlainInterface::Identity<Scalar>(U_b.rows(), U_b.rows(), *U.val().world()) - U_b * U_b.adjoint()) *
-                                               U.adj().block(i) * S_b.diagonal().asDiagonal().inverse() * Vdag_b;
-                    }
-                    if(Vdag_b.cols() > S_b.rows()) {
-                        curr.adj().block(i) +=
-                            U_b * S_b.diagonal().asDiagonal().inverse() * Vdag.adj().block(i) *
-                            (PlainInterface::Identity<Scalar>(Vdag_b.cols(), Vdag_b.cols(), *Vdag.val().world()) - Vdag_b.adjoint() * Vdag_b);
-                    }
-                    // fmt::print("max dA={}\n", curr.adj().block(i).maxCoeff());
+        stan::math::reverse_pass_callback([curr = *this, U, S, Vdag]() mutable {
+            for(std::size_t i = 0; i < curr.sector().size(); ++i) {
+                SPDLOG_INFO("i={}", i);
+                if(i >= S.val().sector().size()) {
+                    // curr.adj().block(i) = PlainInterface::construct_with_zero<Scalar>(
+                    //     PlainInterface::rows(curr.val().block(i)), PlainInterface::cols(curr.val().block(i)), *curr.val().world());
+                    continue;
                 }
-                SPDLOG_WARN("reverse svd. U.adj.norm()={}, S.adj.norm()={}, Vdag.adj.norm()={}, output adj norm={}",
-                            U.adj().norm(),
-                            S.adj().norm(),
-                            Vdag.adj().norm(),
-                            curr.adj().norm());
-            });
-        }
+                auto U_b = U.val().block(i);
+                auto S_b = S.val().block(i);
+                auto Vdag_b = Vdag.val().block(i);
+
+                SPDLOG_INFO("i={}:\tU.val: {}x{}, U.adj: {}x{}, Vdag.val: {}x{}, Vdag.adj: {}x{}, S.val: {}x{}",
+                            i,
+                            U_b.rows(),
+                            U_b.cols(),
+                            U.adj().block(i).rows(),
+                            U.adj().block(i).cols(),
+                            Vdag_b.rows(),
+                            Vdag_b.cols(),
+                            Vdag.adj().block(i).rows(),
+                            Vdag.adj().block(i).cols(),
+                            S_b.rows(),
+                            S_b.cols());
+
+                auto F_inv = PlainInterface::construct<Scalar>(PlainInterface::rows(S_b), PlainInterface::cols(S_b), *S.val().world());
+                PlainInterface::vec_diff(S_b.diagonal().eval(), F_inv);
+                auto F = PlainInterface::unaryFunc<Scalar>(F_inv, [](Scalar d) { return (d < 1.e-12) ? d / (d * d + 1.e-12) : 1. / d; });
+                // fmt::print("S={}\n", S_b.diagonal().transpose());
+                PlainInterface::MType<Scalar> tmp = S_b.diagonal().asDiagonal().inverse();
+                // fmt::print("S_inv={}\n", tmp.diagonal().transpose());
+                // fmt::print("F=\n{}\n", F);
+                auto G_inv = PlainInterface::construct<Scalar>(PlainInterface::rows(S_b), PlainInterface::cols(S_b), *S.val().world());
+                PlainInterface::vec_add(S_b.diagonal().eval(), G_inv);
+                PlainInterface::MType<Scalar> G =
+                    PlainInterface::unaryFunc<Scalar>(G_inv, [](Scalar d) { return (d < 1.e-12) ? d / (d * d + 1.e-12) : 1. / d; });
+                G.diagonal().setZero();
+                // fmt::print("G=\n{}\n", G);
+                auto Udag_dU = U_b.adjoint() * U.adj().block(i);
+                auto Vdag_dV = Vdag_b * Vdag.adj().block(i).adjoint();
+                auto Su = ((F + G).array() * (Udag_dU - Udag_dU.adjoint()).array()).matrix() / 2;
+                auto Sv = ((F - G).array() * (Vdag_dV - Vdag_dV.adjoint()).array()).matrix() / 2;
+                curr.adj().block(i) += U_b * (Su + Sv + S.adj().block(i)) * Vdag_b;
+                // fmt::print("dA=\n{}\n", curr.adj().block(i));
+                if(U_b.rows() > S_b.rows()) {
+                    curr.adj().block(i) += (PlainInterface::Identity<Scalar>(U_b.rows(), U_b.rows(), *U.val().world()) - U_b * U_b.adjoint()) *
+                                           U.adj().block(i) * S_b.diagonal().asDiagonal().inverse() * Vdag_b;
+                }
+                if(Vdag_b.cols() > S_b.rows()) {
+                    curr.adj().block(i) +=
+                        U_b * S_b.diagonal().asDiagonal().inverse() * Vdag.adj().block(i) *
+                        (PlainInterface::Identity<Scalar>(Vdag_b.cols(), Vdag_b.cols(), *Vdag.val().world()) - Vdag_b.adjoint() * Vdag_b);
+                }
+                // fmt::print("max dA={}\n", curr.adj().block(i).maxCoeff());
+            }
+            SPDLOG_WARN("reverse svd. U.adj.norm()={}, S.adj.norm()={}, Vdag.adj.norm()={}, output adj norm={}",
+                        U.adj().norm(),
+                        S.adj().norm(),
+                        Vdag.adj().norm(),
+                        curr.adj().norm());
+        });
+
         return std::make_tuple(U, S, Vdag);
     }
 
@@ -255,12 +246,10 @@ public:
     {
         Scalar tmp = val().norm();
         stan::math::var_value<Scalar> res(tmp);
-        if(grad_tracking) {
-            stan::math::reverse_pass_callback([curr = *this, res]() mutable {
-                curr.adj() += (curr.val() * (res.adj() / res.val())).eval();
-                SPDLOG_WARN("reverse norm of {}, input adj norm={}, output adj norm={}", curr.name(), res.adj(), curr.adj().norm());
-            });
-        }
+        stan::math::reverse_pass_callback([curr = *this, res]() mutable {
+            curr.adj() += (curr.val() * (res.adj() / res.val())).eval();
+            SPDLOG_WARN("reverse norm of {}, input adj norm={}, output adj norm={}", curr.name(), res.adj(), curr.adj().norm());
+        });
         return res;
     }
 
@@ -271,15 +260,13 @@ public:
         PlainInterface::MIndextype max_col;
         Scalar tmp = val().abs().maxCoeff(max_block, max_row, max_col);
         stan::math::var_value<Scalar> res(tmp);
-        if(grad_tracking) {
-            stan::math::reverse_pass_callback([curr = *this, res, max_block, max_row, max_col]() mutable {
-                Tensor<Scalar, Rank, CoRank, Symmetry, false> Zero(curr.uncoupledDomain(), curr.uncoupledCodomain(), *curr.adj().world());
-                Zero.setZero();
-                Zero.block(max_block)(max_row, max_col) = std::signbit(curr.val().block(max_block)(max_row, max_col)) ? -1. : 1.;
-                curr.adj() += Zero * res.adj();
-                SPDLOG_WARN("reverse norm of {}, input adj norm={}, output adj norm={}", curr.name(), res.adj(), curr.adj().norm());
-            });
-        }
+        stan::math::reverse_pass_callback([curr = *this, res, max_block, max_row, max_col]() mutable {
+            Tensor<Scalar, Rank, CoRank, Symmetry, false> Zero(curr.uncoupledDomain(), curr.uncoupledCodomain(), *curr.adj().world());
+            Zero.setZero();
+            Zero.block(max_block)(max_row, max_col) = std::signbit(curr.val().block(max_block)(max_row, max_col)) ? -1. : 1.;
+            curr.adj() += Zero * res.adj();
+            SPDLOG_WARN("reverse norm of {}, input adj norm={}, output adj norm={}", curr.name(), res.adj(), curr.adj().norm());
+        });
         return res;
     }
 
@@ -287,14 +274,11 @@ public:
     {
         Scalar tmp = val().trace();
         stan::math::var_value<Scalar> res(tmp);
-        if(grad_tracking) {
-            stan::math::reverse_pass_callback([curr = *this, res]() mutable {
-                auto Id =
-                    Tensor<Scalar, Rank, CoRank, Symmetry, false>::Identity(curr.uncoupledDomain(), curr.uncoupledCodomain(), *curr.adj().world());
-                curr.adj() += Id * res.adj();
-                SPDLOG_WARN("reverse trace of {}, input adj norm={}, output adj norm={}", curr.name(), res.adj(), curr.adj().norm());
-            });
-        }
+        stan::math::reverse_pass_callback([curr = *this, res]() mutable {
+            auto Id = Tensor<Scalar, Rank, CoRank, Symmetry, false>::Identity(curr.uncoupledDomain(), curr.uncoupledCodomain(), *curr.adj().world());
+            curr.adj() += Id * res.adj();
+            SPDLOG_WARN("reverse trace of {}, input adj norm={}, output adj norm={}", curr.name(), res.adj(), curr.adj().norm());
+        });
         return res;
     }
 
@@ -311,24 +295,20 @@ public:
     Tensor<Scalar, Rank, CoRank, Symmetry, true, AllocationPolicy> diag_sqrt() const
     {
         Tensor<Scalar, Rank, CoRank, Symmetry, true, AllocationPolicy> res(val().diag_sqrt().eval());
-        if(grad_tracking) {
-            stan::math::reverse_pass_callback([curr = *this, res]() mutable {
-                curr.adj() += res.adj().binaryExpr(res.val().diag_inv().eval(), [](Scalar d1, Scalar d2) { return d1 * d2 * 0.5; });
-                SPDLOG_WARN("reverse sqrt of {}, input adj norm={}, output adj norm={}", curr.name(), res.adj().norm(), curr.adj().norm());
-            });
-        }
+        stan::math::reverse_pass_callback([curr = *this, res]() mutable {
+            curr.adj() += res.adj().binaryExpr(res.val().diag_inv().eval(), [](Scalar d1, Scalar d2) { return d1 * d2 * 0.5; });
+            SPDLOG_WARN("reverse sqrt of {}, input adj norm={}, output adj norm={}", curr.name(), res.adj().norm(), curr.adj().norm());
+        });
         return res;
     }
 
     Tensor<Scalar, Rank, CoRank, Symmetry, true, AllocationPolicy> diag_inv() const
     {
         Tensor<Scalar, Rank, CoRank, Symmetry, true, AllocationPolicy> res(val().diag_inv().eval());
-        if(grad_tracking) {
-            stan::math::reverse_pass_callback([curr = *this, res]() mutable {
-                curr.adj() += res.adj().diagBinaryExpr((res.val().square()) * -1., [](Scalar d1, Scalar d2) { return d1 * d2; }).eval();
-                SPDLOG_WARN("reverse diag_inv of {}, input adj norm={}, output adj norm={}", curr.name(), res.adj().norm(), curr.adj().norm());
-            });
-        }
+        stan::math::reverse_pass_callback([curr = *this, res]() mutable {
+            curr.adj() += res.adj().diagBinaryExpr((res.val().square()) * -1., [](Scalar d1, Scalar d2) { return d1 * d2; }).eval();
+            SPDLOG_WARN("reverse diag_inv of {}, input adj norm={}, output adj norm={}", curr.name(), res.adj().norm(), curr.adj().norm());
+        });
         return res;
     }
 
@@ -365,12 +345,10 @@ template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmet
 Tensor<Scalar, Rank, CoRank, Symmetry, true> operator*(const Tensor<Scalar, Rank, CoRank, Symmetry, true>& t, Scalar s)
 {
     Tensor<Scalar, Rank, CoRank, Symmetry, true> res((t.val() * s).eval());
-    if(t.grad_tracking) {
-        stan::math::reverse_pass_callback([res, t, s]() mutable {
-            t.adj() += (res.adj() * s).eval();
-            SPDLOG_WARN("reverse vt*d with vt={}, input adj norm={}, output adj norm={}", t.name(), res.adj().norm(), t.adj().norm());
-        });
-    }
+    stan::math::reverse_pass_callback([res, t, s]() mutable {
+        t.adj() += (res.adj() * s).eval();
+        SPDLOG_WARN("reverse vt*d with vt={}, input adj norm={}, output adj norm={}", t.name(), res.adj().norm(), t.adj().norm());
+    });
     return res;
 }
 
@@ -378,14 +356,11 @@ template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmet
 Tensor<Scalar, Rank, CoRank, Symmetry, true> operator*(const Tensor<Scalar, Rank, CoRank, Symmetry, true>& t, stan::math::var_value<Scalar> s)
 {
     Tensor<Scalar, Rank, CoRank, Symmetry, true> res((t.val() * s.val()).eval());
-    if(t.grad_tracking) {
-        stan::math::reverse_pass_callback([res, t, s]() mutable {
-            t.adj() += (res.adj() * s.val()).eval();
-            s.adj() += (res.adj() * t.val().adjoint()).trace();
-            SPDLOG_WARN(
-                "reverse vt*v with vt={}, input adj norm={}, vt adj norm={}, v adj norm={}", t.name(), res.adj().norm(), t.adj().norm(), s.adj());
-        });
-    }
+    stan::math::reverse_pass_callback([res, t, s]() mutable {
+        t.adj() += (res.adj() * s.val()).eval();
+        s.adj() += (res.adj() * t.val().adjoint()).trace();
+        SPDLOG_WARN("reverse vt*v with vt={}, input adj norm={}, vt adj norm={}, v adj norm={}", t.name(), res.adj().norm(), t.adj().norm(), s.adj());
+    });
     return res;
 }
 
@@ -394,16 +369,14 @@ Xped::Tensor<Scalar, Rank, CoRank, Symmetry, true> operator*(const Tensor<Scalar
                                                              const Tensor<Scalar, MiddleRank, CoRank, Symmetry, true>& right)
 {
     Tensor<Scalar, Rank, CoRank, Symmetry, true> res(left * right.val());
-    if(right.grad_tracking) {
-        Xped::reverse_pass_callback_alloc([res, left, right]() mutable {
-            right.adj() += (left.adjoint() * res.adj());
-            SPDLOG_WARN("reverse t*vt with t={} and vt={}, input adj norm={}, output adj norm={}",
-                        left.name(),
-                        right.name(),
-                        res.adj().norm(),
-                        right.adj().norm());
-        });
-    }
+    Xped::reverse_pass_callback_alloc([res, left, right]() mutable {
+        right.adj() += (left.adjoint() * res.adj());
+        SPDLOG_WARN("reverse t*vt with t={} and vt={}, input adj norm={}, output adj norm={}",
+                    left.name(),
+                    right.name(),
+                    res.adj().norm(),
+                    right.adj().norm());
+    });
     return res;
 }
 
@@ -412,16 +385,14 @@ Xped::Tensor<Scalar, Rank, CoRank, Symmetry, true> operator*(const Tensor<Scalar
                                                              const Tensor<Scalar, MiddleRank, CoRank, Symmetry, false>& right)
 {
     Tensor<Scalar, Rank, CoRank, Symmetry, true> res(left.val() * right);
-    if(left.grad_tracking) {
-        Xped::reverse_pass_callback_alloc([res, left, right]() mutable {
-            left.adj() += res.adj() * right.adjoint();
-            SPDLOG_WARN("reverse vt*t with vt={} and t={}, input adj norm={}, output adj norm={}",
-                        left.name(),
-                        right.name(),
-                        res.adj().norm(),
-                        left.adj().norm());
-        });
-    }
+    Xped::reverse_pass_callback_alloc([res, left, right]() mutable {
+        left.adj() += res.adj() * right.adjoint();
+        SPDLOG_WARN("reverse vt*t with vt={} and t={}, input adj norm={}, output adj norm={}",
+                    left.name(),
+                    right.name(),
+                    res.adj().norm(),
+                    left.adj().norm());
+    });
     return res;
 }
 
@@ -429,34 +400,28 @@ template <typename Scalar, std::size_t Rank, std::size_t MiddleRank, std::size_t
 Xped::Tensor<Scalar, Rank, CoRank, Symmetry, true> operator*(const Tensor<Scalar, Rank, MiddleRank, Symmetry, true>& left,
                                                              const Tensor<Scalar, MiddleRank, CoRank, Symmetry, true>& right)
 {
-    assert(left.grad_tracking == right.grad_tracking);
     Tensor<Scalar, Rank, CoRank, Symmetry, true> res(left.val() * right.val());
-    if(left.grad_tracking) {
-        stan::math::reverse_pass_callback([res, left, right]() mutable {
-            right.adj() += (left.val().adjoint() * res.adj());
-            left.adj() += res.adj() * right.val().adjoint();
-            SPDLOG_WARN("reverse vt*vt with vtl={} and vtr={}, in adj norm={}, vtl adj norm={}, vtr adj norm={}",
-                        left.name(),
-                        right.name(),
-                        res.adj().norm(),
-                        left.adj().norm(),
-                        right.adj().norm());
-        });
-    }
+    stan::math::reverse_pass_callback([res, left, right]() mutable {
+        right.adj() += (left.val().adjoint() * res.adj());
+        left.adj() += res.adj() * right.val().adjoint();
+        SPDLOG_WARN("reverse vt*vt with vtl={} and vtr={}, in adj norm={}, vtl adj norm={}, vtr adj norm={}",
+                    left.name(),
+                    right.name(),
+                    res.adj().norm(),
+                    left.adj().norm(),
+                    right.adj().norm());
+    });
     return res;
 }
 
 template <typename Scalar, std::size_t Rank, typename Symmetry>
 stan::math::var operator*(const Tensor<Scalar, 0, Rank, Symmetry, true>& left, const Tensor<Scalar, Rank, 0, Symmetry, true>& right)
 {
-    assert(left.grad_tracking == right.grad_tracking);
     stan::math::var res = (left.val() * right.val()).block(0)(0, 0);
-    if(left.grad_tracking) {
-        stan::math::reverse_pass_callback([res, left, right]() mutable {
-            right.adj() += left.val().adjoint() * res.adj();
-            left.adj() += res.adj() * right.val().adjoint();
-        });
-    }
+    stan::math::reverse_pass_callback([res, left, right]() mutable {
+        right.adj() += left.val().adjoint() * res.adj();
+        left.adj() += res.adj() * right.val().adjoint();
+    });
     return res;
 }
 
@@ -464,9 +429,7 @@ template <typename Scalar, std::size_t Rank, typename Symmetry>
 stan::math::var operator*(const Tensor<Scalar, 0, Rank, Symmetry, false>& left, const Tensor<Scalar, Rank, 0, Symmetry, true>& right)
 {
     stan::math::var res = (left * right.val()).block(0)(0, 0);
-    if(right.grad_tracking) {
-        Xped::reverse_pass_callback_alloc([res, left, right]() mutable { right.adj() += left.adjoint() * res.adj(); });
-    }
+    Xped::reverse_pass_callback_alloc([res, left, right]() mutable { right.adj() += left.adjoint() * res.adj(); });
     return res;
 }
 

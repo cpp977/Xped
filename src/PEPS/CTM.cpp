@@ -17,21 +17,21 @@ namespace Xped {
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>
 void CTM<Scalar, Symmetry, ENABLE_AD>::init()
 {
-    C1s.resize(cell.pattern);
-    C2s.resize(cell.pattern);
-    C3s.resize(cell.pattern);
-    C4s.resize(cell.pattern);
-    T1s.resize(cell.pattern);
-    T2s.resize(cell.pattern);
-    T3s.resize(cell.pattern);
-    T4s.resize(cell.pattern);
+    C1s.resize(cell_.pattern);
+    C2s.resize(cell_.pattern);
+    C3s.resize(cell_.pattern);
+    C4s.resize(cell_.pattern);
+    T1s.resize(cell_.pattern);
+    T2s.resize(cell_.pattern);
+    T3s.resize(cell_.pattern);
+    T4s.resize(cell_.pattern);
 
-    Svs.resize(cell.pattern);
+    Svs.resize(cell_.pattern);
 
-    for(int x = 0; x < cell.Lx; x++) {
-        for(int y = 0; y < cell.Ly; y++) {
-            if(not cell.pattern.isUnique(x, y)) { continue; }
-            auto pos = cell.pattern.uniqueIndex(x, y);
+    for(int x = 0; x < cell_.Lx; x++) {
+        for(int y = 0; y < cell_.Ly; y++) {
+            if(not cell_.pattern.isUnique(x, y)) { continue; }
+            auto pos = cell_.pattern.uniqueIndex(x, y);
             switch(init_m) {
             case INIT::FROM_TRIVIAL: {
                 C1s[pos] =
@@ -147,22 +147,7 @@ template <typename Scalar, typename Symmetry, bool ENABLE_AD>
 void CTM<Scalar, Symmetry, ENABLE_AD>::solve()
 {
     info();
-    nograd();
     stan::math::print_stack(std::cout);
-    for(std::size_t step = 0; step < opts.pre_steps; ++step) {
-        SPDLOG_CRITICAL("Step={}", step);
-        left_move();
-        right_move();
-        top_move();
-        bottom_move();
-        computeRDM();
-        auto ham = KondoNecklace<Symmetry>::twoSiteHamiltonian(10.);
-        auto [E_h, E_v] = avg(*this, ham);
-        auto res = (E_h.sum() + E_v.sum()) / cell.size();
-        SPDLOG_CRITICAL("Energy={}", res);
-    }
-    stan::math::print_stack(std::cout);
-    grad();
     for(std::size_t step = 0; step < opts.max_steps; ++step) {
         SPDLOG_CRITICAL("Step={}", step);
         left_move();
@@ -174,7 +159,7 @@ void CTM<Scalar, Symmetry, ENABLE_AD>::solve()
         // auto [E_h, E_v] = avg(*this, KondoNecklace::twoSiteHamiltonian(1.));
         // std::cout << "Energy (horizontal):\n" << E_h << std::endl;
         // std::cout << "Energy (vertical)  :\n" << E_v << std::endl;
-        // SPDLOG_CRITICAL("E={}", (E_h.sum() + E_v.sum()) / cell.size());
+        // SPDLOG_CRITICAL("E={}", (E_h.sum() + E_v.sum()) / cell_.size());
         // checkConvergence(1.e-8);
     }
     computeRDM();
@@ -204,12 +189,12 @@ void CTM<Scalar, Symmetry, ENABLE_AD>::info() const
     }
     }
 
-    std::cout << "CTM(χ=" << chi << "): UnitCell=(" << cell.Lx << "x" << cell.Ly << ")"
+    std::cout << "CTM(χ=" << chi << "): UnitCell=(" << cell_.Lx << "x" << cell_.Ly << ")"
               << ", init=" << mode_string << std::endl;
     // std::cout << "Tensors:" << std::endl;
-    // for(int x = 0; x < cell.Lx; x++) {
-    //     for(int y = 0; y < cell.Lx; y++) {
-    //         if(not cell.pattern.isUnique(x, y)) {
+    // for(int x = 0; x < cell_.Lx; x++) {
+    //     for(int y = 0; y < cell_.Lx; y++) {
+    //         if(not cell_.pattern.isUnique(x, y)) {
     //             std::cout << "Cell site: (" << x << "," << y << "): not unique." << std::endl;
     //             continue;
     //         }
@@ -228,8 +213,8 @@ void CTM<Scalar, Symmetry, ENABLE_AD>::info() const
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>
 bool CTM<Scalar, Symmetry, ENABLE_AD>::checkConvergence(typename ScalarTraits<Scalar>::Real epsilon)
 {
-    for(int x = 0; x < cell.Lx; ++x) {
-        for(int y = 0; y < cell.Ly; ++y) {
+    for(int x = 0; x < cell_.Lx; ++x) {
+        for(int y = 0; y < cell_.Ly; ++y) {
             auto C1T4 = C1s(x, y - 1).template contract<std::array{1, -1}, std::array{1, -2, -3, -4}, 1>(T4s(x, y));
             auto C1T4C4 = C1T4.template contract<std::array{-1, 1, -2, -3}, std::array{1, -4}, 2>(C4s(x, y + 1));
 
@@ -251,9 +236,9 @@ bool CTM<Scalar, Symmetry, ENABLE_AD>::checkConvergence(typename ScalarTraits<Sc
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>
 void CTM<Scalar, Symmetry, ENABLE_AD>::computeRDM_h()
 {
-    rho_h = TMatrix<Tensor<Scalar, 2, 2, Symmetry, ENABLE_AD>>(cell.pattern);
-    for(int x = 0; x < cell.Lx; x++) {
-        for(int y = 0; y < cell.Ly; y++) {
+    rho_h = TMatrix<Tensor<Scalar, 2, 2, Symmetry, ENABLE_AD>>(cell_.pattern);
+    for(int x = 0; x < cell_.Lx; x++) {
+        for(int y = 0; y < cell_.Ly; y++) {
             if(rho_h.isChanged(x, y)) { continue; }
             auto C1T1 = C1s(x - 1, y - 1).template contract<std::array{-1, 1}, std::array{1, -2, -3, -4}, 1>(T1s(x, y - 1));
             SPDLOG_INFO("Computed C1T1");
@@ -300,9 +285,9 @@ void CTM<Scalar, Symmetry, ENABLE_AD>::computeRDM_h()
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>
 void CTM<Scalar, Symmetry, ENABLE_AD>::computeRDM_v()
 {
-    rho_v = TMatrix<Tensor<Scalar, 2, 2, Symmetry, ENABLE_AD>>(cell.pattern);
-    for(int x = 0; x < cell.Lx; x++) {
-        for(int y = 0; y < cell.Ly; y++) {
+    rho_v = TMatrix<Tensor<Scalar, 2, 2, Symmetry, ENABLE_AD>>(cell_.pattern);
+    for(int x = 0; x < cell_.Lx; x++) {
+        for(int y = 0; y < cell_.Ly; y++) {
             if(rho_v.isChanged(x, y)) { continue; }
             auto C1T1 = C1s(x - 1, y - 1).template contract<std::array{-1, 1}, std::array{1, -2, -3, -4}, 1>(T1s(x, y - 1));
             SPDLOG_INFO("Computed C1T1");
@@ -343,29 +328,29 @@ void CTM<Scalar, Symmetry, ENABLE_AD>::computeRDM_v()
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>
 void CTM<Scalar, Symmetry, ENABLE_AD>::left_move()
 {
-    TMatrix<Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>> P1(cell.pattern);
-    TMatrix<Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>> P2(cell.pattern);
+    TMatrix<Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>> P1(cell_.pattern);
+    TMatrix<Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>> P2(cell_.pattern);
 
-    TMatrix<Tensor<Scalar, 0, 2, Symmetry, ENABLE_AD>> C1_new(cell.pattern);
-    TMatrix<Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>> T4_new(cell.pattern);
-    TMatrix<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>> C4_new(cell.pattern);
+    TMatrix<Tensor<Scalar, 0, 2, Symmetry, ENABLE_AD>> C1_new(cell_.pattern);
+    TMatrix<Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>> T4_new(cell_.pattern);
+    TMatrix<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>> C4_new(cell_.pattern);
 
     C1s.resetChange();
     C4s.resetChange();
     T4s.resetChange();
     SPDLOG_INFO("left move");
-    for(int x = 0; x < cell.Lx; x++) {
-        for(int y = 0; y < cell.Ly; y++) {
+    for(int x = 0; x < cell_.Lx; x++) {
+        for(int y = 0; y < cell_.Ly; y++) {
             assert(P1.isChanged(x, y) == P2.isChanged(x, y));
             if(P1.isChanged(x, y)) { continue; }
             std::tie(P1(x, y), P2(x, y)) = get_projectors(x, y, DIRECTION::LEFT); // move assignment
         }
-        for(int y = 0; y < cell.Ly; y++) {
+        for(int y = 0; y < cell_.Ly; y++) {
             assert(C1_new.isChanged(x, y - 1) == T4_new.isChanged(x, y) and C1_new.isChanged(x, y - 1) == C4_new.isChanged(x, y + 1));
             if(C1_new.isChanged(x, y - 1)) { continue; }
             std::tie(C1_new(x, y - 1), T4_new(x, y), C4_new(x, y + 1)) = renormalize_left(x, y, P1, P2);
         }
-        for(int y = 0; y < cell.Ly; y++) {
+        for(int y = 0; y < cell_.Ly; y++) {
             assert(C1s.isChanged(x, y) == T4s.isChanged(x, y) and C1s.isChanged(x, y) == C4s.isChanged(x, y));
             if(C1s.isChanged(x, y)) { continue; }
             C1s(x, y) = std::as_const(C1_new)(x, y);
@@ -393,29 +378,29 @@ void CTM<Scalar, Symmetry, ENABLE_AD>::left_move()
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>
 void CTM<Scalar, Symmetry, ENABLE_AD>::right_move()
 {
-    TMatrix<Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>> P1(cell.pattern);
-    TMatrix<Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>> P2(cell.pattern);
+    TMatrix<Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>> P1(cell_.pattern);
+    TMatrix<Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>> P2(cell_.pattern);
 
-    TMatrix<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>> C2_new(cell.pattern);
-    TMatrix<Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>> T2_new(cell.pattern);
-    TMatrix<Tensor<Scalar, 2, 0, Symmetry, ENABLE_AD>> C3_new(cell.pattern);
+    TMatrix<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>> C2_new(cell_.pattern);
+    TMatrix<Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>> T2_new(cell_.pattern);
+    TMatrix<Tensor<Scalar, 2, 0, Symmetry, ENABLE_AD>> C3_new(cell_.pattern);
 
     C2s.resetChange();
     C3s.resetChange();
     T2s.resetChange();
     SPDLOG_INFO("right move");
-    for(int x = cell.Lx; x >= 0; --x) {
-        for(int y = 0; y < cell.Ly; y++) {
+    for(int x = cell_.Lx; x >= 0; --x) {
+        for(int y = 0; y < cell_.Ly; y++) {
             assert(P1.isChanged(x, y) == P2.isChanged(x, y));
             if(P1.isChanged(x, y)) { continue; }
             std::tie(P1(x, y), P2(x, y)) = get_projectors(x, y, DIRECTION::RIGHT); // move assignment
         }
-        for(int y = 0; y < cell.Ly; y++) {
+        for(int y = 0; y < cell_.Ly; y++) {
             assert(C2_new.isChanged(x, y - 1) == T2_new.isChanged(x, y) and C2_new.isChanged(x, y - 1) == C3_new.isChanged(x, y + 1));
             if(C2_new.isChanged(x, y - 1)) { continue; }
             std::tie(C2_new(x, y - 1), T2_new(x, y), C3_new(x, y + 1)) = renormalize_right(x, y, P1, P2);
         }
-        for(int y = 0; y < cell.Ly; y++) {
+        for(int y = 0; y < cell_.Ly; y++) {
             assert(C2s.isChanged(x, y) == T2s.isChanged(x, y) and C2s.isChanged(x, y) == C3s.isChanged(x, y));
             if(C2s.isChanged(x, y)) { continue; }
             C2s(x, y) = std::as_const(C2_new)(x, y);
@@ -442,29 +427,29 @@ void CTM<Scalar, Symmetry, ENABLE_AD>::right_move()
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>
 void CTM<Scalar, Symmetry, ENABLE_AD>::top_move()
 {
-    TMatrix<Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>> P1(cell.pattern);
-    TMatrix<Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>> P2(cell.pattern);
+    TMatrix<Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>> P1(cell_.pattern);
+    TMatrix<Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>> P2(cell_.pattern);
 
-    TMatrix<Tensor<Scalar, 0, 2, Symmetry, ENABLE_AD>> C1_new(cell.pattern);
-    TMatrix<Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>> T1_new(cell.pattern);
-    TMatrix<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>> C2_new(cell.pattern);
+    TMatrix<Tensor<Scalar, 0, 2, Symmetry, ENABLE_AD>> C1_new(cell_.pattern);
+    TMatrix<Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>> T1_new(cell_.pattern);
+    TMatrix<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>> C2_new(cell_.pattern);
 
     C1s.resetChange();
     C2s.resetChange();
     T1s.resetChange();
     SPDLOG_INFO("top move");
-    for(int y = 0; y < cell.Ly; y++) {
-        for(int x = 0; x < cell.Lx; x++) {
+    for(int y = 0; y < cell_.Ly; y++) {
+        for(int x = 0; x < cell_.Lx; x++) {
             assert(P1.isChanged(x, y) == P2.isChanged(x, y));
             if(P1.isChanged(x, y)) { continue; }
             std::tie(P1(x, y), P2(x, y)) = get_projectors(x, y, DIRECTION::TOP); // move assignment
         }
-        for(int x = 0; x < cell.Lx; x++) {
+        for(int x = 0; x < cell_.Lx; x++) {
             assert(C1_new.isChanged(x - 1, y) == C2_new.isChanged(x + 1, y) and C1_new.isChanged(x - 1, y) == T1_new.isChanged(x, y));
             if(C1_new.isChanged(x - 1, y)) { continue; }
             std::tie(C1_new(x - 1, y), T1_new(x, y), C2_new(x + 1, y)) = renormalize_top(x, y, P1, P2);
         }
-        for(int x = 0; x < cell.Lx; x++) {
+        for(int x = 0; x < cell_.Lx; x++) {
             assert(C1s.isChanged(x, y) == C2s.isChanged(x, y) and C1s.isChanged(x, y) == T1s.isChanged(x, y));
             if(C1s.isChanged(x, y)) { continue; }
             C1s(x, y) = std::as_const(C1_new)(x, y);
@@ -491,29 +476,29 @@ void CTM<Scalar, Symmetry, ENABLE_AD>::top_move()
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>
 void CTM<Scalar, Symmetry, ENABLE_AD>::bottom_move()
 {
-    TMatrix<Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>> P1(cell.pattern);
-    TMatrix<Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>> P2(cell.pattern);
+    TMatrix<Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>> P1(cell_.pattern);
+    TMatrix<Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>> P2(cell_.pattern);
 
-    TMatrix<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>> C4_new(cell.pattern);
-    TMatrix<Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>> T3_new(cell.pattern);
-    TMatrix<Tensor<Scalar, 2, 0, Symmetry, ENABLE_AD>> C3_new(cell.pattern);
+    TMatrix<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>> C4_new(cell_.pattern);
+    TMatrix<Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>> T3_new(cell_.pattern);
+    TMatrix<Tensor<Scalar, 2, 0, Symmetry, ENABLE_AD>> C3_new(cell_.pattern);
 
     C4s.resetChange();
     C3s.resetChange();
     T3s.resetChange();
     SPDLOG_INFO("bottom move");
-    for(int y = cell.Ly; y >= 0; --y) {
-        for(int x = 0; x < cell.Lx; x++) {
+    for(int y = cell_.Ly; y >= 0; --y) {
+        for(int x = 0; x < cell_.Lx; x++) {
             assert(P1.isChanged(x, y) == P2.isChanged(x, y));
             if(P1.isChanged(x, y)) { continue; }
             std::tie(P1(x, y), P2(x, y)) = get_projectors(x, y, DIRECTION::BOTTOM); // move assignment
         }
-        for(int x = 0; x < cell.Lx; x++) {
+        for(int x = 0; x < cell_.Lx; x++) {
             assert(C4_new.isChanged(x - 1, y) == C3_new.isChanged(x + 1, y) and C4_new.isChanged(x - 1, y) == T3_new.isChanged(x, y));
             if(C4_new.isChanged(x - 1, y)) { continue; }
             std::tie(C4_new(x - 1, y), T3_new(x, y), C3_new(x + 1, y)) = renormalize_bottom(x, y, P1, P2);
         }
-        for(int x = 0; x < cell.Lx; x++) {
+        for(int x = 0; x < cell_.Lx; x++) {
             assert(C4s.isChanged(x, y) == C3s.isChanged(x, y) and C4s.isChanged(x, y) == T3s.isChanged(x, y));
             if(C4s.isChanged(x, y)) { continue; }
             C4s(x, y) = std::as_const(C4_new)(x, y);

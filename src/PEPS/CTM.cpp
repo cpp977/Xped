@@ -15,6 +15,27 @@
 namespace Xped {
 
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>
+CTM<Scalar, Symmetry, ENABLE_AD>::CTM(const CTM<Scalar, Symmetry, false>& other)
+{
+    cell_ = other.cell();
+    chi = other.chi;
+    // init_m = other.init_m;
+    // proj_m = other.proj_m;
+    // opts = other.opts;
+    HAS_RDM = false;
+
+    A = std::make_shared<iPEPS<double, Symmetry, true>>(*other.A);
+    C1s = other.C1s;
+    C2s = other.C2s;
+    C3s = other.C3s;
+    C4s = other.C4s;
+    T1s = other.T1s;
+    T2s = other.T2s;
+    T3s = other.T3s;
+    T4s = other.T4s;
+}
+
+template <typename Scalar, typename Symmetry, bool ENABLE_AD>
 void CTM<Scalar, Symmetry, ENABLE_AD>::init()
 {
     C1s.resize(cell_.pattern);
@@ -154,13 +175,6 @@ void CTM<Scalar, Symmetry, ENABLE_AD>::solve()
         right_move();
         top_move();
         bottom_move();
-        // info();
-        // computeRDM();
-        // auto [E_h, E_v] = avg(*this, KondoNecklace::twoSiteHamiltonian(1.));
-        // std::cout << "Energy (horizontal):\n" << E_h << std::endl;
-        // std::cout << "Energy (vertical)  :\n" << E_v << std::endl;
-        // SPDLOG_CRITICAL("E={}", (E_h.sum() + E_v.sum()) / cell_.size());
-        // checkConvergence(1.e-8);
     }
     computeRDM();
     stan::math::print_stack(std::cout);
@@ -275,7 +289,7 @@ void CTM<Scalar, Symmetry, ENABLE_AD>::computeRDM_h()
             auto right_half = AT1C2T2.template contract<std::array{-1, 1, -2, -3, 2, 3, 4}, std::array{1, -4, 4, -5, 2, -6, 3}, 3>(T3C3Ad);
             SPDLOG_INFO("Computed right_half");
             rho_h(x, y) = left_half.template contract<std::array{1, 2, -3, 3, -1, 4}, std::array{2, -4, 1, 3, 4, -2}, 2>(right_half);
-            SPDLOG_CRITICAL("x,y={},{} Tr_rho_h={}", x, y, rho_h(x, y).val().trace());
+            // SPDLOG_CRITICAL("x,y={},{} Tr_rho_h={}", x, y, rho_h(x, y).val().trace());
             // assert(rho_h(x, y).val().trace() > 0 and "Negative norm detected");
             rho_h(x, y) = rho_h(x, y) * (1. / rho_h(x, y).trace());
         }
@@ -318,7 +332,7 @@ void CTM<Scalar, Symmetry, ENABLE_AD>::computeRDM_v()
             SPDLOG_INFO("Computed right_half");
 
             rho_v(x, y) = upper_half.template contract<std::array{1, 2, -3, -1, 3, 4}, std::array{2, -4, 1, 4, 3, -2}, 2>(lower_half);
-            SPDLOG_CRITICAL("x,y={},{} Tr_rho_v={}", x, y, rho_v(x, y).val().trace());
+            // SPDLOG_CRITICAL("x,y={},{} Tr_rho_v={}", x, y, rho_v(x, y).val().trace());
             // assert(rho_v(x, y).val().trace() > 0 and "Negative norm detected");
             rho_v(x, y) = rho_v(x, y) * (1. / rho_v(x, y).trace());
         }

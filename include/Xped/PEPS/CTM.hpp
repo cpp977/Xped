@@ -26,6 +26,8 @@ class CTM
                      PlainInterface::MType<std::conditional_t<ENABLE_AD__, stan::math::var, Scalar__>>>
     avg(XPED_CONST CTM<Scalar__, Symmetry__, ENABLE_AD__>& env, XPED_CONST Tensor<Scalar__, 2, 2, Symmetry__, false>& op);
 
+    friend class CTM<Scalar_, Symmetry_, true>;
+
 public:
     typedef Symmetry_ Symmetry;
     typedef Scalar_ Scalar;
@@ -72,6 +74,8 @@ public:
         , init_m(init)
     {}
 
+    CTM(const CTM<Scalar, Symmetry, false>& other);
+
     void solve();
     void init();
 
@@ -87,12 +91,13 @@ public:
     void info() const;
 
     const UnitCell& cell() const { return cell_; }
+    const std::shared_ptr<iPEPS<Scalar, Symmetry, ENABLE_AD>>& Psi() const { return A; }
 
 private:
     std::shared_ptr<iPEPS<Scalar, Symmetry, ENABLE_AD>> A;
     UnitCell cell_;
     std::size_t chi;
-    INIT init_m;
+    INIT init_m = INIT::FROM_A;
     PROJECTION proj_m = PROJECTION::CORNER;
     Options opts{};
     bool HAS_RDM = false;

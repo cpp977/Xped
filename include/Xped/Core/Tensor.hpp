@@ -50,6 +50,8 @@ class Tensor<Scalar_, Rank, CoRank, Symmetry_, false, AllocationPolicy_>
     template <typename Derived>
     friend class TensorBase;
 
+    friend class Tensor<Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_>;
+
 public:
     using Scalar = Scalar_;
     using RealScalar = typename ScalarTraits<Scalar>::Real;

@@ -19,6 +19,16 @@ struct TMatrix
         std::fill(is_changed.begin(), is_changed.end(), false);
     }
 
+    template <typename OtherTtype>
+    TMatrix(const TMatrix<OtherTtype>& other)
+    {
+        pat = other.pat;
+        is_changed.resize(pat.uniqueSize());
+        std::fill(is_changed.begin(), is_changed.end(), false);
+        tensors.resize(other.size());
+        for(auto it = other.cbegin(); it != other.cend(); ++it) { tensors[std::distance(other.cbegin(), it)] = *it; }
+    }
+
     inline std::size_t rows() const { return pat.Lx; }
     inline std::size_t cols() const { return pat.Ly; }
 
@@ -59,10 +69,11 @@ struct TMatrix
 
     void fill(const std::vector<Ttype>& tensors_in) { tensors = tensors_in; }
 
+    Pattern pat;
+
 private:
     std::vector<Ttype> tensors;
     std::vector<bool> is_changed;
-    Pattern pat;
     std::string name = "";
 };
 

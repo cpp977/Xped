@@ -29,6 +29,15 @@ iPEPS<Scalar, Symmetry, ENABLE_AD>::iPEPS(const UnitCell& cell, const Qbasis<Sym
 }
 
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>
+iPEPS<Scalar, Symmetry, ENABLE_AD>::iPEPS(const iPEPS<Scalar, Symmetry, false>& other)
+{
+    D = other.D;
+    cell_ = other.cell();
+    As = other.As;
+    Adags = other.Adags;
+}
+
+template <typename Scalar, typename Symmetry, bool ENABLE_AD>
 void iPEPS<Scalar, Symmetry, ENABLE_AD>::setZero()
 {
     for(int x = 0; x < cell_.Lx; x++) {

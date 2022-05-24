@@ -28,6 +28,7 @@ template <typename Scalar_, typename Symmetry_, bool ENABLE_AD_ = false>
 class iPEPS
 {
     friend class CTM<Scalar_, Symmetry_, ENABLE_AD_>;
+    friend class iPEPS<Scalar_, Symmetry_, true>;
 
 public:
     typedef Symmetry_ Symmetry;
@@ -46,6 +47,8 @@ public:
     };
 
     iPEPS(const UnitCell& cell, const Qbasis<Symmetry, 1>& auxBasis, const Qbasis<Symmetry, 1>& physBasis);
+
+    iPEPS(const iPEPS<Scalar, Symmetry, false>& other);
 
     void setRandom();
     void setZero();

@@ -67,25 +67,37 @@ public:
 
     bool Evaluate(const double* parameters, double* cost, double* gradient) const override
     {
+        Psi->set_data(parameters);
+        Xped::CTM<double, Symmetry, false> Jack(Psi, chi);
+        Jack.init();
+        double Eold = 1000.;
+        for(std::size_t step = 0; step < 20; ++step) {
+            Jack.left_move();
+            Jack.right_move();
+            Jack.top_move();
+            Jack.bottom_move();
+            Jack.computeRDM();
+            auto [E_h, E_v] = avg(Jack, op);
+            double E = (E_h.sum() + E_v.sum()) / Jack.cell().size();
+            SPDLOG_CRITICAL("Step={}, E={}, conv={}", step, E, std::abs(E - Eold));
+            if(std::abs(E - Eold) < 1.e-12) { break; }
+            Eold = E;
+        }
+
         stan::math::nested_rev_autodiff nested;
         stan::math::print_stack(std::cout);
-        auto Psi_ad = std::make_shared<Xped::iPEPS<double, Symmetry, true>>(Psi->cell,
-                                                                            Psi->ketBasis(0, 0, Xped::iPEPS<double, Symmetry, false>::LEG::LEFT),
-                                                                            Psi->ketBasis(0, 0, Xped::iPEPS<double, Symmetry, false>::LEG::PHYS));
-        Psi_ad->setZero();
-        Psi_ad->set_data(parameters);
+        // auto Psi_ad = std::make_shared<Xped::iPEPS<double, Symmetry, true>>(*Psi);
 
-        Xped::CTM<double, Symmetry, true> Jack(Psi_ad, chi);
-        Jack.init();
-        Jack.solve();
-        auto [E_h, E_v] = avg(Jack, op);
-        auto res = (E_h.sum() + E_v.sum()) / Jack.cell.size();
+        Xped::CTM<double, Symmetry, true> Jim(Jack);
+        Jim.solve();
+        auto [E_h, E_v] = avg(Jim, op);
+        auto res = (E_h.sum() + E_v.sum()) / Jim.cell().size();
         cost[0] = res.val();
         if(gradient != nullptr) {
             SPDLOG_CRITICAL("Backwards pass:");
             stan::math::grad(res.vi_);
             std::size_t count = 0;
-            for(auto it = Psi_ad->gradbegin(); it != Psi_ad->gradend(); ++it) { gradient[count++] = *it; }
+            for(auto it = Jim.Psi()->gradbegin(); it != Jim.Psi()->gradend(); ++it) { gradient[count++] = *it; }
         }
         return true;
     }
@@ -100,6 +112,8 @@ public:
 int main(int argc, char* argv[])
 {
     {
+        // gflags::ParseCommandLineFlags(&argc, &argv, false);
+
 #ifdef XPED_USE_MPI
         MPI_Init(&argc, &argv);
         Xped::mpi::XpedWorld world(argc, argv);
@@ -128,9 +142,9 @@ int main(int argc, char* argv[])
         SPDLOG_INFO("Number of MPI processes: {}", world.np);
 
         typedef double Scalar;
-        typedef Xped::Sym::SU2<Xped::Sym::SpinSU2> Symmetry;
+        // typedef Xped::Sym::SU2<Xped::Sym::SpinSU2> Symmetry;
         // typedef Xped::Sym::U1<Xped::Sym::SpinU1> Symmetry;
-        // typedef Xped::Sym::U0<double> Symmetry;
+        typedef Xped::Sym::U0<double> Symmetry;
 
         Xped::Qbasis<Symmetry, 1> aux;
         Xped::Tensor<Scalar, 2, 2, Symmetry> ham;
@@ -139,13 +153,15 @@ int main(int argc, char* argv[])
         auto Jk = args.get<double>("Jk", 1.);
 
         if constexpr(std::is_same_v<Symmetry, Xped::Sym::SU2<Xped::Sym::SpinSU2>>) {
-            aux.push_back({1}, 1);
-            // aux.push_back({2}, 1);
-            aux.push_back({3}, 1);
-            ham = Xped::KondoNecklace<Symmetry>::twoSiteHamiltonian(Jk, J, I);
+            aux.push_back({1}, 2);
+            aux.push_back({2}, 1);
+            // aux.push_back({3}, 1);
+            // ham = Xped::KondoNecklace<Symmetry>::twoSiteHamiltonian(Jk, J, I);
+            ham = Xped::Heisenberg<Symmetry>::twoSiteHamiltonian();
         } else if constexpr(std::is_same_v<Symmetry, Xped::Sym::U0<double>>) {
             aux.push_back({}, Minit);
             // ham = Xped::KondoNecklace<Symmetry>::twoSiteHamiltonian(Jk, Jk, J, J, I, I);
+            ham = Xped::Heisenberg<Symmetry>::twoSiteHamiltonian();
         }
 
         // Xped::Pattern p({{'a', 'b'}, {'c', 'd'}});

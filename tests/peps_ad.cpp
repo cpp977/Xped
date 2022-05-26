@@ -71,7 +71,7 @@ public:
         Xped::CTM<double, Symmetry, false> Jack(Psi, chi);
         Jack.init();
         double Eold = 1000.;
-        for(std::size_t step = 0; step < 20; ++step) {
+        for(std::size_t step = 0; step < 100; ++step) {
             Jack.left_move();
             Jack.right_move();
             Jack.top_move();
@@ -79,7 +79,7 @@ public:
             Jack.computeRDM();
             auto [E_h, E_v] = avg(Jack, op);
             double E = (E_h.sum() + E_v.sum()) / Jack.cell().size();
-            SPDLOG_CRITICAL("Step={}, E={}, conv={}", step, E, std::abs(E - Eold));
+            SPDLOG_CRITICAL("Step={:2d}, E={:2.5f}, conv={:2.10g}", step, E, std::abs(E - Eold));
             if(std::abs(E - Eold) < 1.e-12) { break; }
             Eold = E;
         }
@@ -171,7 +171,6 @@ int main(int argc, char* argv[])
         auto Ly = args.get<std::size_t>("Ly", 1);
         auto Psi = std::make_shared<Xped::iPEPS<double, Symmetry, false>>(Xped::UnitCell(Lx, Ly), aux, ham.uncoupledDomain()[0]);
         Psi->setRandom();
-
         std::size_t chi = args.get<std::size_t>("chi", 20);
 
         ceres::GradientProblem problem(new Energy<Scalar, Symmetry>(ham, Psi, chi));

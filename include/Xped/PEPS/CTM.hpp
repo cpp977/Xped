@@ -63,7 +63,7 @@ public:
 
     struct Options
     {
-        std::size_t max_steps = 10;
+        std::size_t max_steps = 4;
         std::size_t pre_steps = 0;
     };
 

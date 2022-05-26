@@ -83,9 +83,11 @@ std::vector<Scalar> iPEPS<Scalar, Symmetry, ENABLE_AD>::data()
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>
 void iPEPS<Scalar, Symmetry, ENABLE_AD>::set_data(const Scalar* data, bool NORMALIZE)
 {
+    std::size_t count = 0;
     for(auto& A : As) {
-        A.set_data(data, A.plainSize());
+        A.set_data(data + count, A.plainSize());
         if(NORMALIZE) { A = A * (1. / A.norm()); }
+        count += A.plainSize();
     }
 
     for(int x = 0; x < cell_.Lx; x++) {

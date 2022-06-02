@@ -334,10 +334,10 @@ Tensor<Scalar, Rank, CoRank, Symmetry, true> operator-(const Tensor<Scalar, Rank
 }
 
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry>
-Tensor<Scalar, Rank, CoRank, Symmetry> operator+(const Tensor<Scalar, Rank, CoRank, Symmetry, true>& t, Scalar s)
+Tensor<Scalar, Rank, CoRank, Symmetry, true> operator+(const Tensor<Scalar, Rank, CoRank, Symmetry, true>& t, Scalar s)
 {
     SPDLOG_CRITICAL("BLOCKER");
-    Tensor<Scalar, Rank, CoRank, Symmetry> out(t.val() + s);
+    Tensor<Scalar, Rank, CoRank, Symmetry, true> out(t.val() + s);
     return out;
 }
 

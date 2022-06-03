@@ -76,15 +76,26 @@ public:
 
     CTM(const CTM<Scalar, Symmetry, false>& other);
 
+    template <bool TRACK = ENABLE_AD>
     void solve();
+
+    template <bool TRACK = ENABLE_AD>
+    void grow_all();
+
     void init();
 
+    template <bool TRACK = ENABLE_AD>
     void left_move();
+    template <bool TRACK = ENABLE_AD>
     void right_move();
+    template <bool TRACK = ENABLE_AD>
     void top_move();
+    template <bool TRACK = ENABLE_AD>
     void bottom_move();
+    template <bool TRACK = ENABLE_AD>
     void symmetric_move();
 
+    template <bool TRACK = ENABLE_AD>
     void computeRDM();
     bool RDM_COMPUTED() const { return HAS_RDM; }
 
@@ -116,42 +127,51 @@ private:
     TMatrix<Tensor<Scalar, 2, 2, Symmetry, ENABLE_AD>> rho_h;
     TMatrix<Tensor<Scalar, 2, 2, Symmetry, ENABLE_AD>> rho_v;
 
-    std::pair<Tensor<Scalar, 3, 3, Symmetry, ENABLE_AD>, Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>> get_projectors_left();
+    // template <bool TRACK = ENABLE_AD>
+    // std::pair<Tensor<Scalar, 3, 3, Symmetry, TRACK>, Tensor<Scalar, 1, 1, Symmetry, TRACK>> get_projectors_left();
 
+    template <bool TRACK = ENABLE_AD>
     void computeRDM_h();
+    template <bool TRACK = ENABLE_AD>
     void computeRDM_v();
 
-    Tensor<Scalar, 3, 3, Symmetry, ENABLE_AD> contractCorner(const int x, const int y, const CORNER corner) XPED_CONST;
+    template <bool TRACK = ENABLE_AD>
+    Tensor<Scalar, 3, 3, Symmetry, TRACK> contractCorner(const int x, const int y, const CORNER corner) XPED_CONST;
 
-    std::pair<Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>, Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>>
+    template <bool TRACK = ENABLE_AD>
+    std::pair<Tensor<Scalar, 1, 3, Symmetry, TRACK>, Tensor<Scalar, 3, 1, Symmetry, TRACK>>
     get_projectors(const int x, const int y, const DIRECTION dir) XPED_CONST;
 
-    std::tuple<Tensor<Scalar, 0, 2, Symmetry, ENABLE_AD>, Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>, Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>>
+    template <bool TRACK = ENABLE_AD>
+    std::tuple<Tensor<Scalar, 0, 2, Symmetry, TRACK>, Tensor<Scalar, 1, 3, Symmetry, TRACK>, Tensor<Scalar, 1, 1, Symmetry, TRACK>>
     renormalize_left(const int x,
                      const int y,
-                     XPED_CONST TMatrix<Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>>& P1,
-                     XPED_CONST TMatrix<Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>>& P2,
+                     XPED_CONST TMatrix<Tensor<Scalar, 1, 3, Symmetry, TRACK>>& P1,
+                     XPED_CONST TMatrix<Tensor<Scalar, 3, 1, Symmetry, TRACK>>& P2,
                      bool NORMALIZE = true) XPED_CONST;
 
-    std::tuple<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>, Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>, Tensor<Scalar, 2, 0, Symmetry, ENABLE_AD>>
+    template <bool TRACK = ENABLE_AD>
+    std::tuple<Tensor<Scalar, 1, 1, Symmetry, TRACK>, Tensor<Scalar, 3, 1, Symmetry, TRACK>, Tensor<Scalar, 2, 0, Symmetry, TRACK>>
     renormalize_right(const int x,
                       const int y,
-                      XPED_CONST TMatrix<Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>>& P1,
-                      XPED_CONST TMatrix<Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>>& P2,
+                      XPED_CONST TMatrix<Tensor<Scalar, 1, 3, Symmetry, TRACK>>& P1,
+                      XPED_CONST TMatrix<Tensor<Scalar, 3, 1, Symmetry, TRACK>>& P2,
                       bool NORMALIZE = true) XPED_CONST;
 
-    std::tuple<Tensor<Scalar, 0, 2, Symmetry, ENABLE_AD>, Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>, Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>>
+    template <bool TRACK = ENABLE_AD>
+    std::tuple<Tensor<Scalar, 0, 2, Symmetry, TRACK>, Tensor<Scalar, 1, 3, Symmetry, TRACK>, Tensor<Scalar, 1, 1, Symmetry, TRACK>>
     renormalize_top(const int x,
                     const int y,
-                    XPED_CONST TMatrix<Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>>& P1,
-                    XPED_CONST TMatrix<Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>>& P2,
+                    XPED_CONST TMatrix<Tensor<Scalar, 1, 3, Symmetry, TRACK>>& P1,
+                    XPED_CONST TMatrix<Tensor<Scalar, 3, 1, Symmetry, TRACK>>& P2,
                     bool NORMALIZE = true) XPED_CONST;
 
-    std::tuple<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>, Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>, Tensor<Scalar, 2, 0, Symmetry, ENABLE_AD>>
+    template <bool TRACK = ENABLE_AD>
+    std::tuple<Tensor<Scalar, 1, 1, Symmetry, TRACK>, Tensor<Scalar, 3, 1, Symmetry, TRACK>, Tensor<Scalar, 2, 0, Symmetry, TRACK>>
     renormalize_bottom(const int x,
                        const int y,
-                       XPED_CONST TMatrix<Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>>& P1,
-                       XPED_CONST TMatrix<Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>>& P2,
+                       XPED_CONST TMatrix<Tensor<Scalar, 1, 3, Symmetry, TRACK>>& P1,
+                       XPED_CONST TMatrix<Tensor<Scalar, 3, 1, Symmetry, TRACK>>& P2,
                        bool NORMALIZE = true) XPED_CONST;
 
     bool checkConvergence(typename ScalarTraits<Scalar>::Real epsilon);

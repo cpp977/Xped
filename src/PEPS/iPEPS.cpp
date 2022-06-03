@@ -58,7 +58,7 @@ void iPEPS<Scalar, Symmetry, ENABLE_AD>::setRandom()
             if(not cell_.pattern.isUnique(x, y)) { continue; }
             auto pos = cell_.pattern.uniqueIndex(x, y);
             As[pos].setRandom();
-            Adags[pos] = As[pos].adjoint().eval().template permute<0, 3, 4, 2, 0, 1>();
+            Adags[pos] = As[pos].adjoint().eval().template permute<true, 0, 3, 4, 2, 0, 1>();
         }
     }
 }
@@ -95,7 +95,7 @@ void iPEPS<Scalar, Symmetry, ENABLE_AD>::set_data(const Scalar* data, bool NORMA
             if(not cell_.pattern.isUnique(x, y)) { continue; }
             auto pos = cell_.pattern.uniqueIndex(x, y);
 
-            Adags[pos] = As[pos].adjoint().eval().template permute<0, 3, 4, 2, 0, 1>();
+            Adags[pos] = As[pos].adjoint().eval().template permute<true, 0, 3, 4, 2, 0, 1>();
         }
     }
 }

@@ -208,7 +208,7 @@ Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::permute_impl(se
 }
 
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
-template <int shift, std::size_t... p>
+template <bool, int shift, std::size_t... p>
 Tensor<Scalar, Rank - shift, CoRank + shift, Symmetry, false, AllocationPolicy>
 Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::permute() const
 {

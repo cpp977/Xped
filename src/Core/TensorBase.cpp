@@ -18,6 +18,7 @@
 namespace Xped {
 
 template <typename Derived>
+template <bool>
 typename TensorTraits<Derived>::Scalar TensorBase<Derived>::trace() XPED_CONST
 {
     assert(derived().coupledDomain() == derived().coupledCodomain());
@@ -175,7 +176,7 @@ Derived& TensorBase<Derived>::operator-=(XPED_CONST TensorBase<OtherDerived>& ot
 }
 
 template <typename Derived>
-template <typename OtherDerived>
+template <bool, typename OtherDerived>
 Tensor<typename TensorTraits<Derived>::Scalar,
        TensorTraits<Derived>::Rank,
        TensorTraits<typename std::remove_const<std::remove_reference_t<OtherDerived>>::type>::CoRank,

@@ -73,7 +73,7 @@ public:
     template <typename OtherDerived>
     Derived& operator-=(XPED_CONST TensorBase<OtherDerived>& other);
 
-    template <typename OtherDerived>
+    template <bool = false, typename OtherDerived>
     Tensor<Scalar,
            TensorTraits<Derived>::Rank,
            TensorTraits<typename std::remove_const<std::remove_reference_t<OtherDerived>>::type>::CoRank,
@@ -82,7 +82,7 @@ public:
            AllocationPolicy>
     operator*(XPED_CONST TensorBase<OtherDerived>& other) XPED_CONST;
 
-    template <typename OtherDerived>
+    template <bool TRACK = false, typename OtherDerived>
     Tensor<Scalar,
            Rank,
            TensorTraits<typename std::remove_const<std::remove_reference_t<OtherDerived>>::type>::CoRank,
@@ -92,9 +92,10 @@ public:
     operator*(TensorBase<OtherDerived>&& other) XPED_CONST
     {
         TensorBase<OtherDerived>& tmp = other;
-        return this->operator*(tmp);
+        return this->operator*<TRACK>(tmp);
     }
 
+    template <bool = false>
     Scalar trace() XPED_CONST;
 
     Scalar maxNorm() XPED_CONST;
@@ -153,13 +154,13 @@ XPED_CONST CoeffUnaryOp<Derived> operator-(XPED_CONST TensorBase<Derived>& left,
     return left.unaryExpr([offset](const typename Derived::Scalar s) { return s - offset; });
 }
 
-template <typename Derived>
+template <bool = false, typename Derived>
 XPED_CONST CoeffUnaryOp<Derived> operator*(XPED_CONST TensorBase<Derived>& left, const typename Derived::Scalar factor)
 {
     return left.unaryExpr([factor](const typename Derived::Scalar s) { return s * factor; });
 }
 
-template <typename Derived>
+template <bool = false, typename Derived>
 XPED_CONST CoeffUnaryOp<Derived> operator*(const typename Derived::Scalar factor, XPED_CONST TensorBase<Derived>& right)
 {
     return right.unaryExpr([factor](const typename Derived::Scalar s) { return s * factor; });

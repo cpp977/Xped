@@ -89,7 +89,7 @@ public:
         // auto Psi_ad = std::make_shared<Xped::iPEPS<double, Symmetry, true>>(*Psi);
 
         Xped::CTM<double, Symmetry, true> Jim(Jack);
-        Jim.solve();
+        Jim.template solve<false>();
         auto [E_h, E_v] = avg(Jim, op);
         auto res = (E_h.sum() + E_v.sum()) / Jim.cell().size();
         cost[0] = res.val();
@@ -153,11 +153,11 @@ int main(int argc, char* argv[])
         auto Jk = args.get<double>("Jk", 1.);
 
         if constexpr(std::is_same_v<Symmetry, Xped::Sym::SU2<Xped::Sym::SpinSU2>>) {
-            aux.push_back({1}, 2);
-            aux.push_back({2}, 1);
-            // aux.push_back({3}, 1);
-            // ham = Xped::KondoNecklace<Symmetry>::twoSiteHamiltonian(Jk, J, I);
-            ham = Xped::Heisenberg<Symmetry>::twoSiteHamiltonian();
+            aux.push_back({1}, 3);
+            // aux.push_back({2}, 1);
+            aux.push_back({3}, 1);
+            ham = Xped::KondoNecklace<Symmetry>::twoSiteHamiltonian(Jk, J, I);
+            // ham = Xped::Heisenberg<Symmetry>::twoSiteHamiltonian();
         } else if constexpr(std::is_same_v<Symmetry, Xped::Sym::U0<double>>) {
             aux.push_back({}, Minit);
             // ham = Xped::KondoNecklace<Symmetry>::twoSiteHamiltonian(Jk, Jk, J, J, I, I);

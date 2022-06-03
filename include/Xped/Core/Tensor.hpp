@@ -115,6 +115,8 @@ public:
     inline Tensor(const TensorBase<OtherDerived>& other);
 
     constexpr bool CONTIGUOUS_STORAGE() { return Storage::IS_CONTIGUOUS(); }
+    constexpr bool AD_TENSOR() { return false; }
+
     static constexpr std::size_t rank() { return Rank; }
     static constexpr std::size_t corank() { return CoRank; }
 
@@ -222,18 +224,18 @@ public:
 
     // Scalar norm() const { return std::sqrt(squaredNorm()); }
 
-    template <int shift, std::size_t...>
+    template <bool, int shift, std::size_t...>
     Tensor<Scalar, Rank - shift, CoRank + shift, Symmetry, false, AllocationPolicy> permute() const;
 
-    template <int shift, std::size_t... p>
+    template <bool TRACK, int shift, std::size_t... p>
     Tensor<Scalar, Rank - shift, CoRank + shift, Symmetry, false, AllocationPolicy> permute(seq::iseq<std::size_t, p...>) const
     {
-        return permute<shift, p...>();
+        return permute<TRACK, shift, p...>();
     }
 
 #if XPED_HAS_NTTP
-    template <auto a1, auto a2, std::size_t ResRank, std::size_t OtherRank, std::size_t OtherCoRank>
-    auto contract(const Tensor<Scalar, OtherRank, OtherCoRank, Symmetry, false, AllocationPolicy>& other) XPED_CONST
+    template <auto a1, auto a2, std::size_t ResRank, bool TRACK = false, std::size_t OtherRank, std::size_t OtherCoRank, bool ENABLE_AD>
+    auto contract(const Tensor<Scalar, OtherRank, OtherCoRank, Symmetry, ENABLE_AD, AllocationPolicy>& other) XPED_CONST
     {
         constexpr auto perms = util::constFct::get_permutations<a1, Rank, a2, OtherRank, ResRank>();
         constexpr auto p1 = std::get<0>(perms);
@@ -245,8 +247,9 @@ public:
         constexpr auto pres = std::get<4>(perms);
         constexpr auto shiftres = std::get<5>(perms);
         SPDLOG_INFO("shiftres={}, pres={}", shiftres, pres);
-        return (this->template permute<shift1>(util::constFct::as_sequence<p1>()) * other.template permute<shift2>(util::constFct::as_sequence<p2>()))
-            .template permute<shiftres>(util::constFct::as_sequence<pres>());
+        return operator*<TRACK>(this->template permute<TRACK, shift1>(util::constFct::as_sequence<p1>()),
+                                other.template permute<TRACK, shift2>(util::constFct::as_sequence<p2>()))
+            .template permute<TRACK, shiftres>(util::constFct::as_sequence<pres>());
     }
 #endif
 
@@ -305,6 +308,13 @@ Tensor<Scalar_, Rank, CoRank, Symmetry, false, AllocationPolicy>::Tensor(const T
     storage_.reserve(other.derived().sector().size());
     for(std::size_t i = 0; i < other.derived().sector().size(); ++i) { storage_.push_back(other.derived().sector(i), other.derived().block(i)); }
     world_ = other.derived().world();
+}
+
+template <bool TRACK = false, typename Scalar, std::size_t Rank, std::size_t MiddleRank, std::size_t CoRank, typename Symmetry>
+Tensor<Scalar, Rank, CoRank, Symmetry, false> operator*(const Tensor<Scalar, Rank, MiddleRank, Symmetry, false>& left,
+                                                        const Tensor<Scalar, MiddleRank, CoRank, Symmetry, false>& right)
+{
+    return left.template operator*<TRACK>(right);
 }
 
 #ifdef XPED_USE_AD

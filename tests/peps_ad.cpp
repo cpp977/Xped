@@ -78,7 +78,7 @@ public:
             Jack.bottom_move();
             Jack.computeRDM();
             auto [E_h, E_v] = avg(Jack, op);
-            double E = (E_h.sum() + E_v.sum()) / Jack.cell().size();
+            double E = (E_h.sum() + E_v.sum()) / Jack.cell().uniqueSize();
             SPDLOG_CRITICAL("Step={:2d}, E={:2.5f}, conv={:2.10g}", step, E, std::abs(E - Eold));
             if(std::abs(E - Eold) < 1.e-12) { break; }
             Eold = E;
@@ -91,7 +91,7 @@ public:
         Xped::CTM<double, Symmetry, true> Jim(Jack);
         Jim.template solve<false>();
         auto [E_h, E_v] = avg(Jim, op);
-        auto res = (E_h.sum() + E_v.sum()) / Jim.cell().size();
+        auto res = (E_h.sum() + E_v.sum()) / Jim.cell().uniqueSize();
         cost[0] = res.val();
         if(gradient != nullptr) {
             SPDLOG_CRITICAL("Backwards pass:");
@@ -164,12 +164,12 @@ int main(int argc, char* argv[])
             ham = Xped::Heisenberg<Symmetry>::twoSiteHamiltonian();
         }
 
-        // Xped::Pattern p({{'a', 'b'}, {'c', 'd'}});
-        Xped::Pattern p({std::vector<char>{'a'}});
+        Xped::Pattern p({{'a', 'b'}, {'b', 'a'}});
+        // Xped::Pattern p({std::vector<char>{'a'}});
         SPDLOG_CRITICAL("Pattern:\n {}", p);
         auto Lx = args.get<std::size_t>("Lx", 1);
         auto Ly = args.get<std::size_t>("Ly", 1);
-        auto Psi = std::make_shared<Xped::iPEPS<double, Symmetry, false>>(Xped::UnitCell(Lx, Ly), aux, ham.uncoupledDomain()[0]);
+        auto Psi = std::make_shared<Xped::iPEPS<double, Symmetry, false>>(Xped::UnitCell(p), aux, ham.uncoupledDomain()[0]);
         Psi->setRandom();
         std::size_t chi = args.get<std::size_t>("chi", 20);
 

@@ -22,8 +22,8 @@ template <typename Scalar_, typename Symmetry_, bool ENABLE_AD = false>
 class CTM
 {
     template <typename Scalar__, typename Symmetry__, bool ENABLE_AD__>
-    friend std::pair<PlainInterface::MType<std::conditional_t<ENABLE_AD__, stan::math::var, Scalar__>>,
-                     PlainInterface::MType<std::conditional_t<ENABLE_AD__, stan::math::var, Scalar__>>>
+    friend std::pair<TMatrix<std::conditional_t<ENABLE_AD__, stan::math::var, Scalar__>>,
+                     TMatrix<std::conditional_t<ENABLE_AD__, stan::math::var, Scalar__>>>
     avg(XPED_CONST CTM<Scalar__, Symmetry__, ENABLE_AD__>& env, XPED_CONST Tensor<Scalar__, 2, 2, Symmetry__, false>& op);
 
     friend class CTM<Scalar_, Symmetry_, true>;

@@ -21,14 +21,14 @@ jobs:
         # LIBCXX: [OFF]
         # compiler: [g++]
         include:
-          - triplet: x64-linux
-            compiler: g++
-            LIBCXX: OFF
-            STORAGE: Contiguous
-          - triplet: x64-linux-clang
-            compiler: clang++-13
-            LIBCXX: OFF
-            STORAGE: Contiguous
+          #- triplet: x64-linux
+          #  compiler: g++
+          #  LIBCXX: OFF
+          #  STORAGE: Contiguous
+          #- triplet: x64-linux-clang
+          #  compiler: clang++-13
+          #  LIBCXX: OFF
+          #  STORAGE: Contiguous
           - triplet: x64-linux-clang-libcxx
             compiler: clang++-13
             LIBCXX: ON
@@ -90,7 +90,11 @@ jobs:
       env:
         CXX: ${{ matrix.compiler }}
       run: cmake $GITHUB_WORKSPACE --preset=ad-eigen -DVCPKG_TARGET_TRIPLET=${{ matrix.triplet }} -DBLA_VENDOR=OpenBLAS -DXPED_USE_BLAS=ON -DXPED_USE_LAPACK=ON -DXPED_USE_OPENMP=OFF -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DXPED_USE_LIBCXX=${{ matrix.LIBCXX }} -DXPED_ENABLE_CCACHE=OFF -DXPED_BUILD_CYCLOPS=ON -DXPED_STORAGE=${{ matrix.STORAGE }}
-      
+    
+    - name: show debug log
+      if: always
+      run: cat /home/runner/work/Xped/Xped/vcpkg/buildtrees/boost-container/install-x64-linux-clang-libcxx-dbg*
+
     - name: Build
       working-directory: ${{runner.workspace}}/build
       shell: bash

@@ -24,7 +24,7 @@ CTM<Scalar, Symmetry, ENABLE_AD>::CTM(const CTM<Scalar, Symmetry, false>& other)
     // opts = other.opts;
     HAS_RDM = false;
 
-    A = std::make_shared<iPEPS<double, Symmetry, true>>(*other.A);
+    A = std::make_shared<iPEPS<double, Symmetry, ENABLE_AD>>(*other.A);
     C1s = other.C1s;
     C2s = other.C2s;
     C3s = other.C3s;
@@ -166,16 +166,16 @@ void CTM<Scalar, Symmetry, ENABLE_AD>::init()
 
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>
 template <bool TRACK>
-void CTM<Scalar, Symmetry, ENABLE_AD>::solve()
+void CTM<Scalar, Symmetry, ENABLE_AD>::solve(std::size_t steps)
 {
-    info();
-    stan::math::print_stack(std::cout);
-    for(std::size_t step = 0; step < opts.max_steps; ++step) {
-        SPDLOG_CRITICAL("Step={}", step);
+    // info();
+    // stan::math::print_stack(std::cout);
+    for(std::size_t step = 0; step < steps; ++step) {
+        // SPDLOG_CRITICAL("Step={}", step);
         grow_all<TRACK>();
     }
     computeRDM<true>();
-    stan::math::print_stack(std::cout);
+    // stan::math::print_stack(std::cout);
 }
 
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>
@@ -224,8 +224,9 @@ void CTM<Scalar, Symmetry, ENABLE_AD>::info() const
     }
     }
 
-    std::cout << "CTM(χ=" << chi << "): UnitCell=(" << cell_.Lx << "x" << cell_.Ly << ")"
-              << ", init=" << mode_string << std::endl;
+    fmt::print("\tCTM(χ={}): UnitCell=({}x{}), init={}\n", chi, cell_.Lx, cell_.Ly, mode_string);
+    // std::cout << "CTM(χ=" << chi << "): UnitCell=(" << cell_.Lx << "x" << cell_.Ly << ")"
+    //           << ", init=" << mode_string << std::endl;
     // std::cout << "Tensors:" << std::endl;
     // for(int x = 0; x < cell_.Lx; x++) {
     //     for(int y = 0; y < cell_.Lx; y++) {

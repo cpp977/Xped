@@ -61,11 +61,7 @@ public:
         FROM_A
     };
 
-    struct Options
-    {
-        std::size_t max_steps = 4;
-        std::size_t pre_steps = 0;
-    };
+    CTM() = default;
 
     CTM(std::shared_ptr<iPEPS<Scalar, Symmetry, ENABLE_AD>> A, std::size_t chi, const INIT init = INIT::FROM_A)
         : A(A)
@@ -76,8 +72,10 @@ public:
 
     CTM(const CTM<Scalar, Symmetry, false>& other);
 
+    void set_A(std::shared_ptr<iPEPS<Scalar, Symmetry, ENABLE_AD>> A_in) { A = A_in; }
+
     template <bool TRACK = ENABLE_AD>
-    void solve();
+    void solve(std::size_t max_steps);
 
     template <bool TRACK = ENABLE_AD>
     void grow_all();
@@ -110,7 +108,6 @@ private:
     std::size_t chi;
     INIT init_m = INIT::FROM_A;
     PROJECTION proj_m = PROJECTION::CORNER;
-    Options opts{};
     bool HAS_RDM = false;
 
     TMatrix<Tensor<Scalar, 0, 2, Symmetry, ENABLE_AD>> C1s;

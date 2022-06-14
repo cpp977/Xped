@@ -63,6 +63,17 @@ public:
 
     CTM() = default;
 
+    explicit CTM(std::size_t chi, INIT init = INIT::FROM_A)
+        : chi(chi)
+        , init_m(init)
+    {}
+
+    CTM(std::size_t chi, const UnitCell& cell, INIT init = INIT::FROM_A)
+        : cell_(cell)
+        , chi(chi)
+        , init_m(init)
+    {}
+
     CTM(std::shared_ptr<iPEPS<Scalar, Symmetry, ENABLE_AD>> A, std::size_t chi, const INIT init = INIT::FROM_A)
         : A(A)
         , cell_(A->cell())
@@ -72,7 +83,11 @@ public:
 
     CTM(const CTM<Scalar, Symmetry, false>& other);
 
-    void set_A(std::shared_ptr<iPEPS<Scalar, Symmetry, ENABLE_AD>> A_in) { A = A_in; }
+    void set_A(std::shared_ptr<iPEPS<Scalar, Symmetry, ENABLE_AD>> A_in)
+    {
+        A = A_in;
+        cell_ = A_in->cell();
+    }
 
     template <bool TRACK = ENABLE_AD>
     void solve(std::size_t max_steps);

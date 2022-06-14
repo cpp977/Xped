@@ -16,7 +16,8 @@
         "boost-iterator",
         "boost-predef",
         "wignersun",
-        "doctest"
+        "doctest",
+        "toml11"
     ],
     "default-features": [ "ad-eigen" ],
     "features": {

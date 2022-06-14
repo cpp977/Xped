@@ -2,6 +2,7 @@
 #define XPED_PATTERN_H_
 
 #include <map>
+#include <string>
 #include <vector>
 
 #include "tabulate/table.hpp"
@@ -14,7 +15,7 @@ struct Pattern
 {
     friend struct UnitCell;
 
-    explicit Pattern(const std::vector<std::vector<char>>& pat = {{'a'}})
+    Pattern(const std::vector<std::vector<std::string>>& pat = {{"a"}})
         : data(pat)
     {
         init();
@@ -35,10 +36,10 @@ struct Pattern
 
     tabulate::Table print() const;
 
-    std::map<char, std::size_t> label2index;
+    std::map<std::string, std::size_t> label2index;
     std::map<std::size_t, std::size_t> index2unique;
-    std::vector<std::vector<char>> data;
-    std::map<char, std::vector<std::size_t>> sites_of_label;
+    std::vector<std::vector<std::string>> data;
+    std::map<std::string, std::vector<std::size_t>> sites_of_label;
     std::size_t Lx = 1, Ly = 1;
 };
 

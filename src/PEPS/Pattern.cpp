@@ -27,14 +27,14 @@ void Pattern::init()
 
 Pattern Pattern::row(int x) const
 {
-    std::vector<std::vector<char>> row_data(1);
+    std::vector<std::vector<std::string>> row_data(1);
     row_data[0] = data[x];
     return Pattern(row_data);
 }
 
 Pattern Pattern::col(int y) const
 {
-    std::vector<std::vector<char>> col_data(data.size());
+    std::vector<std::vector<std::string>> col_data(data.size());
     for(std::size_t x = 0; x < Lx; x++) { col_data[x] = {data[x][y]}; }
     return Pattern(col_data);
 }
@@ -67,10 +67,7 @@ tabulate::Table Pattern::print() const
     using Row_t = std::vector<std::variant<std::string, const char*, tabulate::Table>>;
     for(const auto& row : data) {
         Row_t t_row(row.size());
-        for(auto i = 0; i < row.size(); i++) {
-            std::string elem(1, row[i]);
-            t_row[i] = elem;
-        }
+        for(auto i = 0; i < row.size(); i++) { t_row[i] = row[i]; }
         pat_table.add_row(t_row);
     }
     // pat_table.format().font_style({tabulate::FontStyle::bold}).border_top(" ").border_bottom(" ").border_left(" ").border_right(" ").corner(" ");

@@ -11,6 +11,8 @@
 #include "spdlog/sinks/basic_file_sink.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
 
+#include "toml.hpp"
+
 #ifdef _OPENMP
 #    include "omp.h"
 #endif
@@ -129,7 +131,6 @@ int main(int argc, char* argv[])
 
         ArgParser args(argc, argv);
         google::InitGoogleLogging(argv[0]);
-        auto Minit = args.get<std::size_t>("Minit", 3);
 
         my_logger->sinks()[0]->set_pattern("[%H:%M:%S] [%n] [%^---%L---%$] [process %P] %v");
         if(world.rank == 0) {
@@ -154,6 +155,16 @@ int main(int argc, char* argv[])
         auto I = args.get<double>("I", 0.);
         auto Jk = args.get<double>("Jk", 1.);
 
+        auto config_file = args.get<std::string>("config_file", "config.toml");
+        toml::value data;
+        try {
+            data = toml::parse("config.toml");
+            std::cout << data << "\n";
+        } catch(const toml::syntax_error& err) {
+            std::cerr << "Parsing failed:\n" << err.what() << "\n";
+            return 1;
+        }
+
         if constexpr(std::is_same_v<Symmetry, Xped::Sym::SU2<Xped::Sym::SpinSU2>>) {
             aux.push_back({1}, 3);
             // aux.push_back({2}, 1);
@@ -161,23 +172,20 @@ int main(int argc, char* argv[])
             ham = Xped::KondoNecklace<Symmetry>::twoSiteHamiltonian(Jk, J, I);
             // ham = Xped::Heisenberg<Symmetry>::twoSiteHamiltonian();
         } else if constexpr(std::is_same_v<Symmetry, Xped::Sym::U0<double>>) {
-            aux.push_back({}, Minit);
+            aux.push_back({}, toml::find_or(data.at("ipeps"), "D", 2));
             // ham = Xped::KondoNecklace<Symmetry>::twoSiteHamiltonian(Jk, Jk, J, J, I, I);
             ham = Xped::Heisenberg<Symmetry>::twoSiteHamiltonian();
         }
 
-        Xped::Pattern p({{'a', 'b'}, {'b', 'a'}});
-        // Xped::Pattern p({std::vector<char>{'a'}});
-        SPDLOG_CRITICAL("Pattern:\n {}", p);
-        auto Lx = args.get<std::size_t>("Lx", 1);
-        auto Ly = args.get<std::size_t>("Ly", 1);
-        auto Psi = std::make_shared<Xped::iPEPS<double, Symmetry, false>>(Xped::UnitCell(p), aux, ham.uncoupledDomain()[0]);
+        Xped::UnitCell c;
+        if(data.at("ipeps").contains("cell")) {
+            c = Xped::UnitCell(toml::get<std::vector<std::vector<std::string>>>(toml::find(data.at("ipeps"), "cell")));
+        }
+        auto Psi = std::make_shared<Xped::iPEPS<double, Symmetry, false>>(c, aux, ham.uncoupledDomain()[0]);
         Psi->setRandom();
 
-        std::size_t chi = args.get<std::size_t>("chi", 20);
-
         Xped::Opts::Optim o_opts{};
-        Xped::Opts::CTM c_opts{.chi = chi, .reinit_env_tol = 1.e-2};
+        Xped::Opts::CTM c_opts = Xped::Opts::ctm_from_toml(data.at("ctm"));
         Xped::iPEPSSolverAD<Scalar, Symmetry> Jack(o_opts, c_opts);
         Jack.solve(Psi, ham);
         // ceres::GradientProblem problem(new Energy<Scalar, Symmetry>(ham, Psi, chi));

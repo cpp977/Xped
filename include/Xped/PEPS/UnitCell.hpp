@@ -17,10 +17,10 @@ struct UnitCell
 
     UnitCell(const std::size_t Lx = 1, const std::size_t Ly = 1);
 
-    std::size_t Lx;
-    std::size_t Ly;
+    std::size_t Lx = 1;
+    std::size_t Ly = 1;
 
-    Pattern pattern;
+    Pattern pattern{};
 
     inline std::size_t uniqueSize() const { return pattern.uniqueSize(); }
     inline std::size_t size() const { return Lx * Ly; }

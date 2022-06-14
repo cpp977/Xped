@@ -3,11 +3,24 @@
 
 namespace Xped::Opts {
 
+enum class Algorithm
+{
+    L_BFGS,
+    CONJUGATE_GRADIENT,
+    NELDER_MEAD
+};
+
+enum class Linesearch
+{
+    WOLFE,
+    ARMIJO
+};
+
 struct Optim
 {
-    // Algorithm alg;
+    Algorithm alg = Algorithm::L_BFGS;
 
-    // LineSearch ls;
+    Linesearch ls = Linesearch::WOLFE;
 
     double bfgs_xxx;
 

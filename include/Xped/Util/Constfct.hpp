@@ -6,6 +6,13 @@
 namespace Xped::util::constFct {
 
 template <std::size_t Rank>
+constexpr std::size_t trimDim(std::size_t leg)
+{
+    if(leg < Rank) { return Rank - 1; }
+    return Rank;
+}
+
+template <std::size_t Rank>
 constexpr std::size_t shift(std::size_t x, std::size_t /*unused*/)
 {
     return x + Rank;

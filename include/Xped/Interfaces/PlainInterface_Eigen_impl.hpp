@@ -19,6 +19,7 @@ struct PlainInterface : public MatrixInterface, public TensorInterface, public V
     using MatrixInterface::scale;
     using MatrixInterface::setConstant;
     using MatrixInterface::setRandom;
+    using MatrixInterface::setVal;
     using MatrixInterface::setZero;
 
     using TensorInterface::construct;
@@ -27,6 +28,7 @@ struct PlainInterface : public MatrixInterface, public TensorInterface, public V
     using TensorInterface::print;
     using TensorInterface::setConstant;
     using TensorInterface::setRandom;
+    using TensorInterface::setVal;
     using TensorInterface::setZero;
 
     using VectorInterface::construct;

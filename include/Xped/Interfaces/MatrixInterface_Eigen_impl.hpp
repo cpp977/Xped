@@ -57,6 +57,9 @@ struct MatrixInterface
     template <typename Derived>
     static void setConstant(Eigen::MatrixBase<Derived>&& M, const typename Derived::Scalar& val);
 
+    template <typename Derived>
+    static void setVal(Eigen::DenseBase<Derived>& M, const MIndextype& row, const MIndextype& col, typename Derived::Scalar val);
+
     template <typename Scalar>
     static MType<Scalar> Identity(const MIndextype& rows, const MIndextype& cols, mpi::XpedWorld& world = mpi::getUniverse());
 

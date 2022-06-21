@@ -86,6 +86,12 @@ void MatrixInterface::setConstant(Eigen::MatrixBase<Derived>&& M, const typename
     M.setConstant(val);
 }
 
+template <typename Derived>
+void MatrixInterface::setVal(Eigen::DenseBase<Derived>& M, const MIndextype& row, const MIndextype& col, typename Derived::Scalar val)
+{
+    M(row, col) = val;
+}
+
 template <typename Scalar>
 MType<Scalar> MatrixInterface::Identity(const MIndextype& rows, const MIndextype& cols, mpi::XpedWorld& world)
 {

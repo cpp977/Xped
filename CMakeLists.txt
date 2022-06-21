@@ -274,7 +274,7 @@ if(XPED_USE_MKL)
 endif()
 
 find_package(GSL 1.16 REQUIRED)
-find_package(Boost 1.34 REQUIRED)
+find_package(Boost 1.78 REQUIRED)
 
 # Link this 'library' to set the c++ standard / compile-time options requested
 add_library(project_options INTERFACE)

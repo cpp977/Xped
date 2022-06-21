@@ -224,7 +224,7 @@ void CTM<Scalar, Symmetry, ENABLE_AD>::info() const
     }
     }
 
-    fmt::print("\tCTM(χ={}): UnitCell=({}x{}), init={}\n", chi, cell_.Lx, cell_.Ly, mode_string);
+    fmt::print("\tCTM(χ={}, {}): UnitCell=({}x{}), init={}\n", chi, Symmetry::name(), cell_.Lx, cell_.Ly, mode_string);
     // std::cout << "CTM(χ=" << chi << "): UnitCell=(" << cell_.Lx << "x" << cell_.Ly << ")"
     //           << ", init=" << mode_string << std::endl;
     // std::cout << "Tensors:" << std::endl;

@@ -52,6 +52,8 @@ struct iPEPSSolverAD
     template <typename HamScalar>
     void solve(std::shared_ptr<iPEPS<Scalar, Symmetry>>& Psi, const Hamiltonian<HamScalar, Symmetry>& H)
     {
+        optim_opts.info();
+        ctm_opts.info();
         auto Dwain = std::make_unique<CTMSolver<Scalar, Symmetry>>(ctm_opts);
         ceres::GradientProblem problem(new Energy<Scalar, Symmetry>(std::move(Dwain), H, Psi));
 
@@ -60,15 +62,23 @@ struct iPEPSSolverAD
         ceres::GradientProblemSolver::Options options;
         // options.line_search_direction_type = ceres::NONLINEAR_CONJUGATE_GRADIENT;
         // options.line_search_direction_type = ceres::STEEPEST_DESCENT;
-        options.line_search_direction_type = ceres::LBFGS;
-        // options.line_search_type = ceres::ARMIJO;
-        options.line_search_type = ceres::WOLFE;
+        switch(optim_opts.alg) {
+        case Opts::Algorithm::L_BFGS: options.line_search_direction_type = ceres::LBFGS; break;
+        case Opts::Algorithm::CONJUGATE_GRADIENT: options.line_search_direction_type = ceres::NONLINEAR_CONJUGATE_GRADIENT; break;
+        case Opts::Algorithm::NELDER_MEAD: throw std::invalid_argument("Nelder-Mead optimization is not in ceres.");
+        }
+
+        switch(optim_opts.ls) {
+        case Opts::Linesearch::WOLFE: options.line_search_type = ceres::WOLFE; break;
+        case Opts::Linesearch::ARMIJO: options.line_search_type = ceres::ARMIJO; break;
+        }
         options.minimizer_progress_to_stdout = true;
-        options.use_approximate_eigenvalue_bfgs_scaling = true;
+        options.use_approximate_eigenvalue_bfgs_scaling = optim_opts.bfgs_scaling;
         // options.line_search_interpolation_type = ceres::BISECTION;
-        options.max_num_iterations = 500;
-        options.function_tolerance = 1.e-10;
-        options.parameter_tolerance = 0.;
+        options.max_num_iterations = optim_opts.max_steps;
+        options.function_tolerance = optim_opts.cost_tol;
+        options.parameter_tolerance = optim_opts.step_tol;
+        options.gradient_tolerance = optim_opts.grad_tol;
         options.update_state_every_iteration = true;
         ceres::GradientProblemSolver::Summary summary;
         ceres::Solve(options, problem, parameters.data(), &summary);

@@ -84,7 +84,7 @@ Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy> loadMatlabTensor
         std::size_t end = (i == off.size() - 1) ? raw.size() : off[i + 1][1];
         for(auto i = begin; i < end; ++i) { submatrix(i - begin, 0) = raw[i]; }
     }
-    return tmp.template permute<full_rank - Rank>(seq::make<std::size_t, full_rank>{});
+    return tmp.template permute<false, full_rank - Rank>(seq::make<std::size_t, full_rank>{});
 }
 
 } // namespace Xped::IO

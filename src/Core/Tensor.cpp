@@ -230,6 +230,33 @@ Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::permute() const
 }
 
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
+template <std::size_t leg>
+Tensor<Scalar, util::constFct::trimDim<Rank>(leg), Rank + CoRank - 1 - util::constFct::trimDim<Rank>(leg), Symmetry, false, AllocationPolicy>
+Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::trim() const
+{
+    constexpr std::size_t new_rank = util::constFct::trimDim<Rank>(leg);
+    constexpr std::size_t new_corank = Rank + CoRank - 1 - util::constFct::trimDim<Rank>(leg);
+    std::array<Qbasis<Symmetry, 1>, new_rank> uncoupled_domain;
+    std::array<Qbasis<Symmetry, 1>, new_corank> uncoupled_codomain;
+    std::size_t count = 0;
+    for(std::size_t r = 0; r < Rank; ++r) {
+        if(r == leg) { continue; }
+        uncoupled_domain[count++] = uncoupledDomain()[r];
+    }
+    count = 0;
+    for(std::size_t c = Rank; c < Rank + CoRank; ++c) {
+        if(c == leg) { continue; }
+        uncoupled_codomain[count++] = uncoupledCodomain()[c - Rank];
+    }
+
+    Tensor<Scalar, util::constFct::trimDim<Rank>(leg), Rank + CoRank - 1 - util::constFct::trimDim<Rank>(leg), Symmetry, false, AllocationPolicy> out(
+        uncoupled_domain, uncoupled_codomain, this->data(), this->plainSize(), world());
+    // out.setZero();
+    // out.storage().m_data = this->storage().m_data;
+    return out;
+}
+
+template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
 std::tuple<Tensor<Scalar, Rank, 1, Symmetry, false, AllocationPolicy>,
            Tensor<typename ScalarTraits<Scalar>::Real, 1, 1, Symmetry, false, AllocationPolicy>,
            Tensor<Scalar, 1, CoRank, Symmetry, false, AllocationPolicy>>
@@ -564,22 +591,6 @@ Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::subBlock(const 
     // TensorcMapType tensorview = PlainInterface::cMap(submatrix.data(), dims);
     // TensorType T = PlainInterface::construct<Scalar, Rank + CoRank>(tensorview);
     // return T;
-}
-
-template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
-const typename PlainInterface::MType<Scalar>
-Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::subMatrix(const FusionTree<Rank, Symmetry>& f1,
-                                                                           const FusionTree<CoRank, Symmetry>& f2) const
-{
-    if(f1.q_coupled != f2.q_coupled) { assert(false); }
-
-    const auto left_offset_domain = coupledDomain().leftOffset(f1);
-    const auto left_offset_codomain = coupledCodomain().leftOffset(f2);
-    const auto it = dict().find(f1.q_coupled);
-
-    auto submatrix = PlainInterface::block(block(it->second), left_offset_domain, left_offset_codomain, f1.dim, f2.dim);
-    // auto submatrix = block_[it->second].block(left_offset_domain, left_offset_codomain, f1.dim, f2.dim);
-    return submatrix;
 }
 
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>

@@ -45,6 +45,8 @@ XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100)
 #include "Xped/PEPS/Models/KondoNecklace.hpp"
 // #include "Xped/PEPS/iPEPS.hpp"
 
+#include "Xped/Physics/SpinBase.hpp"
+
 #include "Xped/Util/Stopwatch.hpp"
 
 #include "Xped/IO/Matlab.hpp"
@@ -89,29 +91,47 @@ int main(int argc, char* argv[])
     C1_ref.read(C1);
     auto g_C1_0 = C1[0].template dereference<HighFive::Group>(py);
     auto C = Xped::IO::loadMatlabTensor<double, 2, 0, Xped::Sym::ZN<Xped::Sym::ChargeU1, 36>, Xped::HeapPolicy>(g_C1_0, py);
-    std::cout << C.squaredNorm() << std::endl;
-    std::cout << (C.template contract<std::array{1, 2}, std::array{1, 2}, 0>(C.adjoint().eval())).trace() << std::endl;
+    // std::cout << C.squaredNorm() << std::endl;
+    // std::cout << (C.template contract<std::array{1, 2}, std::array{1, 2}, 0>(C.adjoint().eval())).trace() << std::endl;
 
     auto T1_ref = py.getDataSet("T1");
     std::vector<HighFive::Reference> T1;
     T1_ref.read(T1);
     auto g_T1_0 = T1[0].template dereference<HighFive::Group>(py);
     auto T = Xped::IO::loadMatlabTensor<double, 0, 4, Xped::Sym::ZN<Xped::Sym::ChargeU1, 36>, Xped::HeapPolicy>(g_T1_0, py);
-    std::cout << T.squaredNorm() << std::endl;
-    std::cout << (T.template contract<std::array{1, 2, 3, 4}, std::array{1, 2, 3, 4}, 0>(T.adjoint().eval())).trace() << std::endl;
+    // std::cout << T.squaredNorm() << std::endl;
+    // std::cout << (T.template contract<std::array{1, 2, 3, 4}, std::array{1, 2, 3, 4}, 0>(T.adjoint().eval())).trace() << std::endl;
 
     auto CT = C.template contract<std::array{1, -1}, std::array{1, -2, -3, -4}, 4>(T);
 
     auto H = Xped::IO::loadMatlabTensor<double, 2, 2, Xped::Sym::ZN<Xped::Sym::ChargeU1, 36>, Xped::HeapPolicy>(py.getGroup("H"), py);
     auto [D, U] = H.eigh();
-    D.print(std::cout);
-    std::cout << H.squaredNorm() << std::endl;
+    // D.print(std::cout);
+    // std::cout << H.squaredNorm() << std::endl;
 
     auto Hcheck = Xped::KondoNecklace<Xped::Sym::U0<>>::twoSiteHamiltonian(0.68, 0.68, 1., 1., 0., 0.4);
     auto [Dcheck, Ucheck] = Hcheck.eigh();
-    Dcheck.print(std::cout);
-    std::cout << Hcheck.squaredNorm() << std::endl;
+    // Dcheck.print(std::cout);
+    // std::cout << Hcheck.squaredNorm() << std::endl;
 
+    // using Symmetry = Xped::Sym::U0<double>;
+    using Symmetry = Xped::Sym::U1<Xped::Sym::SpinU1, double>;
+    // Xped::Qbasis<Symmetry, 1> b;
+    // b.push_back({2}, 1);
+    // Xped::SiteOperator<double, Symmetry> S({3}, b);
+    // S.setZero();
+    // S({2}, {2})(0, 0) = std::sqrt(0.75);
+    // auto S2 = std::sqrt(3.) * Xped::SiteOperator<double, Symmetry>::prod(S.adjoint(), S, {1});
+    // auto SdxS = std::sqrt(3.) * Xped::SiteOperator<double, Symmetry>::outerprod(S.adjoint(), S, {1});
+    // auto SxSd = std::sqrt(3.) * Xped::SiteOperator<double, Symmetry>::outerprod(S, S.adjoint(), {1});
+    auto Dloc = args.get<std::size_t>("Dloc", 2);
+    Xped::SpinBase<Symmetry> B(1, Dloc);
+    std::cout << B.Sz() << std::endl;
+    Xped::Tensor<double, 2, 2, Symmetry> ham = Xped::tprod(B.Sz(), B.Sz()) + 0.5 * (Xped::tprod(B.Sp(), B.Sm()) + Xped::tprod(B.Sm(), B.Sp()));
+    auto [Es, Us] = ham.eigh();
+    Es.print(std::cout);
+    // std::cout << B.Sz(0) << std::endl;
+    // std::cout << B.Sz(1) << std::endl;
     // std::cout << t << std::endl;
     // SPDLOG_INFO("Tensor: \n {}", t);
     // constexpr std::size_t Rank=2;

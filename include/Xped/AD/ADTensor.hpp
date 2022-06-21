@@ -193,15 +193,19 @@ public:
             stan::math::reverse_pass_callback([curr = *this, U, S, Vdag]() mutable {
                 for(std::size_t i = 0; i < curr.sector().size(); ++i) {
                     SPDLOG_INFO("i={}", i);
-                    if(i >= S.val().sector().size()) {
+                    auto it = S.val().dict().find(curr.val().sector(i));
+                    if(it == S.val().dict().end()) {
                         // curr.adj().block(i) = PlainInterface::construct_with_zero<Scalar>(
                         //     PlainInterface::rows(curr.val().block(i)), PlainInterface::cols(curr.val().block(i)), *curr.val().world());
                         continue;
                     }
-                    auto U_b = U.val().block(i);
-                    auto S_b = S.val().block(i);
-                    auto Vdag_b = Vdag.val().block(i);
-
+                    auto j = it->second;
+                    auto U_b = U.val().block(j);
+                    auto S_b = S.val().block(j);
+                    auto Vdag_b = Vdag.val().block(j);
+                    // fmt::print("dU=\n{}\n", U.adj().block(i));
+                    // fmt::print("dVdag=\n{}\n", Vdag.adj().block(i));
+                    // fmt::print("dS=\n{}\n", S.adj().block(i));
                     SPDLOG_INFO("i={}:\tU.val: {}x{}, U.adj: {}x{}, Vdag.val: {}x{}, Vdag.adj: {}x{}, S.val: {}x{}",
                                 i,
                                 U_b.rows(),
@@ -217,7 +221,8 @@ public:
 
                     auto F_inv = PlainInterface::construct<Scalar>(PlainInterface::rows(S_b), PlainInterface::cols(S_b), *S.val().world());
                     PlainInterface::vec_diff(S_b.diagonal().eval(), F_inv);
-                    auto F = PlainInterface::unaryFunc<Scalar>(F_inv, [](Scalar d) { return (d < 1.e-12) ? d / (d * d + 1.e-12) : 1. / d; });
+                    auto F =
+                        PlainInterface::unaryFunc<Scalar>(F_inv, [](Scalar d) { return (std::abs(d) < 1.e-12) ? d / (d * d + 1.e-12) : 1. / d; });
                     // fmt::print("S={}\n", S_b.diagonal().transpose());
                     PlainInterface::MType<Scalar> tmp = S_b.diagonal().asDiagonal().inverse();
                     // fmt::print("S_inv={}\n", tmp.diagonal().transpose());
@@ -228,19 +233,19 @@ public:
                         PlainInterface::unaryFunc<Scalar>(G_inv, [](Scalar d) { return (d < 1.e-12) ? d / (d * d + 1.e-12) : 1. / d; });
                     G.diagonal().setZero();
                     // fmt::print("G=\n{}\n", G);
-                    auto Udag_dU = U_b.adjoint() * U.adj().block(i);
-                    auto Vdag_dV = Vdag_b * Vdag.adj().block(i).adjoint();
+                    auto Udag_dU = U_b.adjoint() * U.adj().block(j);
+                    auto Vdag_dV = Vdag_b * Vdag.adj().block(j).adjoint();
                     auto Su = ((F + G).array() * (Udag_dU - Udag_dU.adjoint()).array()).matrix() / 2;
                     auto Sv = ((F - G).array() * (Vdag_dV - Vdag_dV.adjoint()).array()).matrix() / 2;
-                    curr.adj().block(i) += U_b * (Su + Sv + S.adj().block(i)) * Vdag_b;
+                    curr.adj().block(i) += U_b * (Su + Sv + S.adj().block(j)) * Vdag_b;
                     // fmt::print("dA=\n{}\n", curr.adj().block(i));
                     if(U_b.rows() > S_b.rows()) {
                         curr.adj().block(i) += (PlainInterface::Identity<Scalar>(U_b.rows(), U_b.rows(), *U.val().world()) - U_b * U_b.adjoint()) *
-                                               U.adj().block(i) * S_b.diagonal().asDiagonal().inverse() * Vdag_b;
+                                               U.adj().block(j) * S_b.diagonal().asDiagonal().inverse() * Vdag_b;
                     }
                     if(Vdag_b.cols() > S_b.rows()) {
                         curr.adj().block(i) +=
-                            U_b * S_b.diagonal().asDiagonal().inverse() * Vdag.adj().block(i) *
+                            U_b * S_b.diagonal().asDiagonal().inverse() * Vdag.adj().block(j) *
                             (PlainInterface::Identity<Scalar>(Vdag_b.cols(), Vdag_b.cols(), *Vdag.val().world()) - Vdag_b.adjoint() * Vdag_b);
                     }
                     // fmt::print("max dA={}\n", curr.adj().block(i).maxCoeff());

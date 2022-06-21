@@ -37,6 +37,7 @@ XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100)
 #include "Xped/Symmetry/SU2.hpp"
 #include "Xped/Symmetry/U0.hpp"
 #include "Xped/Symmetry/U1.hpp"
+#include "Xped/Symmetry/ZN.hpp"
 #include "Xped/Symmetry/kind_dummies.hpp"
 
 #include "Xped/Core/AdjointOp.hpp"
@@ -147,7 +148,8 @@ int main(int argc, char* argv[])
         typedef double Scalar;
         // typedef Xped::Sym::SU2<Xped::Sym::SpinSU2> Symmetry;
         // typedef Xped::Sym::U1<Xped::Sym::SpinU1> Symmetry;
-        typedef Xped::Sym::U0<double> Symmetry;
+        typedef Xped::Sym::ZN<Xped::Sym::SpinU1, 36, double> Symmetry;
+        // typedef Xped::Sym::U0<double> Symmetry;
 
         Xped::Qbasis<Symmetry, 1> aux;
         Xped::Tensor<Scalar, 2, 2, Symmetry> ham;
@@ -159,24 +161,36 @@ int main(int argc, char* argv[])
         toml::value data;
         try {
             data = toml::parse("config.toml");
-            std::cout << data << "\n";
+            // std::cout << data << "\n";
         } catch(const toml::syntax_error& err) {
             std::cerr << "Parsing failed:\n" << err.what() << "\n";
             return 1;
         }
 
         if constexpr(std::is_same_v<Symmetry, Xped::Sym::SU2<Xped::Sym::SpinSU2>>) {
-            aux.push_back({1}, 3);
-            // aux.push_back({2}, 1);
-            aux.push_back({3}, 1);
-            ham = Xped::KondoNecklace<Symmetry>::twoSiteHamiltonian(Jk, J, I);
+            aux.push_back({1}, 1);
+            aux.push_back({2}, 1);
+            // aux.push_back({3}, 1);
+            // ham = Xped::KondoNecklace<Symmetry>::twoSiteHamiltonian(Jk, J, I);
+            ham = Xped::Heisenberg<Symmetry>::twoSiteHamiltonian();
+        } else if constexpr(std::is_same_v<Symmetry, Xped::Sym::U1<Xped::Sym::SpinU1, double>>) {
+            aux.push_back({0}, 2);
+            aux.push_back({+2}, 1);
+            aux.push_back({-2}, 1);
+            ham = Xped::KondoNecklace<Symmetry>::twoSiteHamiltonian(Jk, Jk, J, J, I, I);
+            // ham = Xped::Heisenberg<Symmetry>::twoSiteHamiltonian();
+        } else if constexpr(std::is_same_v<Symmetry, Xped::Sym::ZN<Xped::Sym::SpinU1, 36, double>>) {
+            aux.push_back({0}, 2);
+            aux.push_back({+2}, 1);
+            aux.push_back({34}, 1);
+            ham = Xped::KondoNecklace<Symmetry>::twoSiteHamiltonian(Jk, Jk, J, J, I, I);
             // ham = Xped::Heisenberg<Symmetry>::twoSiteHamiltonian();
         } else if constexpr(std::is_same_v<Symmetry, Xped::Sym::U0<double>>) {
             aux.push_back({}, toml::find_or(data.at("ipeps"), "D", 2));
-            // ham = Xped::KondoNecklace<Symmetry>::twoSiteHamiltonian(Jk, Jk, J, J, I, I);
-            ham = Xped::Heisenberg<Symmetry>::twoSiteHamiltonian();
+            ham = Xped::KondoNecklace<Symmetry>::twoSiteHamiltonian(Jk, Jk, J, J, I, I);
+            // ham = Xped::Heisenberg<Symmetry>::twoSiteHamiltonian();
         }
-
+        aux.sort();
         Xped::UnitCell c;
         if(data.at("ipeps").contains("cell")) {
             c = Xped::UnitCell(toml::get<std::vector<std::vector<std::string>>>(toml::find(data.at("ipeps"), "cell")));
@@ -184,7 +198,7 @@ int main(int argc, char* argv[])
         auto Psi = std::make_shared<Xped::iPEPS<double, Symmetry, false>>(c, aux, ham.uncoupledDomain()[0]);
         Psi->setRandom();
 
-        Xped::Opts::Optim o_opts{};
+        Xped::Opts::Optim o_opts = Xped::Opts::optim_from_toml(data.at("optim"));
         Xped::Opts::CTM c_opts = Xped::Opts::ctm_from_toml(data.at("ctm"));
         Xped::iPEPSSolverAD<Scalar, Symmetry> Jack(o_opts, c_opts);
         Jack.solve(Psi, ham);

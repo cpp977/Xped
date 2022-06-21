@@ -19,7 +19,16 @@ struct CTM
 
     double reinit_env_tol = 1.e-1;
 
-    // UnitCell cell{};
+    inline void info()
+    {
+        fmt::print("CTM options:\n");
+        fmt::print("  {:<20} {}\n", "• chi:", chi);
+        fmt::print("  {:<20} {}\n", "• maximum pre-steps:", max_presteps);
+        fmt::print("  {:<20} {}\n", "• tracked steps:", track_steps);
+        fmt::print("  {:<20} {}\n", "• energy tolerance:", tol_E);
+        fmt::print("  {:<20} {}\n", "• norm tolerance:", tol_N);
+        fmt::print("  {:<20} {}\n", "• reinit_env_tol:", reinit_env_tol);
+    }
 };
 
 inline CTM ctm_from_toml(const toml::value& t)

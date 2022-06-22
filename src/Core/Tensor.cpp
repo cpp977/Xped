@@ -301,6 +301,7 @@ Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::tSVD(size_t max
         Vdag.push_back(sector(i), Vmatdag);
     }
     size_t numberOfStates = allSV.size();
+    auto first_entry = allSV[0];
     SPDLOG_INFO("numberOfStates={}", numberOfStates);
     SPDLOG_INFO("allSV={}\n", allSV);
     std::sort(allSV.begin(),
@@ -345,6 +346,8 @@ Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::tSVD(size_t max
     }
     SPDLOG_INFO("Adding {} states from {} states", allSV.size(), numberOfStates);
     // std::cout << "Adding " << allSV.size() << " states from " << numberOfStates << " states" << std::endl;
+    if(allSV.size() == 0) { allSV.push_back(first_entry); }
+
     std::map<typename Symmetry::qType, std::vector<Scalar>> qn_orderedSV;
     Qbasis<Symmetry, 1> truncBasis;
     for(const auto& [q, s] : allSV) {

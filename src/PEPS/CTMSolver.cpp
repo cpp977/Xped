@@ -1,5 +1,7 @@
 #include <limits>
 
+#include "TOOLS/Stopwatch.h"
+
 #include "Xped/PEPS/CTMSolver.hpp"
 
 namespace Xped {
@@ -23,6 +25,7 @@ typename ScalarTraits<Scalar>::Real CTMSolver<Scalar, Symmetry>::solve(const std
     double Eprevprev = std::numeric_limits<Scalar>::quiet_NaN();
     fmt::print("\t{: >3} steps without gradient tracking.\n", "•");
     for(std::size_t step = 0; step < opts.max_presteps; ++step) {
+        Stopwatch<> move;
         Jack.left_move();
         Jack.right_move();
         Jack.top_move();
@@ -30,11 +33,11 @@ typename ScalarTraits<Scalar>::Real CTMSolver<Scalar, Symmetry>::solve(const std
         Jack.computeRDM();
         auto [E_h, E_v] = avg(Jack, H);
         double E = (E_h.sum() + E_v.sum()) / Jack.cell().uniqueSize();
-        step == 0 ? fmt::print("\t{: >3} {:2d}: E={:2.8f}\n", "▷", step, E)
-                  : fmt::print("\t{: >3} {:2d}: E={:2.8f}, conv={:2.10g}\n", "▷", step, E, std::abs(E - Eprev));
+        step == 0 ? fmt::print("\t{: >3} {:2d}: E={:2.8f}, t={}\n", "▷", step, E, move.time())
+                  : fmt::print("\t{: >3} {:2d}: E={:2.8f}, conv={:2.10g}, t={}\n", "▷", step, E, std::abs(E - Eprev), move.time());
         if(std::abs(E - Eprev) < opts.tol_E) { break; }
         if(std::abs(E - Eprevprev) < opts.tol_E) {
-            fmt::print("\t{: >3} Oscillation -> break\n", "▷");
+            fmt::print("\t{: >3} Oscillation -> break\n", "•");
             break;
         }
         Eprevprev = Eprev;

@@ -4,6 +4,7 @@
 #include <memory>
 
 #include "Xped/Core/Tensor.hpp"
+#include "Xped/PEPS/CTMOpts.hpp"
 #include "Xped/PEPS/LinearAlgebra.hpp"
 #include "Xped/PEPS/TMatrix.hpp"
 #include "Xped/PEPS/UnitCell.hpp"
@@ -35,46 +36,46 @@ public:
     template <std::size_t N>
     using cdims = std::array<int, N>;
 
-    enum class DIRECTION
-    {
-        LEFT,
-        RIGHT,
-        TOP,
-        BOTTOM
-    };
-    enum class CORNER
-    {
-        UPPER_LEFT,
-        UPPER_RIGHT,
-        LOWER_LEFT,
-        LOWER_RIGHT
-    };
-    enum class PROJECTION
-    {
-        CORNER,
-        HALF,
-        FULL
-    };
-    enum class INIT
-    {
-        FROM_TRIVIAL,
-        FROM_A
-    };
+    // enum class DIRECTION
+    // {
+    //     LEFT,
+    //     RIGHT,
+    //     TOP,
+    //     BOTTOM
+    // };
+    // enum class CORNER
+    // {
+    //     UPPER_LEFT,
+    //     UPPER_RIGHT,
+    //     LOWER_LEFT,
+    //     LOWER_RIGHT
+    // };
+    // enum class PROJECTION
+    // {
+    //     CORNER,
+    //     HALF,
+    //     FULL
+    // };
+    // enum class INIT
+    // {
+    //     FROM_TRIVIAL,
+    //     FROM_A
+    // };
 
     CTM() = default;
 
-    explicit CTM(std::size_t chi, INIT init = INIT::FROM_A)
+    explicit CTM(std::size_t chi, Opts::CTM_INIT init = Opts::CTM_INIT::FROM_A)
         : chi(chi)
         , init_m(init)
     {}
 
-    CTM(std::size_t chi, const UnitCell& cell, INIT init = INIT::FROM_A)
+    CTM(std::size_t chi, const UnitCell& cell, Opts::CTM_INIT init = Opts::CTM_INIT::FROM_A)
         : cell_(cell)
         , chi(chi)
         , init_m(init)
     {}
 
-    CTM(std::shared_ptr<iPEPS<Scalar, Symmetry, ENABLE_AD>> A, std::size_t chi, const INIT init = INIT::FROM_A)
+    CTM(std::shared_ptr<iPEPS<Scalar, Symmetry, ENABLE_AD>> A, std::size_t chi, const Opts::CTM_INIT init = Opts::CTM_INIT::FROM_A)
         : A(A)
         , cell_(A->cell())
         , chi(chi)
@@ -121,8 +122,8 @@ private:
     std::shared_ptr<iPEPS<Scalar, Symmetry, ENABLE_AD>> A;
     UnitCell cell_;
     std::size_t chi;
-    INIT init_m = INIT::FROM_A;
-    PROJECTION proj_m = PROJECTION::CORNER;
+    Opts::CTM_INIT init_m = Opts::CTM_INIT::FROM_A;
+    Opts::PROJECTION proj_m = Opts::PROJECTION::CORNER;
     bool HAS_RDM = false;
 
     TMatrix<Tensor<Scalar, 0, 2, Symmetry, ENABLE_AD>> C1s;
@@ -138,6 +139,7 @@ private:
 
     TMatrix<Tensor<Scalar, 2, 2, Symmetry, ENABLE_AD>> rho_h;
     TMatrix<Tensor<Scalar, 2, 2, Symmetry, ENABLE_AD>> rho_v;
+    TMatrix<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>> rho1s;
 
     // template <bool TRACK = ENABLE_AD>
     // std::pair<Tensor<Scalar, 3, 3, Symmetry, TRACK>, Tensor<Scalar, 1, 1, Symmetry, TRACK>> get_projectors_left();
@@ -148,11 +150,11 @@ private:
     void computeRDM_v();
 
     template <bool TRACK = ENABLE_AD>
-    Tensor<Scalar, 3, 3, Symmetry, TRACK> contractCorner(const int x, const int y, const CORNER corner) XPED_CONST;
+    Tensor<Scalar, 3, 3, Symmetry, TRACK> contractCorner(const int x, const int y, const Opts::CORNER corner) XPED_CONST;
 
     template <bool TRACK = ENABLE_AD>
     std::pair<Tensor<Scalar, 1, 3, Symmetry, TRACK>, Tensor<Scalar, 3, 1, Symmetry, TRACK>>
-    get_projectors(const int x, const int y, const DIRECTION dir) XPED_CONST;
+    get_projectors(const int x, const int y, const Opts::DIRECTION dir) XPED_CONST;
 
     template <bool TRACK = ENABLE_AD>
     std::tuple<Tensor<Scalar, 0, 2, Symmetry, TRACK>, Tensor<Scalar, 1, 3, Symmetry, TRACK>, Tensor<Scalar, 1, 1, Symmetry, TRACK>>

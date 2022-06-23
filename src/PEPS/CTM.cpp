@@ -54,7 +54,7 @@ void CTM<Scalar, Symmetry, ENABLE_AD>::init()
             if(not cell_.pattern.isUnique(x, y)) { continue; }
             auto pos = cell_.pattern.uniqueIndex(x, y);
             switch(init_m) {
-            case INIT::FROM_TRIVIAL: {
+            case Opts::CTM_INIT::FROM_TRIVIAL: {
                 C1s[pos] =
                     Tensor<Scalar, 0, 2, Symmetry, ENABLE_AD>({{}}, {{Qbasis<Symmetry, 1>::TrivialBasis(), Qbasis<Symmetry, 1>::TrivialBasis()}});
                 C1s[pos].setRandom();
@@ -98,7 +98,7 @@ void CTM<Scalar, Symmetry, ENABLE_AD>::init()
 
                 break;
             }
-            case INIT::FROM_A: {
+            case Opts::CTM_INIT::FROM_A: {
                 auto fuse_ll =
                     Tensor<Scalar, 1, 2, Symmetry, false>::Identity({{A->ketBasis(x, y, iPEPS<Scalar, Symmetry, ENABLE_AD>::LEG::LEFT)
                                                                           .combine(A->braBasis(x, y, iPEPS<Scalar, Symmetry, ENABLE_AD>::LEG::LEFT))
@@ -212,19 +212,19 @@ void CTM<Scalar, Symmetry, ENABLE_AD>::computeRDM()
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>
 void CTM<Scalar, Symmetry, ENABLE_AD>::info() const
 {
-    std::string mode_string = "";
-    switch(init_m) {
-    case INIT::FROM_TRIVIAL: {
-        mode_string = "FROM_TRIVIAL";
-        break;
-    }
-    case INIT::FROM_A: {
-        mode_string = "FROM_A";
-        break;
-    }
-    }
+    // std::string mode_string = "";
+    // switch(init_m) {
+    // case INIT::FROM_TRIVIAL: {
+    //     mode_string = "FROM_TRIVIAL";
+    //     break;
+    // }
+    // case INIT::FROM_A: {
+    //     mode_string = "FROM_A";
+    //     break;
+    // }
+    // }
 
-    fmt::print("\tCTM(χ={}, {}): UnitCell=({}x{}), init={}\n", chi, Symmetry::name(), cell_.Lx, cell_.Ly, mode_string);
+    fmt::print("\tCTM(χ={}, {}): UnitCell=({}x{}), init={}\n", chi, Symmetry::name(), cell_.Lx, cell_.Ly, init_m);
     // std::cout << "CTM(χ=" << chi << "): UnitCell=(" << cell_.Lx << "x" << cell_.Ly << ")"
     //           << ", init=" << mode_string << std::endl;
     // std::cout << "Tensors:" << std::endl;
@@ -254,7 +254,7 @@ bool CTM<Scalar, Symmetry, ENABLE_AD>::checkConvergence(typename ScalarTraits<Sc
             auto C1T4 = C1s(x, y - 1).template contract<std::array{1, -1}, std::array{1, -2, -3, -4}, 1>(T4s(x, y));
             auto C1T4C4 = C1T4.template contract<std::array{-1, 1, -2, -3}, std::array{1, -4}, 2>(C4s(x, y + 1));
 
-            auto corner = contractCorner(x, y, CORNER::UPPER_LEFT);
+            auto corner = contractCorner(x, y, Opts::CORNER::UPPER_LEFT);
             auto cornerC4 = corner.template contract<std::array{1, -1, -2, -3, -4, -5}, std::array{1, -6}, 5>(C4s(x - 1, y + 1));
             auto C1T4C4check = cornerC4.template contract<std::array{1, 2, -1, -2, -3, 3}, std::array{1, 2, 3, -4}, 2>(T3s(x, y + 1));
             Scalar diff = (C1T4C4 - C1T4C4check).norm();
@@ -382,7 +382,7 @@ void CTM<Scalar, Symmetry, ENABLE_AD>::left_move()
         for(int y = 0; y < cell_.Ly; y++) {
             assert(P1.isChanged(x, y) == P2.isChanged(x, y));
             if(P1.isChanged(x, y)) { continue; }
-            std::tie(P1(x, y), P2(x, y)) = get_projectors<TRACK>(x, y, DIRECTION::LEFT); // move assignment
+            std::tie(P1(x, y), P2(x, y)) = get_projectors<TRACK>(x, y, Opts::DIRECTION::LEFT); // move assignment
         }
         for(int y = 0; y < cell_.Ly; y++) {
             assert(C1_new.isChanged(x, y - 1) == T4_new.isChanged(x, y) and C1_new.isChanged(x, y - 1) == C4_new.isChanged(x, y + 1));
@@ -433,7 +433,7 @@ void CTM<Scalar, Symmetry, ENABLE_AD>::right_move()
         for(int y = 0; y < cell_.Ly; y++) {
             assert(P1.isChanged(x, y) == P2.isChanged(x, y));
             if(P1.isChanged(x, y)) { continue; }
-            std::tie(P1(x, y), P2(x, y)) = get_projectors<TRACK>(x, y, DIRECTION::RIGHT); // move assignment
+            std::tie(P1(x, y), P2(x, y)) = get_projectors<TRACK>(x, y, Opts::DIRECTION::RIGHT); // move assignment
         }
         for(int y = 0; y < cell_.Ly; y++) {
             assert(C2_new.isChanged(x, y - 1) == T2_new.isChanged(x, y) and C2_new.isChanged(x, y - 1) == C3_new.isChanged(x, y + 1));
@@ -483,7 +483,7 @@ void CTM<Scalar, Symmetry, ENABLE_AD>::top_move()
         for(int x = 0; x < cell_.Lx; x++) {
             assert(P1.isChanged(x, y) == P2.isChanged(x, y));
             if(P1.isChanged(x, y)) { continue; }
-            std::tie(P1(x, y), P2(x, y)) = get_projectors<TRACK>(x, y, DIRECTION::TOP); // move assignment
+            std::tie(P1(x, y), P2(x, y)) = get_projectors<TRACK>(x, y, Opts::DIRECTION::TOP); // move assignment
         }
         for(int x = 0; x < cell_.Lx; x++) {
             assert(C1_new.isChanged(x - 1, y) == C2_new.isChanged(x + 1, y) and C1_new.isChanged(x - 1, y) == T1_new.isChanged(x, y));
@@ -533,7 +533,7 @@ void CTM<Scalar, Symmetry, ENABLE_AD>::bottom_move()
         for(int x = 0; x < cell_.Lx; x++) {
             assert(P1.isChanged(x, y) == P2.isChanged(x, y));
             if(P1.isChanged(x, y)) { continue; }
-            std::tie(P1(x, y), P2(x, y)) = get_projectors<TRACK>(x, y, DIRECTION::BOTTOM); // move assignment
+            std::tie(P1(x, y), P2(x, y)) = get_projectors<TRACK>(x, y, Opts::DIRECTION::BOTTOM); // move assignment
         }
         for(int x = 0; x < cell_.Lx; x++) {
             assert(C4_new.isChanged(x - 1, y) == C3_new.isChanged(x + 1, y) and C4_new.isChanged(x - 1, y) == T3_new.isChanged(x, y));
@@ -567,17 +567,17 @@ void CTM<Scalar, Symmetry, ENABLE_AD>::bottom_move()
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>
 template <bool TRACK>
 std::pair<Tensor<Scalar, 1, 3, Symmetry, TRACK>, Tensor<Scalar, 3, 1, Symmetry, TRACK>>
-CTM<Scalar, Symmetry, ENABLE_AD>::get_projectors(const int x, const int y, const DIRECTION dir) XPED_CONST
+CTM<Scalar, Symmetry, ENABLE_AD>::get_projectors(const int x, const int y, const Opts::DIRECTION dir) XPED_CONST
 {
     Tensor<Scalar, 1, 3, Symmetry, TRACK> P1;
     Tensor<Scalar, 3, 1, Symmetry, TRACK> P2;
     Tensor<Scalar, 3, 3, Symmetry, TRACK> Q1, Q2, Q3, Q4;
     switch(dir) {
-    case DIRECTION::LEFT: {
+    case Opts::DIRECTION::LEFT: {
         switch(proj_m) {
-        case PROJECTION::CORNER: {
-            Q1 = contractCorner<TRACK>(x, y, CORNER::UPPER_LEFT);
-            Q4 = contractCorner<TRACK>(x, y + 1, CORNER::LOWER_LEFT);
+        case Opts::PROJECTION::CORNER: {
+            Q1 = contractCorner<TRACK>(x, y, Opts::CORNER::UPPER_LEFT);
+            Q4 = contractCorner<TRACK>(x, y + 1, Opts::CORNER::LOWER_LEFT);
             // SPDLOG_INFO("Q1: ({}[{}],{}[{}])",
             //                 Q1.coupledDomain().fullDim(),
             //                 Q1.coupledDomain().dim(),
@@ -591,22 +591,22 @@ CTM<Scalar, Symmetry, ENABLE_AD>::get_projectors(const int x, const int y, const
             std::tie(P1, P2) = decompose(Q4, Q1, chi);
             break;
         }
-        case PROJECTION::HALF: {
+        case Opts::PROJECTION::HALF: {
             assert(false and "Not implemented.");
             break;
         }
-        case PROJECTION::FULL: {
+        case Opts::PROJECTION::FULL: {
             assert(false and "Not implemented.");
             break;
         }
         }
         break;
     }
-    case DIRECTION::RIGHT: {
+    case Opts::DIRECTION::RIGHT: {
         switch(proj_m) {
-        case PROJECTION::CORNER: {
-            Q2 = contractCorner<TRACK>(x, y, CORNER::UPPER_RIGHT);
-            Q3 = contractCorner<TRACK>(x, y + 1, CORNER::LOWER_RIGHT);
+        case Opts::PROJECTION::CORNER: {
+            Q2 = contractCorner<TRACK>(x, y, Opts::CORNER::UPPER_RIGHT);
+            Q3 = contractCorner<TRACK>(x, y + 1, Opts::CORNER::LOWER_RIGHT);
             // SPDLOG_INFO("Q2: ({}[{}],{}[{}])",
             //                 Q2.coupledDomain().fullDim(),
             //                 Q2.coupledDomain().dim(),
@@ -620,22 +620,22 @@ CTM<Scalar, Symmetry, ENABLE_AD>::get_projectors(const int x, const int y, const
             std::tie(P1, P2) = decompose(Q2, Q3, chi);
             break;
         }
-        case PROJECTION::HALF: {
+        case Opts::PROJECTION::HALF: {
             assert(false and "Not implemented.");
             break;
         }
-        case PROJECTION::FULL: {
+        case Opts::PROJECTION::FULL: {
             assert(false and "Not implemented.");
             break;
         }
         }
         break;
     }
-    case DIRECTION::TOP: {
+    case Opts::DIRECTION::TOP: {
         switch(proj_m) {
-        case PROJECTION::CORNER: {
-            Q1 = contractCorner<TRACK>(x, y, CORNER::UPPER_LEFT);
-            Q2 = contractCorner<TRACK>(x + 1, y, CORNER::UPPER_RIGHT);
+        case Opts::PROJECTION::CORNER: {
+            Q1 = contractCorner<TRACK>(x, y, Opts::CORNER::UPPER_LEFT);
+            Q2 = contractCorner<TRACK>(x + 1, y, Opts::CORNER::UPPER_RIGHT);
             // SPDLOG_INFO("Q1: ({}[{}],{}[{}])",
             //                 Q1.coupledDomain().fullDim(),
             //                 Q1.coupledDomain().dim(),
@@ -649,22 +649,22 @@ CTM<Scalar, Symmetry, ENABLE_AD>::get_projectors(const int x, const int y, const
             std::tie(P1, P2) = decompose(Q1, Q2, chi);
             break;
         }
-        case PROJECTION::HALF: {
+        case Opts::PROJECTION::HALF: {
             assert(false and "Not implemented.");
             break;
         }
-        case PROJECTION::FULL: {
+        case Opts::PROJECTION::FULL: {
             assert(false and "Not implemented.");
             break;
         }
         }
         break;
     }
-    case DIRECTION::BOTTOM: {
+    case Opts::DIRECTION::BOTTOM: {
         switch(proj_m) {
-        case PROJECTION::CORNER: {
-            Q4 = contractCorner<TRACK>(x, y, CORNER::LOWER_LEFT);
-            Q3 = contractCorner<TRACK>(x + 1, y, CORNER::LOWER_RIGHT);
+        case Opts::PROJECTION::CORNER: {
+            Q4 = contractCorner<TRACK>(x, y, Opts::CORNER::LOWER_LEFT);
+            Q3 = contractCorner<TRACK>(x + 1, y, Opts::CORNER::LOWER_RIGHT);
             // SPDLOG_INFO("Q4: ({}[{}],{}[{}])",
             //                 Q4.coupledDomain().fullDim(),
             //                 Q4.coupledDomain().dim(),
@@ -678,11 +678,11 @@ CTM<Scalar, Symmetry, ENABLE_AD>::get_projectors(const int x, const int y, const
             std::tie(P1, P2) = decompose(Q3, Q4, chi);
             break;
         }
-        case PROJECTION::HALF: {
+        case Opts::PROJECTION::HALF: {
             assert(false and "Not implemented.");
             break;
         }
-        case PROJECTION::FULL: {
+        case Opts::PROJECTION::FULL: {
             assert(false and "Not implemented.");
             break;
         }
@@ -804,11 +804,11 @@ CTM<Scalar, Symmetry, ENABLE_AD>::renormalize_bottom(const int x,
 
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>
 template <bool TRACK>
-Tensor<Scalar, 3, 3, Symmetry, TRACK> CTM<Scalar, Symmetry, ENABLE_AD>::contractCorner(const int x, const int y, const CORNER corner) XPED_CONST
+Tensor<Scalar, 3, 3, Symmetry, TRACK> CTM<Scalar, Symmetry, ENABLE_AD>::contractCorner(const int x, const int y, const Opts::CORNER corner) XPED_CONST
 {
     Tensor<Scalar, 3, 3, Symmetry, TRACK> Q;
     switch(corner) {
-    case CORNER::UPPER_LEFT: {
+    case Opts::CORNER::UPPER_LEFT: {
         // auto tmp = C1s(x - 1, y - 1).template permute<TRACK, -1, 0, 1>() * T1s(x, y - 1);
         // auto tmp2 = T4s(x - 1, y).template permute<TRACK, -2, 1, 2, 3, 0>() * tmp;
         // auto tmp3 = tmp2.template permute<TRACK, -1, 0, 2, 3, 5, 1, 4>() * A->As(x, y);
@@ -828,7 +828,7 @@ Tensor<Scalar, 3, 3, Symmetry, TRACK> CTM<Scalar, Symmetry, ENABLE_AD>::contract
         // |  ||
         break;
     }
-    case CORNER::LOWER_LEFT: {
+    case Opts::CORNER::LOWER_LEFT: {
         // auto tmp = C4s(x - 1, y + 1) * T3s(x, y + 1).template permute<TRACK, 2, 2, 3, 0, 1>();
         // auto tmp2 = T4s(x - 1, y).template permute<TRACK, -2, 0, 2, 3, 1>() * tmp;
         // auto tmp3 = tmp2.template permute<TRACK, -1, 0, 2, 3, 5, 1, 4>() * A->As(x, y).template permute<TRACK, 0, 0, 3, 1, 2, 4>();
@@ -850,7 +850,7 @@ Tensor<Scalar, 3, 3, Symmetry, TRACK> CTM<Scalar, Symmetry, ENABLE_AD>::contract
         // ooooo ==<==
         break;
     }
-    case CORNER::UPPER_RIGHT: {
+    case Opts::CORNER::UPPER_RIGHT: {
         // auto tmp = T1s(x, y - 1).template permute<TRACK, -2, 0, 2, 3, 1>() * C2s(x + 1, y - 1);
         // auto tmp2 = tmp * T2s(x + 1, y).template permute<TRACK, +2, 2, 3, 0, 1>();
         // auto tmp3 = tmp2.template permute<TRACK, -1, 0, 2, 3, 5, 1, 4>() * A->As(x, y).template permute<TRACK, 0, 1, 2, 0, 3, 4>();
@@ -875,7 +875,7 @@ Tensor<Scalar, 3, 3, Symmetry, TRACK> CTM<Scalar, Symmetry, ENABLE_AD>::contract
 
         break;
     }
-    case CORNER::LOWER_RIGHT: {
+    case Opts::CORNER::LOWER_RIGHT: {
         // auto tmp = C3s(x + 1, y + 1).template permute<TRACK, +1, 0, 1>() * T3s(x, y + 1).template permute<TRACK, +2, 3, 2, 0, 1>();
         // auto tmp2 = T2s(x + 1, y) * tmp;
         // auto tmp3 = tmp2.template permute<TRACK, -1, 2, 1, 3, 5, 0, 4>() * A->As(x, y).template permute<TRACK, 0, 2, 3, 0, 1, 4>();

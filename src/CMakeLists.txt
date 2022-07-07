@@ -38,10 +38,6 @@ if(NOT XPED_COMPILED_LIB)
     endif()
   endif()
   
-  if(XPED_ENABLE_LRU_CACHE)
-    target_link_libraries(Xped INTERFACE lrucache)
-  endif()
-
   if(XPED_USE_MPI)
     target_link_libraries(Xped INTERFACE MPI::MPI_CXX)
   endif()

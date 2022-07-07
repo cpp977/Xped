@@ -9,6 +9,7 @@
         "yas",
         "gsl",
         "highfive",
+        "lru-cache",
         "boost-rational",
         "boost-algorithm",
         "boost-functional",

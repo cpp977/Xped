@@ -12,12 +12,36 @@
 
 namespace Xped {
 
+template <typename Symmetry>
+struct OneSiteObservable;
+
 /**
  * C1 -- T1 -- C2
  *  |    ||    |
  * T4 == A  == T2
  *  |    ||    |
  * C4 -- T3 -- C3
+ *
+ * C1 --> 1
+ * |
+ * ▼
+ * 0
+ *
+ * 0 --> C2
+ *       |
+ *       ▽
+ *       1
+ *
+ *       0
+ *       |
+ *       ▽
+ * 1 --> C3
+ *
+ * 0
+ * |
+ * ▽
+ * C4 --> 1
+
  */
 template <typename Scalar_, typename Symmetry_, bool ENABLE_AD = false>
 class CTM
@@ -26,6 +50,14 @@ class CTM
     friend std::pair<TMatrix<std::conditional_t<ENABLE_AD__, stan::math::var, Scalar__>>,
                      TMatrix<std::conditional_t<ENABLE_AD__, stan::math::var, Scalar__>>>
     avg(XPED_CONST CTM<Scalar__, Symmetry__, ENABLE_AD__>& env, XPED_CONST Tensor<Scalar__, 2, 2, Symmetry__, false>& op);
+
+    template <typename Scalar__, typename Symmetry__, bool ENABLE_AD__>
+    friend TMatrix<std::conditional_t<ENABLE_AD__, stan::math::var, Scalar__>> avg(XPED_CONST CTM<Scalar__, Symmetry__, ENABLE_AD__>& env,
+                                                                                   OneSiteObservable<Symmetry__>& op);
+
+    template <typename Scalar__, typename Symmetry__, bool ENABLE_AD__>
+    friend std::array<TMatrix<std::conditional_t<ENABLE_AD__, stan::math::var, Scalar__>>, 4>
+    avg(XPED_CONST CTM<Scalar__, Symmetry__, ENABLE_AD__>& env, TwoSiteObservable<Symmetry__>& op, bool CALC_NNN);
 
     friend class CTM<Scalar_, Symmetry_, true>;
 
@@ -139,7 +171,8 @@ private:
 
     TMatrix<Tensor<Scalar, 2, 2, Symmetry, ENABLE_AD>> rho_h;
     TMatrix<Tensor<Scalar, 2, 2, Symmetry, ENABLE_AD>> rho_v;
-    TMatrix<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>> rho1s;
+    TMatrix<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>> rho1_h;
+    TMatrix<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>> rho1_v;
 
     // template <bool TRACK = ENABLE_AD>
     // std::pair<Tensor<Scalar, 3, 3, Symmetry, TRACK>, Tensor<Scalar, 1, 1, Symmetry, TRACK>> get_projectors_left();
@@ -148,6 +181,8 @@ private:
     void computeRDM_h();
     template <bool TRACK = ENABLE_AD>
     void computeRDM_v();
+    template <bool TRACK = ENABLE_AD>
+    void computeRDM_1s();
 
     template <bool TRACK = ENABLE_AD>
     Tensor<Scalar, 3, 3, Symmetry, TRACK> contractCorner(const int x, const int y, const Opts::CORNER corner) XPED_CONST;

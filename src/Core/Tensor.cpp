@@ -301,6 +301,7 @@ Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::tSVD(size_t max
         Vdag.push_back(sector(i), Vmatdag);
     }
     size_t numberOfStates = allSV.size();
+    assert(numberOfStates > 0);
     auto first_entry = allSV[0];
     SPDLOG_INFO("numberOfStates={}", numberOfStates);
     SPDLOG_INFO("allSV={}\n", allSV);

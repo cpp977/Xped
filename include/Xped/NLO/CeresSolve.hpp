@@ -80,6 +80,8 @@ struct iPEPSSolverAD
         options.parameter_tolerance = optim_opts.step_tol;
         options.gradient_tolerance = optim_opts.grad_tol;
         options.update_state_every_iteration = true;
+        Callback c(*this, dynamic_cast<const Energy<Scalar, Symmetry>*>(problem.function())->impl->getCTM());
+        options.callbacks.push_back(&c);
         ceres::GradientProblemSolver::Summary summary;
         ceres::Solve(options, problem, parameters.data(), &summary);
         std::cout << summary.FullReport() << "\n";
@@ -87,6 +89,24 @@ struct iPEPSSolverAD
 
     Opts::Optim optim_opts;
     Opts::CTM ctm_opts;
+    std::function<void(XPED_CONST CTM<Scalar, Symmetry>& ctm, std::size_t)> callback = [](XPED_CONST CTM<Scalar, Symmetry>&, std::size_t) {};
+
+    struct Callback : public ceres::IterationCallback
+    {
+        explicit Callback(const iPEPSSolverAD& s, XPED_CONST CTM<Scalar, Symmetry>& c)
+            : s(s)
+            , c(c)
+        {}
+
+        ceres::CallbackReturnType operator()(const ceres::IterationSummary& summary)
+        {
+            s.callback(c, summary.iteration);
+            return ceres::SOLVER_CONTINUE;
+        }
+
+        const iPEPSSolverAD& s;
+        XPED_CONST CTM<Scalar, Symmetry>& c;
+    };
 };
 
 } // namespace Xped

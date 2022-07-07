@@ -14,6 +14,8 @@ namespace Xped {
 
 template <typename Symmetry>
 struct OneSiteObservable;
+template <typename Symmetry>
+struct TwoSiteObservable;
 
 /**
  * C1 -- T1 -- C2

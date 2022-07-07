@@ -27,6 +27,8 @@ public:
     typename ScalarTraits<Scalar>::Real
     solve(const std::shared_ptr<iPEPS<Scalar, Symmetry>>& Psi, Scalar* gradient, const Hamiltonian<HamScalar, Symmetry>& H, bool CALC_GRAD = true);
 
+    XPED_CONST CTM<Scalar, Symmetry, false>& getCTM() XPED_CONST { return Jack; }
+
 private:
     CTM<Scalar, Symmetry, false> Jack;
     Opts::CTM opts;

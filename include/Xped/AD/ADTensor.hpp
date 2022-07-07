@@ -93,6 +93,8 @@ public:
     inline const Qbasis<Symmetry, Rank, AllocationPolicy>& coupledDomain() const { return val().coupledDomain(); }
     inline const Qbasis<Symmetry, CoRank, AllocationPolicy>& coupledCodomain() const { return val().coupledCodomain(); }
 
+    const std::shared_ptr<mpi::XpedWorld> world() const { return val().world(); }
+
     inline auto begin() const { return val_op().begin(); }
     inline auto end() const { return val_op().end(); }
 

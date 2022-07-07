@@ -206,6 +206,7 @@ void CTM<Scalar, Symmetry, ENABLE_AD>::computeRDM()
 {
     computeRDM_h<TRACK>();
     computeRDM_v<TRACK>();
+    // computeRDM_1s<TRACK>();
     HAS_RDM = true;
 }
 
@@ -274,6 +275,8 @@ template <bool TRACK>
 void CTM<Scalar, Symmetry, ENABLE_AD>::computeRDM_h()
 {
     rho_h = TMatrix<Tensor<Scalar, 2, 2, Symmetry, ENABLE_AD>>(cell_.pattern);
+    rho1_h = TMatrix<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>>(cell_.pattern);
+
     for(int x = 0; x < cell_.Lx; x++) {
         for(int y = 0; y < cell_.Ly; y++) {
             if(rho_h.isChanged(x, y)) { continue; }
@@ -315,6 +318,10 @@ void CTM<Scalar, Symmetry, ENABLE_AD>::computeRDM_h()
             // SPDLOG_CRITICAL("x,y={},{} Tr_rho_h={}", x, y, rho_h(x, y).val().trace());
             // assert(rho_h(x, y).val().trace() > 0 and "Negative norm detected");
             rho_h(x, y) = operator*<TRACK>(rho_h(x, y), (1. / rho_h(x, y).template trace<TRACK>()));
+            auto Id = Tensor<Scalar, 1, 1, Symmetry, false>::Identity(
+                {{rho_h(x, y).uncoupledCodomain()[1]}}, {{rho_h(x, y).uncoupledDomain()[1]}}, *rho_h(x, y).world());
+            rho1_h(x, y) = rho_h(x, y).template contract<std::array{-1, 1, -2, 2}, std::array{2, 1}, 1>(Id);
+            rho1_h(x, y) = operator*<TRACK>(rho1_h(x, y), (1. / rho1_h(x, y).template trace<TRACK>()));
         }
     }
 }
@@ -324,6 +331,7 @@ template <bool TRACK>
 void CTM<Scalar, Symmetry, ENABLE_AD>::computeRDM_v()
 {
     rho_v = TMatrix<Tensor<Scalar, 2, 2, Symmetry, ENABLE_AD>>(cell_.pattern);
+    rho1_v = TMatrix<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>>(cell_.pattern);
     for(int x = 0; x < cell_.Lx; x++) {
         for(int y = 0; y < cell_.Ly; y++) {
             if(rho_v.isChanged(x, y)) { continue; }
@@ -359,8 +367,28 @@ void CTM<Scalar, Symmetry, ENABLE_AD>::computeRDM_v()
             // SPDLOG_CRITICAL("x,y={},{} Tr_rho_v={}", x, y, rho_v(x, y).val().trace());
             // assert(rho_v(x, y).val().trace() > 0 and "Negative norm detected");
             rho_v(x, y) = operator*<TRACK>(rho_v(x, y), (1. / rho_v(x, y).template trace<TRACK>()));
+            auto Id = Tensor<Scalar, 1, 1, Symmetry, false>::Identity(
+                {{rho_v(x, y).uncoupledCodomain()[1]}}, {{rho_v(x, y).uncoupledDomain()[1]}}, *rho_v(x, y).world());
+            rho1_v(x, y) = rho_v(x, y).template contract<std::array{-1, 1, -2, 2}, std::array{2, 1}, 1>(Id);
+            rho1_v(x, y) = operator*<TRACK>(rho1_v(x, y), (1. / rho1_v(x, y).template trace<TRACK>()));
         }
     }
+}
+
+template <typename Scalar, typename Symmetry, bool ENABLE_AD>
+template <bool TRACK>
+void CTM<Scalar, Symmetry, ENABLE_AD>::computeRDM_1s()
+{
+    // rho_1s = TMatrix<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>>(cell_.pattern);
+    // for(int x = 0; x < cell_.Lx; x++) {
+    //     for(int y = 0; y < cell_.Ly; y++) {
+    //         if(rho_1s.isChanged(x, y)) { continue; }
+    //         auto C2T2 = C2s(x + 1, y - 1).template contract<std::array{-1, 1}, std::array{-2, -3, 1, -4}, 3>(T2s(x + 1, y));
+    //         auto C2T2C3 = C2T2.template contract<std::array{-1, -2, -3, 1}, std::array{1, -1}, 3>(C3s(x + 1, y + 1));
+    //         auto C2T2C3T3 = C2T2C3.template contract<std::array{-1, -2, -3, 1}, std::array{-4, -5, -6, 1}, 3>(T3s(x, y + 1));
+    //         auto C2T2C3T3C4 = C2T2C3T3.template contract<std::array{-1, -2, -3, -5, -6, 1}, std::array{-4, 1}, 3>(C4s(x - 1, y + 1));
+    //     }
+    // }
 }
 
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>
@@ -860,8 +888,6 @@ Tensor<Scalar, 3, 3, Symmetry, TRACK> CTM<Scalar, Symmetry, ENABLE_AD>::contract
         auto T1C2 = T1s(x, y - 1).template contract<std::array{-1, 1, -2, -3}, std::array{1, -4}, 3, TRACK>(C2s(x + 1, y - 1));
         auto T1C2T2 = T1C2.template contract<std::array{-1, -2, -3, 1}, std::array{-4, -5, 1, -6}, 3, TRACK>(T2s(x + 1, y));
         auto T1C2T2A = T1C2T2.template contract<std::array{-1, 1, -2, 2, -3, -4}, std::array{-5, 1, 2, -6, -7}, 4, TRACK>(A->As(x, y));
-        static_assert(std::is_same_v<decltype(T1C2T2A), Tensor<Scalar, 4, 3, Symmetry, TRACK>>, "Type mismatch");
-        if constexpr(not TRACK) { static_assert(!T1C2T2A.AD_TENSOR(), "This should be an AD Tensor."); }
         Q = T1C2T2A.template contract<std::array{-1, 1, 2, -4, -2, -5, 3}, std::array{-3, 1, 3, 2, -6}, 3, TRACK>(A->Adags(x, y));
         // Scalar diff = (Q - Qcheck).norm();
         // SPDLOG_WARN("upper right corner check at x,y={},{}: {}", x, y, diff);

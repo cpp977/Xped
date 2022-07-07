@@ -23,6 +23,8 @@
 #include "ceres/gradient_problem.h"
 #include "ceres/gradient_problem_solver.h"
 
+#include "Xped/Util/Permutations.hpp"
+
 #include "Xped/Util/Macros.hpp"
 #include "Xped/Util/Mpi.hpp"
 
@@ -146,9 +148,9 @@ int main(int argc, char* argv[])
         SPDLOG_INFO("Number of MPI processes: {}", world.np);
 
         typedef double Scalar;
-        // typedef Xped::Sym::SU2<Xped::Sym::SpinSU2> Symmetry;
+        typedef Xped::Sym::SU2<Xped::Sym::SpinSU2> Symmetry;
         // typedef Xped::Sym::U1<Xped::Sym::SpinU1> Symmetry;
-        typedef Xped::Sym::ZN<Xped::Sym::SpinU1, 36, double> Symmetry;
+        // typedef Xped::Sym::ZN<Xped::Sym::SpinU1, 36, double> Symmetry;
         // typedef Xped::Sym::U0<double> Symmetry;
 
         Xped::Qbasis<Symmetry, 1> aux;
@@ -175,20 +177,20 @@ int main(int argc, char* argv[])
             ham = Xped::Heisenberg<Symmetry>::twoSiteHamiltonian();
         } else if constexpr(std::is_same_v<Symmetry, Xped::Sym::U1<Xped::Sym::SpinU1, double>>) {
             aux.push_back({0}, 2);
-            aux.push_back({+2}, 1);
-            aux.push_back({-2}, 1);
-            ham = Xped::KondoNecklace<Symmetry>::twoSiteHamiltonian(Jk, Jk, J, J, I, I);
-            // ham = Xped::Heisenberg<Symmetry>::twoSiteHamiltonian();
+            aux.push_back({+1}, 1);
+            aux.push_back({-1}, 1);
+            // ham = Xped::KondoNecklace<Symmetry>::twoSiteHamiltonian(Jk, Jk, J, J, I, I);
+            ham = Xped::Heisenberg<Symmetry>::twoSiteHamiltonian();
         } else if constexpr(std::is_same_v<Symmetry, Xped::Sym::ZN<Xped::Sym::SpinU1, 36, double>>) {
             aux.push_back({0}, 2);
-            aux.push_back({+2}, 1);
-            aux.push_back({34}, 1);
-            ham = Xped::KondoNecklace<Symmetry>::twoSiteHamiltonian(Jk, Jk, J, J, I, I);
-            // ham = Xped::Heisenberg<Symmetry>::twoSiteHamiltonian();
+            aux.push_back({+1}, 1);
+            aux.push_back({35}, 1);
+            // ham = Xped::KondoNecklace<Symmetry>::twoSiteHamiltonian(Jk, Jk, J, J, I, I);
+            ham = Xped::Heisenberg<Symmetry>::twoSiteHamiltonian();
         } else if constexpr(std::is_same_v<Symmetry, Xped::Sym::U0<double>>) {
             aux.push_back({}, toml::find_or(data.at("ipeps"), "D", 2));
-            ham = Xped::KondoNecklace<Symmetry>::twoSiteHamiltonian(Jk, Jk, J, J, I, I);
-            // ham = Xped::Heisenberg<Symmetry>::twoSiteHamiltonian();
+            // ham = Xped::KondoNecklace<Symmetry>::twoSiteHamiltonian(Jk, Jk, J, J, I, I);
+            ham = Xped::Heisenberg<Symmetry>::twoSiteHamiltonian();
         }
         aux.sort();
         Xped::UnitCell c;
@@ -197,10 +199,76 @@ int main(int argc, char* argv[])
         }
         auto Psi = std::make_shared<Xped::iPEPS<double, Symmetry, false>>(c, aux, ham.uncoupledDomain()[0]);
         Psi->setRandom();
+        Psi->info();
 
         Xped::Opts::Optim o_opts = Xped::Opts::optim_from_toml(data.at("optim"));
         Xped::Opts::CTM c_opts = Xped::Opts::ctm_from_toml(data.at("ctm"));
         Xped::iPEPSSolverAD<Scalar, Symmetry> Jack(o_opts, c_opts);
+
+        Xped::SpinBase<Symmetry> B(1, 2);
+        // Xped::TwoSiteObservable<Symmetry> SzSz(c.pattern);
+        // for(auto& t : SzSz.data_h) { t = Xped::tprod(B.Sz(), B.Sz()); }
+        // for(auto& t : SzSz.data_v) { t = Xped::tprod(B.Sz(), B.Sz()); }
+        // for(auto& t : SzSz.data_d1) { t = Xped::tprod(B.Sz(), B.Sz()); }
+        // for(auto& t : SzSz.data_d2) { t = Xped::tprod(B.Sz(), B.Sz()); }
+
+        // Xped::TwoSiteObservable<Symmetry> SpSm(c.pattern);
+        // for(auto& t : SpSm.data_h) { t = Xped::tprod(B.Sp(), B.Sm()); }
+        // for(auto& t : SpSm.data_v) { t = Xped::tprod(B.Sp(), B.Sm()); }
+        // for(auto& t : SpSm.data_d1) { t = Xped::tprod(B.Sp(), B.Sm()); }
+        // for(auto& t : SpSm.data_d2) { t = Xped::tprod(B.Sp(), B.Sm()); }
+
+        // Xped::TwoSiteObservable<Symmetry> SmSp(c.pattern);
+        // for(auto& t : SmSp.data_h) { t = Xped::tprod(B.Sm(), B.Sp()); }
+        // for(auto& t : SmSp.data_v) { t = Xped::tprod(B.Sm(), B.Sp()); }
+        // for(auto& t : SmSp.data_d1) { t = Xped::tprod(B.Sm(), B.Sp()); }
+        // for(auto& t : SmSp.data_d2) { t = Xped::tprod(B.Sm(), B.Sp()); }
+        // Xped::OneSiteObservable<Symmetry> Sz(c.pattern);
+        // for(auto& t : Sz.data) { t = B.Sz().data.template trim<1>(); }
+        // Xped::OneSiteObservable<Symmetry> Sx(c.pattern);
+        // for(auto& t : Sx.data) { t = B.Sx().data.template trim<1>(); }
+        // Xped::OneSiteObservable<Symmetry> sz(c.pattern);
+        // for(auto& t : sz.data) { t = B.Sz(1).data.template trim<1>(); }
+        // Xped::OneSiteObservable<Symmetry> Szsz(c.pattern);
+        // for(auto& t : Szsz.data) { t = (B.Sz(0) * B.Sz(1)).data.template trim<1>(); }
+        // Xped::OneSiteObservable<Symmetry> Spsm(c.pattern);
+        // for(auto& t : Spsm.data) { t = (B.Sp(0) * B.Sm(1)).data.template trim<1>(); }
+        // Xped::OneSiteObservable<Symmetry> Smsp(c.pattern);
+        // for(auto& t : Smsp.data) { t = (B.Sm(0) * B.Sp(1)).data.template trim<1>(); }
+
+        Xped::TwoSiteObservable<Symmetry> SS(c.pattern);
+        for(auto& t : SS.data_h) { t = std::sqrt(3.) * Xped::tprod(B.Sdag(), B.S()); }
+        for(auto& t : SS.data_v) { t = std::sqrt(3.) * Xped::tprod(B.Sdag(), B.S()); }
+        for(auto& t : SS.data_d1) { t = std::sqrt(3.) * Xped::tprod(B.Sdag(), B.S()); }
+        for(auto& t : SS.data_d2) { t = std::sqrt(3.) * Xped::tprod(B.Sdag(), B.S()); }
+        Xped::OneSiteObservable<Symmetry> Ssq(c.pattern);
+        for(auto& t : Ssq.data) {
+            t = std::sqrt(3.) * (Xped::SiteOperator<Scalar, Symmetry>::prod(B.Sdag(0), B.S(0), Symmetry::qvacuum())).data.template trim<1>();
+        }
+        Jack.callback = [Ssq, SS](XPED_CONST Xped::CTM<Scalar, Symmetry>& env, std::size_t i) mutable {
+            fmt::print("Callback at iteration {}\n", i);
+            // auto o_Sz = avg(env, Sz);
+            // auto o_Sx = avg(env, Sx);
+            // for(auto i = 0ul; i < o_Sz.size(); ++i) {
+            //     fmt::print("Sz={}, Sx={}, |S|={}\n", o_Sz[i], o_Sx[i], std::sqrt(o_Sz[i] * o_Sz[i] + o_Sx[i] * o_Sx[i]));
+            // }
+            auto o_Ssq = avg(env, Ssq);
+            for(const auto d : o_Ssq) { fmt::print("S²={}\n", d); }
+            auto [o_SS_h, o_SS_v, o_SS_d1, o_SS_d2] = avg(env, SS, true);
+            for(auto i = 0ul; i < o_SS_h.size(); ++i) { fmt::print("SS_h={}, SS_v={}\n", o_SS_h[i], o_SS_v[i]); }
+            for(auto i = 0ul; i < o_SS_d1.size(); ++i) { fmt::print("SS_d1={}, SS_d2={}\n", o_SS_d1[i], o_SS_d2[i]); }
+            // auto [o_SzSz_h, o_SzSz_v, o_SzSz_d1, o_SzSz_d2] = avg(env, SzSz, true);
+            // auto [o_SpSm_h, o_SpSm_v, o_SpSm_d1, o_SpSm_d2] = avg(env, SpSm, true);
+            // auto [o_SmSp_h, o_SmSp_v, o_SmSp_d1, o_SmSp_d2] = avg(env, SmSp, true);
+            // for(auto i = 0ul; i < o_SzSz_h.size(); ++i) { fmt::print("SS_h={}\n", o_SzSz_h[i] + 0.5 * (o_SpSm_h[i] + o_SmSp_h[i])); }
+            // for(auto i = 0ul; i < o_SzSz_v.size(); ++i) { fmt::print("SS_v={}\n", o_SzSz_v[i] + 0.5 * (o_SpSm_v[i] + o_SmSp_v[i])); }
+            // for(auto i = 0ul; i < o_SzSz_d1.size(); ++i) { fmt::print("SS_d1={}\n", o_SzSz_d1[i] + 0.5 * (o_SpSm_d1[i] + o_SmSp_d1[i])); }
+            // for(auto i = 0ul; i < o_SzSz_d2.size(); ++i) { fmt::print("SS_d2={}\n", o_SzSz_d2[i] + 0.5 * (o_SpSm_d2[i] + o_SmSp_d2[i])); }
+            // auto o_Spsm = avg(env, Spsm);
+            // for(const auto d : o_Spsm) { fmt::print("Spsm={}\n", d); }
+            //     auto o_Smsp = avg(env, Smsp);
+            //     for(const auto d : o_Smsp) { fmt::print("Smsp={}\n", d); }
+        };
         Jack.solve(Psi, ham);
         // ceres::GradientProblem problem(new Energy<Scalar, Symmetry>(ham, Psi, chi));
 
@@ -224,9 +292,10 @@ int main(int argc, char* argv[])
         // std::cout << summary.FullReport() << "\n";
 
 #ifdef XPED_CACHE_PERMUTE_OUTPUT
-        std::cout << "total hits=" << tree_cache<1, 2, 1, Symmetry>.cache.stats().total_hits() << endl; // Hits for any key
-        std::cout << "total misses=" << tree_cache<1, 2, 1, Symmetry>.cache.stats().total_misses() << endl; // Misses for any key
-        std::cout << "hit rate=" << tree_cache<1, 2, 1, Symmetry>.cache.stats().hit_rate() << endl; // Hit rate in [0, 1]
+        std::cout << "total hits=" << tree_cache</*shift*/ 0, /*Rank*/ 4, /*CoRank*/ 3, Symmetry>.cache.stats().total_hits()
+                  << endl; // Hits for any key
+        std::cout << "total misses=" << tree_cache<0, 4, 3, Symmetry>.cache.stats().total_misses() << endl; // Misses for any key
+        std::cout << "hit rate=" << tree_cache<0, 4, 3, Symmetry>.cache.stats().hit_rate() << endl; // Hit rate in [0, 1]
 #endif
 
 #ifdef XPED_USE_MPI

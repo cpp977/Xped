@@ -78,8 +78,7 @@ const std::string XPED_BLAS_STR = "None";
 namespace Xped {\
 template <std::size_t Rank, typename Symmetry> \
 struct FusionTree; \
-}\
-struct Permutation; \
+} \
 template <int shift, std::size_t Rank, std::size_t CoRank, typename Symmetry> \
 struct CacheManager \
 { \
@@ -88,7 +87,7 @@ struct CacheManager \
     typedef Xped::FusionTree<Rank, Symmetry> Tree; \
     typedef Xped::FusionTree<Rank - shift, Symmetry> NewTree; \
     typedef typename Symmetry::Scalar Scalar; \
-    typedef LRU::Cache<std::tuple<Tree, CoTree, Permutation>, std::unordered_map<std::pair<NewTree, NewCoTree>, Scalar>> CacheType; \
+    typedef LRU::Cache<std::tuple<Tree, CoTree, Xped::util::Permutation>, std::unordered_map<std::pair<NewTree, NewCoTree>, Scalar>> CacheType; \
     CacheManager(std::size_t cache_size) \
     { \
         cache = CacheType(cache_size); \

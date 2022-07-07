@@ -55,6 +55,7 @@ bool FusionTree<Rank, Symmetry>::operator<(const FusionTree<Rank, Symmetry>& oth
 template <std::size_t Rank, typename Symmetry>
 bool FusionTree<Rank, Symmetry>::operator==(const FusionTree<Rank, Symmetry>& other) const
 {
+    if constexpr(Symmetry::IS_TRIVIAL) { return dims == other.dims; }
     return q_uncoupled == other.q_uncoupled and q_intermediates == other.q_intermediates and multiplicities == other.multiplicities and
            q_coupled == other.q_coupled and IS_DUAL == other.IS_DUAL and dims == other.dims;
 }

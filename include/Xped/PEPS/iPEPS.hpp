@@ -8,10 +8,12 @@
 #include "Xped/PEPS/iPEPSIterator.hpp"
 
 namespace Xped {
+
 template <typename Symmetry>
 struct OneSiteObservable;
 template <typename Symmetry>
 struct TwoSiteObservable;
+
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>
 class CTM;
 /**                   p(4)

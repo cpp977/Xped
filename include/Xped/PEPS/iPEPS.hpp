@@ -8,7 +8,10 @@
 #include "Xped/PEPS/iPEPSIterator.hpp"
 
 namespace Xped {
-
+template <typename Symmetry>
+struct OneSiteObservable;
+template <typename Symmetry>
+struct TwoSiteObservable;
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>
 class CTM;
 /**                   p(4)
@@ -27,6 +30,19 @@ class CTM;
 template <typename Scalar_, typename Symmetry_, bool ENABLE_AD_ = false>
 class iPEPS
 {
+    template <typename Scalar__, typename Symmetry__, bool ENABLE_AD__>
+    friend std::pair<TMatrix<std::conditional_t<ENABLE_AD__, stan::math::var, Scalar__>>,
+                     TMatrix<std::conditional_t<ENABLE_AD__, stan::math::var, Scalar__>>>
+    avg(XPED_CONST CTM<Scalar__, Symmetry__, ENABLE_AD__>& env, XPED_CONST Tensor<Scalar__, 2, 2, Symmetry__, false>& op);
+
+    template <typename Scalar__, typename Symmetry__, bool ENABLE_AD__>
+    friend TMatrix<std::conditional_t<ENABLE_AD__, stan::math::var, Scalar__>> avg(XPED_CONST CTM<Scalar__, Symmetry__, ENABLE_AD__>& env,
+                                                                                   OneSiteObservable<Symmetry__>& op);
+
+    template <typename Scalar__, typename Symmetry__, bool ENABLE_AD__>
+    friend std::array<TMatrix<std::conditional_t<ENABLE_AD__, stan::math::var, Scalar__>>, 4>
+    avg(XPED_CONST CTM<Scalar__, Symmetry__, ENABLE_AD__>& env, TwoSiteObservable<Symmetry__>& op, bool CALC_NNN);
+
     friend class CTM<Scalar_, Symmetry_, ENABLE_AD_>;
     friend class iPEPS<Scalar_, Symmetry_, true>;
 

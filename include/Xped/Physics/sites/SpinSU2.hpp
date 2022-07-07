@@ -1,23 +1,25 @@
 #ifndef XPED_SPINSU2_HPP_
 #define XPED_SPINSU2_HPP_
 
-#include "Xped/Symmetry/kind_dummies.h"
+#include "Xped/Symmetry/kind_dummies.hpp"
 
-#include "Xped/Symmetry/SU2.h"
+#include "Xped/Symmetry/SU2.hpp"
+
+namespace Xped {
 
 template <typename Symmetry, size_t order>
-class SpinSite;
+class Spin;
 
 template <>
-class SpinSite<Sym::SU2<Sym::SpinSU2>, 0ul>
+class Spin<Sym::SU2<Sym::SpinSU2>, 0ul>
 {
-    typedef double Scalar;
-    typedef Sym::SU2<Sym::SpinSU2> Symmetry;
-    typedef SiteOperatorQ<Symmetry, Eigen::Matrix<Scalar, Eigen::Dynamic, Eigen::Dynamic>> OperatorType;
+    using Scalar = double;
+    using Symmetry = Sym::SU2<Sym::SpinSU2>;
+    using OperatorType = SiteOperator<Scalar, Symmetry>;
 
 public:
-    SpinSite(){};
-    SpinSite(std::size_t D_input);
+    Spin(){};
+    Spin(std::size_t D_input);
 
     OperatorType Id_1s() const { return Id_1s_; }
 
@@ -25,12 +27,12 @@ public:
 
     OperatorType Q_1s() const { return Q_1s_; }
 
-    Qbasis<Symmetry> basis_1s() const { return basis_1s_; }
+    Qbasis<Symmetry, 1> basis_1s() const { return basis_1s_; }
 
 protected:
     std::size_t D;
 
-    Qbasis<Symmetry> basis_1s_;
+    Qbasis<Symmetry, 1> basis_1s_;
 
     OperatorType Id_1s_; // identity
     OperatorType S_1s_; // spin
@@ -38,26 +40,24 @@ protected:
     OperatorType Q_1s_; // quadrupole moment
 };
 
-SpinSite<Sym::SU2<Sym::SpinSU2>,0ul>::
-SpinSite(std::size_t D_input)
-:D(D_input)
+Spin<Sym::SU2<Sym::SpinSU2>, 0ul>::Spin(std::size_t D_input)
+    : D(D_input)
 {
-	//create basis for one Spin Site
-	typename Symmetry::qType Q = {static_cast<int>(D)};
-	Eigen::Index inner_dim = 1;
-	std::vector<std::string> ident;
-	ident.push_back("spin");
-	
-	basis_1s_.push_back(Q,inner_dim,ident);
-	
-	Id_1s_ = OperatorType({1},basis_1s_,"id");
-	S_1s_ = OperatorType({3},basis_1s_,"S");
+    // create basis for one Spin Site
+    typename Symmetry::qType Q = {static_cast<int>(D)};
+    basis_1s_.push_back(Q, 1);
 
-	Scalar locS = 0.5*static_cast<double>(D-1);
-	S_1s_( "spin", "spin" ) = std::sqrt(locS*(locS+1.));
-	Sdag_1s_ = S_1s_.adjoint();
-	Q_1s_ = std::sqrt(2.)*OperatorType::prod(S_1s_,S_1s_,{5});
-	Id_1s_.setIdentity();
+    Id_1s_ = OperatorType({1}, basis_1s_);
+    Id_1s_.setIdentity();
+    S_1s_ = OperatorType({3}, basis_1s_);
+    S_1s_.data.setZero();
+
+    Scalar locS = 0.5 * static_cast<double>(D - 1);
+    S_1s_(Q, Q)(0, 0) = std::sqrt(locS * (locS + 1.));
+    Sdag_1s_ = S_1s_.adjoint();
+    Q_1s_ = std::sqrt(2.) * OperatorType::prod(S_1s_, S_1s_, {5});
 }
 
-#endif //SPINSITESU2_H_
+} // namespace Xped
+
+#endif

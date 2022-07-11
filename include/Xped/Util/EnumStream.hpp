@@ -1,3 +1,6 @@
+#ifndef XPED_ENUM_STREAM_HPP_
+#define XPED_ENUM_STREAM_HPP_
+
 #include <boost/describe.hpp>
 
 namespace Xped::Opts {
@@ -10,3 +13,5 @@ std::ostream& operator<<(std::ostream& os, const T& t)
 }
 
 } // namespace Xped::Opts
+
+#endif

@@ -43,7 +43,7 @@ class iPEPS
 
     template <typename Scalar__, typename Symmetry__, bool ENABLE_AD__>
     friend std::array<TMatrix<std::conditional_t<ENABLE_AD__, stan::math::var, Scalar__>>, 4>
-    avg(XPED_CONST CTM<Scalar__, Symmetry__, ENABLE_AD__>& env, TwoSiteObservable<Symmetry__>& op, bool CALC_NNN);
+    avg(XPED_CONST CTM<Scalar__, Symmetry__, ENABLE_AD__>& env, TwoSiteObservable<Symmetry__>& op);
 
     friend class CTM<Scalar_, Symmetry_, ENABLE_AD_>;
     friend class iPEPS<Scalar_, Symmetry_, true>;

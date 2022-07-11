@@ -30,6 +30,9 @@ TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, Scalar>> avg(XPED_CONST C
 {
     assert(env.RDM_COMPUTED());
     TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, Scalar>> o(env.cell().pattern);
+    o.setConstant(0.);
+    if(not op.MEASURE) { return o; }
+
     for(int x = 0; x < env.cell().rows(); ++x) {
         for(int y = 0; y < env.cell().cols(); ++y) {
             if(not env.cell().pattern.isUnique(x, y)) { continue; }
@@ -64,32 +67,42 @@ TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, Scalar>> avg(XPED_CONST C
 }
 
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>
-std::array<TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, Scalar>>, 4>
-avg(XPED_CONST CTM<Scalar, Symmetry, ENABLE_AD>& env, TwoSiteObservable<Symmetry>& op, bool CALC_NNN)
+std::array<TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, Scalar>>, 4> avg(XPED_CONST CTM<Scalar, Symmetry, ENABLE_AD>& env,
+                                                                                   TwoSiteObservable<Symmetry>& op)
 {
     assert(env.RDM_COMPUTED());
     TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, Scalar>> o_h(env.cell().pattern);
+    o_h.setConstant(0.);
     TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, Scalar>> o_v(env.cell().pattern);
+    o_v.setConstant(0.);
     TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, Scalar>> o_d1(env.cell().pattern);
+    o_d1.setConstant(0.);
     TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, Scalar>> o_d2(env.cell().pattern);
+    o_d2.setConstant(0.);
+    if(not op.MEASURE) { return std::array{o_h, o_v, o_d1, o_d2}; }
+
     for(int x = 0; x < env.cell().rows(); ++x) {
         for(int y = 0; y < env.cell().cols(); ++y) {
             if(not env.cell().pattern.isUnique(x, y)) { continue; }
-            o_h(x, y) = env.rho_h(x, y).template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0>(op.data_h(x, y)).trace();
-            o_v(x, y) = env.rho_v(x, y).template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0>(op.data_v(x, y)).trace();
-            if constexpr(ENABLE_AD) {
-                op.obs_h(x, y) = o_h(x, y).val();
-                op.obs_v(x, y) = o_v(x, y).val();
-            } else {
-                op.obs_h(x, y) = o_h(x, y);
-                op.obs_v(x, y) = o_v(x, y);
+            if(op.data_h.size() > 0) {
+                o_h(x, y) = env.rho_h(x, y).template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0>(op.data_h(x, y)).trace();
             }
-            if(CALC_NNN) {
+            if(op.data_v.size() > 0) {
+                o_v(x, y) = env.rho_v(x, y).template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0>(op.data_v(x, y)).trace();
+            }
+            if constexpr(ENABLE_AD) {
+                if(op.data_h.size() > 0) { op.obs_h(x, y) = o_h(x, y).val(); }
+                if(op.data_v.size() > 0) { op.obs_v(x, y) = o_v(x, y).val(); }
+            } else {
+                if(op.data_h.size() > 0) { op.obs_h(x, y) = o_h(x, y); }
+                if(op.data_v.size() > 0) { op.obs_v(x, y) = o_v(x, y); }
+            }
+            if(op.data_d1.size() > 0 or op.data_d2.size() > 0) {
                 auto Q1 = env.contractCorner(x, y, Opts::CORNER::UPPER_LEFT);
                 auto Q2 = env.contractCorner(x + 1, y, Opts::CORNER::UPPER_RIGHT);
                 auto Q3 = env.contractCorner(x + 1, y + 1, Opts::CORNER::LOWER_RIGHT);
                 auto Q4 = env.contractCorner(x, y + 1, Opts::CORNER::LOWER_LEFT);
-                Scalar norm = (Q1 * Q2 * Q3 * Q4).trace();
+                auto norm = (Q1 * Q2 * Q3 * Q4).trace();
 
                 if(op.data_d1.size() > 0) {
                     [[maybe_unused]] double dumb;

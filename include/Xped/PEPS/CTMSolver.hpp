@@ -14,8 +14,8 @@ class CTMSolver
 public:
     using Scalar = Scalar_;
     using Symmetry = Symmetry_;
-    template <typename Sc, typename Sym>
-    using Hamiltonian = Tensor<Sc, 2, 2, Sym, false>;
+    template <typename Sym>
+    using Hamiltonian = TwoSiteObservable<Sym>;
 
     explicit CTMSolver(Opts::CTM opts)
         : opts(opts)
@@ -25,7 +25,7 @@ public:
 
     template <typename HamScalar>
     typename ScalarTraits<Scalar>::Real
-    solve(const std::shared_ptr<iPEPS<Scalar, Symmetry>>& Psi, Scalar* gradient, const Hamiltonian<HamScalar, Symmetry>& H, bool CALC_GRAD = true);
+    solve(const std::shared_ptr<iPEPS<Scalar, Symmetry>>& Psi, Scalar* gradient, Hamiltonian<Symmetry>& H, bool CALC_GRAD = true);
 
     XPED_CONST CTM<Scalar, Symmetry, false>& getCTM() XPED_CONST { return Jack; }
 

@@ -8,10 +8,8 @@ namespace Xped {
 
 template <typename Scalar, typename Symmetry>
 template <typename HamScalar>
-typename ScalarTraits<Scalar>::Real CTMSolver<Scalar, Symmetry>::solve(const std::shared_ptr<iPEPS<Scalar, Symmetry>>& Psi,
-                                                                       Scalar* gradient,
-                                                                       const Hamiltonian<HamScalar, Symmetry>& H,
-                                                                       bool CALC_GRAD)
+typename ScalarTraits<Scalar>::Real
+CTMSolver<Scalar, Symmetry>::solve(const std::shared_ptr<iPEPS<Scalar, Symmetry>>& Psi, Scalar* gradient, Hamiltonian<Symmetry>& H, bool CALC_GRAD)
 {
     Jack.set_A(Psi);
     Jack.info();
@@ -31,8 +29,8 @@ typename ScalarTraits<Scalar>::Real CTMSolver<Scalar, Symmetry>::solve(const std
         Jack.top_move();
         Jack.bottom_move();
         Jack.computeRDM();
-        auto [E_h, E_v] = avg(Jack, H);
-        double E = (E_h.sum() + E_v.sum()) / Jack.cell().uniqueSize();
+        auto [E_h, E_v, E_d1, E_d2] = avg(Jack, H);
+        double E = (E_h.sum() + E_v.sum() + E_d1.sum() + E_d2.sum()) / Jack.cell().uniqueSize();
         step == 0 ? fmt::print("\t{: >3} {:2d}: E={:2.8f}, t={}\n", "▷", step, E, move.time())
                   : fmt::print("\t{: >3} {:2d}: E={:2.8f}, conv={:2.10g}, t={}\n", "▷", step, E, std::abs(E - Eprev), move.time());
         if(std::abs(E - Eprev) < opts.tol_E) { break; }
@@ -53,8 +51,8 @@ typename ScalarTraits<Scalar>::Real CTMSolver<Scalar, Symmetry>::solve(const std
     Xped::CTM<double, Symmetry, true> Jim(Jack);
     fmt::print("\t{: >3} forward pass:\n", "•");
     Jim.template solve<false>(opts.track_steps);
-    auto [E_h, E_v] = avg(Jim, H);
-    auto res = (E_h.sum() + E_v.sum()) / Jim.cell().uniqueSize();
+    auto [E_h, E_v, E_d1, E_d2] = avg(Jim, H);
+    auto res = (E_h.sum() + E_v.sum() + E_d1.sum() + E_d2.sum()) / Jim.cell().uniqueSize();
     E = res.val();
     fmt::print("\t{: >3} backward pass:\n", "•");
     stan::math::grad(res.vi_);

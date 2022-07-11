@@ -23,8 +23,8 @@ TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, Scalar>> avg(XPED_CONST C
                                                                     OneSiteObservable<Symmetry>& op);
 
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>
-std::array<TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, Scalar>>, 4>
-avg(XPED_CONST CTM<Scalar, Symmetry, ENABLE_AD>& env, TwoSiteObservable<Symmetry>& op, bool CALC_NNN = false);
+std::array<TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, Scalar>>, 4> avg(XPED_CONST CTM<Scalar, Symmetry, ENABLE_AD>& env,
+                                                                                   TwoSiteObservable<Symmetry>& op);
 
 } // namespace Xped
 

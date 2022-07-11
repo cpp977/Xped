@@ -14,9 +14,12 @@ namespace Xped {
 template <typename Scalar, typename Symmetry>
 class Energy final : public ceres::FirstOrderFunction
 {
+    template <typename Sym>
+    using Hamiltonian = TwoSiteObservable<Sym>;
+
 public:
     Energy(std::unique_ptr<CTMSolver<Scalar, Symmetry>>&& solver,
-           const Xped::Tensor<Scalar, 2, 2, Symmetry>& op,
+           Hamiltonian<Symmetry>& op,
            std::shared_ptr<Xped::iPEPS<Scalar, Symmetry, false>> Psi)
         : impl(std::move(solver))
         , op(op)
@@ -28,12 +31,12 @@ public:
     bool Evaluate(const double* parameters, double* cost, double* gradient) const override
     {
         Psi->set_data(parameters);
-        cost[0] = impl->solve(Psi, gradient, op, gradient != nullptr);
+        cost[0] = impl->template solve<double>(Psi, gradient, op, gradient != nullptr);
         return true;
     }
 
     std::unique_ptr<CTMSolver<Scalar, Symmetry>> impl;
-    Xped::Tensor<Scalar, 2, 2, Symmetry, false> op;
+    Hamiltonian<Symmetry>& op;
     std::shared_ptr<Xped::iPEPS<Scalar, Symmetry, false>> Psi;
     int NumParameters() const override { return Psi->plainSize(); }
 };
@@ -41,8 +44,8 @@ public:
 template <typename Scalar, typename Symmetry>
 struct iPEPSSolverAD
 {
-    template <typename Sc, typename Sym>
-    using Hamiltonian = Tensor<Sc, 2, 2, Sym, false>;
+    template <typename Sym>
+    using Hamiltonian = TwoSiteObservable<Sym>;
 
     iPEPSSolverAD(Opts::Optim optim_opts, Opts::CTM ctm_opts)
         : optim_opts(optim_opts)
@@ -50,10 +53,17 @@ struct iPEPSSolverAD
     {}
 
     template <typename HamScalar>
-    void solve(std::shared_ptr<iPEPS<Scalar, Symmetry>>& Psi, const Hamiltonian<HamScalar, Symmetry>& H)
+    void solve(std::shared_ptr<iPEPS<Scalar, Symmetry>>& Psi, Hamiltonian<Symmetry>& H)
     {
         optim_opts.info();
         ctm_opts.info();
+        fmt::print("Model: {}(Bonds: V:{}, H:{}, D1: {}, D2: {})\n",
+                   H.name,
+                   (H.bond & Opts::Bond::V) == Opts::Bond::V,
+                   (H.bond & Opts::Bond::H) == Opts::Bond::H,
+                   (H.bond & Opts::Bond::D1) == Opts::Bond::D1,
+                   (H.bond & Opts::Bond::D2) == Opts::Bond::D2);
+
         auto Dwain = std::make_unique<CTMSolver<Scalar, Symmetry>>(ctm_opts);
         ceres::GradientProblem problem(new Energy<Scalar, Symmetry>(std::move(Dwain), H, Psi));
 

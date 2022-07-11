@@ -4,6 +4,7 @@
 #include <boost/describe.hpp>
 
 #include "Xped/Util/EnumStream.hpp"
+#include "Xped/Util/TomlHelpers.hpp"
 
 namespace Xped::Opts {
 
@@ -44,14 +45,8 @@ struct Optim
 inline Optim optim_from_toml(const toml::value& t)
 {
     Optim res{};
-    if(t.contains("algorithm")) {
-        [[maybe_unused]] bool success = boost::describe::enum_from_string(std::string(t.at("algorithm").as_string()).c_str(), res.alg);
-        assert(success);
-    }
-    if(t.contains("linesearch")) {
-        [[maybe_unused]] bool success = boost::describe::enum_from_string(std::string(t.at("linesearch").as_string()).c_str(), res.ls);
-        assert(success);
-    }
+    if(t.contains("algorithm")) { res.alg = util::enum_from_toml<Algorithm>(t.at("algorithm")); }
+    if(t.contains("linesearch")) { res.ls = util::enum_from_toml<Linesearch>(t.at("linesearch")); }
     res.grad_tol = t.contains("grad_tol") ? t.at("grad_tol").as_floating() : res.grad_tol;
     res.step_tol = t.contains("step_tol") ? t.at("step_tol").as_floating() : res.step_tol;
     res.cost_tol = t.contains("cost_tol") ? t.at("cost_tol").as_floating() : res.cost_tol;

@@ -43,8 +43,8 @@ jobs:
     - run: sudo apt-get install lcov
     - run: sudo apt-get install libopenblas-dev
     - run: sudo apt-get install liblapacke-dev
-    - run: sudo apt-get llvm-toolchain-14
-    - run: sudo apt-get llvm-toolchain-13
+    - run: sudo apt-get install llvm-toolchain-14
+    - run: sudo apt-get install llvm-toolchain-13
       
     - uses: actions/checkout@v3
       with:

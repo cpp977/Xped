@@ -94,7 +94,10 @@ jobs:
     - name: show debug log
       if: always()
       run: cat /home/runner/work/Xped/Xped/vcpkg/buildtrees/boost-container/install-x64-linux-clang-libcxx-dbg*
-
+    - name: show directory
+      if: always()
+      run: ls -l /usr/bin/../lib/gcc/x86_64-linux-gnu/11/../../../../
+      
     - name: Build
       working-directory: ${{runner.workspace}}/build
       shell: bash

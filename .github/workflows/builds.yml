@@ -96,7 +96,7 @@ jobs:
       run: cat /home/runner/work/Xped/Xped/vcpkg/buildtrees/boost-container/install-x64-linux-clang-libcxx-dbg*
     - name: show directory
       if: always()
-      run: ls -l /usr/include/c++
+      run: find /usr -name "cstddef"
       
     - name: Build
       working-directory: ${{runner.workspace}}/build

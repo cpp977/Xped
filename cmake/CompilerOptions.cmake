@@ -19,7 +19,7 @@ function(set_project_options project_name)
   
   set(CLANG_OPTIONS_RELEASE
     -stdlib=${USED_LIBCXX}
-#    -march=native
+    -march=native
     -ferror-limit=5
     -fcolor-diagnostics
     )

@@ -69,6 +69,8 @@ struct TMatrix
 
     void fill(const std::vector<Ttype>& tensors_in) { tensors = tensors_in; }
 
+    void setConstant(const Ttype& val) { std::fill(tensors.begin(), tensors.end(), val); }
+
     Ttype sum() const { return std::accumulate(tensors.begin(), tensors.end(), Ttype(0.)); }
 
     Pattern pat;

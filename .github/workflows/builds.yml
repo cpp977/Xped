@@ -26,11 +26,11 @@ jobs:
           #  LIBCXX: OFF
           #  STORAGE: Contiguous
           #- triplet: x64-linux-clang
-          #  compiler: clang++-13
+          #  compiler: clang++
           #  LIBCXX: OFF
           #  STORAGE: Contiguous
           - triplet: x64-linux-clang-libcxx
-            compiler: clang++-13
+            compiler: clang++
             LIBCXX: ON
             STORAGE: Contiguous
     steps:
@@ -77,7 +77,7 @@ jobs:
     #     version: 13
     #     platform: x64
         
-    - run: clang++-13 --version
+    - run: clang++ --version
         
     - name: Create Build Environment
       # Some projects don't allow in-source building, so create a separate build directory

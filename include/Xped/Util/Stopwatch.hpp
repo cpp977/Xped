@@ -159,7 +159,7 @@ template <typename ThemeType, class F, class... ArgTypes>
 std::invoke_result_t<F && (ArgTypes && ...)> Stopwatch<ClockClass>::runTime(ThemeType theme, F&& f, ArgTypes&&... args)
 {
     start();
-    if constexpr(std::is_void<std::result_of_t<F && (ArgTypes && ...)>>::value) {
+    if constexpr(std::is_void<std::invoke_result_t<F && (ArgTypes && ...)>>::value) {
         return std::invoke(std::forward<F>(f), std::forward<ArgTypes>(args)...);
         // if (SAVING_TO_FILE == false) { std::cout << info(theme) << std::endl; }
         // else { info(theme); }

@@ -6,7 +6,7 @@
 #include <string>
 
 #include "Xped/Core/Tensor.hpp"
-#include "Xped/PEPS/TwoSiteObservable"
+#include "Xped/PEPS/TwoSiteObservable.hpp"
 #include "Xped/Physics/SpinBase.hpp"
 
 namespace Xped {

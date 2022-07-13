@@ -39,7 +39,7 @@ public:
     void check();
 
     template <typename ThemeType, class F, class... ArgTypes>
-    std::result_of_t<F && (ArgTypes && ...)> runTime(ThemeType theme, F&& f, ArgTypes&&... args);
+    std::invoke_result_t<F && (ArgTypes && ...)> runTime(ThemeType theme, F&& f, ArgTypes&&... args);
 
 private:
     std::chrono::time_point<ClockClass> t_start, t_end;
@@ -156,7 +156,7 @@ std::string Stopwatch<ClockClass>::info(ThemeType theme, bool RESTART)
 
 template <typename ClockClass>
 template <typename ThemeType, class F, class... ArgTypes>
-std::result_of_t<F && (ArgTypes && ...)> Stopwatch<ClockClass>::runTime(ThemeType theme, F&& f, ArgTypes&&... args)
+std::invoke_result_t<F && (ArgTypes && ...)> Stopwatch<ClockClass>::runTime(ThemeType theme, F&& f, ArgTypes&&... args)
 {
     start();
     if constexpr(std::is_void<std::result_of_t<F && (ArgTypes && ...)>>::value) {
@@ -164,7 +164,7 @@ std::result_of_t<F && (ArgTypes && ...)> Stopwatch<ClockClass>::runTime(ThemeTyp
         // if (SAVING_TO_FILE == false) { std::cout << info(theme) << std::endl; }
         // else { info(theme); }
     } else {
-        std::result_of_t<F && (ArgTypes && ...)> result = std::invoke(std::forward<F>(f), std::forward<ArgTypes>(args)...);
+        std::invoke_result_t<F && (ArgTypes && ...)> result = std::invoke(std::forward<F>(f), std::forward<ArgTypes>(args)...);
         if(SAVING_TO_FILE == false) {
             std::cout << info(theme) << std::endl;
         } else {

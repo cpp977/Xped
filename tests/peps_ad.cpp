@@ -61,67 +61,9 @@ XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100)
 
 #include "Xped/PEPS/iPEPSSolverAD.hpp"
 
-// template <typename Scalar, typename Symmetry>
-// class Energy final : public ceres::FirstOrderFunction
-// {
-// public:
-//     Energy(const Xped::Tensor<Scalar, 2, 2, Symmetry>& op, std::shared_ptr<Xped::iPEPS<Scalar, Symmetry, false>> Psi, std::size_t chi)
-//         : op(op)
-//         , Psi(Psi)
-//         , chi(chi)
-//     {}
-
-//     ~Energy() override {}
-
-//     bool Evaluate(const double* parameters, double* cost, double* gradient) const override
-//     {
-//         Psi->set_data(parameters);
-//         Xped::CTM<double, Symmetry, false> Jack(Psi, chi);
-//         Jack.init();
-//         double Eold = 1000.;
-//         for(std::size_t step = 0; step < 100; ++step) {
-//             Jack.left_move();
-//             Jack.right_move();
-//             Jack.top_move();
-//             Jack.bottom_move();
-//             Jack.computeRDM();
-//             auto [E_h, E_v] = avg(Jack, op);
-//             double E = (E_h.sum() + E_v.sum()) / Jack.cell().uniqueSize();
-//             SPDLOG_CRITICAL("Step={:2d}, E={:2.5f}, conv={:2.10g}", step, E, std::abs(E - Eold));
-//             if(std::abs(E - Eold) < 1.e-12) { break; }
-//             Eold = E;
-//         }
-
-//         stan::math::nested_rev_autodiff nested;
-//         stan::math::print_stack(std::cout);
-//         // auto Psi_ad = std::make_shared<Xped::iPEPS<double, Symmetry, true>>(*Psi);
-
-//         Xped::CTM<double, Symmetry, true> Jim(Jack);
-//         Jim.template solve<false>();
-//         auto [E_h, E_v] = avg(Jim, op);
-//         auto res = (E_h.sum() + E_v.sum()) / Jim.cell().uniqueSize();
-//         cost[0] = res.val();
-//         if(gradient != nullptr) {
-//             SPDLOG_CRITICAL("Backwards pass:");
-//             stan::math::grad(res.vi_);
-//             std::size_t count = 0;
-//             for(auto it = Jim.Psi()->gradbegin(); it != Jim.Psi()->gradend(); ++it) { gradient[count++] = *it; }
-//         }
-//         return true;
-//     }
-
-//     Xped::Tensor<Scalar, 2, 2, Symmetry, false> op;
-//     std::shared_ptr<Xped::iPEPS<Scalar, Symmetry, false>> Psi;
-//     std::size_t chi;
-
-//     int NumParameters() const override { return Psi->plainSize(); }
-// };
-
 int main(int argc, char* argv[])
 {
     {
-        // gflags::ParseCommandLineFlags(&argc, &argv, false);
-
 #ifdef XPED_USE_MPI
         MPI_Init(&argc, &argv);
         Xped::mpi::XpedWorld world(argc, argv);
@@ -304,26 +246,6 @@ int main(int argc, char* argv[])
             //     for(const auto d : o_Smsp) { fmt::print("Smsp={}\n", d); }
         };
         Jack.solve<double>(Psi, *ham);
-        // ceres::GradientProblem problem(new Energy<Scalar, Symmetry>(ham, Psi, chi));
-
-        // std::vector<Scalar> parameters = Psi->data();
-
-        // ceres::GradientProblemSolver::Options options;
-        // // options.line_search_direction_type = ceres::NONLINEAR_CONJUGATE_GRADIENT;
-        // // options.line_search_direction_type = ceres::STEEPEST_DESCENT;
-        // options.line_search_direction_type = ceres::LBFGS;
-        // // options.line_search_type = ceres::ARMIJO;
-        // options.line_search_type = ceres::WOLFE;
-        // options.minimizer_progress_to_stdout = true;
-        // options.use_approximate_eigenvalue_bfgs_scaling = true;
-        // // options.line_search_interpolation_type = ceres::BISECTION;
-        // options.max_num_iterations = 500;
-        // options.function_tolerance = 1.e-10;
-        // options.parameter_tolerance = 0.;
-        // options.update_state_every_iteration = true;
-        // ceres::GradientProblemSolver::Summary summary;
-        // ceres::Solve(options, problem, parameters.data(), &summary);
-        // std::cout << summary.FullReport() << "\n";
 
 #ifdef XPED_CACHE_PERMUTE_OUTPUT
         std::cout << "total hits=" << tree_cache</*shift*/ 0, /*Rank*/ 4, /*CoRank*/ 3, Symmetry>.cache.stats().total_hits()

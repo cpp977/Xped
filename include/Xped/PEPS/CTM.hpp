@@ -70,32 +70,6 @@ public:
     template <std::size_t N>
     using cdims = std::array<int, N>;
 
-    // enum class DIRECTION
-    // {
-    //     LEFT,
-    //     RIGHT,
-    //     TOP,
-    //     BOTTOM
-    // };
-    // enum class CORNER
-    // {
-    //     UPPER_LEFT,
-    //     UPPER_RIGHT,
-    //     LOWER_LEFT,
-    //     LOWER_RIGHT
-    // };
-    // enum class PROJECTION
-    // {
-    //     CORNER,
-    //     HALF,
-    //     FULL
-    // };
-    // enum class INIT
-    // {
-    //     FROM_TRIVIAL,
-    //     FROM_A
-    // };
-
     CTM() = default;
 
     explicit CTM(std::size_t chi, Opts::CTM_INIT init = Opts::CTM_INIT::FROM_A)

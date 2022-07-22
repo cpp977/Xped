@@ -8,7 +8,7 @@
 
 namespace Xped {
 
-template <typename Scalar_, typename Symmetry_>
+template <typename Scalar_, typename Symmetry_, Opts::CTMCheckpoint CPOpts>
 class CTMSolver
 {
 public:
@@ -30,7 +30,7 @@ public:
     XPED_CONST CTM<Scalar, Symmetry, false>& getCTM() XPED_CONST { return Jack; }
 
 private:
-    CTM<Scalar, Symmetry, false> Jack;
+    CTM<Scalar, Symmetry> Jack;
     Opts::CTM opts;
     bool REINIT_ENV = true;
     typename ScalarTraits<Scalar>::Real grad_norm = 1000.;

@@ -247,6 +247,12 @@ public:
         return permute<TRACK, shift, p...>();
     }
 
+    // template <int shift, std::size_t... p>
+    // Tensor<Scalar, Rank - shift, CoRank + shift, Symmetry, false, AllocationPolicy> permute() const
+    // {
+    //     return permute<false, shift, p...>();
+    // }
+
     template <std::size_t leg>
     Tensor<Scalar, util::constFct::trimDim<Rank>(leg), Rank + CoRank - 1 - util::constFct::trimDim<Rank>(leg), Symmetry, false, AllocationPolicy>
     trim() const;

@@ -6,9 +6,9 @@
 
 namespace Xped {
 
-template <typename Scalar, typename Symmetry, bool ENABLE_AD>
+template <typename Scalar, typename Symmetry, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
 std::pair<TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, Scalar>>, TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, Scalar>>>
-avg(XPED_CONST CTM<Scalar, Symmetry, ENABLE_AD>& env, XPED_CONST Tensor<Scalar, 2, 2, Symmetry, false>& op)
+avg(XPED_CONST CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>& env, XPED_CONST Tensor<Scalar, 2, 2, Symmetry, false>& op)
 {
     assert(env.RDM_COMPUTED());
     TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, Scalar>> o_h(env.cell().pattern);
@@ -25,8 +25,9 @@ avg(XPED_CONST CTM<Scalar, Symmetry, ENABLE_AD>& env, XPED_CONST Tensor<Scalar, 
     return std::make_pair(o_h, o_v);
 }
 
-template <typename Scalar, typename Symmetry, bool ENABLE_AD>
-TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, Scalar>> avg(XPED_CONST CTM<Scalar, Symmetry, ENABLE_AD>& env, OneSiteObservable<Symmetry>& op)
+template <typename Scalar, typename Symmetry, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
+TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, Scalar>> avg(XPED_CONST CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>& env,
+                                                                    OneSiteObservable<Symmetry>& op)
 {
     assert(env.RDM_COMPUTED());
     TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, Scalar>> o(env.cell().pattern);
@@ -66,8 +67,8 @@ TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, Scalar>> avg(XPED_CONST C
     return o;
 }
 
-template <typename Scalar, typename Symmetry, bool ENABLE_AD>
-std::array<TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, Scalar>>, 4> avg(XPED_CONST CTM<Scalar, Symmetry, ENABLE_AD>& env,
+template <typename Scalar, typename Symmetry, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
+std::array<TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, Scalar>>, 4> avg(XPED_CONST CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>& env,
                                                                                    TwoSiteObservable<Symmetry>& op)
 {
     assert(env.RDM_COMPUTED());

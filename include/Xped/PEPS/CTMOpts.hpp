@@ -53,5 +53,24 @@ inline CTM ctm_from_toml(const toml::value& t)
     return res;
 }
 
+struct CTMCheckpoint
+{
+    bool GROW_ALL = false;
+    bool MOVE = false;
+    bool CORNER = false;
+    bool PROJECTORS = false;
+    bool RENORMALIZE = false;
+
+    constexpr void info() const
+    {
+        fmt::print("CTM checkpoint settings:\n");
+        fmt::print("  {:<20} {}\n", "• grow_all:", GROW_ALL);
+        fmt::print("  {:<20} {}\n", "• move:", MOVE);
+        fmt::print("  {:<20} {}\n", "• corner contraction:", CORNER);
+        fmt::print("  {:<20} {}\n", "• projector computation:", PROJECTORS);
+        fmt::print("  {:<20} {}\n", "• Renormalization step:", RENORMALIZE);
+    }
+};
+
 } // namespace Xped::Opts
 #endif

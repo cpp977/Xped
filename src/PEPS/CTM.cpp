@@ -14,8 +14,8 @@
 
 namespace Xped {
 
-template <typename Scalar, typename Symmetry, bool ENABLE_AD>
-CTM<Scalar, Symmetry, ENABLE_AD>::CTM(const CTM<Scalar, Symmetry, false>& other)
+template <typename Scalar, typename Symmetry, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
+CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::CTM(const CTM<Scalar, Symmetry, false>& other)
 {
     cell_ = other.cell();
     chi = other.chi;
@@ -35,8 +35,8 @@ CTM<Scalar, Symmetry, ENABLE_AD>::CTM(const CTM<Scalar, Symmetry, false>& other)
     T4s = other.T4s;
 }
 
-template <typename Scalar, typename Symmetry, bool ENABLE_AD>
-void CTM<Scalar, Symmetry, ENABLE_AD>::init()
+template <typename Scalar, typename Symmetry, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
+void CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::init()
 {
     C1s.resize(cell_.pattern);
     C2s.resize(cell_.pattern);
@@ -164,9 +164,9 @@ void CTM<Scalar, Symmetry, ENABLE_AD>::init()
     }
 }
 
-template <typename Scalar, typename Symmetry, bool ENABLE_AD>
+template <typename Scalar, typename Symmetry, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
 template <bool TRACK>
-void CTM<Scalar, Symmetry, ENABLE_AD>::solve(std::size_t steps)
+void CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::solve(std::size_t steps)
 {
     // info();
     // stan::math::print_stack(std::cout);
@@ -178,31 +178,42 @@ void CTM<Scalar, Symmetry, ENABLE_AD>::solve(std::size_t steps)
     // stan::math::print_stack(std::cout);
 }
 
-template <typename Scalar, typename Symmetry, bool ENABLE_AD>
-template <bool TRACK>
-void CTM<Scalar, Symmetry, ENABLE_AD>::grow_all()
+template <typename Scalar, typename Symmetry, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
+template <bool TRACK, bool CP>
+void CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::grow_all()
 {
-    left_move<TRACK>();
-    right_move<TRACK>();
-    top_move<TRACK>();
-    bottom_move<TRACK>();
-    if constexpr(TRACK) {
-        return;
-    } else {
-        stan::math::reverse_pass_callback([curr = *this]() mutable {
+    constexpr bool TRACK_INNER = TRACK ? not CP : false;
+    [[maybe_unused]] auto curr = *this;
+    left_move<TRACK_INNER>();
+    right_move<TRACK_INNER>();
+    top_move<TRACK_INNER>();
+    bottom_move<TRACK_INNER>();
+    if constexpr(TRACK and CP) {
+        stan::math::reverse_pass_callback([curr_ = curr, res = *this]() mutable {
             stan::math::nested_rev_autodiff nested;
-            curr.template left_move<true>();
-            curr.template right_move<true>();
-            curr.template top_move<true>();
-            curr.template bottom_move<true>();
+            curr_.template grow_all<TRACK, false>();
+            for(auto i = 0ul; i < curr_.cell().uniqueSize(); ++i) {
+                curr_.C1s[i].adj() = res.C1s[i].adj();
+                curr_.C2s[i].adj() = res.C2s[i].adj();
+                curr_.C3s[i].adj() = res.C3s[i].adj();
+                curr_.C4s[i].adj() = res.C4s[i].adj();
+                curr_.T1s[i].adj() = res.T1s[i].adj();
+                curr_.T2s[i].adj() = res.T2s[i].adj();
+                curr_.T3s[i].adj() = res.T3s[i].adj();
+                curr_.T4s[i].adj() = res.T4s[i].adj();
+            }
+            // curr.template left_move<true>();
+            // curr.template right_move<true>();
+            // curr.template top_move<true>();
+            // curr.template bottom_move<true>();
             stan::math::grad();
         });
     }
 }
 
-template <typename Scalar, typename Symmetry, bool ENABLE_AD>
+template <typename Scalar, typename Symmetry, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
 template <bool TRACK>
-void CTM<Scalar, Symmetry, ENABLE_AD>::computeRDM()
+void CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::computeRDM()
 {
     computeRDM_h<TRACK>();
     computeRDM_v<TRACK>();
@@ -210,21 +221,9 @@ void CTM<Scalar, Symmetry, ENABLE_AD>::computeRDM()
     HAS_RDM = true;
 }
 
-template <typename Scalar, typename Symmetry, bool ENABLE_AD>
-void CTM<Scalar, Symmetry, ENABLE_AD>::info() const
+template <typename Scalar, typename Symmetry, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
+void CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::info() const
 {
-    // std::string mode_string = "";
-    // switch(init_m) {
-    // case INIT::FROM_TRIVIAL: {
-    //     mode_string = "FROM_TRIVIAL";
-    //     break;
-    // }
-    // case INIT::FROM_A: {
-    //     mode_string = "FROM_A";
-    //     break;
-    // }
-    // }
-
     fmt::print("\tCTM(χ={}, {}): UnitCell=({}x{}), init={}\n", chi, Symmetry::name(), cell_.Lx, cell_.Ly, init_m);
     // std::cout << "CTM(χ=" << chi << "): UnitCell=(" << cell_.Lx << "x" << cell_.Ly << ")"
     //           << ", init=" << mode_string << std::endl;
@@ -247,8 +246,8 @@ void CTM<Scalar, Symmetry, ENABLE_AD>::info() const
     // }
 }
 
-template <typename Scalar, typename Symmetry, bool ENABLE_AD>
-bool CTM<Scalar, Symmetry, ENABLE_AD>::checkConvergence(typename ScalarTraits<Scalar>::Real epsilon)
+template <typename Scalar, typename Symmetry, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
+bool CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::checkConvergence(typename ScalarTraits<Scalar>::Real epsilon)
 {
     for(int x = 0; x < cell_.Lx; ++x) {
         for(int y = 0; y < cell_.Ly; ++y) {
@@ -270,9 +269,9 @@ bool CTM<Scalar, Symmetry, ENABLE_AD>::checkConvergence(typename ScalarTraits<Sc
     return true;
 }
 
-template <typename Scalar, typename Symmetry, bool ENABLE_AD>
+template <typename Scalar, typename Symmetry, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
 template <bool TRACK>
-void CTM<Scalar, Symmetry, ENABLE_AD>::computeRDM_h()
+void CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::computeRDM_h()
 {
     rho_h = TMatrix<Tensor<Scalar, 2, 2, Symmetry, ENABLE_AD>>(cell_.pattern);
     rho1_h = TMatrix<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>>(cell_.pattern);
@@ -326,9 +325,9 @@ void CTM<Scalar, Symmetry, ENABLE_AD>::computeRDM_h()
     }
 }
 
-template <typename Scalar, typename Symmetry, bool ENABLE_AD>
+template <typename Scalar, typename Symmetry, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
 template <bool TRACK>
-void CTM<Scalar, Symmetry, ENABLE_AD>::computeRDM_v()
+void CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::computeRDM_v()
 {
     rho_v = TMatrix<Tensor<Scalar, 2, 2, Symmetry, ENABLE_AD>>(cell_.pattern);
     rho1_v = TMatrix<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>>(cell_.pattern);
@@ -375,32 +374,19 @@ void CTM<Scalar, Symmetry, ENABLE_AD>::computeRDM_v()
     }
 }
 
-template <typename Scalar, typename Symmetry, bool ENABLE_AD>
-template <bool TRACK>
-void CTM<Scalar, Symmetry, ENABLE_AD>::computeRDM_1s()
+template <typename Scalar, typename Symmetry, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
+template <bool TRACK, bool CP>
+void CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::left_move()
 {
-    // rho_1s = TMatrix<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>>(cell_.pattern);
-    // for(int x = 0; x < cell_.Lx; x++) {
-    //     for(int y = 0; y < cell_.Ly; y++) {
-    //         if(rho_1s.isChanged(x, y)) { continue; }
-    //         auto C2T2 = C2s(x + 1, y - 1).template contract<std::array{-1, 1}, std::array{-2, -3, 1, -4}, 3>(T2s(x + 1, y));
-    //         auto C2T2C3 = C2T2.template contract<std::array{-1, -2, -3, 1}, std::array{1, -1}, 3>(C3s(x + 1, y + 1));
-    //         auto C2T2C3T3 = C2T2C3.template contract<std::array{-1, -2, -3, 1}, std::array{-4, -5, -6, 1}, 3>(T3s(x, y + 1));
-    //         auto C2T2C3T3C4 = C2T2C3T3.template contract<std::array{-1, -2, -3, -5, -6, 1}, std::array{-4, 1}, 3>(C4s(x - 1, y + 1));
-    //     }
-    // }
-}
+    constexpr bool TRACK_INNER = TRACK ? not CP : false;
+    auto curr = *this;
 
-template <typename Scalar, typename Symmetry, bool ENABLE_AD>
-template <bool TRACK>
-void CTM<Scalar, Symmetry, ENABLE_AD>::left_move()
-{
-    TMatrix<Tensor<Scalar, 1, 3, Symmetry, TRACK>> P1(cell_.pattern);
-    TMatrix<Tensor<Scalar, 3, 1, Symmetry, TRACK>> P2(cell_.pattern);
+    TMatrix<Tensor<Scalar, 1, 3, Symmetry, TRACK_INNER>> P1(cell_.pattern);
+    TMatrix<Tensor<Scalar, 3, 1, Symmetry, TRACK_INNER>> P2(cell_.pattern);
 
-    TMatrix<Tensor<Scalar, 0, 2, Symmetry, ENABLE_AD>> C1_new(cell_.pattern);
-    TMatrix<Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>> T4_new(cell_.pattern);
-    TMatrix<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>> C4_new(cell_.pattern);
+    TMatrix<Tensor<Scalar, 0, 2, Symmetry, TRACK_INNER>> C1_new(cell_.pattern);
+    TMatrix<Tensor<Scalar, 1, 3, Symmetry, TRACK_INNER>> T4_new(cell_.pattern);
+    TMatrix<Tensor<Scalar, 1, 1, Symmetry, TRACK_INNER>> C4_new(cell_.pattern);
 
     C1s.resetChange();
     C4s.resetChange();
@@ -410,12 +396,12 @@ void CTM<Scalar, Symmetry, ENABLE_AD>::left_move()
         for(int y = 0; y < cell_.Ly; y++) {
             assert(P1.isChanged(x, y) == P2.isChanged(x, y));
             if(P1.isChanged(x, y)) { continue; }
-            std::tie(P1(x, y), P2(x, y)) = get_projectors<TRACK>(x, y, Opts::DIRECTION::LEFT); // move assignment
+            std::tie(P1(x, y), P2(x, y)) = get_projectors<TRACK_INNER>(x, y, Opts::DIRECTION::LEFT); // move assignment
         }
         for(int y = 0; y < cell_.Ly; y++) {
             assert(C1_new.isChanged(x, y - 1) == T4_new.isChanged(x, y) and C1_new.isChanged(x, y - 1) == C4_new.isChanged(x, y + 1));
             if(C1_new.isChanged(x, y - 1)) { continue; }
-            std::tie(C1_new(x, y - 1), T4_new(x, y), C4_new(x, y + 1)) = renormalize_left<ENABLE_AD>(x, y, P1, P2);
+            std::tie(C1_new(x, y - 1), T4_new(x, y), C4_new(x, y + 1)) = renormalize_left<TRACK_INNER>(x, y, P1, P2);
         }
         for(int y = 0; y < cell_.Ly; y++) {
             assert(C1s.isChanged(x, y) == T4s.isChanged(x, y) and C1s.isChanged(x, y) == C4s.isChanged(x, y));
@@ -440,18 +426,33 @@ void CTM<Scalar, Symmetry, ENABLE_AD>::left_move()
             SPDLOG_INFO("site: ({},{})\tC4new: ([{}],[{}])", x, y, C4s(x, y).uncoupledDomain()[0].dim(), C4s(x, y).uncoupledCodomain()[0].dim());
         }
     }
+    if constexpr(TRACK and CP) {
+        stan::math::reverse_pass_callback([curr_ = curr, res = *this]() mutable {
+            stan::math::nested_rev_autodiff nested;
+            curr_.template left_move<TRACK, false>();
+            for(auto i = 0ul; i < curr_.cell().uniqueSize(); ++i) {
+                curr_.C1s[i].adj() = res.C1s[i].adj();
+                curr_.C4s[i].adj() = res.C4s[i].adj();
+                curr_.T4s[i].adj() = res.T4s[i].adj();
+            }
+            stan::math::grad();
+        });
+    }
 }
 
-template <typename Scalar, typename Symmetry, bool ENABLE_AD>
-template <bool TRACK>
-void CTM<Scalar, Symmetry, ENABLE_AD>::right_move()
+template <typename Scalar, typename Symmetry, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
+template <bool TRACK, bool CP>
+void CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::right_move()
 {
-    TMatrix<Tensor<Scalar, 1, 3, Symmetry, TRACK>> P1(cell_.pattern);
-    TMatrix<Tensor<Scalar, 3, 1, Symmetry, TRACK>> P2(cell_.pattern);
+    constexpr bool TRACK_INNER = TRACK ? not CP : false;
+    auto curr = *this;
 
-    TMatrix<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>> C2_new(cell_.pattern);
-    TMatrix<Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>> T2_new(cell_.pattern);
-    TMatrix<Tensor<Scalar, 2, 0, Symmetry, ENABLE_AD>> C3_new(cell_.pattern);
+    TMatrix<Tensor<Scalar, 1, 3, Symmetry, TRACK_INNER>> P1(cell_.pattern);
+    TMatrix<Tensor<Scalar, 3, 1, Symmetry, TRACK_INNER>> P2(cell_.pattern);
+
+    TMatrix<Tensor<Scalar, 1, 1, Symmetry, TRACK_INNER>> C2_new(cell_.pattern);
+    TMatrix<Tensor<Scalar, 3, 1, Symmetry, TRACK_INNER>> T2_new(cell_.pattern);
+    TMatrix<Tensor<Scalar, 2, 0, Symmetry, TRACK_INNER>> C3_new(cell_.pattern);
 
     C2s.resetChange();
     C3s.resetChange();
@@ -461,12 +462,12 @@ void CTM<Scalar, Symmetry, ENABLE_AD>::right_move()
         for(int y = 0; y < cell_.Ly; y++) {
             assert(P1.isChanged(x, y) == P2.isChanged(x, y));
             if(P1.isChanged(x, y)) { continue; }
-            std::tie(P1(x, y), P2(x, y)) = get_projectors<TRACK>(x, y, Opts::DIRECTION::RIGHT); // move assignment
+            std::tie(P1(x, y), P2(x, y)) = get_projectors<TRACK_INNER>(x, y, Opts::DIRECTION::RIGHT); // move assignment
         }
         for(int y = 0; y < cell_.Ly; y++) {
             assert(C2_new.isChanged(x, y - 1) == T2_new.isChanged(x, y) and C2_new.isChanged(x, y - 1) == C3_new.isChanged(x, y + 1));
             if(C2_new.isChanged(x, y - 1)) { continue; }
-            std::tie(C2_new(x, y - 1), T2_new(x, y), C3_new(x, y + 1)) = renormalize_right<ENABLE_AD>(x, y, P1, P2);
+            std::tie(C2_new(x, y - 1), T2_new(x, y), C3_new(x, y + 1)) = renormalize_right<TRACK_INNER>(x, y, P1, P2);
         }
         for(int y = 0; y < cell_.Ly; y++) {
             assert(C2s.isChanged(x, y) == T2s.isChanged(x, y) and C2s.isChanged(x, y) == C3s.isChanged(x, y));
@@ -490,18 +491,33 @@ void CTM<Scalar, Symmetry, ENABLE_AD>::right_move()
                         C3s(x, y).coupledCodomain().dim());
         }
     }
+    if constexpr(TRACK and CP) {
+        stan::math::reverse_pass_callback([curr_ = curr, res = *this]() mutable {
+            stan::math::nested_rev_autodiff nested;
+            curr_.template right_move<TRACK, false>();
+            for(auto i = 0ul; i < curr_.cell().uniqueSize(); ++i) {
+                curr_.C2s[i].adj() = res.C2s[i].adj();
+                curr_.C3s[i].adj() = res.C3s[i].adj();
+                curr_.T2s[i].adj() = res.T2s[i].adj();
+            }
+            stan::math::grad();
+        });
+    }
 }
 
-template <typename Scalar, typename Symmetry, bool ENABLE_AD>
-template <bool TRACK>
-void CTM<Scalar, Symmetry, ENABLE_AD>::top_move()
+template <typename Scalar, typename Symmetry, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
+template <bool TRACK, bool CP>
+void CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::top_move()
 {
-    TMatrix<Tensor<Scalar, 1, 3, Symmetry, TRACK>> P1(cell_.pattern);
-    TMatrix<Tensor<Scalar, 3, 1, Symmetry, TRACK>> P2(cell_.pattern);
+    constexpr bool TRACK_INNER = TRACK ? not CP : false;
+    auto curr = *this;
 
-    TMatrix<Tensor<Scalar, 0, 2, Symmetry, ENABLE_AD>> C1_new(cell_.pattern);
-    TMatrix<Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>> T1_new(cell_.pattern);
-    TMatrix<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>> C2_new(cell_.pattern);
+    TMatrix<Tensor<Scalar, 1, 3, Symmetry, TRACK_INNER>> P1(cell_.pattern);
+    TMatrix<Tensor<Scalar, 3, 1, Symmetry, TRACK_INNER>> P2(cell_.pattern);
+
+    TMatrix<Tensor<Scalar, 0, 2, Symmetry, TRACK_INNER>> C1_new(cell_.pattern);
+    TMatrix<Tensor<Scalar, 1, 3, Symmetry, TRACK_INNER>> T1_new(cell_.pattern);
+    TMatrix<Tensor<Scalar, 1, 1, Symmetry, TRACK_INNER>> C2_new(cell_.pattern);
 
     C1s.resetChange();
     C2s.resetChange();
@@ -511,12 +527,12 @@ void CTM<Scalar, Symmetry, ENABLE_AD>::top_move()
         for(int x = 0; x < cell_.Lx; x++) {
             assert(P1.isChanged(x, y) == P2.isChanged(x, y));
             if(P1.isChanged(x, y)) { continue; }
-            std::tie(P1(x, y), P2(x, y)) = get_projectors<TRACK>(x, y, Opts::DIRECTION::TOP); // move assignment
+            std::tie(P1(x, y), P2(x, y)) = get_projectors<TRACK_INNER>(x, y, Opts::DIRECTION::TOP); // move assignment
         }
         for(int x = 0; x < cell_.Lx; x++) {
             assert(C1_new.isChanged(x - 1, y) == C2_new.isChanged(x + 1, y) and C1_new.isChanged(x - 1, y) == T1_new.isChanged(x, y));
             if(C1_new.isChanged(x - 1, y)) { continue; }
-            std::tie(C1_new(x - 1, y), T1_new(x, y), C2_new(x + 1, y)) = renormalize_top<ENABLE_AD>(x, y, P1, P2);
+            std::tie(C1_new(x - 1, y), T1_new(x, y), C2_new(x + 1, y)) = renormalize_top<TRACK_INNER>(x, y, P1, P2);
         }
         for(int x = 0; x < cell_.Lx; x++) {
             assert(C1s.isChanged(x, y) == C2s.isChanged(x, y) and C1s.isChanged(x, y) == T1s.isChanged(x, y));
@@ -540,18 +556,33 @@ void CTM<Scalar, Symmetry, ENABLE_AD>::top_move()
             SPDLOG_INFO("site: ({},{})\tC2new: ([{}],[{}])", x, y, C2s(x, y).uncoupledDomain()[0].dim(), C2s(x, y).uncoupledCodomain()[0].dim());
         }
     }
+    if constexpr(TRACK and CP) {
+        stan::math::reverse_pass_callback([curr_ = curr, res = *this]() mutable {
+            stan::math::nested_rev_autodiff nested;
+            curr_.template top_move<TRACK, false>();
+            for(auto i = 0ul; i < curr_.cell().uniqueSize(); ++i) {
+                curr_.C1s[i].adj() = res.C1s[i].adj();
+                curr_.C2s[i].adj() = res.C2s[i].adj();
+                curr_.T1s[i].adj() = res.T1s[i].adj();
+            }
+            stan::math::grad();
+        });
+    }
 }
 
-template <typename Scalar, typename Symmetry, bool ENABLE_AD>
-template <bool TRACK>
-void CTM<Scalar, Symmetry, ENABLE_AD>::bottom_move()
+template <typename Scalar, typename Symmetry, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
+template <bool TRACK, bool CP>
+void CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::bottom_move()
 {
-    TMatrix<Tensor<Scalar, 1, 3, Symmetry, TRACK>> P1(cell_.pattern);
-    TMatrix<Tensor<Scalar, 3, 1, Symmetry, TRACK>> P2(cell_.pattern);
+    constexpr bool TRACK_INNER = TRACK ? not CP : false;
+    auto curr = *this;
 
-    TMatrix<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>> C4_new(cell_.pattern);
-    TMatrix<Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>> T3_new(cell_.pattern);
-    TMatrix<Tensor<Scalar, 2, 0, Symmetry, ENABLE_AD>> C3_new(cell_.pattern);
+    TMatrix<Tensor<Scalar, 1, 3, Symmetry, TRACK_INNER>> P1(cell_.pattern);
+    TMatrix<Tensor<Scalar, 3, 1, Symmetry, TRACK_INNER>> P2(cell_.pattern);
+
+    TMatrix<Tensor<Scalar, 1, 1, Symmetry, TRACK_INNER>> C4_new(cell_.pattern);
+    TMatrix<Tensor<Scalar, 3, 1, Symmetry, TRACK_INNER>> T3_new(cell_.pattern);
+    TMatrix<Tensor<Scalar, 2, 0, Symmetry, TRACK_INNER>> C3_new(cell_.pattern);
 
     C4s.resetChange();
     C3s.resetChange();
@@ -561,12 +592,12 @@ void CTM<Scalar, Symmetry, ENABLE_AD>::bottom_move()
         for(int x = 0; x < cell_.Lx; x++) {
             assert(P1.isChanged(x, y) == P2.isChanged(x, y));
             if(P1.isChanged(x, y)) { continue; }
-            std::tie(P1(x, y), P2(x, y)) = get_projectors<TRACK>(x, y, Opts::DIRECTION::BOTTOM); // move assignment
+            std::tie(P1(x, y), P2(x, y)) = get_projectors<TRACK_INNER>(x, y, Opts::DIRECTION::BOTTOM); // move assignment
         }
         for(int x = 0; x < cell_.Lx; x++) {
             assert(C4_new.isChanged(x - 1, y) == C3_new.isChanged(x + 1, y) and C4_new.isChanged(x - 1, y) == T3_new.isChanged(x, y));
             if(C4_new.isChanged(x - 1, y)) { continue; }
-            std::tie(C4_new(x - 1, y), T3_new(x, y), C3_new(x + 1, y)) = renormalize_bottom<ENABLE_AD>(x, y, P1, P2);
+            std::tie(C4_new(x - 1, y), T3_new(x, y), C3_new(x + 1, y)) = renormalize_bottom<TRACK_INNER>(x, y, P1, P2);
         }
         for(int x = 0; x < cell_.Lx; x++) {
             assert(C4s.isChanged(x, y) == C3s.isChanged(x, y) and C4s.isChanged(x, y) == T3s.isChanged(x, y));
@@ -590,22 +621,36 @@ void CTM<Scalar, Symmetry, ENABLE_AD>::bottom_move()
                         C3s(x, y).coupledCodomain().dim());
         }
     }
+    if constexpr(TRACK and CP) {
+        stan::math::reverse_pass_callback([curr_ = curr, res = *this]() mutable {
+            stan::math::nested_rev_autodiff nested;
+            curr_.template bottom_move<TRACK, false>();
+            for(auto i = 0ul; i < curr_.cell().uniqueSize(); ++i) {
+                curr_.C3s[i].adj() = res.C3s[i].adj();
+                curr_.C4s[i].adj() = res.C4s[i].adj();
+                curr_.T3s[i].adj() = res.T3s[i].adj();
+            }
+            stan::math::grad();
+        });
+    }
 }
 
-template <typename Scalar, typename Symmetry, bool ENABLE_AD>
-template <bool TRACK>
+template <typename Scalar, typename Symmetry, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
+template <bool TRACK, bool CP>
 std::pair<Tensor<Scalar, 1, 3, Symmetry, TRACK>, Tensor<Scalar, 3, 1, Symmetry, TRACK>>
-CTM<Scalar, Symmetry, ENABLE_AD>::get_projectors(const int x, const int y, const Opts::DIRECTION dir) XPED_CONST
+CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::get_projectors(const int x, const int y, const Opts::DIRECTION dir) XPED_CONST
 {
+    constexpr bool TRACK_INNER = TRACK ? not CP : false;
+
     Tensor<Scalar, 1, 3, Symmetry, TRACK> P1;
     Tensor<Scalar, 3, 1, Symmetry, TRACK> P2;
-    Tensor<Scalar, 3, 3, Symmetry, TRACK> Q1, Q2, Q3, Q4;
+    Tensor<Scalar, 3, 3, Symmetry, TRACK_INNER> Q1, Q2, Q3, Q4;
     switch(dir) {
     case Opts::DIRECTION::LEFT: {
         switch(proj_m) {
         case Opts::PROJECTION::CORNER: {
-            Q1 = contractCorner<TRACK>(x, y, Opts::CORNER::UPPER_LEFT);
-            Q4 = contractCorner<TRACK>(x, y + 1, Opts::CORNER::LOWER_LEFT);
+            Q1 = contractCorner<TRACK_INNER>(x, y, Opts::CORNER::UPPER_LEFT);
+            Q4 = contractCorner<TRACK_INNER>(x, y + 1, Opts::CORNER::LOWER_LEFT);
             // SPDLOG_INFO("Q1: ({}[{}],{}[{}])",
             //                 Q1.coupledDomain().fullDim(),
             //                 Q1.coupledDomain().dim(),
@@ -633,8 +678,8 @@ CTM<Scalar, Symmetry, ENABLE_AD>::get_projectors(const int x, const int y, const
     case Opts::DIRECTION::RIGHT: {
         switch(proj_m) {
         case Opts::PROJECTION::CORNER: {
-            Q2 = contractCorner<TRACK>(x, y, Opts::CORNER::UPPER_RIGHT);
-            Q3 = contractCorner<TRACK>(x, y + 1, Opts::CORNER::LOWER_RIGHT);
+            Q2 = contractCorner<TRACK_INNER>(x, y, Opts::CORNER::UPPER_RIGHT);
+            Q3 = contractCorner<TRACK_INNER>(x, y + 1, Opts::CORNER::LOWER_RIGHT);
             // SPDLOG_INFO("Q2: ({}[{}],{}[{}])",
             //                 Q2.coupledDomain().fullDim(),
             //                 Q2.coupledDomain().dim(),
@@ -662,8 +707,8 @@ CTM<Scalar, Symmetry, ENABLE_AD>::get_projectors(const int x, const int y, const
     case Opts::DIRECTION::TOP: {
         switch(proj_m) {
         case Opts::PROJECTION::CORNER: {
-            Q1 = contractCorner<TRACK>(x, y, Opts::CORNER::UPPER_LEFT);
-            Q2 = contractCorner<TRACK>(x + 1, y, Opts::CORNER::UPPER_RIGHT);
+            Q1 = contractCorner<TRACK_INNER>(x, y, Opts::CORNER::UPPER_LEFT);
+            Q2 = contractCorner<TRACK_INNER>(x + 1, y, Opts::CORNER::UPPER_RIGHT);
             // SPDLOG_INFO("Q1: ({}[{}],{}[{}])",
             //                 Q1.coupledDomain().fullDim(),
             //                 Q1.coupledDomain().dim(),
@@ -691,8 +736,8 @@ CTM<Scalar, Symmetry, ENABLE_AD>::get_projectors(const int x, const int y, const
     case Opts::DIRECTION::BOTTOM: {
         switch(proj_m) {
         case Opts::PROJECTION::CORNER: {
-            Q4 = contractCorner<TRACK>(x, y, Opts::CORNER::LOWER_LEFT);
-            Q3 = contractCorner<TRACK>(x + 1, y, Opts::CORNER::LOWER_RIGHT);
+            Q4 = contractCorner<TRACK_INNER>(x, y, Opts::CORNER::LOWER_LEFT);
+            Q3 = contractCorner<TRACK_INNER>(x + 1, y, Opts::CORNER::LOWER_RIGHT);
             // SPDLOG_INFO("Q4: ({}[{}],{}[{}])",
             //                 Q4.coupledDomain().fullDim(),
             //                 Q4.coupledDomain().dim(),
@@ -718,122 +763,228 @@ CTM<Scalar, Symmetry, ENABLE_AD>::get_projectors(const int x, const int y, const
         break;
     }
     }
+    if constexpr(TRACK and CP) {
+        stan::math::reverse_pass_callback([P1_ = P1, P2_ = P2, curr = *this, x, y, dir]() mutable {
+            stan::math::nested_rev_autodiff nested;
+            auto [P1__, P2__] = curr.template contractCorner<TRACK, false>(x, y, dir);
+            P1__.adj() = P1_.adj();
+            P2__.adj() = P2_.adj();
+            stan::math::grad();
+        });
+    }
     return std::make_pair(P1, P2);
 }
 
-template <typename Scalar, typename Symmetry, bool ENABLE_AD>
-template <bool TRACK>
+template <typename Scalar, typename Symmetry, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
+template <bool TRACK, bool CP>
 std::tuple<Tensor<Scalar, 0, 2, Symmetry, TRACK>, Tensor<Scalar, 1, 3, Symmetry, TRACK>, Tensor<Scalar, 1, 1, Symmetry, TRACK>>
-CTM<Scalar, Symmetry, ENABLE_AD>::renormalize_left(const int x,
-                                                   const int y,
-                                                   XPED_CONST TMatrix<Tensor<Scalar, 1, 3, Symmetry, TRACK>>& P1,
-                                                   XPED_CONST TMatrix<Tensor<Scalar, 3, 1, Symmetry, TRACK>>& P2,
-                                                   bool NORMALIZE) XPED_CONST
+CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::renormalize_left(const int x,
+                                                           const int y,
+                                                           XPED_CONST TMatrix<Tensor<Scalar, 1, 3, Symmetry, TRACK>>& P1,
+                                                           XPED_CONST TMatrix<Tensor<Scalar, 3, 1, Symmetry, TRACK>>& P2,
+                                                           bool NORMALIZE) XPED_CONST
 {
+    constexpr bool TRACK_INNER = TRACK ? not CP : false;
+
     Tensor<Scalar, 0, 2, Symmetry, TRACK> C1_new;
     Tensor<Scalar, 1, 3, Symmetry, TRACK> T4_new;
     Tensor<Scalar, 1, 1, Symmetry, TRACK> C4_new;
-    C1_new = (P1(x, y - 1) * (C1s(x - 1, y - 1).template permute<TRACK, -1, 0, 1>() * T1s(x, y - 1)).template permute<TRACK, -2, 0, 2, 3, 1>())
-                 .template permute<TRACK, +1, 0, 1>();
-    if(NORMALIZE) C1_new = C1_new * (1. / C1_new.maxNorm());
-    C4_new = ((C4s(x - 1, y + 1) * T3s(x, y + 1).template permute<TRACK, 2, 2, 3, 0, 1>()).template permute<TRACK, 0, 1, 0, 2, 3>() * P2(x, y))
-                 .template permute<TRACK, 0, 1, 0>();
-    if(NORMALIZE) C4_new = C4_new * (1. / C4_new.maxNorm());
-    auto tmp2 = P1(x, y).template permute<TRACK, -2, 0, 2, 3, 1>() * T4s(x - 1, y).template permute<TRACK, 0, 1, 0, 2, 3>();
-    auto tmp3 = tmp2.template permute<TRACK, -1, 0, 2, 3, 5, 4, 1>() * A->As(x, y).template permute<TRACK, 0, 0, 3, 1, 2, 4>();
-    auto tmp4 = (tmp3.template permute<TRACK, 0, 0, 2, 4, 5, 3, 1, 6>() * A->Adags(x, y).template permute<TRACK, 0, 0, 4, 2, 1, 3>())
-                    .template permute<TRACK, +1, 0, 3, 5, 1, 2, 4>();
-    T4_new = (tmp4 * P2(x, y - 1)).template permute<TRACK, +2, 3, 0, 1, 2>();
-    if(NORMALIZE) T4_new = T4_new * (1. / T4_new.maxNorm());
+
+    Tensor<Scalar, 0, 2, Symmetry, TRACK_INNER> C1_new_tmp;
+    Tensor<Scalar, 1, 3, Symmetry, TRACK_INNER> T4_new_tmp;
+    Tensor<Scalar, 1, 1, Symmetry, TRACK_INNER> C4_new_tmp;
+    // C1_new_tmp = (operator*<TRACK_INNER>(P1(x, y - 1),
+    //                                      (operator*<TRACK_INNER>(C1s(x - 1, y - 1).template permute<TRACK_INNER, -1, 0, 1>(),
+    //                                                              T1s(x, y - 1).template permute<TRACK_INNER, -2, 0, 2, 3, 1>()))))
+    //                  .template permute<TRACK_INNER, +1, 0, 1>();
+    C1_new_tmp = operator*<TRACK_INNER>(P1(x, y - 1),
+                                        operator*<TRACK_INNER>(C1s(x - 1, y - 1).template permute<TRACK_INNER, -1, 0, 1>(), T1s(x, y - 1))
+                                            .template permute<TRACK_INNER, -2, 0, 2, 3, 1>())
+                     .template permute<TRACK_INNER, +1, 0, 1>();
+
+    C1_new = NORMALIZE ? C1_new_tmp * (1. / C1_new_tmp.maxNorm()) : C1_new_tmp;
+    C4_new_tmp = operator*<TRACK_INNER>(operator*<TRACK_INNER>(C4s(x - 1, y + 1), T3s(x, y + 1).template permute<TRACK_INNER, 2, 2, 3, 0, 1>())
+                                            .template permute<TRACK_INNER, 0, 1, 0, 2, 3>(),
+                                        P2(x, y))
+                     .template permute<TRACK_INNER, 0, 1, 0>();
+    C4_new = NORMALIZE ? C4_new_tmp * (1. / C4_new_tmp.maxNorm()) : C4_new_tmp;
+    auto tmp2 = P1(x, y).template permute<TRACK_INNER, -2, 0, 2, 3, 1>() * T4s(x - 1, y).template permute<TRACK_INNER, 0, 1, 0, 2, 3>();
+    auto tmp3 = tmp2.template permute<TRACK_INNER, -1, 0, 2, 3, 5, 4, 1>() * A->As(x, y).template permute<TRACK_INNER, 0, 0, 3, 1, 2, 4>();
+    auto tmp4 = (tmp3.template permute<TRACK_INNER, 0, 0, 2, 4, 5, 3, 1, 6>() * A->Adags(x, y).template permute<TRACK_INNER, 0, 0, 4, 2, 1, 3>())
+                    .template permute<TRACK_INNER, +1, 0, 3, 5, 1, 2, 4>();
+    T4_new_tmp = operator*<TRACK_INNER>(tmp4, P2(x, y - 1)).template permute<TRACK_INNER, +2, 3, 0, 1, 2>();
+    T4_new = NORMALIZE ? T4_new_tmp * (1. / T4_new_tmp.maxNorm()) : T4_new_tmp;
+
+    if constexpr(TRACK and CP) {
+        stan::math::reverse_pass_callback([C1_new, C4_new, T4_new, P1_ = P1, P2_ = P2, curr = *this, x, y, NORMALIZE]() mutable {
+            stan::math::nested_rev_autodiff nested;
+            auto [C1_new_, T4_new_, C4_new_] = curr.template renormalize_left<TRACK, false>(x, y, P1_, P2_, NORMALIZE);
+            C1_new_.adj() = C1_new.adj();
+            C4_new_.adj() = C4_new.adj();
+            T4_new_.adj() = T4_new.adj();
+            stan::math::grad();
+        });
+    }
+
     return std::make_tuple(C1_new, T4_new, C4_new);
 }
 
-template <typename Scalar, typename Symmetry, bool ENABLE_AD>
-template <bool TRACK>
+template <typename Scalar, typename Symmetry, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
+template <bool TRACK, bool CP>
 std::tuple<Tensor<Scalar, 1, 1, Symmetry, TRACK>, Tensor<Scalar, 3, 1, Symmetry, TRACK>, Tensor<Scalar, 2, 0, Symmetry, TRACK>>
-CTM<Scalar, Symmetry, ENABLE_AD>::renormalize_right(const int x,
-                                                    const int y,
-                                                    XPED_CONST TMatrix<Tensor<Scalar, 1, 3, Symmetry, TRACK>>& P1,
-                                                    XPED_CONST TMatrix<Tensor<Scalar, 3, 1, Symmetry, TRACK>>& P2,
-                                                    bool NORMALIZE) XPED_CONST
+CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::renormalize_right(const int x,
+                                                            const int y,
+                                                            XPED_CONST TMatrix<Tensor<Scalar, 1, 3, Symmetry, TRACK>>& P1,
+                                                            XPED_CONST TMatrix<Tensor<Scalar, 3, 1, Symmetry, TRACK>>& P2,
+                                                            bool NORMALIZE) XPED_CONST
 {
+    constexpr bool TRACK_INNER = TRACK ? not CP : false;
+
     Tensor<Scalar, 1, 1, Symmetry, TRACK> C2_new;
     Tensor<Scalar, 3, 1, Symmetry, TRACK> T2_new;
     Tensor<Scalar, 2, 0, Symmetry, TRACK> C3_new;
-    C2_new = (T1s(x, y - 1).template permute<TRACK, -2, 0, 2, 3, 1>() * C2s(x + 1, y - 1)).template permute<TRACK, +2, 0, 3, 1, 2>() * P2(x, y - 1);
-    if(NORMALIZE) C2_new = C2_new * (1. / C2_new.maxNorm());
-    C3_new = (P1(x, y) * (C3s(x + 1, y + 1).template permute<TRACK, +1, 0, 1>() * T3s(x, y + 1).template permute<TRACK, +2, 3, 2, 0, 1>())
-                             .template permute<TRACK, -2, 0, 2, 3, 1>())
-                 .template permute<TRACK, -1, 0, 1>();
-    if(NORMALIZE) C3_new = C3_new * (1. / C3_new.maxNorm());
-    auto tmp2 = P1(x, y - 1).template permute<TRACK, -2, 0, 2, 3, 1>() * T2s(x + 1, y).template permute<TRACK, +2, 2, 3, 0, 1>();
-    auto tmp3 = tmp2.template permute<TRACK, -1, 0, 2, 3, 5, 1, 4>() * A->As(x, y).template permute<TRACK, 0, 1, 2, 0, 3, 4>();
-    auto tmp4 = (tmp3.template permute<TRACK, 0, 0, 2, 4, 5, 1, 3, 6>() * A->Adags(x, y).template permute<TRACK, 0, 1, 3, 2, 0, 4>())
-                    .template permute<TRACK, +1, 0, 2, 4, 1, 3, 5>();
-    T2_new = (tmp4 * P2(x, y)).template permute<TRACK, 0, 1, 2, 0, 3>();
-    if(NORMALIZE) T2_new = T2_new * (1. / T2_new.maxNorm());
+
+    Tensor<Scalar, 1, 1, Symmetry, TRACK_INNER> C2_new_tmp;
+    Tensor<Scalar, 3, 1, Symmetry, TRACK_INNER> T2_new_tmp;
+    Tensor<Scalar, 2, 0, Symmetry, TRACK_INNER> C3_new_tmp;
+
+    C2_new_tmp = operator*<TRACK_INNER>(operator*<TRACK_INNER>(T1s(x, y - 1).template permute<TRACK_INNER, -2, 0, 2, 3, 1>(), C2s(x + 1, y - 1))
+                                            .template permute<TRACK_INNER, +2, 0, 3, 1, 2>(),
+                                        P2(x, y - 1));
+    C2_new = NORMALIZE ? C2_new_tmp * (1. / C2_new_tmp.maxNorm()) : C2_new_tmp;
+    C3_new_tmp = operator*<TRACK_INNER>(P1(x, y),
+                                        operator*<TRACK_INNER>(C3s(x + 1, y + 1).template permute<TRACK_INNER, +1, 0, 1>(),
+                                                               T3s(x, y + 1).template permute<TRACK_INNER, +2, 3, 2, 0, 1>())
+                                            .template permute<TRACK_INNER, -2, 0, 2, 3, 1>())
+                     .template permute<TRACK_INNER, -1, 0, 1>();
+    C3_new = NORMALIZE ? C3_new_tmp * (1. / C3_new_tmp.maxNorm()) : C3_new_tmp;
+    auto tmp2 = P1(x, y - 1).template permute<TRACK_INNER, -2, 0, 2, 3, 1>() * T2s(x + 1, y).template permute<TRACK_INNER, +2, 2, 3, 0, 1>();
+    auto tmp3 = tmp2.template permute<TRACK_INNER, -1, 0, 2, 3, 5, 1, 4>() * A->As(x, y).template permute<TRACK_INNER, 0, 1, 2, 0, 3, 4>();
+    auto tmp4 = (tmp3.template permute<TRACK_INNER, 0, 0, 2, 4, 5, 1, 3, 6>() * A->Adags(x, y).template permute<TRACK_INNER, 0, 1, 3, 2, 0, 4>())
+                    .template permute<TRACK_INNER, +1, 0, 2, 4, 1, 3, 5>();
+    T2_new_tmp = operator*<TRACK_INNER>(tmp4, P2(x, y)).template permute<TRACK_INNER, 0, 1, 2, 0, 3>();
+    T2_new = NORMALIZE ? T2_new_tmp * (1. / T2_new_tmp.maxNorm()) : T2_new_tmp;
+
+    if constexpr(TRACK and CP) {
+        stan::math::reverse_pass_callback([C2_new, C3_new, T2_new, P1_ = P1, P2_ = P2, curr = *this, x, y, NORMALIZE]() mutable {
+            stan::math::nested_rev_autodiff nested;
+            auto [C2_new_, T2_new_, C3_new_] = curr.template renormalize_right<TRACK, false>(x, y, P1_, P2_, NORMALIZE);
+            C2_new_.adj() = C2_new.adj();
+            C3_new_.adj() = C3_new.adj();
+            T2_new_.adj() = T2_new.adj();
+            stan::math::grad();
+        });
+    }
+
     return std::make_tuple(C2_new, T2_new, C3_new);
 }
 
-template <typename Scalar, typename Symmetry, bool ENABLE_AD>
-template <bool TRACK>
+template <typename Scalar, typename Symmetry, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
+template <bool TRACK, bool CP>
 std::tuple<Tensor<Scalar, 0, 2, Symmetry, TRACK>, Tensor<Scalar, 1, 3, Symmetry, TRACK>, Tensor<Scalar, 1, 1, Symmetry, TRACK>>
-CTM<Scalar, Symmetry, ENABLE_AD>::renormalize_top(const int x,
-                                                  const int y,
-                                                  XPED_CONST TMatrix<Tensor<Scalar, 1, 3, Symmetry, TRACK>>& P1,
-                                                  XPED_CONST TMatrix<Tensor<Scalar, 3, 1, Symmetry, TRACK>>& P2,
-                                                  bool NORMALIZE) XPED_CONST
+CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::renormalize_top(const int x,
+                                                          const int y,
+                                                          XPED_CONST TMatrix<Tensor<Scalar, 1, 3, Symmetry, TRACK>>& P1,
+                                                          XPED_CONST TMatrix<Tensor<Scalar, 3, 1, Symmetry, TRACK>>& P2,
+                                                          bool NORMALIZE) XPED_CONST
 {
+    constexpr bool TRACK_INNER = TRACK ? not CP : false;
+
     Tensor<Scalar, 0, 2, Symmetry, TRACK> C1_new;
     Tensor<Scalar, 1, 3, Symmetry, TRACK> T1_new;
     Tensor<Scalar, 1, 1, Symmetry, TRACK> C2_new;
-    C1_new = ((T4s(x - 1, y).template permute<TRACK, -2, 1, 2, 3, 0>() * C1s(x - 1, y - 1).template permute<TRACK, -1, 0, 1>())
-                  .template permute<TRACK, +2, 0, 3, 1, 2>() *
-              P2(x - 1, y))
-                 .template permute<TRACK, +1, 0, 1>();
-    if(NORMALIZE) C1_new = C1_new * (1. / C1_new.maxNorm());
-    C2_new = (P1(x, y) * (C2s(x + 1, y - 1) * T2s(x + 1, y).template permute<TRACK, +2, 2, 0, 1, 3>()).template permute<TRACK, -2, 0, 1, 2, 3>());
-    if(NORMALIZE) C2_new = C2_new * (1. / C2_new.maxNorm());
-    auto tmp2 = P1(x - 1, y).template permute<TRACK, -2, 0, 2, 3, 1>() * T1s(x, y - 1);
-    auto tmp3 = tmp2.template permute<TRACK, -1, 0, 2, 3, 5, 1, 4>() * A->As(x, y);
-    auto tmp4 = (tmp3.template permute<TRACK, 0, 0, 2, 4, 5, 1, 3, 6>() * A->Adags(x, y)).template permute<TRACK, +1, 0, 3, 5, 1, 2, 4>();
-    T1_new = (tmp4 * P2(x, y)).template permute<TRACK, +2, 0, 3, 1, 2>();
-    if(NORMALIZE) T1_new = T1_new * (1. / T1_new.maxNorm());
+
+    Tensor<Scalar, 0, 2, Symmetry, TRACK_INNER> C1_new_tmp;
+    Tensor<Scalar, 1, 3, Symmetry, TRACK_INNER> T1_new_tmp;
+    Tensor<Scalar, 1, 1, Symmetry, TRACK_INNER> C2_new_tmp;
+    C1_new_tmp = operator*<TRACK_INNER>(operator*<TRACK_INNER>(T4s(x - 1, y).template permute<TRACK_INNER, -2, 1, 2, 3, 0>(),
+                                                               C1s(x - 1, y - 1).template permute<TRACK_INNER, -1, 0, 1>())
+                                            .template permute<TRACK_INNER, +2, 0, 3, 1, 2>(),
+                                        P2(x - 1, y))
+                     .template permute<TRACK_INNER, +1, 0, 1>();
+    C1_new = NORMALIZE ? C1_new_tmp * (1. / C1_new_tmp.maxNorm()) : C1_new_tmp;
+    C2_new_tmp = operator*<TRACK_INNER>(P1(x, y),
+                                        operator*<TRACK_INNER>(C2s(x + 1, y - 1), T2s(x + 1, y).template permute<TRACK_INNER, +2, 2, 0, 1, 3>())
+                                            .template permute<TRACK_INNER, -2, 0, 1, 2, 3>());
+    C2_new = NORMALIZE ? C2_new_tmp * (1. / C2_new_tmp.maxNorm()) : C2_new_tmp;
+    auto tmp2 = operator*<TRACK_INNER>(P1(x - 1, y).template permute<TRACK_INNER, -2, 0, 2, 3, 1>(), T1s(x, y - 1));
+    auto tmp3 = operator*<TRACK_INNER>(tmp2.template permute<TRACK_INNER, -1, 0, 2, 3, 5, 1, 4>(), A->As(x, y));
+    auto tmp4 = operator*<TRACK_INNER>(tmp3.template permute<TRACK_INNER, 0, 0, 2, 4, 5, 1, 3, 6>(), A->Adags(x, y))
+                    .template permute<TRACK_INNER, +1, 0, 3, 5, 1, 2, 4>();
+    T1_new_tmp = (tmp4 * P2(x, y)).template permute<TRACK_INNER, +2, 0, 3, 1, 2>();
+    T1_new = NORMALIZE ? T1_new_tmp * (1. / T1_new_tmp.maxNorm()) : T1_new_tmp;
+
+    if constexpr(TRACK and CP) {
+        stan::math::reverse_pass_callback([C1_new, C2_new, T1_new, P1_ = P1, P2_ = P2, curr = *this, x, y, NORMALIZE]() mutable {
+            stan::math::nested_rev_autodiff nested;
+            auto [C1_new_, T1_new_, C2_new_] = curr.template renormalize_top<TRACK, false>(x, y, P1_, P2_, NORMALIZE);
+            C1_new_.adj() = C1_new.adj();
+            C2_new_.adj() = C2_new.adj();
+            T1_new_.adj() = T1_new.adj();
+            stan::math::grad();
+        });
+    }
+
     return std::make_tuple(C1_new, T1_new, C2_new);
 }
 
-template <typename Scalar, typename Symmetry, bool ENABLE_AD>
-template <bool TRACK>
+template <typename Scalar, typename Symmetry, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
+template <bool TRACK, bool CP>
 std::tuple<Tensor<Scalar, 1, 1, Symmetry, TRACK>, Tensor<Scalar, 3, 1, Symmetry, TRACK>, Tensor<Scalar, 2, 0, Symmetry, TRACK>>
-CTM<Scalar, Symmetry, ENABLE_AD>::renormalize_bottom(const int x,
-                                                     const int y,
-                                                     XPED_CONST TMatrix<Tensor<Scalar, 1, 3, Symmetry, TRACK>>& P1,
-                                                     XPED_CONST TMatrix<Tensor<Scalar, 3, 1, Symmetry, TRACK>>& P2,
-                                                     bool NORMALIZE) XPED_CONST
+CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::renormalize_bottom(const int x,
+                                                             const int y,
+                                                             XPED_CONST TMatrix<Tensor<Scalar, 1, 3, Symmetry, TRACK>>& P1,
+                                                             XPED_CONST TMatrix<Tensor<Scalar, 3, 1, Symmetry, TRACK>>& P2,
+                                                             bool NORMALIZE) XPED_CONST
 {
+    constexpr bool TRACK_INNER = TRACK ? not CP : false;
+
     Tensor<Scalar, 1, 1, Symmetry, TRACK> C4_new;
     Tensor<Scalar, 3, 1, Symmetry, TRACK> T3_new;
     Tensor<Scalar, 2, 0, Symmetry, TRACK> C3_new;
-    C4_new = (P1(x - 1, y) * (T4s(x - 1, y).template permute<TRACK, -2, 0, 2, 3, 1>() * C4s(x - 1, y + 1)).template permute<TRACK, 0, 3, 1, 2, 0>())
-                 .template permute<TRACK, 0, 1, 0>();
-    if(NORMALIZE) C4_new = C4_new * (1. / C4_new.maxNorm());
-    C3_new = ((T2s(x + 1, y) * C3s(x + 1, y + 1).template permute<TRACK, +1, 0, 1>()).template permute<TRACK, +2, 2, 3, 0, 1>() * P2(x, y))
-                 .template permute<TRACK, -1, 0, 1>();
-    if(NORMALIZE) C3_new = C3_new * (1. / C3_new.maxNorm());
-    auto tmp2 = P1(x, y).template permute<TRACK, -2, 0, 2, 3, 1>() * T3s(x, y + 1).template permute<TRACK, +2, 3, 2, 0, 1>();
-    auto tmp3 = tmp2.template permute<TRACK, -1, 0, 2, 3, 5, 1, 4>() * A->As(x, y).template permute<TRACK, 0, 2, 3, 0, 1, 4>();
 
-    auto tmp4 = (tmp3.template permute<TRACK, 0, 0, 2, 4, 5, 1, 3, 6>() * A->Adags(x, y).template permute<TRACK, 0, 3, 4, 2, 0, 1>())
-                    .template permute<TRACK, +1, 0, 3, 5, 1, 2, 4>();
-    T3_new = (tmp4 * P2(x - 1, y)).template permute<TRACK, 0, 1, 2, 3, 0>();
-    if(NORMALIZE) T3_new = T3_new * (1. / T3_new.maxNorm());
+    Tensor<Scalar, 1, 1, Symmetry, TRACK_INNER> C4_new_tmp;
+    Tensor<Scalar, 3, 1, Symmetry, TRACK_INNER> T3_new_tmp;
+    Tensor<Scalar, 2, 0, Symmetry, TRACK_INNER> C3_new_tmp;
+    C4_new_tmp = operator*<TRACK_INNER>(P1(x - 1, y),
+                                        operator*<TRACK_INNER>(T4s(x - 1, y).template permute<TRACK_INNER, -2, 0, 2, 3, 1>(), C4s(x - 1, y + 1))
+                                            .template permute<TRACK_INNER, 0, 3, 1, 2, 0>())
+                     .template permute<TRACK_INNER, 0, 1, 0>();
+    C4_new = NORMALIZE ? C4_new_tmp * (1. / C4_new_tmp.maxNorm()) : C4_new_tmp;
+    C3_new_tmp = operator*<TRACK_INNER>(operator*<TRACK_INNER>(T2s(x + 1, y), C3s(x + 1, y + 1).template permute<TRACK_INNER, +1, 0, 1>())
+                                            .template permute<TRACK_INNER, +2, 2, 3, 0, 1>(),
+                                        P2(x, y))
+                     .template permute<TRACK_INNER, -1, 0, 1>();
+    C3_new = NORMALIZE ? C3_new_tmp * (1. / C3_new_tmp.maxNorm()) : C3_new_tmp;
+    auto tmp2 = P1(x, y).template permute<TRACK_INNER, -2, 0, 2, 3, 1>() * T3s(x, y + 1).template permute<TRACK_INNER, +2, 3, 2, 0, 1>();
+    auto tmp3 = tmp2.template permute<TRACK_INNER, -1, 0, 2, 3, 5, 1, 4>() * A->As(x, y).template permute<TRACK_INNER, 0, 2, 3, 0, 1, 4>();
+
+    auto tmp4 = (tmp3.template permute<TRACK_INNER, 0, 0, 2, 4, 5, 1, 3, 6>() * A->Adags(x, y).template permute<TRACK_INNER, 0, 3, 4, 2, 0, 1>())
+                    .template permute<TRACK_INNER, +1, 0, 3, 5, 1, 2, 4>();
+    T3_new_tmp = operator*<TRACK_INNER>(tmp4, P2(x - 1, y)).template permute<TRACK_INNER, 0, 1, 2, 3, 0>();
+    T3_new = NORMALIZE ? T3_new_tmp * (1. / T3_new_tmp.maxNorm()) : T3_new_tmp;
+
+    if constexpr(TRACK and CP) {
+        stan::math::reverse_pass_callback([C3_new, C4_new, T3_new, P1_ = P1, P2_ = P2, curr = *this, x, y, NORMALIZE]() mutable {
+            stan::math::nested_rev_autodiff nested;
+            auto [C4_new_, T3_new_, C3_new_] = curr.template renormalize_bottom<TRACK, false>(x, y, P1_, P2_, NORMALIZE);
+            C3_new_.adj() = C3_new.adj();
+            C4_new_.adj() = C4_new.adj();
+            T3_new_.adj() = T3_new.adj();
+            stan::math::grad();
+        });
+    }
+
     return std::make_tuple(C4_new, T3_new, C3_new);
 }
 
-template <typename Scalar, typename Symmetry, bool ENABLE_AD>
-template <bool TRACK>
-Tensor<Scalar, 3, 3, Symmetry, TRACK> CTM<Scalar, Symmetry, ENABLE_AD>::contractCorner(const int x, const int y, const Opts::CORNER corner) XPED_CONST
+template <typename Scalar, typename Symmetry, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
+template <bool TRACK, bool CP>
+Tensor<Scalar, 3, 3, Symmetry, TRACK>
+CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::contractCorner(const int x, const int y, const Opts::CORNER corner) XPED_CONST
 {
+    constexpr bool TRACK_INNER = TRACK ? not CP : false;
+
     Tensor<Scalar, 3, 3, Symmetry, TRACK> Q;
     switch(corner) {
     case Opts::CORNER::UPPER_LEFT: {
@@ -842,10 +993,10 @@ Tensor<Scalar, 3, 3, Symmetry, TRACK> CTM<Scalar, Symmetry, ENABLE_AD>::contract
         // auto tmp3 = tmp2.template permute<TRACK, -1, 0, 2, 3, 5, 1, 4>() * A->As(x, y);
         // Q = (tmp3.template permute<TRACK, 0, 0, 2, 4, 5, 1, 3, 6>() * A->Adags(x, y)).template permute<TRACK, +1, 0, 3, 5, 1, 2, 4>();
 
-        auto C1T1 = C1s(x - 1, y - 1).template contract<std::array{-1, 1}, std::array{1, -2, -3, -4}, 1, TRACK>(T1s(x, y - 1));
-        auto T4C1T1 = T4s(x - 1, y).template contract<std::array{1, -1, -2, -3}, std::array{1, -4, -5, -6}, 3, TRACK>(C1T1);
-        auto T4C1T1A = T4C1T1.template contract<std::array{-1, 1, -2, -3, 2, -4}, std::array{1, 2, -5, -6, -7}, 4, TRACK>(A->As(x, y));
-        Q = T4C1T1A.template contract<std::array{-1, 1, -4, 2, -5, -2, 3}, std::array{1, 2, 3, -6, -3}, 3, TRACK>(A->Adags(x, y));
+        auto C1T1 = C1s(x - 1, y - 1).template contract<std::array{-1, 1}, std::array{1, -2, -3, -4}, 1, TRACK_INNER>(T1s(x, y - 1));
+        auto T4C1T1 = T4s(x - 1, y).template contract<std::array{1, -1, -2, -3}, std::array{1, -4, -5, -6}, 3, TRACK_INNER>(C1T1);
+        auto T4C1T1A = T4C1T1.template contract<std::array{-1, 1, -2, -3, 2, -4}, std::array{1, 2, -5, -6, -7}, 4, TRACK_INNER>(A->As(x, y));
+        Q = T4C1T1A.template contract<std::array{-1, 1, -4, 2, -5, -2, 3}, std::array{1, 2, 3, -6, -3}, 3, TRACK_INNER>(A->Adags(x, y));
         // Scalar diff = (Q - Qcheck).norm();
         // SPDLOG_WARN("upper left corner check at x,y={},{}: {}", x, y, diff);
         // ooooo -->--
@@ -863,10 +1014,10 @@ Tensor<Scalar, 3, 3, Symmetry, TRACK> CTM<Scalar, Symmetry, ENABLE_AD>::contract
         // Q = (tmp3.template permute<TRACK, 0, 0, 2, 4, 5, 1, 3, 6>() * A->Adags(x, y).template permute<TRACK, 0, 0, 4, 2, 1, 3>())
         //         .template permute<TRACK, +1, 1, 3, 5, 0, 2, 4>();
 
-        auto C4T3 = C4s(x - 1, y + 1).template contract<std::array{-1, 1}, std::array{-2, -3, 1, -4}, 1, TRACK>(T3s(x, y + 1));
-        auto T4C4T3 = T4s(x - 1, y).template contract<std::array{-1, 1, -2, -3}, std::array{1, -4, -5, -6}, 3, TRACK>(C4T3);
-        auto T4C4T3A = T4C4T3.template contract<std::array{-1, 1, -2, 2, -3, -4}, std::array{1, -5, -6, 2, -7}, 4, TRACK>(A->As(x, y));
-        Q = T4C4T3A.template contract<std::array{-4, 1, 2, -1, -5, -2, 3}, std::array{1, -6, 3, -3, 2}, 3, TRACK>(A->Adags(x, y));
+        auto C4T3 = C4s(x - 1, y + 1).template contract<std::array{-1, 1}, std::array{-2, -3, 1, -4}, 1, TRACK_INNER>(T3s(x, y + 1));
+        auto T4C4T3 = T4s(x - 1, y).template contract<std::array{-1, 1, -2, -3}, std::array{1, -4, -5, -6}, 3, TRACK_INNER>(C4T3);
+        auto T4C4T3A = T4C4T3.template contract<std::array{-1, 1, -2, 2, -3, -4}, std::array{1, -5, -6, 2, -7}, 4, TRACK_INNER>(A->As(x, y));
+        Q = T4C4T3A.template contract<std::array{-4, 1, 2, -1, -5, -2, 3}, std::array{1, -6, 3, -3, 2}, 3, TRACK_INNER>(A->Adags(x, y));
         // Scalar diff = (Q - Qcheck).norm();
         // SPDLOG_WARN("lower left corner check at x,y={},{}: {}", x, y, diff);
 
@@ -885,10 +1036,10 @@ Tensor<Scalar, 3, 3, Symmetry, TRACK> CTM<Scalar, Symmetry, ENABLE_AD>::contract
         // Q = (tmp3.template permute<TRACK, 0, 0, 2, 4, 5, 1, 3, 6>() * A->Adags(x, y).template permute<TRACK, 0, 1, 3, 2, 0, 4>())
         //         .template permute<TRACK, +1, 0, 2, 4, 1, 3, 5>();
 
-        auto T1C2 = T1s(x, y - 1).template contract<std::array{-1, 1, -2, -3}, std::array{1, -4}, 3, TRACK>(C2s(x + 1, y - 1));
-        auto T1C2T2 = T1C2.template contract<std::array{-1, -2, -3, 1}, std::array{-4, -5, 1, -6}, 3, TRACK>(T2s(x + 1, y));
-        auto T1C2T2A = T1C2T2.template contract<std::array{-1, 1, -2, 2, -3, -4}, std::array{-5, 1, 2, -6, -7}, 4, TRACK>(A->As(x, y));
-        Q = T1C2T2A.template contract<std::array{-1, 1, 2, -4, -2, -5, 3}, std::array{-3, 1, 3, 2, -6}, 3, TRACK>(A->Adags(x, y));
+        auto T1C2 = T1s(x, y - 1).template contract<std::array{-1, 1, -2, -3}, std::array{1, -4}, 3, TRACK_INNER>(C2s(x + 1, y - 1));
+        auto T1C2T2 = T1C2.template contract<std::array{-1, -2, -3, 1}, std::array{-4, -5, 1, -6}, 3, TRACK_INNER>(T2s(x + 1, y));
+        auto T1C2T2A = T1C2T2.template contract<std::array{-1, 1, -2, 2, -3, -4}, std::array{-5, 1, 2, -6, -7}, 4, TRACK_INNER>(A->As(x, y));
+        Q = T1C2T2A.template contract<std::array{-1, 1, 2, -4, -2, -5, 3}, std::array{-3, 1, 3, 2, -6}, 3, TRACK_INNER>(A->Adags(x, y));
         // Scalar diff = (Q - Qcheck).norm();
         // SPDLOG_WARN("upper right corner check at x,y={},{}: {}", x, y, diff);
 
@@ -908,10 +1059,10 @@ Tensor<Scalar, 3, 3, Symmetry, TRACK> CTM<Scalar, Symmetry, ENABLE_AD>::contract
         // Q = (tmp3.template permute<TRACK, 0, 0, 2, 4, 5, 1, 3, 6>() * A->Adags(x, y).template permute<TRACK, 0, 3, 4, 2, 0, 1>())
         //         .template permute<TRACK, +1, 0, 3, 5, 1, 2, 4>();
 
-        auto C3T3 = C3s(x + 1, y + 1).template contract<std::array{-1, 1}, std::array{-2, -3, -4, 1}, 1, TRACK>(T3s(x, y + 1));
-        auto T2C3T3 = T2s(x + 1, y).template contract<std::array{-1, -2, -3, 1}, std::array{1, -4, -5, -6}, 3, TRACK>(C3T3);
-        auto T2C3T3A = T2C3T3.template contract<std::array{1, -1, -2, 2, -3, -4}, std::array{-5, -6, 1, 2, -7}, 4, TRACK>(A->As(x, y));
-        Q = T2C3T3A.template contract<std::array{1, -1, 2, -4, -5, -2, 3}, std::array{-6, -3, 3, 1, 2}, 3, TRACK>(A->Adags(x, y));
+        auto C3T3 = C3s(x + 1, y + 1).template contract<std::array{-1, 1}, std::array{-2, -3, -4, 1}, 1, TRACK_INNER>(T3s(x, y + 1));
+        auto T2C3T3 = T2s(x + 1, y).template contract<std::array{-1, -2, -3, 1}, std::array{1, -4, -5, -6}, 3, TRACK_INNER>(C3T3);
+        auto T2C3T3A = T2C3T3.template contract<std::array{1, -1, -2, 2, -3, -4}, std::array{-5, -6, 1, 2, -7}, 4, TRACK_INNER>(A->As(x, y));
+        Q = T2C3T3A.template contract<std::array{1, -1, 2, -4, -5, -2, 3}, std::array{-6, -3, 3, 1, 2}, 3, TRACK_INNER>(A->Adags(x, y));
         // Scalar diff = (Q - Qcheck).norm();
         // SPDLOG_WARN("lower right corner check at x,y={},{}: {}", x, y, diff);
 
@@ -923,6 +1074,15 @@ Tensor<Scalar, 3, 3, Symmetry, TRACK> CTM<Scalar, Symmetry, ENABLE_AD>::contract
         // ==<==ooooo
         break;
     }
+    }
+
+    if constexpr(TRACK and CP) {
+        stan::math::reverse_pass_callback([Q, curr = *this, x, y, corner]() mutable {
+            stan::math::nested_rev_autodiff nested;
+            auto Q_ = curr.template contractCorner<TRACK, false>(x, y, corner);
+            Q_.adj() = Q.adj();
+            stan::math::grad();
+        });
     }
     return Q;
 }

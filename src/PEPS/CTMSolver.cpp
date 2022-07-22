@@ -6,10 +6,12 @@
 
 namespace Xped {
 
-template <typename Scalar, typename Symmetry>
+template <typename Scalar, typename Symmetry, Opts::CTMCheckpoint CPOpts>
 template <typename HamScalar>
-typename ScalarTraits<Scalar>::Real
-CTMSolver<Scalar, Symmetry>::solve(const std::shared_ptr<iPEPS<Scalar, Symmetry>>& Psi, Scalar* gradient, Hamiltonian<Symmetry>& H, bool CALC_GRAD)
+typename ScalarTraits<Scalar>::Real CTMSolver<Scalar, Symmetry, CPOpts>::solve(const std::shared_ptr<iPEPS<Scalar, Symmetry>>& Psi,
+                                                                               Scalar* gradient,
+                                                                               Hamiltonian<Symmetry>& H,
+                                                                               bool CALC_GRAD)
 {
     Jack.set_A(Psi);
     Jack.info();
@@ -48,9 +50,9 @@ CTMSolver<Scalar, Symmetry>::solve(const std::shared_ptr<iPEPS<Scalar, Symmetry>
     }
 
     stan::math::nested_rev_autodiff nested;
-    Xped::CTM<double, Symmetry, true> Jim(Jack);
+    Xped::CTM<double, Symmetry, true, CPOpts> Jim(Jack);
     fmt::print("\t{: >3} forward pass:\n", "•");
-    Jim.template solve<false>(opts.track_steps);
+    Jim.solve(opts.track_steps);
     auto [E_h, E_v, E_d1, E_d2] = avg(Jim, H);
     auto res = (E_h.sum() + E_v.sum() + E_d1.sum() + E_d2.sum()) / Jim.cell().uniqueSize();
     E = res.val();

@@ -11,14 +11,14 @@
 
 namespace Xped {
 
-template <typename Scalar, typename Symmetry>
+template <typename Scalar, typename Symmetry, Opts::CTMCheckpoint CPOpts>
 class Energy final : public ceres::FirstOrderFunction
 {
     template <typename Sym>
     using Hamiltonian = TwoSiteObservable<Sym>;
 
 public:
-    Energy(std::unique_ptr<CTMSolver<Scalar, Symmetry>>&& solver,
+    Energy(std::unique_ptr<CTMSolver<Scalar, Symmetry, CPOpts>>&& solver,
            Hamiltonian<Symmetry>& op,
            std::shared_ptr<Xped::iPEPS<Scalar, Symmetry, false>> Psi)
         : impl(std::move(solver))
@@ -35,13 +35,13 @@ public:
         return true;
     }
 
-    std::unique_ptr<CTMSolver<Scalar, Symmetry>> impl;
+    std::unique_ptr<CTMSolver<Scalar, Symmetry, CPOpts>> impl;
     Hamiltonian<Symmetry>& op;
     std::shared_ptr<Xped::iPEPS<Scalar, Symmetry, false>> Psi;
     int NumParameters() const override { return Psi->plainSize(); }
 };
 
-template <typename Scalar, typename Symmetry>
+template <typename Scalar, typename Symmetry, Opts::CTMCheckpoint CPOpts = Opts::CTMCheckpoint{}>
 struct iPEPSSolverAD
 {
     template <typename Sym>
@@ -57,6 +57,7 @@ struct iPEPSSolverAD
     {
         optim_opts.info();
         ctm_opts.info();
+        CPOpts.info();
         fmt::print("Model: {}(Bonds: V:{}, H:{}, D1: {}, D2: {})\n",
                    H.name,
                    (H.bond & Opts::Bond::V) == Opts::Bond::V,
@@ -64,8 +65,8 @@ struct iPEPSSolverAD
                    (H.bond & Opts::Bond::D1) == Opts::Bond::D1,
                    (H.bond & Opts::Bond::D2) == Opts::Bond::D2);
 
-        auto Dwain = std::make_unique<CTMSolver<Scalar, Symmetry>>(ctm_opts);
-        ceres::GradientProblem problem(new Energy<Scalar, Symmetry>(std::move(Dwain), H, Psi));
+        auto Dwain = std::make_unique<CTMSolver<Scalar, Symmetry, CPOpts>>(ctm_opts);
+        ceres::GradientProblem problem(new Energy<Scalar, Symmetry, CPOpts>(std::move(Dwain), H, Psi));
 
         std::vector<Scalar> parameters = Psi->data();
 
@@ -90,7 +91,7 @@ struct iPEPSSolverAD
         options.parameter_tolerance = optim_opts.step_tol;
         options.gradient_tolerance = optim_opts.grad_tol;
         options.update_state_every_iteration = true;
-        Callback c(*this, dynamic_cast<const Energy<Scalar, Symmetry>*>(problem.function())->impl->getCTM());
+        Callback c(*this, dynamic_cast<const Energy<Scalar, Symmetry, CPOpts>*>(problem.function())->impl->getCTM());
         options.callbacks.push_back(&c);
         ceres::GradientProblemSolver::Summary summary;
         ceres::Solve(options, problem, parameters.data(), &summary);

@@ -45,23 +45,32 @@ struct TwoSiteObservable;
  * C4 --> 1
 
  */
-template <typename Scalar_, typename Symmetry_, bool ENABLE_AD = false>
+
+/**
+ * Checkpoint move (l,r,t,b).
+ * Checkpoint computeRDM_h/v.
+ * Checkpoint contractCorner.
+ * Checkpoint get_projectors.
+ * Checkpoint renormalize (l,r,t,b)
+ */
+template <typename Scalar_, typename Symmetry_, bool ENABLE_AD = false, Opts::CTMCheckpoint CPOpts = Opts::CTMCheckpoint{}>
 class CTM
 {
-    template <typename Scalar__, typename Symmetry__, bool ENABLE_AD__>
+    template <typename Scalar__, typename Symmetry__, bool ENABLE_AD__, Opts::CTMCheckpoint CPOpts__>
     friend std::pair<TMatrix<std::conditional_t<ENABLE_AD__, stan::math::var, Scalar__>>,
                      TMatrix<std::conditional_t<ENABLE_AD__, stan::math::var, Scalar__>>>
-    avg(XPED_CONST CTM<Scalar__, Symmetry__, ENABLE_AD__>& env, XPED_CONST Tensor<Scalar__, 2, 2, Symmetry__, false>& op);
+    avg(XPED_CONST CTM<Scalar__, Symmetry__, ENABLE_AD__, CPOpts__>& env, XPED_CONST Tensor<Scalar__, 2, 2, Symmetry__, false>& op);
 
-    template <typename Scalar__, typename Symmetry__, bool ENABLE_AD__>
-    friend TMatrix<std::conditional_t<ENABLE_AD__, stan::math::var, Scalar__>> avg(XPED_CONST CTM<Scalar__, Symmetry__, ENABLE_AD__>& env,
+    template <typename Scalar__, typename Symmetry__, bool ENABLE_AD__, Opts::CTMCheckpoint CPOpts__>
+    friend TMatrix<std::conditional_t<ENABLE_AD__, stan::math::var, Scalar__>> avg(XPED_CONST CTM<Scalar__, Symmetry__, ENABLE_AD__, CPOpts__>& env,
                                                                                    OneSiteObservable<Symmetry__>& op);
 
-    template <typename Scalar__, typename Symmetry__, bool ENABLE_AD__>
+    template <typename Scalar__, typename Symmetry__, bool ENABLE_AD__, Opts::CTMCheckpoint CPOpts__>
     friend std::array<TMatrix<std::conditional_t<ENABLE_AD__, stan::math::var, Scalar__>>, 4>
-    avg(XPED_CONST CTM<Scalar__, Symmetry__, ENABLE_AD__>& env, TwoSiteObservable<Symmetry__>& op);
+    avg(XPED_CONST CTM<Scalar__, Symmetry__, ENABLE_AD__, CPOpts__>& env, TwoSiteObservable<Symmetry__>& op);
 
-    friend class CTM<Scalar_, Symmetry_, true>;
+    template <typename, typename, bool, Opts::CTMCheckpoint>
+    friend class CTM;
 
 public:
     typedef Symmetry_ Symmetry;
@@ -101,20 +110,20 @@ public:
     template <bool TRACK = ENABLE_AD>
     void solve(std::size_t max_steps);
 
-    template <bool TRACK = ENABLE_AD>
+    template <bool TRACK = ENABLE_AD, bool CP = CPOpts.GROW_ALL>
     void grow_all();
 
     void init();
 
-    template <bool TRACK = ENABLE_AD>
+    template <bool TRACK = ENABLE_AD, bool CP = CPOpts.MOVE>
     void left_move();
-    template <bool TRACK = ENABLE_AD>
+    template <bool TRACK = ENABLE_AD, bool CP = CPOpts.MOVE>
     void right_move();
-    template <bool TRACK = ENABLE_AD>
+    template <bool TRACK = ENABLE_AD, bool CP = CPOpts.MOVE>
     void top_move();
-    template <bool TRACK = ENABLE_AD>
+    template <bool TRACK = ENABLE_AD, bool CP = CPOpts.MOVE>
     void bottom_move();
-    template <bool TRACK = ENABLE_AD>
+    template <bool TRACK = ENABLE_AD, bool CP = CPOpts.MOVE>
     void symmetric_move();
 
     template <bool TRACK = ENABLE_AD>
@@ -157,17 +166,15 @@ private:
     void computeRDM_h();
     template <bool TRACK = ENABLE_AD>
     void computeRDM_v();
-    template <bool TRACK = ENABLE_AD>
-    void computeRDM_1s();
 
-    template <bool TRACK = ENABLE_AD>
+    template <bool TRACK = ENABLE_AD, bool CP = CPOpts.CORNER>
     Tensor<Scalar, 3, 3, Symmetry, TRACK> contractCorner(const int x, const int y, const Opts::CORNER corner) XPED_CONST;
 
-    template <bool TRACK = ENABLE_AD>
+    template <bool TRACK = ENABLE_AD, bool CP = CPOpts.PROJECTORS>
     std::pair<Tensor<Scalar, 1, 3, Symmetry, TRACK>, Tensor<Scalar, 3, 1, Symmetry, TRACK>>
     get_projectors(const int x, const int y, const Opts::DIRECTION dir) XPED_CONST;
 
-    template <bool TRACK = ENABLE_AD>
+    template <bool TRACK = ENABLE_AD, bool CP = CPOpts.RENORMALIZE>
     std::tuple<Tensor<Scalar, 0, 2, Symmetry, TRACK>, Tensor<Scalar, 1, 3, Symmetry, TRACK>, Tensor<Scalar, 1, 1, Symmetry, TRACK>>
     renormalize_left(const int x,
                      const int y,
@@ -175,7 +182,7 @@ private:
                      XPED_CONST TMatrix<Tensor<Scalar, 3, 1, Symmetry, TRACK>>& P2,
                      bool NORMALIZE = true) XPED_CONST;
 
-    template <bool TRACK = ENABLE_AD>
+    template <bool TRACK = ENABLE_AD, bool CP = CPOpts.RENORMALIZE>
     std::tuple<Tensor<Scalar, 1, 1, Symmetry, TRACK>, Tensor<Scalar, 3, 1, Symmetry, TRACK>, Tensor<Scalar, 2, 0, Symmetry, TRACK>>
     renormalize_right(const int x,
                       const int y,
@@ -183,7 +190,7 @@ private:
                       XPED_CONST TMatrix<Tensor<Scalar, 3, 1, Symmetry, TRACK>>& P2,
                       bool NORMALIZE = true) XPED_CONST;
 
-    template <bool TRACK = ENABLE_AD>
+    template <bool TRACK = ENABLE_AD, bool CP = CPOpts.RENORMALIZE>
     std::tuple<Tensor<Scalar, 0, 2, Symmetry, TRACK>, Tensor<Scalar, 1, 3, Symmetry, TRACK>, Tensor<Scalar, 1, 1, Symmetry, TRACK>>
     renormalize_top(const int x,
                     const int y,
@@ -191,7 +198,7 @@ private:
                     XPED_CONST TMatrix<Tensor<Scalar, 3, 1, Symmetry, TRACK>>& P2,
                     bool NORMALIZE = true) XPED_CONST;
 
-    template <bool TRACK = ENABLE_AD>
+    template <bool TRACK = ENABLE_AD, bool CP = CPOpts.RENORMALIZE>
     std::tuple<Tensor<Scalar, 1, 1, Symmetry, TRACK>, Tensor<Scalar, 3, 1, Symmetry, TRACK>, Tensor<Scalar, 2, 0, Symmetry, TRACK>>
     renormalize_bottom(const int x,
                        const int y,

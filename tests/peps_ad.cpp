@@ -179,7 +179,8 @@ int main(int argc, char* argv[])
 
         Xped::Opts::Optim o_opts = Xped::Opts::optim_from_toml(data.at("optim"));
         Xped::Opts::CTM c_opts = Xped::Opts::ctm_from_toml(data.at("ctm"));
-        Xped::iPEPSSolverAD<Scalar, Symmetry> Jack(o_opts, c_opts);
+        constexpr Xped::Opts::CTMCheckpoint cp_opts{.MOVE = true, .CORNER = true};
+        Xped::iPEPSSolverAD<Scalar, Symmetry, cp_opts> Jack(o_opts, c_opts);
 
         Xped::SpinBase<Symmetry> B(1, 2);
         Xped::TwoSiteObservable<Symmetry> SzSz(c.pattern, Xped::Opts::Bond::H | Xped::Opts::Bond::V | Xped::Opts::Bond::D1 | Xped::Opts::Bond::D2);

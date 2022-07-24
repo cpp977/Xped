@@ -1,5 +1,5 @@
-#ifndef XPED_H_
-#define XPED_H_
+#ifndef XPED_TENSOR_HPP_
+#define XPED_TENSOR_HPP_
 
 #include <string>
 #include <vector>

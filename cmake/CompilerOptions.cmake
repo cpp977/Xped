@@ -28,7 +28,6 @@ function(set_project_options project_name)
 #    -march=native
     -ferror-limit=5
     -fcolor-diagnostics
-    -v
     )
   set(CLANG_OPTIONS_PROFILE
     -stdlib=${USED_LIBCXX}

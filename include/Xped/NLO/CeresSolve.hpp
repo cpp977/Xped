@@ -95,6 +95,7 @@ struct iPEPSSolverAD
         options.callbacks.push_back(&c);
         ceres::GradientProblemSolver::Summary summary;
         ceres::Solve(options, problem, parameters.data(), &summary);
+        c(summary.iterations.back());
         std::cout << summary.FullReport() << "\n";
     }
 

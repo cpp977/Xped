@@ -67,7 +67,13 @@ std::string format(qarray<Symmetry::Nq> qnum)
         if(Symmetry::kind()[q] == KIND::S or Symmetry::kind()[q] == KIND::Salt or Symmetry::kind()[q] == KIND::T) {
             ss << util::print_frac_nice(boost::rational<int>(qnum[q] - 1, 2));
         } else if(Symmetry::kind()[q] == KIND::M) {
-            ss << util::print_frac_nice(boost::rational<int>(qnum[q], 2));
+            if constexpr(Symmetry::IS_MODULAR) {
+                int q_nice = qnum[q];
+                if(std::abs(qnum[q]) > std::abs(qnum[q] - Symmetry::MOD_N)) { q_nice = q_nice - Symmetry::MOD_N; }
+                ss << util::print_frac_nice(boost::rational<int>(q_nice, 2));
+            } else {
+                ss << util::print_frac_nice(boost::rational<int>(qnum[q], 2));
+            }
         } else if(Symmetry::kind()[q] == KIND::Z2) {
             std::string parity = util::posmod<2>(qnum[q] == 0) ? "evn" : "odd";
             ss << parity;

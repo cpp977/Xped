@@ -29,6 +29,7 @@ template <typename Symmetry, std::size_t depth, typename AllocationPolicy>
 void Qbasis<Symmetry, depth, AllocationPolicy>::push_back(const qType& q, const size_t& inner_dim)
 {
     assert(depth == 1 or depth == 0);
+    if(inner_dim == 0) { return; }
     auto it = find(q);
     if(it == data_.end()) // insert quantum number if it is not there (sorting is lost then)
     {
@@ -354,6 +355,18 @@ Qbasis<Symmetry, depth, AllocationPolicy> Qbasis<Symmetry, depth, AllocationPoli
             std::find_if(data_.begin(), data_.end(), [q2 = q2](std::tuple<qType, size_t, Basis> entry) { return std::get<0>(entry) == q2; });
         if(it_this == data_.end()) { out.push_back(q2, plain2.dim()); }
     }
+    out.sort();
+    return out;
+}
+
+template <typename Symmetry, std::size_t depth, typename AllocationPolicy>
+Qbasis<Symmetry, depth, AllocationPolicy> Qbasis<Symmetry, depth, AllocationPolicy>::shift(qType qshift) const
+{
+    static_assert(depth == 1, "shift() in Qbasis is only for bases without depth.");
+    if(qshift == Symmetry::qvacuum()) { return *this; }
+    assert(not Symmetry::NON_ABELIAN and "Nontrivial shifts onl for Abelian symmetries.");
+    Qbasis<Symmetry, depth, AllocationPolicy> out;
+    for(const auto& [q, dim, plain] : data_) { out.push_back(Symmetry::reduceSilent(q, qshift)[0], plain.dim()); }
     out.sort();
     return out;
 }

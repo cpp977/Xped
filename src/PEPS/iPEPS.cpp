@@ -14,14 +14,65 @@ template <typename Scalar, typename Symmetry, bool ENABLE_AD>
 iPEPS<Scalar, Symmetry, ENABLE_AD>::iPEPS(const UnitCell& cell, const Qbasis<Symmetry, 1>& auxBasis, const Qbasis<Symmetry, 1>& physBasis)
     : cell_(cell)
 {
-    D = auxBasis.fullDim();
-    As.resize(cell.pattern);
-    Adags.resize(cell.pattern);
-    for(int x = 0; x < cell.Lx; x++) {
-        for(int y = 0; y < cell.Ly; y++) {
-            if(not cell.pattern.isUnique(x, y)) { continue; }
-            auto pos = cell.pattern.uniqueIndex(x, y);
-            As[pos] = Tensor<Scalar, 2, 3, Symmetry, ENABLE_AD>({{auxBasis, auxBasis}}, {{auxBasis, auxBasis, physBasis}});
+    charges_ = TMatrix<qType>(cell_.pattern);
+    charges_.setConstant(Symmetry::qvacuum());
+
+    TMatrix<Qbasis<Symmetry, 1>> aux;
+    aux.setConstant(auxBasis);
+
+    TMatrix<Qbasis<Symmetry, 1>> phys;
+    phys.setConstant(physBasis);
+
+    init(aux, aux, aux, aux, phys);
+}
+
+template <typename Scalar, typename Symmetry, bool ENABLE_AD>
+iPEPS<Scalar, Symmetry, ENABLE_AD>::iPEPS(const UnitCell& cell,
+                                          const TMatrix<Qbasis<Symmetry, 1>>& leftBasis,
+                                          const TMatrix<Qbasis<Symmetry, 1>>& topBasis,
+                                          const TMatrix<Qbasis<Symmetry, 1>>& rightBasis,
+                                          const TMatrix<Qbasis<Symmetry, 1>>& bottomBasis,
+                                          const TMatrix<Qbasis<Symmetry, 1>>& physBasis)
+    : cell_(cell)
+{
+    charges_ = TMatrix<qType>(cell_.pattern);
+    charges_.setConstant(Symmetry::qvacuum());
+    init(leftBasis, topBasis, rightBasis, bottomBasis, physBasis);
+}
+
+template <typename Scalar, typename Symmetry, bool ENABLE_AD>
+iPEPS<Scalar, Symmetry, ENABLE_AD>::iPEPS(const UnitCell& cell,
+                                          const TMatrix<Qbasis<Symmetry, 1>>& leftBasis,
+                                          const TMatrix<Qbasis<Symmetry, 1>>& topBasis,
+                                          const TMatrix<Qbasis<Symmetry, 1>>& rightBasis,
+                                          const TMatrix<Qbasis<Symmetry, 1>>& bottomBasis,
+                                          const TMatrix<Qbasis<Symmetry, 1>>& physBasis,
+                                          const TMatrix<qType>& charges)
+    : cell_(cell)
+    , charges_(charges)
+{
+    init(leftBasis, topBasis, rightBasis, bottomBasis, physBasis);
+}
+
+template <typename Scalar, typename Symmetry, bool ENABLE_AD>
+void iPEPS<Scalar, Symmetry, ENABLE_AD>::init(const TMatrix<Qbasis<Symmetry, 1>>& leftBasis,
+                                              const TMatrix<Qbasis<Symmetry, 1>>& topBasis,
+                                              const TMatrix<Qbasis<Symmetry, 1>>& rightBasis,
+                                              const TMatrix<Qbasis<Symmetry, 1>>& bottomBasis,
+                                              const TMatrix<Qbasis<Symmetry, 1>>& physBasis)
+{
+    As.resize(cell().pattern);
+    Adags.resize(cell().pattern);
+    for(int x = 0; x < cell().Lx; x++) {
+        for(int y = 0; y < cell().Ly; y++) {
+            if(not cell().pattern.isUnique(x, y)) { continue; }
+            auto pos = cell().pattern.uniqueIndex(x, y);
+            Qbasis<Symmetry, 1> shifted_physBasis = physBasis[pos].shift(charges_[pos]);
+            fmt::print("x={}, y={}, original basis which will be shifted by {}:\n", x, y, Sym::format<Symmetry>(charges_[pos]));
+            std::cout << physBasis[pos] << std::endl;
+            std::cout << "shifted:\n" << shifted_physBasis << std::endl;
+            As[pos] = Tensor<Scalar, 2, 3, Symmetry, ENABLE_AD>({{leftBasis[pos], topBasis[pos]}},
+                                                                {{rightBasis[pos], bottomBasis[pos], shifted_physBasis}});
             // As[pos].setZero();
             assert(As[pos].coupledDomain().dim() > 0 and "Bases of the A tensor have no fused blocks.");
         }
@@ -33,6 +84,7 @@ iPEPS<Scalar, Symmetry, ENABLE_AD>::iPEPS(const iPEPS<Scalar, Symmetry, false>& 
 {
     D = other.D;
     cell_ = other.cell();
+    charges_ = other.charges();
     As = other.As;
     Adags = other.Adags;
 }

@@ -192,6 +192,8 @@ public:
     /**Adds two bases together.*/
     Qbasis<Symmetry, depth, AllocationPolicy> add(const Qbasis<Symmetry, depth, AllocationPolicy>& other) const;
 
+    Qbasis<Symmetry, depth, AllocationPolicy> shift(qType qshift) const;
+
     /**Returns the intersection of this and \p other.*/
     Qbasis<Symmetry, depth, AllocationPolicy> intersection(const Qbasis<Symmetry, depth, AllocationPolicy>& other) const;
 

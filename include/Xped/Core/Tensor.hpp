@@ -257,6 +257,9 @@ public:
     Tensor<Scalar, util::constFct::trimDim<Rank>(leg), Rank + CoRank - 1 - util::constFct::trimDim<Rank>(leg), Symmetry, false, AllocationPolicy>
     trim() const;
 
+    template <std::size_t... legs>
+    Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy> shiftQN(qType charge) const;
+
 #if XPED_HAS_NTTP
     template <auto a1, auto a2, std::size_t ResRank, bool TRACK = false, std::size_t OtherRank, std::size_t OtherCoRank, bool ENABLE_AD>
     auto contract(const Tensor<Scalar, OtherRank, OtherCoRank, Symmetry, ENABLE_AD, AllocationPolicy>& other) XPED_CONST

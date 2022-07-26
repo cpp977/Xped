@@ -257,6 +257,37 @@ Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::trim() const
 }
 
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
+template <std::size_t... legs>
+Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>
+Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::shiftQN(qType charge) const
+{
+    std::array<std::size_t, sizeof...(legs)> arr_legs = {legs...};
+
+    std::array<Qbasis<Symmetry, 1>, Rank> uncoupled_domain;
+    std::array<Qbasis<Symmetry, 1>, CoRank> uncoupled_codomain;
+    for(std::size_t r = 0; r < Rank; ++r) {
+        if(auto it = std::find(arr_legs.begin(), arr_legs.end(), r); it == arr_legs.end()) {
+            uncoupled_domain[r] = uncoupledDomain()[r];
+        } else {
+            uncoupled_domain[r] = uncoupledDomain()[r].shift(charge);
+        }
+    }
+    for(std::size_t c = Rank; c < Rank + CoRank; ++c) {
+        if(auto it = std::find(arr_legs.begin(), arr_legs.end(), c); it == arr_legs.end()) {
+            uncoupled_codomain[c - Rank] = uncoupledCodomain()[c - Rank];
+        } else {
+            uncoupled_codomain[c - Rank] = uncoupledCodomain()[c - Rank].shift(charge);
+        }
+    }
+
+    Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy> out(
+        uncoupled_domain, uncoupled_codomain, this->data(), this->plainSize(), world());
+    // out.setZero();
+    // out.storage().m_data = this->storage().m_data;
+    return out;
+}
+
+template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
 std::tuple<Tensor<Scalar, Rank, 1, Symmetry, false, AllocationPolicy>,
            Tensor<typename ScalarTraits<Scalar>::Real, 1, 1, Symmetry, false, AllocationPolicy>,
            Tensor<Scalar, 1, CoRank, Symmetry, false, AllocationPolicy>>

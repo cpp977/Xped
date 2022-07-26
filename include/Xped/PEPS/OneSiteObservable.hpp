@@ -16,6 +16,17 @@ struct OneSiteObservable : public ObservableBase
     {}
     TMatrix<Tensor<double, 1, 1, Symmetry, false>> data;
     TMatrix<double> obs;
+    OneSiteObservable<Symmetry> shiftQN(const TMatrix<typename Symmetry::qType>& charges)
+    {
+        OneSiteObservable<Symmetry> out(data.pat);
+        for(int x = 0; x < data.pat.Lx; ++x) {
+            for(int y = 0; y < data.pat.Ly; ++y) {
+                if(not data.pat.isUnique(x, y)) { continue; }
+                out.data(x, y) = data(x, y).template shiftQN<0, 1>(charges(x, y));
+            }
+        }
+        return out;
+    }
 };
 
 } // namespace Xped

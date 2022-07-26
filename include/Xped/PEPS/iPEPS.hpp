@@ -72,6 +72,21 @@ public:
 
     iPEPS(const UnitCell& cell, const Qbasis<Symmetry, 1>& auxBasis, const Qbasis<Symmetry, 1>& physBasis);
 
+    iPEPS(const UnitCell& cell,
+          const TMatrix<Qbasis<Symmetry, 1>>& leftBasis,
+          const TMatrix<Qbasis<Symmetry, 1>>& topBasis,
+          const TMatrix<Qbasis<Symmetry, 1>>& rightBasis,
+          const TMatrix<Qbasis<Symmetry, 1>>& bottomBasis,
+          const TMatrix<Qbasis<Symmetry, 1>>& physBasis);
+
+    iPEPS(const UnitCell& cell,
+          const TMatrix<Qbasis<Symmetry, 1>>& leftBasis,
+          const TMatrix<Qbasis<Symmetry, 1>>& topBasis,
+          const TMatrix<Qbasis<Symmetry, 1>>& rightBasis,
+          const TMatrix<Qbasis<Symmetry, 1>>& bottomBasis,
+          const TMatrix<Qbasis<Symmetry, 1>>& physBasis,
+          const TMatrix<qType>& charges);
+
     iPEPS(const iPEPS<Scalar, Symmetry, false>& other);
 
     void setRandom();
@@ -117,12 +132,21 @@ public:
 
     const UnitCell& cell() const { return cell_; }
 
+    const TMatrix<qType>& charges() const { return charges_; }
+
 private:
+    void init(const TMatrix<Qbasis<Symmetry, 1>>& leftBasis,
+              const TMatrix<Qbasis<Symmetry, 1>>& topBasis,
+              const TMatrix<Qbasis<Symmetry, 1>>& rightBasis,
+              const TMatrix<Qbasis<Symmetry, 1>>& bottomBasis,
+              const TMatrix<Qbasis<Symmetry, 1>>& physBasis);
+
     std::size_t D;
 
     UnitCell cell_;
     TMatrix<Tensor<Scalar, 2, 3, Symmetry, ENABLE_AD>> As;
     TMatrix<Tensor<Scalar, 3, 2, Symmetry, ENABLE_AD>> Adags;
+    TMatrix<qType> charges_;
 };
 
 } // namespace Xped

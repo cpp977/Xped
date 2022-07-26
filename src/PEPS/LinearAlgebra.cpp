@@ -34,6 +34,8 @@ TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, Scalar>> avg(XPED_CONST C
     o.setConstant(0.);
     if(not op.MEASURE) { return o; }
 
+    auto shifted_op = op.shiftQN(env.Psi()->charges());
+
     for(int x = 0; x < env.cell().rows(); ++x) {
         for(int y = 0; y < env.cell().cols(); ++y) {
             if(not env.cell().pattern.isUnique(x, y)) { continue; }
@@ -54,8 +56,8 @@ TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, Scalar>> avg(XPED_CONST C
             // auto norm = (Q1 * C2T2C3T3C4).trace();
             // o(x, y) = (Q1H * C2T2C3T3C4).trace() / norm;
 
-            o(x, y) = 0.5 * (env.rho1_h(x, y).template contract<std::array{1, 2}, std::array{2, 1}, 0, ENABLE_AD>(op.data(x, y)).trace() +
-                             env.rho1_v(x, y).template contract<std::array{1, 2}, std::array{2, 1}, 0, ENABLE_AD>(op.data(x, y)).trace());
+            o(x, y) = 0.5 * (env.rho1_h(x, y).template contract<std::array{1, 2}, std::array{2, 1}, 0, ENABLE_AD>(shifted_op.data(x, y)).trace() +
+                             env.rho1_v(x, y).template contract<std::array{1, 2}, std::array{2, 1}, 0, ENABLE_AD>(shifted_op.data(x, y)).trace());
 
             if constexpr(ENABLE_AD) {
                 op.obs(x, y) = o(x, y).val();
@@ -82,14 +84,16 @@ std::array<TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, Scalar>>, 4> a
     o_d2.setConstant(0.);
     if(not op.MEASURE) { return std::array{o_h, o_v, o_d1, o_d2}; }
 
+    auto shifted_op = op.shiftQN(env.Psi()->charges());
+
     for(int x = 0; x < env.cell().rows(); ++x) {
         for(int y = 0; y < env.cell().cols(); ++y) {
             if(not env.cell().pattern.isUnique(x, y)) { continue; }
             if(op.data_h.size() > 0) {
-                o_h(x, y) = env.rho_h(x, y).template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0>(op.data_h(x, y)).trace();
+                o_h(x, y) = env.rho_h(x, y).template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0>(shifted_op.data_h(x, y)).trace();
             }
             if(op.data_v.size() > 0) {
-                o_v(x, y) = env.rho_v(x, y).template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0>(op.data_v(x, y)).trace();
+                o_v(x, y) = env.rho_v(x, y).template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0>(shifted_op.data_v(x, y)).trace();
             }
             if constexpr(ENABLE_AD) {
                 if(op.data_h.size() > 0) { op.obs_h(x, y) = o_h(x, y).val(); }
@@ -108,7 +112,7 @@ std::array<TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, Scalar>>, 4> a
                 if(op.data_d1.size() > 0) {
                     [[maybe_unused]] double dumb;
                     auto [Hu, Hs, Hvdag] =
-                        op.data_d1(x, y).template permute<false, 0, 0, 2, 1, 3>().tSVD(std::numeric_limits<std::size_t>::max(), 1.e-14, dumb);
+                        shifted_op.data_d1(x, y).template permute<false, 0, 0, 2, 1, 3>().tSVD(std::numeric_limits<std::size_t>::max(), 1.e-14, dumb);
                     Hu = Hu * Hs.sqrt();
                     Hvdag = Hs.sqrt() * Hvdag;
 
@@ -147,8 +151,8 @@ std::array<TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, Scalar>>, 4> a
                     // norm = (Q1 * Q2 * Q3 * Q4).trace();
 
                     [[maybe_unused]] double dumb;
-                    auto [Hu, Hs, Hvdag] =
-                        op.data_d2(x, y).template permute<false, 0, 0, 2, 1, 3>().tSVD(std::numeric_limits<std::size_t>::max(), 1.e-14, dumb);
+                    auto [Hu, Hs, Hvdag] = shifted_op.data_d2(x + 1, y).template permute<false, 0, 0, 2, 1, 3>().tSVD(
+                        std::numeric_limits<std::size_t>::max(), 1.e-14, dumb);
                     Hu = Hu * Hs.sqrt();
                     Hvdag = Hs.sqrt() * Hvdag;
 

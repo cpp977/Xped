@@ -1,0 +1,131 @@
+name: Builds
+
+on: [push]
+
+env:
+  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+  BUILD_TYPE: Release
+
+jobs:
+  build:
+    # The CMake configure and build commands are platform agnostic and should work equally
+    # well on Windows or Mac.  You can convert this to a matrix build if you need
+    # cross-platform coverage.
+    # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        # triplet: [x64-linux, x64-linux-clang, x64-linux-clang-libcxx]
+        # STORAGE: [Contiguous]
+        # LIBCXX: [OFF]
+        # compiler: [g++]
+        include:
+          - triplet: x64-linux
+            compiler: g++
+            LIBCXX: OFF
+            STORAGE: Contiguous
+          - triplet: x64-linux-clang
+            compiler: clang++
+            LIBCXX: OFF
+            STORAGE: Contiguous
+          - triplet: x64-linux-clang-libcxx
+            compiler: clang++
+            LIBCXX: ON
+            STORAGE: Contiguous
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: 'true'
+    - run: sudo add-apt-repository ppa:ubuntu-toolchain-r/ppa
+    - run: sudo apt-get update
+    - run: sudo apt-get install openmpi-bin libopenmpi-dev        
+    - run: sudo apt-get install lcov
+    - run: sudo apt-get install libopenblas-dev
+    - run: sudo apt-get install liblapacke-dev
+    - run: sudo apt-get install libomp-13-dev
+    - run: sudo apt-get install libc++abi1-13
+    - run: sudo apt-get install libc++1-13
+    - run: sudo apt-get install libc++abi-13-dev
+    - run: sudo apt-get install libc++-13-dev
+    - run: sudo apt-get install libomp-14-dev
+    - run: sudo apt-get install libc++abi1-14
+    - run: sudo apt-get install libc++1-14
+    - run: sudo apt-get install libc++abi-14-dev
+    - run: sudo apt-get install libc++-14-dev
+      
+    - uses: actions/checkout@v3
+      with:
+        repository: cpp977/TOOLS
+        token: ${{ secrets.TOOLS_CLONE }}
+        ref: master
+        path: tools-src
+    - run: sudo mkdir -p /usr/local/include/TOOLS
+    - run: sudo cp -r $GITHUB_WORKSPACE/tools-src/* /usr/local/include/TOOLS/
+
+    - name: Set up GCC
+      uses: egor-tensin/setup-gcc@v1
+      with:
+        version: 10
+        platform: x64
+        
+    - run: g++ --version
+
+    # - name: Set up Clang
+    #   uses: egor-tensin/setup-clang@v1
+    #   with:
+    #     version: 13
+    #     platform: x64
+        
+    - run: clang++ --version
+        
+    - name: Create Build Environment
+      # Some projects don't allow in-source building, so create a separate build directory
+      # We'll use this as our working directory for all subsequent commands
+      run: cmake -E make_directory ${{runner.workspace}}/build
+
+    - uses: lukka/get-cmake@latest
+
+    - name: Restore artifacts, or setup vcpkg (do not install any package)
+      uses: lukka/run-vcpkg@v10
+        
+    - name: Configure CMake
+      shell: bash
+      working-directory: ${{runner.workspace}}/build
+      env:
+        CXX: ${{ matrix.compiler }}
+      run: cmake $GITHUB_WORKSPACE --preset=ad-eigen -DVCPKG_TARGET_TRIPLET=${{ matrix.triplet }} -DBLA_VENDOR=OpenBLAS -DXPED_USE_BLAS=ON -DXPED_USE_LAPACK=ON -DXPED_USE_OPENMP=OFF -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DXPED_USE_LIBCXX=${{ matrix.LIBCXX }} -DXPED_ENABLE_CCACHE=OFF -DXPED_BUILD_CYCLOPS=ON -DXPED_STORAGE=${{ matrix.STORAGE }}
+          
+    - name: Build
+      working-directory: ${{runner.workspace}}/build
+      shell: bash
+      # Execute the build.  You can specify a specific target with "--target <NAME>"
+      run: cmake --build . --config $BUILD_TYPE -- VERBOSE=1 -j2
+
+    - name: Test
+      working-directory: ${{runner.workspace}}/build/tests
+      shell: bash
+      # Execute tests defined by the CMake configuration.  
+      # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
+      run: ctest -C $BUILD_TYPE
+      
+    - name: Generate coverage report
+      if: matrix.compiler == 'g++'
+      working-directory: ${{runner.workspace}}/build/tests
+      run: |
+        lcov --capture --directory . --output-file coverage.info
+        lcov --remove coverage.info '/usr/*' --output-file coverage.info # filter system-files
+        lcov --remove coverage.info '${{runner.workspace}}/build/thirdparty/*' --output-file coverage.info # filter system-files
+        lcov --list coverage.info # debug info
+        
+    - name: Upload coverage to Codecov
+      if: matrix.compiler == 'g++'
+      uses: codecov/codecov-action@v1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        file: ${{runner.workspace}}/build/tests/coverage.info
+        directory: ${{runner.workspace}}/build/tests
+        flags: unittests
+        name: coverage
+        fail_ci_if_error: true
+        verbose: true

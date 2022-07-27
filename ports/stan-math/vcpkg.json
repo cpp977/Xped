@@ -1,6 +1,6 @@
 {
   "name": "stan-math",
-  "version-string": "4.3.1",
+  "version-string": "4.4.0",
   "description": "stan math provides a framework for automatic differentation in reverse and forward mode.",
   "dependencies": [
       "sundials",

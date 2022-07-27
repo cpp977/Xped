@@ -2,6 +2,7 @@
 #define XPED_TWO_SITE_OBSERVABLE_HPP_
 
 #include "Xped/Core/Tensor.hpp"
+#include "Xped/PEPS/Bonds.hpp"
 #include "Xped/PEPS/ObservableBase.hpp"
 #include "Xped/PEPS/TMatrix.hpp"
 

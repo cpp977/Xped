@@ -3,6 +3,8 @@
 
 #include <cmath>
 
+#include "Xped/Util/Bool.hpp"
+
 #include "Xped/Core/Tensor.hpp"
 
 #include "Xped/AD/reverse_pass_callback_alloc.hpp"
@@ -130,26 +132,27 @@ public:
         }
     }
 
-    template <bool TRACK, int shift, std::size_t... p>
-    auto permute() const
+    template <int shift, std::size_t... p, bool TRACK>
+    auto permute(Bool<TRACK>) const
     {
         if constexpr(TRACK) {
-            Xped::Tensor<Scalar, Rank - shift, CoRank + shift, Symmetry, true, AllocationPolicy> out(val().template permute<false, shift, p...>());
+            Xped::Tensor<Scalar, Rank - shift, CoRank + shift, Symmetry, true, AllocationPolicy> out(
+                val().template permute<shift, p...>(Bool<false>{}));
             stan::math::reverse_pass_callback([curr = *this, out]() mutable {
                 using inverse = decltype(Xped::util::constFct::inverse_permutation<seq::iseq<std::size_t, p...>>());
-                curr.adj() += out.adj().template permute<false, -shift>(inverse{});
+                curr.adj() += out.adj().template permute<-shift>(inverse{}, Bool<false>{});
                 SPDLOG_WARN("reverse permute of {}, input adj norm={}, output adj norm={}", curr.name(), out.adj().norm(), curr.adj().norm());
             });
             return out;
         } else {
-            return val().template permute<false, shift, p...>();
+            return val().template permute<shift, p...>(Bool<false>{});
         }
     }
 
-    template <bool TRACK, int shift, std::size_t... p>
-    Tensor<Scalar, Rank - shift, CoRank + shift, Symmetry, true, AllocationPolicy> permute(seq::iseq<std::size_t, p...>) const
+    template <int shift, std::size_t... p, bool TRACK>
+    Tensor<Scalar, Rank - shift, CoRank + shift, Symmetry, true, AllocationPolicy> permute(seq::iseq<std::size_t, p...>, Bool<TRACK>) const
     {
-        return permute<TRACK, shift, p...>();
+        return permute<shift, p...>(Bool<TRACK>{});
     }
 
 #if XPED_HAS_NTTP
@@ -166,9 +169,9 @@ public:
         constexpr auto pres = std::get<4>(perms);
         constexpr auto shiftres = std::get<5>(perms);
         SPDLOG_INFO("shiftres={}, pres={}", shiftres, pres);
-        return operator*<TRACK>(this->template permute<TRACK, shift1>(util::constFct::as_sequence<p1>()),
-                                other.template permute<TRACK, shift2>(util::constFct::as_sequence<p2>()))
-            .template permute<TRACK, shiftres>(util::constFct::as_sequence<pres>());
+        return operator*<TRACK>(this->template permute<shift1>(util::constFct::as_sequence<p1>(), Bool<TRACK>{}),
+                                other.template permute<shift2>(util::constFct::as_sequence<p2>(), Bool<TRACK>{}))
+            .template permute<shiftres>(util::constFct::as_sequence<pres>(), Bool<TRACK>{});
     }
 #endif
 

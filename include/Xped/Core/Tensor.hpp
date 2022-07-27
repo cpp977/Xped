@@ -8,6 +8,7 @@
 
 #include "Xped/Util/Macros.hpp"
 
+#include "Xped/Util/Bool.hpp"
 #include "Xped/Util/Constfct.hpp"
 #include "Xped/Util/Mpi.hpp"
 
@@ -238,20 +239,41 @@ public:
 
     // Scalar norm() const { return std::sqrt(squaredNorm()); }
 
-    template <bool, int shift, std::size_t...>
-    Tensor<Scalar, Rank - shift, CoRank + shift, Symmetry, false, AllocationPolicy> permute() const;
+    // template <bool, int shift, std::size_t...>
+    // Tensor<Scalar, Rank - shift, CoRank + shift, Symmetry, false, AllocationPolicy> permute() const;
 
-    template <bool TRACK, int shift, std::size_t... p>
-    Tensor<Scalar, Rank - shift, CoRank + shift, Symmetry, false, AllocationPolicy> permute(seq::iseq<std::size_t, p...>) const
-    {
-        return permute<TRACK, shift, p...>();
-    }
+    // template <bool TRACK, int shift, std::size_t... p>
+    // Tensor<Scalar, Rank - shift, CoRank + shift, Symmetry, false, AllocationPolicy> permute(seq::iseq<std::size_t, p...>) const
+    // {
+    //     return permute<TRACK, shift, p...>();
+    // }
 
     // template <int shift, std::size_t... p>
     // Tensor<Scalar, Rank - shift, CoRank + shift, Symmetry, false, AllocationPolicy> permute() const
     // {
     //     return permute<false, shift, p...>();
     // }
+
+    template <int shift, std::size_t... p>
+    Tensor<Scalar, Rank - shift, CoRank + shift, Symmetry, false, AllocationPolicy> permute() const;
+
+    template <int shift, std::size_t... p>
+    Tensor<Scalar, Rank - shift, CoRank + shift, Symmetry, false, AllocationPolicy> permute(seq::iseq<std::size_t, p...>) const
+    {
+        return permute<shift, p...>();
+    }
+
+    template <int shift, std::size_t... p, bool b>
+    Tensor<Scalar, Rank - shift, CoRank + shift, Symmetry, false, AllocationPolicy> permute(Bool<b>) const
+    {
+        return permute<shift, p...>();
+    }
+
+    template <int shift, std::size_t... p, bool TRACK>
+    Tensor<Scalar, Rank - shift, CoRank + shift, Symmetry, false, AllocationPolicy> permute(seq::iseq<std::size_t, p...>, Bool<TRACK>) const
+    {
+        return permute<shift, p...>(Bool<TRACK>{});
+    }
 
     template <std::size_t leg>
     Tensor<Scalar, util::constFct::trimDim<Rank>(leg), Rank + CoRank - 1 - util::constFct::trimDim<Rank>(leg), Symmetry, false, AllocationPolicy>
@@ -274,9 +296,9 @@ public:
         constexpr auto pres = std::get<4>(perms);
         constexpr auto shiftres = std::get<5>(perms);
         SPDLOG_INFO("shiftres={}, pres={}", shiftres, pres);
-        return operator*<TRACK>(this->template permute<TRACK, shift1>(util::constFct::as_sequence<p1>()),
-                                other.template permute<TRACK, shift2>(util::constFct::as_sequence<p2>()))
-            .template permute<TRACK, shiftres>(util::constFct::as_sequence<pres>());
+        return operator*<TRACK>(this->template permute<shift1>(util::constFct::as_sequence<p1>(), Bool<TRACK>{}),
+                                other.template permute<shift2>(util::constFct::as_sequence<p2>(), Bool<TRACK>{}))
+            .template permute<shiftres>(util::constFct::as_sequence<pres>(), Bool<TRACK>{});
     }
 #endif
 

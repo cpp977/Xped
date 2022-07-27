@@ -28,7 +28,7 @@ template <typename Scalar, typename Symmetry>
 SiteOperator<Scalar, Symmetry> SiteOperator<Scalar, Symmetry>::adjoint() const
 {
     SiteOperator<Scalar, Symmetry> out(Symmetry::conj(Q), data.coupledCodomain());
-    out.data = data.adjoint().eval().template permute<false, -1, 0, 2, 1>();
+    out.data = data.adjoint().eval().template permute<-1, 0, 2, 1>();
     return out;
 }
 

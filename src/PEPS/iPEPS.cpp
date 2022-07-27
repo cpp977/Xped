@@ -2,6 +2,8 @@
 
 #include "Xped/PEPS/iPEPS.hpp"
 
+#include "Xped/Util/Bool.hpp"
+
 #include "Xped/Core/AdjointOp.hpp"
 
 #include "Xped/Symmetry/SU2.hpp"
@@ -110,7 +112,7 @@ void iPEPS<Scalar, Symmetry, ENABLE_AD>::setRandom()
             if(not cell_.pattern.isUnique(x, y)) { continue; }
             auto pos = cell_.pattern.uniqueIndex(x, y);
             As[pos].setRandom();
-            Adags[pos] = As[pos].adjoint().eval().template permute<true, 0, 3, 4, 2, 0, 1>();
+            Adags[pos] = As[pos].adjoint().eval().template permute<0, 3, 4, 2, 0, 1>(Bool<ENABLE_AD>{});
         }
     }
 }
@@ -147,7 +149,7 @@ void iPEPS<Scalar, Symmetry, ENABLE_AD>::set_data(const Scalar* data, bool NORMA
             if(not cell_.pattern.isUnique(x, y)) { continue; }
             auto pos = cell_.pattern.uniqueIndex(x, y);
 
-            Adags[pos] = As[pos].adjoint().eval().template permute<true, 0, 3, 4, 2, 0, 1>();
+            Adags[pos] = As[pos].adjoint().eval().template permute<0, 3, 4, 2, 0, 1>(Bool<ENABLE_AD>{});
         }
     }
 }

@@ -109,11 +109,6 @@ int main(int argc, char* argv[])
     // D.print(std::cout);
     // std::cout << H.squaredNorm() << std::endl;
 
-    auto Hcheck = Xped::KondoNecklace<Xped::Sym::U0<>>::twoSiteHamiltonian(0.68, 0.68, 1., 1., 0., 0.4);
-    auto [Dcheck, Ucheck] = Hcheck.eigh();
-    // Dcheck.print(std::cout);
-    // std::cout << Hcheck.squaredNorm() << std::endl;
-
     // using Symmetry = Xped::Sym::U0<double>;
     using Symmetry = Xped::Sym::U1<Xped::Sym::SpinU1, double>;
     // Xped::Qbasis<Symmetry, 1> b;

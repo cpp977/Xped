@@ -112,7 +112,7 @@ std::array<TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, Scalar>>, 4> a
                 if(op.data_d1.size() > 0) {
                     [[maybe_unused]] double dumb;
                     auto [Hu, Hs, Hvdag] =
-                        shifted_op.data_d1(x, y).template permute<false, 0, 0, 2, 1, 3>().tSVD(std::numeric_limits<std::size_t>::max(), 1.e-14, dumb);
+                        shifted_op.data_d1(x, y).template permute<0, 0, 2, 1, 3>().tSVD(std::numeric_limits<std::size_t>::max(), 1.e-14, dumb);
                     Hu = Hu * Hs.sqrt();
                     Hvdag = Hs.sqrt() * Hvdag;
 
@@ -151,8 +151,8 @@ std::array<TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, Scalar>>, 4> a
                     // norm = (Q1 * Q2 * Q3 * Q4).trace();
 
                     [[maybe_unused]] double dumb;
-                    auto [Hu, Hs, Hvdag] = shifted_op.data_d2(x + 1, y).template permute<false, 0, 0, 2, 1, 3>().tSVD(
-                        std::numeric_limits<std::size_t>::max(), 1.e-14, dumb);
+                    auto [Hu, Hs, Hvdag] =
+                        shifted_op.data_d2(x + 1, y).template permute<0, 0, 2, 1, 3>().tSVD(std::numeric_limits<std::size_t>::max(), 1.e-14, dumb);
                     Hu = Hu * Hs.sqrt();
                     Hvdag = Hs.sqrt() * Hvdag;
 

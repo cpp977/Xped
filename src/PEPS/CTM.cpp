@@ -11,6 +11,7 @@
 #include "Xped/Symmetry/SU2.hpp"
 #include "Xped/Symmetry/U0.hpp"
 #include "Xped/Symmetry/U1.hpp"
+#include "Xped/Util/Bool.hpp"
 
 namespace Xped {
 
@@ -798,21 +799,23 @@ CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::renormalize_left(const int x,
     //                                                              T1s(x, y - 1).template permute<TRACK_INNER, -2, 0, 2, 3, 1>()))))
     //                  .template permute<TRACK_INNER, +1, 0, 1>();
     C1_new_tmp = operator*<TRACK_INNER>(P1(x, y - 1),
-                                        operator*<TRACK_INNER>(C1s(x - 1, y - 1).template permute<TRACK_INNER, -1, 0, 1>(), T1s(x, y - 1))
-                                            .template permute<TRACK_INNER, -2, 0, 2, 3, 1>())
-                     .template permute<TRACK_INNER, +1, 0, 1>();
+                                        operator*<TRACK_INNER>(C1s(x - 1, y - 1).template permute<-1, 0, 1>(Bool<TRACK_INNER>{}), T1s(x, y - 1))
+                                            .template permute<-2, 0, 2, 3, 1>(Bool<TRACK_INNER>{}))
+                     .template permute<+1, 0, 1>(Bool<TRACK_INNER>{});
 
     C1_new = NORMALIZE ? C1_new_tmp * (1. / C1_new_tmp.maxNorm()) : C1_new_tmp;
-    C4_new_tmp = operator*<TRACK_INNER>(operator*<TRACK_INNER>(C4s(x - 1, y + 1), T3s(x, y + 1).template permute<TRACK_INNER, 2, 2, 3, 0, 1>())
-                                            .template permute<TRACK_INNER, 0, 1, 0, 2, 3>(),
+    C4_new_tmp = operator*<TRACK_INNER>(operator*<TRACK_INNER>(C4s(x - 1, y + 1), T3s(x, y + 1).template permute<2, 2, 3, 0, 1>(Bool<TRACK_INNER>{}))
+                                            .template permute<0, 1, 0, 2, 3>(Bool<TRACK_INNER>{}),
                                         P2(x, y))
-                     .template permute<TRACK_INNER, 0, 1, 0>();
+                     .template permute<0, 1, 0>(Bool<TRACK_INNER>{});
     C4_new = NORMALIZE ? C4_new_tmp * (1. / C4_new_tmp.maxNorm()) : C4_new_tmp;
-    auto tmp2 = P1(x, y).template permute<TRACK_INNER, -2, 0, 2, 3, 1>() * T4s(x - 1, y).template permute<TRACK_INNER, 0, 1, 0, 2, 3>();
-    auto tmp3 = tmp2.template permute<TRACK_INNER, -1, 0, 2, 3, 5, 4, 1>() * A->As(x, y).template permute<TRACK_INNER, 0, 0, 3, 1, 2, 4>();
-    auto tmp4 = (tmp3.template permute<TRACK_INNER, 0, 0, 2, 4, 5, 3, 1, 6>() * A->Adags(x, y).template permute<TRACK_INNER, 0, 0, 4, 2, 1, 3>())
-                    .template permute<TRACK_INNER, +1, 0, 3, 5, 1, 2, 4>();
-    T4_new_tmp = operator*<TRACK_INNER>(tmp4, P2(x, y - 1)).template permute<TRACK_INNER, +2, 3, 0, 1, 2>();
+    auto tmp2 = P1(x, y).template permute<-2, 0, 2, 3, 1>(Bool<TRACK_INNER>{}) * T4s(x - 1, y).template permute<0, 1, 0, 2, 3>(Bool<TRACK_INNER>{});
+    auto tmp3 =
+        tmp2.template permute<-1, 0, 2, 3, 5, 4, 1>(Bool<TRACK_INNER>{}) * A->As(x, y).template permute<0, 0, 3, 1, 2, 4>(Bool<TRACK_INNER>{});
+    auto tmp4 =
+        (tmp3.template permute<0, 0, 2, 4, 5, 3, 1, 6>(Bool<TRACK_INNER>{}) * A->Adags(x, y).template permute<0, 0, 4, 2, 1, 3>(Bool<TRACK_INNER>{}))
+            .template permute<+1, 0, 3, 5, 1, 2, 4>(Bool<TRACK_INNER>{});
+    T4_new_tmp = operator*<TRACK_INNER>(tmp4, P2(x, y - 1)).template permute<+2, 3, 0, 1, 2>(Bool<TRACK_INNER>{});
     T4_new = NORMALIZE ? T4_new_tmp * (1. / T4_new_tmp.maxNorm()) : T4_new_tmp;
 
     if constexpr(TRACK and CP) {
@@ -848,21 +851,24 @@ CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::renormalize_right(const int x,
     Tensor<Scalar, 3, 1, Symmetry, TRACK_INNER> T2_new_tmp;
     Tensor<Scalar, 2, 0, Symmetry, TRACK_INNER> C3_new_tmp;
 
-    C2_new_tmp = operator*<TRACK_INNER>(operator*<TRACK_INNER>(T1s(x, y - 1).template permute<TRACK_INNER, -2, 0, 2, 3, 1>(), C2s(x + 1, y - 1))
-                                            .template permute<TRACK_INNER, +2, 0, 3, 1, 2>(),
+    C2_new_tmp = operator*<TRACK_INNER>(operator*<TRACK_INNER>(T1s(x, y - 1).template permute<-2, 0, 2, 3, 1>(Bool<TRACK_INNER>{}), C2s(x + 1, y - 1))
+                                            .template permute<+2, 0, 3, 1, 2>(Bool<TRACK_INNER>{}),
                                         P2(x, y - 1));
     C2_new = NORMALIZE ? C2_new_tmp * (1. / C2_new_tmp.maxNorm()) : C2_new_tmp;
     C3_new_tmp = operator*<TRACK_INNER>(P1(x, y),
-                                        operator*<TRACK_INNER>(C3s(x + 1, y + 1).template permute<TRACK_INNER, +1, 0, 1>(),
-                                                               T3s(x, y + 1).template permute<TRACK_INNER, +2, 3, 2, 0, 1>())
-                                            .template permute<TRACK_INNER, -2, 0, 2, 3, 1>())
-                     .template permute<TRACK_INNER, -1, 0, 1>();
+                                        operator*<TRACK_INNER>(C3s(x + 1, y + 1).template permute<+1, 0, 1>(Bool<TRACK_INNER>{}),
+                                                               T3s(x, y + 1).template permute<+2, 3, 2, 0, 1>(Bool<TRACK_INNER>{}))
+                                            .template permute<-2, 0, 2, 3, 1>(Bool<TRACK_INNER>{}))
+                     .template permute<-1, 0, 1>(Bool<TRACK_INNER>{});
     C3_new = NORMALIZE ? C3_new_tmp * (1. / C3_new_tmp.maxNorm()) : C3_new_tmp;
-    auto tmp2 = P1(x, y - 1).template permute<TRACK_INNER, -2, 0, 2, 3, 1>() * T2s(x + 1, y).template permute<TRACK_INNER, +2, 2, 3, 0, 1>();
-    auto tmp3 = tmp2.template permute<TRACK_INNER, -1, 0, 2, 3, 5, 1, 4>() * A->As(x, y).template permute<TRACK_INNER, 0, 1, 2, 0, 3, 4>();
-    auto tmp4 = (tmp3.template permute<TRACK_INNER, 0, 0, 2, 4, 5, 1, 3, 6>() * A->Adags(x, y).template permute<TRACK_INNER, 0, 1, 3, 2, 0, 4>())
-                    .template permute<TRACK_INNER, +1, 0, 2, 4, 1, 3, 5>();
-    T2_new_tmp = operator*<TRACK_INNER>(tmp4, P2(x, y)).template permute<TRACK_INNER, 0, 1, 2, 0, 3>();
+    auto tmp2 =
+        P1(x, y - 1).template permute<-2, 0, 2, 3, 1>(Bool<TRACK_INNER>{}) * T2s(x + 1, y).template permute<+2, 2, 3, 0, 1>(Bool<TRACK_INNER>{});
+    auto tmp3 =
+        tmp2.template permute<-1, 0, 2, 3, 5, 1, 4>(Bool<TRACK_INNER>{}) * A->As(x, y).template permute<0, 1, 2, 0, 3, 4>(Bool<TRACK_INNER>{});
+    auto tmp4 =
+        (tmp3.template permute<0, 0, 2, 4, 5, 1, 3, 6>(Bool<TRACK_INNER>{}) * A->Adags(x, y).template permute<0, 1, 3, 2, 0, 4>(Bool<TRACK_INNER>{}))
+            .template permute<+1, 0, 2, 4, 1, 3, 5>(Bool<TRACK_INNER>{});
+    T2_new_tmp = operator*<TRACK_INNER>(tmp4, P2(x, y)).template permute<0, 1, 2, 0, 3>(Bool<TRACK_INNER>{});
     T2_new = NORMALIZE ? T2_new_tmp * (1. / T2_new_tmp.maxNorm()) : T2_new_tmp;
 
     if constexpr(TRACK and CP) {
@@ -897,21 +903,21 @@ CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::renormalize_top(const int x,
     Tensor<Scalar, 0, 2, Symmetry, TRACK_INNER> C1_new_tmp;
     Tensor<Scalar, 1, 3, Symmetry, TRACK_INNER> T1_new_tmp;
     Tensor<Scalar, 1, 1, Symmetry, TRACK_INNER> C2_new_tmp;
-    C1_new_tmp = operator*<TRACK_INNER>(operator*<TRACK_INNER>(T4s(x - 1, y).template permute<TRACK_INNER, -2, 1, 2, 3, 0>(),
-                                                               C1s(x - 1, y - 1).template permute<TRACK_INNER, -1, 0, 1>())
-                                            .template permute<TRACK_INNER, +2, 0, 3, 1, 2>(),
+    C1_new_tmp = operator*<TRACK_INNER>(operator*<TRACK_INNER>(T4s(x - 1, y).template permute<-2, 1, 2, 3, 0>(Bool<TRACK_INNER>{}),
+                                                               C1s(x - 1, y - 1).template permute<-1, 0, 1>(Bool<TRACK_INNER>{}))
+                                            .template permute<+2, 0, 3, 1, 2>(Bool<TRACK_INNER>{}),
                                         P2(x - 1, y))
-                     .template permute<TRACK_INNER, +1, 0, 1>();
+                     .template permute<+1, 0, 1>(Bool<TRACK_INNER>{});
     C1_new = NORMALIZE ? C1_new_tmp * (1. / C1_new_tmp.maxNorm()) : C1_new_tmp;
     C2_new_tmp = operator*<TRACK_INNER>(P1(x, y),
-                                        operator*<TRACK_INNER>(C2s(x + 1, y - 1), T2s(x + 1, y).template permute<TRACK_INNER, +2, 2, 0, 1, 3>())
-                                            .template permute<TRACK_INNER, -2, 0, 1, 2, 3>());
+                                        operator*<TRACK_INNER>(C2s(x + 1, y - 1), T2s(x + 1, y).template permute<+2, 2, 0, 1, 3>(Bool<TRACK_INNER>{}))
+                                            .template permute<-2, 0, 1, 2, 3>(Bool<TRACK_INNER>{}));
     C2_new = NORMALIZE ? C2_new_tmp * (1. / C2_new_tmp.maxNorm()) : C2_new_tmp;
-    auto tmp2 = operator*<TRACK_INNER>(P1(x - 1, y).template permute<TRACK_INNER, -2, 0, 2, 3, 1>(), T1s(x, y - 1));
-    auto tmp3 = operator*<TRACK_INNER>(tmp2.template permute<TRACK_INNER, -1, 0, 2, 3, 5, 1, 4>(), A->As(x, y));
-    auto tmp4 = operator*<TRACK_INNER>(tmp3.template permute<TRACK_INNER, 0, 0, 2, 4, 5, 1, 3, 6>(), A->Adags(x, y))
-                    .template permute<TRACK_INNER, +1, 0, 3, 5, 1, 2, 4>();
-    T1_new_tmp = (tmp4 * P2(x, y)).template permute<TRACK_INNER, +2, 0, 3, 1, 2>();
+    auto tmp2 = operator*<TRACK_INNER>(P1(x - 1, y).template permute<-2, 0, 2, 3, 1>(Bool<TRACK_INNER>{}), T1s(x, y - 1));
+    auto tmp3 = operator*<TRACK_INNER>(tmp2.template permute<-1, 0, 2, 3, 5, 1, 4>(Bool<TRACK_INNER>{}), A->As(x, y));
+    auto tmp4 = operator*<TRACK_INNER>(tmp3.template permute<0, 0, 2, 4, 5, 1, 3, 6>(Bool<TRACK_INNER>{}), A->Adags(x, y))
+                    .template permute<+1, 0, 3, 5, 1, 2, 4>(Bool<TRACK_INNER>{});
+    T1_new_tmp = (tmp4 * P2(x, y)).template permute<+2, 0, 3, 1, 2>(Bool<TRACK_INNER>{});
     T1_new = NORMALIZE ? T1_new_tmp * (1. / T1_new_tmp.maxNorm()) : T1_new_tmp;
 
     if constexpr(TRACK and CP) {
@@ -947,21 +953,23 @@ CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::renormalize_bottom(const int x,
     Tensor<Scalar, 3, 1, Symmetry, TRACK_INNER> T3_new_tmp;
     Tensor<Scalar, 2, 0, Symmetry, TRACK_INNER> C3_new_tmp;
     C4_new_tmp = operator*<TRACK_INNER>(P1(x - 1, y),
-                                        operator*<TRACK_INNER>(T4s(x - 1, y).template permute<TRACK_INNER, -2, 0, 2, 3, 1>(), C4s(x - 1, y + 1))
-                                            .template permute<TRACK_INNER, 0, 3, 1, 2, 0>())
-                     .template permute<TRACK_INNER, 0, 1, 0>();
+                                        operator*<TRACK_INNER>(T4s(x - 1, y).template permute<-2, 0, 2, 3, 1>(Bool<TRACK_INNER>{}), C4s(x - 1, y + 1))
+                                            .template permute<0, 3, 1, 2, 0>(Bool<TRACK_INNER>{}))
+                     .template permute<0, 1, 0>(Bool<TRACK_INNER>{});
     C4_new = NORMALIZE ? C4_new_tmp * (1. / C4_new_tmp.maxNorm()) : C4_new_tmp;
-    C3_new_tmp = operator*<TRACK_INNER>(operator*<TRACK_INNER>(T2s(x + 1, y), C3s(x + 1, y + 1).template permute<TRACK_INNER, +1, 0, 1>())
-                                            .template permute<TRACK_INNER, +2, 2, 3, 0, 1>(),
+    C3_new_tmp = operator*<TRACK_INNER>(operator*<TRACK_INNER>(T2s(x + 1, y), C3s(x + 1, y + 1).template permute<+1, 0, 1>(Bool<TRACK_INNER>{}))
+                                            .template permute<+2, 2, 3, 0, 1>(Bool<TRACK_INNER>{}),
                                         P2(x, y))
-                     .template permute<TRACK_INNER, -1, 0, 1>();
+                     .template permute<-1, 0, 1>(Bool<TRACK_INNER>{});
     C3_new = NORMALIZE ? C3_new_tmp * (1. / C3_new_tmp.maxNorm()) : C3_new_tmp;
-    auto tmp2 = P1(x, y).template permute<TRACK_INNER, -2, 0, 2, 3, 1>() * T3s(x, y + 1).template permute<TRACK_INNER, +2, 3, 2, 0, 1>();
-    auto tmp3 = tmp2.template permute<TRACK_INNER, -1, 0, 2, 3, 5, 1, 4>() * A->As(x, y).template permute<TRACK_INNER, 0, 2, 3, 0, 1, 4>();
+    auto tmp2 = P1(x, y).template permute<-2, 0, 2, 3, 1>(Bool<TRACK_INNER>{}) * T3s(x, y + 1).template permute<+2, 3, 2, 0, 1>(Bool<TRACK_INNER>{});
+    auto tmp3 =
+        tmp2.template permute<-1, 0, 2, 3, 5, 1, 4>(Bool<TRACK_INNER>{}) * A->As(x, y).template permute<0, 2, 3, 0, 1, 4>(Bool<TRACK_INNER>{});
 
-    auto tmp4 = (tmp3.template permute<TRACK_INNER, 0, 0, 2, 4, 5, 1, 3, 6>() * A->Adags(x, y).template permute<TRACK_INNER, 0, 3, 4, 2, 0, 1>())
-                    .template permute<TRACK_INNER, +1, 0, 3, 5, 1, 2, 4>();
-    T3_new_tmp = operator*<TRACK_INNER>(tmp4, P2(x - 1, y)).template permute<TRACK_INNER, 0, 1, 2, 3, 0>();
+    auto tmp4 =
+        (tmp3.template permute<0, 0, 2, 4, 5, 1, 3, 6>(Bool<TRACK_INNER>{}) * A->Adags(x, y).template permute<0, 3, 4, 2, 0, 1>(Bool<TRACK_INNER>{}))
+            .template permute<+1, 0, 3, 5, 1, 2, 4>(Bool<TRACK_INNER>{});
+    T3_new_tmp = operator*<TRACK_INNER>(tmp4, P2(x - 1, y)).template permute<0, 1, 2, 3, 0>(Bool<TRACK_INNER>{});
     T3_new = NORMALIZE ? T3_new_tmp * (1. / T3_new_tmp.maxNorm()) : T3_new_tmp;
 
     if constexpr(TRACK and CP) {

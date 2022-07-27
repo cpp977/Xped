@@ -61,7 +61,7 @@ struct CTMCheckpoint
     bool PROJECTORS = false;
     bool RENORMALIZE = false;
 
-    constexpr void info() const
+    void info() const
     {
         fmt::print("CTM checkpoint settings:\n");
         fmt::print("  {:<20} {}\n", "• grow_all:", GROW_ALL);

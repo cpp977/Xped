@@ -8,6 +8,7 @@
 #include <fstream>
 #include <iostream>
 #include <numeric>
+#include <set>
 #include <vector>
 
 #include <boost/algorithm/string.hpp>

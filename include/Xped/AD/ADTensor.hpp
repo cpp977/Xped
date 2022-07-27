@@ -111,7 +111,7 @@ public:
 
     inline void set_data(const Scalar* data, std::size_t size) { val_op().set_data(data, size); }
 
-    inline vari_type& operator*() { return *vi_; }
+    // inline vari_type& operator*() { return *vi_; }
 
     inline vari_type* operator->() { return vi_; }
 

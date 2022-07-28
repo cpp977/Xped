@@ -19,6 +19,8 @@ using std::size_t;
 using std::string;
 
 #include "Xped/Util/Macros.hpp"
+#include "Xped/Util/Mpi.hpp"
+#include "Xped/Util/TomlHelpers.hpp"
 
 #ifdef XPED_CACHE_PERMUTE_OUTPUT
 #    include "lru/lru.hpp"

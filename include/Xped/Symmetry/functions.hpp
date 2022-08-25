@@ -37,7 +37,6 @@ inline std::string print_frac_nice(boost::rational<int> r)
 } // namespace util
 
 namespace Sym {
-// Crazy that this enum needs to be here, because it is also in DmrgTypedefs.h. But without this, it doesn't compile...
 #ifndef KIND_ENUM
 #    define KIND_ENUM
 enum KIND
@@ -46,6 +45,7 @@ enum KIND
     Salt,
     T,
     N,
+    FN,
     M,
     Nup,
     Ndn,

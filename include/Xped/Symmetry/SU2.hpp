@@ -51,6 +51,7 @@ struct SU2 : public SymBase<SU2<Kind, Scalar_>>
     static constexpr bool ABELIAN = false;
     static constexpr bool IS_TRIVIAL = false;
     static constexpr bool IS_MODULAR = false;
+    static constexpr bool IS_FERMIONIC = false;
     static constexpr int MOD_N = 0;
 
     static constexpr bool IS_CHARGE_SU2()
@@ -97,7 +98,7 @@ struct SU2 : public SymBase<SU2<Kind, Scalar_>>
      */
     static std::vector<qType> basis_combine(const qType& ql, const qType& qr);
 
-    std::size_t multiplicity(const qType& q1, const qType& q2, const qType& q3) { return triangle(q1, q2, q3) ? 1ul : 0ul; }
+    static std::size_t multiplicity(const qType& q1, const qType& q2, const qType& q3) { return triangle(q1, q2, q3) ? 1ul : 0ul; }
     ///@{
     /**
      * Various coeffecients, all resulting from contractions or traces of the Clebsch-Gordon coefficients.

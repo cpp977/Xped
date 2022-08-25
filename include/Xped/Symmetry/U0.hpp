@@ -47,6 +47,7 @@ struct U0 : SymBase<U0<Scalar_>>
     static constexpr bool ABELIAN = true;
     static constexpr bool IS_TRIVIAL = true;
     static constexpr bool IS_MODULAR = false;
+    static constexpr bool IS_FERMIONIC = false;
     static constexpr int MOD_N = 0;
 
     static constexpr bool IS_CHARGE_SU2() { return false; }
@@ -69,7 +70,11 @@ struct U0 : SymBase<U0<Scalar_>>
 
     inline static std::vector<qType> basis_combine(const qType&, const qType&) { return {{}}; }
 
+    static std::size_t multiplicity(const qType&, const qType&, const qType&) { return 1ul; }
+
     inline static Scalar coeff_dot(const qType&) { return Scalar(1.); }
+
+    inline static Scalar coeff_twist(const qType&) { return Scalar(1.); }
 
     inline static Scalar coeff_FS(const qType&) { return Scalar(1.); }
 

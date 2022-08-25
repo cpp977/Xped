@@ -47,6 +47,7 @@ struct ZN : public SymBase<ZN<Kind, N, Scalar_>>
     static constexpr bool ABELIAN = true;
     static constexpr bool IS_TRIVIAL = false;
     static constexpr bool IS_MODULAR = true;
+    static constexpr bool IS_FERMIONIC = (Kind::name == KIND::FN);
     static constexpr int MOD_N = N;
 
     static constexpr bool IS_CHARGE_SU2() { return false; }
@@ -65,7 +66,18 @@ struct ZN : public SymBase<ZN<Kind, N, Scalar_>>
         return std::array<qType, 2>{{qarray<1>(std::array<int, 1>{{1}}), qarray<1>(std::array<int, 1>{{N - 1}})}};
     }
 
-    inline static std::string name() { return "Z(" + std::to_string(N) + ")"; }
+    inline static std::string name()
+    {
+        std::string prefix = IS_FERMIONIC ? "f" : "";
+        if(N == 2) { return prefix + "Z₂"; }
+        if(N == 3) { return prefix + "Z₃"; }
+        if(N == 4) { return prefix + "Z₄"; }
+        if(N == 5) { return prefix + "Z₅"; }
+        if(N == 36) { return prefix + "Z₃₆"; }
+        if(N == 64) { return prefix + "Z₆₄"; }
+        return prefix + "Z(" + std::to_string(N) + ")";
+    }
+
     inline static constexpr std::array<KIND, Nq> kind() { return {Kind::name}; }
 
     inline static qType conj(const qType& q) { return {util::constFct::posmod<N>(-q[0])}; }
@@ -83,7 +95,7 @@ struct ZN : public SymBase<ZN<Kind, N, Scalar_>>
      */
     static std::vector<qType> basis_combine(const qType& ql, const qType& qr);
 
-    std::size_t multiplicity(const qType& q1, const qType& q2, const qType& q3) { return triangle(q1, q2, q3) ? 1ul : 0ul; }
+    static std::size_t multiplicity(const qType& q1, const qType& q2, const qType& q3) { return triangle(q1, q2, q3) ? 1ul : 0ul; }
 
     ///@{
     /**
@@ -93,6 +105,12 @@ struct ZN : public SymBase<ZN<Kind, N, Scalar_>>
      *       for which the Kronecker deltas are not necessary.
      */
     inline static Scalar coeff_dot(const qType&) { return Scalar(1.); }
+
+    inline static Scalar coeff_twist(const qType& q)
+    {
+        Scalar sign = (q[0] % 2 != 0 and Kind::name == KIND::FN) ? -1. : 1.;
+        return sign * Scalar(1.);
+    }
 
     static Scalar coeff_FS(const qType&) { return Scalar(1.); }
 
@@ -132,7 +150,16 @@ struct ZN : public SymBase<ZN<Kind, N, Scalar_>>
         return Scalar(1);
     }
 
-    static Scalar coeff_swap(const qType& ql, const qType& qr, const qType& qf) { return triangle(ql, qr, qf) ? Scalar(1.) : Scalar(0.); };
+    static Scalar coeff_swap(const qType& ql, const qType& qr, const qType& qf)
+    {
+        Scalar sign = +1.;
+        if constexpr(Kind::name == KIND::FN) {
+            bool parity = (ql[0] % 2 != 0) and (qr[0] % 2 != 0);
+            sign = parity ? -1. : 1.;
+            SPDLOG_INFO("ql,pl={},{}; qr,pr={},{}; sign={}\n", ql[0], ql[0] % 2 != 0, qr[0], qr[0] % 2 != 0, sign);
+        }
+        return triangle(ql, qr, qf) ? sign * Scalar(1.) : Scalar(0.);
+    };
     ///@}
 
     static bool triangle(const qType& q1, const qType& q2, const qType& q3);

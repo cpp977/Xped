@@ -26,10 +26,7 @@ typename ScalarTraits<Scalar>::Real CTMSolver<Scalar, Symmetry, CPOpts>::solve(c
     fmt::print("\t{: >3} steps without gradient tracking.\n", "•");
     for(std::size_t step = 0; step < opts.max_presteps; ++step) {
         Stopwatch<> move;
-        Jack.left_move();
-        Jack.right_move();
-        Jack.top_move();
-        Jack.bottom_move();
+        Jack.grow_all();
         Jack.computeRDM();
         auto [E_h, E_v, E_d1, E_d2] = avg(Jack, H);
         double E = (E_h.sum() + E_v.sum() + E_d1.sum() + E_d2.sum()) / Jack.cell().uniqueSize();
@@ -43,7 +40,6 @@ typename ScalarTraits<Scalar>::Real CTMSolver<Scalar, Symmetry, CPOpts>::solve(c
         Eprevprev = Eprev;
         Eprev = E;
     }
-
     if(not CALC_GRAD) {
         REINIT_ENV = true;
         return E;
@@ -66,7 +62,7 @@ typename ScalarTraits<Scalar>::Real CTMSolver<Scalar, Symmetry, CPOpts>::solve(c
     fmt::print(" {}s\n", backward.time());
     std::size_t count = 0;
     for(auto it = Jim.Psi()->gradbegin(); it != Jim.Psi()->gradend(); ++it) { gradient[count++] = *it; }
-    grad_norm = *std::max_element(gradient, gradient + Psi->plainSize(), [](Scalar a, Scalar b) { return std::abs(a) < std::abs(b); });
+    grad_norm = std::abs(*std::max_element(gradient, gradient + Psi->plainSize(), [](Scalar a, Scalar b) { return std::abs(a) < std::abs(b); }));
     REINIT_ENV = grad_norm < opts.reinit_env_tol ? false : true;
     return E;
 }

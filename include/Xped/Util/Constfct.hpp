@@ -43,7 +43,7 @@ constexpr auto inverse_permutation()
 }
 
 template <int N>
-inline int posmod(int x)
+inline constexpr int posmod(int x)
 {
     return (x % N + N) % N;
 }

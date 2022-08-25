@@ -398,7 +398,7 @@ Qbasis<Symmetry, depth, AllocationPolicy> Qbasis<Symmetry, depth, AllocationPoli
 {
     assert(depth == 1);
     Qbasis<Symmetry, depth, AllocationPolicy> out;
-    out.CONJ = !this->CONJ;
+    out.CONJ = not this->CONJ;
     for(const auto& [q, num, plain] : data_) {
         auto oldtrees = tree(q);
         assert(oldtrees.size() == 1);
@@ -406,7 +406,7 @@ Qbasis<Symmetry, depth, AllocationPolicy> Qbasis<Symmetry, depth, AllocationPoli
         FusionTree<depth, Symmetry> tree;
         tree.q_uncoupled[0] = Symmetry::conj(q);
         tree.q_coupled = Symmetry::conj(q);
-        tree.IS_DUAL[0] = !oldtrees[0].IS_DUAL[0];
+        tree.IS_DUAL[0] = not oldtrees[0].IS_DUAL[0];
         tree.dims[0] = oldtrees[0].dims[0];
         tree.dim = oldtrees[0].dim;
         trees.push_back(tree);
@@ -471,6 +471,17 @@ Qbasis<Symmetry, depth + 1, AllocationPolicy> Qbasis<Symmetry, depth, Allocation
     }
     out.sort();
     return out;
+}
+
+template <typename Symmetry, std::size_t depth, typename AllocationPolicy>
+std::string Qbasis<Symmetry, depth, AllocationPolicy>::info() const
+{
+    std::stringstream res;
+    res << "Basis(" << Symmetry::name() << ", dim=" << dim();
+    if constexpr(Symmetry::NON_ABELIAN) { res << "[" << fullDim() << "]"; }
+    res << ")";
+    if(IS_CONJ()) { res << "'"; }
+    return res.str();
 }
 
 template <typename Symmetry, std::size_t depth, typename AllocationPolicy>

@@ -204,6 +204,9 @@ public:
     /**Prints the basis.*/
     tabulate::Table print() const;
 
+    /**Prints rough info.*/
+    std::string info() const;
+
     /**Prints the trees.*/
     std::string printTrees() const;
 
@@ -221,6 +224,7 @@ public:
     void sort();
 
     inline bool IS_SORTED() const { return IS_SORTED_; }
+    inline bool IS_CONJ() const { return CONJ; }
 
     inline const auto& tree(const qType& q) const
     {

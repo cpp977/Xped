@@ -72,6 +72,7 @@ public:
 
     inline const auto& val() const noexcept { return vi_->val(); }
     inline auto& val_op() noexcept { return vi_->val_op(); }
+    inline const auto& detach() const noexcept { return vi_->val(); }
 
     inline auto& adj() noexcept { return vi_->adj(); }
     inline auto& adj() const noexcept { return vi_->adj(); }
@@ -169,6 +170,9 @@ public:
         constexpr auto pres = std::get<4>(perms);
         constexpr auto shiftres = std::get<5>(perms);
         SPDLOG_INFO("shiftres={}, pres={}", shiftres, pres);
+        // auto left_p = this->template permute<shift1>(util::constFct::as_sequence<p1>(), Bool<TRACK>{});
+        // auto right_p = other.template permute<shift2>(util::constFct::as_sequence<p2>(), Bool<TRACK>{});
+        // return operator*<TRACK>(left_p, right_p).template permute<shiftres>(util::constFct::as_sequence<pres>(), Bool<TRACK>{});
         return operator*<TRACK>(this->template permute<shift1>(util::constFct::as_sequence<p1>(), Bool<TRACK>{}),
                                 other.template permute<shift2>(util::constFct::as_sequence<p2>(), Bool<TRACK>{}))
             .template permute<shiftres>(util::constFct::as_sequence<pres>(), Bool<TRACK>{});
@@ -374,11 +378,27 @@ public:
         }
     }
 
+    template <bool TRACK = true>
+    XTensor<TRACK, Scalar, Rank, CoRank, Symmetry, AllocationPolicy> twist(std::size_t leg) const
+    {
+        if constexpr(TRACK) {
+            Tensor<Scalar, Rank, CoRank, Symmetry, true, AllocationPolicy> res(val().twist(leg));
+            stan::math::reverse_pass_callback([curr = *this, res, leg]() mutable {
+                curr.adj() += res.adj().twist(leg);
+                SPDLOG_WARN("reverse twist of {}, input adj norm={}, output adj norm={}", curr.name(), res.adj().norm(), curr.adj().norm());
+            });
+            return res;
+        } else {
+            return val().twist(leg);
+        }
+    }
     // Tensor<Scalar, Rank, CoRank, Symmetry, true, AllocationPolicy>& operator-=(const Scalar s)
     // {
     //     val_op() = val() - s;
     //     return *this;
     // }
+
+    void print(std::ostream& o, bool PRINT_MATRICES = true) const { val().print(o, PRINT_MATRICES); }
 
     friend std::ostream& operator<<(std::ostream& os, const Tensor<Scalar, Rank, CoRank, Symmetry, true, AllocationPolicy>& v)
     {

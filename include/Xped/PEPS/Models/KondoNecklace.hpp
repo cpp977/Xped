@@ -58,7 +58,7 @@ public:
         if((bond & Opts::Bond::H) == Opts::Bond::H) {
             for(auto& t : this->data_h) { t = gate; }
         }
-        if((bond & Opts::Bond::H) == Opts::Bond::V) {
+        if((bond & Opts::Bond::V) == Opts::Bond::V) {
             for(auto& t : this->data_v) { t = gate; }
         }
         if((bond & Opts::Bond::D1) == Opts::Bond::D1) {
@@ -67,9 +67,6 @@ public:
         if((bond & Opts::Bond::D2) == Opts::Bond::D2) {
             for(auto& t : this->data_d2) { t = gate; }
         }
-
-        for(auto& t : this->data_h) { t = gate; }
-        for(auto& t : this->data_v) { t = gate; }
     }
 };
 

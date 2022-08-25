@@ -230,6 +230,28 @@ Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::permute() const
 }
 
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
+template <bool>
+Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>
+Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::twist(std::size_t leg) const
+{
+    if constexpr(not Symmetry::IS_FERMIONIC) { return *this; }
+    SPDLOG_INFO("Performing twist of leg={}", leg);
+    Self out = *this;
+    for(std::size_t i = 0; i < out.sector().size(); ++i) {
+        auto domain_trees = out.coupledDomain().tree(out.sector(i));
+        auto codomain_trees = out.coupledCodomain().tree(out.sector(i));
+        for(const auto& domain_tree : domain_trees) {
+            for(const auto& codomain_tree : codomain_trees) {
+                auto coeff =
+                    (leg < Rank) ? Symmetry::coeff_twist(domain_tree.q_uncoupled[leg]) : Symmetry::coeff_twist(codomain_tree.q_uncoupled[leg - Rank]);
+                out.subMatrix(domain_tree, codomain_tree) *= coeff;
+            }
+        }
+    }
+    return out;
+}
+
+template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
 template <std::size_t leg>
 Tensor<Scalar, util::constFct::trimDim<Rank>(leg), Rank + CoRank - 1 - util::constFct::trimDim<Rank>(leg), Symmetry, false, AllocationPolicy>
 Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::trim() const
@@ -805,12 +827,25 @@ template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmet
 void Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::print(std::ostream& o, bool PRINT_MATRICES) const
 {
     // std::stringstream ss;
-    o << "domain:" << endl << coupledDomain() << endl; // << "with trees:" << endl << domain.printTrees() << endl;
-    o << "codomain:" << endl << coupledCodomain() << endl; // << "with trees:" << endl << codomain.printTrees() << endl;
-    for(size_t i = 0; i < sector().size(); i++) {
-        o << "Sector i=" << i << " with QN=" << Sym::format<Symmetry>(sector(i)) << endl;
-        if(PRINT_MATRICES) {
-            o << std::fixed << std::setprecision(12) << block(i) << endl;
+    fmt::print(o, "Tensor<{},{}>: domain=[", Rank, CoRank);
+    if(Rank == 0) o << "], codomain[";
+    for(auto i = 0ul; i < Rank; ++i) {
+        o << uncoupledDomain()[i].info();
+        i < Rank - 1 ? o << ", " : o << "], codomain[";
+    }
+    if(CoRank == 0) { o << "]"; }
+    for(auto i = 0ul; i < CoRank; ++i) {
+        o << uncoupledCodomain()[i].info();
+        i < CoRank - 1 ? o << ", " : o << "]";
+    }
+
+    // o << "domain:" << endl << coupledDomain() << endl; // << "with trees:" << endl << domain.printTrees() << endl;
+    // o << "codomain:" << endl << coupledCodomain() << endl; // << "with trees:" << endl << codomain.printTrees() << endl;
+    if(PRINT_MATRICES) {
+        o << std::endl;
+        for(std::size_t i = 0; i < sector().size(); ++i) {
+            fmt::print(o, "Sector i={} with QN={}\n", i, Sym::format<Symmetry>(sector(i)));
+            o << std::fixed << std::setprecision(12) << block(i) << std::endl;
             // storage_.block(i).print_matrix();
             // PlainInterface::print<Scalar>(storage_.block(i));
         }

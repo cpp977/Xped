@@ -205,7 +205,7 @@ public:
 
     // MatrixType& operator() (const FusionTree<Rank,Symmetry>& f1, const FusionTree<CoRank,Symmetry>& f2);
 
-    void print(std::ostream& o, bool PRINT_MATRICES = true) const;
+    void print(std::ostream& o, bool PRINT_MATRICES = false) const;
 
     void setRandom();
     void setZero();
@@ -278,6 +278,9 @@ public:
     template <std::size_t leg>
     Tensor<Scalar, util::constFct::trimDim<Rank>(leg), Rank + CoRank - 1 - util::constFct::trimDim<Rank>(leg), Symmetry, false, AllocationPolicy>
     trim() const;
+
+    template <bool = false>
+    Self twist(std::size_t leg) const;
 
     template <std::size_t... legs>
     Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy> shiftQN(qType charge) const;

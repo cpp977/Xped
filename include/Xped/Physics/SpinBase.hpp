@@ -14,7 +14,7 @@ namespace Xped {
 /**
  * \ingroup Bases
  *
- * This class provides the local operators for fermions in a SU(2)⊗U(1) block representation.
+ * This class provides the local operators for general spins with quantum number S.
  *
  */
 template <typename Symmetry_, std::size_t order = 0>
@@ -112,27 +112,27 @@ public:
     template <class Dummy = Symmetry>
     typename std::enable_if<!Dummy::IS_SPIN_SU2(), OperatorType>::type Scomp(SPINOP_LABEL Sa, int orbital = 0) const
     {
-        assert(Sa != SY and Sa != QP and Sa != QM and Sa != QPZ and Sa != QMZ);
+        assert(Sa != SPINOP_LABEL::SY and Sa != SPINOP_LABEL::QP and Sa != SPINOP_LABEL::QM and Sa != SPINOP_LABEL::QPZ and Sa != SPINOP_LABEL::QMZ);
         OperatorType out = Zero();
         if constexpr(Dummy::NO_SPIN_SYM()) {
-            if(Sa == SX) {
+            if(Sa == SPINOP_LABEL::SX) {
                 out = Sx(orbital);
-            } else if(Sa == iSY) {
+            } else if(Sa == SPINOP_LABEL::iSY) {
                 out = iSy(orbital);
-            } else if(Sa == SZ) {
+            } else if(Sa == SPINOP_LABEL::SZ) {
                 out = Sz(orbital);
-            } else if(Sa == SP) {
+            } else if(Sa == SPINOP_LABEL::SP) {
                 out = Sp(orbital);
-            } else if(Sa == SM) {
+            } else if(Sa == SPINOP_LABEL::SM) {
                 out = Sm(orbital);
             }
         } else {
-            assert(Sa != SX and Sa != iSY);
-            if(Sa == SZ) {
+            assert(Sa != SPINOP_LABEL::SX and Sa != SPINOP_LABEL::iSY);
+            if(Sa == SPINOP_LABEL::SZ) {
                 out = Sz(orbital);
-            } else if(Sa == SP) {
+            } else if(Sa == SPINOP_LABEL::SP) {
                 out = Sp(orbital);
-            } else if(Sa == SM) {
+            } else if(Sa == SPINOP_LABEL::SM) {
                 out = Sm(orbital);
             }
         }
@@ -142,17 +142,18 @@ public:
     template <class Dummy = Symmetry>
     typename std::enable_if<!Dummy::IS_SPIN_SU2(), OperatorType>::type Qcomp(SPINOP_LABEL Sa, int orbital = 0) const
     {
-        assert(Sa != SX and Sa != SY and Sa != iSY and Sa != SZ and Sa != SP and Sa != SM);
+        assert(Sa != SPINOP_LABEL::SX and Sa != SPINOP_LABEL::SY and Sa != SPINOP_LABEL::iSY and Sa != SPINOP_LABEL::SZ and Sa != SPINOP_LABEL::SP and
+               Sa != SPINOP_LABEL::SM);
         OperatorType out;
-        if(Sa == QZ) {
+        if(Sa == SPINOP_LABEL::QZ) {
             out = Qz(orbital);
-        } else if(Sa == QP) {
+        } else if(Sa == SPINOP_LABEL::QP) {
             out = Qp(orbital);
-        } else if(Sa == QM) {
+        } else if(Sa == SPINOP_LABEL::QM) {
             out = Qm(orbital);
-        } else if(Sa == QPZ) {
+        } else if(Sa == SPINOP_LABEL::QPZ) {
             out = Qpz(orbital);
-        } else if(Sa == QMZ) {
+        } else if(Sa == SPINOP_LABEL::QMZ) {
             out = Qmz(orbital);
         }
         return out;

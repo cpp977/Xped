@@ -2,6 +2,7 @@
 #define XPED_SPIN_HPP_
 
 #include "Xped/Physics/SiteOperator.hpp"
+#include "Xped/Physics/SpinOp.hpp"
 
 // #include "Xped/Symmetry/S1xS2.hpp"
 #include "Xped/Symmetry/SU2.hpp"
@@ -9,21 +10,6 @@
 #include "Xped/Symmetry/U1.hpp"
 
 namespace Xped {
-
-enum SPINOP_LABEL
-{
-    SZ,
-    SP,
-    SM,
-    SX,
-    SY,
-    iSY,
-    QZ,
-    QPZ,
-    QMZ,
-    QP,
-    QM
-};
 
 template <typename Symmetry_, std::size_t order = 0>
 class Spin
@@ -118,23 +104,23 @@ void Spin<Symmetry_, order>::fill_SiteOps()
 
     F_1s_ = OperatorType(Symmetry::qvacuum(), basis_1s_);
 
-    Sz_1s_ = OperatorType(getQ(SZ), basis_1s_);
-    Sp_1s_ = OperatorType(getQ(SP), basis_1s_);
-    Sm_1s_ = OperatorType(getQ(SM), basis_1s_);
+    Sz_1s_ = OperatorType(getQ(SPINOP_LABEL::SZ), basis_1s_);
+    Sp_1s_ = OperatorType(getQ(SPINOP_LABEL::SP), basis_1s_);
+    Sm_1s_ = OperatorType(getQ(SPINOP_LABEL::SM), basis_1s_);
 
-    Qz_1s_ = OperatorType(getQ(SZ), basis_1s_);
-    Qp_1s_ = OperatorType(getQ(QP), basis_1s_);
-    Qm_1s_ = OperatorType(getQ(QM), basis_1s_);
-    Qpz_1s_ = OperatorType(getQ(SP), basis_1s_);
-    Qmz_1s_ = OperatorType(getQ(SM), basis_1s_);
+    Qz_1s_ = OperatorType(getQ(SPINOP_LABEL::SZ), basis_1s_);
+    Qp_1s_ = OperatorType(getQ(SPINOP_LABEL::QP), basis_1s_);
+    Qm_1s_ = OperatorType(getQ(SPINOP_LABEL::QM), basis_1s_);
+    Qpz_1s_ = OperatorType(getQ(SPINOP_LABEL::SP), basis_1s_);
+    Qmz_1s_ = OperatorType(getQ(SPINOP_LABEL::SM), basis_1s_);
 
-    exp_i_pi_Sz_1s_ = OperatorType(getQ(SZ), basis_1s_);
+    exp_i_pi_Sz_1s_ = OperatorType(getQ(SPINOP_LABEL::SZ), basis_1s_);
     if constexpr(Symmetry::IS_TRIVIAL) {
-        exp_i_pi_Sx_1s_ = OperatorType(getQ(SX), basis_1s_);
-        exp_i_pi_Sy_1s_ = OperatorType(getQ(iSY), basis_1s_);
+        exp_i_pi_Sx_1s_ = OperatorType(getQ(SPINOP_LABEL::SX), basis_1s_);
+        exp_i_pi_Sy_1s_ = OperatorType(getQ(SPINOP_LABEL::iSY), basis_1s_);
     }
 
-    OperatorType Sbase = OperatorType(getQ(SP), basis_1s_, labels);
+    OperatorType Sbase = OperatorType(getQ(SPINOP_LABEL::SP), basis_1s_, labels);
     Sbase.setZero();
 
     double S = 0.5 * (D - 1);
@@ -149,6 +135,10 @@ void Spin<Symmetry_, order>::fill_SiteOps()
     Sm_1s_ = 2. * Sbase;
     Sp_1s_ = Sm_1s_.adjoint();
     Sz_1s_ = 0.5 * (Sp_1s_ * Sm_1s_ - Sm_1s_ * Sp_1s_);
+
+    std::cout << std::fixed << Sz_1s_.plain()[0] << std::endl;
+    std::cout << std::fixed << Sp_1s_.plain()[0] << std::endl;
+    std::cout << std::fixed << Sm_1s_.plain()[0] << std::endl;
 
     F_1s_ = 0.5 * Id_1s_ - Sz_1s_;
 
@@ -245,18 +235,18 @@ typename Symmetry_::qType Spin<Symmetry_, order>::getQ(SPINOP_LABEL Sa) const
             return Symmetry::qvacuum();
         } else if constexpr(Symmetry::kind()[0] == Sym::KIND::M) // return magnetization as good quantum number.
         {
-            assert(Sa != SX and Sa != iSY);
+            assert(Sa != SPINOP_LABEL::SX and Sa != SPINOP_LABEL::iSY);
 
             typename Symmetry::qType out;
-            if(Sa == SZ or Sa == QZ) {
+            if(Sa == SPINOP_LABEL::SZ or Sa == SPINOP_LABEL::QZ) {
                 out = {0};
-            } else if(Sa == SP or Sa == QPZ) {
+            } else if(Sa == SPINOP_LABEL::SP or Sa == SPINOP_LABEL::QPZ) {
                 out = {+2};
-            } else if(Sa == SM or Sa == QMZ) {
+            } else if(Sa == SPINOP_LABEL::SM or Sa == SPINOP_LABEL::QMZ) {
                 out = Symmetry::conj({+2});
-            } else if(Sa == QP) {
+            } else if(Sa == SPINOP_LABEL::QP) {
                 out = {+4};
-            } else if(Sa == QM) {
+            } else if(Sa == SPINOP_LABEL::QM) {
                 out = Symmetry::conj({+4});
             }
             return out;
@@ -264,56 +254,56 @@ typename Symmetry_::qType Spin<Symmetry_, order>::getQ(SPINOP_LABEL Sa) const
             assert(false and "Ill defined KIND of the used Symmetry.");
         }
     } else if constexpr(Symmetry::Nq == 2) {
-        assert(Sa != SX and Sa != iSY and Sa != QP and Sa != QM);
+        assert(Sa != SPINOP_LABEL::SX and Sa != SPINOP_LABEL::iSY and Sa != SPINOP_LABEL::QP and Sa != SPINOP_LABEL::QM);
 
         typename Symmetry::qType out;
         if constexpr(Symmetry::kind()[0] == Sym::KIND::N and Symmetry::kind()[1] == Sym::KIND::M) {
-            if(Sa == SZ) {
+            if(Sa == SPINOP_LABEL::SZ) {
                 out = {0, 0};
-            } else if(Sa == SP) {
+            } else if(Sa == SPINOP_LABEL::SP) {
                 out = {0, +2};
-            } else if(Sa == SM) {
+            } else if(Sa == SPINOP_LABEL::SM) {
                 out = {0, -2};
             }
         } else if constexpr(Symmetry::kind()[0] == Sym::KIND::M and Symmetry::kind()[1] == Sym::KIND::N) {
-            if(Sa == SZ) {
+            if(Sa == SPINOP_LABEL::SZ) {
                 out = {0, 0};
-            } else if(Sa == SP) {
+            } else if(Sa == SPINOP_LABEL::SP) {
                 out = {+2, 0};
-            } else if(Sa == SM) {
+            } else if(Sa == SPINOP_LABEL::SM) {
                 out = {-2, 0};
             }
         } else if constexpr(Symmetry::kind()[0] == Sym::KIND::Nup and Symmetry::kind()[1] == Sym::KIND::Ndn) {
-            if(Sa == SZ) {
+            if(Sa == SPINOP_LABEL::SZ) {
                 out = {0, 0};
-            } else if(Sa == SP) {
+            } else if(Sa == SPINOP_LABEL::SP) {
                 out = {+1, -1};
-            } else if(Sa == SM) {
+            } else if(Sa == SPINOP_LABEL::SM) {
                 out = {-1, +1};
             }
         } else if constexpr(Symmetry::kind()[0] == Sym::KIND::Ndn and Symmetry::kind()[1] == Sym::KIND::Nup) {
-            if(Sa == SZ) {
+            if(Sa == SPINOP_LABEL::SZ) {
                 out = {0, 0};
-            } else if(Sa == SP) {
+            } else if(Sa == SPINOP_LABEL::SP) {
                 out = {-1, +1};
-            } else if(Sa == SM) {
+            } else if(Sa == SPINOP_LABEL::SM) {
                 out = {+1, -1};
             }
         } else if constexpr(Symmetry::kind()[0] == Sym::KIND::M and Symmetry::kind()[1] == Sym::KIND::M) {
             if(order == 0ul) {
-                if(Sa == SZ) {
+                if(Sa == SPINOP_LABEL::SZ) {
                     out = {0, 0};
-                } else if(Sa == SP) {
+                } else if(Sa == SPINOP_LABEL::SP) {
                     out = {+2, 0};
-                } else if(Sa == SM) {
+                } else if(Sa == SPINOP_LABEL::SM) {
                     out = {-2, 0};
                 }
             } else {
-                if(Sa == SZ) {
+                if(Sa == SPINOP_LABEL::SZ) {
                     out = {0, 0};
-                } else if(Sa == SP) {
+                } else if(Sa == SPINOP_LABEL::SP) {
                     out = {0, +2};
-                } else if(Sa == SM) {
+                } else if(Sa == SPINOP_LABEL::SM) {
                     out = {0, -2};
                 }
             }

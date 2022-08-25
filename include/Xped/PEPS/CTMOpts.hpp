@@ -29,10 +29,13 @@ struct CTM
 
     double reinit_env_tol = 1.e-1;
 
+    CTM_INIT init = CTM_INIT::FROM_A;
+
     inline void info()
     {
         fmt::print("CTM options:\n");
         fmt::print("  {:<20} {}\n", "• chi:", chi);
+        fmt::print("  {:<20} {}\n", "• init:", init);
         fmt::print("  {:<20} {}\n", "• maximum pre-steps:", max_presteps);
         fmt::print("  {:<20} {}\n", "• tracked steps:", track_steps);
         fmt::print("  {:<20} {}\n", "• energy tolerance:", tol_E);
@@ -45,6 +48,7 @@ inline CTM ctm_from_toml(const toml::value& t)
 {
     CTM res{};
     res.chi = t.contains("chi") ? t.at("chi").as_integer() : res.chi;
+    if(t.contains("init")) { res.init = util::enum_from_toml<CTM_INIT>(t.at("init")); }
     res.max_presteps = t.contains("max_presteps") ? t.at("max_presteps").as_integer() : res.max_presteps;
     res.track_steps = t.contains("track_steps") ? t.at("track_steps").as_integer() : res.track_steps;
     res.tol_E = t.contains("tol_E") ? t.at("tol_E").as_floating() : res.tol_E;

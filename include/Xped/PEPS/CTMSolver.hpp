@@ -20,7 +20,7 @@ public:
     explicit CTMSolver(Opts::CTM opts)
         : opts(opts)
     {
-        Jack = CTM<Scalar, Symmetry, false>(opts.chi); //, opts.cell);
+        Jack = CTM<Scalar, Symmetry, false>(opts.chi, opts.init); //, opts.cell);
     }
 
     template <typename HamScalar>

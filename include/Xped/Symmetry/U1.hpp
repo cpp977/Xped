@@ -81,7 +81,7 @@ struct U1 : public SymBase<U1<Kind, Scalar_>>
         return std::array<qType, 2>{{qarray<1>(std::array<int, 1>{{-1}}), qarray<1>(std::array<int, 1>{{+1}})}};
     }
 
-    inline static std::string name() { return "U1"; }
+    inline static std::string name() { return IS_FERMIONIC ? "fU₁" : "U₁"; }
     inline static constexpr std::array<KIND, Nq> kind() { return {Kind::name}; }
 
     inline static qType conj(const qType& q) { return {-q[0]}; }
@@ -109,6 +109,12 @@ struct U1 : public SymBase<U1<Kind, Scalar_>>
      *       for which the Kronecker deltas are not necessary.
      */
     inline static Scalar coeff_dot(const qType&) { return Scalar(1.); }
+
+    inline static Scalar coeff_twist(const qType& q)
+    {
+        if constexpr(not IS_FERMIONIC) { return 1.; }
+        return (q[0] % 2 != 0) ? -1. : 1.;
+    }
 
     static Scalar coeff_FS(const qType&) { return Scalar(1.); }
 

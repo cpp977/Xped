@@ -108,8 +108,8 @@ struct ZN : public SymBase<ZN<Kind, N, Scalar_>>
 
     inline static Scalar coeff_twist(const qType& q)
     {
-        Scalar sign = (q[0] % 2 != 0 and Kind::name == KIND::FN) ? -1. : 1.;
-        return sign * Scalar(1.);
+        if constexpr(not IS_FERMIONIC) { return 1.; }
+        return (q[0] % 2 != 0) ? -1. : 1.;
     }
 
     static Scalar coeff_FS(const qType&) { return Scalar(1.); }

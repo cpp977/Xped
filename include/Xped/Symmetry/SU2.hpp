@@ -82,7 +82,7 @@ struct SU2 : public SymBase<SU2<Kind, Scalar_>>
 
     SU2(){};
 
-    inline static std::string name() { return "SU2"; }
+    inline static std::string name() { return IS_FERMIONIC ? "fSU₂" : "SU₂"; }
     inline static constexpr std::array<KIND, Nq> kind() { return {Kind::name}; }
 
     inline static constexpr qType qvacuum() { return {1}; }
@@ -104,6 +104,12 @@ struct SU2 : public SymBase<SU2<Kind, Scalar_>>
      * Various coeffecients, all resulting from contractions or traces of the Clebsch-Gordon coefficients.
      */
     static Scalar coeff_dot(const qType& q1);
+
+    inline static Scalar coeff_twist(const qType& q)
+    {
+        if constexpr(not IS_FERMIONIC) { return 1.; }
+        return ((q[0] - 1) % 2 != 0) ? -1. : 1.;
+    }
 
     static Scalar coeff_FS(const qType& q1);
 
@@ -142,7 +148,12 @@ struct SU2 : public SymBase<SU2<Kind, Scalar_>>
 
     static Scalar coeff_swap(const qType& ql, const qType& qr, const qType& qf)
     {
-        return triangle(ql, qr, qf) ? phase<Scalar>((ql[0] + qr[0] - qf[0] - 1) / 2) : Scalar(0.);
+        Scalar sign = +1.;
+        if constexpr(IS_FERMIONIC) {
+            bool parity = ((ql[0] - 1) % 2 != 0) and ((qr[0] - 1) % 2 != 0);
+            sign = parity ? -1. : 1.;
+        }
+        return triangle(ql, qr, qf) ? sign * phase<Scalar>((ql[0] + qr[0] - qf[0] - 1) / 2) : Scalar(0.);
     }
     ///@}
 

@@ -56,8 +56,9 @@ TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, Scalar>> avg(XPED_CONST C
             // auto norm = (Q1 * C2T2C3T3C4).trace();
             // o(x, y) = (Q1H * C2T2C3T3C4).trace() / norm;
 
-            o(x, y) = 0.5 * (env.rho1_h(x, y).template contract<std::array{1, 2}, std::array{2, 1}, 0, ENABLE_AD>(shifted_op.data(x, y)).trace() +
-                             env.rho1_v(x, y).template contract<std::array{1, 2}, std::array{2, 1}, 0, ENABLE_AD>(shifted_op.data(x, y)).trace());
+            o(x, y) =
+                0.5 * (env.rho1_h(x, y).twist(0).template contract<std::array{1, 2}, std::array{2, 1}, 0, ENABLE_AD>(shifted_op.data(x, y)).trace() +
+                       env.rho1_v(x, y).twist(0).template contract<std::array{1, 2}, std::array{2, 1}, 0, ENABLE_AD>(shifted_op.data(x, y)).trace());
 
             if constexpr(ENABLE_AD) {
                 op.obs(x, y) = o(x, y).val();
@@ -90,10 +91,18 @@ std::array<TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, Scalar>>, 4> a
         for(int y = 0; y < env.cell().cols(); ++y) {
             if(not env.cell().pattern.isUnique(x, y)) { continue; }
             if(op.data_h.size() > 0) {
-                o_h(x, y) = env.rho_h(x, y).template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0>(shifted_op.data_h(x, y)).trace();
+                o_h(x, y) = env.rho_h(x, y)
+                                .twist(0)
+                                .twist(1)
+                                .template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0>(shifted_op.data_h(x, y))
+                                .trace();
             }
             if(op.data_v.size() > 0) {
-                o_v(x, y) = env.rho_v(x, y).template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0>(shifted_op.data_v(x, y)).trace();
+                o_v(x, y) = env.rho_v(x, y)
+                                .twist(0)
+                                .twist(1)
+                                .template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0>(shifted_op.data_v(x, y))
+                                .trace();
             }
             if constexpr(ENABLE_AD) {
                 if(op.data_h.size() > 0) { op.obs_h(x, y) = o_h(x, y).val(); }

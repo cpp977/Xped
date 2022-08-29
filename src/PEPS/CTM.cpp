@@ -58,43 +58,51 @@ void CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::init()
             case Opts::CTM_INIT::FROM_TRIVIAL: {
                 C1s[pos] =
                     Tensor<Scalar, 0, 2, Symmetry, ENABLE_AD>({{}}, {{Qbasis<Symmetry, 1>::TrivialBasis(), Qbasis<Symmetry, 1>::TrivialBasis()}});
-                C1s[pos].setRandom();
+                // C1s[pos].setRandom();
+                C1s[pos].setIdentity();
                 // C1s[pos] = C1s[pos].square();
                 C2s[pos] =
                     Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>({{Qbasis<Symmetry, 1>::TrivialBasis()}}, {{Qbasis<Symmetry, 1>::TrivialBasis()}});
-                C2s[pos].setRandom();
+                // C2s[pos].setRandom();
+                C2s[pos].setIdentity();
                 // C2s[pos] = C2s[pos].square();
                 C3s[pos] =
                     Tensor<Scalar, 2, 0, Symmetry, ENABLE_AD>({{Qbasis<Symmetry, 1>::TrivialBasis(), Qbasis<Symmetry, 1>::TrivialBasis()}}, {{}});
-                C3s[pos].setRandom();
+                // C3s[pos].setRandom();
+                C3s[pos].setIdentity();
                 // C3s[pos] = C3s[pos].square();
                 C4s[pos] =
                     Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>({{Qbasis<Symmetry, 1>::TrivialBasis()}}, {{Qbasis<Symmetry, 1>::TrivialBasis()}});
-                C4s[pos].setRandom();
+                // C4s[pos].setRandom();
+                C4s[pos].setIdentity();
                 // C4s[pos] = C4s[pos].square();
                 T1s[pos] = Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>({{Qbasis<Symmetry, 1>::TrivialBasis()}},
                                                                      {{Qbasis<Symmetry, 1>::TrivialBasis(),
                                                                        A->ketBasis(x, y + 1, iPEPS<Scalar, Symmetry, ENABLE_AD>::LEG::UP),
                                                                        A->braBasis(x, y + 1, iPEPS<Scalar, Symmetry, ENABLE_AD>::LEG::UP)}});
-                T1s[pos].setRandom();
+                // T1s[pos].setRandom();
+                T1s[pos].setIdentity();
                 // T1s[pos] = T1s[pos].square();
                 T2s[pos] = Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>({{A->ketBasis(x - 1, y, iPEPS<Scalar, Symmetry, ENABLE_AD>::LEG::RIGHT),
                                                                        A->braBasis(x - 1, y, iPEPS<Scalar, Symmetry, ENABLE_AD>::LEG::RIGHT),
                                                                        Qbasis<Symmetry, 1>::TrivialBasis()}},
                                                                      {{Qbasis<Symmetry, 1>::TrivialBasis()}});
-                T2s[pos].setRandom();
+                // T2s[pos].setRandom();
+                T2s[pos].setIdentity();
                 // T2s[pos] = T2s[pos].square();
                 T3s[pos] = Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>({{A->ketBasis(x, y - 1, iPEPS<Scalar, Symmetry, ENABLE_AD>::LEG::DOWN),
                                                                        A->braBasis(x, y - 1, iPEPS<Scalar, Symmetry, ENABLE_AD>::LEG::DOWN),
                                                                        Qbasis<Symmetry, 1>::TrivialBasis()}},
                                                                      {{Qbasis<Symmetry, 1>::TrivialBasis()}});
-                T3s[pos].setRandom();
+                // T3s[pos].setRandom();
+                T3s[pos].setIdentity();
                 // T3s[pos] = T3s[pos].square();
                 T4s[pos] = Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>({{Qbasis<Symmetry, 1>::TrivialBasis()}},
                                                                      {{Qbasis<Symmetry, 1>::TrivialBasis(),
                                                                        A->ketBasis(x + 1, y, iPEPS<Scalar, Symmetry, ENABLE_AD>::LEG::LEFT),
                                                                        A->braBasis(x + 1, y, iPEPS<Scalar, Symmetry, ENABLE_AD>::LEG::LEFT)}});
-                T4s[pos].setRandom();
+                // T4s[pos].setRandom();
+                T4s[pos].setIdentity();
                 // T4s[pos] = T4s[pos].square();
 
                 break;
@@ -126,37 +134,37 @@ void CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::init()
                                                                           .forgetHistory()}});
 
                 C1s[pos] = A->As[pos]
-                               .template contract<std::array{1, 2, -1, -2, 3}, std::array{1, 2, 3, -3, -4}, 2>(A->Adags[pos])
+                               .template contract<std::array{1, 2, -1, -2, 3}, std::array{1, 2, 3, -3, -4}, 2>(A->Adags[pos].twist(3).twist(4))
                                .template contract<std::array{1, -1, 2, -2}, std::array{1, 2, -3}, 2>(fuse_rr)
                                .template contract<std::array{1, 2, -2}, std::array{1, 2, -1}, 0>(fuse_dd);
                 C2s[pos] = A->As[pos]
-                               .template contract<std::array{-1, 1, 2, -2, 3}, std::array{-3, 1, 3, 2, -4}, 2>(A->Adags[pos])
-                               .template contract<std::array{1, -1, 2, -2}, std::array{-3, 1, 2}, 2>(fuse_ll)
+                               .template contract<std::array{-1, 1, 2, -2, 3}, std::array{-3, 1, 3, 2, -4}, 2>(A->Adags[pos].twist(4))
+                               .template contract<std::array{1, -1, 2, -2}, std::array{-3, 1, 2}, 2>(fuse_ll.twist(1).twist(2))
                                .template contract<std::array{1, 2, -1}, std::array{1, 2, -2}, 1>(fuse_dd);
                 C3s[pos] = A->As[pos]
                                .template contract<std::array{-1, -2, 1, 2, 3}, std::array{-3, -4, 3, 1, 2}, 2>(A->Adags[pos])
-                               .template contract<std::array{1, -1, 2, -2}, std::array{-3, 1, 2}, 2>(fuse_ll)
-                               .template contract<std::array{1, 2, -2}, std::array{-1, 1, 2}, 2>(fuse_uu);
+                               .template contract<std::array{1, -1, 2, -2}, std::array{-3, 1, 2}, 2>(fuse_ll.twist(1).twist(2))
+                               .template contract<std::array{1, 2, -2}, std::array{-1, 1, 2}, 2>(fuse_uu.twist(1).twist(2));
                 C4s[pos] = A->As[pos]
-                               .template contract<std::array{1, -1, -2, 2, 3}, std::array{1, -3, 3, -4, 2}, 2>(A->Adags[pos])
-                               .template contract<std::array{1, -1, 2, -2}, std::array{-3, 1, 2}, 2>(fuse_uu)
+                               .template contract<std::array{1, -1, -2, 2, 3}, std::array{1, -3, 3, -4, 2}, 2>(A->Adags[pos].twist(3))
+                               .template contract<std::array{1, -1, 2, -2}, std::array{-3, 1, 2}, 2>(fuse_uu.twist(1).twist(2))
                                .template contract<std::array{1, 2, -1}, std::array{1, 2, -2}, 1>(fuse_rr);
 
                 T1s[pos] = A->As[pos]
-                               .template contract<std::array{-1, 1, -2, -3, 2}, std::array{-4, 1, 2, -5, -6}, 3>(A->Adags[pos])
-                               .template contract<std::array{1, -1, -2, 2, -3, -4}, std::array{-5, 1, 2}, 4>(fuse_ll)
+                               .template contract<std::array{-1, 1, -2, -3, 2}, std::array{-4, 1, 2, -5, -6}, 3>(A->Adags[pos].twist(3).twist(4))
+                               .template contract<std::array{1, -1, -2, 2, -3, -4}, std::array{-5, 1, 2}, 4>(fuse_ll.twist(1).twist(2))
                                .template contract<std::array{1, -3, 2, -4, -1}, std::array{1, 2, -2}, 1>(fuse_rr);
                 T2s[pos] = A->As[pos]
-                               .template contract<std::array{-1, -2, 1, -3, 2}, std::array{-4, -5, 2, 1, -6}, 3>(A->Adags[pos])
-                               .template contract<std::array{-1, 1, -2, -3, 2, -4}, std::array{-5, 1, 2}, 4>(fuse_uu)
+                               .template contract<std::array{-1, -2, 1, -3, 2}, std::array{-4, -5, 2, 1, -6}, 3>(A->Adags[pos].twist(4))
+                               .template contract<std::array{-1, 1, -2, -3, 2, -4}, std::array{-5, 1, 2}, 4>(fuse_uu.twist(1).twist(2))
                                .template contract<std::array{-1, 1, -2, 2, -3}, std::array{1, 2, -4}, 3>(fuse_dd);
                 T3s[pos] = A->As[pos]
-                               .template contract<std::array{-1, -2, -3, 1, 2}, std::array{-4, -5, 2, -6, 1}, 3>(A->Adags[pos])
-                               .template contract<std::array{1, -1, -2, 2, -3, -4}, std::array{-5, 1, 2}, 4>(fuse_ll)
+                               .template contract<std::array{-1, -2, -3, 1, 2}, std::array{-4, -5, 2, -6, 1}, 3>(A->Adags[pos].twist(3))
+                               .template contract<std::array{1, -1, -2, 2, -3, -4}, std::array{-5, 1, 2}, 4>(fuse_ll.twist(1).twist(2))
                                .template contract<std::array{-1, 1, -2, 2, -3}, std::array{1, 2, -4}, 3>(fuse_rr);
                 T4s[pos] = A->As[pos]
-                               .template contract<std::array{1, -1, -2, -3, 2}, std::array{1, -4, 2, -5, -6}, 3>(A->Adags[pos])
-                               .template contract<std::array{1, -1, -2, 2, -3, -4}, std::array{-5, 1, 2}, 4>(fuse_uu)
+                               .template contract<std::array{1, -1, -2, -3, 2}, std::array{1, -4, 2, -5, -6}, 3>(A->Adags[pos].twist(3).twist(4))
+                               .template contract<std::array{1, -1, -2, 2, -3, -4}, std::array{-5, 1, 2}, 4>(fuse_uu.twist(1).twist(2))
                                .template contract<std::array{-3, 1, -4, 2, -1}, std::array{1, 2, -2}, 1>(fuse_dd);
                 break;
             }
@@ -283,7 +291,8 @@ void CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::computeRDM_h()
             auto C1T1 = C1s(x - 1, y - 1).template contract<std::array{-1, 1}, std::array{1, -2, -3, -4}, 1, TRACK>(T1s(x, y - 1));
             SPDLOG_INFO("Computed C1T1");
             // auto tmp = C1s(x - 1, y - 1).template permute<-1, 0, 1>() * T1s(x, y - 1);
-            auto T4C1T1 = T4s(x - 1, y).template contract<std::array{1, -1, -2, -3}, std::array{1, -4, -5, -6}, 3, TRACK>(C1T1);
+            auto T4C1T1 =
+                T4s(x - 1, y).template contract<std::array{1, -1, -2, -3}, std::array{1, -4, -5, -6}, 3, TRACK>(C1T1.template twist<TRACK>(0));
             // std::cout << "T4C1T1 trees" << std::endl;
             // for(const auto& [q, tree] : T4C1T1.coupledDomain().trees) {
             //     std::cout << "Q=" << q << std::endl;
@@ -291,13 +300,12 @@ void CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::computeRDM_h()
             //     std::cout << std::endl;
             // }
             SPDLOG_INFO("Computed T4C1T1");
-            // auto tmp2 = T4s(x - 1, y).template permute<-2, 1, 2, 3, 0>() * tmp;
             auto T4C1T1A = T4C1T1.template contract<std::array{-1, 1, -2, -3, 2, -4}, std::array{1, 2, -5, -6, -7}, 4, TRACK>(A->As(x, y));
             SPDLOG_INFO("Computed T4C1T1A");
-            // auto UL = tmp2.template permute<-1, 0, 2, 3, 5, 1, 4>() * A->As(x, y);
             auto C4T3 = C4s(x - 1, y + 1).template contract<std::array{-1, 1}, std::array{-2, -3, 1, -4}, 1, TRACK>(T3s(x, y + 1));
             SPDLOG_INFO("Computed C4T3");
-            auto C4T3Ad = C4T3.template contract<std::array{-1, -2, 1, -3}, std::array{-4, -5, -6, -7, 1}, 3, TRACK>(A->Adags(x, y));
+            auto C4T3Ad =
+                C4T3.template contract<std::array{-1, -2, 1, -3}, std::array{-4, -5, -6, -7, 1}, 3, TRACK>(A->Adags(x, y).template twist<TRACK>(3));
             SPDLOG_INFO("Computed C4T3Ad");
             auto left_half = T4C1T1A.template contract<std::array{1, 2, -1, 3, -2, 4, -3}, std::array{1, 4, -4, 2, 3, -5, -6}, 3, TRACK>(C4T3Ad);
             SPDLOG_INFO("Computed left_half");
@@ -306,7 +314,9 @@ void CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::computeRDM_h()
             SPDLOG_INFO("Computed T1C2");
             auto T1C2T2 = T1C2.template contract<std::array{-1, -2, -3, 1}, std::array{-4, -5, 1, -6}, 3, TRACK>(T2s(x + 2, y));
             SPDLOG_INFO("Computed T1C2T2");
-            auto AT1C2T2 = A->As(x + 1, y).template contract<std::array{-1, 1, 2, -2, -3}, std::array{-4, 1, -5, 2, -6, -7}, 3, TRACK>(T1C2T2);
+            auto AT1C2T2 =
+                A->As(x + 1, y).template twist<TRACK>(1).template contract<std::array{-1, 1, 2, -2, -3}, std::array{-4, 1, -5, 2, -6, -7}, 3, TRACK>(
+                    T1C2T2);
             SPDLOG_INFO("Computed AT1C1T2");
             auto T3C3 = T3s(x + 1, y + 1).template contract<std::array{-1, -2, -3, 1}, std::array{-4, 1}, 3, TRACK>(C3s(x + 2, y + 1));
             SPDLOG_INFO("Computed T3C3");
@@ -315,13 +325,22 @@ void CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::computeRDM_h()
             auto right_half = AT1C2T2.template contract<std::array{-1, 1, -2, -3, 2, 3, 4}, std::array{1, -4, 4, -5, 2, -6, 3}, 3, TRACK>(T3C3Ad);
             SPDLOG_INFO("Computed right_half");
             rho_h(x, y) = left_half.template contract<std::array{1, 2, -3, 3, -1, 4}, std::array{2, -4, 1, 3, 4, -2}, 2, TRACK>(right_half);
-            // SPDLOG_CRITICAL("x,y={},{} Tr_rho_h={}", x, y, rho_h(x, y).val().trace());
-            // assert(rho_h(x, y).val().trace() > 0 and "Negative norm detected");
-            rho_h(x, y) = operator*<TRACK>(rho_h(x, y), (1. / rho_h(x, y).template trace<TRACK>()));
+
+            auto Id2 =
+                Tensor<Scalar, 2, 2, Symmetry, false>::Identity(rho_h(x, y).uncoupledCodomain(), rho_h(x, y).uncoupledDomain(), *rho_h(x, y).world());
+            auto norm = rho_h(x, y)
+                            .template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0, TRACK>(Id2.twist(0).twist(1))
+                            .template trace<TRACK>();
+            rho_h(x, y) = operator*<TRACK>(rho_h(x, y), (1. / norm));
+            // fmt::print("rho_h at ({},{}):\n", x, y);
+            // rho_h(x, y).print(std::cout, true);
+            // std::cout << std::endl;
             auto Id = Tensor<Scalar, 1, 1, Symmetry, false>::Identity(
                 {{rho_h(x, y).uncoupledCodomain()[1]}}, {{rho_h(x, y).uncoupledDomain()[1]}}, *rho_h(x, y).world());
-            rho1_h(x, y) = rho_h(x, y).template contract<std::array{-1, 1, -2, 2}, std::array{2, 1}, 1>(Id);
-            rho1_h(x, y) = operator*<TRACK>(rho1_h(x, y), (1. / rho1_h(x, y).template trace<TRACK>()));
+            rho1_h(x, y) = rho_h(x, y).template contract<std::array{-1, 1, -2, 2}, std::array{2, 1}, 1>(Id.twist(0));
+            rho1_h(x, y) = operator*<TRACK>(rho1_h(x, y), (1. / rho1_h(x, y).template twist<TRACK>(0).template trace<TRACK>()));
+            // rho1_h(x, y).print(std::cout, true);
+            // std::cout << std::endl;
         }
     }
 }
@@ -337,13 +356,17 @@ void CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::computeRDM_v()
             if(rho_v.isChanged(x, y)) { continue; }
             auto C1T1 = C1s(x - 1, y - 1).template contract<std::array{-1, 1}, std::array{1, -2, -3, -4}, 1, TRACK>(T1s(x, y - 1));
             SPDLOG_INFO("Computed C1T1");
-            auto T4C1T1 = T4s(x - 1, y).template contract<std::array{1, -1, -2, -3}, std::array{1, -4, -5, -6}, 3, TRACK>(C1T1);
+            auto T4C1T1 =
+                T4s(x - 1, y).template contract<std::array{1, -1, -2, -3}, std::array{1, -4, -5, -6}, 3, TRACK>(C1T1.template twist<TRACK>(0));
             SPDLOG_INFO("Computed T4C1T1");
             auto T4C1T1A = T4C1T1.template contract<std::array{-1, 1, -2, -3, 2, -4}, std::array{1, 2, -5, -6, -7}, 4, TRACK>(A->As(x, y));
             SPDLOG_INFO("Computed T4C1T1A");
             auto C2T2 = C2s(x + 1, y - 1).template contract<std::array{-1, 1}, std::array{-2, -3, 1, -4}, 1, TRACK>(T2s(x + 1, y));
             SPDLOG_INFO("Computed C4T3");
-            auto AdC2T2 = A->Adags(x, y).template contract<std::array{-1, -2, -3, 1, -4}, std::array{-5, -6, 1, -7}, 4, TRACK>(C2T2);
+            auto AdC2T2 = A->Adags(x, y)
+                              .template twist<TRACK>(3)
+                              .template twist<TRACK>(4)
+                              .template contract<std::array{-1, -2, -3, 1, -4}, std::array{-5, -6, 1, -7}, 4, TRACK>(C2T2);
             SPDLOG_INFO("Computed C4T3Ad");
             auto upper_half = T4C1T1A.template contract<std::array{-1, 1, 2, 3, 4, -2, -3}, std::array{1, 3, -4, -5, 2, 4, -6}, 3, TRACK>(AdC2T2);
             SPDLOG_INFO("Computed left_half");
@@ -352,25 +375,34 @@ void CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::computeRDM_v()
             SPDLOG_INFO("Computed T1C2");
             auto T4C4T3 = T4s(x - 1, y + 1).template contract<std::array{-1, 1, -2, -3}, std::array{1, -4, -5, -6}, 3, TRACK>(C4T3);
             SPDLOG_INFO("Computed T1C2T2");
-            auto AT4C4T3 = A->As(x, y + 1).template contract<std::array{1, -1, -2, 2, -3}, std::array{-4, 1, -5, 2, -6, -7}, 3, TRACK>(T4C4T3);
+            auto AT4C4T3 =
+                A->As(x, y + 1).template twist<TRACK>(0).template contract<std::array{1, -1, -2, 2, -3}, std::array{-4, 1, -5, 2, -6, -7}, 3, TRACK>(
+                    T4C4T3);
             SPDLOG_INFO("Computed AT1C1T2");
             auto T2C3 = T2s(x + 1, y + 1).template contract<std::array{-1, -2, -3, 1}, std::array{1, -4}, 3, TRACK>(C3s(x + 1, y + 2));
             SPDLOG_INFO("Computed T3C3");
             auto T2C3Ad = T2C3.template contract<std::array{-1, 1, -2, -3}, std::array{-4, -5, -6, 1, -7}, 3, TRACK>(A->Adags(x, y + 1));
             SPDLOG_INFO("Computed T3C3Ad");
-            // std::cout << AT4C4T3.template permute<0, 2, 3, 5, 0, 1, 4, 6>().coupledCodomain() << std::endl
-            //           << T2C3Ad.template permute<-1, 4, 6, 3, 1, 0, 2, 5>().coupledDomain() << std::endl;
             auto lower_half = AT4C4T3.template contract<std::array{-1, 1, -2, -3, 2, 3, 4}, std::array{1, -4, 4, 2, -5, -6, 3}, 3, TRACK>(T2C3Ad);
             SPDLOG_INFO("Computed right_half");
 
             rho_v(x, y) = upper_half.template contract<std::array{1, 2, -3, -1, 3, 4}, std::array{2, -4, 1, 4, 3, -2}, 2, TRACK>(lower_half);
-            // SPDLOG_CRITICAL("x,y={},{} Tr_rho_v={}", x, y, rho_v(x, y).val().trace());
-            // assert(rho_v(x, y).val().trace() > 0 and "Negative norm detected");
-            rho_v(x, y) = operator*<TRACK>(rho_v(x, y), (1. / rho_v(x, y).template trace<TRACK>()));
+            auto Id2 =
+                Tensor<Scalar, 2, 2, Symmetry, false>::Identity(rho_v(x, y).uncoupledCodomain(), rho_v(x, y).uncoupledDomain(), *rho_h(x, y).world());
+            auto norm = rho_v(x, y)
+                            .template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0, TRACK>(Id2.twist(0).twist(1))
+                            .template trace<TRACK>();
+
+            rho_v(x, y) = operator*<TRACK>(rho_v(x, y), (1. / norm));
+            // fmt::print("rho_v at ({},{}):\n", x, y);
+            // rho_v(x, y).print(std::cout, true);
+            // std::cout << std::endl;
             auto Id = Tensor<Scalar, 1, 1, Symmetry, false>::Identity(
                 {{rho_v(x, y).uncoupledCodomain()[1]}}, {{rho_v(x, y).uncoupledDomain()[1]}}, *rho_v(x, y).world());
-            rho1_v(x, y) = rho_v(x, y).template contract<std::array{-1, 1, -2, 2}, std::array{2, 1}, 1>(Id);
-            rho1_v(x, y) = operator*<TRACK>(rho1_v(x, y), (1. / rho1_v(x, y).template trace<TRACK>()));
+            rho1_v(x, y) = rho_v(x, y).template contract<std::array{-1, 1, -2, 2}, std::array{2, 1}, 1>(Id.twist(0));
+            rho1_v(x, y) = operator*<TRACK>(rho1_v(x, y), (1. / rho1_v(x, y).template twist<TRACK>(0).template trace<TRACK>()));
+            // rho1_v(x, y).print(std::cout, true);
+            // std::cout << std::endl;
         }
     }
 }
@@ -651,7 +683,10 @@ CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::get_projectors(const int x, const int 
         switch(proj_m) {
         case Opts::PROJECTION::CORNER: {
             Q1 = contractCorner<TRACK_INNER>(x, y, Opts::CORNER::UPPER_LEFT);
-            Q4 = contractCorner<TRACK_INNER>(x, y + 1, Opts::CORNER::LOWER_LEFT);
+            Q4 = contractCorner<TRACK_INNER>(x, y + 1, Opts::CORNER::LOWER_LEFT)
+                     .template twist<TRACK_INNER>(3)
+                     .template twist<TRACK_INNER>(4)
+                     .template twist<TRACK_INNER>(5);
             // SPDLOG_INFO("Q1: ({}[{}],{}[{}])",
             //                 Q1.coupledDomain().fullDim(),
             //                 Q1.coupledDomain().dim(),
@@ -737,7 +772,10 @@ CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::get_projectors(const int x, const int 
     case Opts::DIRECTION::BOTTOM: {
         switch(proj_m) {
         case Opts::PROJECTION::CORNER: {
-            Q4 = contractCorner<TRACK_INNER>(x, y, Opts::CORNER::LOWER_LEFT);
+            Q4 = contractCorner<TRACK_INNER>(x, y, Opts::CORNER::LOWER_LEFT)
+                     .template twist<TRACK_INNER>(0)
+                     .template twist<TRACK_INNER>(1)
+                     .template twist<TRACK_INNER>(2);
             Q3 = contractCorner<TRACK_INNER>(x + 1, y, Opts::CORNER::LOWER_RIGHT);
             // SPDLOG_INFO("Q4: ({}[{}],{}[{}])",
             //                 Q4.coupledDomain().fullDim(),
@@ -798,24 +836,46 @@ CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::renormalize_left(const int x,
     //                                      (operator*<TRACK_INNER>(C1s(x - 1, y - 1).template permute<TRACK_INNER, -1, 0, 1>(),
     //                                                              T1s(x, y - 1).template permute<TRACK_INNER, -2, 0, 2, 3, 1>()))))
     //                  .template permute<TRACK_INNER, +1, 0, 1>();
-    C1_new_tmp = operator*<TRACK_INNER>(P1(x, y - 1),
-                                        operator*<TRACK_INNER>(C1s(x - 1, y - 1).template permute<-1, 0, 1>(Bool<TRACK_INNER>{}), T1s(x, y - 1))
-                                            .template permute<-2, 0, 2, 3, 1>(Bool<TRACK_INNER>{}))
-                     .template permute<+1, 0, 1>(Bool<TRACK_INNER>{});
-
+    auto C1T1 = C1s(x - 1, y - 1).template contract<std::array{-1, 1}, std::array{1, -4, -2, -3}, 3, TRACK_INNER>(T1s(x, y - 1));
+    C1_new_tmp = P1(x, y - 1)
+                     .template twist<TRACK_INNER>(1)
+                     .template twist<TRACK_INNER>(2)
+                     .template twist<TRACK_INNER>(3)
+                     .template contract<std::array{-1, 1, 2, 3}, std::array{1, 2, 3, -2}, 0, TRACK_INNER>(C1T1);
+    // C1_new_tmp = operator*<TRACK_INNER>(P1(x, y - 1),
+    //                                     operator*<TRACK_INNER>(C1s(x - 1, y - 1).template permute<-1, 0, 1>(Bool<TRACK_INNER>{}), T1s(x, y - 1))
+    //                                         .template permute<-2, 0, 2, 3, 1>(Bool<TRACK_INNER>{}))
+    //                  .template permute<+1, 0, 1>(Bool<TRACK_INNER>{});
     C1_new = NORMALIZE ? C1_new_tmp * (1. / C1_new_tmp.maxNorm()) : C1_new_tmp;
-    C4_new_tmp = operator*<TRACK_INNER>(operator*<TRACK_INNER>(C4s(x - 1, y + 1), T3s(x, y + 1).template permute<2, 2, 3, 0, 1>(Bool<TRACK_INNER>{}))
-                                            .template permute<0, 1, 0, 2, 3>(Bool<TRACK_INNER>{}),
-                                        P2(x, y))
-                     .template permute<0, 1, 0>(Bool<TRACK_INNER>{});
+
+    // C4_new_tmp = operator*<TRACK_INNER>(operator*<TRACK_INNER>(C4s(x - 1, y + 1), T3s(x, y + 1).template permute<2, 2, 3, 0,
+    // 1>(Bool<TRACK_INNER>{}))
+    //                                         .template permute<0, 1, 0, 2, 3>(Bool<TRACK_INNER>{}),
+    //                                     P2(x, y))
+    //                  .template permute<0, 1, 0>(Bool<TRACK_INNER>{});
+    auto C4T3 = C4s(x - 1, y + 1).template contract<std::array{-2, 1}, std::array{-3, -4, 1, -1}, 1, TRACK_INNER>(T3s(x, y + 1));
+    C4_new_tmp = C4T3.template contract<std::array{-2, 1, 2, 3}, std::array{1, 2, 3, -1}, 1, TRACK_INNER>(
+        P2(x, y).template twist<TRACK_INNER>(0).template twist<TRACK_INNER>(1).template twist<TRACK_INNER>(2));
     C4_new = NORMALIZE ? C4_new_tmp * (1. / C4_new_tmp.maxNorm()) : C4_new_tmp;
-    auto tmp2 = P1(x, y).template permute<-2, 0, 2, 3, 1>(Bool<TRACK_INNER>{}) * T4s(x - 1, y).template permute<0, 1, 0, 2, 3>(Bool<TRACK_INNER>{});
-    auto tmp3 =
-        tmp2.template permute<-1, 0, 2, 3, 5, 4, 1>(Bool<TRACK_INNER>{}) * A->As(x, y).template permute<0, 0, 3, 1, 2, 4>(Bool<TRACK_INNER>{});
-    auto tmp4 =
-        (tmp3.template permute<0, 0, 2, 4, 5, 3, 1, 6>(Bool<TRACK_INNER>{}) * A->Adags(x, y).template permute<0, 0, 4, 2, 1, 3>(Bool<TRACK_INNER>{}))
-            .template permute<+1, 0, 3, 5, 1, 2, 4>(Bool<TRACK_INNER>{});
-    T4_new_tmp = operator*<TRACK_INNER>(tmp4, P2(x, y - 1)).template permute<+2, 3, 0, 1, 2>(Bool<TRACK_INNER>{});
+
+    // auto tmp2 = P1(x, y).template permute<-2, 0, 2, 3, 1>(Bool<TRACK_INNER>{}) * T4s(x - 1, y).template permute<0, 1, 0, 2,
+    // 3>(Bool<TRACK_INNER>{}); auto tmp3 =
+    //     tmp2.template permute<-1, 0, 2, 3, 5, 4, 1>(Bool<TRACK_INNER>{}) * A->As(x, y).template permute<0, 0, 3, 1, 2, 4>(Bool<TRACK_INNER>{});
+    // auto tmp4 =
+    //     (tmp3.template permute<0, 0, 2, 4, 5, 3, 1, 6>(Bool<TRACK_INNER>{}) * A->Adags(x, y).template permute<0, 0, 4, 2, 1,
+    //     3>(Bool<TRACK_INNER>{}))
+    //         .template permute<+1, 0, 3, 5, 1, 2, 4>(Bool<TRACK_INNER>{});
+    // T4_new_tmp = operator*<TRACK_INNER>(tmp4, P2(x, y - 1)).template permute<+2, 3, 0, 1, 2>(Bool<TRACK_INNER>{});
+    auto P1T4 = P1(x, y)
+                    .template twist<TRACK_INNER>(1)
+                    .template twist<TRACK_INNER>(2)
+                    .template twist<TRACK_INNER>(3)
+                    .template contract<std::array{-1, 1, -2, -3}, std::array{-4, 1, -5, -6}, 3, TRACK_INNER>(T4s(x - 1, y));
+    auto P1T4A = P1T4.template contract<std::array{-1, 2, -2, -3, 1, -4}, std::array{1, -5, -6, 2, -7}, 4, TRACK_INNER>(A->As(x, y));
+    auto P1T4AAdag = P1T4A.template contract<std::array{-1, 2, -4, 1, -5, -2, 3}, std::array{1, -6, 3, -3, 2}, 3, TRACK_INNER>(
+        A->Adags(x, y).template twist<TRACK_INNER>(3).template twist<TRACK_INNER>(4));
+    T4_new_tmp = P1T4AAdag.template contract<std::array{-2, -3, -4, 1, 2, 3}, std::array{1, 2, 3, -1}, 1, TRACK_INNER>(
+        P2(x, y - 1).template twist<TRACK_INNER>(0).template twist<TRACK_INNER>(1).template twist<TRACK_INNER>(2));
     T4_new = NORMALIZE ? T4_new_tmp * (1. / T4_new_tmp.maxNorm()) : T4_new_tmp;
 
     if constexpr(TRACK and CP) {
@@ -851,24 +911,40 @@ CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::renormalize_right(const int x,
     Tensor<Scalar, 3, 1, Symmetry, TRACK_INNER> T2_new_tmp;
     Tensor<Scalar, 2, 0, Symmetry, TRACK_INNER> C3_new_tmp;
 
-    C2_new_tmp = operator*<TRACK_INNER>(operator*<TRACK_INNER>(T1s(x, y - 1).template permute<-2, 0, 2, 3, 1>(Bool<TRACK_INNER>{}), C2s(x + 1, y - 1))
-                                            .template permute<+2, 0, 3, 1, 2>(Bool<TRACK_INNER>{}),
-                                        P2(x, y - 1));
+    // C2_new_tmp = operator*<TRACK_INNER>(operator*<TRACK_INNER>(T1s(x, y - 1).template permute<-2, 0, 2, 3, 1>(Bool<TRACK_INNER>{}), C2s(x + 1, y -
+    // 1))
+    //                                         .template permute<+2, 0, 3, 1, 2>(Bool<TRACK_INNER>{}),
+    //                                     P2(x, y - 1));
+    auto T1C2 = T1s(x, y - 1).template contract<std::array{-1, 1, -3, -4}, std::array{1, -2}, 1, TRACK_INNER>(C2s(x + 1, y - 1));
+    C2_new_tmp = T1C2.template contract<std::array{-1, 1, 2, 3}, std::array{1, 2, 3, -2}, 1, TRACK_INNER>(P2(x, y - 1));
     C2_new = NORMALIZE ? C2_new_tmp * (1. / C2_new_tmp.maxNorm()) : C2_new_tmp;
-    C3_new_tmp = operator*<TRACK_INNER>(P1(x, y),
-                                        operator*<TRACK_INNER>(C3s(x + 1, y + 1).template permute<+1, 0, 1>(Bool<TRACK_INNER>{}),
-                                                               T3s(x, y + 1).template permute<+2, 3, 2, 0, 1>(Bool<TRACK_INNER>{}))
-                                            .template permute<-2, 0, 2, 3, 1>(Bool<TRACK_INNER>{}))
-                     .template permute<-1, 0, 1>(Bool<TRACK_INNER>{});
+
+    // C3_new_tmp = operator*<TRACK_INNER>(P1(x, y),
+    //                                     operator*<TRACK_INNER>(C3s(x + 1, y + 1).template permute<+1, 0, 1>(Bool<TRACK_INNER>{}),
+    //                                                            T3s(x, y + 1).template permute<+2, 3, 2, 0, 1>(Bool<TRACK_INNER>{}))
+    //                                         .template permute<-2, 0, 2, 3, 1>(Bool<TRACK_INNER>{}))
+    //                  .template permute<-1, 0, 1>(Bool<TRACK_INNER>{});
+    auto C3T3 = C3s(x + 1, y + 1)
+                    .template twist<TRACK_INNER>(1)
+                    .template contract<std::array{-1, 1}, std::array{-2, -3, -4, 1}, 3, TRACK_INNER>(T3s(x, y + 1));
+    C3_new_tmp = P1(x, y).template contract<std::array{-1, 1, 2, 3}, std::array{1, 2, 3, -2}, 2, TRACK_INNER>(C3T3);
     C3_new = NORMALIZE ? C3_new_tmp * (1. / C3_new_tmp.maxNorm()) : C3_new_tmp;
-    auto tmp2 =
-        P1(x, y - 1).template permute<-2, 0, 2, 3, 1>(Bool<TRACK_INNER>{}) * T2s(x + 1, y).template permute<+2, 2, 3, 0, 1>(Bool<TRACK_INNER>{});
-    auto tmp3 =
-        tmp2.template permute<-1, 0, 2, 3, 5, 1, 4>(Bool<TRACK_INNER>{}) * A->As(x, y).template permute<0, 1, 2, 0, 3, 4>(Bool<TRACK_INNER>{});
-    auto tmp4 =
-        (tmp3.template permute<0, 0, 2, 4, 5, 1, 3, 6>(Bool<TRACK_INNER>{}) * A->Adags(x, y).template permute<0, 1, 3, 2, 0, 4>(Bool<TRACK_INNER>{}))
-            .template permute<+1, 0, 2, 4, 1, 3, 5>(Bool<TRACK_INNER>{});
-    T2_new_tmp = operator*<TRACK_INNER>(tmp4, P2(x, y)).template permute<0, 1, 2, 0, 3>(Bool<TRACK_INNER>{});
+
+    // auto tmp2 =
+    //     P1(x, y - 1).template permute<-2, 0, 2, 3, 1>(Bool<TRACK_INNER>{}) * T2s(x + 1, y).template permute<+2, 2, 3, 0, 1>(Bool<TRACK_INNER>{});
+    // auto tmp3 =
+    //     tmp2.template permute<-1, 0, 2, 3, 5, 1, 4>(Bool<TRACK_INNER>{}) * A->As(x, y).template permute<0, 1, 2, 0, 3, 4>(Bool<TRACK_INNER>{});
+    // auto tmp4 =
+    //     (tmp3.template permute<0, 0, 2, 4, 5, 1, 3, 6>(Bool<TRACK_INNER>{}) * A->Adags(x, y).template permute<0, 1, 3, 2, 0,
+    //     4>(Bool<TRACK_INNER>{}))
+    //         .template permute<+1, 0, 2, 4, 1, 3, 5>(Bool<TRACK_INNER>{});
+    // T2_new_tmp = operator*<TRACK_INNER>(tmp4, P2(x, y)).template permute<0, 1, 2, 0, 3>(Bool<TRACK_INNER>{});
+    auto P1T2 = P1(x, y - 1).template contract<std::array{-1, 1, -2, -3}, std::array{-4, -5, 1, -6}, 3, TRACK_INNER>(T2s(x + 1, y));
+    auto P1T2A = P1T2.template contract<std::array{-1, 1, -2, 2, -3, -4}, std::array{-5, 1, 2, -6, -7}, 4, TRACK_INNER>(
+        A->As(x, y).template twist<TRACK_INNER>(2));
+    auto P1T2AAdag = P1T2A.template contract<std::array{-1, 1, 2, -4, -2, -5, 3}, std::array{-3, 1, 3, 2, -6}, 3, TRACK_INNER>(
+        A->Adags(x, y).template twist<TRACK_INNER>(4));
+    T2_new_tmp = P1T2AAdag.template contract<std::array{-3, -1, -2, 1, 2, 3}, std::array{1, 2, 3, -4}, 3, TRACK_INNER>(P2(x, y));
     T2_new = NORMALIZE ? T2_new_tmp * (1. / T2_new_tmp.maxNorm()) : T2_new_tmp;
 
     if constexpr(TRACK and CP) {
@@ -903,21 +979,35 @@ CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::renormalize_top(const int x,
     Tensor<Scalar, 0, 2, Symmetry, TRACK_INNER> C1_new_tmp;
     Tensor<Scalar, 1, 3, Symmetry, TRACK_INNER> T1_new_tmp;
     Tensor<Scalar, 1, 1, Symmetry, TRACK_INNER> C2_new_tmp;
-    C1_new_tmp = operator*<TRACK_INNER>(operator*<TRACK_INNER>(T4s(x - 1, y).template permute<-2, 1, 2, 3, 0>(Bool<TRACK_INNER>{}),
-                                                               C1s(x - 1, y - 1).template permute<-1, 0, 1>(Bool<TRACK_INNER>{}))
-                                            .template permute<+2, 0, 3, 1, 2>(Bool<TRACK_INNER>{}),
-                                        P2(x - 1, y))
-                     .template permute<+1, 0, 1>(Bool<TRACK_INNER>{});
+
+    // C1_new_tmp = operator*<TRACK_INNER>(operator*<TRACK_INNER>(T4s(x - 1, y).template permute<-2, 1, 2, 3, 0>(Bool<TRACK_INNER>{}),
+    //                                                            C1s(x - 1, y - 1).template permute<-1, 0, 1>(Bool<TRACK_INNER>{}))
+    //                                         .template permute<+2, 0, 3, 1, 2>(Bool<TRACK_INNER>{}),
+    //                                     P2(x - 1, y))
+    //                  .template permute<+1, 0, 1>(Bool<TRACK_INNER>{});
+    auto T4C1 = T4s(x - 1, y).template contract<std::array{1, -1, -3, -4}, std::array{1, -2}, 1, TRACK_INNER>(
+        C1s(x - 1, y - 1).template twist<TRACK_INNER>(0));
+    C1_new_tmp = T4C1.template contract<std::array{-1, 1, 2, 3}, std::array{1, 2, 3, -2}, 0, TRACK_INNER>(P2(x - 1, y));
     C1_new = NORMALIZE ? C1_new_tmp * (1. / C1_new_tmp.maxNorm()) : C1_new_tmp;
-    C2_new_tmp = operator*<TRACK_INNER>(P1(x, y),
-                                        operator*<TRACK_INNER>(C2s(x + 1, y - 1), T2s(x + 1, y).template permute<+2, 2, 0, 1, 3>(Bool<TRACK_INNER>{}))
-                                            .template permute<-2, 0, 1, 2, 3>(Bool<TRACK_INNER>{}));
+
+    // C2_new_tmp = operator*<TRACK_INNER>(P1(x, y),
+    //                                     operator*<TRACK_INNER>(C2s(x + 1, y - 1), T2s(x + 1, y).template permute<+2, 2, 0, 1,
+    //                                     3>(Bool<TRACK_INNER>{}))
+    //                                         .template permute<-2, 0, 1, 2, 3>(Bool<TRACK_INNER>{}));
+    auto C2T2 = C2s(x + 1, y - 1).template contract<std::array{-1, 1}, std::array{-2, -3, 1, -4}, 3, TRACK_INNER>(T2s(x + 1, y));
+    C2_new_tmp = P1(x, y).template contract<std::array{-1, 1, 2, 3}, std::array{1, 2, 3, -2}, 1, TRACK_INNER>(C2T2);
     C2_new = NORMALIZE ? C2_new_tmp * (1. / C2_new_tmp.maxNorm()) : C2_new_tmp;
-    auto tmp2 = operator*<TRACK_INNER>(P1(x - 1, y).template permute<-2, 0, 2, 3, 1>(Bool<TRACK_INNER>{}), T1s(x, y - 1));
-    auto tmp3 = operator*<TRACK_INNER>(tmp2.template permute<-1, 0, 2, 3, 5, 1, 4>(Bool<TRACK_INNER>{}), A->As(x, y));
-    auto tmp4 = operator*<TRACK_INNER>(tmp3.template permute<0, 0, 2, 4, 5, 1, 3, 6>(Bool<TRACK_INNER>{}), A->Adags(x, y))
-                    .template permute<+1, 0, 3, 5, 1, 2, 4>(Bool<TRACK_INNER>{});
-    T1_new_tmp = (tmp4 * P2(x, y)).template permute<+2, 0, 3, 1, 2>(Bool<TRACK_INNER>{});
+
+    // auto tmp2 = operator*<TRACK_INNER>(P1(x - 1, y).template permute<-2, 0, 2, 3, 1>(Bool<TRACK_INNER>{}), T1s(x, y - 1));
+    // auto tmp3 = operator*<TRACK_INNER>(tmp2.template permute<-1, 0, 2, 3, 5, 1, 4>(Bool<TRACK_INNER>{}), A->As(x, y));
+    // auto tmp4 = operator*<TRACK_INNER>(tmp3.template permute<0, 0, 2, 4, 5, 1, 3, 6>(Bool<TRACK_INNER>{}), A->Adags(x, y))
+    //                 .template permute<+1, 0, 3, 5, 1, 2, 4>(Bool<TRACK_INNER>{});
+    // T1_new_tmp = (tmp4 * P2(x, y)).template permute<+2, 0, 3, 1, 2>(Bool<TRACK_INNER>{});
+    auto P1T1 = P1(x - 1, y).template contract<std::array{-1, 1, -2, -3}, std::array{1, -4, -5, -6}, 3, TRACK_INNER>(T1s(x, y - 1));
+    auto P1T1A = P1T1.template contract<std::array{-1, 1, -2, -3, 2, -4}, std::array{1, 2, -5, -6, -7}, 4, TRACK_INNER>(A->As(x, y));
+    auto P1T1AAdag = P1T1A.template contract<std::array{-1, 1, -4, 2, -5, -2, 3}, std::array{1, 2, 3, -6, -3}, 3, TRACK_INNER>(
+        A->Adags(x, y).template twist<TRACK_INNER>(3).template twist<TRACK_INNER>(4));
+    T1_new_tmp = P1T1AAdag.template contract<std::array{-1, -3, -4, 1, 2, 3}, std::array{1, 2, 3, -2}, 1, TRACK_INNER>(P2(x, y));
     T1_new = NORMALIZE ? T1_new_tmp * (1. / T1_new_tmp.maxNorm()) : T1_new_tmp;
 
     if constexpr(TRACK and CP) {
@@ -952,24 +1042,48 @@ CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::renormalize_bottom(const int x,
     Tensor<Scalar, 1, 1, Symmetry, TRACK_INNER> C4_new_tmp;
     Tensor<Scalar, 3, 1, Symmetry, TRACK_INNER> T3_new_tmp;
     Tensor<Scalar, 2, 0, Symmetry, TRACK_INNER> C3_new_tmp;
-    C4_new_tmp = operator*<TRACK_INNER>(P1(x - 1, y),
-                                        operator*<TRACK_INNER>(T4s(x - 1, y).template permute<-2, 0, 2, 3, 1>(Bool<TRACK_INNER>{}), C4s(x - 1, y + 1))
-                                            .template permute<0, 3, 1, 2, 0>(Bool<TRACK_INNER>{}))
-                     .template permute<0, 1, 0>(Bool<TRACK_INNER>{});
-    C4_new = NORMALIZE ? C4_new_tmp * (1. / C4_new_tmp.maxNorm()) : C4_new_tmp;
-    C3_new_tmp = operator*<TRACK_INNER>(operator*<TRACK_INNER>(T2s(x + 1, y), C3s(x + 1, y + 1).template permute<+1, 0, 1>(Bool<TRACK_INNER>{}))
-                                            .template permute<+2, 2, 3, 0, 1>(Bool<TRACK_INNER>{}),
-                                        P2(x, y))
-                     .template permute<-1, 0, 1>(Bool<TRACK_INNER>{});
-    C3_new = NORMALIZE ? C3_new_tmp * (1. / C3_new_tmp.maxNorm()) : C3_new_tmp;
-    auto tmp2 = P1(x, y).template permute<-2, 0, 2, 3, 1>(Bool<TRACK_INNER>{}) * T3s(x, y + 1).template permute<+2, 3, 2, 0, 1>(Bool<TRACK_INNER>{});
-    auto tmp3 =
-        tmp2.template permute<-1, 0, 2, 3, 5, 1, 4>(Bool<TRACK_INNER>{}) * A->As(x, y).template permute<0, 2, 3, 0, 1, 4>(Bool<TRACK_INNER>{});
 
-    auto tmp4 =
-        (tmp3.template permute<0, 0, 2, 4, 5, 1, 3, 6>(Bool<TRACK_INNER>{}) * A->Adags(x, y).template permute<0, 3, 4, 2, 0, 1>(Bool<TRACK_INNER>{}))
-            .template permute<+1, 0, 3, 5, 1, 2, 4>(Bool<TRACK_INNER>{});
-    T3_new_tmp = operator*<TRACK_INNER>(tmp4, P2(x - 1, y)).template permute<0, 1, 2, 3, 0>(Bool<TRACK_INNER>{});
+    // C4_new_tmp = operator*<TRACK_INNER>(P1(x - 1, y),
+    //                                     operator*<TRACK_INNER>(T4s(x - 1, y).template permute<-2, 0, 2, 3, 1>(Bool<TRACK_INNER>{}), C4s(x - 1, y +
+    //                                     1))
+    //                                         .template permute<0, 3, 1, 2, 0>(Bool<TRACK_INNER>{}))
+    //                  .template permute<0, 1, 0>(Bool<TRACK_INNER>{});
+    auto T4C4 = T4s(x - 1, y).template contract<std::array{-4, 1, -2, -3}, std::array{1, -1}, 3, TRACK_INNER>(C4s(x - 1, y + 1));
+    C4_new_tmp = P1(x - 1, y)
+                     .template twist<TRACK_INNER>(1)
+                     .template twist<TRACK_INNER>(2)
+                     .template twist<TRACK_INNER>(3)
+                     .template contract<std::array{-2, 1, 2, 3}, std::array{1, 2, 3, -1}, 1, TRACK_INNER>(T4C4);
+    C4_new = NORMALIZE ? C4_new_tmp * (1. / C4_new_tmp.maxNorm()) : C4_new_tmp;
+
+    // C3_new_tmp = operator*<TRACK_INNER>(operator*<TRACK_INNER>(T2s(x + 1, y), C3s(x + 1, y + 1).template permute<+1, 0, 1>(Bool<TRACK_INNER>{}))
+    //                                         .template permute<+2, 2, 3, 0, 1>(Bool<TRACK_INNER>{}),
+    //                                     P2(x, y))
+    //                  .template permute<-1, 0, 1>(Bool<TRACK_INNER>{});
+    auto T2C3 = T2s(x + 1, y).template contract<std::array{-3, -4, -1, 1}, std::array{1, -2}, 1, TRACK_INNER>(C3s(x + 1, y + 1));
+    C3_new_tmp = T2C3.template contract<std::array{-1, 1, 2, 3}, std::array{1, 2, 3, -2}, 2, TRACK_INNER>(
+        P2(x, y).template twist<TRACK_INNER>(0).template twist<TRACK_INNER>(1).template twist<TRACK_INNER>(2));
+    C3_new = NORMALIZE ? C3_new_tmp * (1. / C3_new_tmp.maxNorm()) : C3_new_tmp;
+
+    // auto tmp2 = P1(x, y).template permute<-2, 0, 2, 3, 1>(Bool<TRACK_INNER>{}) * T3s(x, y + 1).template permute<+2, 3, 2, 0,
+    // 1>(Bool<TRACK_INNER>{}); auto tmp3 =
+    //     tmp2.template permute<-1, 0, 2, 3, 5, 1, 4>(Bool<TRACK_INNER>{}) * A->As(x, y).template permute<0, 2, 3, 0, 1, 4>(Bool<TRACK_INNER>{});
+    // auto tmp4 =
+    //     (tmp3.template permute<0, 0, 2, 4, 5, 1, 3, 6>(Bool<TRACK_INNER>{}) * A->Adags(x, y).template permute<0, 3, 4, 2, 0,
+    //     1>(Bool<TRACK_INNER>{}))
+    //         .template permute<+1, 0, 3, 5, 1, 2, 4>(Bool<TRACK_INNER>{});
+    // T3_new_tmp = operator*<TRACK_INNER>(tmp4, P2(x - 1, y)).template permute<0, 1, 2, 3, 0>(Bool<TRACK_INNER>{});
+    auto P1T3 =
+        P1(x, y)
+            .template twist<TRACK_INNER>(1)
+            .template twist<TRACK_INNER>(2)
+            .template twist<TRACK_INNER>(3)
+            .template contract<std::array{-1, 1, -2, -3}, std::array{-4, -5, -6, 1}, 3, TRACK_INNER>(T3s(x, y + 1).template twist<TRACK_INNER>(0));
+    auto P1T3A = P1T3.template contract<std::array{-1, 1, -2, 2, -3, -4}, std::array{-5, -6, 1, 2, -7}, 4, TRACK_INNER>(A->As(x, y));
+    auto P1T3AAdag = P1T3A.template contract<std::array{-1, 1, 2, -4, -5, -2, 3}, std::array{-6, -3, 3, 1, 2}, 3, TRACK_INNER>(
+        A->Adags(x, y).template twist<TRACK_INNER>(3));
+    T3_new_tmp = P1T3AAdag.template contract<std::array{-4, -1, -2, 1, 2, 3}, std::array{1, 2, 3, -3}, 3, TRACK_INNER>(
+        P2(x - 1, y).template twist<TRACK_INNER>(0).template twist<TRACK_INNER>(1).template twist<TRACK_INNER>(2));
     T3_new = NORMALIZE ? T3_new_tmp * (1. / T3_new_tmp.maxNorm()) : T3_new_tmp;
 
     if constexpr(TRACK and CP) {
@@ -1002,9 +1116,11 @@ CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::contractCorner(const int x, const int 
         // Q = (tmp3.template permute<TRACK, 0, 0, 2, 4, 5, 1, 3, 6>() * A->Adags(x, y)).template permute<TRACK, +1, 0, 3, 5, 1, 2, 4>();
 
         auto C1T1 = C1s(x - 1, y - 1).template contract<std::array{-1, 1}, std::array{1, -2, -3, -4}, 1, TRACK_INNER>(T1s(x, y - 1));
-        auto T4C1T1 = T4s(x - 1, y).template contract<std::array{1, -1, -2, -3}, std::array{1, -4, -5, -6}, 3, TRACK_INNER>(C1T1);
+        auto T4C1T1 = T4s(x - 1, y).template contract<std::array{1, -1, -2, -3}, std::array{1, -4, -5, -6}, 3, TRACK_INNER>(
+            C1T1.template twist<TRACK_INNER>(0));
         auto T4C1T1A = T4C1T1.template contract<std::array{-1, 1, -2, -3, 2, -4}, std::array{1, 2, -5, -6, -7}, 4, TRACK_INNER>(A->As(x, y));
-        Q = T4C1T1A.template contract<std::array{-1, 1, -4, 2, -5, -2, 3}, std::array{1, 2, 3, -6, -3}, 3, TRACK_INNER>(A->Adags(x, y));
+        Q = T4C1T1A.template contract<std::array{-1, 1, -4, 2, -5, -2, 3}, std::array{1, 2, 3, -6, -3}, 3, TRACK_INNER>(
+            A->Adags(x, y).template twist<TRACK_INNER>(3).template twist<TRACK_INNER>(4));
         // Scalar diff = (Q - Qcheck).norm();
         // SPDLOG_WARN("upper left corner check at x,y={},{}: {}", x, y, diff);
         // ooooo -->--
@@ -1024,8 +1140,10 @@ CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::contractCorner(const int x, const int 
 
         auto C4T3 = C4s(x - 1, y + 1).template contract<std::array{-1, 1}, std::array{-2, -3, 1, -4}, 1, TRACK_INNER>(T3s(x, y + 1));
         auto T4C4T3 = T4s(x - 1, y).template contract<std::array{-1, 1, -2, -3}, std::array{1, -4, -5, -6}, 3, TRACK_INNER>(C4T3);
-        auto T4C4T3A = T4C4T3.template contract<std::array{-1, 1, -2, 2, -3, -4}, std::array{1, -5, -6, 2, -7}, 4, TRACK_INNER>(A->As(x, y));
-        Q = T4C4T3A.template contract<std::array{-4, 1, 2, -1, -5, -2, 3}, std::array{1, -6, 3, -3, 2}, 3, TRACK_INNER>(A->Adags(x, y));
+        auto T4C4T3A = T4C4T3.template contract<std::array{-1, 1, -2, 2, -3, -4}, std::array{1, -5, -6, 2, -7}, 4, TRACK_INNER>(
+            A->As(x, y).template twist<TRACK_INNER>(3));
+        Q = T4C4T3A.template contract<std::array{-4, 1, 2, -1, -5, -2, 3}, std::array{1, -6, 3, -3, 2}, 3, TRACK_INNER>(
+            A->Adags(x, y).template twist<TRACK_INNER>(3));
         // Scalar diff = (Q - Qcheck).norm();
         // SPDLOG_WARN("lower left corner check at x,y={},{}: {}", x, y, diff);
 
@@ -1046,8 +1164,10 @@ CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::contractCorner(const int x, const int 
 
         auto T1C2 = T1s(x, y - 1).template contract<std::array{-1, 1, -2, -3}, std::array{1, -4}, 3, TRACK_INNER>(C2s(x + 1, y - 1));
         auto T1C2T2 = T1C2.template contract<std::array{-1, -2, -3, 1}, std::array{-4, -5, 1, -6}, 3, TRACK_INNER>(T2s(x + 1, y));
-        auto T1C2T2A = T1C2T2.template contract<std::array{-1, 1, -2, 2, -3, -4}, std::array{-5, 1, 2, -6, -7}, 4, TRACK_INNER>(A->As(x, y));
-        Q = T1C2T2A.template contract<std::array{-1, 1, 2, -4, -2, -5, 3}, std::array{-3, 1, 3, 2, -6}, 3, TRACK_INNER>(A->Adags(x, y));
+        auto T1C2T2A = T1C2T2.template contract<std::array{-1, 1, -2, 2, -3, -4}, std::array{-5, 1, 2, -6, -7}, 4, TRACK_INNER>(
+            A->As(x, y).template twist<TRACK_INNER>(2));
+        Q = T1C2T2A.template contract<std::array{-1, 1, 2, -4, -2, -5, 3}, std::array{-3, 1, 3, 2, -6}, 3, TRACK_INNER>(
+            A->Adags(x, y).template twist<TRACK_INNER>(4));
         // Scalar diff = (Q - Qcheck).norm();
         // SPDLOG_WARN("upper right corner check at x,y={},{}: {}", x, y, diff);
 
@@ -1067,9 +1187,12 @@ CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::contractCorner(const int x, const int 
         // Q = (tmp3.template permute<TRACK, 0, 0, 2, 4, 5, 1, 3, 6>() * A->Adags(x, y).template permute<TRACK, 0, 3, 4, 2, 0, 1>())
         //         .template permute<TRACK, +1, 0, 3, 5, 1, 2, 4>();
 
-        auto C3T3 = C3s(x + 1, y + 1).template contract<std::array{-1, 1}, std::array{-2, -3, -4, 1}, 1, TRACK_INNER>(T3s(x, y + 1));
+        auto C3T3 = C3s(x + 1, y + 1)
+                        .template twist<TRACK_INNER>(1)
+                        .template contract<std::array{-1, 1}, std::array{-2, -3, -4, 1}, 1, TRACK_INNER>(T3s(x, y + 1));
         auto T2C3T3 = T2s(x + 1, y).template contract<std::array{-1, -2, -3, 1}, std::array{1, -4, -5, -6}, 3, TRACK_INNER>(C3T3);
-        auto T2C3T3A = T2C3T3.template contract<std::array{1, -1, -2, 2, -3, -4}, std::array{-5, -6, 1, 2, -7}, 4, TRACK_INNER>(A->As(x, y));
+        auto T2C3T3A = T2C3T3.template contract<std::array{1, -1, -2, 2, -3, -4}, std::array{-5, -6, 1, 2, -7}, 4, TRACK_INNER>(
+            A->As(x, y).template twist<TRACK_INNER>(2).template twist<TRACK_INNER>(3));
         Q = T2C3T3A.template contract<std::array{1, -1, 2, -4, -5, -2, 3}, std::array{-6, -3, 3, 1, 2}, 3, TRACK_INNER>(A->Adags(x, y));
         // Scalar diff = (Q - Qcheck).norm();
         // SPDLOG_WARN("lower right corner check at x,y={},{}: {}", x, y, diff);

@@ -4,7 +4,9 @@
 
 #include "spdlog/spdlog.h"
 
+#include "fmt/core.h"
 #include "fmt/os.h"
+#include "fmt/ostream.h"
 #include "fmt/ranges.h"
 
 #include "Xped/Util/Constfct.hpp"

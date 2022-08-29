@@ -92,11 +92,11 @@ int main(int argc, char* argv[])
         SPDLOG_INFO("Number of MPI processes: {}", world.np);
 
         typedef double Scalar;
-        // using Symmetry = Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>;
+        using Symmetry = Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>;
         // typedef Xped::Sym::SU2<Xped::Sym::SpinSU2> Symmetry;
         // typedef Xped::Sym::U1<Xped::Sym::SpinU1> Symmetry;
         // typedef Xped::Sym::ZN<Xped::Sym::SpinU1, 36, double> Symmetry;
-        typedef Xped::Sym::U0<double> Symmetry;
+        // typedef Xped::Sym::U0<double> Symmetry;
 
         std::unique_ptr<Xped::TwoSiteObservable<Symmetry>> ham;
 
@@ -200,39 +200,49 @@ int main(int argc, char* argv[])
 
         Xped::Opts::Optim o_opts = Xped::Opts::optim_from_toml(data.at("optim"));
         Xped::Opts::CTM c_opts = Xped::Opts::ctm_from_toml(data.at("ctm"));
-        constexpr Xped::Opts::CTMCheckpoint cp_opts{.MOVE = false, .CORNER = false};
+        constexpr Xped::Opts::CTMCheckpoint cp_opts{.MOVE = true, .CORNER = true};
         Xped::iPEPSSolverAD<Scalar, Symmetry, cp_opts> Jack(o_opts, c_opts);
 
-        Xped::SpinBase<Symmetry> B(1, 2);
-        Xped::TwoSiteObservable<Symmetry> SzSz(c.pattern, Xped::Opts::Bond::H | Xped::Opts::Bond::V | Xped::Opts::Bond::D1 | Xped::Opts::Bond::D2);
-        for(auto& t : SzSz.data_h) { t = Xped::tprod(B.Sz(), B.Sz()); }
-        for(auto& t : SzSz.data_v) { t = Xped::tprod(B.Sz(), B.Sz()); }
-        for(auto& t : SzSz.data_d1) { t = Xped::tprod(B.Sz(), B.Sz()); }
-        for(auto& t : SzSz.data_d2) { t = Xped::tprod(B.Sz(), B.Sz()); }
+        Xped::FermionBase<Symmetry> F(1);
+        Xped::OneSiteObservable<Symmetry> n(c.pattern);
+        for(auto& t : n.data) { t = F.n().data.template trim<2>(); }
+        Xped::OneSiteObservable<Symmetry> nup(c.pattern);
+        for(auto& t : nup.data) { t = F.n(Xped::SPIN_INDEX::UP).data.template trim<2>(); }
+        Xped::OneSiteObservable<Symmetry> ndn(c.pattern);
+        for(auto& t : ndn.data) { t = F.n(Xped::SPIN_INDEX::DN).data.template trim<2>(); }
+        Xped::OneSiteObservable<Symmetry> d(c.pattern);
+        for(auto& t : d.data) { t = F.d().data.template trim<2>(); }
 
-        Xped::TwoSiteObservable<Symmetry> SpSm(c.pattern, Xped::Opts::Bond::H | Xped::Opts::Bond::V | Xped::Opts::Bond::D1 | Xped::Opts::Bond::D2);
-        for(auto& t : SpSm.data_h) { t = Xped::tprod(B.Sp(), B.Sm()); }
-        for(auto& t : SpSm.data_v) { t = Xped::tprod(B.Sp(), B.Sm()); }
-        for(auto& t : SpSm.data_d1) { t = Xped::tprod(B.Sp(), B.Sm()); }
-        for(auto& t : SpSm.data_d2) { t = Xped::tprod(B.Sp(), B.Sm()); }
+        // Xped::SpinBase<Symmetry> B(1, 2);
+        // Xped::TwoSiteObservable<Symmetry> SzSz(c.pattern, Xped::Opts::Bond::H | Xped::Opts::Bond::V | Xped::Opts::Bond::D1 | Xped::Opts::Bond::D2);
+        // for(auto& t : SzSz.data_h) { t = Xped::tprod(B.Sz(), B.Sz()); }
+        // for(auto& t : SzSz.data_v) { t = Xped::tprod(B.Sz(), B.Sz()); }
+        // for(auto& t : SzSz.data_d1) { t = Xped::tprod(B.Sz(), B.Sz()); }
+        // for(auto& t : SzSz.data_d2) { t = Xped::tprod(B.Sz(), B.Sz()); }
 
-        Xped::TwoSiteObservable<Symmetry> SmSp(c.pattern, Xped::Opts::Bond::H | Xped::Opts::Bond::V | Xped::Opts::Bond::D1 | Xped::Opts::Bond::D2);
-        for(auto& t : SmSp.data_h) { t = Xped::tprod(B.Sm(), B.Sp()); }
-        for(auto& t : SmSp.data_v) { t = Xped::tprod(B.Sm(), B.Sp()); }
-        for(auto& t : SmSp.data_d1) { t = Xped::tprod(B.Sm(), B.Sp()); }
-        for(auto& t : SmSp.data_d2) { t = Xped::tprod(B.Sm(), B.Sp()); }
-        Xped::OneSiteObservable<Symmetry> Sz(c.pattern);
-        for(auto& t : Sz.data) { t = B.Sz().data.template trim<1>(); }
-        Xped::OneSiteObservable<Symmetry> Sx(c.pattern);
-        for(auto& t : Sx.data) { t = B.Sx().data.template trim<1>(); }
+        // Xped::TwoSiteObservable<Symmetry> SpSm(c.pattern, Xped::Opts::Bond::H | Xped::Opts::Bond::V | Xped::Opts::Bond::D1 | Xped::Opts::Bond::D2);
+        // for(auto& t : SpSm.data_h) { t = Xped::tprod(B.Sp(), B.Sm()); }
+        // for(auto& t : SpSm.data_v) { t = Xped::tprod(B.Sp(), B.Sm()); }
+        // for(auto& t : SpSm.data_d1) { t = Xped::tprod(B.Sp(), B.Sm()); }
+        // for(auto& t : SpSm.data_d2) { t = Xped::tprod(B.Sp(), B.Sm()); }
+
+        // Xped::TwoSiteObservable<Symmetry> SmSp(c.pattern, Xped::Opts::Bond::H | Xped::Opts::Bond::V | Xped::Opts::Bond::D1 | Xped::Opts::Bond::D2);
+        // for(auto& t : SmSp.data_h) { t = Xped::tprod(B.Sm(), B.Sp()); }
+        // for(auto& t : SmSp.data_v) { t = Xped::tprod(B.Sm(), B.Sp()); }
+        // for(auto& t : SmSp.data_d1) { t = Xped::tprod(B.Sm(), B.Sp()); }
+        // for(auto& t : SmSp.data_d2) { t = Xped::tprod(B.Sm(), B.Sp()); }
+        // Xped::OneSiteObservable<Symmetry> Sz(c.pattern);
+        // for(auto& t : Sz.data) { t = B.Sz().data.template trim<2>(); }
+        // Xped::OneSiteObservable<Symmetry> Sx(c.pattern);
+        // for(auto& t : Sx.data) { t = B.Sx().data.template trim<2>(); }
         // Xped::OneSiteObservable<Symmetry> sz(c.pattern);
-        // for(auto& t : sz.data) { t = B.Sz(1).data.template trim<1>(); }
+        // for(auto& t : sz.data) { t = B.Sz(1).data.template trim<2>(); }
         // Xped::OneSiteObservable<Symmetry> Szsz(c.pattern);
-        // for(auto& t : Szsz.data) { t = (B.Sz(0) * B.Sz(1)).data.template trim<1>(); }
+        // for(auto& t : Szsz.data) { t = (B.Sz(0) * B.Sz(1)).data.template trim<2>(); }
         // Xped::OneSiteObservable<Symmetry> Spsm(c.pattern);
-        // for(auto& t : Spsm.data) { t = (B.Sp(0) * B.Sm(1)).data.template trim<1>(); }
+        // for(auto& t : Spsm.data) { t = (B.Sp(0) * B.Sm(1)).data.template trim<2>(); }
         // Xped::OneSiteObservable<Symmetry> Smsp(c.pattern);
-        // for(auto& t : Smsp.data) { t = (B.Sm(0) * B.Sp(1)).data.template trim<1>(); }
+        // for(auto& t : Smsp.data) { t = (B.Sm(0) * B.Sp(1)).data.template trim<2>(); }
 
         // Xped::TwoSiteObservable<Symmetry> SS(c.pattern, Xped::Opts::Bond::H | Xped::Opts::Bond::V | Xped::Opts::Bond::D1 | Xped::Opts::Bond::D2);
         // for(auto& t : SS.data_h) { t = std::sqrt(3.) * Xped::tprod(B.Sdag(), B.S()); }
@@ -241,32 +251,40 @@ int main(int argc, char* argv[])
         // for(auto& t : SS.data_d2) { t = std::sqrt(3.) * Xped::tprod(B.Sdag(), B.S()); }
         // Xped::OneSiteObservable<Symmetry> Ssq(c.pattern);
         // for(auto& t : Ssq.data) {
-        //     t = std::sqrt(3.) * (Xped::SiteOperator<Scalar, Symmetry>::prod(B.Sdag(0), B.S(0), Symmetry::qvacuum())).data.template trim<1>();
+        //     t = std::sqrt(3.) * (Xped::SiteOperator<Scalar, Symmetry>::prod(B.Sdag(0), B.S(0), Symmetry::qvacuum())).data.template trim<2>();
         // }
-        Jack.callback = [Sz, Sx, SzSz, SpSm, SmSp](XPED_CONST Xped::CTM<Scalar, Symmetry>& env, std::size_t i) mutable {
+        // Jack.callback = [Sz, Sx, SzSz, SpSm, SmSp](XPED_CONST Xped::CTM<Scalar, Symmetry>& env, std::size_t i) mutable {
+        //     fmt::print("Callback at iteration {}\n", i);
+        //     auto o_Sz = avg(env, Sz);
+        //     auto o_Sx = avg(env, Sx);
+        //     for(auto i = 0ul; i < o_Sz.size(); ++i) {
+        //         fmt::print("Sz={}, Sx={}, |S|={}\n", o_Sz[i], o_Sx[i], std::sqrt(o_Sz[i] * o_Sz[i] + o_Sx[i] * o_Sx[i]));
+        //         // fmt::print("Sz={}\n", o_Sz[i]);
+        //     }
+        //     // auto o_Ssq = avg(env, Ssq);
+        //     // for(const auto d : o_Ssq) { fmt::print("S²={}\n", d); }
+        //     // auto [o_SS_h, o_SS_v, o_SS_d1, o_SS_d2] = avg(env, SS);
+        //     // for(auto i = 0ul; i < o_SS_h.size(); ++i) { fmt::print("SS_h={}, SS_v={}\n", o_SS_h[i], o_SS_v[i]); }
+        //     // for(auto i = 0ul; i < o_SS_d1.size(); ++i) { fmt::print("SS_d1={}, SS_d2={}\n", o_SS_d1[i], o_SS_d2[i]); }
+        //     auto [o_SzSz_h, o_SzSz_v, o_SzSz_d1, o_SzSz_d2] = avg(env, SzSz);
+        //     auto [o_SpSm_h, o_SpSm_v, o_SpSm_d1, o_SpSm_d2] = avg(env, SpSm);
+        //     auto [o_SmSp_h, o_SmSp_v, o_SmSp_d1, o_SmSp_d2] = avg(env, SmSp);
+        //     for(auto i = 0ul; i < o_SzSz_h.size(); ++i) { fmt::print("SS_h={}\n", o_SzSz_h[i] + 0.5 * (o_SpSm_h[i] + o_SmSp_h[i])); }
+        //     for(auto i = 0ul; i < o_SzSz_v.size(); ++i) { fmt::print("SS_v={}\n", o_SzSz_v[i] + 0.5 * (o_SpSm_v[i] + o_SmSp_v[i])); }
+        //     for(auto i = 0ul; i < o_SzSz_d1.size(); ++i) { fmt::print("SS_d1={}\n", o_SzSz_d1[i] + 0.5 * (o_SpSm_d1[i] + o_SmSp_d1[i])); }
+        //     for(auto i = 0ul; i < o_SzSz_d2.size(); ++i) { fmt::print("SS_d2={}\n", o_SzSz_d2[i] + 0.5 * (o_SpSm_d2[i] + o_SmSp_d2[i])); }
+        //     // auto o_Spsm = avg(env, Spsm);
+        //     // for(const auto d : o_Spsm) { fmt::print("Spsm={}\n", d); }
+        //     //     auto o_Smsp = avg(env, Smsp);
+        //     //     for(const auto d : o_Smsp) { fmt::print("Smsp={}\n", d); }
+        // };
+        Jack.callback = [n, nup, ndn, d](XPED_CONST Xped::CTM<Scalar, Symmetry>& env, std::size_t i) mutable {
             fmt::print("Callback at iteration {}\n", i);
-            auto o_Sz = avg(env, Sz);
-            auto o_Sx = avg(env, Sx);
-            for(auto i = 0ul; i < o_Sz.size(); ++i) {
-                fmt::print("Sz={}, Sx={}, |S|={}\n", o_Sz[i], o_Sx[i], std::sqrt(o_Sz[i] * o_Sz[i] + o_Sx[i] * o_Sx[i]));
-                // fmt::print("Sz={}\n", o_Sz[i]);
-            }
-            // auto o_Ssq = avg(env, Ssq);
-            // for(const auto d : o_Ssq) { fmt::print("S²={}\n", d); }
-            // auto [o_SS_h, o_SS_v, o_SS_d1, o_SS_d2] = avg(env, SS);
-            // for(auto i = 0ul; i < o_SS_h.size(); ++i) { fmt::print("SS_h={}, SS_v={}\n", o_SS_h[i], o_SS_v[i]); }
-            // for(auto i = 0ul; i < o_SS_d1.size(); ++i) { fmt::print("SS_d1={}, SS_d2={}\n", o_SS_d1[i], o_SS_d2[i]); }
-            auto [o_SzSz_h, o_SzSz_v, o_SzSz_d1, o_SzSz_d2] = avg(env, SzSz);
-            auto [o_SpSm_h, o_SpSm_v, o_SpSm_d1, o_SpSm_d2] = avg(env, SpSm);
-            auto [o_SmSp_h, o_SmSp_v, o_SmSp_d1, o_SmSp_d2] = avg(env, SmSp);
-            for(auto i = 0ul; i < o_SzSz_h.size(); ++i) { fmt::print("SS_h={}\n", o_SzSz_h[i] + 0.5 * (o_SpSm_h[i] + o_SmSp_h[i])); }
-            for(auto i = 0ul; i < o_SzSz_v.size(); ++i) { fmt::print("SS_v={}\n", o_SzSz_v[i] + 0.5 * (o_SpSm_v[i] + o_SmSp_v[i])); }
-            for(auto i = 0ul; i < o_SzSz_d1.size(); ++i) { fmt::print("SS_d1={}\n", o_SzSz_d1[i] + 0.5 * (o_SpSm_d1[i] + o_SmSp_d1[i])); }
-            for(auto i = 0ul; i < o_SzSz_d2.size(); ++i) { fmt::print("SS_d2={}\n", o_SzSz_d2[i] + 0.5 * (o_SpSm_d2[i] + o_SmSp_d2[i])); }
-            // auto o_Spsm = avg(env, Spsm);
-            // for(const auto d : o_Spsm) { fmt::print("Spsm={}\n", d); }
-            //     auto o_Smsp = avg(env, Smsp);
-            //     for(const auto d : o_Smsp) { fmt::print("Smsp={}\n", d); }
+            auto o_n = avg(env, n);
+            auto o_nup = avg(env, nup);
+            auto o_ndn = avg(env, ndn);
+            auto o_d = avg(env, d);
+            for(auto i = 0ul; i < o_n.size(); ++i) { fmt::print("n={} (n_up={}, n_dn={}), d={}\n", o_n[i], o_nup[i], o_ndn[i], o_d[i]); }
         };
         Jack.solve<double>(Psi, *ham);
 

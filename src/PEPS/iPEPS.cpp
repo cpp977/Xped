@@ -140,7 +140,7 @@ void iPEPS<Scalar, Symmetry, ENABLE_AD>::set_data(const Scalar* data, bool NORMA
     std::size_t count = 0;
     for(auto& A : As) {
         A.set_data(data + count, A.plainSize());
-        if(NORMALIZE) { A = A * (1. / A.norm()); }
+        if(NORMALIZE) { A = A * (1. / A.maxNorm()); }
         count += A.plainSize();
     }
 
@@ -175,7 +175,7 @@ Qbasis<Symmetry, 1> iPEPS<Scalar, Symmetry, ENABLE_AD>::braBasis(const int x, co
     case LEG::UP: return Adags(x, y).uncoupledDomain()[1]; break;
     case LEG::RIGHT: return Adags(x, y).uncoupledCodomain()[0]; break;
     case LEG::DOWN: return Adags(x, y).uncoupledCodomain()[1]; break;
-    case LEG::PHYS: return Adags(x, y).uncoupledCodomain()[2]; break;
+    case LEG::PHYS: return Adags(x, y).uncoupledDomain()[2]; break;
     default: std::terminate();
     }
 }

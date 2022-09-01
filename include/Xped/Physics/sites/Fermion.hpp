@@ -5,6 +5,7 @@
 #include "Xped/Physics/SpinIndex.hpp"
 #include "Xped/Physics/SpinOp.hpp"
 #include "Xped/Symmetry/U0.hpp"
+#include "Xped/Util/Constfct.hpp"
 
 namespace Xped {
 
@@ -386,9 +387,9 @@ typename Symmetry_::qType Fermion<Symmetry_>::getQ(SPIN_INDEX sigma, int Delta) 
         {
             typename Symmetry::qType out;
             if(sigma == SPIN_INDEX::UP) {
-                out = {util::posmod<2>(Delta)};
+                out = {util::constFct::posmod<2>(Delta)};
             } else if(sigma == SPIN_INDEX::DN) {
-                out = {util::posmod<2>(-Delta)};
+                out = {util::constFct::posmod<2>(-Delta)};
             } else if(sigma == SPIN_INDEX::UPDN) {
                 out = Symmetry::qvacuum();
             } else if(sigma == SPIN_INDEX::NOSPIN) {

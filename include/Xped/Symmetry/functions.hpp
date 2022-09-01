@@ -1,26 +1,15 @@
-#ifndef FUNCTIONS_H_
-#define FUNCTIONS_H_
+#ifndef XPED_FUNCTIONS_H_
+#define XPED_FUNCTIONS_H_
 
-#include "SU2Wrappers.hpp"
-#include "qarray.hpp"
+#include "Xped/Symmetry/SU2Wrappers.hpp"
+#include "Xped/Symmetry/qarray.hpp"
+#include "Xped/Util/Constfct.hpp"
 
 #include <boost/rational.hpp>
 
 namespace Xped {
 
 namespace util {
-
-/**Calculates mod N ensuring the result is positive for positive N*/
-#ifndef POSMOD_FUNCTION
-#    define POSMOD_FUNCTION
-template <int N>
-inline int posmod(int x)
-{
-    return (x % N + N) % N;
-}
-
-inline int posmod(int x, int N) { return (x % N + N) % N; }
-#endif
 
 /**Prints a boost fraction in such a way, that a "1" in the denominator is omitted.*/
 inline std::string print_frac_nice(boost::rational<int> r)
@@ -75,7 +64,7 @@ std::string format(qarray<Symmetry::Nq> qnum)
                 ss << util::print_frac_nice(boost::rational<int>(qnum[q], 2));
             }
         } else if(Symmetry::kind()[q] == KIND::Z2) {
-            std::string parity = util::posmod<2>(qnum[q] == 0) ? "evn" : "odd";
+            std::string parity = util::constFct::posmod<2>(qnum[q] == 0) ? "evn" : "odd";
             ss << parity;
         } else {
             ss << qnum[q];

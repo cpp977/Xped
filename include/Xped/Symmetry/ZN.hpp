@@ -1,11 +1,7 @@
 #ifndef XPED_ZN_H_
 #define XPED_ZN_H_
 
-// include <array>
-// include <cstddef>
-/// \cond
-#include <unordered_set>
-/// \endcond
+#include <array>
 
 #include "Xped/Util/Constfct.hpp"
 #include "Xped/Util/Mpi.hpp"

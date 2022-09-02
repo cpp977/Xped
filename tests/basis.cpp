@@ -90,4 +90,54 @@ TEST_CASE("Testing combine() in Qbasis.")
     }
 }
 
+#ifdef XPED_USE_MPI
+MPI_TEST_CASE("Testing push_back() in Qbasis.", 2)
+#else
+TEST_CASE("Testing push_back() in Qbasis.")
+#endif
+{
+    SUBCASE("SU2")
+    {
+        typedef Xped::Sym::SU2<Xped::Sym::SpinSU2> Symmetry;
+        Xped::Qbasis<Symmetry, 1> B, C;
+        B.push_back(Symmetry::qvacuum(), 4);
+        B.push_back(Symmetry::lowest_qs()[0], 8);
+        B.push_back({5}, 5);
+        C.push_back(Symmetry::qvacuum(), 1);
+        C.push_back(Symmetry::qvacuum(), 3);
+        C.push_back(Symmetry::lowest_qs()[0], 5);
+        C.push_back(Symmetry::lowest_qs()[0], 3);
+        C.push_back({5}, 2);
+        C.push_back({5}, 3);
+        CHECK(B == C);
+    }
+
+    SUBCASE("U1")
+    {
+        typedef Xped::Sym::U1<Xped::Sym::SpinU1> Symmetry;
+        Xped::Qbasis<Symmetry, 1> B, C;
+        B.push_back(Symmetry::qvacuum(), 4);
+        B.push_back(Symmetry::lowest_qs()[0], 8);
+        B.push_back({5}, 5);
+        C.push_back(Symmetry::qvacuum(), 1);
+        C.push_back(Symmetry::qvacuum(), 3);
+        C.push_back(Symmetry::lowest_qs()[0], 5);
+        C.push_back(Symmetry::lowest_qs()[0], 3);
+        C.push_back({5}, 2);
+        C.push_back({5}, 3);
+        CHECK(B == C);
+    }
+
+    SUBCASE("U0")
+    {
+        typedef Xped::Sym::U0<> Symmetry;
+        Xped::Qbasis<Symmetry, 1> B, C;
+        B.push_back(Symmetry::qvacuum(), 20);
+        C.push_back(Symmetry::qvacuum(), 1);
+        C.push_back(Symmetry::qvacuum(), 3);
+        C.push_back(Symmetry::qvacuum(), 10);
+        C.push_back(Symmetry::qvacuum(), 6);
+        CHECK(B == C);
+    }
+}
 TEST_SUITE_END();

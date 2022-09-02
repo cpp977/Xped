@@ -56,7 +56,7 @@ void Qbasis<Symmetry, depth, AllocationPolicy>::push_back(const qType& q, const 
     } else // append to quantumnumber if it is there
     {
         std::get<2>(*it) = std::get<2>(*it).add(Basis(inner_dim));
-        for(auto loop = it++; loop == data_.end(); loop++) { std::get<1>(*loop) += inner_dim; }
+        for(auto loop = ++it; loop != data_.end(); ++loop) { std::get<1>(*loop) += inner_dim; }
         for(auto& [p, tree] : trees) {
             if(p != q) { continue; }
             tree[0].dim += inner_dim;
@@ -364,7 +364,7 @@ Qbasis<Symmetry, depth, AllocationPolicy> Qbasis<Symmetry, depth, AllocationPoli
 {
     static_assert(depth == 1, "shift() in Qbasis is only for bases without depth.");
     if(qshift == Symmetry::qvacuum()) { return *this; }
-    assert(not Symmetry::NON_ABELIAN and "Nontrivial shifts onl for Abelian symmetries.");
+    assert(not Symmetry::ANY_NON_ABELIAN and "Nontrivial shifts onl for Abelian symmetries.");
     Qbasis<Symmetry, depth, AllocationPolicy> out;
     for(const auto& [q, dim, plain] : data_) { out.push_back(Symmetry::reduceSilent(q, qshift)[0], plain.dim()); }
     out.sort();
@@ -478,7 +478,7 @@ std::string Qbasis<Symmetry, depth, AllocationPolicy>::info() const
 {
     std::stringstream res;
     res << "Basis(" << Symmetry::name() << ", dim=" << dim();
-    if constexpr(Symmetry::NON_ABELIAN) { res << "[" << fullDim() << "]"; }
+    if constexpr(Symmetry::ANY_NON_ABELIAN) { res << "[" << fullDim() << "]"; }
     res << ")";
     if(IS_CONJ()) { res << "'"; }
     return res.str();

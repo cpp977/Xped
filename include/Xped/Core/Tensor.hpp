@@ -6,6 +6,8 @@
 
 #include "seq/seq.h"
 
+#include "spdlog/spdlog.h"
+
 #include "Xped/Util/Macros.hpp"
 
 #include "Xped/Util/Bool.hpp"

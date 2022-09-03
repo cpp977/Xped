@@ -19,6 +19,20 @@ if (XPED_USE_MPI)
 else ()
   add_test(NAME basis COMMAND basis_test)
 endif()
+
+#########################
+#       physics_test      #
+#########################
+add_executable(physics_test physics.cpp $<TARGET_OBJECTS:test_suite>)
+target_link_libraries (physics_test test_suite)
+
+# doctest_discover_tests(basis_test TEST_PREFIX basis__ ADD_LABELS "1")
+if (XPED_USE_MPI)
+  add_test(NAME physics COMMAND ${MPIEXEC_EXECUTABLE} --mca opal_warn_on_missing_libcuda 0 ${MPIEXEC_NUMPROC_FLAG} 2 ${MPIEXEC_PREFLAGS} ./physics_test ${MPIEXEC_POSTFLAGS})
+else ()
+  add_test(NAME physics COMMAND physics_test)
+endif()
+
 #########################
 #        tree_test      #
 #########################

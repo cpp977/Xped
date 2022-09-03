@@ -55,7 +55,7 @@ bool FusionTree<Rank, Symmetry>::operator<(const FusionTree<Rank, Symmetry>& oth
 template <std::size_t Rank, typename Symmetry>
 bool FusionTree<Rank, Symmetry>::operator==(const FusionTree<Rank, Symmetry>& other) const
 {
-    if constexpr(Symmetry::IS_TRIVIAL) { return dims == other.dims; }
+    if constexpr(Symmetry::ALL_IS_TRIVIAL) { return dims == other.dims; }
     return q_uncoupled == other.q_uncoupled and q_intermediates == other.q_intermediates and multiplicities == other.multiplicities and
            q_coupled == other.q_coupled and IS_DUAL == other.IS_DUAL and dims == other.dims;
 }
@@ -316,7 +316,7 @@ FusionTree<Rank, Symmetry>::swap(const std::size_t& pos) const // swaps sites po
     assert(pos < Rank - 1 and "Invalid position for swap.");
     std::unordered_map<FusionTree<Rank, Symmetry>, typename Symmetry::Scalar> out;
     if(pos == 0) {
-        if constexpr(Symmetry::HAS_MULTIPLICITIES) {
+        if constexpr(Symmetry::ANY_HAS_MULTIPLICITIES) {
             assert(false and "Not implemented.");
         } else {
             auto ql = q_uncoupled[0];
@@ -339,7 +339,7 @@ FusionTree<Rank, Symmetry>::swap(const std::size_t& pos) const // swaps sites po
             return out;
         }
     }
-    if constexpr(Symmetry::HAS_MULTIPLICITIES) {
+    if constexpr(Symmetry::ANY_HAS_MULTIPLICITIES) {
         assert(false and "Not implemented.");
     } else {
         auto q1 = (pos == 1) ? q_uncoupled[0] : q_intermediates[pos - 2];

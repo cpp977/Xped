@@ -33,6 +33,7 @@ enum KIND
     S,
     Salt,
     T,
+    FT,
     N,
     FN,
     M,
@@ -56,9 +57,9 @@ std::string format(qarray<Symmetry::Nq> qnum)
         if(Symmetry::kind()[q] == KIND::S or Symmetry::kind()[q] == KIND::Salt or Symmetry::kind()[q] == KIND::T) {
             ss << util::print_frac_nice(boost::rational<int>(qnum[q] - 1, 2));
         } else if(Symmetry::kind()[q] == KIND::M) {
-            if constexpr(Symmetry::IS_MODULAR) {
+            if(Symmetry::IS_MODULAR[q]) {
                 int q_nice = qnum[q];
-                if(std::abs(qnum[q]) > std::abs(qnum[q] - Symmetry::MOD_N)) { q_nice = q_nice - Symmetry::MOD_N; }
+                if(std::abs(qnum[q]) > std::abs(qnum[q] - Symmetry::MOD_N[q])) { q_nice = q_nice - Symmetry::MOD_N[q]; }
                 ss << util::print_frac_nice(boost::rational<int>(q_nice, 2));
             } else {
                 ss << util::print_frac_nice(boost::rational<int>(qnum[q], 2));

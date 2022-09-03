@@ -35,7 +35,7 @@ public:
     /**
      * \param L_input : the amount of orbitals
      */
-    FermionBase(std::size_t L_input, bool REMOVE_DOUBLE = false, bool REMVOVE_EMPTY = false, bool REMOVE_SINGLE = false, int mfactor = 1);
+    FermionBase(std::size_t L_input, bool REMOVE_DOUBLE = false, bool REMVOVE_EMPTY = false, bool REMOVE_SINGLE = false);
 
     /**amount of states*/
     inline std::size_t dim() const { return N_states; }
@@ -361,8 +361,8 @@ private:
 };
 
 template <typename Symmetry>
-FermionBase<Symmetry>::FermionBase(std::size_t L_input, bool REMOVE_DOUBLE, bool REMVOVE_EMPTY, bool REMOVE_SINGLE, int mfactor)
-    : Fermion<Symmetry>(REMOVE_DOUBLE, REMVOVE_EMPTY, REMOVE_SINGLE, mfactor)
+FermionBase<Symmetry>::FermionBase(std::size_t L_input, bool REMOVE_DOUBLE, bool REMVOVE_EMPTY, bool REMOVE_SINGLE)
+    : Fermion<Symmetry>(REMOVE_DOUBLE, REMVOVE_EMPTY, REMOVE_SINGLE)
     , N_orbitals(L_input)
 {
     // create basis for zero orbitals

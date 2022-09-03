@@ -236,7 +236,7 @@ template <bool>
 Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>
 Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::twist(std::size_t leg) const
 {
-    if constexpr(not Symmetry::IS_FERMIONIC) { return *this; }
+    if constexpr(not Symmetry::ANY_IS_FERMIONIC) { return *this; }
     SPDLOG_INFO("Performing twist of leg={}", leg);
     Self out = *this;
     for(std::size_t i = 0; i < out.sector().size(); ++i) {
@@ -402,7 +402,11 @@ Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::tSVD(size_t max
     }
     SPDLOG_INFO("Adding {} states from {} states", allSV.size(), numberOfStates);
     // std::cout << "Adding " << allSV.size() << " states from " << numberOfStates << " states" << std::endl;
-    if(allSV.size() == 0) { allSV.push_back(first_entry); }
+    if(allSV.size() == 0) {
+        SPDLOG_CRITICAL("All singular values are 0.");
+        assert(first_entry.second > 1.e-12 and "All singular values are exactly 0.");
+        allSV.push_back(first_entry);
+    }
 
     std::map<typename Symmetry::qType, std::vector<Scalar>> qn_orderedSV;
     Qbasis<Symmetry, 1> truncBasis;

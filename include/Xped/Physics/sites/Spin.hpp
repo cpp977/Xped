@@ -11,7 +11,7 @@
 
 namespace Xped {
 
-template <typename Symmetry_, std::size_t order = 0>
+template <typename Symmetry_, std::size_t spin_index = 0>
 class Spin
 {
     typedef double Scalar;
@@ -82,19 +82,18 @@ protected:
     OperatorType exp_i_pi_Sz_1s_;
 };
 
-template <typename Symmetry_, std::size_t order>
-Spin<Symmetry_, order>::Spin(std::size_t D_input)
+template <typename Symmetry_, std::size_t spin_index>
+Spin<Symmetry_, spin_index>::Spin(std::size_t D_input)
     : D(D_input)
 {
     // create basis for one spin site
     fill_basis();
-
-    // cout << "single site basis" << endl << this->basis_1s_ << endl;
+    // std::cout << basis_1s_.info() << std::endl;
     fill_SiteOps();
 }
 
-template <typename Symmetry_, std::size_t order>
-void Spin<Symmetry_, order>::fill_SiteOps()
+template <typename Symmetry_, std::size_t spin_index>
+void Spin<Symmetry_, spin_index>::fill_SiteOps()
 {
     Id_1s_ = OperatorType(Symmetry::qvacuum(), basis_1s_);
     Id_1s_.setIdentity();
@@ -115,7 +114,7 @@ void Spin<Symmetry_, order>::fill_SiteOps()
     Qmz_1s_ = OperatorType(getQ(SPINOP_LABEL::SM), basis_1s_);
 
     exp_i_pi_Sz_1s_ = OperatorType(getQ(SPINOP_LABEL::SZ), basis_1s_);
-    if constexpr(Symmetry::IS_TRIVIAL) {
+    if constexpr(Symmetry::ALL_IS_TRIVIAL) {
         exp_i_pi_Sx_1s_ = OperatorType(getQ(SPINOP_LABEL::SX), basis_1s_);
         exp_i_pi_Sy_1s_ = OperatorType(getQ(SPINOP_LABEL::iSY), basis_1s_);
     }
@@ -135,11 +134,6 @@ void Spin<Symmetry_, order>::fill_SiteOps()
     Sm_1s_ = 2. * Sbase;
     Sp_1s_ = Sm_1s_.adjoint();
     Sz_1s_ = 0.5 * (Sp_1s_ * Sm_1s_ - Sm_1s_ * Sp_1s_);
-
-    std::cout << std::fixed << Sz_1s_.plain()[0] << std::endl;
-    std::cout << std::fixed << Sp_1s_.plain()[0] << std::endl;
-    std::cout << std::fixed << Sm_1s_.plain()[0] << std::endl;
-
     F_1s_ = 0.5 * Id_1s_ - Sz_1s_;
 
     //	cout << "Spin:" << endl;
@@ -188,130 +182,61 @@ void Spin<Symmetry_, order>::fill_SiteOps()
     return;
 }
 
-template <typename Symmetry_, std::size_t order>
-void Spin<Symmetry_, order>::fill_basis()
+template <typename Symmetry_, std::size_t spin_index>
+void Spin<Symmetry_, spin_index>::fill_basis()
 {
     // double S = 0.5 * (D - 1);
     std::size_t Sx2 = D - 1;
+    typename Symmetry::qType Q = Symmetry::qvacuum();
 
-    if constexpr(Symmetry::NO_SPIN_SYM()) // U0
-    {
-        basis_1s_.push_back(Symmetry::qvacuum(), D);
+    if constexpr(Symmetry::ALL_IS_TRIVIAL) {
+        basis_1s_.push_back(Q, D);
         // for(int i = D - 1; i >= 0; --i) {
         for(int i = 0; i < D; ++i) {
             int Qint = -static_cast<int>(Sx2) + 2 * static_cast<int>(i);
-            labels.insert(std::make_pair(std::to_string(Qint), std::make_pair(Symmetry::qvacuum(), i)));
+            labels.insert(std::make_pair(std::to_string(Qint), std::make_pair(Q, i)));
         }
-    } else if constexpr(Symmetry::IS_SPIN_U1()) {
-        typename Symmetry::qType Q;
+    } else if constexpr(Symmetry::IS_SPIN[spin_index]) {
         assert(D >= 1);
         // for(int i = D - 1; i >= 0; --i) {
         for(int i = 0; i < D; ++i) {
             int Qint = -static_cast<int>(Sx2) + 2 * static_cast<int>(i);
-            if constexpr(Symmetry::Nq > 1) {
-                for(std::size_t q = 0; q < Symmetry::Nq; q++) { Q[q] = (Symmetry::kind()[q] == Sym::KIND::M and q == order) ? Qint : 0; }
-            } else {
-                if constexpr(Symmetry::IS_MODULAR) {
-                    Q[0] = util::constFct::posmod<Symmetry::MOD_N>(Qint);
-                } else {
-                    Q[0] = Qint;
-                }
-            }
-            labels.insert(std::make_pair(std::to_string(Qint), std::make_pair(Q, 0)));
+            Q[spin_index] = Symmetry::IS_MODULAR[spin_index] ? util::constFct::posmod<Symmetry::MOD_N[spin_index]>(Qint) : Qint;
+            labels.insert(std::make_pair(std::to_string(Qint), std::make_pair(Q, basis_1s_.inner_dim(Q))));
             basis_1s_.push_back(Q, 1);
         }
         basis_1s_.sort();
+    } else {
+        basis_1s_.push_back(Q, D);
+        // for(int i = D - 1; i >= 0; --i) {
+        for(int i = 0; i < D; ++i) {
+            int Qint = -static_cast<int>(Sx2) + 2 * static_cast<int>(i);
+            labels.insert(std::make_pair(std::to_string(Qint), std::make_pair(Q, i)));
+        }
     }
 }
 
-template <typename Symmetry_, std::size_t order>
-typename Symmetry_::qType Spin<Symmetry_, order>::getQ(SPINOP_LABEL Sa) const
+template <typename Symmetry_, std::size_t spin_index>
+typename Symmetry_::qType Spin<Symmetry_, spin_index>::getQ(SPINOP_LABEL Sa) const
 {
-    if constexpr(Symmetry::NO_SPIN_SYM()) {
-        return Symmetry::qvacuum();
-    } else if constexpr(Symmetry::Nq == 1) {
-        if constexpr(Symmetry::kind()[0] == Sym::KIND::N or Symmetry::kind()[0] == Sym::KIND::Z2) // return particle number as good quantum number.
-        {
-            return Symmetry::qvacuum();
-        } else if constexpr(Symmetry::kind()[0] == Sym::KIND::M) // return magnetization as good quantum number.
-        {
-            assert(Sa != SPINOP_LABEL::SX and Sa != SPINOP_LABEL::iSY);
-
-            typename Symmetry::qType out;
-            if(Sa == SPINOP_LABEL::SZ or Sa == SPINOP_LABEL::QZ) {
-                out = {0};
-            } else if(Sa == SPINOP_LABEL::SP or Sa == SPINOP_LABEL::QPZ) {
-                out = {+2};
-            } else if(Sa == SPINOP_LABEL::SM or Sa == SPINOP_LABEL::QMZ) {
-                out = Symmetry::conj({+2});
-            } else if(Sa == SPINOP_LABEL::QP) {
-                out = {+4};
-            } else if(Sa == SPINOP_LABEL::QM) {
-                out = Symmetry::conj({+4});
-            }
-            return out;
-        } else {
-            assert(false and "Ill defined KIND of the used Symmetry.");
+    typename Symmetry::qType Q = Symmetry::qvacuum();
+    if constexpr(Symmetry::ALL_IS_TRIVIAL) {
+        return Q;
+    } else if constexpr(Symmetry::IS_SPIN[spin_index]) {
+        assert(Sa != SPINOP_LABEL::SX and Sa != SPINOP_LABEL::iSY);
+        if(Sa == SPINOP_LABEL::SZ or Sa == SPINOP_LABEL::QZ) {
+            Q[spin_index] = 0;
+        } else if(Sa == SPINOP_LABEL::SP or Sa == SPINOP_LABEL::QPZ) {
+            Q[spin_index] = Symmetry::IS_MODULAR[spin_index] ? util::constFct::posmod<Symmetry::MOD_N[spin_index]>(2) : 2;
+        } else if(Sa == SPINOP_LABEL::SM or Sa == SPINOP_LABEL::QMZ) {
+            Q = Symmetry::conj(getQ(SPINOP_LABEL::SP));
+        } else if(Sa == SPINOP_LABEL::QP) {
+            Q[spin_index] = Symmetry::IS_MODULAR[spin_index] ? util::constFct::posmod<Symmetry::MOD_N[spin_index]>(4) : 4;
+        } else if(Sa == SPINOP_LABEL::QM) {
+            Q = Symmetry::conj(getQ(SPINOP_LABEL::QP));
         }
-    } else if constexpr(Symmetry::Nq == 2) {
-        assert(Sa != SPINOP_LABEL::SX and Sa != SPINOP_LABEL::iSY and Sa != SPINOP_LABEL::QP and Sa != SPINOP_LABEL::QM);
-
-        typename Symmetry::qType out;
-        if constexpr(Symmetry::kind()[0] == Sym::KIND::N and Symmetry::kind()[1] == Sym::KIND::M) {
-            if(Sa == SPINOP_LABEL::SZ) {
-                out = {0, 0};
-            } else if(Sa == SPINOP_LABEL::SP) {
-                out = {0, +2};
-            } else if(Sa == SPINOP_LABEL::SM) {
-                out = {0, -2};
-            }
-        } else if constexpr(Symmetry::kind()[0] == Sym::KIND::M and Symmetry::kind()[1] == Sym::KIND::N) {
-            if(Sa == SPINOP_LABEL::SZ) {
-                out = {0, 0};
-            } else if(Sa == SPINOP_LABEL::SP) {
-                out = {+2, 0};
-            } else if(Sa == SPINOP_LABEL::SM) {
-                out = {-2, 0};
-            }
-        } else if constexpr(Symmetry::kind()[0] == Sym::KIND::Nup and Symmetry::kind()[1] == Sym::KIND::Ndn) {
-            if(Sa == SPINOP_LABEL::SZ) {
-                out = {0, 0};
-            } else if(Sa == SPINOP_LABEL::SP) {
-                out = {+1, -1};
-            } else if(Sa == SPINOP_LABEL::SM) {
-                out = {-1, +1};
-            }
-        } else if constexpr(Symmetry::kind()[0] == Sym::KIND::Ndn and Symmetry::kind()[1] == Sym::KIND::Nup) {
-            if(Sa == SPINOP_LABEL::SZ) {
-                out = {0, 0};
-            } else if(Sa == SPINOP_LABEL::SP) {
-                out = {-1, +1};
-            } else if(Sa == SPINOP_LABEL::SM) {
-                out = {+1, -1};
-            }
-        } else if constexpr(Symmetry::kind()[0] == Sym::KIND::M and Symmetry::kind()[1] == Sym::KIND::M) {
-            if(order == 0ul) {
-                if(Sa == SPINOP_LABEL::SZ) {
-                    out = {0, 0};
-                } else if(Sa == SPINOP_LABEL::SP) {
-                    out = {+2, 0};
-                } else if(Sa == SPINOP_LABEL::SM) {
-                    out = {-2, 0};
-                }
-            } else {
-                if(Sa == SPINOP_LABEL::SZ) {
-                    out = {0, 0};
-                } else if(Sa == SPINOP_LABEL::SP) {
-                    out = {0, +2};
-                } else if(Sa == SPINOP_LABEL::SM) {
-                    out = {0, -2};
-                }
-            }
-        }
-        //		cout << "order=" << order << ", Sa=" << Sa << ", out=" << out << endl;
-        return out;
     }
-    static_assert("You inserted a Symmetry which can not be handled by SpinBase.");
+    return Q;
 }
 
 } // namespace Xped

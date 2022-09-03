@@ -42,13 +42,33 @@ struct U0 : SymBase<U0<Scalar_>>
 
     static constexpr std::size_t Nq = 0;
 
-    static constexpr bool HAS_MULTIPLICITIES = false;
-    static constexpr bool NON_ABELIAN = false;
-    static constexpr bool ABELIAN = true;
-    static constexpr bool IS_TRIVIAL = true;
-    static constexpr bool IS_MODULAR = false;
-    static constexpr bool IS_FERMIONIC = false;
-    static constexpr int MOD_N = 0;
+    static constexpr std::array<bool, Nq> HAS_MULTIPLICITIES = {};
+    static constexpr std::array<bool, Nq> NON_ABELIAN = {};
+    static constexpr std::array<bool, Nq> ABELIAN = {};
+    static constexpr std::array<bool, Nq> IS_TRIVIAL = {};
+    static constexpr std::array<bool, Nq> IS_MODULAR = {};
+    static constexpr std::array<bool, Nq> IS_FERMIONIC = {};
+    static constexpr std::array<bool, Nq> IS_BOSONIC = {};
+    static constexpr std::array<bool, Nq> IS_SPIN = {};
+    static constexpr std::array<int, Nq> MOD_N = {};
+
+    static constexpr bool ANY_HAS_MULTIPLICITIES = false;
+    static constexpr bool ANY_NON_ABELIAN = false;
+    static constexpr bool ANY_ABELIAN = false;
+    static constexpr bool ANY_IS_TRIVIAL = true;
+    static constexpr bool ANY_IS_MODULAR = false;
+    static constexpr bool ANY_IS_FERMIONIC = false;
+    static constexpr bool ANY_IS_BOSONIC = false;
+    static constexpr bool ANY_IS_SPIN = false;
+
+    static constexpr bool ALL_HAS_MULTIPLICITIES = false;
+    static constexpr bool ALL_NON_ABELIAN = false;
+    static constexpr bool ALL_ABELIAN = false;
+    static constexpr bool ALL_IS_TRIVIAL = true;
+    static constexpr bool ALL_IS_MODULAR = false;
+    static constexpr bool ALL_IS_FERMIONIC = false;
+    static constexpr bool ALL_IS_BOSONIC = false;
+    static constexpr bool ALL_IS_SPIN = false;
 
     static constexpr bool IS_CHARGE_SU2() { return false; }
     static constexpr bool IS_SPIN_SU2() { return false; }

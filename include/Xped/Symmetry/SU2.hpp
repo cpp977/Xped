@@ -46,22 +46,42 @@ struct SU2 : public SymBase<SU2<Kind, Scalar_>>
 
     static constexpr std::size_t Nq = 1;
 
-    static constexpr bool NON_ABELIAN = true;
-    static constexpr bool HAS_MULTIPLICITIES = false;
-    static constexpr bool ABELIAN = false;
-    static constexpr bool IS_TRIVIAL = false;
-    static constexpr bool IS_MODULAR = false;
-    static constexpr bool IS_FERMIONIC = false;
-    static constexpr int MOD_N = 0;
+    static constexpr std::array<bool, Nq> HAS_MULTIPLICITIES = {false};
+    static constexpr std::array<bool, Nq> NON_ABELIAN = {true};
+    static constexpr std::array<bool, Nq> ABELIAN = {false};
+    static constexpr std::array<bool, Nq> IS_TRIVIAL = {false};
+    static constexpr std::array<bool, Nq> IS_MODULAR = {false};
+    static constexpr std::array<bool, Nq> IS_FERMIONIC = {(Kind::name == KIND::FT)};
+    static constexpr std::array<bool, Nq> IS_BOSONIC = {(Kind::name == KIND::T)};
+    static constexpr std::array<bool, Nq> IS_SPIN = {(Kind::name == KIND::S)};
+    static constexpr std::array<int, Nq> MOD_N = {1};
+
+    static constexpr bool ANY_HAS_MULTIPLICITIES = HAS_MULTIPLICITIES[0];
+    static constexpr bool ANY_NON_ABELIAN = NON_ABELIAN[0];
+    static constexpr bool ANY_ABELIAN = ABELIAN[0];
+    static constexpr bool ANY_IS_TRIVIAL = IS_TRIVIAL[0];
+    static constexpr bool ANY_IS_MODULAR = IS_MODULAR[0];
+    static constexpr bool ANY_IS_FERMIONIC = IS_FERMIONIC[0];
+    static constexpr bool ANY_IS_BOSONIC = IS_BOSONIC[0];
+    static constexpr bool ANY_IS_SPIN = IS_SPIN[0];
+
+    static constexpr bool ALL_HAS_MULTIPLICITIES = HAS_MULTIPLICITIES[0];
+    static constexpr bool ALL_NON_ABELIAN = NON_ABELIAN[0];
+    static constexpr bool ALL_ABELIAN = ABELIAN[0];
+    static constexpr bool ALL_IS_TRIVIAL = IS_TRIVIAL[0];
+    static constexpr bool ALL_IS_MODULAR = IS_MODULAR[0];
+    static constexpr bool ALL_IS_FERMIONIC = IS_FERMIONIC[0];
+    static constexpr bool ALL_IS_BOSONIC = IS_BOSONIC[0];
+    static constexpr bool ALL_IS_SPIN = IS_SPIN[0];
 
     static constexpr bool IS_CHARGE_SU2()
     {
-        if constexpr(SU2<Kind, Scalar>::kind()[0] == KIND::T) { return true; }
+        if constexpr(IS_FERMIONIC[0] or IS_BOSONIC[0]) { return true; }
         return false;
     }
     static constexpr bool IS_SPIN_SU2()
     {
-        if constexpr(SU2<Kind, Scalar>::kind()[0] == KIND::S) { return true; }
+        if constexpr(IS_SPIN[0]) { return true; }
         return false;
     }
 
@@ -69,12 +89,12 @@ struct SU2 : public SymBase<SU2<Kind, Scalar_>>
 
     static constexpr bool NO_SPIN_SYM()
     {
-        if(SU2<Kind, Scalar>::kind()[0] != KIND::S) { return true; }
+        if constexpr(not IS_SPIN[0]) { return true; }
         return false;
     }
     static constexpr bool NO_CHARGE_SYM()
     {
-        if(SU2<Kind, Scalar>::kind()[0] != KIND::T) { return true; }
+        if constexpr(not IS_FERMIONIC[0] and not IS_BOSONIC[0]) { return true; }
         return false;
     }
 
@@ -82,7 +102,7 @@ struct SU2 : public SymBase<SU2<Kind, Scalar_>>
 
     SU2(){};
 
-    inline static std::string name() { return IS_FERMIONIC ? "fSU₂" : "SU₂"; }
+    inline static std::string name() { return IS_FERMIONIC[0] ? "ƑSU₂" : "SU₂"; }
     inline static constexpr std::array<KIND, Nq> kind() { return {Kind::name}; }
 
     inline static constexpr qType qvacuum() { return {1}; }
@@ -107,7 +127,7 @@ struct SU2 : public SymBase<SU2<Kind, Scalar_>>
 
     inline static Scalar coeff_twist(const qType& q)
     {
-        if constexpr(not IS_FERMIONIC) { return 1.; }
+        if constexpr(not IS_FERMIONIC[0]) { return 1.; }
         return ((q[0] - 1) % 2 != 0) ? -1. : 1.;
     }
 
@@ -149,7 +169,7 @@ struct SU2 : public SymBase<SU2<Kind, Scalar_>>
     static Scalar coeff_swap(const qType& ql, const qType& qr, const qType& qf)
     {
         Scalar sign = +1.;
-        if constexpr(IS_FERMIONIC) {
+        if constexpr(IS_FERMIONIC[0]) {
             bool parity = ((ql[0] - 1) % 2 != 0) and ((qr[0] - 1) % 2 != 0);
             sign = parity ? -1. : 1.;
         }

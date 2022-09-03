@@ -19,7 +19,7 @@ class Fermion
 
 public:
     Fermion(){};
-    Fermion(bool REMOVE_DOUBLE, bool REMOVE_EMPTY, bool REMOVE_SINGLE, int mfactor_input = 1);
+    Fermion(bool REMOVE_DOUBLE, bool REMOVE_EMPTY, bool REMOVE_SINGLE, bool CONSIDER_SPIN = true, bool CONSIDER_CHARGE = true);
 
     OperatorType Id_1s() const { return Id_1s_; }
     OperatorType F_1s() const { return F_1s_; }
@@ -56,8 +56,6 @@ public:
     Qbasis<Symmetry, 1> basis_1s() const { return basis_1s_; }
 
 protected:
-    int mfactor = 1;
-
     void fill_basis(bool REMOVE_DOUBLE, bool REMOVE_EMPTY, bool REMOVE_SINGLE);
     void fill_SiteOps(bool REMOVE_DOUBLE, bool REMOVE_EMPTY, bool REMOVE_SINGLE);
 
@@ -66,6 +64,12 @@ protected:
 
     Qbasis<Symmetry, 1> basis_1s_;
     std::unordered_map<std::string, std::pair<qType, std::size_t>> labels;
+
+    std::size_t sp_index = 0;
+    std::size_t ch_index = 0;
+
+    bool HAS_SPIN;
+    bool HAS_CHARGE;
 
     OperatorType Id_1s_; // identity
     OperatorType F_1s_; // Fermionic sign
@@ -91,15 +95,36 @@ protected:
 };
 
 template <typename Symmetry_>
-Fermion<Symmetry_>::Fermion(bool REMOVE_DOUBLE, bool REMOVE_EMPTY, bool REMOVE_SINGLE, int mfactor_input)
-    : mfactor(mfactor_input)
+Fermion<Symmetry_>::Fermion(bool REMOVE_DOUBLE, bool REMOVE_EMPTY, bool REMOVE_SINGLE, bool CONSIDER_SPIN, bool CONSIDER_CHARGE)
 {
+    if(CONSIDER_SPIN) {
+        for(std::size_t q = 0; q < Symmetry::Nq; ++q) {
+            if(Symmetry::IS_SPIN[q]) {
+                sp_index = q;
+                HAS_SPIN = true;
+                break;
+            }
+        }
+    } else {
+        HAS_SPIN = false;
+    }
+
+    if(CONSIDER_CHARGE) {
+        for(std::size_t q = 0; q < Symmetry::Nq; ++q) {
+            if(Symmetry::IS_FERMIONIC[q] or Symmetry::IS_BOSONIC[q]) {
+                ch_index = q;
+                HAS_CHARGE = true;
+                break;
+            }
+        }
+    } else {
+        HAS_CHARGE = false;
+    }
+
     // create basis for one Fermionic Site
     fill_basis(REMOVE_DOUBLE, REMOVE_EMPTY, REMOVE_SINGLE);
-    std::cout << "single site basis" << std::endl << this->basis_1s_ << std::endl;
-    fmt::print("labels=\n{}\n", labels);
+    basis_1s_.sort();
     fill_SiteOps(REMOVE_DOUBLE, REMOVE_EMPTY, REMOVE_SINGLE);
-    //	cout << "fill_SiteOps done!" << endl;
 }
 
 template <typename Symmetry_>
@@ -143,71 +168,28 @@ void Fermion<Symmetry_>::fill_SiteOps(bool REMOVE_DOUBLE, bool REMOVE_EMPTY, boo
         F_1s_("dn", "dn") = -1.;
     }
 
-    fmt::print("Setting up cup.\n");
     if(!REMOVE_EMPTY and !REMOVE_SINGLE) { cup_1s_("empty", "up") = 1.; }
     if(!REMOVE_DOUBLE and !REMOVE_SINGLE) { cup_1s_("dn", "double") = 1.; }
 
-    fmt::print("Setting up cdn.\n");
     if(!REMOVE_EMPTY and !REMOVE_SINGLE) { cdn_1s_("empty", "dn") = 1.; }
     if(!REMOVE_EMPTY and !REMOVE_SINGLE) { cdn_1s_("up", "double") = -1.; }
 
-    fmt::print("Computing cdagup.\n");
     cdagup_1s_ = cup_1s_.adjoint();
-    fmt::print("Computing cdagdn.\n");
     cdagdn_1s_ = cdn_1s_.adjoint();
 
-    std::cout << std::fixed << cdagup_1s_ << std::endl
-              << cdagup_1s_.plain()[0] << std::endl
-              << cup_1s_ << std::endl
-              << cup_1s_.plain()[0] << std::endl;
+    // std::cout << std::fixed << cdagup_1s_ << std::endl
+    //           << cdagup_1s_.plain()[0] << std::endl
+    //           << cup_1s_ << std::endl
+    //           << cup_1s_.plain()[0] << std::endl;
 
-    fmt::print("Computing nup.\n");
     nup_1s_ = cdagup_1s_ * cup_1s_;
-    auto check = nup_1s_.data.template permute<0, 1, 0, 2>().template trim<2>(); //(cup_1s_ * cdagup_1s_).data.template trim<2>();
-    // [[maybe_unused]] double t_weight;
-    // auto [U, S, Vdag] = check.tSVD(std::numeric_limits<std::size_t>::max(), 0, t_weight, false);
-    // fmt::print("Singular values of nup.\n");
-    // S.print(std::cout, true);
-    // std::cout << std::endl;
-    // auto chchd = check.template contract<std::array{-1, 1}, std::array{1, -2}, 1>(check.adjoint().eval());
-    // for(auto r = 0ul; r < chchd.rank(); ++r) {
-    //     if(chchd.uncoupledDomain()[r].IS_CONJ()) { chchd = chchd.twist(r); }
-    // }
-    // auto [D, V] = chchd.eigh();
-    // fmt::print("Eigenvalues of nup*nup.\n");
-    // D.print(std::cout, true);
-    // std::cout << std::endl;
-    // SiteOperator<Scalar, Symmetry> nupc(Symmetry::qvacuum(), cup_1s_.data.coupledDomain());
-    // Qbasis<Symmetry, 1> Otarget_op;
-    // Otarget_op.push_back(Symmetry::qvacuum(), 1);
-    // Tensor<double, 2, 1, Symmetry, false> couple({{cup_1s_.data.uncoupledCodomain()[1], cdagup_1s_.data.uncoupledCodomain()[1]}}, {{Otarget_op}});
-    // couple.setConstant(1.);
-    // auto tmp1 = cup_1s_.data.template contract<std::array{1, -3, -4}, std::array{-1, 1, -2}, 2>(cdagup_1s_.data);
-    // nupc.data = tmp1.template contract<std::array{-1, 1, -2, 2}, std::array{2, 1, -3}, 1>(couple);
-
-    // auto nup1 = cup_1s_.data.adjoint().eval().template contract<std::array{-1, 1, 2}, std::array{2, -2, 1}, 1>(cup_1s_.data);
-    // auto nup2 = cup_1s_.data.template contract<std::array{2, -2, 1}, std::array{-1, 1, 2}, 1>(cup_1s_.data.adjoint().eval());
-
-    fmt::print("Computing ndn.\n");
     ndn_1s_ = cdagdn_1s_ * cdn_1s_;
-    std::cout << std::fixed << nup_1s_ << std::endl << nup_1s_.plain()[0] << std::endl << std::endl;
-    std::cout << std::fixed << check << std::endl << check.plainTensor() << std::endl << std::endl;
-    auto Id = Xped::Tensor<double, 1, 1, Symmetry>::Identity({{check.coupledDomain().conj()}}, {{check.coupledDomain().conj()}});
-    auto trt = check.template contract<std::array{1, 2}, std::array{1, 2}, 0>(Id);
-    check = check.twist(0);
-    fmt::print("tr(n)={}, tr(check)={}, with contract: {}\n", nup_1s_.data.template trim<2>().trace(), check.trace(), trt.block(0)(0, 0));
-
-    // std::cout << std::fixed << nup1 << std::endl << nup1.plainTensor() << std::endl << std::endl;
-    // std::cout << std::fixed << nup2 << std::endl << nup2.plainTensor() << std::endl << std::endl;
-    fmt::print("Computing n.\n");
     n_1s_ = nup_1s_ + ndn_1s_;
 
     d_1s_.setZero();
     if(!REMOVE_DOUBLE) d_1s_("double", "double") = 1.;
 
-    fmt::print("Computing cc.\n");
     cc_1s_ = cdn_1s_ * cup_1s_;
-    fmt::print("Computing cdagcdag.\n");
     cdagcdag_1s_ = cc_1s_.adjoint();
 
     if(!REMOVE_SINGLE) {
@@ -220,124 +202,72 @@ void Fermion<Symmetry_>::fill_SiteOps(bool REMOVE_DOUBLE, bool REMOVE_EMPTY, boo
 template <typename Symmetry_>
 void Fermion<Symmetry_>::fill_basis(bool REMOVE_DOUBLE, bool REMOVE_EMPTY, bool REMOVE_SINGLE)
 {
-    bool U_IS_INFINITE = false;
-    bool UPH_IS_INFINITE = false;
-
-    // if constexpr(std::is_same<Symmetry, Sym::S1xS2<Sym::U1<Sym::SpinU1>, Sym::U1<Sym::ChargeU1>>>::value) // U1xU1
-    // {
-    //     qType Q;
-
-    //     if(!REMOVE_EMPTY) {
-    //         Q = {0, 0};
-    //         labels.insert(std::make_pair("empty", std::make_pair(Symmetry::qvacuum(), 0)));
-    //         this->basis_1s_.push_back(Q, 1);
-    //     }
-
-    //     if(!REMOVE_SINGLE) {
-    //         Q = {+mfactor, 1};
-    //         this->basis_1s_.push_back(Q, 1);
-    //         labels.insert(std::make_pair("up", std::make_pair(Q, 1)));
-
-    //         Q = {-mfactor, 1};
-    //         this->basis_1s_.push_back(Q, 1);
-    //         labels.insert(std::make_pair("dn", std::make_pair(Q, 1)));
-    //     }
-
-    //     if(!REMOVE_DOUBLE) {
-    //         Q = {0, 2};
-    //         this->basis_1s_.push_back(Q, 1);
-    //         labels.insert(std::make_pair("double", std::make_pair(Q, 1)));
-    //     }
-    // } else
-    if constexpr(std::is_same<Symmetry, Sym::U0<Scalar>>::value) // U0
+    if constexpr(Symmetry::ALL_IS_TRIVIAL) // U0
     {
-        qType Q = {};
-
-        if(!UPH_IS_INFINITE and U_IS_INFINITE) {
-            this->basis_1s_.push_back(Q, 3);
-            labels.insert(std::make_pair("empty", std::make_pair(Q, 0)));
-            labels.insert(std::make_pair("up", std::make_pair(Q, 1)));
-            labels.insert(std::make_pair("dn", std::make_pair(Q, 2)));
-        } else if(!U_IS_INFINITE and !UPH_IS_INFINITE) {
-            this->basis_1s_.push_back(Q, 4);
-            labels.insert(std::make_pair("empty", std::make_pair(Q, 0)));
-            labels.insert(std::make_pair("up", std::make_pair(Q, 1)));
-            labels.insert(std::make_pair("dn", std::make_pair(Q, 2)));
-            labels.insert(std::make_pair("double", std::make_pair(Q, 3)));
+        qType Q = Symmetry::qvacuum();
+        std::size_t dim = 0;
+        if(not REMOVE_EMPTY) { labels.insert(std::make_pair("empty", std::make_pair(Q, dim++))); }
+        if(not REMOVE_SINGLE) {
+            labels.insert(std::make_pair("up", std::make_pair(Q, dim++)));
+            labels.insert(std::make_pair("dn", std::make_pair(Q, dim++)));
+        }
+        if(not REMOVE_DOUBLE) { labels.insert(std::make_pair("double", std::make_pair(Q, dim++))); }
+        this->basis_1s_.push_back(Q, dim);
+        return;
+    } else {
+        if(not HAS_SPIN and HAS_CHARGE) {
+            qType Q = Symmetry::qvacuum();
+            if(not REMOVE_EMPTY) {
+                this->basis_1s_.push_back(Q, 1);
+                labels.insert(std::make_pair("empty", std::make_pair(Q, 0)));
+            }
+            if(not REMOVE_DOUBLE) {
+                std::size_t dim = (Symmetry::MOD_N[ch_index] == 2) ? 1 : 0;
+                Q[ch_index] = Symmetry::IS_MODULAR[ch_index] ? util::constFct::posmod(2, Symmetry::MOD_N[ch_index]) : 2;
+                this->basis_1s_.push_back(Q, 1);
+                labels.insert(std::make_pair("double", std::make_pair(Q, dim)));
+            }
+            if(not REMOVE_SINGLE) {
+                Q[ch_index] = 1;
+                this->basis_1s_.push_back(Q, 2);
+                labels.insert(std::make_pair("up", std::make_pair(Q, 0)));
+                labels.insert(std::make_pair("dn", std::make_pair(Q, 1)));
+            }
+        } else if(HAS_SPIN and not HAS_CHARGE) {
+            qType Q = Symmetry::qvacuum();
+            std::size_t dim = 0;
+            if(not REMOVE_EMPTY) { labels.insert(std::make_pair("empty", std::make_pair(Q, dim++))); }
+            if(not REMOVE_DOUBLE) { labels.insert(std::make_pair("double", std::make_pair(Q, dim++))); }
+            this->basis_1s_.push_back(Q, dim);
+            if(not REMOVE_SINGLE) {
+                Q[sp_index] = 1;
+                this->basis_1s_.push_back(Q, 1);
+                labels.insert(std::make_pair("up", std::make_pair(Q, 0)));
+                Q[sp_index] = Symmetry::IS_MODULAR[sp_index] ? util::constFct::posmod(-1, Symmetry::MOD_N[sp_index]) : -1;
+                this->basis_1s_.push_back(Q, 1);
+                labels.insert(std::make_pair("dn", std::make_pair(Q, 0)));
+            }
         } else {
-            this->basis_1s_.push_back(Q, 2);
-            labels.insert(std::make_pair("up", std::make_pair(Q, 1)));
-            labels.insert(std::make_pair("dn", std::make_pair(Q, 2)));
-        }
-    } else if constexpr(std::is_same<Symmetry, Sym::U1<Sym::SpinU1>>::value) // spin U1
-    {
-        typename Symmetry::qType Q;
-
-        if(!REMOVE_EMPTY) {
-            Q = {0};
-            this->basis_1s_.push_back(Q, 1);
-            labels.insert(std::make_pair("empty", std::make_pair(Q, 0)));
-        }
-
-        if(!REMOVE_DOUBLE) {
-            Q = {0};
-            this->basis_1s_.push_back(Q, 2);
-            labels.insert(std::make_pair("empty", std::make_pair(Q, 0)));
-            labels.insert(std::make_pair("double", std::make_pair(Q, 1)));
-        }
-
-        if(!REMOVE_SINGLE) {
-            Q = {+mfactor};
-            this->basis_1s_.push_back(Q, 1);
-            labels.insert(std::make_pair("up", std::make_pair(Q, 0)));
-
-            Q = {-mfactor};
-            this->basis_1s_.push_back(Q, 1);
-            labels.insert(std::make_pair("dn", std::make_pair(Q, 0)));
-        }
-    } else if constexpr(std::is_same<Symmetry, Sym::U1<Sym::SpinU1>>::value) // spin U1
-    {
-        typename Symmetry::qType Q;
-
-        if(!REMOVE_EMPTY) {
-            Q = {0};
-            this->basis_1s_.push_back(Q, 1);
-            labels.insert(std::make_pair("empty", std::make_pair(Q, 0)));
-        }
-
-        if(!REMOVE_DOUBLE) {
-            Q = {0};
-            this->basis_1s_.push_back(Q, 2);
-            labels.insert(std::make_pair("empty", std::make_pair(Q, 0)));
-            labels.insert(std::make_pair("double", std::make_pair(Q, 1)));
-        }
-
-        if(!REMOVE_SINGLE) {
-            Q = {+mfactor};
-            this->basis_1s_.push_back(Q, 1);
-            labels.insert(std::make_pair("up", std::make_pair(Q, 0)));
-
-            Q = {-mfactor};
-            this->basis_1s_.push_back(Q, 1);
-            labels.insert(std::make_pair("dn", std::make_pair(Q, 0)));
-        }
-    } else if constexpr(std::is_same<Symmetry, Sym::U1<Sym::ChargeU1>>::value or std::is_same<Symmetry, Sym::U1<Sym::FChargeU1>>::value or
-                        std::is_same<Symmetry, Sym::ZN<Sym::FChargeU1, 2>>::value) // charge U1
-    {
-        typename Symmetry::qType Q;
-
-        if(!REMOVE_EMPTY and !REMOVE_DOUBLE) {
-            Q = {0};
-            this->basis_1s_.push_back(Q, 2);
-            labels.insert(std::make_pair("empty", std::make_pair(Q, 0)));
-            labels.insert(std::make_pair("double", std::make_pair(Q, 1)));
-        }
-
-        if(!REMOVE_SINGLE) {
-            Q = {1};
-            this->basis_1s_.push_back(Q, 2);
-            labels.insert(std::make_pair("up", std::make_pair(Q, 0)));
-            labels.insert(std::make_pair("dn", std::make_pair(Q, 1)));
+            qType Q = Symmetry::qvacuum();
+            if(not REMOVE_EMPTY) {
+                this->basis_1s_.push_back(Q, 1);
+                labels.insert(std::make_pair("empty", std::make_pair(Q, 0)));
+            }
+            if(not REMOVE_DOUBLE) {
+                std::size_t dim = (Symmetry::MOD_N[ch_index] == 2) ? 1 : 0;
+                Q[ch_index] = Symmetry::IS_MODULAR[ch_index] ? util::constFct::posmod(2, Symmetry::MOD_N[ch_index]) : 2;
+                this->basis_1s_.push_back(Q, 1);
+                labels.insert(std::make_pair("double", std::make_pair(Q, dim)));
+            }
+            if(not REMOVE_SINGLE) {
+                Q[ch_index] = 1;
+                Q[sp_index] = 1;
+                this->basis_1s_.push_back(Q, 1);
+                labels.insert(std::make_pair("up", std::make_pair(Q, 0)));
+                Q[sp_index] = Symmetry::IS_MODULAR[sp_index] ? util::constFct::posmod(-1, Symmetry::MOD_N[ch_index]) : -1;
+                this->basis_1s_.push_back(Q, 1);
+                labels.insert(std::make_pair("dn", std::make_pair(Q, 0)));
+            }
         }
     }
 }
@@ -345,176 +275,70 @@ void Fermion<Symmetry_>::fill_basis(bool REMOVE_DOUBLE, bool REMOVE_EMPTY, bool 
 template <typename Symmetry_>
 typename Symmetry_::qType Fermion<Symmetry_>::getQ(SPIN_INDEX sigma, int Delta) const
 {
-    if constexpr(Symmetry::IS_TRIVIAL) {
-        return {};
-    } else if constexpr(Symmetry::Nq == 1) {
-        if constexpr(Symmetry::kind()[0] == Sym::KIND::N or Symmetry::kind()[0] == Sym::KIND::FN) // return particle number as good quantum number.
-        {
-            typename Symmetry::qType out;
-            if(sigma == SPIN_INDEX::UP) {
-                out = {Delta};
-            } else if(sigma == SPIN_INDEX::DN) {
-                out = {Delta};
-            } else if(sigma == SPIN_INDEX::UPDN) {
-                out = {2 * Delta};
-            } else if(sigma == SPIN_INDEX::NOSPIN) {
-                out = Symmetry::qvacuum();
+    auto Q = Symmetry::qvacuum();
+    if constexpr(Symmetry::ALL_IS_TRIVIAL) {
+        return Q;
+    } else {
+        if(not HAS_SPIN and HAS_CHARGE) {
+            if(sigma == SPIN_INDEX::UP or sigma == SPIN_INDEX::DN) {
+                Q[ch_index] = Symmetry::IS_MODULAR[ch_index] ? util::constFct::posmod(Delta, Symmetry::MOD_N[ch_index]) : Delta;
+                return Q;
             }
-            if(sigma == SPIN_INDEX::UP) {
-                out = {1};
-            } else if(sigma == SPIN_INDEX::DN) {
-                out = {1};
-            } else if(sigma == SPIN_INDEX::UPDN) {
-                out = Symmetry::qvacuum();
-            } else if(sigma == SPIN_INDEX::NOSPIN) {
-                out = Symmetry::qvacuum();
+            if(sigma == SPIN_INDEX::UPDN) {
+                Q[ch_index] = Symmetry::IS_MODULAR[ch_index] ? util::constFct::posmod(2 * Delta, Symmetry::MOD_N[ch_index]) : 2 * Delta;
+                return Q;
             }
-            return out;
-        } else if constexpr(Symmetry::kind()[0] == Sym::KIND::M) // return magnetization as good quantum number.
-        {
-            typename Symmetry::qType out;
+            return Q;
+        } else if(HAS_SPIN and not HAS_CHARGE) {
             if(sigma == SPIN_INDEX::UP) {
-                out = {mfactor * Delta};
-            } else if(sigma == SPIN_INDEX::DN) {
-                out = {-mfactor * Delta};
-            } else if(sigma == SPIN_INDEX::UPDN) {
-                out = Symmetry::qvacuum();
-            } else if(sigma == SPIN_INDEX::NOSPIN) {
-                out = Symmetry::qvacuum();
+                Q[sp_index] = Symmetry::IS_MODULAR[sp_index] ? util::constFct::posmod(Delta, Symmetry::MOD_N[sp_index]) : Delta;
+                return Q;
             }
-            return out;
-        } else if constexpr(Symmetry::kind()[0] == Sym::KIND::Z2) // return parity as good quantum number.
-        {
-            typename Symmetry::qType out;
-            if(sigma == SPIN_INDEX::UP) {
-                out = {util::constFct::posmod<2>(Delta)};
-            } else if(sigma == SPIN_INDEX::DN) {
-                out = {util::constFct::posmod<2>(-Delta)};
-            } else if(sigma == SPIN_INDEX::UPDN) {
-                out = Symmetry::qvacuum();
-            } else if(sigma == SPIN_INDEX::NOSPIN) {
-                out = Symmetry::qvacuum();
+            if(sigma == SPIN_INDEX::DN) {
+                Q[sp_index] = Symmetry::IS_MODULAR[sp_index] ? util::constFct::posmod(-Delta, Symmetry::MOD_N[sp_index]) : -Delta;
+                return Q;
             }
-            return out;
+            return Q;
         } else {
-            assert(false and "Ill defined KIND of the used Symmetry.");
+            if(sigma == SPIN_INDEX::UP) {
+                Q[sp_index] = Symmetry::IS_MODULAR[sp_index] ? util::constFct::posmod(Delta, Symmetry::MOD_N[sp_index]) : Delta;
+                Q[ch_index] = Symmetry::IS_MODULAR[ch_index] ? util::constFct::posmod(Delta, Symmetry::MOD_N[ch_index]) : Delta;
+                return Q;
+            }
+            if(sigma == SPIN_INDEX::DN) {
+                Q[sp_index] = Symmetry::IS_MODULAR[sp_index] ? util::constFct::posmod(-Delta, Symmetry::MOD_N[sp_index]) : -Delta;
+                Q[ch_index] = Symmetry::IS_MODULAR[ch_index] ? util::constFct::posmod(Delta, Symmetry::MOD_N[ch_index]) : Delta;
+                return Q;
+            }
+            if(sigma == SPIN_INDEX::UPDN) {
+                Q[ch_index] = Symmetry::IS_MODULAR[ch_index] ? util::constFct::posmod(2 * Delta, Symmetry::MOD_N[ch_index]) : 2 * Delta;
+                return Q;
+            }
+            return Q;
         }
-    } else if constexpr(Symmetry::Nq == 2) {
-        typename Symmetry::qType out;
-        if constexpr(Symmetry::kind()[0] == Sym::KIND::N and Symmetry::kind()[1] == Sym::KIND::M) {
-            if(sigma == SPIN_INDEX::UP) {
-                out = {Delta, mfactor * Delta};
-            } else if(sigma == SPIN_INDEX::DN) {
-                out = {Delta, -mfactor * Delta};
-            } else if(sigma == SPIN_INDEX::UPDN) {
-                out = {2 * Delta, 0};
-            } else if(sigma == SPIN_INDEX::NOSPIN) {
-                out = Symmetry::qvacuum();
-            }
-        } else if constexpr(Symmetry::kind()[0] == Sym::KIND::M and Symmetry::kind()[1] == Sym::KIND::N) {
-            if(sigma == SPIN_INDEX::UP) {
-                out = {mfactor * Delta, Delta};
-            } else if(sigma == SPIN_INDEX::DN) {
-                out = {-mfactor * Delta, Delta};
-            } else if(sigma == SPIN_INDEX::UPDN) {
-                out = {0, 2 * Delta};
-            } else if(sigma == SPIN_INDEX::NOSPIN) {
-                out = Symmetry::qvacuum();
-            }
-        }
-        // Not possible to use mfactor with these?
-        else if constexpr(Symmetry::kind()[0] == Sym::KIND::Nup and Symmetry::kind()[1] == Sym::KIND::Ndn) {
-            if(sigma == SPIN_INDEX::UP) {
-                out = {Delta, 0};
-            } else if(sigma == SPIN_INDEX::DN) {
-                out = {0, Delta};
-            } else if(sigma == SPIN_INDEX::UPDN) {
-                out = {Delta, Delta};
-            } else if(sigma == SPIN_INDEX::NOSPIN) {
-                out = Symmetry::qvacuum();
-            }
-        } else if constexpr(Symmetry::kind()[0] == Sym::KIND::Ndn and Symmetry::kind()[1] == Sym::KIND::Nup) {
-            if(sigma == SPIN_INDEX::UP) {
-                out = {0, Delta};
-            } else if(sigma == SPIN_INDEX::DN) {
-                out = {Delta, 0};
-            } else if(sigma == SPIN_INDEX::UPDN) {
-                out = {Delta, Delta};
-            } else if(sigma == SPIN_INDEX::NOSPIN) {
-                out = Symmetry::qvacuum();
-            }
-        }
-        return out;
     }
-    static_assert("You inserted a Symmetry which can not be handled by FermionBase.");
 }
 
 template <typename Symmetry_>
 typename Symmetry_::qType Fermion<Symmetry_>::getQ(SPINOP_LABEL Sa) const
 {
-    if constexpr(Symmetry::IS_TRIVIAL) {
-        return {};
-    } else if constexpr(Symmetry::Nq == 1) {
-        if constexpr(Symmetry::kind()[0] == Sym::KIND::N or Symmetry::kind()[0] == Sym::KIND::Z2 or
-                     Symmetry::kind()[0] == Sym::KIND::FN) // return particle number as good quantum number.
-        {
-            return Symmetry::qvacuum();
-        } else if constexpr(Symmetry::kind()[0] == Sym::KIND::M) // return magnetization as good quantum number.
-        {
-            assert(Sa != SPINOP_LABEL::SX and Sa != SPINOP_LABEL::iSY);
-
-            typename Symmetry::qType out;
+    auto Q = Symmetry::qvacuum();
+    if constexpr(Symmetry::ALL_IS_TRIVIAL) {
+        return Q;
+    } else {
+        if(HAS_SPIN) {
+            assert(Sa != SPINOP_LABEL::SX and Sa != SPINOP_LABEL::iSY and "Sx and Sy break the U1 spin symmetry.");
             if(Sa == SPINOP_LABEL::SZ) {
-                out = {0};
+                return Q;
             } else if(Sa == SPINOP_LABEL::SP) {
-                out = {+2};
+                Q[sp_index] = Symmetry::IS_MODULAR[sp_index] ? util::constFct::posmod(2, Symmetry::MOD_N[sp_index]) : 2;
             } else if(Sa == SPINOP_LABEL::SM) {
-                out = {-2};
+                Q[sp_index] = Symmetry::IS_MODULAR[sp_index] ? util::constFct::posmod(-2, Symmetry::MOD_N[sp_index]) : -2;
             }
-            return out;
-        } else {
-            assert(false and "Ill defined KIND of the used Symmetry.");
+            return Q;
         }
-    } else if constexpr(Symmetry::Nq == 2) {
-        assert(Sa != SPINOP_LABEL::SX and Sa != SPINOP_LABEL::iSY);
-
-        typename Symmetry::qType out;
-        if constexpr(Symmetry::kind()[0] == Sym::KIND::N and Symmetry::kind()[1] == Sym::KIND::M) {
-            if(Sa == SPINOP_LABEL::SZ) {
-                out = {0, 0};
-            } else if(Sa == SPINOP_LABEL::SP) {
-                out = {0, +2};
-            } else if(Sa == SPINOP_LABEL::SM) {
-                out = {0, -2};
-            }
-        } else if constexpr(Symmetry::kind()[0] == Sym::KIND::M and Symmetry::kind()[1] == Sym::KIND::N) {
-            if(Sa == SPINOP_LABEL::SZ) {
-                out = {0, 0};
-            } else if(Sa == SPINOP_LABEL::SP) {
-                out = {+2, 0};
-            } else if(Sa == SPINOP_LABEL::SM) {
-                out = {-2, 0};
-            }
-        } else if constexpr(Symmetry::kind()[0] == Sym::KIND::Nup and Symmetry::kind()[1] == Sym::KIND::Ndn) {
-            if(Sa == SPINOP_LABEL::SZ) {
-                out = {0, 0};
-            } else if(Sa == SPINOP_LABEL::SP) {
-                out = {+1, -1};
-            } else if(Sa == SPINOP_LABEL::SM) {
-                out = {-1, +1};
-            }
-        } else if constexpr(Symmetry::kind()[0] == Sym::KIND::Ndn and Symmetry::kind()[1] == Sym::KIND::Nup) {
-            if(Sa == SPINOP_LABEL::SZ) {
-                out = {0, 0};
-            } else if(Sa == SPINOP_LABEL::SP) {
-                out = {-1, +1};
-            } else if(Sa == SPINOP_LABEL::SM) {
-                out = {+1, -1};
-            }
-        }
-        return out;
     }
-    static_assert("You inserted a Symmetry which can not be handled by FermionBase.");
+    return Q;
 }
 
 } // namespace Xped

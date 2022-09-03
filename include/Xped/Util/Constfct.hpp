@@ -48,6 +48,8 @@ inline constexpr int posmod(int x)
     return (x % N + N) % N;
 }
 
+inline constexpr int posmod(int x, int N) { return (x % N + N) % N; }
+
 #if XPED_HAS_NTTP
 template <auto a1, std::size_t rank1, auto a2, std::size_t rank2, std::size_t rankres>
 consteval auto get_permutations()

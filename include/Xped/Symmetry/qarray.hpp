@@ -153,7 +153,7 @@ std::pair<qarray<Nq1>, qarray<Nq2>> disjoin(const qarray<Nql>& large_arr)
     std::copy(large_arr.data.begin(), large_arr.data.begin() + Nq1, lhs.data.begin());
     qarray<Nq2> rhs;
     std::copy(large_arr.data.begin() + Nq1, large_arr.data.end(), rhs.data.begin());
-    return make_pair(lhs, rhs);
+    return std::make_pair(lhs, rhs);
 }
 
 template <size_t Nq>

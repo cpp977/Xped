@@ -108,7 +108,7 @@ template <typename Scalar, typename Symmetry>
 std::string SiteOperator<Scalar, Symmetry>::print() const
 {
     std::stringstream ss;
-    ss << "QN=" << Sym::format<Symmetry>(Q) << std::endl;
+    ss << "QN=" << Sym::format<Symmetry>(Q) << ": ";
     data.print(ss);
     return ss.str();
 }

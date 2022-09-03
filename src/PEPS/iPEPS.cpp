@@ -63,6 +63,7 @@ void iPEPS<Scalar, Symmetry, ENABLE_AD>::init(const TMatrix<Qbasis<Symmetry, 1>>
                                               const TMatrix<Qbasis<Symmetry, 1>>& bottomBasis,
                                               const TMatrix<Qbasis<Symmetry, 1>>& physBasis)
 {
+
     As.resize(cell().pattern);
     Adags.resize(cell().pattern);
     for(int x = 0; x < cell().Lx; x++) {
@@ -70,9 +71,9 @@ void iPEPS<Scalar, Symmetry, ENABLE_AD>::init(const TMatrix<Qbasis<Symmetry, 1>>
             if(not cell().pattern.isUnique(x, y)) { continue; }
             auto pos = cell().pattern.uniqueIndex(x, y);
             Qbasis<Symmetry, 1> shifted_physBasis = physBasis[pos].shift(charges_[pos]);
-            fmt::print("x={}, y={}, original basis which will be shifted by {}:\n", x, y, Sym::format<Symmetry>(charges_[pos]));
-            std::cout << physBasis[pos] << std::endl;
-            std::cout << "shifted:\n" << shifted_physBasis << std::endl;
+            // fmt::print("x={}, y={}, original basis which will be shifted by {}:\n", x, y, Sym::format<Symmetry>(charges_[pos]));
+            // std::cout << physBasis[pos] << std::endl;
+            // std::cout << "shifted:\n" << shifted_physBasis << std::endl;
             As[pos] = Tensor<Scalar, 2, 3, Symmetry, ENABLE_AD>({{leftBasis[pos], topBasis[pos]}},
                                                                 {{rightBasis[pos], bottomBasis[pos], shifted_physBasis}});
             // As[pos].setZero();

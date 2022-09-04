@@ -9,6 +9,7 @@
 #include "Xped/Physics/SpinOp.hpp"
 #include "Xped/Physics/SubLattice.hpp"
 #include "Xped/Physics/sites/Fermion.hpp"
+#include "Xped/Physics/sites/FermionSU2xX.hpp"
 #include "Xped/Symmetry/kind_dummies.hpp"
 
 namespace Xped {

@@ -43,7 +43,7 @@ public:
 
     S1xS2(){};
 
-    static std::string name() { return S1_::name() + "⊗" + S2_::name(); }
+    static std::string name() { return S1_::name() + "×" + S2_::name(); }
 
     static constexpr std::size_t Nq = S1_::Nq + S2_::Nq;
 
@@ -121,7 +121,13 @@ public:
     static std::vector<qType> basis_combine(const qType& ql, const qType& qr);
     ///@}
 
-    static std::size_t multiplicity(const qType& q1, const qType& q2, const qType& q3) { return triangle(q1, q2, q3) ? 1ul : 0ul; }
+    static std::size_t multiplicity(const qType& q1, const qType& q2, const qType& q3)
+    {
+        auto [q1l, q1r] = disjoin<S1_::Nq, S2_::Nq>(q1);
+        auto [q2l, q2r] = disjoin<S1_::Nq, S2_::Nq>(q2);
+        auto [q3l, q3r] = disjoin<S1_::Nq, S2_::Nq>(q3);
+        return S1::multiplicity(q1l, q2l, q3l) * S2::multiplicity(q1r, q2r, q3r);
+    }
 
     ///@{
     /**
@@ -135,15 +141,19 @@ public:
         return S1::coeff_twist(ql) * S2::coeff_twist(qr);
     }
 
-    static Scalar coeff_FS(const qType&) { return Scalar(1.); }
+    static Scalar coeff_FS(const qType& q)
+    {
+        auto [ql, qr] = disjoin<S1_::Nq, S2_::Nq>(q);
+        return S1::coeff_FS(ql) * S2::coeff_FS(qr);
+    }
 
     template <typename PlainLib>
     static typename PlainLib::template TType<Scalar, 2> one_j_tensor(const qType& q, mpi::XpedWorld& world = mpi::getUniverse())
     {
         auto [ql, qr] = disjoin<S1_::Nq, S2_::Nq>(q);
 
-        auto Tl = S1::one_j_tensor(ql, world);
-        auto Tr = S1::one_j_tensor(qr, world);
+        auto Tl = S1::template one_j_tensor<PlainLib>(ql, world);
+        auto Tr = S2::template one_j_tensor<PlainLib>(qr, world);
         return PlainLib::tensorProd(Tl, Tr);
     }
 
@@ -159,15 +169,31 @@ public:
         auto [q2l, q2r] = disjoin<S1_::Nq, S2_::Nq>(q2);
         auto [q3l, q3r] = disjoin<S1_::Nq, S2_::Nq>(q3);
 
-        auto Tl = S1::CGC(q1l, q2l, q3l, alpha, world);
-        auto Tr = S1::CGC(q1r, q2r, q3r, alpha, world);
+        auto Tl = S1::template CGC<PlainLib>(q1l, q2l, q3l, alpha, world);
+        auto Tr = S2::template CGC<PlainLib>(q1r, q2r, q3r, alpha, world);
         return PlainLib::tensorProd(Tl, Tr);
+    }
+
+    static Scalar coeff_turn(const qType& ql, const qType& qr, const qType& qf)
+    {
+        auto [ql1, ql2] = disjoin<S1_::Nq, S2_::Nq>(ql);
+        auto [qr1, qr2] = disjoin<S1_::Nq, S2_::Nq>(qr);
+        auto [qf1, qf2] = disjoin<S1_::Nq, S2_::Nq>(qf);
+        return S1::coeff_turn(ql1, qr1, qf1) * S2::coeff_turn(ql2, qr2, qf2);
     }
 
     inline static Scalar coeff_6j(const qType& q1, const qType& q2, const qType& q3, const qType& q4, const qType& q5, const qType& q6);
     inline static Scalar coeff_recouple(const qType& q1, const qType& q2, const qType& q3, const qType& Q, const qType& Q12, const qType& Q23)
     {
-        return coeff_6j(q1, q2, Q12, q3, Q, Q23);
+        auto [q1l, q1r] = disjoin<S1_::Nq, S2_::Nq>(q1);
+        auto [q2l, q2r] = disjoin<S1_::Nq, S2_::Nq>(q2);
+        auto [q3l, q3r] = disjoin<S1_::Nq, S2_::Nq>(q3);
+        auto [Ql, Qr] = disjoin<S1_::Nq, S2_::Nq>(Q);
+        auto [Q12l, Q12r] = disjoin<S1_::Nq, S2_::Nq>(Q12);
+        auto [Q23l, Q23r] = disjoin<S1_::Nq, S2_::Nq>(Q23);
+
+        Scalar out = S1_::coeff_recouple(q1l, q2l, q3l, Ql, Q12l, Q23l) * S2_::coeff_recouple(q1r, q2r, q3r, Qr, Q12r, Q23r);
+        return out;
     }
 
     static Scalar coeff_swap(const qType& ql, const qType& qr, const qType& qf)

@@ -51,19 +51,19 @@ function(set_project_options project_name)
     )
   
   set(GCC_OPTIONS_RELEASE
-#    -march=native
+    -march=native
     -fmax-errors=5
     -fdiagnostics-color=always
     )
   set(GCC_OPTIONS_DEBUG
-#    -march=native
+    -march=native
     -fmax-errors=5
     -fdiagnostics-color=always
     )
   set(GCC_OPTIONS_PROFILE
     -O2
     -pg
-#    -march=native
+    -march=native
     -fmax-errors=5
     -fdiagnostics-color=always
     )

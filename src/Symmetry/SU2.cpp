@@ -17,10 +17,11 @@ typename SU2<Kind, Scalar_>::qType SU2<Kind, Scalar_>::random_q()
 template <typename Kind, typename Scalar_>
 std::vector<typename SU2<Kind, Scalar_>::qType> SU2<Kind, Scalar_>::basis_combine(const qType& ql, const qType& qr)
 {
-    std::vector<qType> vout;
     int qmin = std::abs(ql[0] - qr[0]) + 1;
     int qmax = std::abs(ql[0] + qr[0]) - 1;
-    for(int i = qmin; i <= qmax; i += 2) { vout.push_back({i}); }
+    std::vector<qType> vout((qmax - qmin) / 2 + 1);
+    std::size_t count = 0;
+    for(int i = qmin; i <= qmax; i += 2) { vout[count++] = {i}; }
     return vout;
 }
 

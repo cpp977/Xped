@@ -22,8 +22,15 @@ public:
             "Hubbard[U=" + std::to_string(std::any_cast<double>(params["U"])) + ", μ=" + std::to_string(std::any_cast<double>(params["mu"])) + "]";
         FermionBase<Symmetry> F(1);
         Tensor<double, 2, 2, Symmetry> gate;
-        if constexpr(std::is_same_v<Symmetry, Sym::SU2<Sym::SpinSU2>>) {
-            gate.setZero();
+        if constexpr(std::is_same_v<Symmetry,
+                                    Xped::Sym::S1xS2<Xped::Sym::S1xS2<Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::SU2<Xped::Sym::SpinSU2>>,
+                                                     Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>>>) {
+            gate = -std::any_cast<double>(params["t"]) * (tprod(F.cdag(), F.c()) - tprod(F.c(), F.cdag())) +
+                   0.25 * 0.5 * std::any_cast<double>(params["U"]) *
+                       (tprod(F.n() * (F.n() - F.Id()), F.Id()) + tprod(F.Id(), F.n() * (F.n() - F.Id()))) -
+                   0.25 * (std::any_cast<double>(params["mu"]) + 1.5 * std::any_cast<double>(params["U"])) *
+                       (tprod(F.n(), F.Id()) + tprod(F.Id(), F.n()));
+
         } else {
             gate = -std::any_cast<double>(params["t"]) *
                        (tprod(F.cdag(SPIN_INDEX::UP), F.c(SPIN_INDEX::UP)) + tprod(F.cdag(SPIN_INDEX::DN), F.c(SPIN_INDEX::DN)) -

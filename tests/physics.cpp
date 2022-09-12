@@ -288,73 +288,102 @@ TEST_CASE("Testing FermionBase.")
         CHECK(Es.block(13)(0, 0) == doctest::Approx(-13.378782979745));
     }
 
-    SUBCASE("SU2xZ2")
-    {
-        using Symmetry = Xped::Sym::S1xS2<Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>>;
-        auto dim = 4ul;
-        Xped::FermionBase<Symmetry> F(dim);
-        Eigen::MatrixXd ts(dim, dim);
-        ts.setZero();
-        auto t1 = 1.;
-        auto t2 = 0.8;
-        auto mu = 3.;
-        auto U = 8.;
-        ts.diagonal<1>().setConstant(-t1);
-        ts.diagonal<-1>().setConstant(-t1);
-        ts.diagonal<2>().setConstant(-t2);
-        ts.diagonal<-2>().setConstant(-t2);
-        Xped::SiteOperator<double, Symmetry> H(Symmetry::qvacuum(), F.get_basis());
-        H.setZero();
-        for(std::size_t i = 0; i < dim; ++i) {
-            for(std::size_t j = 0; j < dim; ++j) {
-                if(i == j) { H = H - mu * F.n(i) + U * F.d(i); }
-                if(std::abs(ts(i, j)) < 1.e-12) { continue; }
-                H = H + ts(i, j) * std::sqrt(2.) * Xped::SiteOperator<double, Symmetry>::prod(F.cdag(i), F.c(j), Symmetry::qvacuum());
-            }
-        }
-        auto [Es, Us] = H.data.trim<2>().eigh();
-        CHECK(Es.block(0)(0, 0) == doctest::Approx(-13.1853931833403));
-    }
+    // SUBCASE("SU2xZ2")
+    // {
+    //     using Symmetry = Xped::Sym::S1xS2<Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>>;
+    //     auto dim = 4ul;
+    //     Xped::FermionBase<Symmetry> F(dim);
+    //     Eigen::MatrixXd ts(dim, dim);
+    //     ts.setZero();
+    //     auto t1 = 1.;
+    //     auto t2 = 0.8;
+    //     auto mu = 3.;
+    //     auto U = 8.;
+    //     ts.diagonal<1>().setConstant(-t1);
+    //     ts.diagonal<-1>().setConstant(-t1);
+    //     ts.diagonal<2>().setConstant(-t2);
+    //     ts.diagonal<-2>().setConstant(-t2);
+    //     Xped::SiteOperator<double, Symmetry> H(Symmetry::qvacuum(), F.get_basis());
+    //     H.setZero();
+    //     for(std::size_t i = 0; i < dim; ++i) {
+    //         for(std::size_t j = 0; j < dim; ++j) {
+    //             if(i == j) { H = H - mu * F.n(i) + U * F.d(i); }
+    //             if(std::abs(ts(i, j)) < 1.e-12) { continue; }
+    //             H = H + ts(i, j) * std::sqrt(2.) * Xped::SiteOperator<double, Symmetry>::prod(F.cdag(i), F.c(j), Symmetry::qvacuum());
+    //         }
+    //     }
+    //     auto [Es, Us] = H.data.trim<2>().eigh();
+    //     CHECK(Es.block(0)(0, 0) == doctest::Approx(-13.1853931833403));
+    // }
 
-    SUBCASE("SU2xZ36")
-    {
-        using Symmetry = Xped::Sym::S1xS2<Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::ZN<Xped::Sym::FChargeU1, 36>>;
-        auto dim = 4ul;
-        Xped::FermionBase<Symmetry> F(dim);
-        Eigen::MatrixXd ts(dim, dim);
-        ts.setZero();
-        auto t1 = 1.;
-        auto t2 = 0.8;
-        auto mu = 3.;
-        auto U = 8.;
-        ts.diagonal<1>().setConstant(-t1);
-        ts.diagonal<-1>().setConstant(-t1);
-        ts.diagonal<2>().setConstant(-t2);
-        ts.diagonal<-2>().setConstant(-t2);
-        Xped::SiteOperator<double, Symmetry> H(Symmetry::qvacuum(), F.get_basis());
-        H.setZero();
-        for(std::size_t i = 0; i < dim; ++i) {
-            for(std::size_t j = 0; j < dim; ++j) {
-                if(i == j) { H = H - mu * F.n(i) + U * F.d(i); }
-                if(std::abs(ts(i, j)) < 1.e-12) { continue; }
-                H = H + ts(i, j) * std::sqrt(2.) * Xped::SiteOperator<double, Symmetry>::prod(F.cdag(i), F.c(j), Symmetry::qvacuum());
-            }
-        }
-        auto [Es, Us] = H.data.trim<2>().eigh();
-        CHECK(Es.block(2)(0, 0) == doctest::Approx(-13.1853931833403));
-    }
+    // SUBCASE("SU2xZ36")
+    // {
+    //     using Symmetry = Xped::Sym::S1xS2<Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::ZN<Xped::Sym::FChargeU1, 36>>;
+    //     auto dim = 4ul;
+    //     Xped::FermionBase<Symmetry> F(dim);
+    //     Eigen::MatrixXd ts(dim, dim);
+    //     ts.setZero();
+    //     auto t1 = 1.;
+    //     auto t2 = 0.8;
+    //     auto mu = 3.;
+    //     auto U = 8.;
+    //     ts.diagonal<1>().setConstant(-t1);
+    //     ts.diagonal<-1>().setConstant(-t1);
+    //     ts.diagonal<2>().setConstant(-t2);
+    //     ts.diagonal<-2>().setConstant(-t2);
+    //     Xped::SiteOperator<double, Symmetry> H(Symmetry::qvacuum(), F.get_basis());
+    //     H.setZero();
+    //     for(std::size_t i = 0; i < dim; ++i) {
+    //         for(std::size_t j = 0; j < dim; ++j) {
+    //             if(i == j) { H = H - mu * F.n(i) + U * F.d(i); }
+    //             if(std::abs(ts(i, j)) < 1.e-12) { continue; }
+    //             H = H + ts(i, j) * std::sqrt(2.) * Xped::SiteOperator<double, Symmetry>::prod(F.cdag(i), F.c(j), Symmetry::qvacuum());
+    //         }
+    //     }
+    //     auto [Es, Us] = H.data.trim<2>().eigh();
+    //     CHECK(Es.block(2)(0, 0) == doctest::Approx(-13.1853931833403));
+    // }
 
-    SUBCASE("SU2xU1")
+    // SUBCASE("SU2xU1")
+    // {
+    //     using Symmetry = Xped::Sym::S1xS2<Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::U1<Xped::Sym::FChargeU1>>;
+    //     auto dim = 4ul;
+    //     Xped::FermionBase<Symmetry> F(dim);
+    //     Eigen::MatrixXd ts(dim, dim);
+    //     ts.setZero();
+    //     auto t1 = 1.;
+    //     auto t2 = 0.8;
+    //     auto mu = 3.;
+    //     auto U = 8.;
+    //     ts.diagonal<1>().setConstant(-t1);
+    //     ts.diagonal<-1>().setConstant(-t1);
+    //     ts.diagonal<2>().setConstant(-t2);
+    //     ts.diagonal<-2>().setConstant(-t2);
+    //     Xped::SiteOperator<double, Symmetry> H(Symmetry::qvacuum(), F.get_basis());
+    //     H.setZero();
+    //     for(std::size_t i = 0; i < dim; ++i) {
+    //         for(std::size_t j = 0; j < dim; ++j) {
+    //             if(i == j) { H = H - mu * F.n(i) + U * F.d(i); }
+    //             if(std::abs(ts(i, j)) < 1.e-12) { continue; }
+    //             H = H + ts(i, j) * std::sqrt(2.) * Xped::SiteOperator<double, Symmetry>::prod(F.cdag(i), F.c(j), Symmetry::qvacuum());
+    //         }
+    //     }
+    //     auto [Es, Us] = H.data.trim<2>().eigh();
+    //     CHECK(Es.block(2)(0, 0) == doctest::Approx(-13.1853931833403));
+    // }
+
+    SUBCASE("SU2xSU2xZ2")
     {
-        using Symmetry = Xped::Sym::S1xS2<Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::U1<Xped::Sym::FChargeU1>>;
-        auto dim = 4ul;
+        using Symmetry = Xped::Sym::S1xS2<Xped::Sym::S1xS2<Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::SU2<Xped::Sym::SpinSU2>>,
+                                          Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>>;
+        auto dim = 3ul;
         Xped::FermionBase<Symmetry> F(dim);
         Eigen::MatrixXd ts(dim, dim);
         ts.setZero();
         auto t1 = 1.;
         auto t2 = 0.8;
-        auto mu = 3.;
-        auto U = 8.;
+        auto mu = 0.;
+        auto U = 0.;
         ts.diagonal<1>().setConstant(-t1);
         ts.diagonal<-1>().setConstant(-t1);
         ts.diagonal<2>().setConstant(-t2);
@@ -363,13 +392,13 @@ TEST_CASE("Testing FermionBase.")
         H.setZero();
         for(std::size_t i = 0; i < dim; ++i) {
             for(std::size_t j = 0; j < dim; ++j) {
-                if(i == j) { H = H - mu * F.n(i) + U * F.d(i); }
+                if(i == j) { H = H - (mu + 3. * U / 2.) * F.n(i) + U / 2. * F.n(i) * (F.n(i) - F.Id()); }
                 if(std::abs(ts(i, j)) < 1.e-12) { continue; }
-                H = H + ts(i, j) * std::sqrt(2.) * Xped::SiteOperator<double, Symmetry>::prod(F.cdag(i), F.c(j), Symmetry::qvacuum());
+                H = H + ts(i, j) * std::sqrt(2.) * std::sqrt(2.) * Xped::SiteOperator<double, Symmetry>::prod(F.cdag(i), F.c(j), Symmetry::qvacuum());
             }
         }
         auto [Es, Us] = H.data.trim<2>().eigh();
-        CHECK(Es.block(2)(0, 0) == doctest::Approx(-13.1853931833403));
+        CHECK(Es.block(0)(0, 0) == doctest::Approx(-7.47877505967545));
     }
 }
 

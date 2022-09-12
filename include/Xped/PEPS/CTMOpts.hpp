@@ -34,13 +34,13 @@ struct CTM
     inline void info()
     {
         fmt::print("CTM options:\n");
-        fmt::print("  {:<20} {}\n", "• chi:", chi);
-        fmt::print("  {:<20} {}\n", "• init:", init);
-        fmt::print("  {:<20} {}\n", "• maximum pre-steps:", max_presteps);
-        fmt::print("  {:<20} {}\n", "• tracked steps:", track_steps);
-        fmt::print("  {:<20} {}\n", "• energy tolerance:", tol_E);
-        fmt::print("  {:<20} {}\n", "• norm tolerance:", tol_N);
-        fmt::print("  {:<20} {}\n", "• reinit_env_tol:", reinit_env_tol);
+        fmt::print("  {:<30} {}\n", "• chi:", chi);
+        fmt::print("  {:<30} {}\n", "• init:", init);
+        fmt::print("  {:<30} {}\n", "• maximum pre-steps:", max_presteps);
+        fmt::print("  {:<30} {}\n", "• tracked steps:", track_steps);
+        fmt::print("  {:<30} {}\n", "• energy tolerance:", tol_E);
+        fmt::print("  {:<30} {}\n", "• norm tolerance:", tol_N);
+        fmt::print("  {:<30} {}\n", "• reinit_env_tol:", reinit_env_tol);
     }
 };
 
@@ -68,11 +68,11 @@ struct CTMCheckpoint
     void info() const
     {
         fmt::print("CTM checkpoint settings:\n");
-        fmt::print("  {:<20} {}\n", "• grow_all:", GROW_ALL);
-        fmt::print("  {:<20} {}\n", "• move:", MOVE);
-        fmt::print("  {:<20} {}\n", "• corner contraction:", CORNER);
-        fmt::print("  {:<20} {}\n", "• projector computation:", PROJECTORS);
-        fmt::print("  {:<20} {}\n", "• Renormalization step:", RENORMALIZE);
+        fmt::print("  {:<30} {}\n", "• grow_all:", GROW_ALL);
+        fmt::print("  {:<30} {}\n", "• move:", MOVE);
+        fmt::print("  {:<30} {}\n", "• corner contraction:", CORNER);
+        fmt::print("  {:<30} {}\n", "• projector computation:", PROJECTORS);
+        fmt::print("  {:<30} {}\n", "• Renormalization step:", RENORMALIZE);
     }
 };
 

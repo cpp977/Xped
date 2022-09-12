@@ -31,14 +31,14 @@ struct Optim
     inline void info()
     {
         fmt::print("Optimization options:\n");
-        fmt::print("  {:<20} {}\n", "• Algorithm:", alg);
-        fmt::print("  {:<20} {}\n", "• Linesearch:", ls);
-        fmt::print("  {:<20} {}\n", "• maximum steps:", max_steps);
-        fmt::print("  {:<20} {}\n", "• minimum steps:", min_steps);
-        fmt::print("  {:<20} {}\n", "• gradient tolerance:", grad_tol);
-        fmt::print("  {:<20} {}\n", "• cost tolerance:", cost_tol);
-        fmt::print("  {:<20} {}\n", "• step tolerance:", step_tol);
-        fmt::print("  {:<20} {}\n", "• bfgs scaling:", bfgs_scaling);
+        fmt::print("  {:<30} {}\n", "• Algorithm:", alg);
+        fmt::print("  {:<30} {}\n", "• Linesearch:", ls);
+        fmt::print("  {:<30} {}\n", "• maximum steps:", max_steps);
+        fmt::print("  {:<30} {}\n", "• minimum steps:", min_steps);
+        fmt::print("  {:<30} {}\n", "• gradient tolerance:", grad_tol);
+        fmt::print("  {:<30} {}\n", "• cost tolerance:", cost_tol);
+        fmt::print("  {:<30} {}\n", "• step tolerance:", step_tol);
+        fmt::print("  {:<30} {}\n", "• bfgs scaling:", bfgs_scaling);
     }
 };
 

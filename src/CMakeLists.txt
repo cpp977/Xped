@@ -58,7 +58,7 @@ if(NOT XPED_COMPILED_LIB)
   endif()
 
   if(XPED_USE_MKL)
-    target_link_libraries(Xped INTERFACE mkl::mkl_intel_32bit_omp_dyn)
+    target_link_libraries(Xped INTERFACE MKL::MKL)
     if(XPED_MKL_USE_MPI)
       target_link_libraries(Xped INTERFACE mkl::scalapack_mpich_intel_32bit_omp_dyn)
     endif()

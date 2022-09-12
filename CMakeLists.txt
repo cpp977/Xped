@@ -254,7 +254,6 @@ if(XPED_USE_LAPACK)
 endif()
 
 if(XPED_USE_MKL)
-  list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
   find_package(MKL REQUIRED)
   set_package_properties(LAPACK PROPERTIES
     URL "https://software.intel.com/content/www/us/en/develop/tools/oneapi/components/onemkl.html#gs.acpjiq"
@@ -263,14 +262,14 @@ if(XPED_USE_MKL)
     PURPOSE "The Eigen and cyclops backend can export matrix decompositions (SVD, QR, ...) to calls to MKL. The cyclops backend can also use the Intel MPI and ScaLAPACK implementation."
     )
   
-  if(NOT TARGET mkl::mkl_intel_32bit_omp_dyn)
+  if(NOT TARGET MKL::MKL)
     message(FATAL_ERROR "Intel MKL support not sufficient (Core libraries with BLAS and LAPACK support not found).")
   endif()
-  if(XPED_MKL_USE_MPI)
-    if(NOT TARGET mkl::scalapack_mpich_intel_32bit_omp_dyn)
-      message(FATAL_ERROR "Intel MKL support not sufficient. (SCALAPACK with mpich not found)")
-    endif()
-  endif()
+  # if(XPED_MKL_USE_MPI)
+  #   if(NOT TARGET mkl::scalapack_mpich_intel_32bit_omp_dyn)
+  #     message(FATAL_ERROR "Intel MKL support not sufficient. (SCALAPACK with mpich not found)")
+  #   endif()
+  # endif()
 endif()
 
 find_package(GSL 1.16 REQUIRED)

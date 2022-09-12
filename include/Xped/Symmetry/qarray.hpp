@@ -38,6 +38,12 @@ struct qarray
     constexpr qarray(const std::array<int, Nq>& in)
         : data(in){};
 
+    qarray(const std::vector<int>& in)
+    {
+        assert(in.size() == Nq);
+        std::copy(in.begin(), in.end(), data.begin());
+    };
+
     /**Constructs with an \p initializer_list.*/
     qarray(std::initializer_list<int> a) { std::copy(a.begin(), a.end(), data.data()); }
 
@@ -150,9 +156,11 @@ template <std::size_t Nq1, std::size_t Nq2, std::size_t Nql>
 std::pair<qarray<Nq1>, qarray<Nq2>> disjoin(const qarray<Nql>& large_arr)
 {
     qarray<Nq1> lhs;
-    std::copy(large_arr.data.begin(), large_arr.data.begin() + Nq1, lhs.data.begin());
+    memcpy(lhs.data.begin(), large_arr.data.begin(), Nq1 * sizeof(int));
+    // std::copy(large_arr.data.begin(), large_arr.data.begin() + Nq1, lhs.data.begin());
     qarray<Nq2> rhs;
-    std::copy(large_arr.data.begin() + Nq1, large_arr.data.end(), rhs.data.begin());
+    memcpy(rhs.data.begin(), large_arr.data.begin() + Nq1, Nq2 * sizeof(int));
+    // std::copy(large_arr.data.begin() + Nq1, large_arr.data.end(), rhs.data.begin());
     return std::make_pair(lhs, rhs);
 }
 

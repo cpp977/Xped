@@ -141,7 +141,7 @@ std::unordered_map<std::pair<FusionTree<Rank - shift, Symmetry>, FusionTree<CoRa
 permute(const FusionTree<Rank, Symmetry>& t1, const FusionTree<CoRank, Symmetry>& t2, const util::Permutation& p)
 {
 #ifdef XPED_CACHE_PERMUTE_OUTPUT
-    if constexpr(Symmetry::ANY_NON_ABELIAN) {
+    if constexpr(Symmetry::ANY_NON_ABELIAN and Rank + CoRank > 6) {
         if(tree_cache<shift, Rank, CoRank, Symmetry>.cache.contains(std::make_tuple(t1, t2, p))) {
             return tree_cache<shift, Rank, CoRank, Symmetry>.cache.lookup(std::make_tuple(t1, t2, p));
         }
@@ -182,7 +182,9 @@ permute(const FusionTree<Rank, Symmetry>& t1, const FusionTree<CoRank, Symmetry>
     }
     if(zero_count > 0) { cout << "permute pair operation created #=" << zero_count << " 0s." << endl; }
 #ifdef XPED_CACHE_PERMUTE_OUTPUT
-    if constexpr(Symmetry::ANY_NON_ABELIAN) { tree_cache<shift, Rank, CoRank, Symmetry>.cache.emplace(std::make_tuple(t1, t2, p), out); }
+    if constexpr(Symmetry::ANY_NON_ABELIAN and Rank + CoRank > 6) {
+        tree_cache<shift, Rank, CoRank, Symmetry>.cache.emplace(std::make_tuple(t1, t2, p), out);
+    }
 #endif
     return out;
 }

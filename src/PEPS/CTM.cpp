@@ -174,6 +174,47 @@ void CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::init()
 }
 
 template <typename Scalar, typename Symmetry, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
+void CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::computeMs()
+{
+    for(int x = 0; x < cell_.Lx; x++) {
+        for(int y = 0; y < cell_.Ly; y++) {
+            if(not cell_.pattern.isUnique(x, y)) { continue; }
+            auto pos = cell_.pattern.uniqueIndex(x, y);
+
+            auto fuse_ll =
+                Tensor<Scalar, 1, 2, Symmetry, false>::Identity({{A->ketBasis(x, y, iPEPS<Scalar, Symmetry, ENABLE_AD>::LEG::LEFT)
+                                                                      .combine(A->braBasis(x, y, iPEPS<Scalar, Symmetry, ENABLE_AD>::LEG::LEFT))
+                                                                      .forgetHistory()}},
+                                                                {{A->ketBasis(x, y, iPEPS<Scalar, Symmetry, ENABLE_AD>::LEG::LEFT),
+                                                                  A->braBasis(x, y, iPEPS<Scalar, Symmetry, ENABLE_AD>::LEG::LEFT)}});
+            auto fuse_tt = Tensor<Scalar, 1, 2, Symmetry, false>::Identity(
+                {{A->ketBasis(x, y, iPEPS<Scalar, Symmetry, ENABLE_AD>::LEG::UP)
+                      .combine(A->braBasis(x, y, iPEPS<Scalar, Symmetry, ENABLE_AD>::LEG::UP))
+                      .forgetHistory()}},
+                {{A->ketBasis(x, y, iPEPS<Scalar, Symmetry, ENABLE_AD>::LEG::UP), A->braBasis(x, y, iPEPS<Scalar, Symmetry, ENABLE_AD>::LEG::UP)}});
+            auto fuse_rr =
+                Tensor<Scalar, 2, 1, Symmetry, false>::Identity({{A->ketBasis(x, y, iPEPS<Scalar, Symmetry, ENABLE_AD>::LEG::RIGHT),
+                                                                  A->braBasis(x, y, iPEPS<Scalar, Symmetry, ENABLE_AD>::LEG::RIGHT)}},
+                                                                {{A->ketBasis(x, y, iPEPS<Scalar, Symmetry, ENABLE_AD>::LEG::RIGHT)
+                                                                      .combine(A->braBasis(x, y, iPEPS<Scalar, Symmetry, ENABLE_AD>::LEG::RIGHT))
+                                                                      .forgetHistory()}});
+            auto fuse_dd =
+                Tensor<Scalar, 2, 1, Symmetry, false>::Identity({{A->ketBasis(x, y, iPEPS<Scalar, Symmetry, ENABLE_AD>::LEG::DOWN),
+                                                                  A->braBasis(x, y, iPEPS<Scalar, Symmetry, ENABLE_AD>::LEG::DOWN)}},
+                                                                {{A->ketBasis(x, y, iPEPS<Scalar, Symmetry, ENABLE_AD>::LEG::DOWN)
+                                                                      .combine(A->braBasis(x, y, iPEPS<Scalar, Symmetry, ENABLE_AD>::LEG::DOWN))
+                                                                      .forgetHistory()}});
+            Ms[pos] = A->As[pos]
+                          .template contract<std::array{-1, -2, -3, -4, 1}, std::array{-5, -6, 1, -7, -8}, 8>(A->Adags[pos].twist(3).twist(4))
+                          .template contract<std::array{1, -1, -2, -3, 2, -4, -5, -6}, std::array{-7, 1, 2}, 6>(fuse_ll.twist(1).twist(2))
+                          .template contract<std::array{1, -1, -2, 2, -3, -4, -5}, std::array{-6, 1, 2}, 5>(fuse_tt.twist(1).twist(2))
+                          .template contract<std::array{1, -1, 2, -2, -3, -4}, std::array{1, 2, -5}, 4>(fuse_rr)
+                          .template contract<std::array{1, 1, -1, -2, -3}, std::array{1, 2, -4}, 2>(fuse_dd);
+        }
+    }
+}
+
+template <typename Scalar, typename Symmetry, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
 template <bool TRACK>
 void CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::solve(std::size_t steps)
 {
@@ -197,6 +238,7 @@ void CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::grow_all()
     right_move<TRACK_INNER>();
     top_move<TRACK_INNER>();
     bottom_move<TRACK_INNER>();
+
     if constexpr(TRACK and CP) {
         stan::math::reverse_pass_callback([curr_ = curr, res = *this]() mutable {
             stan::math::nested_rev_autodiff nested;
@@ -282,6 +324,7 @@ template <typename Scalar, typename Symmetry, bool ENABLE_AD, Opts::CTMCheckpoin
 template <bool TRACK>
 void CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::computeRDM_h()
 {
+    SPDLOG_INFO("Compute rho_h.");
     rho_h = TMatrix<Tensor<Scalar, 2, 2, Symmetry, ENABLE_AD>>(cell_.pattern);
     rho1_h = TMatrix<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>>(cell_.pattern);
 
@@ -349,6 +392,7 @@ template <typename Scalar, typename Symmetry, bool ENABLE_AD, Opts::CTMCheckpoin
 template <bool TRACK>
 void CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::computeRDM_v()
 {
+    SPDLOG_INFO("Compute rho_v.");
     rho_v = TMatrix<Tensor<Scalar, 2, 2, Symmetry, ENABLE_AD>>(cell_.pattern);
     rho1_v = TMatrix<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>>(cell_.pattern);
     for(int x = 0; x < cell_.Lx; x++) {

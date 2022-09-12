@@ -152,6 +152,8 @@ private:
     TMatrix<Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>> T3s;
     TMatrix<Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>> T4s;
 
+    TMatrix<Tensor<Scalar, 2, 2, Symmetry, ENABLE_AD>> Ms;
+
     TMatrix<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>> Svs;
 
     TMatrix<Tensor<Scalar, 2, 2, Symmetry, ENABLE_AD>> rho_h;
@@ -161,6 +163,8 @@ private:
 
     // template <bool TRACK = ENABLE_AD>
     // std::pair<Tensor<Scalar, 3, 3, Symmetry, TRACK>, Tensor<Scalar, 1, 1, Symmetry, TRACK>> get_projectors_left();
+
+    void computeMs();
 
     template <bool TRACK = ENABLE_AD>
     void computeRDM_h();

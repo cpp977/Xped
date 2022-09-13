@@ -19,6 +19,7 @@ std::vector<typename SU2<Kind, Scalar_>::qType> SU2<Kind, Scalar_>::basis_combin
 {
     int qmin = std::abs(ql[0] - qr[0]) + 1;
     int qmax = std::abs(ql[0] + qr[0]) - 1;
+    assert(qmax >= qmin);
     std::vector<qType> vout((qmax - qmin) / 2 + 1);
     std::size_t count = 0;
     for(int i = qmin; i <= qmax; i += 2) { vout[count++] = {i}; }

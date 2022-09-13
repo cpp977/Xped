@@ -1176,10 +1176,12 @@ CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::contractCorner(const int x, con
     Tensor<Scalar, TRank + 1, TRank + 1, Symmetry, TRACK> Q;
     switch(corner) {
     case Opts::CORNER::UPPER_LEFT: {
-        // auto tmp = C1s(x - 1, y - 1).template permute<TRACK, -1, 0, 1>() * T1s(x, y - 1);
-        // auto tmp2 = T4s(x - 1, y).template permute<TRACK, -2, 1, 2, 3, 0>() * tmp;
-        // auto tmp3 = tmp2.template permute<TRACK, -1, 0, 2, 3, 5, 1, 4>() * A->As(x, y);
-        // Q = (tmp3.template permute<TRACK, 0, 0, 2, 4, 5, 1, 3, 6>() * A->Adags(x, y)).template permute<TRACK, +1, 0, 3, 5, 1, 2, 4>();
+        // ooooo -->--
+        // o Q o
+        // ooooo ==>==
+        // |  ||
+        // ^  ^^
+        // |  ||
 
         auto C1T1 = C1s(x - 1, y - 1).template contract<std::array{-1, 1}, std::array{1, -2, -3, -4}, 1, TRACK_INNER>(T1s(x, y - 1));
         auto T4C1T1 = T4s(x - 1, y).template contract<std::array{1, -1, -2, -3}, std::array{1, -4, -5, -6}, 3, TRACK_INNER>(
@@ -1187,22 +1189,15 @@ CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::contractCorner(const int x, con
         auto T4C1T1A = T4C1T1.template contract<std::array{-1, 1, -2, -3, 2, -4}, std::array{1, 2, -5, -6, -7}, 4, TRACK_INNER>(A->As(x, y));
         Q = T4C1T1A.template contract<std::array{-1, 1, -4, 2, -5, -2, 3}, std::array{1, 2, 3, -6, -3}, 3, TRACK_INNER>(
             A->Adags(x, y).template twist<TRACK_INNER>(3).template twist<TRACK_INNER>(4));
-        // Scalar diff = (Q - Qcheck).norm();
-        // SPDLOG_WARN("upper left corner check at x,y={},{}: {}", x, y, diff);
-        // ooooo -->--
-        // o Q o
-        // ooooo ==>==
-        // |  ||
-        // ^  ^^
-        // |  ||
         break;
     }
     case Opts::CORNER::LOWER_LEFT: {
-        // auto tmp = C4s(x - 1, y + 1) * T3s(x, y + 1).template permute<TRACK, 2, 2, 3, 0, 1>();
-        // auto tmp2 = T4s(x - 1, y).template permute<TRACK, -2, 0, 2, 3, 1>() * tmp;
-        // auto tmp3 = tmp2.template permute<TRACK, -1, 0, 2, 3, 5, 1, 4>() * A->As(x, y).template permute<TRACK, 0, 0, 3, 1, 2, 4>();
-        // Q = (tmp3.template permute<TRACK, 0, 0, 2, 4, 5, 1, 3, 6>() * A->Adags(x, y).template permute<TRACK, 0, 0, 4, 2, 1, 3>())
-        //         .template permute<TRACK, +1, 1, 3, 5, 0, 2, 4>();
+        // |  ||
+        // ^  ^^
+        // |  ||
+        // ooooo --<--
+        // o Q o
+        // ooooo ==<==
 
         auto C4T3 = C4s(x - 1, y + 1).template contract<std::array{-1, 1}, std::array{-2, -3, 1, -4}, 1, TRACK_INNER>(T3s(x, y + 1));
         auto T4C4T3 = T4s(x - 1, y).template contract<std::array{-1, 1, -2, -3}, std::array{1, -4, -5, -6}, 3, TRACK_INNER>(C4T3);
@@ -1210,33 +1205,9 @@ CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::contractCorner(const int x, con
             A->As(x, y).template twist<TRACK_INNER>(3));
         Q = T4C4T3A.template contract<std::array{-4, 1, 2, -1, -5, -2, 3}, std::array{1, -6, 3, -3, 2}, 3, TRACK_INNER>(
             A->Adags(x, y).template twist<TRACK_INNER>(3));
-        // Scalar diff = (Q - Qcheck).norm();
-        // SPDLOG_WARN("lower left corner check at x,y={},{}: {}", x, y, diff);
-
-        // |  ||
-        // ^  ^^
-        // |  ||
-        // ooooo --<--
-        // o Q o
-        // ooooo ==<==
         break;
     }
     case Opts::CORNER::UPPER_RIGHT: {
-        // auto tmp = T1s(x, y - 1).template permute<TRACK, -2, 0, 2, 3, 1>() * C2s(x + 1, y - 1);
-        // auto tmp2 = tmp * T2s(x + 1, y).template permute<TRACK, +2, 2, 3, 0, 1>();
-        // auto tmp3 = tmp2.template permute<TRACK, -1, 0, 2, 3, 5, 1, 4>() * A->As(x, y).template permute<TRACK, 0, 1, 2, 0, 3, 4>();
-        // Q = (tmp3.template permute<TRACK, 0, 0, 2, 4, 5, 1, 3, 6>() * A->Adags(x, y).template permute<TRACK, 0, 1, 3, 2, 0, 4>())
-        //         .template permute<TRACK, +1, 0, 2, 4, 1, 3, 5>();
-
-        auto T1C2 = T1s(x, y - 1).template contract<std::array{-1, 1, -2, -3}, std::array{1, -4}, 3, TRACK_INNER>(C2s(x + 1, y - 1));
-        auto T1C2T2 = T1C2.template contract<std::array{-1, -2, -3, 1}, std::array{-4, -5, 1, -6}, 3, TRACK_INNER>(T2s(x + 1, y));
-        auto T1C2T2A = T1C2T2.template contract<std::array{-1, 1, -2, 2, -3, -4}, std::array{-5, 1, 2, -6, -7}, 4, TRACK_INNER>(
-            A->As(x, y).template twist<TRACK_INNER>(2));
-        Q = T1C2T2A.template contract<std::array{-1, 1, 2, -4, -2, -5, 3}, std::array{-3, 1, 3, 2, -6}, 3, TRACK_INNER>(
-            A->Adags(x, y).template twist<TRACK_INNER>(4));
-        // Scalar diff = (Q - Qcheck).norm();
-        // SPDLOG_WARN("upper right corner check at x,y={},{}: {}", x, y, diff);
-
         // -->--ooooo
         //      o Q o
         // ==>==ooooo
@@ -1244,14 +1215,21 @@ CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::contractCorner(const int x, con
         //      v  vv
         //      |  ||
 
+        auto T1C2 = T1s(x, y - 1).template contract<std::array{-1, 1, -2, -3}, std::array{1, -4}, 3, TRACK_INNER>(C2s(x + 1, y - 1));
+        auto T1C2T2 = T1C2.template contract<std::array{-1, -2, -3, 1}, std::array{-4, -5, 1, -6}, 3, TRACK_INNER>(T2s(x + 1, y));
+        auto T1C2T2A = T1C2T2.template contract<std::array{-1, 1, -2, 2, -3, -4}, std::array{-5, 1, 2, -6, -7}, 4, TRACK_INNER>(
+            A->As(x, y).template twist<TRACK_INNER>(2));
+        Q = T1C2T2A.template contract<std::array{-1, 1, 2, -4, -2, -5, 3}, std::array{-3, 1, 3, 2, -6}, 3, TRACK_INNER>(
+            A->Adags(x, y).template twist<TRACK_INNER>(4));
         break;
     }
     case Opts::CORNER::LOWER_RIGHT: {
-        // auto tmp = C3s(x + 1, y + 1).template permute<TRACK, +1, 0, 1>() * T3s(x, y + 1).template permute<TRACK, +2, 3, 2, 0, 1>();
-        // auto tmp2 = T2s(x + 1, y) * tmp;
-        // auto tmp3 = tmp2.template permute<TRACK, -1, 2, 1, 3, 5, 0, 4>() * A->As(x, y).template permute<TRACK, 0, 2, 3, 0, 1, 4>();
-        // Q = (tmp3.template permute<TRACK, 0, 0, 2, 4, 5, 1, 3, 6>() * A->Adags(x, y).template permute<TRACK, 0, 3, 4, 2, 0, 1>())
-        //         .template permute<TRACK, +1, 0, 3, 5, 1, 2, 4>();
+        //      |  ||
+        //      v  vv
+        //      |  ||
+        // --<--ooooo
+        //      o Q o
+        // ==<==ooooo
 
         auto C3T3 = C3s(x + 1, y + 1)
                         .template twist<TRACK_INNER>(1)
@@ -1260,15 +1238,6 @@ CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::contractCorner(const int x, con
         auto T2C3T3A = T2C3T3.template contract<std::array{1, -1, -2, 2, -3, -4}, std::array{-5, -6, 1, 2, -7}, 4, TRACK_INNER>(
             A->As(x, y).template twist<TRACK_INNER>(2).template twist<TRACK_INNER>(3));
         Q = T2C3T3A.template contract<std::array{1, -1, 2, -4, -5, -2, 3}, std::array{-6, -3, 3, 1, 2}, 3, TRACK_INNER>(A->Adags(x, y));
-        // Scalar diff = (Q - Qcheck).norm();
-        // SPDLOG_WARN("lower right corner check at x,y={},{}: {}", x, y, diff);
-
-        //      |  ||
-        //      v  vv
-        //      |  ||
-        // --<--ooooo
-        //      o Q o
-        // ==<==ooooo
         break;
     }
     }

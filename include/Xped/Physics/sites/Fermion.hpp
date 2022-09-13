@@ -7,6 +7,9 @@
 #include "Xped/Symmetry/U0.hpp"
 #include "Xped/Util/Constfct.hpp"
 
+#include "Xped/Physics/sites/FermionSU2xSU2xX.hpp"
+#include "Xped/Physics/sites/FermionSU2xX.hpp"
+
 namespace Xped {
 
 template <typename Symmetry_>

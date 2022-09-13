@@ -1,8 +1,8 @@
-#ifndef XPED_FERMIONSSU2xU1_H_
-#define XPED_FERMIONSSU2xU1_H_
+#ifndef XPED_FERMIONSSU2xSU2xU1_H_
+#define XPED_FERMIONSSU2xSU2xU1_H_
 
 #include "Xped/Physics/SiteOperator.hpp"
-#include "Xped/Symmetry/S1xS2.hpp"
+#include "Xped/Symmetry/CombSym.hpp"
 #include "Xped/Symmetry/SU2.hpp"
 #include "Xped/Symmetry/U1.hpp"
 #include "Xped/Symmetry/kind_dummies.hpp"
@@ -12,10 +12,10 @@ template <typename Symmetry>
 class Fermion;
 
 template <typename Symmetry_>
-class Fermion<Sym::S1xS2<Sym::S1xS2<Sym::SU2<Sym::SpinSU2>, Sym::SU2<Sym::SpinSU2>>, Symmetry_>>
+class Fermion<Sym::Combined<Sym::SU2<Sym::SpinSU2>, Sym::SU2<Sym::SpinSU2>, Symmetry_>>
 {
     using Scalar = double;
-    using Symmetry = Sym::S1xS2<Sym::S1xS2<Sym::SU2<Sym::SpinSU2>, Sym::SU2<Sym::SpinSU2>>, Symmetry_>;
+    using Symmetry = Sym::Combined<Sym::SU2<Sym::SpinSU2>, Sym::SU2<Sym::SpinSU2>, Symmetry_>;
     using OperatorType = SiteOperator<double, Symmetry>;
     using qType = typename Symmetry::qType;
 
@@ -62,7 +62,7 @@ protected:
 };
 
 template <typename Symmetry_>
-Fermion<Sym::S1xS2<Sym::S1xS2<Sym::SU2<Sym::SpinSU2>, Sym::SU2<Sym::SpinSU2>>, Symmetry_>>::Fermion(bool, bool, bool, bool, bool CONSIDER_CHARGE)
+Fermion<Sym::Combined<Sym::SU2<Sym::SpinSU2>, Sym::SU2<Sym::SpinSU2>, Symmetry_>>::Fermion(bool, bool, bool, bool, bool CONSIDER_CHARGE)
 {
     if(CONSIDER_CHARGE) {
         for(std::size_t q = 0; q < Symmetry::Nq; ++q) {
@@ -119,7 +119,7 @@ Fermion<Sym::S1xS2<Sym::S1xS2<Sym::SU2<Sym::SpinSU2>, Sym::SU2<Sym::SpinSU2>>, S
 }
 
 template <typename Symmetry_>
-void Fermion<Sym::S1xS2<Sym::S1xS2<Sym::SU2<Sym::SpinSU2>, Sym::SU2<Sym::SpinSU2>>, Symmetry_>>::fill_basis()
+void Fermion<Sym::Combined<Sym::SU2<Sym::SpinSU2>, Sym::SU2<Sym::SpinSU2>, Symmetry_>>::fill_basis()
 {
     if(not HAS_CHARGE) {
         qType Q = Symmetry::qvacuum();

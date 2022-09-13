@@ -31,7 +31,7 @@
 
 #ifdef XPED_CACHE_PERMUTE_OUTPUT
 #    include "lru/lru.hpp"
-XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100)
+XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 500000)
 #endif
 
 #include "Xped/Interfaces/PlainInterface.hpp"
@@ -93,7 +93,9 @@ int main(int argc, char* argv[])
 
         typedef double Scalar;
         // using Symmetry = Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>;
-        using Symmetry = Xped::Sym::ZN<Xped::Sym::FChargeU1, 36>;
+        // using Symmetry = Xped::Sym::ZN<Xped::Sym::FChargeU1, 36>;
+        using Symmetry =
+            Xped::Sym::Combined<Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>>;
         // typedef Xped::Sym::SU2<Xped::Sym::SpinSU2> Symmetry;
         // typedef Xped::Sym::U1<Xped::Sym::SpinU1> Symmetry;
         // typedef Xped::Sym::ZN<Xped::Sym::SpinU1, 36, double> Symmetry;
@@ -127,9 +129,10 @@ int main(int argc, char* argv[])
 
         Xped::TMatrix<Xped::Qbasis<Symmetry, 1>> left_aux(c.pattern), top_aux(c.pattern), right_aux(c.pattern), bottom_aux(c.pattern);
         if(data.at("ipeps").at("aux_bases").contains("left_basis")) {
-            auto left = toml::get<std::vector<std::vector<std::pair<int, int>>>>(toml::find(data.at("ipeps").at("aux_bases"), "left_basis"));
+            auto left =
+                toml::get<std::vector<std::vector<std::pair<std::vector<int>, int>>>>(toml::find(data.at("ipeps").at("aux_bases"), "left_basis"));
             for(std::size_t i = 0; i < c.uniqueSize(); ++i) {
-                for(const auto& [q, dim_q] : left[i]) { left_aux[i].push_back({q}, dim_q); }
+                for(const auto& [q, dim_q] : left[i]) { left_aux[i].push_back(q, dim_q); }
                 left_aux[i].sort();
             }
         } else {
@@ -137,9 +140,10 @@ int main(int argc, char* argv[])
         }
 
         if(data.at("ipeps").at("aux_bases").contains("top_basis")) {
-            auto top = toml::get<std::vector<std::vector<std::pair<int, int>>>>(toml::find(data.at("ipeps").at("aux_bases"), "top_basis"));
+            auto top =
+                toml::get<std::vector<std::vector<std::pair<std::vector<int>, int>>>>(toml::find(data.at("ipeps").at("aux_bases"), "top_basis"));
             for(std::size_t i = 0; i < c.uniqueSize(); ++i) {
-                for(const auto& [q, dim_q] : top[i]) { top_aux[i].push_back({q}, dim_q); }
+                for(const auto& [q, dim_q] : top[i]) { top_aux[i].push_back(q, dim_q); }
                 top_aux[i].sort();
             }
         } else {
@@ -147,9 +151,10 @@ int main(int argc, char* argv[])
         }
 
         if(data.at("ipeps").at("aux_bases").contains("right_basis")) {
-            auto right = toml::get<std::vector<std::vector<std::pair<int, int>>>>(toml::find(data.at("ipeps").at("aux_bases"), "right_basis"));
+            auto right =
+                toml::get<std::vector<std::vector<std::pair<std::vector<int>, int>>>>(toml::find(data.at("ipeps").at("aux_bases"), "right_basis"));
             for(std::size_t i = 0; i < c.uniqueSize(); ++i) {
-                for(const auto& [q, dim_q] : right[i]) { right_aux[i].push_back({q}, dim_q); }
+                for(const auto& [q, dim_q] : right[i]) { right_aux[i].push_back(q, dim_q); }
                 right_aux[i].sort();
             }
         } else {
@@ -157,9 +162,10 @@ int main(int argc, char* argv[])
         }
 
         if(data.at("ipeps").at("aux_bases").contains("bottom_basis")) {
-            auto bottom = toml::get<std::vector<std::vector<std::pair<int, int>>>>(toml::find(data.at("ipeps").at("aux_bases"), "bottom_basis"));
+            auto bottom =
+                toml::get<std::vector<std::vector<std::pair<std::vector<int>, int>>>>(toml::find(data.at("ipeps").at("aux_bases"), "bottom_basis"));
             for(std::size_t i = 0; i < c.uniqueSize(); ++i) {
-                for(const auto& [q, dim_q] : bottom[i]) { bottom_aux[i].push_back({q}, dim_q); }
+                for(const auto& [q, dim_q] : bottom[i]) { bottom_aux[i].push_back(q, dim_q); }
                 bottom_aux[i].sort();
             }
         } else {
@@ -181,11 +187,12 @@ int main(int argc, char* argv[])
             for(std::size_t i = 1; i < bs.size(); ++i) { bonds = bonds | bs[i]; }
         }
 
-        if(toml::find(data.at("model"), "name").as_string() == "Heisenberg") {
-            ham = std::make_unique<Xped::Heisenberg<Symmetry>>(params, c.pattern, bonds);
-        } else if(toml::find(data.at("model"), "name").as_string() == "KondoNecklace") {
-            ham = std::make_unique<Xped::KondoNecklace<Symmetry>>(params, c.pattern, bonds);
-        } else if(toml::find(data.at("model"), "name").as_string() == "Hubbard") {
+        // if(toml::find(data.at("model"), "name").as_string() == "Heisenberg") {
+        //     ham = std::make_unique<Xped::Heisenberg<Symmetry>>(params, c.pattern, bonds);
+        // } else if(toml::find(data.at("model"), "name").as_string() == "KondoNecklace") {
+        //     ham = std::make_unique<Xped::KondoNecklace<Symmetry>>(params, c.pattern, bonds);
+        // } else
+        if(toml::find(data.at("model"), "name").as_string() == "Hubbard") {
             ham = std::make_unique<Xped::Hubbard<Symmetry>>(params, c.pattern, bonds);
         } else {
             throw std::invalid_argument("Specified model is not implemented.");
@@ -195,7 +202,7 @@ int main(int argc, char* argv[])
         phys_basis.setConstant(ham->data_h[0].uncoupledDomain()[0]);
         auto Psi = std::make_shared<Xped::iPEPS<double, Symmetry, false>>(c, left_aux, top_aux, right_aux, bottom_aux, phys_basis, charges);
         Psi->setRandom();
-
+        Psi->info();
         Xped::Opts::Optim o_opts = Xped::Opts::optim_from_toml(data.at("optim"));
         Xped::Opts::CTM c_opts = Xped::Opts::ctm_from_toml(data.at("ctm"));
         constexpr Xped::Opts::CTMCheckpoint cp_opts{.MOVE = true, .CORNER = true};
@@ -204,12 +211,12 @@ int main(int argc, char* argv[])
         Xped::FermionBase<Symmetry> F(1);
         Xped::OneSiteObservable<Symmetry> n(c.pattern);
         for(auto& t : n.data) { t = F.n().data.template trim<2>(); }
-        Xped::OneSiteObservable<Symmetry> nup(c.pattern);
-        for(auto& t : nup.data) { t = F.n(Xped::SPIN_INDEX::UP).data.template trim<2>(); }
-        Xped::OneSiteObservable<Symmetry> ndn(c.pattern);
-        for(auto& t : ndn.data) { t = F.n(Xped::SPIN_INDEX::DN).data.template trim<2>(); }
-        Xped::OneSiteObservable<Symmetry> d(c.pattern);
-        for(auto& t : d.data) { t = F.d().data.template trim<2>(); }
+        // Xped::OneSiteObservable<Symmetry> nup(c.pattern);
+        // for(auto& t : nup.data) { t = F.n(Xped::SPIN_INDEX::UP).data.template trim<2>(); }
+        // Xped::OneSiteObservable<Symmetry> ndn(c.pattern);
+        // for(auto& t : ndn.data) { t = F.n(Xped::SPIN_INDEX::DN).data.template trim<2>(); }
+        // Xped::OneSiteObservable<Symmetry> d(c.pattern);
+        // for(auto& t : d.data) { t = F.d().data.template trim<2>(); }
 
         // Xped::SpinBase<Symmetry> B(1, 2);
         // Xped::TwoSiteObservable<Symmetry> SzSz(c.pattern, Xped::Opts::Bond::H | Xped::Opts::Bond::V | Xped::Opts::Bond::D1 | Xped::Opts::Bond::D2);
@@ -276,13 +283,13 @@ int main(int argc, char* argv[])
         //     //     auto o_Smsp = avg(env, Smsp);
         //     //     for(const auto d : o_Smsp) { fmt::print("Smsp={}\n", d); }
         // };
-        Jack.callback = [n, nup, ndn, d](XPED_CONST Xped::CTM<Scalar, Symmetry>& env, std::size_t i) mutable {
+        Jack.callback = [n](XPED_CONST Xped::CTM<Scalar, Symmetry>& env, std::size_t i) mutable {
             fmt::print("Callback at iteration {}\n", i);
             auto o_n = avg(env, n);
-            auto o_nup = avg(env, nup);
-            auto o_ndn = avg(env, ndn);
-            auto o_d = avg(env, d);
-            for(auto i = 0ul; i < o_n.size(); ++i) { fmt::print("n={} (n_up={}, n_dn={}), d={}\n", o_n[i], o_nup[i], o_ndn[i], o_d[i]); }
+            // auto o_nup = avg(env, nup);
+            // auto o_ndn = avg(env, ndn);
+            // auto o_d = avg(env, d);
+            for(auto i = 0ul; i < o_n.size(); ++i) { fmt::print("n={}\n", o_n[i]); }
         };
         Jack.solve<double>(Psi, *ham);
 

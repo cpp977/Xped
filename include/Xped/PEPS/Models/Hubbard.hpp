@@ -23,8 +23,9 @@ public:
         FermionBase<Symmetry> F(1);
         Tensor<double, 2, 2, Symmetry> gate;
         if constexpr(std::is_same_v<Symmetry,
-                                    Xped::Sym::S1xS2<Xped::Sym::S1xS2<Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::SU2<Xped::Sym::SpinSU2>>,
-                                                     Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>>>) {
+                                    Xped::Sym::Combined<Xped::Sym::SU2<Xped::Sym::SpinSU2>,
+                                                        Xped::Sym::SU2<Xped::Sym::SpinSU2>,
+                                                        Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>>>) {
             gate = -std::any_cast<double>(params["t"]) * (tprod(F.cdag(), F.c()) - tprod(F.c(), F.cdag())) +
                    0.25 * 0.5 * std::any_cast<double>(params["U"]) *
                        (tprod(F.n() * (F.n() - F.Id()), F.Id()) + tprod(F.Id(), F.n() * (F.n() - F.Id()))) -

@@ -2,7 +2,7 @@
 #define XPED_FERMIONSSU2xU1_H_
 
 #include "Xped/Physics/SiteOperator.hpp"
-#include "Xped/Symmetry/S1xS2.hpp"
+#include "Xped/Symmetry/CombSym.hpp"
 #include "Xped/Symmetry/SU2.hpp"
 #include "Xped/Symmetry/U1.hpp"
 #include "Xped/Symmetry/kind_dummies.hpp"
@@ -12,10 +12,10 @@ template <typename Symmetry>
 class Fermion;
 
 template <typename Symmetry_>
-class Fermion<Sym::S1xS2<Sym::SU2<Sym::SpinSU2>, Symmetry_>>
+class Fermion<Sym::Combined<Sym::SU2<Sym::SpinSU2>, Symmetry_>>
 {
     typedef double Scalar;
-    typedef Sym::S1xS2<Sym::SU2<Sym::SpinSU2>, Symmetry_> Symmetry;
+    typedef Sym::Combined<Sym::SU2<Sym::SpinSU2>, Symmetry_> Symmetry;
     typedef SiteOperator<double, Symmetry> OperatorType;
     using qType = typename Symmetry::qType;
 
@@ -62,7 +62,11 @@ protected:
 };
 
 template <typename Symmetry_>
-Fermion<Sym::S1xS2<Sym::SU2<Sym::SpinSU2>, Symmetry_>>::Fermion(bool REMOVE_DOUBLE, bool REMOVE_EMPTY, bool REMOVE_SINGLE, bool, bool CONSIDER_CHARGE)
+Fermion<Sym::Combined<Sym::SU2<Sym::SpinSU2>, Symmetry_>>::Fermion(bool REMOVE_DOUBLE,
+                                                                   bool REMOVE_EMPTY,
+                                                                   bool REMOVE_SINGLE,
+                                                                   bool,
+                                                                   bool CONSIDER_CHARGE)
 {
     if(CONSIDER_CHARGE) {
         for(std::size_t q = 0; q < Symmetry::Nq; ++q) {
@@ -111,7 +115,7 @@ Fermion<Sym::S1xS2<Sym::SU2<Sym::SpinSU2>, Symmetry_>>::Fermion(bool REMOVE_DOUB
 }
 
 template <typename Symmetry_>
-void Fermion<Sym::S1xS2<Sym::SU2<Sym::SpinSU2>, Symmetry_>>::fill_basis(bool REMOVE_DOUBLE, bool REMOVE_EMPTY, bool REMOVE_SINGLE)
+void Fermion<Sym::Combined<Sym::SU2<Sym::SpinSU2>, Symmetry_>>::fill_basis(bool REMOVE_DOUBLE, bool REMOVE_EMPTY, bool REMOVE_SINGLE)
 {
     if(not HAS_CHARGE) {
         qType Q = Symmetry::qvacuum();

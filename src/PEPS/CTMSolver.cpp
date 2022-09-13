@@ -6,18 +6,18 @@
 
 namespace Xped {
 
-template <typename Scalar, typename Symmetry, Opts::CTMCheckpoint CPOpts>
+template <typename Scalar, typename Symmetry, Opts::CTMCheckpoint CPOpts, std::size_t TRank>
 template <typename HamScalar>
-typename ScalarTraits<Scalar>::Real CTMSolver<Scalar, Symmetry, CPOpts>::solve(const std::shared_ptr<iPEPS<Scalar, Symmetry>>& Psi,
-                                                                               Scalar* gradient,
-                                                                               Hamiltonian<Symmetry>& H,
-                                                                               bool CALC_GRAD)
+typename ScalarTraits<Scalar>::Real CTMSolver<Scalar, Symmetry, CPOpts, TRank>::solve(const std::shared_ptr<iPEPS<Scalar, Symmetry>>& Psi,
+                                                                                      Scalar* gradient,
+                                                                                      Hamiltonian<Symmetry>& H,
+                                                                                      bool CALC_GRAD)
 {
     Jack.set_A(Psi);
     Jack.info();
     if(REINIT_ENV) {
         fmt::print("\t{: >3} Reinit env.\n", "•");
-        Jack = CTM<Scalar, Symmetry, false>(Psi, opts.chi);
+        Jack = CTM<Scalar, Symmetry, TRank, false>(Psi, opts.chi);
         Jack.init();
     }
     double E = std::numeric_limits<Scalar>::quiet_NaN();
@@ -46,7 +46,7 @@ typename ScalarTraits<Scalar>::Real CTMSolver<Scalar, Symmetry, CPOpts>::solve(c
     }
 
     stan::math::nested_rev_autodiff nested;
-    Xped::CTM<double, Symmetry, true, CPOpts> Jim(Jack);
+    Xped::CTM<double, Symmetry, TRank, true, CPOpts> Jim(Jack);
     fmt::print("\t{: >3} forward pass:", "•");
     std::fflush(nullptr);
     Stopwatch<> forward;

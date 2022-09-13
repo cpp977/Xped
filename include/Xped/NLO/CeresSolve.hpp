@@ -11,14 +11,14 @@
 
 namespace Xped {
 
-template <typename Scalar, typename Symmetry, Opts::CTMCheckpoint CPOpts>
+template <typename Scalar, typename Symmetry, Opts::CTMCheckpoint CPOpts, std::size_t TRank = 2>
 class Energy final : public ceres::FirstOrderFunction
 {
     template <typename Sym>
     using Hamiltonian = TwoSiteObservable<Sym>;
 
 public:
-    Energy(std::unique_ptr<CTMSolver<Scalar, Symmetry, CPOpts>>&& solver,
+    Energy(std::unique_ptr<CTMSolver<Scalar, Symmetry, CPOpts, TRank>>&& solver,
            Hamiltonian<Symmetry>& op,
            std::shared_ptr<Xped::iPEPS<Scalar, Symmetry, false>> Psi)
         : impl(std::move(solver))
@@ -35,13 +35,13 @@ public:
         return true;
     }
 
-    std::unique_ptr<CTMSolver<Scalar, Symmetry, CPOpts>> impl;
+    std::unique_ptr<CTMSolver<Scalar, Symmetry, CPOpts, TRank>> impl;
     Hamiltonian<Symmetry>& op;
     std::shared_ptr<Xped::iPEPS<Scalar, Symmetry, false>> Psi;
     int NumParameters() const override { return Psi->plainSize(); }
 };
 
-template <typename Scalar, typename Symmetry, Opts::CTMCheckpoint CPOpts = Opts::CTMCheckpoint{}>
+template <typename Scalar, typename Symmetry, Opts::CTMCheckpoint CPOpts = Opts::CTMCheckpoint{}, std::size_t TRank = 2>
 struct iPEPSSolverAD
 {
     template <typename Sym>
@@ -65,8 +65,8 @@ struct iPEPSSolverAD
                    (H.bond & Opts::Bond::D1) == Opts::Bond::D1,
                    (H.bond & Opts::Bond::D2) == Opts::Bond::D2);
 
-        auto Dwain = std::make_unique<CTMSolver<Scalar, Symmetry, CPOpts>>(ctm_opts);
-        ceres::GradientProblem problem(new Energy<Scalar, Symmetry, CPOpts>(std::move(Dwain), H, Psi));
+        auto Dwain = std::make_unique<CTMSolver<Scalar, Symmetry, CPOpts, TRank>>(ctm_opts);
+        ceres::GradientProblem problem(new Energy<Scalar, Symmetry, CPOpts, TRank>(std::move(Dwain), H, Psi));
 
         std::vector<Scalar> parameters = Psi->data();
 
@@ -91,7 +91,7 @@ struct iPEPSSolverAD
         options.parameter_tolerance = optim_opts.step_tol;
         options.gradient_tolerance = optim_opts.grad_tol;
         options.update_state_every_iteration = true;
-        Callback c(*this, dynamic_cast<const Energy<Scalar, Symmetry, CPOpts>*>(problem.function())->impl->getCTM());
+        Callback c(*this, dynamic_cast<const Energy<Scalar, Symmetry, CPOpts, TRank>*>(problem.function())->impl->getCTM());
         options.callbacks.push_back(&c);
         ceres::GradientProblemSolver::Summary summary;
         ceres::Solve(options, problem, parameters.data(), &summary);
@@ -101,11 +101,12 @@ struct iPEPSSolverAD
 
     Opts::Optim optim_opts;
     Opts::CTM ctm_opts;
-    std::function<void(XPED_CONST CTM<Scalar, Symmetry>& ctm, std::size_t)> callback = [](XPED_CONST CTM<Scalar, Symmetry>&, std::size_t) {};
+    std::function<void(XPED_CONST CTM<Scalar, Symmetry, TRank>& ctm, std::size_t)> callback = [](XPED_CONST CTM<Scalar, Symmetry, TRank>&,
+                                                                                                 std::size_t) {};
 
     struct Callback : public ceres::IterationCallback
     {
-        explicit Callback(const iPEPSSolverAD& s, XPED_CONST CTM<Scalar, Symmetry>& c)
+        Callback(const iPEPSSolverAD& s, XPED_CONST CTM<Scalar, Symmetry, TRank>& c)
             : s(s)
             , c(c)
         {}
@@ -117,7 +118,7 @@ struct iPEPSSolverAD
         }
 
         const iPEPSSolverAD& s;
-        XPED_CONST CTM<Scalar, Symmetry>& c;
+        XPED_CONST CTM<Scalar, Symmetry, TRank>& c;
     };
 };
 

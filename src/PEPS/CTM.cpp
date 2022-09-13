@@ -15,8 +15,8 @@
 
 namespace Xped {
 
-template <typename Scalar, typename Symmetry, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
-CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::CTM(const CTM<Scalar, Symmetry, false>& other)
+template <typename Scalar, typename Symmetry, std::size_t TRank, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
+CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::CTM(const CTM<Scalar, Symmetry, TRank, false>& other)
 {
     cell_ = other.cell();
     chi = other.chi;
@@ -36,8 +36,8 @@ CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::CTM(const CTM<Scalar, Symmetry, false>
     T4s = other.T4s;
 }
 
-template <typename Scalar, typename Symmetry, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
-void CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::init()
+template <typename Scalar, typename Symmetry, std::size_t TRank, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
+void CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::init()
 {
     C1s.resize(cell_.pattern);
     C2s.resize(cell_.pattern);
@@ -58,53 +58,51 @@ void CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::init()
             case Opts::CTM_INIT::FROM_TRIVIAL: {
                 C1s[pos] =
                     Tensor<Scalar, 0, 2, Symmetry, ENABLE_AD>({{}}, {{Qbasis<Symmetry, 1>::TrivialBasis(), Qbasis<Symmetry, 1>::TrivialBasis()}});
-                // C1s[pos].setRandom();
                 C1s[pos].setIdentity();
-                // C1s[pos] = C1s[pos].square();
                 C2s[pos] =
                     Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>({{Qbasis<Symmetry, 1>::TrivialBasis()}}, {{Qbasis<Symmetry, 1>::TrivialBasis()}});
-                // C2s[pos].setRandom();
                 C2s[pos].setIdentity();
-                // C2s[pos] = C2s[pos].square();
                 C3s[pos] =
                     Tensor<Scalar, 2, 0, Symmetry, ENABLE_AD>({{Qbasis<Symmetry, 1>::TrivialBasis(), Qbasis<Symmetry, 1>::TrivialBasis()}}, {{}});
-                // C3s[pos].setRandom();
                 C3s[pos].setIdentity();
-                // C3s[pos] = C3s[pos].square();
                 C4s[pos] =
                     Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>({{Qbasis<Symmetry, 1>::TrivialBasis()}}, {{Qbasis<Symmetry, 1>::TrivialBasis()}});
-                // C4s[pos].setRandom();
                 C4s[pos].setIdentity();
-                // C4s[pos] = C4s[pos].square();
-                T1s[pos] = Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>({{Qbasis<Symmetry, 1>::TrivialBasis()}},
-                                                                     {{Qbasis<Symmetry, 1>::TrivialBasis(),
-                                                                       A->ketBasis(x, y + 1, iPEPS<Scalar, Symmetry, ENABLE_AD>::LEG::UP),
-                                                                       A->braBasis(x, y + 1, iPEPS<Scalar, Symmetry, ENABLE_AD>::LEG::UP)}});
-                // T1s[pos].setRandom();
-                T1s[pos].setIdentity();
-                // T1s[pos] = T1s[pos].square();
-                T2s[pos] = Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>({{A->ketBasis(x - 1, y, iPEPS<Scalar, Symmetry, ENABLE_AD>::LEG::RIGHT),
-                                                                       A->braBasis(x - 1, y, iPEPS<Scalar, Symmetry, ENABLE_AD>::LEG::RIGHT),
-                                                                       Qbasis<Symmetry, 1>::TrivialBasis()}},
-                                                                     {{Qbasis<Symmetry, 1>::TrivialBasis()}});
-                // T2s[pos].setRandom();
-                T2s[pos].setIdentity();
-                // T2s[pos] = T2s[pos].square();
-                T3s[pos] = Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>({{A->ketBasis(x, y - 1, iPEPS<Scalar, Symmetry, ENABLE_AD>::LEG::DOWN),
-                                                                       A->braBasis(x, y - 1, iPEPS<Scalar, Symmetry, ENABLE_AD>::LEG::DOWN),
-                                                                       Qbasis<Symmetry, 1>::TrivialBasis()}},
-                                                                     {{Qbasis<Symmetry, 1>::TrivialBasis()}});
-                // T3s[pos].setRandom();
-                T3s[pos].setIdentity();
-                // T3s[pos] = T3s[pos].square();
-                T4s[pos] = Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>({{Qbasis<Symmetry, 1>::TrivialBasis()}},
-                                                                     {{Qbasis<Symmetry, 1>::TrivialBasis(),
-                                                                       A->ketBasis(x + 1, y, iPEPS<Scalar, Symmetry, ENABLE_AD>::LEG::LEFT),
-                                                                       A->braBasis(x + 1, y, iPEPS<Scalar, Symmetry, ENABLE_AD>::LEG::LEFT)}});
-                // T4s[pos].setRandom();
-                T4s[pos].setIdentity();
-                // T4s[pos] = T4s[pos].square();
-
+                if constexpr(TRank == 2) /*Stadard bra ket case */ {
+                    T1s[pos] = Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>({{Qbasis<Symmetry, 1>::TrivialBasis()}},
+                                                                         {{Qbasis<Symmetry, 1>::TrivialBasis(),
+                                                                           A->ketBasis(x, y + 1, iPEPS<Scalar, Symmetry, ENABLE_AD>::LEG::UP),
+                                                                           A->braBasis(x, y + 1, iPEPS<Scalar, Symmetry, ENABLE_AD>::LEG::UP)}});
+                    T1s[pos].setIdentity();
+                    T2s[pos] = Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>({{A->ketBasis(x - 1, y, iPEPS<Scalar, Symmetry, ENABLE_AD>::LEG::RIGHT),
+                                                                           A->braBasis(x - 1, y, iPEPS<Scalar, Symmetry, ENABLE_AD>::LEG::RIGHT),
+                                                                           Qbasis<Symmetry, 1>::TrivialBasis()}},
+                                                                         {{Qbasis<Symmetry, 1>::TrivialBasis()}});
+                    T2s[pos].setIdentity();
+                    T3s[pos] = Tensor<Scalar, 3, 1, Symmetry, ENABLE_AD>({{A->ketBasis(x, y - 1, iPEPS<Scalar, Symmetry, ENABLE_AD>::LEG::DOWN),
+                                                                           A->braBasis(x, y - 1, iPEPS<Scalar, Symmetry, ENABLE_AD>::LEG::DOWN),
+                                                                           Qbasis<Symmetry, 1>::TrivialBasis()}},
+                                                                         {{Qbasis<Symmetry, 1>::TrivialBasis()}});
+                    T3s[pos].setIdentity();
+                    T4s[pos] = Tensor<Scalar, 1, 3, Symmetry, ENABLE_AD>({{Qbasis<Symmetry, 1>::TrivialBasis()}},
+                                                                         {{Qbasis<Symmetry, 1>::TrivialBasis(),
+                                                                           A->ketBasis(x + 1, y, iPEPS<Scalar, Symmetry, ENABLE_AD>::LEG::LEFT),
+                                                                           A->braBasis(x + 1, y, iPEPS<Scalar, Symmetry, ENABLE_AD>::LEG::LEFT)}});
+                    T4s[pos].setIdentity();
+                } else if constexpr(TRank == 1) {
+                    T1s[pos] = Tensor<Scalar, 1, 2, Symmetry, ENABLE_AD>({{Qbasis<Symmetry, 1>::TrivialBasis()}},
+                                                                         {{Qbasis<Symmetry, 1>::TrivialBasis(), Ms(x, y + 1).uncoupledDomain()[1]}});
+                    T1s[pos].setIdentity();
+                    T2s[pos] = Tensor<Scalar, 2, 1, Symmetry, ENABLE_AD>({{Ms(x - 1, y).uncoupledCoDomain()[0], Qbasis<Symmetry, 1>::TrivialBasis()}},
+                                                                         {{Qbasis<Symmetry, 1>::TrivialBasis()}});
+                    T2s[pos].setIdentity();
+                    T3s[pos] = Tensor<Scalar, 2, 1, Symmetry, ENABLE_AD>({{Ms(x, y - 1).uncoupledCoDomain()[1], Qbasis<Symmetry, 1>::TrivialBasis()}},
+                                                                         {{Qbasis<Symmetry, 1>::TrivialBasis()}});
+                    T3s[pos].setIdentity();
+                    T4s[pos] = Tensor<Scalar, 1, 2, Symmetry, ENABLE_AD>({{Qbasis<Symmetry, 1>::TrivialBasis()}},
+                                                                         {{Qbasis<Symmetry, 1>::TrivialBasis(), Ms(x + 1, y).uncoupledDomain()[0]}});
+                    T4s[pos].setIdentity();
+                }
                 break;
             }
             case Opts::CTM_INIT::FROM_A: {
@@ -150,22 +148,46 @@ void CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::init()
                                .template contract<std::array{1, -1, 2, -2}, std::array{-3, 1, 2}, 2>(fuse_uu.twist(1).twist(2))
                                .template contract<std::array{1, 2, -1}, std::array{1, 2, -2}, 1>(fuse_rr);
 
-                T1s[pos] = A->As[pos]
-                               .template contract<std::array{-1, 1, -2, -3, 2}, std::array{-4, 1, 2, -5, -6}, 3>(A->Adags[pos].twist(3).twist(4))
-                               .template contract<std::array{1, -1, -2, 2, -3, -4}, std::array{-5, 1, 2}, 4>(fuse_ll.twist(1).twist(2))
-                               .template contract<std::array{1, -3, 2, -4, -1}, std::array{1, 2, -2}, 1>(fuse_rr);
-                T2s[pos] = A->As[pos]
-                               .template contract<std::array{-1, -2, 1, -3, 2}, std::array{-4, -5, 2, 1, -6}, 3>(A->Adags[pos].twist(4))
-                               .template contract<std::array{-1, 1, -2, -3, 2, -4}, std::array{-5, 1, 2}, 4>(fuse_uu.twist(1).twist(2))
-                               .template contract<std::array{-1, 1, -2, 2, -3}, std::array{1, 2, -4}, 3>(fuse_dd);
-                T3s[pos] = A->As[pos]
-                               .template contract<std::array{-1, -2, -3, 1, 2}, std::array{-4, -5, 2, -6, 1}, 3>(A->Adags[pos].twist(3))
-                               .template contract<std::array{1, -1, -2, 2, -3, -4}, std::array{-5, 1, 2}, 4>(fuse_ll.twist(1).twist(2))
-                               .template contract<std::array{-1, 1, -2, 2, -3}, std::array{1, 2, -4}, 3>(fuse_rr);
-                T4s[pos] = A->As[pos]
-                               .template contract<std::array{1, -1, -2, -3, 2}, std::array{1, -4, 2, -5, -6}, 3>(A->Adags[pos].twist(3).twist(4))
-                               .template contract<std::array{1, -1, -2, 2, -3, -4}, std::array{-5, 1, 2}, 4>(fuse_uu.twist(1).twist(2))
-                               .template contract<std::array{-3, 1, -4, 2, -1}, std::array{1, 2, -2}, 1>(fuse_dd);
+                if constexpr(TRank == 2) {
+                    T1s[pos] = A->As[pos]
+                                   .template contract<std::array{-1, 1, -2, -3, 2}, std::array{-4, 1, 2, -5, -6}, 3>(A->Adags[pos].twist(3).twist(4))
+                                   .template contract<std::array{1, -1, -2, 2, -3, -4}, std::array{-5, 1, 2}, 4>(fuse_ll.twist(1).twist(2))
+                                   .template contract<std::array{1, -3, 2, -4, -1}, std::array{1, 2, -2}, 1>(fuse_rr);
+                    T2s[pos] = A->As[pos]
+                                   .template contract<std::array{-1, -2, 1, -3, 2}, std::array{-4, -5, 2, 1, -6}, 3>(A->Adags[pos].twist(4))
+                                   .template contract<std::array{-1, 1, -2, -3, 2, -4}, std::array{-5, 1, 2}, 4>(fuse_uu.twist(1).twist(2))
+                                   .template contract<std::array{-1, 1, -2, 2, -3}, std::array{1, 2, -4}, 3>(fuse_dd);
+                    T3s[pos] = A->As[pos]
+                                   .template contract<std::array{-1, -2, -3, 1, 2}, std::array{-4, -5, 2, -6, 1}, 3>(A->Adags[pos].twist(3))
+                                   .template contract<std::array{1, -1, -2, 2, -3, -4}, std::array{-5, 1, 2}, 4>(fuse_ll.twist(1).twist(2))
+                                   .template contract<std::array{-1, 1, -2, 2, -3}, std::array{1, 2, -4}, 3>(fuse_rr);
+                    T4s[pos] = A->As[pos]
+                                   .template contract<std::array{1, -1, -2, -3, 2}, std::array{1, -4, 2, -5, -6}, 3>(A->Adags[pos].twist(3).twist(4))
+                                   .template contract<std::array{1, -1, -2, 2, -3, -4}, std::array{-5, 1, 2}, 4>(fuse_uu.twist(1).twist(2))
+                                   .template contract<std::array{-3, 1, -4, 2, -1}, std::array{1, 2, -2}, 1>(fuse_dd);
+                } else if constexpr(TRank == 1) {
+                    T1s[pos] = A->As[pos]
+                                   .template contract<std::array{-1, 1, -2, -3, 2}, std::array{-4, 1, 2, -5, -6}, 3>(A->Adags[pos].twist(3).twist(4))
+                                   .template contract<std::array{1, -1, -2, 2, -3, -4}, std::array{-5, 1, 2}, 4>(fuse_ll.twist(1).twist(2))
+                                   .template contract<std::array{1, -3, 2, -4, -1}, std::array{1, 2, -2}, 1>(fuse_rr)
+                                   .template contract<std::array{-1, -2, 1, 2}, std::array{1, 2, -3}, 1>(fuse_dd);
+
+                    T2s[pos] = A->As[pos]
+                                   .template contract<std::array{-1, -2, 1, -3, 2}, std::array{-4, -5, 2, 1, -6}, 3>(A->Adags[pos].twist(4))
+                                   .template contract<std::array{-1, 1, -2, -3, 2, -4}, std::array{-5, 1, 2}, 4>(fuse_uu.twist(1).twist(2))
+                                   .template contract<std::array{-1, 1, -2, 2, -3}, std::array{1, 2, -4}, 3>(fuse_dd)
+                                   .template contract<std::array{1, 2, -2, -3}, std::array{-1, 1, 2}, 2>(fuse_ll.twist(1).twist(2));
+                    T3s[pos] = A->As[pos]
+                                   .template contract<std::array{-1, -2, -3, 1, 2}, std::array{-4, -5, 2, -6, 1}, 3>(A->Adags[pos].twist(3))
+                                   .template contract<std::array{1, -1, -2, 2, -3, -4}, std::array{-5, 1, 2}, 4>(fuse_ll.twist(1).twist(2))
+                                   .template contract<std::array{-1, 1, -2, 2, -3}, std::array{1, 2, -4}, 3>(fuse_rr)
+                                   .template contract<std::array{1, 2, -2, -3}, std::array{-1, 1, 2}, 2>(fuse_uu.twist(1).twist(2));
+                    T4s[pos] = A->As[pos]
+                                   .template contract<std::array{1, -1, -2, -3, 2}, std::array{1, -4, 2, -5, -6}, 3>(A->Adags[pos].twist(3).twist(4))
+                                   .template contract<std::array{1, -1, -2, 2, -3, -4}, std::array{-5, 1, 2}, 4>(fuse_uu.twist(1).twist(2))
+                                   .template contract<std::array{-3, 1, -4, 2, -1}, std::array{1, 2, -2}, 1>(fuse_dd)
+                                   .template contract<std::array{-1, -2, 1, 2}, std::array{1, 2, -3}, 1>(fuse_rr);
+                }
                 break;
             }
             }
@@ -173,8 +195,8 @@ void CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::init()
     }
 }
 
-template <typename Scalar, typename Symmetry, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
-void CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::computeMs()
+template <typename Scalar, typename Symmetry, std::size_t TRank, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
+void CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::computeMs()
 {
     for(int x = 0; x < cell_.Lx; x++) {
         for(int y = 0; y < cell_.Ly; y++) {
@@ -214,9 +236,9 @@ void CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::computeMs()
     }
 }
 
-template <typename Scalar, typename Symmetry, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
+template <typename Scalar, typename Symmetry, std::size_t TRank, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
 template <bool TRACK>
-void CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::solve(std::size_t steps)
+void CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::solve(std::size_t steps)
 {
     // info();
     // stan::math::print_stack(std::cout);
@@ -228,9 +250,9 @@ void CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::solve(std::size_t steps)
     // stan::math::print_stack(std::cout);
 }
 
-template <typename Scalar, typename Symmetry, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
+template <typename Scalar, typename Symmetry, std::size_t TRank, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
 template <bool TRACK, bool CP>
-void CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::grow_all()
+void CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::grow_all()
 {
     constexpr bool TRACK_INNER = TRACK ? not CP : false;
     [[maybe_unused]] auto curr = *this;
@@ -262,9 +284,9 @@ void CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::grow_all()
     }
 }
 
-template <typename Scalar, typename Symmetry, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
+template <typename Scalar, typename Symmetry, std::size_t TRank, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
 template <bool TRACK>
-void CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::computeRDM()
+void CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::computeRDM()
 {
     computeRDM_h<TRACK>();
     computeRDM_v<TRACK>();
@@ -272,8 +294,8 @@ void CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::computeRDM()
     HAS_RDM = true;
 }
 
-template <typename Scalar, typename Symmetry, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
-void CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::info() const
+template <typename Scalar, typename Symmetry, std::size_t TRank, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
+void CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::info() const
 {
     fmt::print("\tCTM(χ={}, {}): UnitCell=({}x{}), init={}\n", chi, Symmetry::name(), cell_.Lx, cell_.Ly, init_m);
     // std::cout << "CTM(χ=" << chi << "): UnitCell=(" << cell_.Lx << "x" << cell_.Ly << ")"
@@ -297,8 +319,8 @@ void CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::info() const
     // }
 }
 
-template <typename Scalar, typename Symmetry, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
-bool CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::checkConvergence(typename ScalarTraits<Scalar>::Real epsilon)
+template <typename Scalar, typename Symmetry, std::size_t TRank, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
+bool CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::checkConvergence(typename ScalarTraits<Scalar>::Real epsilon)
 {
     for(int x = 0; x < cell_.Lx; ++x) {
         for(int y = 0; y < cell_.Ly; ++y) {
@@ -320,9 +342,9 @@ bool CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::checkConvergence(typename ScalarT
     return true;
 }
 
-template <typename Scalar, typename Symmetry, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
+template <typename Scalar, typename Symmetry, std::size_t TRank, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
 template <bool TRACK>
-void CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::computeRDM_h()
+void CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::computeRDM_h()
 {
     SPDLOG_INFO("Compute rho_h.");
     rho_h = TMatrix<Tensor<Scalar, 2, 2, Symmetry, ENABLE_AD>>(cell_.pattern);
@@ -388,9 +410,9 @@ void CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::computeRDM_h()
     }
 }
 
-template <typename Scalar, typename Symmetry, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
+template <typename Scalar, typename Symmetry, std::size_t TRank, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
 template <bool TRACK>
-void CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::computeRDM_v()
+void CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::computeRDM_v()
 {
     SPDLOG_INFO("Compute rho_v.");
     rho_v = TMatrix<Tensor<Scalar, 2, 2, Symmetry, ENABLE_AD>>(cell_.pattern);
@@ -451,18 +473,18 @@ void CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::computeRDM_v()
     }
 }
 
-template <typename Scalar, typename Symmetry, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
+template <typename Scalar, typename Symmetry, std::size_t TRank, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
 template <bool TRACK, bool CP>
-void CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::left_move()
+void CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::left_move()
 {
     constexpr bool TRACK_INNER = TRACK ? not CP : false;
     auto curr = *this;
 
-    TMatrix<Tensor<Scalar, 1, 3, Symmetry, TRACK_INNER>> P1(cell_.pattern);
-    TMatrix<Tensor<Scalar, 3, 1, Symmetry, TRACK_INNER>> P2(cell_.pattern);
+    TMatrix<Tensor<Scalar, 1, TRank + 1, Symmetry, TRACK_INNER>> P1(cell_.pattern);
+    TMatrix<Tensor<Scalar, TRank + 1, 1, Symmetry, TRACK_INNER>> P2(cell_.pattern);
 
     TMatrix<Tensor<Scalar, 0, 2, Symmetry, TRACK_INNER>> C1_new(cell_.pattern);
-    TMatrix<Tensor<Scalar, 1, 3, Symmetry, TRACK_INNER>> T4_new(cell_.pattern);
+    TMatrix<Tensor<Scalar, 1, TRank + 1, Symmetry, TRACK_INNER>> T4_new(cell_.pattern);
     TMatrix<Tensor<Scalar, 1, 1, Symmetry, TRACK_INNER>> C4_new(cell_.pattern);
 
     C1s.resetChange();
@@ -517,18 +539,18 @@ void CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::left_move()
     }
 }
 
-template <typename Scalar, typename Symmetry, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
+template <typename Scalar, typename Symmetry, std::size_t TRank, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
 template <bool TRACK, bool CP>
-void CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::right_move()
+void CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::right_move()
 {
     constexpr bool TRACK_INNER = TRACK ? not CP : false;
     auto curr = *this;
 
-    TMatrix<Tensor<Scalar, 1, 3, Symmetry, TRACK_INNER>> P1(cell_.pattern);
-    TMatrix<Tensor<Scalar, 3, 1, Symmetry, TRACK_INNER>> P2(cell_.pattern);
+    TMatrix<Tensor<Scalar, 1, TRank + 1, Symmetry, TRACK_INNER>> P1(cell_.pattern);
+    TMatrix<Tensor<Scalar, TRank + 1, 1, Symmetry, TRACK_INNER>> P2(cell_.pattern);
 
     TMatrix<Tensor<Scalar, 1, 1, Symmetry, TRACK_INNER>> C2_new(cell_.pattern);
-    TMatrix<Tensor<Scalar, 3, 1, Symmetry, TRACK_INNER>> T2_new(cell_.pattern);
+    TMatrix<Tensor<Scalar, TRank + 1, 1, Symmetry, TRACK_INNER>> T2_new(cell_.pattern);
     TMatrix<Tensor<Scalar, 2, 0, Symmetry, TRACK_INNER>> C3_new(cell_.pattern);
 
     C2s.resetChange();
@@ -582,18 +604,18 @@ void CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::right_move()
     }
 }
 
-template <typename Scalar, typename Symmetry, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
+template <typename Scalar, typename Symmetry, std::size_t TRank, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
 template <bool TRACK, bool CP>
-void CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::top_move()
+void CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::top_move()
 {
     constexpr bool TRACK_INNER = TRACK ? not CP : false;
     auto curr = *this;
 
-    TMatrix<Tensor<Scalar, 1, 3, Symmetry, TRACK_INNER>> P1(cell_.pattern);
-    TMatrix<Tensor<Scalar, 3, 1, Symmetry, TRACK_INNER>> P2(cell_.pattern);
+    TMatrix<Tensor<Scalar, 1, TRank + 1, Symmetry, TRACK_INNER>> P1(cell_.pattern);
+    TMatrix<Tensor<Scalar, TRank + 1, 1, Symmetry, TRACK_INNER>> P2(cell_.pattern);
 
     TMatrix<Tensor<Scalar, 0, 2, Symmetry, TRACK_INNER>> C1_new(cell_.pattern);
-    TMatrix<Tensor<Scalar, 1, 3, Symmetry, TRACK_INNER>> T1_new(cell_.pattern);
+    TMatrix<Tensor<Scalar, 1, TRank + 1, Symmetry, TRACK_INNER>> T1_new(cell_.pattern);
     TMatrix<Tensor<Scalar, 1, 1, Symmetry, TRACK_INNER>> C2_new(cell_.pattern);
 
     C1s.resetChange();
@@ -647,18 +669,18 @@ void CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::top_move()
     }
 }
 
-template <typename Scalar, typename Symmetry, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
+template <typename Scalar, typename Symmetry, std::size_t TRank, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
 template <bool TRACK, bool CP>
-void CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::bottom_move()
+void CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::bottom_move()
 {
     constexpr bool TRACK_INNER = TRACK ? not CP : false;
     auto curr = *this;
 
-    TMatrix<Tensor<Scalar, 1, 3, Symmetry, TRACK_INNER>> P1(cell_.pattern);
-    TMatrix<Tensor<Scalar, 3, 1, Symmetry, TRACK_INNER>> P2(cell_.pattern);
+    TMatrix<Tensor<Scalar, 1, TRank + 1, Symmetry, TRACK_INNER>> P1(cell_.pattern);
+    TMatrix<Tensor<Scalar, TRank + 1, 1, Symmetry, TRACK_INNER>> P2(cell_.pattern);
 
     TMatrix<Tensor<Scalar, 1, 1, Symmetry, TRACK_INNER>> C4_new(cell_.pattern);
-    TMatrix<Tensor<Scalar, 3, 1, Symmetry, TRACK_INNER>> T3_new(cell_.pattern);
+    TMatrix<Tensor<Scalar, TRank + 1, 1, Symmetry, TRACK_INNER>> T3_new(cell_.pattern);
     TMatrix<Tensor<Scalar, 2, 0, Symmetry, TRACK_INNER>> C3_new(cell_.pattern);
 
     C4s.resetChange();
@@ -712,16 +734,16 @@ void CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::bottom_move()
     }
 }
 
-template <typename Scalar, typename Symmetry, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
+template <typename Scalar, typename Symmetry, std::size_t TRank, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
 template <bool TRACK, bool CP>
-std::pair<Tensor<Scalar, 1, 3, Symmetry, TRACK>, Tensor<Scalar, 3, 1, Symmetry, TRACK>>
-CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::get_projectors(const int x, const int y, const Opts::DIRECTION dir) XPED_CONST
+std::pair<Tensor<Scalar, 1, TRank + 1, Symmetry, TRACK>, Tensor<Scalar, TRank + 1, 1, Symmetry, TRACK>>
+CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::get_projectors(const int x, const int y, const Opts::DIRECTION dir) XPED_CONST
 {
     constexpr bool TRACK_INNER = TRACK ? not CP : false;
 
-    Tensor<Scalar, 1, 3, Symmetry, TRACK> P1;
-    Tensor<Scalar, 3, 1, Symmetry, TRACK> P2;
-    Tensor<Scalar, 3, 3, Symmetry, TRACK_INNER> Q1, Q2, Q3, Q4;
+    Tensor<Scalar, 1, TRank + 1, Symmetry, TRACK> P1;
+    Tensor<Scalar, TRank + 1, 1, Symmetry, TRACK> P2;
+    Tensor<Scalar, TRank + 1, TRank + 1, Symmetry, TRACK_INNER> Q1, Q2, Q3, Q4;
     switch(dir) {
     case Opts::DIRECTION::LEFT: {
         switch(proj_m) {
@@ -858,23 +880,23 @@ CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::get_projectors(const int x, const int 
     return std::make_pair(P1, P2);
 }
 
-template <typename Scalar, typename Symmetry, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
+template <typename Scalar, typename Symmetry, std::size_t TRank, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
 template <bool TRACK, bool CP>
-std::tuple<Tensor<Scalar, 0, 2, Symmetry, TRACK>, Tensor<Scalar, 1, 3, Symmetry, TRACK>, Tensor<Scalar, 1, 1, Symmetry, TRACK>>
-CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::renormalize_left(const int x,
-                                                           const int y,
-                                                           XPED_CONST TMatrix<Tensor<Scalar, 1, 3, Symmetry, TRACK>>& P1,
-                                                           XPED_CONST TMatrix<Tensor<Scalar, 3, 1, Symmetry, TRACK>>& P2,
-                                                           bool NORMALIZE) XPED_CONST
+std::tuple<Tensor<Scalar, 0, 2, Symmetry, TRACK>, Tensor<Scalar, 1, TRank + 1, Symmetry, TRACK>, Tensor<Scalar, 1, 1, Symmetry, TRACK>>
+CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::renormalize_left(const int x,
+                                                                  const int y,
+                                                                  XPED_CONST TMatrix<Tensor<Scalar, 1, TRank + 1, Symmetry, TRACK>>& P1,
+                                                                  XPED_CONST TMatrix<Tensor<Scalar, TRank + 1, 1, Symmetry, TRACK>>& P2,
+                                                                  bool NORMALIZE) XPED_CONST
 {
     constexpr bool TRACK_INNER = TRACK ? not CP : false;
 
     Tensor<Scalar, 0, 2, Symmetry, TRACK> C1_new;
-    Tensor<Scalar, 1, 3, Symmetry, TRACK> T4_new;
+    Tensor<Scalar, 1, TRank + 1, Symmetry, TRACK> T4_new;
     Tensor<Scalar, 1, 1, Symmetry, TRACK> C4_new;
 
     Tensor<Scalar, 0, 2, Symmetry, TRACK_INNER> C1_new_tmp;
-    Tensor<Scalar, 1, 3, Symmetry, TRACK_INNER> T4_new_tmp;
+    Tensor<Scalar, 1, TRank + 1, Symmetry, TRACK_INNER> T4_new_tmp;
     Tensor<Scalar, 1, 1, Symmetry, TRACK_INNER> C4_new_tmp;
     // C1_new_tmp = (operator*<TRACK_INNER>(P1(x, y - 1),
     //                                      (operator*<TRACK_INNER>(C1s(x - 1, y - 1).template permute<TRACK_INNER, -1, 0, 1>(),
@@ -936,23 +958,23 @@ CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::renormalize_left(const int x,
     return std::make_tuple(C1_new, T4_new, C4_new);
 }
 
-template <typename Scalar, typename Symmetry, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
+template <typename Scalar, typename Symmetry, std::size_t TRank, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
 template <bool TRACK, bool CP>
-std::tuple<Tensor<Scalar, 1, 1, Symmetry, TRACK>, Tensor<Scalar, 3, 1, Symmetry, TRACK>, Tensor<Scalar, 2, 0, Symmetry, TRACK>>
-CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::renormalize_right(const int x,
-                                                            const int y,
-                                                            XPED_CONST TMatrix<Tensor<Scalar, 1, 3, Symmetry, TRACK>>& P1,
-                                                            XPED_CONST TMatrix<Tensor<Scalar, 3, 1, Symmetry, TRACK>>& P2,
-                                                            bool NORMALIZE) XPED_CONST
+std::tuple<Tensor<Scalar, 1, 1, Symmetry, TRACK>, Tensor<Scalar, TRank + 1, 1, Symmetry, TRACK>, Tensor<Scalar, 2, 0, Symmetry, TRACK>>
+CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::renormalize_right(const int x,
+                                                                   const int y,
+                                                                   XPED_CONST TMatrix<Tensor<Scalar, 1, TRank + 1, Symmetry, TRACK>>& P1,
+                                                                   XPED_CONST TMatrix<Tensor<Scalar, TRank + 1, 1, Symmetry, TRACK>>& P2,
+                                                                   bool NORMALIZE) XPED_CONST
 {
     constexpr bool TRACK_INNER = TRACK ? not CP : false;
 
     Tensor<Scalar, 1, 1, Symmetry, TRACK> C2_new;
-    Tensor<Scalar, 3, 1, Symmetry, TRACK> T2_new;
+    Tensor<Scalar, TRank + 1, 1, Symmetry, TRACK> T2_new;
     Tensor<Scalar, 2, 0, Symmetry, TRACK> C3_new;
 
     Tensor<Scalar, 1, 1, Symmetry, TRACK_INNER> C2_new_tmp;
-    Tensor<Scalar, 3, 1, Symmetry, TRACK_INNER> T2_new_tmp;
+    Tensor<Scalar, TRank + 1, 1, Symmetry, TRACK_INNER> T2_new_tmp;
     Tensor<Scalar, 2, 0, Symmetry, TRACK_INNER> C3_new_tmp;
 
     // C2_new_tmp = operator*<TRACK_INNER>(operator*<TRACK_INNER>(T1s(x, y - 1).template permute<-2, 0, 2, 3, 1>(Bool<TRACK_INNER>{}), C2s(x + 1, y -
@@ -1005,23 +1027,23 @@ CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::renormalize_right(const int x,
     return std::make_tuple(C2_new, T2_new, C3_new);
 }
 
-template <typename Scalar, typename Symmetry, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
+template <typename Scalar, typename Symmetry, std::size_t TRank, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
 template <bool TRACK, bool CP>
-std::tuple<Tensor<Scalar, 0, 2, Symmetry, TRACK>, Tensor<Scalar, 1, 3, Symmetry, TRACK>, Tensor<Scalar, 1, 1, Symmetry, TRACK>>
-CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::renormalize_top(const int x,
-                                                          const int y,
-                                                          XPED_CONST TMatrix<Tensor<Scalar, 1, 3, Symmetry, TRACK>>& P1,
-                                                          XPED_CONST TMatrix<Tensor<Scalar, 3, 1, Symmetry, TRACK>>& P2,
-                                                          bool NORMALIZE) XPED_CONST
+std::tuple<Tensor<Scalar, 0, 2, Symmetry, TRACK>, Tensor<Scalar, 1, TRank + 1, Symmetry, TRACK>, Tensor<Scalar, 1, 1, Symmetry, TRACK>>
+CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::renormalize_top(const int x,
+                                                                 const int y,
+                                                                 XPED_CONST TMatrix<Tensor<Scalar, 1, TRank + 1, Symmetry, TRACK>>& P1,
+                                                                 XPED_CONST TMatrix<Tensor<Scalar, TRank + 1, 1, Symmetry, TRACK>>& P2,
+                                                                 bool NORMALIZE) XPED_CONST
 {
     constexpr bool TRACK_INNER = TRACK ? not CP : false;
 
     Tensor<Scalar, 0, 2, Symmetry, TRACK> C1_new;
-    Tensor<Scalar, 1, 3, Symmetry, TRACK> T1_new;
+    Tensor<Scalar, 1, TRank + 1, Symmetry, TRACK> T1_new;
     Tensor<Scalar, 1, 1, Symmetry, TRACK> C2_new;
 
     Tensor<Scalar, 0, 2, Symmetry, TRACK_INNER> C1_new_tmp;
-    Tensor<Scalar, 1, 3, Symmetry, TRACK_INNER> T1_new_tmp;
+    Tensor<Scalar, 1, TRank + 1, Symmetry, TRACK_INNER> T1_new_tmp;
     Tensor<Scalar, 1, 1, Symmetry, TRACK_INNER> C2_new_tmp;
 
     // C1_new_tmp = operator*<TRACK_INNER>(operator*<TRACK_INNER>(T4s(x - 1, y).template permute<-2, 1, 2, 3, 0>(Bool<TRACK_INNER>{}),
@@ -1068,23 +1090,23 @@ CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::renormalize_top(const int x,
     return std::make_tuple(C1_new, T1_new, C2_new);
 }
 
-template <typename Scalar, typename Symmetry, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
+template <typename Scalar, typename Symmetry, std::size_t TRank, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
 template <bool TRACK, bool CP>
-std::tuple<Tensor<Scalar, 1, 1, Symmetry, TRACK>, Tensor<Scalar, 3, 1, Symmetry, TRACK>, Tensor<Scalar, 2, 0, Symmetry, TRACK>>
-CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::renormalize_bottom(const int x,
-                                                             const int y,
-                                                             XPED_CONST TMatrix<Tensor<Scalar, 1, 3, Symmetry, TRACK>>& P1,
-                                                             XPED_CONST TMatrix<Tensor<Scalar, 3, 1, Symmetry, TRACK>>& P2,
-                                                             bool NORMALIZE) XPED_CONST
+std::tuple<Tensor<Scalar, 1, 1, Symmetry, TRACK>, Tensor<Scalar, TRank + 1, 1, Symmetry, TRACK>, Tensor<Scalar, 2, 0, Symmetry, TRACK>>
+CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::renormalize_bottom(const int x,
+                                                                    const int y,
+                                                                    XPED_CONST TMatrix<Tensor<Scalar, 1, TRank + 1, Symmetry, TRACK>>& P1,
+                                                                    XPED_CONST TMatrix<Tensor<Scalar, TRank + 1, 1, Symmetry, TRACK>>& P2,
+                                                                    bool NORMALIZE) XPED_CONST
 {
     constexpr bool TRACK_INNER = TRACK ? not CP : false;
 
     Tensor<Scalar, 1, 1, Symmetry, TRACK> C4_new;
-    Tensor<Scalar, 3, 1, Symmetry, TRACK> T3_new;
+    Tensor<Scalar, TRank + 1, 1, Symmetry, TRACK> T3_new;
     Tensor<Scalar, 2, 0, Symmetry, TRACK> C3_new;
 
     Tensor<Scalar, 1, 1, Symmetry, TRACK_INNER> C4_new_tmp;
-    Tensor<Scalar, 3, 1, Symmetry, TRACK_INNER> T3_new_tmp;
+    Tensor<Scalar, TRank + 1, 1, Symmetry, TRACK_INNER> T3_new_tmp;
     Tensor<Scalar, 2, 0, Symmetry, TRACK_INNER> C3_new_tmp;
 
     // C4_new_tmp = operator*<TRACK_INNER>(P1(x - 1, y),
@@ -1144,14 +1166,14 @@ CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::renormalize_bottom(const int x,
     return std::make_tuple(C4_new, T3_new, C3_new);
 }
 
-template <typename Scalar, typename Symmetry, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
+template <typename Scalar, typename Symmetry, std::size_t TRank, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
 template <bool TRACK, bool CP>
-Tensor<Scalar, 3, 3, Symmetry, TRACK>
-CTM<Scalar, Symmetry, ENABLE_AD, CPOpts>::contractCorner(const int x, const int y, const Opts::CORNER corner) XPED_CONST
+Tensor<Scalar, TRank + 1, TRank + 1, Symmetry, TRACK>
+CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::contractCorner(const int x, const int y, const Opts::CORNER corner) XPED_CONST
 {
     constexpr bool TRACK_INNER = TRACK ? not CP : false;
 
-    Tensor<Scalar, 3, 3, Symmetry, TRACK> Q;
+    Tensor<Scalar, TRank + 1, TRank + 1, Symmetry, TRACK> Q;
     switch(corner) {
     case Opts::CORNER::UPPER_LEFT: {
         // auto tmp = C1s(x - 1, y - 1).template permute<TRACK, -1, 0, 1>() * T1s(x, y - 1);

@@ -164,6 +164,7 @@ private:
     // template <bool TRACK = ENABLE_AD>
     // std::pair<Tensor<Scalar, 3, 3, Symmetry, TRACK>, Tensor<Scalar, 1, 1, Symmetry, TRACK>> get_projectors_left();
 
+    template <bool TRACK = ENABLE_AD>
     void computeMs();
 
     template <bool TRACK = ENABLE_AD>

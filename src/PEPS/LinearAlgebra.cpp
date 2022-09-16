@@ -119,33 +119,38 @@ std::array<TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, Scalar>>, 4> a
                 auto norm = (Q1 * Q2 * Q3 * Q4).trace();
 
                 if(op.data_d1.size() > 0) {
-                    [[maybe_unused]] double dumb;
-                    auto [Hu, Hs, Hvdag] =
-                        shifted_op.data_d1(x, y).template permute<0, 0, 2, 1, 3>().tSVD(std::numeric_limits<std::size_t>::max(), 1.e-14, dumb);
-                    Hu = Hu * Hs.sqrt();
-                    Hvdag = Hs.sqrt() * Hvdag;
+                    if constexpr(TRank == 2) {
+                        [[maybe_unused]] double dumb;
+                        auto [Hu, Hs, Hvdag] =
+                            shifted_op.data_d1(x, y).template permute<0, 0, 2, 1, 3>().tSVD(std::numeric_limits<std::size_t>::max(), 1.e-14, dumb);
+                        Hu = Hu * Hs.sqrt();
+                        Hvdag = Hs.sqrt() * Hvdag;
 
-                    auto C1T1 =
-                        env.C1s(x - 1, y - 1).template contract<std::array{-1, 1}, std::array{1, -2, -3, -4}, 1, ENABLE_AD>(env.T1s(x, y - 1));
-                    auto T4C1T1 = env.T4s(x - 1, y).template contract<std::array{1, -1, -2, -3}, std::array{1, -4, -5, -6}, 3, ENABLE_AD>(C1T1);
-                    auto T4C1T1A =
-                        T4C1T1.template contract<std::array{-1, 1, -2, -3, 2, -4}, std::array{1, 2, -5, -6, -7}, 4, ENABLE_AD>(env.A->As(x, y));
-                    auto T4C1T1AH = T4C1T1A.template contract<std::array{-1, -2, -3, -4, -5, -6, 1}, std::array{1, -7, -8}, 6, ENABLE_AD>(Hu);
-                    auto Q1H = T4C1T1AH.template contract<std::array{-1, 1, -4, 2, -5, -2, 3, -7}, std::array{1, 2, 3, -6, -3}, 3, ENABLE_AD>(
-                        env.A->Adags(x, y));
+                        auto C1T1 =
+                            env.C1s(x - 1, y - 1).template contract<std::array{-1, 1}, std::array{1, -2, -3, -4}, 1, ENABLE_AD>(env.T1s(x, y - 1));
+                        auto T4C1T1 = env.T4s(x - 1, y).template contract<std::array{1, -1, -2, -3}, std::array{1, -4, -5, -6}, 3, ENABLE_AD>(C1T1);
+                        auto T4C1T1A =
+                            T4C1T1.template contract<std::array{-1, 1, -2, -3, 2, -4}, std::array{1, 2, -5, -6, -7}, 4, ENABLE_AD>(env.A->As(x, y));
+                        auto T4C1T1AH = T4C1T1A.template contract<std::array{-1, -2, -3, -4, -5, -6, 1}, std::array{1, -7, -8}, 6, ENABLE_AD>(Hu);
+                        auto Q1H = T4C1T1AH.template contract<std::array{-1, 1, -4, 2, -5, -2, 3, -7}, std::array{1, 2, 3, -6, -3}, 3, ENABLE_AD>(
+                            env.A->Adags(x, y));
 
-                    auto C3T3 =
-                        env.C3s(x + 2, y + 2).template contract<std::array{-1, 1}, std::array{-2, -3, -4, 1}, 1, ENABLE_AD>(env.T3s(x + 1, y + 2));
-                    auto T2C3T3 = env.T2s(x + 2, y + 1).template contract<std::array{-1, -2, -3, 1}, std::array{1, -4, -5, -6}, 3, ENABLE_AD>(C3T3);
-                    auto T2C3T3A = T2C3T3.template contract<std::array{1, -1, -2, 2, -3, -4}, std::array{-5, -6, 1, 2, -7}, 4, ENABLE_AD>(
-                        env.A->As(x + 1, y + 1));
-                    auto T2C3T3AH = T2C3T3A.template contract<std::array{-1, -2, -3, -4, -5, -6, 1}, std::array{-7, 1, -8}, 6, ENABLE_AD>(Hvdag);
-                    auto Q3H = T2C3T3AH.template contract<std::array{1, -1, 2, -4, -5, -2, -7, 3}, std::array{-6, -3, 3, 1, 2}, 3, ENABLE_AD>(
-                        env.A->Adags(x + 1, y + 1));
-                    Q1H = Q4 * Q1H;
-                    Q3H = Q2 * Q3H;
-                    o_d1(x, y) =
-                        Q1H.template contract<std::array{1, 2, 3, 4, 5, 6, 7}, std::array{4, 5, 6, 1, 2, 3, 7}, 0, ENABLE_AD>(Q3H).trace() / norm;
+                        auto C3T3 = env.C3s(x + 2, y + 2)
+                                        .template contract<std::array{-1, 1}, std::array{-2, -3, -4, 1}, 1, ENABLE_AD>(env.T3s(x + 1, y + 2));
+                        auto T2C3T3 =
+                            env.T2s(x + 2, y + 1).template contract<std::array{-1, -2, -3, 1}, std::array{1, -4, -5, -6}, 3, ENABLE_AD>(C3T3);
+                        auto T2C3T3A = T2C3T3.template contract<std::array{1, -1, -2, 2, -3, -4}, std::array{-5, -6, 1, 2, -7}, 4, ENABLE_AD>(
+                            env.A->As(x + 1, y + 1));
+                        auto T2C3T3AH = T2C3T3A.template contract<std::array{-1, -2, -3, -4, -5, -6, 1}, std::array{-7, 1, -8}, 6, ENABLE_AD>(Hvdag);
+                        auto Q3H = T2C3T3AH.template contract<std::array{1, -1, 2, -4, -5, -2, -7, 3}, std::array{-6, -3, 3, 1, 2}, 3, ENABLE_AD>(
+                            env.A->Adags(x + 1, y + 1));
+                        Q1H = Q4 * Q1H;
+                        Q3H = Q2 * Q3H;
+                        o_d1(x, y) =
+                            Q1H.template contract<std::array{1, 2, 3, 4, 5, 6, 7}, std::array{4, 5, 6, 1, 2, 3, 7}, 0, ENABLE_AD>(Q3H).trace() / norm;
+                    } else if constexpr(TRank == 1) {
+                        o_d1(x, y) = 0.;
+                    }
                     if constexpr(ENABLE_AD) {
                         op.obs_d1(x, y) = o_d1(x, y).val();
                     } else {
@@ -158,34 +163,38 @@ std::array<TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, Scalar>>, 4> a
                     // Q3 = env.contractCorner(x, y + 1, Opts::CORNER::LOWER_RIGHT);
                     // Q4 = env.contractCorner(x - 1, y + 1, Opts::CORNER::LOWER_LEFT);
                     // norm = (Q1 * Q2 * Q3 * Q4).trace();
+                    if constexpr(TRank == 2) {
+                        [[maybe_unused]] double dumb;
+                        auto [Hu, Hs, Hvdag] = shifted_op.data_d2(x + 1, y).template permute<0, 0, 2, 1, 3>().tSVD(
+                            std::numeric_limits<std::size_t>::max(), 1.e-14, dumb);
+                        Hu = Hu * Hs.sqrt();
+                        Hvdag = Hs.sqrt() * Hvdag;
 
-                    [[maybe_unused]] double dumb;
-                    auto [Hu, Hs, Hvdag] =
-                        shifted_op.data_d2(x + 1, y).template permute<0, 0, 2, 1, 3>().tSVD(std::numeric_limits<std::size_t>::max(), 1.e-14, dumb);
-                    Hu = Hu * Hs.sqrt();
-                    Hvdag = Hs.sqrt() * Hvdag;
+                        auto T1C2 = env.T1s(x + 1, y - 1)
+                                        .template contract<std::array{-1, 1, -2, -3}, std::array{1, -4}, 3, ENABLE_AD>(env.C2s(x + 2, y - 1));
+                        auto T1C2T2 = T1C2.template contract<std::array{-1, -2, -3, 1}, std::array{-4, -5, 1, -6}, 3, ENABLE_AD>(env.T2s(x + 2, y));
+                        auto T1C2T2A = T1C2T2.template contract<std::array{-1, 1, -2, 2, -3, -4}, std::array{-5, 1, 2, -6, -7}, 4, ENABLE_AD>(
+                            env.A->As(x + 1, y));
+                        auto T1C2T2AH = T1C2T2A.template contract<std::array{-1, -2, -3, -4, -5, -6, 1}, std::array{-7, 1, -8}, 6, ENABLE_AD>(Hvdag);
+                        auto Q2H = T1C2T2AH.template contract<std::array{-1, 1, 2, -4, -2, -5, -7, 3}, std::array{-3, 1, 3, 2, -6}, 3, ENABLE_AD>(
+                            env.A->Adags(x + 1, y));
 
-                    auto T1C2 =
-                        env.T1s(x + 1, y - 1).template contract<std::array{-1, 1, -2, -3}, std::array{1, -4}, 3, ENABLE_AD>(env.C2s(x + 2, y - 1));
-                    auto T1C2T2 = T1C2.template contract<std::array{-1, -2, -3, 1}, std::array{-4, -5, 1, -6}, 3, ENABLE_AD>(env.T2s(x + 2, y));
-                    auto T1C2T2A =
-                        T1C2T2.template contract<std::array{-1, 1, -2, 2, -3, -4}, std::array{-5, 1, 2, -6, -7}, 4, ENABLE_AD>(env.A->As(x + 1, y));
-                    auto T1C2T2AH = T1C2T2A.template contract<std::array{-1, -2, -3, -4, -5, -6, 1}, std::array{-7, 1, -8}, 6, ENABLE_AD>(Hvdag);
-                    auto Q2H = T1C2T2AH.template contract<std::array{-1, 1, 2, -4, -2, -5, -7, 3}, std::array{-3, 1, 3, 2, -6}, 3, ENABLE_AD>(
-                        env.A->Adags(x + 1, y));
-
-                    auto C4T3 =
-                        env.C4s(x - 1, y + 2).template contract<std::array{-1, 1}, std::array{-2, -3, 1, -4}, 1, ENABLE_AD>(env.T3s(x, y + 2));
-                    auto T4C4T3 = env.T4s(x - 1, y + 1).template contract<std::array{-1, 1, -2, -3}, std::array{1, -4, -5, -6}, 3, ENABLE_AD>(C4T3);
-                    auto T4C4T3A =
-                        T4C4T3.template contract<std::array{-1, 1, -2, 2, -3, -4}, std::array{1, -5, -6, 2, -7}, 4, ENABLE_AD>(env.A->As(x, y + 1));
-                    auto T4C4T3AH = T4C4T3A.template contract<std::array{-1, -2, -3, -4, -5, -6, 1}, std::array{1, -7, -8}, 6, ENABLE_AD>(Hu);
-                    auto Q4H = T4C4T3AH.template contract<std::array{-4, 1, 2, -1, -5, -2, 3, -7}, std::array{1, -6, 3, -3, 2}, 3, ENABLE_AD>(
-                        env.A->Adags(x, y + 1));
-                    Q2H = Q1 * Q2H;
-                    Q4H = Q3 * Q4H;
-                    o_d2(x, y) =
-                        Q2H.template contract<std::array{1, 2, 3, 4, 5, 6, 7}, std::array{4, 5, 6, 1, 2, 3, 7}, 0, ENABLE_AD>(Q4H).trace() / norm;
+                        auto C4T3 =
+                            env.C4s(x - 1, y + 2).template contract<std::array{-1, 1}, std::array{-2, -3, 1, -4}, 1, ENABLE_AD>(env.T3s(x, y + 2));
+                        auto T4C4T3 =
+                            env.T4s(x - 1, y + 1).template contract<std::array{-1, 1, -2, -3}, std::array{1, -4, -5, -6}, 3, ENABLE_AD>(C4T3);
+                        auto T4C4T3A = T4C4T3.template contract<std::array{-1, 1, -2, 2, -3, -4}, std::array{1, -5, -6, 2, -7}, 4, ENABLE_AD>(
+                            env.A->As(x, y + 1));
+                        auto T4C4T3AH = T4C4T3A.template contract<std::array{-1, -2, -3, -4, -5, -6, 1}, std::array{1, -7, -8}, 6, ENABLE_AD>(Hu);
+                        auto Q4H = T4C4T3AH.template contract<std::array{-4, 1, 2, -1, -5, -2, 3, -7}, std::array{1, -6, 3, -3, 2}, 3, ENABLE_AD>(
+                            env.A->Adags(x, y + 1));
+                        Q2H = Q1 * Q2H;
+                        Q4H = Q3 * Q4H;
+                        o_d2(x, y) =
+                            Q2H.template contract<std::array{1, 2, 3, 4, 5, 6, 7}, std::array{4, 5, 6, 1, 2, 3, 7}, 0, ENABLE_AD>(Q4H).trace() / norm;
+                    } else if constexpr(TRank == 1) {
+                        o_d2(x, y) = 0.;
+                    }
                     // o_d2(x, y) =
                     //     Q2H.template contract<std::array{1, 2, 3, 4, 5, 6, 7}, std::array{1, 2, 3, 4, 5, 6, 7}, 0, ENABLE_AD>(Q4H).trace() / norm;
                     if constexpr(ENABLE_AD) {

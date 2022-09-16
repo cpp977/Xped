@@ -205,7 +205,8 @@ int main(int argc, char* argv[])
         Xped::Opts::Optim o_opts = Xped::Opts::optim_from_toml(data.at("optim"));
         Xped::Opts::CTM c_opts = Xped::Opts::ctm_from_toml(data.at("ctm"));
         constexpr Xped::Opts::CTMCheckpoint cp_opts{.MOVE = true, .CORNER = true};
-        Xped::iPEPSSolverAD<Scalar, Symmetry, cp_opts> Jack(o_opts, c_opts);
+        constexpr std::size_t TRank = 2;
+        Xped::iPEPSSolverAD<Scalar, Symmetry, cp_opts, TRank> Jack(o_opts, c_opts);
 
         // Xped::FermionBase<Symmetry> F(1);
         // Xped::OneSiteObservable<Symmetry> n(c.pattern);
@@ -257,7 +258,7 @@ int main(int argc, char* argv[])
         // for(auto& t : Ssq.data) {
         //     t = std::sqrt(3.) * (Xped::SiteOperator<Scalar, Symmetry>::prod(B.Sdag(0), B.S(0), Symmetry::qvacuum())).data.template trim<2>();
         // }
-        Jack.callback = [Sz, Sx, SzSz, SpSm, SmSp](XPED_CONST Xped::CTM<Scalar, Symmetry>& env, std::size_t i) mutable {
+        Jack.callback = [Sz, Sx, SzSz, SpSm, SmSp](XPED_CONST Xped::CTM<Scalar, Symmetry, TRank>& env, std::size_t i) mutable {
             fmt::print("Callback at iteration {}\n", i);
             auto o_Sz = avg(env, Sz);
             auto o_Sx = avg(env, Sx);
@@ -282,7 +283,7 @@ int main(int argc, char* argv[])
             //     auto o_Smsp = avg(env, Smsp);
             //     for(const auto d : o_Smsp) { fmt::print("Smsp={}\n", d); }
         };
-        // Jack.callback = [n](XPED_CONST Xped::CTM<Scalar, Symmetry>& env, std::size_t i) mutable {
+        // Jack.callback = [n](XPED_CONST Xped::CTM<Scalar, Symmetry, 1>& env, std::size_t i) mutable {
         //     fmt::print("Callback at iteration {}\n", i);
         //     auto o_n = avg(env, n);
         //     // auto o_nup = avg(env, nup);

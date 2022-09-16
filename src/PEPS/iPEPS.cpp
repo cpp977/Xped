@@ -156,27 +156,27 @@ void iPEPS<Scalar, Symmetry, ENABLE_AD>::set_data(const Scalar* data, bool NORMA
 }
 
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>
-Qbasis<Symmetry, 1> iPEPS<Scalar, Symmetry, ENABLE_AD>::ketBasis(const int x, const int y, const LEG leg) const
+Qbasis<Symmetry, 1> iPEPS<Scalar, Symmetry, ENABLE_AD>::ketBasis(const int x, const int y, const Opts::LEG leg) const
 {
     switch(leg) {
-    case LEG::LEFT: return As(x, y).uncoupledDomain()[0]; break;
-    case LEG::UP: return As(x, y).uncoupledDomain()[1]; break;
-    case LEG::RIGHT: return As(x, y).uncoupledCodomain()[0]; break;
-    case LEG::DOWN: return As(x, y).uncoupledCodomain()[1]; break;
-    case LEG::PHYS: return As(x, y).uncoupledCodomain()[2]; break;
+    case Opts::LEG::LEFT: return As(x, y).uncoupledDomain()[0]; break;
+    case Opts::LEG::UP: return As(x, y).uncoupledDomain()[1]; break;
+    case Opts::LEG::RIGHT: return As(x, y).uncoupledCodomain()[0]; break;
+    case Opts::LEG::DOWN: return As(x, y).uncoupledCodomain()[1]; break;
+    case Opts::LEG::PHYS: return As(x, y).uncoupledCodomain()[2]; break;
     default: std::terminate();
     }
 }
 
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>
-Qbasis<Symmetry, 1> iPEPS<Scalar, Symmetry, ENABLE_AD>::braBasis(const int x, const int y, const LEG leg) const
+Qbasis<Symmetry, 1> iPEPS<Scalar, Symmetry, ENABLE_AD>::braBasis(const int x, const int y, const Opts::LEG leg) const
 {
     switch(leg) {
-    case LEG::LEFT: return Adags(x, y).uncoupledDomain()[0]; break;
-    case LEG::UP: return Adags(x, y).uncoupledDomain()[1]; break;
-    case LEG::RIGHT: return Adags(x, y).uncoupledCodomain()[0]; break;
-    case LEG::DOWN: return Adags(x, y).uncoupledCodomain()[1]; break;
-    case LEG::PHYS: return Adags(x, y).uncoupledDomain()[2]; break;
+    case Opts::LEG::LEFT: return Adags(x, y).uncoupledDomain()[0]; break;
+    case Opts::LEG::UP: return Adags(x, y).uncoupledDomain()[1]; break;
+    case Opts::LEG::RIGHT: return Adags(x, y).uncoupledCodomain()[0]; break;
+    case Opts::LEG::DOWN: return Adags(x, y).uncoupledCodomain()[1]; break;
+    case Opts::LEG::PHYS: return Adags(x, y).uncoupledDomain()[2]; break;
     default: std::terminate();
     }
 }

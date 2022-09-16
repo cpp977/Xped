@@ -6,6 +6,7 @@
 #include "Xped/PEPS/TMatrix.hpp"
 #include "Xped/PEPS/UnitCell.hpp"
 #include "Xped/PEPS/iPEPSIterator.hpp"
+#include "Xped/PEPS/iPEPSOpts.hpp"
 
 namespace Xped {
 
@@ -61,15 +62,6 @@ public:
     typedef typename ScalarTraits<Scalar>::Real RealScalar;
     typedef typename Symmetry::qType qType;
 
-    enum class LEG
-    {
-        LEFT,
-        UP,
-        RIGHT,
-        DOWN,
-        PHYS
-    };
-
     iPEPS(const UnitCell& cell, const Qbasis<Symmetry, 1>& auxBasis, const Qbasis<Symmetry, 1>& physBasis);
 
     iPEPS(const UnitCell& cell,
@@ -98,8 +90,8 @@ public:
         for(auto i = 0ul; i < As.size(); ++i) { Adags[i] = As[i].adjoint().eval().template permute<0, 3, 4, 2, 0, 1>(); }
     }
 
-    Qbasis<Symmetry, 1> ketBasis(const int x, const int y, const LEG leg) const;
-    Qbasis<Symmetry, 1> braBasis(const int x, const int y, const LEG leg) const;
+    Qbasis<Symmetry, 1> ketBasis(const int x, const int y, const Opts::LEG leg) const;
+    Qbasis<Symmetry, 1> braBasis(const int x, const int y, const Opts::LEG leg) const;
     void info() const;
 
     std::vector<Scalar> data();

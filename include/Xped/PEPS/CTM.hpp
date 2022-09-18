@@ -105,6 +105,10 @@ public:
     {
         A = A_in;
         cell_ = A_in->cell();
+        if constexpr(TRank == 1) {
+            Ms.resize(cell_.pattern);
+            computeMs();
+        }
     }
 
     template <bool TRACK = ENABLE_AD>

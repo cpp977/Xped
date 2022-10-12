@@ -61,7 +61,7 @@ private:
 
     struct fuseData
     {
-        std::size_t dim1, dim2;
+        std::size_t dim1 = 0, dim2 = 0;
         std::array<std::size_t, 2> source(std::size_t combined_num) const
         {
             std::size_t tmp = combined_num / dim1;

@@ -192,7 +192,7 @@ public:
     /**Adds two bases together.*/
     Qbasis<Symmetry, depth, AllocationPolicy> add(const Qbasis<Symmetry, depth, AllocationPolicy>& other) const;
 
-    Qbasis<Symmetry, depth, AllocationPolicy> shift(qType qshift) const;
+    std::pair<std::vector<std::size_t>, Qbasis<Symmetry, depth, AllocationPolicy>> shift(qType qshift) const;
 
     /**Returns the intersection of this and \p other.*/
     Qbasis<Symmetry, depth, AllocationPolicy> intersection(const Qbasis<Symmetry, depth, AllocationPolicy>& other) const;
@@ -221,7 +221,7 @@ public:
     /**Swaps with another Qbasis.*/
     // void swap (Qbasis<Symmetry,depth> &other) { this->data.swap(other.data()); }
 
-    void sort();
+    std::vector<std::size_t> sort();
 
     inline bool IS_SORTED() const { return IS_SORTED_; }
     inline bool IS_CONJ() const { return CONJ; }

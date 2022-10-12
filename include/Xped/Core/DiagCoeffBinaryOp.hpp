@@ -41,7 +41,7 @@ public:
         static_assert(std::is_same<typename XprTypeLeft::Symmetry, typename XprTypeLeft::Symmetry>::value);
         assert(refxpr_l_.sector() == refxpr_r_.sector());
         assert(refxpr_l_.dict() == refxpr_r_.dict());
-        assert(refxpr_l_.world() == refxpr_r_.world());
+        assert(*refxpr_l_.world() == *refxpr_r_.world());
         assert(refxpr_l_.uncoupledDomain() == refxpr_r_.uncoupledDomain());
         assert(refxpr_l_.uncoupledCodomain() == refxpr_r_.uncoupledCodomain());
         assert(refxpr_l_.coupledDomain() == refxpr_r_.coupledDomain());

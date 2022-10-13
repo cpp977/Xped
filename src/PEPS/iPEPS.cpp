@@ -70,7 +70,7 @@ void iPEPS<Scalar, Symmetry, ENABLE_AD>::init(const TMatrix<Qbasis<Symmetry, 1>>
         for(int y = 0; y < cell().Ly; y++) {
             if(not cell().pattern.isUnique(x, y)) { continue; }
             auto pos = cell().pattern.uniqueIndex(x, y);
-            Qbasis<Symmetry, 1> shifted_physBasis = physBasis[pos].shift(charges_[pos]);
+            auto [dummy, shifted_physBasis] = physBasis[pos].shift(charges_[pos]);
             // fmt::print("x={}, y={}, original basis which will be shifted by {}:\n", x, y, Sym::format<Symmetry>(charges_[pos]));
             // std::cout << physBasis[pos] << std::endl;
             // std::cout << "shifted:\n" << shifted_physBasis << std::endl;
@@ -141,10 +141,12 @@ void iPEPS<Scalar, Symmetry, ENABLE_AD>::set_data(const Scalar* data, bool NORMA
     std::size_t count = 0;
     for(auto& A : As) {
         A.set_data(data + count, A.plainSize());
-        if(NORMALIZE) { A = A * (1. / A.maxNorm()); }
+        if(NORMALIZE) {
+            auto tmp = (A * (1. / A.maxNorm())).eval();
+            A = tmp;
+        }
         count += A.plainSize();
     }
-
     for(int x = 0; x < cell_.Lx; x++) {
         for(int y = 0; y < cell_.Ly; y++) {
             if(not cell_.pattern.isUnique(x, y)) { continue; }

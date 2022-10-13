@@ -167,24 +167,8 @@ public:
     }
 
     template <typename Ar>
-    void serialize(Ar& ar) const
-    {
-        ar& YAS_OBJECT_NVP("x_storage",
-                           ("data", m_data),
-                           ("dict", m_dict),
-                           ("sectors", m_sector),
-                           ("uncoupled_domain", m_uncoupled_domain),
-                           ("uncoupled_codomain", m_uncoupled_codomain),
-                           ("domain", m_domain),
-                           ("codomain", m_codomain),
-                           ("world", m_world),
-                           ("offsets", m_offsets));
-    }
-
-    template <typename Ar>
     void serialize(Ar& ar)
     {
-        // mpi::XpedWorld tmp_world;
         ar& YAS_OBJECT_NVP("x_storage",
                            ("data", m_data),
                            ("dict", m_dict),
@@ -195,7 +179,6 @@ public:
                            ("codomain", m_codomain),
                            ("world", m_world),
                            ("offsets", m_offsets));
-        // m_world = std::make_shared<mpi::XpedWorld>(std::move(tmp_world));
     }
 
     const mpi::XpedWorld& world() const { return m_world; }

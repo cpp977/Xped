@@ -10,13 +10,13 @@ typedef Eigen::Index VIndextype;
 
 // constructors
 template <typename Scalar>
-VType<Scalar> VectorInterface::construct(const VIndextype& elems, mpi::XpedWorld& world)
+VType<Scalar> VectorInterface::construct(const VIndextype& elems, const mpi::XpedWorld&)
 {
     return VType<Scalar>(elems);
 }
 
 template <typename Scalar>
-VType<Scalar> VectorInterface::construct_with_zero(const VIndextype& elems, mpi::XpedWorld& world)
+VType<Scalar> VectorInterface::construct_with_zero(const VIndextype& elems, const mpi::XpedWorld&)
 {
     VType<Scalar> vec(elems);
     vec.setZero();

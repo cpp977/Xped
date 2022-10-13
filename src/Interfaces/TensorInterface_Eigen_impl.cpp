@@ -18,7 +18,7 @@ using Indextype = Eigen::Index;
 
 // constructors
 template <typename Scalar, std::size_t Rank>
-TType<Scalar, Rank> TensorInterface::construct(const std::array<Indextype, Rank>& dims, mpi::XpedWorld& world)
+TType<Scalar, Rank> TensorInterface::construct(const std::array<Indextype, Rank>& dims, const mpi::XpedWorld&)
 {
     return TType<Scalar, Rank>(dims);
 }

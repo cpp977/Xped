@@ -26,7 +26,7 @@ struct TensorInterface
 
     // constructors
     template <typename Scalar, std::size_t Rank>
-    static TType<Scalar, Rank> construct(const std::array<Indextype, Rank>& dims, mpi::XpedWorld& world = mpi::getUniverse());
+    static TType<Scalar, Rank> construct(const std::array<Indextype, Rank>& dims, const mpi::XpedWorld& = mpi::getUniverse());
 
     template <typename Scalar, int Rank>
     static TType<Scalar, Rank> construct(const MapTType<Scalar, Rank>& map);

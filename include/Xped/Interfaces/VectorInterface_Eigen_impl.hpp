@@ -17,10 +17,10 @@ struct VectorInterface
 
     // constructors
     template <typename Scalar>
-    static VType<Scalar> construct(const VIndextype& elems, mpi::XpedWorld& world = mpi::getUniverse());
+    static VType<Scalar> construct(const VIndextype& elems, const mpi::XpedWorld& = mpi::getUniverse());
 
     template <typename Scalar>
-    static VType<Scalar> construct_with_zero(const VIndextype& elems, mpi::XpedWorld& world = mpi::getUniverse());
+    static VType<Scalar> construct_with_zero(const VIndextype& elems, const mpi::XpedWorld& = mpi::getUniverse());
 
     template <typename Scalar>
     static void resize(VType<Scalar>& V, const VIndextype& new_elems);

@@ -24,10 +24,10 @@ struct MatrixInterface
     typedef Eigen::Index MIndextype;
     // constructors
     template <typename Scalar>
-    static MType<Scalar> construct(const MIndextype& rows, const MIndextype& cols, mpi::XpedWorld& world = mpi::getUniverse());
+    static MType<Scalar> construct(const MIndextype& rows, const MIndextype& cols, const mpi::XpedWorld&);
 
     template <typename Scalar>
-    static MType<Scalar> construct_with_zero(const MIndextype& rows, const MIndextype& cols, mpi::XpedWorld& world = mpi::getUniverse());
+    static MType<Scalar> construct_with_zero(const MIndextype& rows, const MIndextype& cols, const mpi::XpedWorld&);
 
     template <typename Scalar>
     static void resize(MType<Scalar>& M, const MIndextype& new_rows, const MIndextype& new_cols);
@@ -61,7 +61,7 @@ struct MatrixInterface
     static void setVal(Eigen::DenseBase<Derived>& M, const MIndextype& row, const MIndextype& col, typename Derived::Scalar val);
 
     template <typename Scalar>
-    static MType<Scalar> Identity(const MIndextype& rows, const MIndextype& cols, mpi::XpedWorld& world = mpi::getUniverse());
+    static MType<Scalar> Identity(const MIndextype& rows, const MIndextype& cols, const mpi::XpedWorld&);
 
     // shape
     template <typename Derived>

@@ -16,13 +16,13 @@ using MIndextype = MatrixInterface::MIndextype;
 
 // constructors
 template <typename Scalar>
-MType<Scalar> MatrixInterface::construct(const MIndextype& rows, const MIndextype& cols, mpi::XpedWorld& world)
+MType<Scalar> MatrixInterface::construct(const MIndextype& rows, const MIndextype& cols, const mpi::XpedWorld&)
 {
     return MType<Scalar>(rows, cols);
 }
 
 template <typename Scalar>
-MType<Scalar> MatrixInterface::construct_with_zero(const MIndextype& rows, const MIndextype& cols, mpi::XpedWorld& world)
+MType<Scalar> MatrixInterface::construct_with_zero(const MIndextype& rows, const MIndextype& cols, const mpi::XpedWorld&)
 {
     MType<Scalar> mat(rows, cols);
     mat.setZero();
@@ -93,7 +93,7 @@ void MatrixInterface::setVal(Eigen::DenseBase<Derived>& M, const MIndextype& row
 }
 
 template <typename Scalar>
-MType<Scalar> MatrixInterface::Identity(const MIndextype& rows, const MIndextype& cols, mpi::XpedWorld& world)
+MType<Scalar> MatrixInterface::Identity(const MIndextype& rows, const MIndextype& cols, const mpi::XpedWorld&)
 {
     return Eigen::MatrixXd::Identity(rows, cols);
 }

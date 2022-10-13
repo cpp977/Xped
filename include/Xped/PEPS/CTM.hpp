@@ -166,7 +166,7 @@ public:
                            ("rho1_v", rho1_v));
     }
 
-    // private:
+private:
     std::shared_ptr<iPEPS<Scalar, Symmetry, ENABLE_AD>> A;
     UnitCell cell_;
     std::size_t chi;

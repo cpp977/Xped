@@ -93,6 +93,7 @@ struct iPEPSSolverAD
         case Opts::Linesearch::WOLFE: options.line_search_type = ceres::WOLFE; break;
         case Opts::Linesearch::ARMIJO: options.line_search_type = ceres::ARMIJO; break;
         }
+        options.logging_type = ceres::SILENT;
         options.minimizer_progress_to_stdout = true;
         options.use_approximate_eigenvalue_bfgs_scaling = optim_opts.bfgs_scaling;
         // options.line_search_interpolation_type = ceres::BISECTION;
@@ -101,6 +102,8 @@ struct iPEPSSolverAD
         options.parameter_tolerance = optim_opts.step_tol;
         options.gradient_tolerance = optim_opts.grad_tol;
         options.update_state_every_iteration = true;
+        LoggingCallback logging_c;
+        options.callbacks.push_back(&logging_c);
         GetStateCallback get_state_c(this->state);
         options.callbacks.push_back(&get_state_c);
         Callback c(*this, dynamic_cast<const EnergyFunctor*>(problem->function())->impl->getCTM());
@@ -194,6 +197,15 @@ struct iPEPSSolverAD
             return ceres::SOLVER_CONTINUE;
         }
         SolverState& state;
+    };
+
+    struct LoggingCallback : public ceres::IterationCallback
+    {
+        ceres::CallbackReturnType operator()(const ceres::IterationSummary& summary)
+        {
+            fmt::print("Iteration={}, |∇|={}\n", summary.iteration, summary.gradient_norm);
+            return ceres::SOLVER_CONTINUE;
+        }
     };
 };
 

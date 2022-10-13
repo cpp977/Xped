@@ -11,6 +11,8 @@ namespace Xped {
 template <typename Symmetry>
 struct TwoSiteObservable : public ObservableBase
 {
+    TwoSiteObservable() = default;
+
     /*
       x,y: O_h(x,y; x+1,y)
       x,y: O_v(x,y; x,y+1)
@@ -60,6 +62,22 @@ struct TwoSiteObservable : public ObservableBase
         }
         return out;
     }
+
+    template <typename Ar>
+    void serialize(Ar& ar)
+    {
+        ar& YAS_OBJECT_NVP("TwoSiteobservable",
+                           ("data_h", data_h),
+                           ("data_v", data_v),
+                           ("data_d1", data_d1),
+                           ("data_d2", data_d2),
+                           ("obs_h", obs_h),
+                           ("obs_v", obs_v),
+                           ("obs_d1", obs_d1),
+                           ("obs_d2", obs_d2),
+                           ("bond", bond));
+    }
+
     TMatrix<Tensor<double, 2, 2, Symmetry, false>> data_h;
     TMatrix<Tensor<double, 2, 2, Symmetry, false>> data_v;
     TMatrix<Tensor<double, 2, 2, Symmetry, false>> data_d1;

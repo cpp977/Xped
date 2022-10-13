@@ -31,6 +31,19 @@ struct CTM
 
     CTM_INIT init = CTM_INIT::FROM_A;
 
+    template <typename Ar>
+    void serialize(Ar& ar)
+    {
+        ar& YAS_OBJECT_NVP("CTMOpts",
+                           ("chi", chi),
+                           ("max_presteps", max_presteps),
+                           ("track_steps", track_steps),
+                           ("tol_E", tol_E),
+                           ("tol_N", tol_N),
+                           ("reinit_env_tol", reinit_env_tol),
+                           ("init", init));
+    }
+
     inline void info()
     {
         fmt::print("CTM options:\n");

@@ -1,6 +1,9 @@
 #ifndef XPED_IPEPS_H_
 #define XPED_IPEPS_H_
 
+#include "yas/serialize.hpp"
+#include "yas/std_types.hpp"
+
 #include "Xped/Core/Qbasis.hpp"
 #include "Xped/Core/Tensor.hpp"
 #include "Xped/PEPS/TMatrix.hpp"
@@ -61,6 +64,8 @@ public:
     static constexpr bool ENABLE_AD = ENABLE_AD_;
     typedef typename ScalarTraits<Scalar>::Real RealScalar;
     typedef typename Symmetry::qType qType;
+
+    iPEPS() = default;
 
     iPEPS(const UnitCell& cell, const Qbasis<Symmetry, 1>& auxBasis, const Qbasis<Symmetry, 1>& physBasis);
 
@@ -126,7 +131,13 @@ public:
 
     const TMatrix<qType>& charges() const { return charges_; }
 
-private:
+    template <typename Ar>
+    void serialize(Ar& ar)
+    {
+        ar& YAS_OBJECT_NVP("iPEPS", ("D", D), ("cell", cell_), ("As", As), ("Adags", Adags), ("charges", charges_));
+    }
+
+    // private:
     void init(const TMatrix<Qbasis<Symmetry, 1>>& leftBasis,
               const TMatrix<Qbasis<Symmetry, 1>>& topBasis,
               const TMatrix<Qbasis<Symmetry, 1>>& rightBasis,

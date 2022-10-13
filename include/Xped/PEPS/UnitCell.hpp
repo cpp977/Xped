@@ -3,6 +3,9 @@
 
 #include <vector>
 
+#include "yas/serialize.hpp"
+#include "yas/std_types.hpp"
+
 #include "Xped/PEPS/Pattern.hpp"
 
 namespace Xped {
@@ -21,6 +24,12 @@ struct UnitCell
     std::size_t Ly = 1;
 
     Pattern pattern{};
+
+    template <typename Ar>
+    void serialize(Ar& ar)
+    {
+        ar& YAS_OBJECT_NVP("UnitCell", ("Lx", Lx), ("Ly", Ly), ("pattern", pattern));
+    }
 
     inline std::size_t uniqueSize() const { return pattern.uniqueSize(); }
     inline std::size_t size() const { return Lx * Ly; }

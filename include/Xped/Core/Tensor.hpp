@@ -8,6 +8,9 @@
 
 #include "spdlog/spdlog.h"
 
+#include "yas/serialize.hpp"
+#include "yas/std_types.hpp"
+
 #include "Xped/Util/Macros.hpp"
 
 #include "Xped/Util/Bool.hpp"
@@ -93,25 +96,22 @@ public:
 
     Tensor(const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, Rank>& basis_domain,
            const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, CoRank>& basis_codomain,
-           mpi::XpedWorld& world = mpi::getUniverse())
+           const mpi::XpedWorld& world = mpi::getUniverse())
         : storage_(basis_domain, basis_codomain, world)
-        , world_(&world, mpi::TrivialDeleter<mpi::XpedWorld>{})
     {}
 
-    Tensor(const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, Rank>& basis_domain,
-           const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, CoRank>& basis_codomain,
-           const std::shared_ptr<mpi::XpedWorld>& world)
-        : storage_(basis_domain, basis_codomain, *world)
-        , world_(world)
-    {}
+    // Tensor(const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, Rank>& basis_domain,
+    //        const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, CoRank>& basis_codomain,
+    //        mpi::XpedWorld& world)
+    //     : storage_(basis_domain, basis_codomain, world)
+    // {}
 
     Tensor(const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, Rank>& basis_domain,
            const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, CoRank>& basis_codomain,
            const Scalar* data,
            std::size_t size,
-           const std::shared_ptr<mpi::XpedWorld>& world)
-        : storage_(basis_domain, basis_codomain, data, size, *world)
-        , world_(world)
+           const mpi::XpedWorld& world)
+        : storage_(basis_domain, basis_codomain, data, size, world)
     {}
 
     template <typename OtherDerived>
@@ -149,7 +149,7 @@ public:
     const Storage& storage() const { return storage_; }
     Storage& storage() { return storage_; }
 
-    const std::shared_ptr<mpi::XpedWorld> world() const { return world_; }
+    const mpi::XpedWorld& world() const { return storage_.world(); }
 
     const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, Rank>& uncoupledDomain() const { return storage_.uncoupledDomain(); }
     const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, CoRank>& uncoupledCodomain() const { return storage_.uncoupledCodomain(); }
@@ -218,7 +218,7 @@ public:
 
     static Self Identity(const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, Rank>& basis_domain,
                          const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, CoRank>& basis_codomain,
-                         mpi::XpedWorld& world = mpi::getUniverse())
+                         const mpi::XpedWorld& world = mpi::getUniverse())
     {
         Self out(basis_domain, basis_codomain, world);
         out.setIdentity();
@@ -287,6 +287,9 @@ public:
     template <std::size_t... legs>
     Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy> shiftQN(qType charge) const;
 
+    // template <std::size_t leg>
+    // Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy> shiftQN(qType charge) const;
+
 #if XPED_HAS_NTTP
     template <auto a1, auto a2, std::size_t ResRank, bool TRACK = false, std::size_t OtherRank, std::size_t OtherCoRank, bool ENABLE_AD>
     auto contract(const Tensor<Scalar, OtherRank, OtherCoRank, Symmetry, ENABLE_AD, AllocationPolicy>& other) XPED_CONST
@@ -342,10 +345,14 @@ public:
     const auto cbegin() const { return storage_.cbegin(); }
     const auto cend() const { return storage_.cend(); }
 
+    template <typename Ar>
+    void serialize(Ar& ar)
+    {
+        ar& YAS_OBJECT_NVP("Tensor", ("storage", storage_));
+    }
+
 private:
     Storage storage_;
-
-    std::shared_ptr<mpi::XpedWorld> world_;
 
     template <std::size_t... p_domain, std::size_t... p_codomain>
     Self permute_impl(seq::iseq<std::size_t, p_domain...> pd, seq::iseq<std::size_t, p_codomain...> pc) const;
@@ -358,10 +365,9 @@ template <typename Scalar_, std::size_t Rank, std::size_t CoRank, typename Symme
 template <typename OtherDerived>
 Tensor<Scalar_, Rank, CoRank, Symmetry, false, AllocationPolicy>::Tensor(const TensorBase<OtherDerived>& other)
 {
-    storage_ = Storage(other.derived().uncoupledDomain(), other.derived().uncoupledCodomain(), *other.derived().world());
+    storage_ = Storage(other.derived().uncoupledDomain(), other.derived().uncoupledCodomain(), other.derived().world());
     storage_.reserve(other.derived().sector().size());
     for(std::size_t i = 0; i < other.derived().sector().size(); ++i) { storage_.push_back(other.derived().sector(i), other.derived().block(i)); }
-    world_ = other.derived().world();
 }
 
 template <bool TRACK = false, typename Scalar, std::size_t Rank, std::size_t MiddleRank, std::size_t CoRank, typename Symmetry>

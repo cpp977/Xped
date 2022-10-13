@@ -1,6 +1,9 @@
 #ifndef XPED_TMATRIX_H_
 #define XPED_TMATRIX_H_
 
+#include "yas/serialize.hpp"
+#include "yas/std_types.hpp"
+
 #include "Xped/PEPS/Pattern.hpp"
 
 namespace Xped {
@@ -72,6 +75,12 @@ struct TMatrix
     void setConstant(const Ttype& val) { std::fill(tensors.begin(), tensors.end(), val); }
 
     Ttype sum() const { return std::accumulate(tensors.begin(), tensors.end(), Ttype(0.)); }
+
+    template <typename Ar>
+    void serialize(Ar& ar)
+    {
+        ar& YAS_OBJECT_NVP("TMatrix", ("pattern", pat), ("tensors", tensors), ("is_changed", is_changed), ("name", name));
+    }
 
     Pattern pat;
 

@@ -44,6 +44,7 @@ struct CyclopsVectorLib
 } // namespace Xped
 
 #if defined XPED_USE_EIGEN_VECTOR_LIB
+#    define EIGEN_DENSEBASE_PLUGIN "Xped/Util/EigenPlugins.hpp"
 #    include "Xped/Interfaces/VectorInterface_Eigen_impl.hpp"
 #elif defined XPED_USE_ARRAY_VECTOR_LIB
 #    include "Xped/Interfaces/VectorInterface_Array_impl.hpp"

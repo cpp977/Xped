@@ -28,6 +28,20 @@ struct Optim
     std::size_t max_steps = 200;
     std::size_t min_steps = 10;
 
+    template <typename Ar>
+    void serialize(Ar& ar)
+    {
+        ar& YAS_OBJECT_NVP("OptimOpts",
+                           ("alg", alg),
+                           ("LineSearch", ls),
+                           ("bfgs_scaling", bfgs_scaling),
+                           ("grad_tol", grad_tol),
+                           ("step_tol", step_tol),
+                           ("cost_tol", cost_tol),
+                           ("max_steps", max_steps),
+                           ("min_steps", min_steps));
+    }
+
     inline void info()
     {
         fmt::print("Optimization options:\n");

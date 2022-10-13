@@ -1,6 +1,9 @@
 #ifndef XPED_CTM_SOLVER_HPP_
 #define XPED_CTM_SOLVER_HPP_
 
+#include "yas/serialize.hpp"
+#include "yas/std_types.hpp"
+
 #include "Xped/Core/ScalarTraits.hpp"
 
 #include "Xped/PEPS/CTM.hpp"
@@ -17,6 +20,8 @@ public:
     template <typename Sym>
     using Hamiltonian = TwoSiteObservable<Sym>;
 
+    CTMSolver() = default;
+
     explicit CTMSolver(Opts::CTM opts)
         : opts(opts)
     {
@@ -25,13 +30,22 @@ public:
 
     template <typename HamScalar>
     typename ScalarTraits<Scalar>::Real
-    solve(const std::shared_ptr<iPEPS<Scalar, Symmetry>>& Psi, Scalar* gradient, Hamiltonian<Symmetry>& H, bool CALC_GRAD = true);
+    solve(std::shared_ptr<iPEPS<Scalar, Symmetry>> Psi, Scalar* gradient, Hamiltonian<Symmetry>& H, bool CALC_GRAD = true);
 
     XPED_CONST CTM<Scalar, Symmetry, TRank, false>& getCTM() XPED_CONST { return Jack; }
 
+    void setCTM(XPED_CONST CTM<Scalar, Symmetry, TRank, false>& in) { Jack = in; }
+
+    template <typename Ar>
+    void serialize(Ar& ar)
+    {
+        ar& YAS_OBJECT_NVP("CTMSolver", ("solver", Jack), ("opts", opts), ("REINIT_ENV", REINIT_ENV), ("grad_norm", grad_norm));
+    }
+
+    Opts::CTM opts{};
+
 private:
     CTM<Scalar, Symmetry, TRank> Jack;
-    Opts::CTM opts;
     bool REINIT_ENV = true;
     typename ScalarTraits<Scalar>::Real grad_norm = 1000.;
 };

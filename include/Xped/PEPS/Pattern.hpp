@@ -5,6 +5,9 @@
 #include <string>
 #include <vector>
 
+#include "yas/serialize.hpp"
+#include "yas/std_types.hpp"
+
 #include "tabulate/table.hpp"
 
 namespace Xped {
@@ -35,6 +38,19 @@ struct Pattern
     bool isUnique(const int x, const int y) const;
 
     tabulate::Table print() const;
+
+    template <typename Ar>
+    void serialize(Ar& ar) const
+    {
+        ar& YAS_OBJECT_NVP("Pattern", ("data", data));
+    }
+
+    template <typename Ar>
+    void serialize(Ar& ar)
+    {
+        ar& YAS_OBJECT_NVP("Pattern", ("data", data));
+        init();
+    }
 
     std::map<std::string, std::size_t> label2index;
     std::map<std::size_t, std::size_t> index2unique;

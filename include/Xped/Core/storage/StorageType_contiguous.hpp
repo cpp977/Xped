@@ -1,6 +1,9 @@
 #ifndef XPED_STORAGE_TYPE_CONTIGOUS_HPP_
 #define XPED_STORAGE_TYPE_CONTIGOUS_HPP_
 
+#include "yas/serialize.hpp"
+#include "yas/std_types.hpp"
+
 #include "Xped/Core/Qbasis.hpp"
 #include "Xped/Core/TensorHelper.hpp"
 
@@ -29,10 +32,10 @@ public:
 
     StorageType(const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, Rank> basis_domain,
                 const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, CoRank> basis_codomain,
-                mpi::XpedWorld& world = mpi::getUniverse())
+                const mpi::XpedWorld& world = mpi::getUniverse())
         : m_uncoupled_domain(basis_domain)
         , m_uncoupled_codomain(basis_codomain)
-        , m_world(&world, mpi::TrivialDeleter<mpi::XpedWorld>{})
+        , m_world(world)
     {
         m_domain = internal::build_FusionTree(m_uncoupled_domain);
         m_codomain = internal::build_FusionTree(m_uncoupled_codomain);
@@ -43,10 +46,10 @@ public:
                 const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, CoRank> basis_codomain,
                 const Scalar* data,
                 std::size_t size,
-                mpi::XpedWorld& world = mpi::getUniverse())
+                const mpi::XpedWorld& world = mpi::getUniverse())
         : m_uncoupled_domain(basis_domain)
         , m_uncoupled_codomain(basis_codomain)
-        , m_world(&world, mpi::TrivialDeleter<mpi::XpedWorld>{})
+        , m_world(world)
     {
         m_domain = internal::build_FusionTree(m_uncoupled_domain);
         m_codomain = internal::build_FusionTree(m_uncoupled_codomain);
@@ -163,6 +166,40 @@ public:
         m_sector.clear();
     }
 
+    template <typename Ar>
+    void serialize(Ar& ar) const
+    {
+        ar& YAS_OBJECT_NVP("x_storage",
+                           ("data", m_data),
+                           ("dict", m_dict),
+                           ("sectors", m_sector),
+                           ("uncoupled_domain", m_uncoupled_domain),
+                           ("uncoupled_codomain", m_uncoupled_codomain),
+                           ("domain", m_domain),
+                           ("codomain", m_codomain),
+                           ("world", m_world),
+                           ("offsets", m_offsets));
+    }
+
+    template <typename Ar>
+    void serialize(Ar& ar)
+    {
+        // mpi::XpedWorld tmp_world;
+        ar& YAS_OBJECT_NVP("x_storage",
+                           ("data", m_data),
+                           ("dict", m_dict),
+                           ("sectors", m_sector),
+                           ("uncoupled_domain", m_uncoupled_domain),
+                           ("uncoupled_codomain", m_uncoupled_codomain),
+                           ("domain", m_domain),
+                           ("codomain", m_codomain),
+                           ("world", m_world),
+                           ("offsets", m_offsets));
+        // m_world = std::make_shared<mpi::XpedWorld>(std::move(tmp_world));
+    }
+
+    const mpi::XpedWorld& world() const { return m_world; }
+
 private:
     std::vector<Scalar, typename AllocationPolicy::template Allocator<Scalar>> m_data;
 
@@ -174,7 +211,7 @@ private:
     Qbasis<Symmetry, Rank, AllocationPolicy> m_domain;
     Qbasis<Symmetry, CoRank, AllocationPolicy> m_codomain;
 
-    std::shared_ptr<mpi::XpedWorld> m_world;
+    mpi::XpedWorld m_world;
 
     std::vector<std::size_t, typename AllocationPolicy::template Allocator<std::size_t>> m_offsets;
 

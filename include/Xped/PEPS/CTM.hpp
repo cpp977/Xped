@@ -3,6 +3,9 @@
 
 #include <memory>
 
+#include "yas/serialize.hpp"
+#include "yas/std_types.hpp"
+
 #include "Xped/Core/Tensor.hpp"
 #include "Xped/PEPS/CTMOpts.hpp"
 #include "Xped/PEPS/LinearAlgebra.hpp"
@@ -99,6 +102,8 @@ public:
         , init_m(init)
     {}
 
+    // This is a copy constructor for non-AD CTM (CTM<Scalar, Symmetry, TRank, false>) so it prohibits implicitly declared move operations in this
+    // case...
     CTM(const CTM<Scalar, Symmetry, TRank, false>& other);
 
     void set_A(std::shared_ptr<iPEPS<Scalar, Symmetry, ENABLE_AD>> A_in)
@@ -139,7 +144,29 @@ public:
     const UnitCell& cell() const { return cell_; }
     const std::shared_ptr<iPEPS<Scalar, Symmetry, ENABLE_AD>>& Psi() const { return A; }
 
-private:
+    template <typename Ar>
+    void serialize(Ar& ar)
+    {
+        ar& YAS_OBJECT_NVP("CTM",
+                           ("cell", cell_),
+                           ("chi", chi),
+                           ("HAS_RDM", HAS_RDM),
+                           ("C1s", C1s),
+                           ("C2s", C2s),
+                           ("C3s", C3s),
+                           ("C4s", C4s),
+                           ("T1s", T1s),
+                           ("T2s", T2s),
+                           ("T3s", T3s),
+                           ("T4s", T4s),
+                           // ("Ms", Ms),
+                           ("rho_h", rho_h),
+                           ("rho_v", rho_v),
+                           ("rho1_h", rho1_h),
+                           ("rho1_v", rho1_v));
+    }
+
+    // private:
     std::shared_ptr<iPEPS<Scalar, Symmetry, ENABLE_AD>> A;
     UnitCell cell_;
     std::size_t chi;

@@ -60,6 +60,7 @@ struct CyclopsMatrixLib
 } // namespace Xped
 
 #if defined XPED_USE_EIGEN_MATRIX_LIB
+#    define EIGEN_DENSEBASE_PLUGIN "Xped/Util/EigenPlugins.hpp"
 #    include "Xped/Interfaces/MatrixInterface_Eigen_impl.hpp"
 #elif defined XPED_USE_ARRAY_MATRIX_LIB
 #    include "Xped/Interfaces/MatrixInterface_Array_impl.hpp"

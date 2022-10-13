@@ -1,6 +1,9 @@
 #ifndef XPED_MPI_H_
 #define XPED_MPI_H_
 
+#include "yas/serialize.hpp"
+#include "yas/std_types.hpp"
+
 #ifdef XPED_USE_MPI
 #    include "ctf.hpp"
 namespace Xped::mpi {
@@ -32,6 +35,15 @@ struct XpedWorld
     int rank = 0;
     int np = 1;
     int comm = 1000;
+
+    bool operator==(const XpedWorld& other) const { return comm == other.comm; }
+    // auto operator<=>(const XpedWorld&) const = default;
+
+    template <typename Ar>
+    void serialize(Ar& ar)
+    {
+        ar& YAS_OBJECT_NVP("x_world", ("rank", rank), ("np", np), ("comm", comm));
+    }
 };
 inline XpedWorld universe{};
 inline XpedWorld& getUniverse() { return universe; };

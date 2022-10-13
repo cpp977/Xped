@@ -57,6 +57,7 @@ struct CyclopsTensorLib
 #include "seq/seq.h"
 
 #if defined XPED_USE_EIGEN_TENSOR_LIB
+#    define EIGEN_DENSEBASE_PLUGIN "Xped/Util/EigenPlugins.hpp"
 #    include "Xped/Interfaces/TensorInterface_Eigen_impl.hpp"
 #elif defined XPED_USE_ARRAY_TENSOR_LIB
 #    include "Xped/Interfaces/TensorInterface_Array_impl.hpp"

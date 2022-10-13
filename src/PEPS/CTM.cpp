@@ -25,7 +25,7 @@ CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::CTM(const CTM<Scalar, Symmetry,
     // opts = other.opts;
     HAS_RDM = false;
 
-    A = std::make_shared<iPEPS<double, Symmetry, ENABLE_AD>>(*other.A);
+    if(other.A != nullptr) { A = std::make_shared<iPEPS<double, Symmetry, ENABLE_AD>>(*other.A); }
     C1s = other.C1s;
     C2s = other.C2s;
     C3s = other.C3s;
@@ -37,7 +37,7 @@ CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::CTM(const CTM<Scalar, Symmetry,
 
     if constexpr(TRank == 1) {
         Ms.resize(cell_.pattern);
-        computeMs();
+        if(other.A != nullptr) { computeMs(); }
     }
 }
 
@@ -116,16 +116,20 @@ void CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::init()
             case Opts::CTM_INIT::FROM_A: {
                 auto fuse_ll = Tensor<Scalar, 1, 2, Symmetry, false>::Identity(
                     {{A->ketBasis(x, y, Opts::LEG::LEFT).combine(A->braBasis(x, y, Opts::LEG::LEFT)).forgetHistory()}},
-                    {{A->ketBasis(x, y, Opts::LEG::LEFT), A->braBasis(x, y, Opts::LEG::LEFT)}});
+                    {{A->ketBasis(x, y, Opts::LEG::LEFT), A->braBasis(x, y, Opts::LEG::LEFT)}},
+                    A->As(x, y).world());
                 auto fuse_uu = Tensor<Scalar, 1, 2, Symmetry, false>::Identity(
                     {{A->ketBasis(x, y, Opts::LEG::UP).combine(A->braBasis(x, y, Opts::LEG::UP)).forgetHistory()}},
-                    {{A->ketBasis(x, y, Opts::LEG::UP), A->braBasis(x, y, Opts::LEG::UP)}});
+                    {{A->ketBasis(x, y, Opts::LEG::UP), A->braBasis(x, y, Opts::LEG::UP)}},
+                    A->As(x, y).world());
                 auto fuse_rr = Tensor<Scalar, 2, 1, Symmetry, false>::Identity(
                     {{A->ketBasis(x, y, Opts::LEG::RIGHT), A->braBasis(x, y, Opts::LEG::RIGHT)}},
-                    {{A->ketBasis(x, y, Opts::LEG::RIGHT).combine(A->braBasis(x, y, Opts::LEG::RIGHT)).forgetHistory()}});
+                    {{A->ketBasis(x, y, Opts::LEG::RIGHT).combine(A->braBasis(x, y, Opts::LEG::RIGHT)).forgetHistory()}},
+                    A->As(x, y).world());
                 auto fuse_dd = Tensor<Scalar, 2, 1, Symmetry, false>::Identity(
                     {{A->ketBasis(x, y, Opts::LEG::DOWN), A->braBasis(x, y, Opts::LEG::DOWN)}},
-                    {{A->ketBasis(x, y, Opts::LEG::DOWN).combine(A->braBasis(x, y, Opts::LEG::DOWN)).forgetHistory()}});
+                    {{A->ketBasis(x, y, Opts::LEG::DOWN).combine(A->braBasis(x, y, Opts::LEG::DOWN)).forgetHistory()}},
+                    A->As(x, y).world());
 
                 C1s[pos] = A->As[pos]
                                .template contract<std::array{1, 2, -1, -2, 3}, std::array{1, 2, 3, -3, -4}, 2>(A->Adags[pos].twist(3).twist(4))
@@ -202,16 +206,20 @@ void CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::computeMs()
 
             auto fuse_ll = Tensor<Scalar, 1, 2, Symmetry, false>::Identity(
                 {{A->ketBasis(x, y, Opts::LEG::LEFT).combine(A->braBasis(x, y, Opts::LEG::LEFT)).forgetHistory()}},
-                {{A->ketBasis(x, y, Opts::LEG::LEFT), A->braBasis(x, y, Opts::LEG::LEFT)}});
+                {{A->ketBasis(x, y, Opts::LEG::LEFT), A->braBasis(x, y, Opts::LEG::LEFT)}},
+                A->As(x, y).world());
             auto fuse_tt = Tensor<Scalar, 1, 2, Symmetry, false>::Identity(
                 {{A->ketBasis(x, y, Opts::LEG::UP).combine(A->braBasis(x, y, Opts::LEG::UP)).forgetHistory()}},
-                {{A->ketBasis(x, y, Opts::LEG::UP), A->braBasis(x, y, Opts::LEG::UP)}});
+                {{A->ketBasis(x, y, Opts::LEG::UP), A->braBasis(x, y, Opts::LEG::UP)}},
+                A->As(x, y).world());
             auto fuse_rr = Tensor<Scalar, 2, 1, Symmetry, false>::Identity(
                 {{A->ketBasis(x, y, Opts::LEG::RIGHT), A->braBasis(x, y, Opts::LEG::RIGHT)}},
-                {{A->ketBasis(x, y, Opts::LEG::RIGHT).combine(A->braBasis(x, y, Opts::LEG::RIGHT)).forgetHistory()}});
+                {{A->ketBasis(x, y, Opts::LEG::RIGHT).combine(A->braBasis(x, y, Opts::LEG::RIGHT)).forgetHistory()}},
+                A->As(x, y).world());
             auto fuse_dd = Tensor<Scalar, 2, 1, Symmetry, false>::Identity(
                 {{A->ketBasis(x, y, Opts::LEG::DOWN), A->braBasis(x, y, Opts::LEG::DOWN)}},
-                {{A->ketBasis(x, y, Opts::LEG::DOWN).combine(A->braBasis(x, y, Opts::LEG::DOWN)).forgetHistory()}});
+                {{A->ketBasis(x, y, Opts::LEG::DOWN).combine(A->braBasis(x, y, Opts::LEG::DOWN)).forgetHistory()}},
+                A->As(x, y).world());
             Ms[pos] = A->As[pos]
                           .template contract<std::array{-1, -2, -3, -4, 1}, std::array{-5, -6, 1, -7, -8}, 8, TRACK>(A->Adags[pos].twist(3).twist(4))
                           .template contract<std::array{1, -1, -2, -3, 2, -4, -5, -6}, std::array{-7, 1, 2}, 6, TRACK>(fuse_ll.twist(1).twist(2))
@@ -362,12 +370,12 @@ void CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::computeRDM_h()
                 auto get_fuse = [this](int x, int y, Opts::LEG leg) {
                     return Tensor<Scalar, 2, 1, Symmetry, false>::Identity({{A->ketBasis(x, y, leg), A->braBasis(x, y, leg)}},
                                                                            {{A->ketBasis(x, y, leg).combine(A->braBasis(x, y, leg)).forgetHistory()}},
-                                                                           *A->As(x, y).world());
+                                                                           A->As(x, y).world());
                 };
                 auto get_split = [this](int x, int y, Opts::LEG leg) {
                     return Tensor<Scalar, 1, 2, Symmetry, false>::Identity({{A->ketBasis(x, y, leg).combine(A->braBasis(x, y, leg)).forgetHistory()}},
                                                                            {{A->ketBasis(x, y, leg), A->braBasis(x, y, leg)}},
-                                                                           *A->As(x, y).world());
+                                                                           A->As(x, y).world());
                 };
 
                 auto C1T1 = C1s(x - 1, y - 1).template contract<std::array{-1, 1}, std::array{1, -2, -3}, 1, TRACK>(T1s(x, y - 1));
@@ -403,7 +411,7 @@ void CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::computeRDM_h()
                 rho_h(x, y) = left_half.template contract<std::array{1, 2, -3, 3, -1, 4}, std::array{2, -4, 1, 3, 4, -2}, 2, TRACK>(right_half);
             }
             auto Id2 =
-                Tensor<Scalar, 2, 2, Symmetry, false>::Identity(rho_h(x, y).uncoupledCodomain(), rho_h(x, y).uncoupledDomain(), *rho_h(x, y).world());
+                Tensor<Scalar, 2, 2, Symmetry, false>::Identity(rho_h(x, y).uncoupledCodomain(), rho_h(x, y).uncoupledDomain(), rho_h(x, y).world());
             auto norm = rho_h(x, y)
                             .template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0, TRACK>(Id2.twist(0).twist(1))
                             .template trace<TRACK>();
@@ -412,7 +420,7 @@ void CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::computeRDM_h()
             // rho_h(x, y).print(std::cout, true);
             // std::cout << std::endl;
             auto Id = Tensor<Scalar, 1, 1, Symmetry, false>::Identity(
-                {{rho_h(x, y).uncoupledCodomain()[1]}}, {{rho_h(x, y).uncoupledDomain()[1]}}, *rho_h(x, y).world());
+                {{rho_h(x, y).uncoupledCodomain()[1]}}, {{rho_h(x, y).uncoupledDomain()[1]}}, rho_h(x, y).world());
             rho1_h(x, y) = rho_h(x, y).template contract<std::array{-1, 1, -2, 2}, std::array{2, 1}, 1>(Id.twist(0));
             rho1_h(x, y) = operator*<TRACK>(rho1_h(x, y), (1. / rho1_h(x, y).template twist<TRACK>(0).template trace<TRACK>()));
             // rho1_h(x, y).print(std::cout, true);
@@ -457,12 +465,12 @@ void CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::computeRDM_v()
                 auto get_fuse = [this](int x, int y, Opts::LEG leg) {
                     return Tensor<Scalar, 2, 1, Symmetry, false>::Identity({{A->ketBasis(x, y, leg), A->braBasis(x, y, leg)}},
                                                                            {{A->ketBasis(x, y, leg).combine(A->braBasis(x, y, leg)).forgetHistory()}},
-                                                                           *A->As(x, y).world());
+                                                                           A->As(x, y).world());
                 };
                 auto get_split = [this](int x, int y, Opts::LEG leg) {
                     return Tensor<Scalar, 1, 2, Symmetry, false>::Identity({{A->ketBasis(x, y, leg).combine(A->braBasis(x, y, leg)).forgetHistory()}},
                                                                            {{A->ketBasis(x, y, leg), A->braBasis(x, y, leg)}},
-                                                                           *A->As(x, y).world());
+                                                                           A->As(x, y).world());
                 };
 
                 auto C1T1 = C1s(x - 1, y - 1).template contract<std::array{-1, 1}, std::array{1, -2, -3}, 1, TRACK>(T1s(x, y - 1));
@@ -501,7 +509,7 @@ void CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::computeRDM_v()
                 rho_v(x, y) = upper_half.template contract<std::array{1, 2, -3, -1, 3, 4}, std::array{2, -4, 1, 4, 3, -2}, 2, TRACK>(lower_half);
             }
             auto Id2 =
-                Tensor<Scalar, 2, 2, Symmetry, false>::Identity(rho_v(x, y).uncoupledCodomain(), rho_v(x, y).uncoupledDomain(), *rho_v(x, y).world());
+                Tensor<Scalar, 2, 2, Symmetry, false>::Identity(rho_v(x, y).uncoupledCodomain(), rho_v(x, y).uncoupledDomain(), rho_v(x, y).world());
             auto norm = rho_v(x, y)
                             .template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0, TRACK>(Id2.twist(0).twist(1))
                             .template trace<TRACK>();
@@ -511,7 +519,7 @@ void CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::computeRDM_v()
             // rho_v(x, y).print(std::cout, true);
             // std::cout << std::endl;
             auto Id = Tensor<Scalar, 1, 1, Symmetry, false>::Identity(
-                {{rho_v(x, y).uncoupledCodomain()[1]}}, {{rho_v(x, y).uncoupledDomain()[1]}}, *rho_v(x, y).world());
+                {{rho_v(x, y).uncoupledCodomain()[1]}}, {{rho_v(x, y).uncoupledDomain()[1]}}, rho_v(x, y).world());
             rho1_v(x, y) = rho_v(x, y).template contract<std::array{-1, 1, -2, 2}, std::array{2, 1}, 1>(Id.twist(0));
             rho1_v(x, y) = operator*<TRACK>(rho1_v(x, y), (1. / rho1_v(x, y).template twist<TRACK>(0).template trace<TRACK>()));
             // rho1_v(x, y).print(std::cout, true);

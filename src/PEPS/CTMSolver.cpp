@@ -8,7 +8,7 @@ namespace Xped {
 
 template <typename Scalar, typename Symmetry, Opts::CTMCheckpoint CPOpts, std::size_t TRank>
 template <typename HamScalar>
-typename ScalarTraits<Scalar>::Real CTMSolver<Scalar, Symmetry, CPOpts, TRank>::solve(const std::shared_ptr<iPEPS<Scalar, Symmetry>>& Psi,
+typename ScalarTraits<Scalar>::Real CTMSolver<Scalar, Symmetry, CPOpts, TRank>::solve(std::shared_ptr<iPEPS<Scalar, Symmetry>> Psi,
                                                                                       Scalar* gradient,
                                                                                       Hamiltonian<Symmetry>& H,
                                                                                       bool CALC_GRAD)
@@ -20,6 +20,7 @@ typename ScalarTraits<Scalar>::Real CTMSolver<Scalar, Symmetry, CPOpts, TRank>::
         Jack = CTM<Scalar, Symmetry, TRank, false>(Psi, opts.chi);
         Jack.init();
     }
+
     double E = std::numeric_limits<Scalar>::quiet_NaN();
     double Eprev = std::numeric_limits<Scalar>::quiet_NaN();
     double Eprevprev = std::numeric_limits<Scalar>::quiet_NaN();

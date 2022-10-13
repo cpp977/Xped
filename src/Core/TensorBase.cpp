@@ -189,6 +189,7 @@ TensorBase<Derived>::operator*(XPED_CONST TensorBase<OtherDerived>& other) XPED_
     static_assert(CoRank == TensorTraits<OtherDerived_>::Rank);
     auto derived_ref = derived();
     auto other_derived_ref = other.derived();
+    // fmt::print("world={}, other.world={}\n", derived_ref.world()->comm, other_derived_ref.world()->comm);
     assert(derived_ref.world() == other_derived_ref.world());
     assert(derived_ref.coupledCodomain() == other_derived_ref.coupledDomain());
 

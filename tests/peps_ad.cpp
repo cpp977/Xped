@@ -201,12 +201,12 @@ int main(int argc, char* argv[])
         phys_basis.setConstant(ham->data_h[0].uncoupledDomain()[0]);
         auto Psi = std::make_shared<Xped::iPEPS<double, Symmetry, false>>(c, left_aux, top_aux, right_aux, bottom_aux, phys_basis, charges);
         Psi->setRandom();
-        Psi->info();
+
         Xped::Opts::Optim o_opts = Xped::Opts::optim_from_toml(data.at("optim"));
         Xped::Opts::CTM c_opts = Xped::Opts::ctm_from_toml(data.at("ctm"));
-        constexpr Xped::Opts::CTMCheckpoint cp_opts{.MOVE = true, .CORNER = true};
-        constexpr std::size_t TRank = 2;
-        Xped::iPEPSSolverAD<Scalar, Symmetry, cp_opts, TRank> Jack(o_opts, c_opts);
+        constexpr Xped::Opts::CTMCheckpoint cp_opts{.MOVE = false, .CORNER = false};
+        constexpr std::size_t TRank = 1;
+        Xped::iPEPSSolverAD<Scalar, Symmetry, cp_opts, TRank> Jack(o_opts, c_opts, Psi, std::move(ham));
 
         // Xped::FermionBase<Symmetry> F(1);
         // Xped::OneSiteObservable<Symmetry> n(c.pattern);
@@ -291,8 +291,14 @@ int main(int argc, char* argv[])
         //     // auto o_d = avg(env, d);
         //     for(auto i = 0ul; i < o_n.size(); ++i) { fmt::print("n={}\n", o_n[i]); }
         // };
-        Jack.solve<double>(Psi, *ham);
+        Jack.solve<double>();
+        constexpr std::size_t flags = yas::file /*IO type*/ | yas::binary; /*IO format*/
+        yas::save<flags>("heisenberg.xped", Jack);
+        Xped::iPEPSSolverAD<Scalar, Symmetry, cp_opts, TRank> Jim;
+        fmt::print("Load solver state back in.\n");
+        yas::load<flags>("heisenberg.xped", Jim);
 
+        Jim.solve<double>();
 #ifdef XPED_CACHE_PERMUTE_OUTPUT
         std::cout << "total hits=" << tree_cache</*shift*/ 0, /*Rank*/ 4, /*CoRank*/ 3, Symmetry>.cache.stats().total_hits()
                   << endl; // Hits for any key

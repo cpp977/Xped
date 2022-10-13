@@ -96,7 +96,7 @@ public:
     inline const Qbasis<Symmetry, Rank, AllocationPolicy>& coupledDomain() const { return val().coupledDomain(); }
     inline const Qbasis<Symmetry, CoRank, AllocationPolicy>& coupledCodomain() const { return val().coupledCodomain(); }
 
-    const std::shared_ptr<mpi::XpedWorld> world() const { return val().world(); }
+    const mpi::XpedWorld& world() const { return val().world(); }
 
     inline auto begin() const { return val_op().begin(); }
     inline auto end() const { return val_op().end(); }
@@ -228,7 +228,7 @@ public:
                                 S_b.rows(),
                                 S_b.cols());
 
-                    auto F_inv = PlainInterface::construct<Scalar>(PlainInterface::rows(S_b), PlainInterface::cols(S_b), *S.val().world());
+                    auto F_inv = PlainInterface::construct<Scalar>(PlainInterface::rows(S_b), PlainInterface::cols(S_b), S.val().world());
                     PlainInterface::vec_diff(S_b.diagonal().eval(), F_inv);
                     auto F =
                         PlainInterface::unaryFunc<Scalar>(F_inv, [](Scalar d) { return (std::abs(d) < 1.e-12) ? d / (d * d + 1.e-12) : 1. / d; });
@@ -236,7 +236,7 @@ public:
                     PlainInterface::MType<Scalar> tmp = S_b.diagonal().asDiagonal().inverse();
                     // fmt::print("S_inv={}\n", tmp.diagonal().transpose());
                     // fmt::print("F=\n{}\n", F);
-                    auto G_inv = PlainInterface::construct<Scalar>(PlainInterface::rows(S_b), PlainInterface::cols(S_b), *S.val().world());
+                    auto G_inv = PlainInterface::construct<Scalar>(PlainInterface::rows(S_b), PlainInterface::cols(S_b), S.val().world());
                     PlainInterface::vec_add(S_b.diagonal().eval(), G_inv);
                     PlainInterface::MType<Scalar> G =
                         PlainInterface::unaryFunc<Scalar>(G_inv, [](Scalar d) { return (d < 1.e-12) ? d / (d * d + 1.e-12) : 1. / d; });
@@ -249,13 +249,13 @@ public:
                     curr.adj().block(i) += U_b * (Su + Sv + S.adj().block(j)) * Vdag_b;
                     // fmt::print("dA=\n{}\n", curr.adj().block(i));
                     if(U_b.rows() > S_b.rows()) {
-                        curr.adj().block(i) += (PlainInterface::Identity<Scalar>(U_b.rows(), U_b.rows(), *U.val().world()) - U_b * U_b.adjoint()) *
+                        curr.adj().block(i) += (PlainInterface::Identity<Scalar>(U_b.rows(), U_b.rows(), U.val().world()) - U_b * U_b.adjoint()) *
                                                U.adj().block(j) * S_b.diagonal().asDiagonal().inverse() * Vdag_b;
                     }
                     if(Vdag_b.cols() > S_b.rows()) {
                         curr.adj().block(i) +=
                             U_b * S_b.diagonal().asDiagonal().inverse() * Vdag.adj().block(j) *
-                            (PlainInterface::Identity<Scalar>(Vdag_b.cols(), Vdag_b.cols(), *Vdag.val().world()) - Vdag_b.adjoint() * Vdag_b);
+                            (PlainInterface::Identity<Scalar>(Vdag_b.cols(), Vdag_b.cols(), Vdag.val().world()) - Vdag_b.adjoint() * Vdag_b);
                     }
                     // fmt::print("max dA={}\n", curr.adj().block(i).maxCoeff());
                 }
@@ -308,7 +308,7 @@ public:
             Scalar tmp = val().abs().maxCoeff(max_block, max_row, max_col);
             stan::math::var_value<Scalar> res(tmp);
             stan::math::reverse_pass_callback([curr = *this, res, max_block, max_row, max_col]() mutable {
-                Tensor<Scalar, Rank, CoRank, Symmetry, false> Zero(curr.uncoupledDomain(), curr.uncoupledCodomain(), *curr.adj().world());
+                Tensor<Scalar, Rank, CoRank, Symmetry, false> Zero(curr.uncoupledDomain(), curr.uncoupledCodomain(), curr.adj().world());
                 Zero.setZero();
                 Zero.block(max_block)(max_row, max_col) = std::signbit(curr.val().block(max_block)(max_row, max_col)) ? -1. : 1.;
                 curr.adj() += Zero * res.adj();
@@ -328,7 +328,7 @@ public:
             stan::math::var_value<Scalar> res(tmp);
             stan::math::reverse_pass_callback([curr = *this, res]() mutable {
                 auto Id =
-                    Tensor<Scalar, Rank, CoRank, Symmetry, false>::Identity(curr.uncoupledDomain(), curr.uncoupledCodomain(), *curr.adj().world());
+                    Tensor<Scalar, Rank, CoRank, Symmetry, false>::Identity(curr.uncoupledDomain(), curr.uncoupledCodomain(), curr.adj().world());
                 curr.adj() += Id * res.adj();
                 SPDLOG_WARN("reverse trace of {}, input adj norm={}, output adj norm={}", curr.name(), res.adj(), curr.adj().norm());
             });

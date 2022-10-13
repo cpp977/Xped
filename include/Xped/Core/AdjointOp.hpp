@@ -49,7 +49,7 @@ public:
 
     inline const auto dict() const { return refxpr_.dict(); }
 
-    inline const std::shared_ptr<mpi::XpedWorld> world() const { return refxpr_.world(); }
+    inline const mpi::XpedWorld& world() const { return refxpr_.world(); }
 
     // inline const std::array<Qbasis<Symmetry, 1, Allocator>, XprType::CoRank> uncoupledDomain() const { return refxpr_.uncoupledCodomain(); }
     // inline const std::array<Qbasis<Symmetry, 1, Allocator>, XprType::Rank> uncoupledCodomain() const { return refxpr_.uncoupledDomain(); }

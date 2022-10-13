@@ -48,7 +48,7 @@ public:
 
     inline const auto dict() const { return refxpr_.dict(); }
 
-    inline std::shared_ptr<mpi::XpedWorld> world() const { return refxpr_.world(); }
+    inline const mpi::XpedWorld& world() const { return refxpr_.world(); }
 
     inline const auto uncoupledDomain() const { return refxpr_.uncoupledDomain(); }
     inline const auto uncoupledCodomain() const { return refxpr_.uncoupledCodomain(); }

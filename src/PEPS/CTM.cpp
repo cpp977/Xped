@@ -13,6 +13,8 @@
 #include "Xped/Symmetry/U1.hpp"
 #include "Xped/Util/Bool.hpp"
 
+#include "Xped/AD/reverse_pass_callback_alloc.hpp"
+
 namespace Xped {
 
 template <typename Scalar, typename Symmetry, std::size_t TRank, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
@@ -256,7 +258,7 @@ void CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::grow_all()
     bottom_move<TRACK_INNER>();
 
     if constexpr(TRACK and CP) {
-        stan::math::reverse_pass_callback([curr_ = curr, res = *this]() mutable {
+        Xped::reverse_pass_callback_alloc([curr_ = curr, res = *this]() mutable {
             stan::math::nested_rev_autodiff nested;
             curr_.template grow_all<TRACK, false>();
             for(auto i = 0ul; i < curr_.cell().uniqueSize(); ++i) {
@@ -291,7 +293,7 @@ void CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::computeRDM()
 template <typename Scalar, typename Symmetry, std::size_t TRank, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
 void CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::info() const
 {
-    fmt::print("\tCTM(χ={}, {}): UnitCell=({}x{}), init={}\n", chi, Symmetry::name(), cell_.Lx, cell_.Ly, init_m);
+    fmt::print("  CTM(χ={}, {}): UnitCell=({}x{}), init={}\n", chi, Symmetry::name(), cell_.Lx, cell_.Ly, init_m);
     // std::cout << "CTM(χ=" << chi << "): UnitCell=(" << cell_.Lx << "x" << cell_.Ly << ")"
     //           << ", init=" << mode_string << std::endl;
     // std::cout << "Tensors:" << std::endl;
@@ -581,7 +583,7 @@ void CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::left_move()
         }
     }
     if constexpr(TRACK and CP) {
-        stan::math::reverse_pass_callback([curr_ = curr, res = *this]() mutable {
+        Xped::reverse_pass_callback_alloc([curr_ = curr, res = *this]() mutable {
             stan::math::nested_rev_autodiff nested;
             curr_.template left_move<TRACK, false>();
             for(auto i = 0ul; i < curr_.cell().uniqueSize(); ++i) {
@@ -646,7 +648,7 @@ void CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::right_move()
         }
     }
     if constexpr(TRACK and CP) {
-        stan::math::reverse_pass_callback([curr_ = curr, res = *this]() mutable {
+        Xped::reverse_pass_callback_alloc([curr_ = curr, res = *this]() mutable {
             stan::math::nested_rev_autodiff nested;
             curr_.template right_move<TRACK, false>();
             for(auto i = 0ul; i < curr_.cell().uniqueSize(); ++i) {
@@ -711,7 +713,7 @@ void CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::top_move()
         }
     }
     if constexpr(TRACK and CP) {
-        stan::math::reverse_pass_callback([curr_ = curr, res = *this]() mutable {
+        Xped::reverse_pass_callback_alloc([curr_ = curr, res = *this]() mutable {
             stan::math::nested_rev_autodiff nested;
             curr_.template top_move<TRACK, false>();
             for(auto i = 0ul; i < curr_.cell().uniqueSize(); ++i) {
@@ -776,7 +778,7 @@ void CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::bottom_move()
         }
     }
     if constexpr(TRACK and CP) {
-        stan::math::reverse_pass_callback([curr_ = curr, res = *this]() mutable {
+        Xped::reverse_pass_callback_alloc([curr_ = curr, res = *this]() mutable {
             stan::math::nested_rev_autodiff nested;
             curr_.template bottom_move<TRACK, false>();
             for(auto i = 0ul; i < curr_.cell().uniqueSize(); ++i) {
@@ -932,7 +934,7 @@ CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::get_projectors(const int x, con
     }
     }
     if constexpr(TRACK and CP) {
-        stan::math::reverse_pass_callback([P1_ = P1, P2_ = P2, curr = *this, x, y, dir]() mutable {
+        Xped::reverse_pass_callback_alloc([P1_ = P1, P2_ = P2, curr = *this, x, y, dir]() mutable {
             stan::math::nested_rev_autodiff nested;
             auto [P1__, P2__] = curr.template contractCorner<TRACK, false>(x, y, dir);
             P1__.adj() = P1_.adj();
@@ -1012,7 +1014,7 @@ CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::renormalize_left(const int x,
     T4_new = NORMALIZE ? T4_new_tmp * (1. / T4_new_tmp.maxNorm()) : T4_new_tmp;
 
     if constexpr(TRACK and CP) {
-        stan::math::reverse_pass_callback([C1_new, C4_new, T4_new, P1_ = P1, P2_ = P2, curr = *this, x, y, NORMALIZE]() mutable {
+        Xped::reverse_pass_callback_alloc([C1_new, C4_new, T4_new, P1_ = P1, P2_ = P2, curr = *this, x, y, NORMALIZE]() mutable {
             stan::math::nested_rev_autodiff nested;
             auto [C1_new_, T4_new_, C4_new_] = curr.template renormalize_left<TRACK, false>(x, y, P1_, P2_, NORMALIZE);
             C1_new_.adj() = C1_new.adj();
@@ -1082,7 +1084,7 @@ CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::renormalize_right(const int x,
     T2_new = NORMALIZE ? T2_new_tmp * (1. / T2_new_tmp.maxNorm()) : T2_new_tmp;
 
     if constexpr(TRACK and CP) {
-        stan::math::reverse_pass_callback([C2_new, C3_new, T2_new, P1_ = P1, P2_ = P2, curr = *this, x, y, NORMALIZE]() mutable {
+        Xped::reverse_pass_callback_alloc([C2_new, C3_new, T2_new, P1_ = P1, P2_ = P2, curr = *this, x, y, NORMALIZE]() mutable {
             stan::math::nested_rev_autodiff nested;
             auto [C2_new_, T2_new_, C3_new_] = curr.template renormalize_right<TRACK, false>(x, y, P1_, P2_, NORMALIZE);
             C2_new_.adj() = C2_new.adj();
@@ -1148,7 +1150,7 @@ CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::renormalize_top(const int x,
     T1_new = NORMALIZE ? T1_new_tmp * (1. / T1_new_tmp.maxNorm()) : T1_new_tmp;
 
     if constexpr(TRACK and CP) {
-        stan::math::reverse_pass_callback([C1_new, C2_new, T1_new, P1_ = P1, P2_ = P2, curr = *this, x, y, NORMALIZE]() mutable {
+        Xped::reverse_pass_callback_alloc([C1_new, C2_new, T1_new, P1_ = P1, P2_ = P2, curr = *this, x, y, NORMALIZE]() mutable {
             stan::math::nested_rev_autodiff nested;
             auto [C1_new_, T1_new_, C2_new_] = curr.template renormalize_top<TRACK, false>(x, y, P1_, P2_, NORMALIZE);
             C1_new_.adj() = C1_new.adj();
@@ -1232,7 +1234,7 @@ CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::renormalize_bottom(const int x,
     T3_new = NORMALIZE ? T3_new_tmp * (1. / T3_new_tmp.maxNorm()) : T3_new_tmp;
 
     if constexpr(TRACK and CP) {
-        stan::math::reverse_pass_callback([C3_new, C4_new, T3_new, P1_ = P1, P2_ = P2, curr = *this, x, y, NORMALIZE]() mutable {
+        Xped::reverse_pass_callback_alloc([C3_new, C4_new, T3_new, P1_ = P1, P2_ = P2, curr = *this, x, y, NORMALIZE]() mutable {
             stan::math::nested_rev_autodiff nested;
             auto [C4_new_, T3_new_, C3_new_] = curr.template renormalize_bottom<TRACK, false>(x, y, P1_, P2_, NORMALIZE);
             C3_new_.adj() = C3_new.adj();
@@ -1345,7 +1347,7 @@ CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::contractCorner(const int x, con
     }
 
     if constexpr(TRACK and CP) {
-        stan::math::reverse_pass_callback([Q, curr = *this, x, y, corner]() mutable {
+        Xped::reverse_pass_callback_alloc([Q, curr = *this, x, y, corner]() mutable {
             stan::math::nested_rev_autodiff nested;
             auto Q_ = curr.template contractCorner<TRACK, false>(x, y, corner);
             Q_.adj() = Q.adj();

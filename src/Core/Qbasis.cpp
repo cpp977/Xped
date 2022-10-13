@@ -290,9 +290,9 @@ void Qbasis<Symmetry, depth, AllocationPolicy>::truncate(const std::unordered_se
 }
 
 template <typename Symmetry, std::size_t depth, typename AllocationPolicy>
-void Qbasis<Symmetry, depth, AllocationPolicy>::sort()
+std::vector<std::size_t> Qbasis<Symmetry, depth, AllocationPolicy>::sort()
 {
-    if(data_.size() < 2) { return; }
+    if(data_.size() < 2) { return std::vector<std::size_t>({0}); }
     std::vector<std::size_t> index_sort(data_.size());
     std::iota(index_sort.begin(), index_sort.end(), 0);
     std::sort(index_sort.begin(), index_sort.end(), [&](std::size_t n1, std::size_t n2) {
@@ -313,6 +313,7 @@ void Qbasis<Symmetry, depth, AllocationPolicy>::sort()
     }
     data_ = new_data_;
     IS_SORTED_ = true;
+    return index_sort;
 }
 
 template <typename Symmetry, std::size_t depth, typename AllocationPolicy>
@@ -360,15 +361,15 @@ Qbasis<Symmetry, depth, AllocationPolicy> Qbasis<Symmetry, depth, AllocationPoli
 }
 
 template <typename Symmetry, std::size_t depth, typename AllocationPolicy>
-Qbasis<Symmetry, depth, AllocationPolicy> Qbasis<Symmetry, depth, AllocationPolicy>::shift(qType qshift) const
+std::pair<std::vector<std::size_t>, Qbasis<Symmetry, depth, AllocationPolicy>> Qbasis<Symmetry, depth, AllocationPolicy>::shift(qType qshift) const
 {
     static_assert(depth == 1, "shift() in Qbasis is only for bases without depth.");
-    if(qshift == Symmetry::qvacuum()) { return *this; }
-    assert(not Symmetry::ANY_NON_ABELIAN and "Nontrivial shifts onl for Abelian symmetries.");
+    if(qshift == Symmetry::qvacuum()) { return std::make_pair(std::vector{0ul}, *this); }
+    assert(not Symmetry::ANY_NON_ABELIAN and "Nontrivial shifts only for Abelian symmetries.");
     Qbasis<Symmetry, depth, AllocationPolicy> out;
     for(const auto& [q, dim, plain] : data_) { out.push_back(Symmetry::reduceSilent(q, qshift)[0], plain.dim()); }
-    out.sort();
-    return out;
+    auto idx_sort = out.sort();
+    return std::make_pair(idx_sort, out);
 }
 
 template <typename Symmetry, std::size_t depth, typename AllocationPolicy>

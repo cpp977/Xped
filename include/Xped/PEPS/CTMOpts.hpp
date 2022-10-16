@@ -3,6 +3,9 @@
 
 #include "toml.hpp"
 
+#include "fmt/color.h"
+#include "fmt/core.h"
+
 #include <boost/describe.hpp>
 
 #include "Xped/PEPS/UnitCell.hpp"
@@ -46,9 +49,9 @@ struct CTM
 
     inline void info()
     {
-        fmt::print("CTM options:\n");
+        fmt::print("{}:\n", fmt::styled("CTM options", fmt::emphasis::bold));
         fmt::print("  {:<30} {}\n", "• chi:", chi);
-        fmt::print("  {:<30} {}\n", "• init:", init);
+        fmt::print("  {:<30} {}\n", "• init:", fmt::streamed(init));
         fmt::print("  {:<30} {}\n", "• maximum pre-steps:", max_presteps);
         fmt::print("  {:<30} {}\n", "• tracked steps:", track_steps);
         fmt::print("  {:<30} {}\n", "• energy tolerance:", tol_E);
@@ -80,7 +83,7 @@ struct CTMCheckpoint
 
     void info() const
     {
-        fmt::print("CTM checkpoint settings:\n");
+        fmt::print("{}:\n", fmt::styled("Checkpointing settings", fmt::emphasis::bold));
         fmt::print("  {:<30} {}\n", "• grow_all:", GROW_ALL);
         fmt::print("  {:<30} {}\n", "• move:", MOVE);
         fmt::print("  {:<30} {}\n", "• corner contraction:", CORNER);

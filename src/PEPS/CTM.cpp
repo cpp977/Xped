@@ -293,7 +293,7 @@ void CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::computeRDM()
 template <typename Scalar, typename Symmetry, std::size_t TRank, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
 void CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::info() const
 {
-    fmt::print("  CTM(χ={}, {}): UnitCell=({}x{}), init={}\n", chi, Symmetry::name(), cell_.Lx, cell_.Ly, init_m);
+    fmt::print("  CTM(χ={}, {}): UnitCell=({}x{}), init={}\n", chi, Symmetry::name(), cell_.Lx, cell_.Ly, fmt::streamed(init_m));
     // std::cout << "CTM(χ=" << chi << "): UnitCell=(" << cell_.Lx << "x" << cell_.Ly << ")"
     //           << ", init=" << mode_string << std::endl;
     // std::cout << "Tensors:" << std::endl;

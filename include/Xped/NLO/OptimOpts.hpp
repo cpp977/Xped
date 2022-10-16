@@ -3,6 +3,8 @@
 
 #include <boost/describe.hpp>
 
+#include "fmt/color.h"
+
 #include "Xped/Util/EnumStream.hpp"
 #include "Xped/Util/TomlHelpers.hpp"
 
@@ -28,6 +30,11 @@ struct Optim
     std::size_t max_steps = 200;
     std::size_t min_steps = 10;
 
+    bool resume = false;
+    std::string load = "";
+
+    std::size_t save_period = 0;
+
     template <typename Ar>
     void serialize(Ar& ar)
     {
@@ -39,20 +46,26 @@ struct Optim
                            ("step_tol", step_tol),
                            ("cost_tol", cost_tol),
                            ("max_steps", max_steps),
-                           ("min_steps", min_steps));
+                           ("min_steps", min_steps),
+                           ("resume", resume),
+                           ("load", load),
+                           ("save_period", save_period));
     }
 
     inline void info()
     {
-        fmt::print("Optimization options:\n");
-        fmt::print("  {:<30} {}\n", "• Algorithm:", alg);
-        fmt::print("  {:<30} {}\n", "• Linesearch:", ls);
+        fmt::print("{}:\n", fmt::styled("Optimization options", fmt::emphasis::bold));
+        fmt::print("  {:<30} {}\n", "• Algorithm:", fmt::streamed(alg));
+        fmt::print("  {:<30} {}\n", "• Linesearch:", fmt::streamed(ls));
         fmt::print("  {:<30} {}\n", "• maximum steps:", max_steps);
         fmt::print("  {:<30} {}\n", "• minimum steps:", min_steps);
         fmt::print("  {:<30} {}\n", "• gradient tolerance:", grad_tol);
         fmt::print("  {:<30} {}\n", "• cost tolerance:", cost_tol);
         fmt::print("  {:<30} {}\n", "• step tolerance:", step_tol);
         fmt::print("  {:<30} {}\n", "• bfgs scaling:", bfgs_scaling);
+        fmt::print("  {:<30} {}\n", "• resume:", resume);
+        if(load.size() > 0) { fmt::print("  {:<30} {}\n", "• load from:", load); }
+        fmt::print("  {:<30} {}\n", "• save period:", save_period);
     }
 };
 
@@ -66,8 +79,10 @@ inline Optim optim_from_toml(const toml::value& t)
     res.cost_tol = t.contains("cost_tol") ? t.at("cost_tol").as_floating() : res.cost_tol;
     res.max_steps = t.contains("max_steps") ? t.at("max_steps").as_integer() : res.max_steps;
     res.min_steps = t.contains("min_steps") ? t.at("min_steps").as_integer() : res.min_steps;
-
     res.bfgs_scaling = t.contains("bfgs_scaling") ? t.at("bfgs_scaling").as_boolean() : res.bfgs_scaling;
+    res.resume = t.contains("resume") ? t.at("resume").as_boolean() : res.resume;
+    res.load = t.contains("load") ? t.at("load").as_string() : res.load;
+    res.save_period = t.contains("save_period") ? t.at("save_period").as_integer() : res.save_period;
     return res;
 }
 

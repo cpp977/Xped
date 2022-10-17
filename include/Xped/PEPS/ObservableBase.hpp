@@ -6,8 +6,10 @@
 namespace Xped {
 struct ObservableBase
 {
-    std::string name = "Op";
+    virtual std::string name() const { return "Op"; };
     bool MEASURE = true;
+
+    virtual ~ObservableBase() = default;
 };
 
 } // namespace Xped

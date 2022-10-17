@@ -15,10 +15,11 @@ template <typename Symmetry>
 class KondoNecklace : public TwoSiteObservable<Symmetry>
 {
 public:
-    KondoNecklace(std::map<std::string, std::any>& params, const Pattern& pat, Opts::Bond bond = Opts::Bond::H | Opts::Bond::V)
+    KondoNecklace(std::map<std::string, std::any>& params_in, const Pattern& pat, Opts::Bond bond = Opts::Bond::H | Opts::Bond::V)
         : TwoSiteObservable<Symmetry>(pat, bond)
+        , params(params_in)
     {
-        this->name = "KondoNecklace";
+        // this->name = "KondoNecklace";
         SpinBase<Symmetry> B(2, 2);
         Tensor<double, 2, 2, Symmetry> gate;
         if constexpr(std::is_same_v<Symmetry, Sym::SU2<Sym::SpinSU2>>) {
@@ -68,6 +69,16 @@ public:
             for(auto& t : this->data_d2) { t = gate; }
         }
     }
+
+    std::string name() const override
+    {
+        return "Kondo_Jz=" + std::to_string(std::any_cast<double>(params.at("Jz"))) +
+               "_Jxy=" + std::to_string(std::any_cast<double>(params.at("Jxy"))) + "_Jkz=" + std::to_string(std::any_cast<double>(params.at("Jkz"))) +
+               "_Jkxy=" + std::to_string(std::any_cast<double>(params.at("Jkxy"))) + "_Iz=" + std::to_string(std::any_cast<double>(params.at("Iz"))) +
+               "_Ixy=" + std::to_string(std::any_cast<double>(params.at("Ixy")));
+    }
+
+    std::map<std::string, std::any> params;
 };
 
 } // namespace Xped

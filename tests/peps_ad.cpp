@@ -204,8 +204,8 @@ int main(int argc, char* argv[])
 
         Xped::Opts::Optim o_opts = Xped::Opts::optim_from_toml(data.at("optim"));
         Xped::Opts::CTM c_opts = Xped::Opts::ctm_from_toml(data.at("ctm"));
-        constexpr Xped::Opts::CTMCheckpoint cp_opts{.MOVE = false, .CORNER = false};
-        constexpr std::size_t TRank = 1;
+        constexpr Xped::Opts::CTMCheckpoint cp_opts{.MOVE = true, .CORNER = true};
+        constexpr std::size_t TRank = 2;
         Xped::iPEPSSolverAD<Scalar, Symmetry, cp_opts, TRank> Jack(o_opts, c_opts, Psi, std::move(ham));
 
         // Xped::FermionBase<Symmetry> F(1);
@@ -259,11 +259,11 @@ int main(int argc, char* argv[])
         //     t = std::sqrt(3.) * (Xped::SiteOperator<Scalar, Symmetry>::prod(B.Sdag(0), B.S(0), Symmetry::qvacuum())).data.template trim<2>();
         // }
         Jack.callback = [Sz, Sx, SzSz, SpSm, SmSp](XPED_CONST Xped::CTM<Scalar, Symmetry, TRank>& env, std::size_t i) mutable {
-            fmt::print("Callback at iteration {}\n", i);
+            fmt::print("  Callback at iteration {}\n", i);
             auto o_Sz = avg(env, Sz);
             auto o_Sx = avg(env, Sx);
             for(auto i = 0ul; i < o_Sz.size(); ++i) {
-                fmt::print("Sz={}, Sx={}, |S|={}\n", o_Sz[i], o_Sx[i], std::sqrt(o_Sz[i] * o_Sz[i] + o_Sx[i] * o_Sx[i]));
+                fmt::print("  Sz={}, Sx={}, |S|={}\n", o_Sz[i], o_Sx[i], std::sqrt(o_Sz[i] * o_Sz[i] + o_Sx[i] * o_Sx[i]));
                 // fmt::print("Sz={}\n", o_Sz[i]);
             }
             // auto o_Ssq = avg(env, Ssq);
@@ -274,10 +274,10 @@ int main(int argc, char* argv[])
             auto [o_SzSz_h, o_SzSz_v, o_SzSz_d1, o_SzSz_d2] = avg(env, SzSz);
             auto [o_SpSm_h, o_SpSm_v, o_SpSm_d1, o_SpSm_d2] = avg(env, SpSm);
             auto [o_SmSp_h, o_SmSp_v, o_SmSp_d1, o_SmSp_d2] = avg(env, SmSp);
-            for(auto i = 0ul; i < o_SzSz_h.size(); ++i) { fmt::print("SS_h={}\n", o_SzSz_h[i] + 0.5 * (o_SpSm_h[i] + o_SmSp_h[i])); }
-            for(auto i = 0ul; i < o_SzSz_v.size(); ++i) { fmt::print("SS_v={}\n", o_SzSz_v[i] + 0.5 * (o_SpSm_v[i] + o_SmSp_v[i])); }
-            for(auto i = 0ul; i < o_SzSz_d1.size(); ++i) { fmt::print("SS_d1={}\n", o_SzSz_d1[i] + 0.5 * (o_SpSm_d1[i] + o_SmSp_d1[i])); }
-            for(auto i = 0ul; i < o_SzSz_d2.size(); ++i) { fmt::print("SS_d2={}\n", o_SzSz_d2[i] + 0.5 * (o_SpSm_d2[i] + o_SmSp_d2[i])); }
+            for(auto i = 0ul; i < o_SzSz_h.size(); ++i) { fmt::print("  SS_h={}\n", o_SzSz_h[i] + 0.5 * (o_SpSm_h[i] + o_SmSp_h[i])); }
+            for(auto i = 0ul; i < o_SzSz_v.size(); ++i) { fmt::print("  SS_v={}\n", o_SzSz_v[i] + 0.5 * (o_SpSm_v[i] + o_SmSp_v[i])); }
+            for(auto i = 0ul; i < o_SzSz_d1.size(); ++i) { fmt::print("  SS_d1={}\n", o_SzSz_d1[i] + 0.5 * (o_SpSm_d1[i] + o_SmSp_d1[i])); }
+            for(auto i = 0ul; i < o_SzSz_d2.size(); ++i) { fmt::print("  SS_d2={}\n", o_SzSz_d2[i] + 0.5 * (o_SpSm_d2[i] + o_SmSp_d2[i])); }
             // auto o_Spsm = avg(env, Spsm);
             // for(const auto d : o_Spsm) { fmt::print("Spsm={}\n", d); }
             //     auto o_Smsp = avg(env, Smsp);
@@ -292,13 +292,6 @@ int main(int argc, char* argv[])
         //     for(auto i = 0ul; i < o_n.size(); ++i) { fmt::print("n={}\n", o_n[i]); }
         // };
         Jack.solve<double>();
-        constexpr std::size_t flags = yas::file /*IO type*/ | yas::binary; /*IO format*/
-        yas::save<flags>("heisenberg.xped", Jack);
-        Xped::iPEPSSolverAD<Scalar, Symmetry, cp_opts, TRank> Jim;
-        fmt::print("Load solver state back in.\n");
-        yas::load<flags>("heisenberg.xped", Jim);
-
-        Jim.solve<double>();
 #ifdef XPED_CACHE_PERMUTE_OUTPUT
         std::cout << "total hits=" << tree_cache</*shift*/ 0, /*Rank*/ 4, /*CoRank*/ 3, Symmetry>.cache.stats().total_hits()
                   << endl; // Hits for any key

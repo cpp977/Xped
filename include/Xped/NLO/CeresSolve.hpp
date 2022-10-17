@@ -60,19 +60,24 @@ struct iPEPSSolverAD
     iPEPSSolverAD(Opts::Optim optim_opts,
                   Opts::CTM ctm_opts,
                   std::shared_ptr<iPEPS<Scalar, Symmetry>> Psi_in,
-                  std::unique_ptr<Hamiltonian<Symmetry>> H_in,
-                  const std::filesystem::path& solver_f = "")
+                  std::unique_ptr<Hamiltonian<Symmetry>> H_in)
         : optim_opts(optim_opts)
         , H(std::move(H_in))
         , Psi(Psi_in)
-        , solver_file(solver_f)
     {
-        problem = std::make_unique<ceres::GradientProblem>(
-            new EnergyFunctor(std::move(std::make_unique<CTMSolver<Scalar, Symmetry, CPOpts, TRank>>(ctm_opts)), *H, Psi));
-        if(not solver_file.empty()) {
-            std::filesystem::create_directories(solver_file.parent_path());
-            if(solver_file.extension() == ".h5") {
-                HighFive::File file(solver_file, optim_opts.resume ? HighFive::File::Open : HighFive::File::Create);
+        if(optim_opts.resume) {
+            auto* heis = dynamic_cast<Heisenberg<Symmetry>*>(this->H.get());
+            // fmt::print("Is Heisenberg: {}\n", heis != nullptr);
+            // fmt::print("Model={}\n", H->name());
+            constexpr std::size_t flags = yas::file /*IO type*/ | yas::binary; /*IO format*/
+            yas::load<flags>((this->H->name() + ".xped").c_str(), *this);
+        } else {
+            problem = std::make_unique<ceres::GradientProblem>(
+                new EnergyFunctor(std::move(std::make_unique<CTMSolver<Scalar, Symmetry, CPOpts, TRank>>(ctm_opts)), *H, Psi));
+            std::filesystem::create_directories(optim_opts.working_directory / optim_opts.logging_directory);
+            if(optim_opts.log_format == ".h5") {
+                HighFive::File file((optim_opts.working_directory / optim_opts.logging_directory).string() + "/" + this->H->name() + ".h5",
+                                    optim_opts.resume ? HighFive::File::ReadWrite : HighFive::File::Excl);
                 HighFive::DataSpace dataspace = HighFive::DataSpace({0}, {HighFive::DataSpace::UNLIMITED});
 
                 // // Use chunking
@@ -98,7 +103,7 @@ struct iPEPSSolverAD
     {
         fmt::print("{}: Model={}(Bonds: V:{}, H:{}, D1: {}, D2: {})\n",
                    fmt::styled("iPEPSSolverAD", fmt::emphasis::bold),
-                   H->name,
+                   H->name(),
                    (H->bond & Opts::Bond::V) == Opts::Bond::V,
                    (H->bond & Opts::Bond::H) == Opts::Bond::H,
                    (H->bond & Opts::Bond::D1) == Opts::Bond::D1,
@@ -134,21 +139,20 @@ struct iPEPSSolverAD
         options.parameter_tolerance = optim_opts.step_tol;
         options.gradient_tolerance = optim_opts.grad_tol;
         options.update_state_every_iteration = true;
-        LoggingCallback logging_c(solver_file);
+        LoggingCallback logging_c(*this);
         options.callbacks.push_back(&logging_c);
         GetStateCallback get_state_c(this->state);
         options.callbacks.push_back(&get_state_c);
-        Callback c(*this, dynamic_cast<const EnergyFunctor*>(problem->function())->impl->getCTM());
-        options.callbacks.push_back(&c);
+        CustomCallback custom_c(*this, getCTMSolver()->getCTM());
+        options.callbacks.push_back(&custom_c);
+        SaveCallback save_c(*this);
+        if(optim_opts.save_period > 0) { options.callbacks.push_back(&save_c); }
         ceres::GradientProblemSolver::Summary summary;
         ceres::Solve(options, *problem, parameters.data(), &summary);
-        c(summary.iterations.back());
+        custom_c(summary.iterations.back());
         std::cout << summary.FullReport() << "\n";
     }
 
-    Opts::Optim optim_opts;
-    std::function<void(XPED_CONST CTM<Scalar, Symmetry, TRank>& ctm, std::size_t)> callback = [](XPED_CONST CTM<Scalar, Symmetry, TRank>&,
-                                                                                                 std::size_t) {};
     struct SolverState
     {
         std::size_t current_iter = 0;
@@ -162,16 +166,17 @@ struct iPEPSSolverAD
         }
     };
 
+    CTMSolver<Scalar, Symmetry, CPOpts, TRank>* getCTMSolver() { return dynamic_cast<const EnergyFunctor*>(problem->function())->impl.get(); }
+
+    Opts::Optim optim_opts;
+    std::function<void(XPED_CONST CTM<Scalar, Symmetry, TRank>& ctm, std::size_t)> callback = [](XPED_CONST CTM<Scalar, Symmetry, TRank>&,
+                                                                                                 std::size_t) {};
     SolverState state;
 
     ceres::GradientProblemSolver::Options options;
     std::unique_ptr<Hamiltonian<Symmetry>> H;
     std::shared_ptr<iPEPS<Scalar, Symmetry>> Psi;
     std::unique_ptr<ceres::GradientProblem> problem;
-
-    std::filesystem::path solver_file;
-
-    CTMSolver<Scalar, Symmetry, CPOpts, TRank>* getCTMSolver() { return dynamic_cast<const EnergyFunctor*>(problem->function())->impl.get(); }
 
     template <typename Ar>
     void serialize(Ar& ar) const
@@ -180,9 +185,8 @@ struct iPEPSSolverAD
                            ("CTMSolver", *dynamic_cast<const EnergyFunctor*>(problem->function())->impl),
                            ("Psi", *Psi),
                            ("optim_opts", optim_opts),
-                           ("H", *H),
-                           ("state", state),
-                           ("solver_file", solver_file.string()));
+                           // ("H", *H),
+                           ("state", state));
     }
 
     template <typename Ar>
@@ -190,26 +194,18 @@ struct iPEPSSolverAD
     {
         CTMSolver<Scalar, Symmetry, CPOpts, TRank> tmp_CTMSolver;
         iPEPS<Scalar, Symmetry> tmp_Psi;
-        Hamiltonian<Symmetry> tmp_H;
-        std::string solver_file_name;
-        ar& YAS_OBJECT_NVP("iPEPSSolverAD",
-                           ("CTMSolver", tmp_CTMSolver),
-                           ("Psi", tmp_Psi),
-                           ("optim_opts", optim_opts),
-                           ("H", tmp_H),
-                           ("state", state),
-                           ("solver_file", solver_file_name));
+        // Hamiltonian<Symmetry> tmp_H;
+        ar& YAS_OBJECT_NVP("iPEPSSolverAD", ("CTMSolver", tmp_CTMSolver), ("Psi", tmp_Psi), ("optim_opts", optim_opts), ("state", state));
         // optim_opts.max_steps = optim_opts.max_steps > state.current_iter ? optim_opts.max_steps - state.current_iter : 1;
         Psi = std::make_shared<iPEPS<Scalar, Symmetry>>(std::move(tmp_Psi));
-        H = std::make_unique<Hamiltonian<Symmetry>>(std::move(tmp_H));
+        // H = std::make_unique<Hamiltonian<Symmetry>>(std::move(tmp_H));
         auto Dwain = std::make_unique<CTMSolver<Scalar, Symmetry, CPOpts, TRank>>(std::move(tmp_CTMSolver));
         problem = std::make_unique<ceres::GradientProblem>(new EnergyFunctor(std::move(Dwain), *H, Psi));
-        solver_file = std::filesystem::path(solver_file_name);
     }
 
-    struct Callback : public ceres::IterationCallback
+    struct CustomCallback : public ceres::IterationCallback
     {
-        Callback(const iPEPSSolverAD& s, XPED_CONST CTM<Scalar, Symmetry, TRank>& c)
+        CustomCallback(const iPEPSSolverAD& s, XPED_CONST CTM<Scalar, Symmetry, TRank>& c)
             : s(s)
             , c(c)
         {}
@@ -243,8 +239,8 @@ struct iPEPSSolverAD
 
     struct LoggingCallback : public ceres::IterationCallback
     {
-        LoggingCallback(const std::filesystem::path& solver_file_in)
-            : solver_file(solver_file_in)
+        LoggingCallback(const iPEPSSolverAD& solver_in)
+            : solver(solver_in)
         {}
 
         ceres::CallbackReturnType operator()(const ceres::IterationSummary& summary)
@@ -254,28 +250,50 @@ struct iPEPSSolverAD
                        fmt::styled(summary.iteration, fmt::emphasis::bold),
                        summary.cost,
                        summary.gradient_norm);
-            if(not solver_file.empty()) {
-                if(solver_file.extension() == ".h5") {
-                    HighFive::File file(solver_file, HighFive::File::OpenOrCreate);
-                    auto insert_elem = [&file](const std::string& name, auto elem) {
-                        auto d = file.getDataSet(name);
-                        std::size_t curr_size = d.getElementCount();
-                        d.resize({curr_size + 1});
-                        decltype(elem) elem_a[1] = {elem};
-                        d.select({curr_size}, {1}).write(elem_a);
-                    };
-                    insert_elem("/iteration", summary.iteration);
-                    insert_elem("/cost", summary.cost);
-                    insert_elem("/grad_norm", summary.gradient_norm);
-                } else {
-                    std::ofstream ofs(solver_file, std::ios::app);
-                    ofs << summary.iteration << '\t' << summary.cost << '\t' << summary.gradient_norm << std::endl;
-                    ofs.close();
-                }
+            if(solver.optim_opts.log_format == ".h5") {
+                HighFive::File file((solver.optim_opts.working_directory / solver.optim_opts.logging_directory).string() + "/" + solver.H->name() +
+                                        ".h5",
+                                    HighFive::File::OpenOrCreate);
+                auto insert_elem = [&file](const std::string& name, auto elem) {
+                    auto d = file.getDataSet(name);
+                    std::size_t curr_size = d.getElementCount();
+                    d.resize({curr_size + 1});
+                    decltype(elem) elem_a[1] = {elem};
+                    d.select({curr_size}, {1}).write(elem_a);
+                };
+                insert_elem("/iteration", summary.iteration);
+                insert_elem("/cost", summary.cost);
+                insert_elem("/grad_norm", summary.gradient_norm);
+            } else {
+                std::ofstream ofs((solver.optim_opts.working_directory / solver.optim_opts.logging_directory).string() + "/" + solver.H->name() +
+                                      solver.optim_opts.log_format,
+                                  std::ios::app);
+                ofs << summary.iteration << '\t' << summary.cost << '\t' << summary.gradient_norm << std::endl;
+                ofs.close();
             }
             return ceres::SOLVER_CONTINUE;
         }
-        std::filesystem::path solver_file;
+        const iPEPSSolverAD& solver;
+    };
+
+    struct SaveCallback : public ceres::IterationCallback
+    {
+        SaveCallback(const iPEPSSolverAD& solver_in)
+            : solver(solver_in)
+        {}
+
+        ceres::CallbackReturnType operator()(const ceres::IterationSummary& summary)
+        {
+            assert(solver.optim_opts.save_period > 0);
+            if(summary.iteration == 0) { return ceres::SOLVER_CONTINUE; }
+            if(summary.iteration % solver.optim_opts.save_period == 0) {
+                yas::file_ostream ofs((solver.H->name() + ".xped").c_str(), /*trunc*/ 1);
+                constexpr std::size_t flags = yas::file /*IO type*/ | yas::binary; /*IO format*/
+                yas::save<flags>(ofs, solver);
+            }
+            return ceres::SOLVER_CONTINUE;
+        }
+        const iPEPSSolverAD& solver;
     };
 };
 

@@ -15,11 +15,12 @@ template <typename Symmetry>
 class Hubbard : public TwoSiteObservable<Symmetry>
 {
 public:
-    Hubbard(std::map<std::string, std::any>& params, const Pattern& pat, Opts::Bond bond = Opts::Bond::H | Opts::Bond::V)
+    Hubbard(std::map<std::string, std::any>& params_in, const Pattern& pat, Opts::Bond bond = Opts::Bond::H | Opts::Bond::V)
         : TwoSiteObservable<Symmetry>(pat, bond)
+        , params(params_in)
     {
-        this->name =
-            "Hubbard[U=" + std::to_string(std::any_cast<double>(params["U"])) + ", μ=" + std::to_string(std::any_cast<double>(params["mu"])) + "]";
+        // this->name =
+        //     "Hubbard[U=" + std::to_string(std::any_cast<double>(params["U"])) + ", μ=" + std::to_string(std::any_cast<double>(params["mu"])) + "]";
         FermionBase<Symmetry> F(1);
         Tensor<double, 2, 2, Symmetry> gate;
         if constexpr(std::is_same_v<Symmetry,
@@ -58,6 +59,14 @@ public:
             for(auto& t : this->data_d2) { t = gate; }
         }
     }
+
+    std::string name() const override
+    {
+        return "Hubbard_t=" + std::to_string(std::any_cast<double>(params.at("t"))) + "_U=" + std::to_string(std::any_cast<double>(params.at("U"))) +
+               "_mu=" + std::to_string(std::any_cast<double>(params.at("mu")));
+    }
+
+    std::map<std::string, std::any> params;
 };
 
 } // namespace Xped

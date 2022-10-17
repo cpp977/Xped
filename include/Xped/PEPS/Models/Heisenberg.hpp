@@ -20,10 +20,10 @@ template <typename Symmetry>
 class Heisenberg : public TwoSiteObservable<Symmetry>
 {
 public:
-    Heisenberg(std::map<std::string, std::any>& params, const Pattern& pat, Opts::Bond bond = Opts::Bond::H | Opts::Bond::V)
+    Heisenberg(std::map<std::string, std::any>& params_in, const Pattern& pat, Opts::Bond bond = Opts::Bond::H | Opts::Bond::V)
         : TwoSiteObservable<Symmetry>(pat, bond)
+        , params(params_in)
     {
-        this->name = "Heisenberg";
         SpinBase<Symmetry> B(1, 2);
         Tensor<double, 2, 2, Symmetry> gate;
         if constexpr(std::is_same_v<Symmetry, Sym::SU2<Sym::SpinSU2>>) {
@@ -46,6 +46,14 @@ public:
             for(auto& t : this->data_d2) { t = std::any_cast<double>(params["J2"]) * gate; }
         }
     }
+
+    std::string name() const override
+    {
+        return "Heisenberg_Jz" + fmt::format("{:2.2f}", std::any_cast<double>(params.at("Jz"))) + "_Jxy" +
+               fmt::format("{:2.2f}", std::any_cast<double>(params.at("Jxy")));
+    }
+
+    std::map<std::string, std::any> params;
 };
 
 } // namespace Xped

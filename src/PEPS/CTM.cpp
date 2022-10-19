@@ -21,7 +21,7 @@ template <typename Scalar, typename Symmetry, std::size_t TRank, bool ENABLE_AD,
 CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::CTM(const CTM<Scalar, Symmetry, TRank, false>& other)
 {
     cell_ = other.cell();
-    chi = other.chi;
+    chi_ = other.chi_;
     // init_m = other.init_m;
     // proj_m = other.proj_m;
     // opts = other.opts;
@@ -291,9 +291,9 @@ void CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::computeRDM()
 }
 
 template <typename Scalar, typename Symmetry, std::size_t TRank, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
-void CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::info() const
+auto CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::info() const
 {
-    fmt::print("  CTM(χ={}, {}): UnitCell=({}x{}), init={}\n", chi, Symmetry::name(), cell_.Lx, cell_.Ly, fmt::streamed(init_m));
+    return fmt::format("CTM(χ={}, {}): UnitCell=({}x{}), init={}", chi_, Symmetry::name(), cell_.Lx, cell_.Ly, fmt::streamed(init_m));
     // std::cout << "CTM(χ=" << chi << "): UnitCell=(" << cell_.Lx << "x" << cell_.Ly << ")"
     //           << ", init=" << mode_string << std::endl;
     // std::cout << "Tensors:" << std::endl;
@@ -824,7 +824,7 @@ CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::get_projectors(const int x, con
             //                 Q4.coupledDomain().dim(),
             //                 Q4.coupledCodomain().fullDim(),
             //                 Q4.coupledCodomain().dim());
-            std::tie(P1, P2) = decompose(Q4, Q1, chi);
+            std::tie(P1, P2) = decompose(Q4, Q1, chi_);
             break;
         }
         case Opts::PROJECTION::HALF: {
@@ -853,7 +853,7 @@ CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::get_projectors(const int x, con
             //                 Q3.coupledDomain().dim(),
             //                 Q3.coupledCodomain().fullDim(),
             //                 Q3.coupledCodomain().dim());
-            std::tie(P1, P2) = decompose(Q2, Q3, chi);
+            std::tie(P1, P2) = decompose(Q2, Q3, chi_);
             break;
         }
         case Opts::PROJECTION::HALF: {
@@ -882,7 +882,7 @@ CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::get_projectors(const int x, con
             //                 Q2.coupledDomain().dim(),
             //                 Q2.coupledCodomain().fullDim(),
             //                 Q2.coupledCodomain().dim());
-            std::tie(P1, P2) = decompose(Q1, Q2, chi);
+            std::tie(P1, P2) = decompose(Q1, Q2, chi_);
             break;
         }
         case Opts::PROJECTION::HALF: {
@@ -918,7 +918,7 @@ CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::get_projectors(const int x, con
             //                 Q3.coupledDomain().dim(),
             //                 Q3.coupledCodomain().fullDim(),
             //                 Q3.coupledCodomain().dim());
-            std::tie(P1, P2) = decompose(Q3, Q4, chi);
+            std::tie(P1, P2) = decompose(Q3, Q4, chi_);
             break;
         }
         case Opts::PROJECTION::HALF: {

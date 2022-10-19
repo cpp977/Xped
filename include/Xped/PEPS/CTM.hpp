@@ -85,20 +85,20 @@ public:
     CTM() = default;
 
     explicit CTM(std::size_t chi, Opts::CTM_INIT init = Opts::CTM_INIT::FROM_A)
-        : chi(chi)
+        : chi_(chi)
         , init_m(init)
     {}
 
     CTM(std::size_t chi, const UnitCell& cell, Opts::CTM_INIT init = Opts::CTM_INIT::FROM_A)
         : cell_(cell)
-        , chi(chi)
+        , chi_(chi)
         , init_m(init)
     {}
 
     CTM(std::shared_ptr<iPEPS<Scalar, Symmetry, ENABLE_AD>> A, std::size_t chi, const Opts::CTM_INIT init = Opts::CTM_INIT::FROM_A)
         : A(A)
         , cell_(A->cell())
-        , chi(chi)
+        , chi_(chi)
         , init_m(init)
     {}
 
@@ -139,7 +139,7 @@ public:
     void computeRDM();
     bool RDM_COMPUTED() const { return HAS_RDM; }
 
-    void info() const;
+    auto info() const;
 
     const UnitCell& cell() const { return cell_; }
     const std::shared_ptr<iPEPS<Scalar, Symmetry, ENABLE_AD>>& Psi() const { return A; }
@@ -149,7 +149,7 @@ public:
     {
         ar& YAS_OBJECT_NVP("CTM",
                            ("cell", cell_),
-                           ("chi", chi),
+                           ("chi", chi_),
                            ("HAS_RDM", HAS_RDM),
                            ("C1s", C1s),
                            ("C2s", C2s),
@@ -166,10 +166,14 @@ public:
                            ("rho1_v", rho1_v));
     }
 
+    std::size_t chi() const { return chi_; }
+
+    Opts::CTM_INIT const init_mode() { return init_m; }
+
 private:
     std::shared_ptr<iPEPS<Scalar, Symmetry, ENABLE_AD>> A;
     UnitCell cell_;
-    std::size_t chi;
+    std::size_t chi_;
     Opts::CTM_INIT init_m = Opts::CTM_INIT::FROM_A;
     Opts::PROJECTION proj_m = Opts::PROJECTION::CORNER;
     bool HAS_RDM = false;

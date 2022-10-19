@@ -258,31 +258,31 @@ int main(int argc, char* argv[])
         // for(auto& t : Ssq.data) {
         //     t = std::sqrt(3.) * (Xped::SiteOperator<Scalar, Symmetry>::prod(B.Sdag(0), B.S(0), Symmetry::qvacuum())).data.template trim<2>();
         // }
-        Jack.callback = [Sz, Sx, SzSz, SpSm, SmSp](XPED_CONST Xped::CTM<Scalar, Symmetry, TRank>& env, std::size_t i) mutable {
-            fmt::print("  Callback at iteration {}\n", i);
-            auto o_Sz = avg(env, Sz);
-            auto o_Sx = avg(env, Sx);
-            for(auto i = 0ul; i < o_Sz.size(); ++i) {
-                fmt::print("  Sz={}, Sx={}, |S|={}\n", o_Sz[i], o_Sx[i], std::sqrt(o_Sz[i] * o_Sz[i] + o_Sx[i] * o_Sx[i]));
-                // fmt::print("Sz={}\n", o_Sz[i]);
-            }
-            // auto o_Ssq = avg(env, Ssq);
-            // for(const auto d : o_Ssq) { fmt::print("S²={}\n", d); }
-            // auto [o_SS_h, o_SS_v, o_SS_d1, o_SS_d2] = avg(env, SS);
-            // for(auto i = 0ul; i < o_SS_h.size(); ++i) { fmt::print("SS_h={}, SS_v={}\n", o_SS_h[i], o_SS_v[i]); }
-            // for(auto i = 0ul; i < o_SS_d1.size(); ++i) { fmt::print("SS_d1={}, SS_d2={}\n", o_SS_d1[i], o_SS_d2[i]); }
-            auto [o_SzSz_h, o_SzSz_v, o_SzSz_d1, o_SzSz_d2] = avg(env, SzSz);
-            auto [o_SpSm_h, o_SpSm_v, o_SpSm_d1, o_SpSm_d2] = avg(env, SpSm);
-            auto [o_SmSp_h, o_SmSp_v, o_SmSp_d1, o_SmSp_d2] = avg(env, SmSp);
-            for(auto i = 0ul; i < o_SzSz_h.size(); ++i) { fmt::print("  SS_h={}\n", o_SzSz_h[i] + 0.5 * (o_SpSm_h[i] + o_SmSp_h[i])); }
-            for(auto i = 0ul; i < o_SzSz_v.size(); ++i) { fmt::print("  SS_v={}\n", o_SzSz_v[i] + 0.5 * (o_SpSm_v[i] + o_SmSp_v[i])); }
-            for(auto i = 0ul; i < o_SzSz_d1.size(); ++i) { fmt::print("  SS_d1={}\n", o_SzSz_d1[i] + 0.5 * (o_SpSm_d1[i] + o_SmSp_d1[i])); }
-            for(auto i = 0ul; i < o_SzSz_d2.size(); ++i) { fmt::print("  SS_d2={}\n", o_SzSz_d2[i] + 0.5 * (o_SpSm_d2[i] + o_SmSp_d2[i])); }
-            // auto o_Spsm = avg(env, Spsm);
-            // for(const auto d : o_Spsm) { fmt::print("Spsm={}\n", d); }
-            //     auto o_Smsp = avg(env, Smsp);
-            //     for(const auto d : o_Smsp) { fmt::print("Smsp={}\n", d); }
-        };
+        // Jack.callback = [Sz, Sx, SzSz, SpSm, SmSp](XPED_CONST Xped::CTM<Scalar, Symmetry, TRank>& env, std::size_t i) mutable {
+        //     fmt::print("  Callback at iteration {}\n", i);
+        //     auto o_Sz = avg(env, Sz);
+        //     auto o_Sx = avg(env, Sx);
+        //     for(auto i = 0ul; i < o_Sz.size(); ++i) {
+        //         fmt::print("  Sz={}, Sx={}, |S|={}\n", o_Sz[i], o_Sx[i], std::sqrt(o_Sz[i] * o_Sz[i] + o_Sx[i] * o_Sx[i]));
+        //         // fmt::print("Sz={}\n", o_Sz[i]);
+        //     }
+        //     // auto o_Ssq = avg(env, Ssq);
+        //     // for(const auto d : o_Ssq) { fmt::print("S²={}\n", d); }
+        //     // auto [o_SS_h, o_SS_v, o_SS_d1, o_SS_d2] = avg(env, SS);
+        //     // for(auto i = 0ul; i < o_SS_h.size(); ++i) { fmt::print("SS_h={}, SS_v={}\n", o_SS_h[i], o_SS_v[i]); }
+        //     // for(auto i = 0ul; i < o_SS_d1.size(); ++i) { fmt::print("SS_d1={}, SS_d2={}\n", o_SS_d1[i], o_SS_d2[i]); }
+        //     auto [o_SzSz_h, o_SzSz_v, o_SzSz_d1, o_SzSz_d2] = avg(env, SzSz);
+        //     auto [o_SpSm_h, o_SpSm_v, o_SpSm_d1, o_SpSm_d2] = avg(env, SpSm);
+        //     auto [o_SmSp_h, o_SmSp_v, o_SmSp_d1, o_SmSp_d2] = avg(env, SmSp);
+        //     for(auto i = 0ul; i < o_SzSz_h.size(); ++i) { fmt::print("  SS_h={}\n", o_SzSz_h[i] + 0.5 * (o_SpSm_h[i] + o_SmSp_h[i])); }
+        //     for(auto i = 0ul; i < o_SzSz_v.size(); ++i) { fmt::print("  SS_v={}\n", o_SzSz_v[i] + 0.5 * (o_SpSm_v[i] + o_SmSp_v[i])); }
+        //     for(auto i = 0ul; i < o_SzSz_d1.size(); ++i) { fmt::print("  SS_d1={}\n", o_SzSz_d1[i] + 0.5 * (o_SpSm_d1[i] + o_SmSp_d1[i])); }
+        //     for(auto i = 0ul; i < o_SzSz_d2.size(); ++i) { fmt::print("  SS_d2={}\n", o_SzSz_d2[i] + 0.5 * (o_SpSm_d2[i] + o_SmSp_d2[i])); }
+        //     // auto o_Spsm = avg(env, Spsm);
+        //     // for(const auto d : o_Spsm) { fmt::print("Spsm={}\n", d); }
+        //     //     auto o_Smsp = avg(env, Smsp);
+        //     //     for(const auto d : o_Smsp) { fmt::print("Smsp={}\n", d); }
+        // };
         // Jack.callback = [n](XPED_CONST Xped::CTM<Scalar, Symmetry, 1>& env, std::size_t i) mutable {
         //     fmt::print("Callback at iteration {}\n", i);
         //     auto o_n = avg(env, n);

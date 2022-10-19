@@ -6,6 +6,7 @@
 #include "fmt/color.h"
 
 #include "Xped/Util/EnumStream.hpp"
+#include "Xped/Util/Logging.hpp"
 #include "Xped/Util/TomlHelpers.hpp"
 
 namespace Xped::Opts {
@@ -40,6 +41,8 @@ struct Optim
     std::filesystem::path working_directory = std::filesystem::current_path();
     std::filesystem::path logging_directory = "logs";
 
+    Verbosity verbosity = Verbosity::PER_ITERATION;
+
     template <typename Ar>
     void serialize(Ar& ar) const
     {
@@ -52,12 +55,12 @@ struct Optim
                            ("cost_tol", cost_tol),
                            ("max_steps", max_steps),
                            ("min_steps", min_steps),
-                           // ("resume", resume),
                            ("load", load),
                            ("save_period", save_period),
                            ("log_format", log_format),
                            ("working_directory", working_directory.string()),
-                           ("logging_directory", logging_directory.string()));
+                           ("logging_directory", logging_directory.string()),
+                           ("verbosity", verbosity));
     }
 
     template <typename Ar>
@@ -73,33 +76,36 @@ struct Optim
                            ("cost_tol", cost_tol),
                            ("max_steps", max_steps),
                            ("min_steps", min_steps),
-                           // ("resume", resume),
                            ("load", load),
                            ("save_period", save_period),
                            ("log_format", log_format),
                            ("working_directory", working_dir),
-                           ("logging_directory", logging_dir));
+                           ("logging_directory", logging_dir),
+                           ("verbosity", verbosity));
         working_directory = working_dir;
         logging_directory = logging_dir;
     }
 
-    inline void info()
+    inline auto info()
     {
-        fmt::print("{}:\n", fmt::styled("Optimization options", fmt::emphasis::bold));
-        fmt::print("  {:<30} {}\n", "• Algorithm:", fmt::streamed(alg));
-        fmt::print("  {:<30} {}\n", "• Linesearch:", fmt::streamed(ls));
-        fmt::print("  {:<30} {}\n", "• maximum steps:", max_steps);
-        fmt::print("  {:<30} {}\n", "• minimum steps:", min_steps);
-        fmt::print("  {:<30} {}\n", "• gradient tolerance:", grad_tol);
-        fmt::print("  {:<30} {}\n", "• cost tolerance:", cost_tol);
-        fmt::print("  {:<30} {}\n", "• step tolerance:", step_tol);
-        fmt::print("  {:<30} {}\n", "• bfgs scaling:", bfgs_scaling);
-        fmt::print("  {:<30} {}\n", "• resume:", resume);
-        fmt::print("  {:<30} {}\n", "• log format:", log_format);
-        fmt::print("  {:<30} {}\n", "• working directory:", working_directory.string());
-        fmt::print("  {:<30} {}\n", "• logging directory:", logging_directory.string());
-        if(load.size() > 0) { fmt::print("  {:<30} {}\n", "• load from:", load); }
-        fmt::print("  {:<30} {}\n", "• save period:", save_period);
+        std::string res;
+        fmt::format_to(std::back_inserter(res), "{}:\n", fmt::styled("Optimization options", fmt::emphasis::bold));
+        fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• Algorithm:", fmt::streamed(alg));
+        fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• Linesearch:", fmt::streamed(ls));
+        fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• maximum steps:", max_steps);
+        fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• minimum steps:", min_steps);
+        fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• gradient tolerance:", grad_tol);
+        fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• cost tolerance:", cost_tol);
+        fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• step tolerance:", step_tol);
+        fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• bfgs scaling:", bfgs_scaling);
+        fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• resume:", resume);
+        fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• log format:", log_format);
+        fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• working directory:", working_directory.string());
+        fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• logging directory:", logging_directory.string());
+        if(load.size() > 0) { fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• load from:", load); }
+        fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• save period:", save_period);
+        fmt::format_to(std::back_inserter(res), "  {:<30} {}", "• verbosity:", fmt::streamed(verbosity));
+        return res;
     }
 };
 
@@ -124,6 +130,7 @@ inline Optim optim_from_toml(const toml::value& t)
     if(t.contains("logging_directory")) {
         res.logging_directory = std::filesystem::path(static_cast<std::string>(t.at("logging_directory").as_string()));
     }
+    if(t.contains("verbosity")) { res.verbosity = util::enum_from_toml<Verbosity>(t.at("verbosity")); }
     return res;
 }
 

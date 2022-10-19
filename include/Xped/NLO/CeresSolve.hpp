@@ -101,16 +101,17 @@ struct iPEPSSolverAD
     template <typename HamScalar>
     void solve()
     {
-        fmt::print("{}: Model={}(Bonds: V:{}, H:{}, D1: {}, D2: {})\n",
-                   fmt::styled("iPEPSSolverAD", fmt::emphasis::bold),
-                   H->name(),
-                   (H->bond & Opts::Bond::V) == Opts::Bond::V,
-                   (H->bond & Opts::Bond::H) == Opts::Bond::H,
-                   (H->bond & Opts::Bond::D1) == Opts::Bond::D1,
-                   (H->bond & Opts::Bond::D2) == Opts::Bond::D2);
-        optim_opts.info();
-        getCTMSolver()->opts.info();
-        CPOpts.info();
+        Log::on_entry(optim_opts.verbosity,
+                      "{}: Model={}(Bonds: V:{}, H:{}, D1: {}, D2: {})",
+                      fmt::styled("iPEPSSolverAD", fmt::emphasis::bold),
+                      H->name(),
+                      (H->bond & Opts::Bond::V) == Opts::Bond::V,
+                      (H->bond & Opts::Bond::H) == Opts::Bond::H,
+                      (H->bond & Opts::Bond::D1) == Opts::Bond::D1,
+                      (H->bond & Opts::Bond::D2) == Opts::Bond::D2);
+        Log::on_entry(optim_opts.verbosity, "{}", optim_opts.info());
+        Log::on_entry(optim_opts.verbosity, "{}", getCTMSolver()->opts.info());
+        Log::on_entry(optim_opts.verbosity, "{}", CPOpts.info());
 
         // auto Dwain = std::make_unique<CTMSolver<Scalar, Symmetry, CPOpts, TRank>>(ctm_opts);
         // ceres::GradientProblem problem(new Energy<Scalar, Symmetry, CPOpts, TRank>(std::move(Dwain), H, Psi));
@@ -150,7 +151,7 @@ struct iPEPSSolverAD
         ceres::GradientProblemSolver::Summary summary;
         ceres::Solve(options, *problem, parameters.data(), &summary);
         custom_c(summary.iterations.back());
-        std::cout << summary.FullReport() << "\n";
+        Log::on_exit(optim_opts.verbosity, "{}", summary.FullReport());
     }
 
     struct SolverState
@@ -245,11 +246,15 @@ struct iPEPSSolverAD
 
         ceres::CallbackReturnType operator()(const ceres::IterationSummary& summary)
         {
-            fmt::print("{}{}, E={:2.8f}, |∇|={:1.3g}\n",
-                       fmt::styled("Iteration=", fmt::emphasis::bold),
-                       fmt::styled(summary.iteration, fmt::emphasis::bold),
-                       summary.cost,
-                       summary.gradient_norm);
+            Log::per_iteration(solver.optim_opts.verbosity,
+                               "{}{:^4d}: E={:+.8f}, ΔE={:.1e}, |∇|={:.1e}, step time={:6.1f}s, total time={:6.1f}s",
+                               fmt::styled("Iteration=", fmt::emphasis::bold),
+                               fmt::styled(summary.iteration, fmt::emphasis::bold),
+                               summary.cost,
+                               summary.cost_change,
+                               summary.gradient_norm,
+                               summary.iteration_time_in_seconds,
+                               summary.cumulative_time_in_seconds);
             if(solver.optim_opts.log_format == ".h5") {
                 HighFive::File file((solver.optim_opts.working_directory / solver.optim_opts.logging_directory).string() + "/" + solver.H->name() +
                                         ".h5",

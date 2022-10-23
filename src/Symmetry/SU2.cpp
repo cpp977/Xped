@@ -40,7 +40,7 @@ Scalar_ SU2<Kind, Scalar_>::coeff_FS(const qType& q1)
 
 template <typename Kind, typename Scalar_>
 template <typename PlainLib>
-typename PlainLib::template TType<Scalar_, 2> SU2<Kind, Scalar_>::one_j_tensor(const qType& q1, mpi::XpedWorld& world)
+typename PlainLib::template TType<Scalar_, 2> SU2<Kind, Scalar_>::one_j_tensor(const qType& q1, const mpi::XpedWorld& world)
 {
     typedef typename PlainLib::Indextype IndexType;
 
@@ -70,7 +70,7 @@ Scalar_ SU2<Kind, Scalar_>::coeff_3j(const qType& q1, const qType& q2, const qTy
 template <typename Kind, typename Scalar_>
 template <typename PlainLib>
 typename PlainLib::template TType<Scalar_, 3>
-SU2<Kind, Scalar_>::CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t, mpi::XpedWorld& world)
+SU2<Kind, Scalar_>::CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t, const mpi::XpedWorld& world)
 {
     typedef typename PlainLib::Indextype IndexType;
     // typename TensorInterface<TensorLib>::template TType<Scalar_,3> out(degeneracy(q1),degeneracy(q2),degeneracy(q3));

@@ -134,7 +134,7 @@ struct SU2 : public SymBase<SU2<Kind, Scalar_>>
     static Scalar coeff_FS(const qType& q1);
 
     template <typename PlainLib>
-    static typename PlainLib::template TType<Scalar_, 2> one_j_tensor(const qType& q1, mpi::XpedWorld& world = mpi::getUniverse());
+    static typename PlainLib::template TType<Scalar_, 2> one_j_tensor(const qType& q1, const mpi::XpedWorld& world = mpi::getUniverse());
 
     static Scalar coeff_rightOrtho(const qType& q1, const qType& q2) { return static_cast<Scalar>(q1[0]) / static_cast<Scalar>(q2[0]); }
 
@@ -147,7 +147,7 @@ struct SU2 : public SymBase<SU2<Kind, Scalar_>>
 
     template <typename PlainLib>
     static typename PlainLib::template TType<Scalar_, 3>
-    CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t, mpi::XpedWorld& world = mpi::getUniverse());
+    CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t, const mpi::XpedWorld& world = mpi::getUniverse());
 
     static Scalar coeff_6j(const qType& q1, const qType& q2, const qType& q3, const qType& q4, const qType& q5, const qType& q6);
 

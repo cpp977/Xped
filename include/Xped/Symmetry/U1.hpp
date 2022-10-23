@@ -136,7 +136,7 @@ struct U1 : public SymBase<U1<Kind, Scalar_>>
     static Scalar coeff_FS(const qType&) { return Scalar(1.); }
 
     template <typename PlainLib>
-    static typename PlainLib::template TType<Scalar_, 2> one_j_tensor(const qType&, mpi::XpedWorld& world = mpi::getUniverse())
+    static typename PlainLib::template TType<Scalar_, 2> one_j_tensor(const qType&, const mpi::XpedWorld& world = mpi::getUniverse())
     {
         typedef typename PlainLib::Indextype IndexType;
         auto T = PlainLib::template construct<Scalar>(std::array<IndexType, 2>{1, 1}, world);
@@ -154,7 +154,7 @@ struct U1 : public SymBase<U1<Kind, Scalar_>>
 
     template <typename PlainLib>
     static typename PlainLib::template TType<Scalar_, 3>
-    CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t, mpi::XpedWorld& world = mpi::getUniverse());
+    CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t, const mpi::XpedWorld& world = mpi::getUniverse());
 
     static Scalar coeff_turn(const qType& ql, const qType& qr, const qType& qf) { return triangle(ql, qr, qf) ? Scalar(1.) : Scalar(0.); }
 
@@ -196,7 +196,7 @@ std::vector<typename U1<Kind, Scalar_>::qType> U1<Kind, Scalar_>::basis_combine(
 template <typename Kind, typename Scalar_>
 template <typename PlainLib>
 typename PlainLib::template TType<Scalar_, 3>
-U1<Kind, Scalar_>::CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t, mpi::XpedWorld& world)
+U1<Kind, Scalar_>::CGC(const qType& q1, const qType& q2, const qType& q3, const std::size_t, const mpi::XpedWorld& world)
 {
     typedef typename PlainLib::Indextype IndexType;
     auto T = PlainLib::template construct<Scalar>(std::array<IndexType, 3>{1, 1, 1}, world);

@@ -77,7 +77,7 @@ struct FusionTree
     std::string print() const;
 
     template <typename PlainLib>
-    typename PlainLib::template TType<Scalar, Rank + 1> asTensor(mpi::XpedWorld& world = mpi::getUniverse()) const;
+    typename PlainLib::template TType<Scalar, Rank + 1> asTensor(const mpi::XpedWorld& world = mpi::getUniverse()) const;
 
     FusionTree<Rank + 1, Symmetry> enlarge(const FusionTree<1, Symmetry>& other) const;
 

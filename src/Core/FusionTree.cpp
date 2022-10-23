@@ -116,7 +116,7 @@ std::string FusionTree<Rank, Symmetry>::print() const
 template <std::size_t Rank, typename Symmetry>
 template <typename PlainLib>
 typename PlainLib::template TType<typename FusionTree<Rank, Symmetry>::Scalar, Rank + 1>
-FusionTree<Rank, Symmetry>::asTensor(mpi::XpedWorld& world) const
+FusionTree<Rank, Symmetry>::asTensor(const mpi::XpedWorld& world) const
 {
     typedef typename Symmetry::Scalar Scalar;
 

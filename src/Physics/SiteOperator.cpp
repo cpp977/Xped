@@ -92,7 +92,7 @@ std::vector<typename SiteOperator<Scalar, Symmetry>::MatrixType> SiteOperator<Sc
     auto T = data.plainTensor();
     std::vector<MatrixType> out(Symmetry::degeneracy(Q));
     for(std::size_t i = 0; i < Symmetry::degeneracy(Q); ++i) {
-        auto M = PlainInterface::construct<Scalar>(data.uncoupledDomain()[0].fullDim(), data.uncoupledCodomain()[0].fullDim());
+        auto M = PlainInterface::construct<Scalar>(data.uncoupledDomain()[0].fullDim(), data.uncoupledCodomain()[0].fullDim(), data.world());
         for(std::size_t row = 0; row < data.uncoupledDomain()[0].fullDim(); ++row) {
             for(std::size_t col = 0; col < data.uncoupledCodomain()[0].fullDim(); ++col) {
                 PlainInterface::setVal(

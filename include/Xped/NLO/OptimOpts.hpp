@@ -41,6 +41,9 @@ struct Optim
     std::filesystem::path working_directory = std::filesystem::current_path();
     std::filesystem::path logging_directory = "logs";
 
+    std::filesystem::path obs_directory = "obs";
+    bool display_obs = true;
+
     Verbosity verbosity = Verbosity::PER_ITERATION;
 
     template <typename Ar>
@@ -60,13 +63,15 @@ struct Optim
                            ("log_format", log_format),
                            ("working_directory", working_directory.string()),
                            ("logging_directory", logging_directory.string()),
-                           ("verbosity", verbosity));
+                           ("obs_directory", obs_directory.string()),
+                           ("verbosity", verbosity),
+                           ("display_obs", display_obs));
     }
 
     template <typename Ar>
     void serialize(Ar& ar)
     {
-        std::string working_dir, logging_dir;
+        std::string working_dir, logging_dir, obs_dir;
         ar& YAS_OBJECT_NVP("OptimOpts",
                            ("alg", alg),
                            ("LineSearch", ls),
@@ -81,9 +86,12 @@ struct Optim
                            ("log_format", log_format),
                            ("working_directory", working_dir),
                            ("logging_directory", logging_dir),
-                           ("verbosity", verbosity));
+                           ("obs_directory", obs_dir),
+                           ("verbosity", verbosity),
+                           ("display_obs", display_obs));
         working_directory = working_dir;
         logging_directory = logging_dir;
+        obs_directory = obs_dir;
     }
 
     inline auto info()
@@ -102,9 +110,11 @@ struct Optim
         fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• log format:", log_format);
         fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• working directory:", working_directory.string());
         fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• logging directory:", logging_directory.string());
+        fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• obs directory:", obs_directory.string());
         if(load.size() > 0) { fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• load from:", load); }
         fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• save period:", save_period);
-        fmt::format_to(std::back_inserter(res), "  {:<30} {}", "• verbosity:", fmt::streamed(verbosity));
+        fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• verbosity:", fmt::streamed(verbosity));
+        fmt::format_to(std::back_inserter(res), "  {:<30} {}", "• display obs to terminal:", display_obs);
         return res;
     }
 };
@@ -130,7 +140,9 @@ inline Optim optim_from_toml(const toml::value& t)
     if(t.contains("logging_directory")) {
         res.logging_directory = std::filesystem::path(static_cast<std::string>(t.at("logging_directory").as_string()));
     }
+    if(t.contains("obs_directory")) { res.obs_directory = std::filesystem::path(static_cast<std::string>(t.at("obs_directory").as_string())); }
     if(t.contains("verbosity")) { res.verbosity = util::enum_from_toml<Verbosity>(t.at("verbosity")); }
+    res.display_obs = t.contains("display_obs") ? t.at("display_obs").as_boolean() : res.display_obs;
     return res;
 }
 

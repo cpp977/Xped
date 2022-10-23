@@ -31,7 +31,7 @@
 
 #ifdef XPED_CACHE_PERMUTE_OUTPUT
 #    include "lru/lru.hpp"
-XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 500000)
+XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100000)
 #endif
 
 #include "Xped/Interfaces/PlainInterface.hpp"
@@ -93,13 +93,13 @@ int main(int argc, char* argv[])
 
         typedef double Scalar;
         // using Symmetry = Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>;
-        // using Symmetry = Xped::Sym::ZN<Xped::Sym::FChargeU1, 36>;
-        // using Symmetry =
-        //     Xped::Sym::Combined<Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>>;
+        // using Symmetry = Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>;
+        using Symmetry =
+            Xped::Sym::Combined<Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>>;
         // typedef Xped::Sym::SU2<Xped::Sym::SpinSU2> Symmetry;
         // typedef Xped::Sym::U1<Xped::Sym::SpinU1> Symmetry;
         // typedef Xped::Sym::ZN<Xped::Sym::SpinU1, 36, double> Symmetry;
-        typedef Xped::Sym::U0<double> Symmetry;
+        // typedef Xped::Sym::U0<double> Symmetry;
 
         std::unique_ptr<Xped::TwoSiteObservable<Symmetry>> ham;
 
@@ -172,7 +172,7 @@ int main(int argc, char* argv[])
             for(std::size_t i = 0; i < c.uniqueSize(); ++i) { bottom_aux[i].setRandom(toml::get<std::size_t>(toml::find(data.at("ipeps"), "D"))); }
         }
 
-        std::map<std::string, std::any> params = Xped::util::params_from_toml(data.at("model").at("params"));
+        std::map<std::string, Xped::Param> params = Xped::util::params_from_toml(data.at("model").at("params"));
 
         std::vector<Xped::Opts::Bond> bs;
         for(const auto& elem : data.at("model").at("bonds").as_array()) {
@@ -187,15 +187,17 @@ int main(int argc, char* argv[])
             for(std::size_t i = 1; i < bs.size(); ++i) { bonds = bonds | bs[i]; }
         }
 
-        if(toml::find(data.at("model"), "name").as_string() == "Heisenberg") {
-            ham = std::make_unique<Xped::Heisenberg<Symmetry>>(params, c.pattern, bonds);
-        } else if(toml::find(data.at("model"), "name").as_string() == "KondoNecklace") {
-            ham = std::make_unique<Xped::KondoNecklace<Symmetry>>(params, c.pattern, bonds);
-        } else if(toml::find(data.at("model"), "name").as_string() == "Hubbard") {
+        // if(toml::find(data.at("model"), "name").as_string() == "Heisenberg") {
+        //     ham = std::make_unique<Xped::Heisenberg<Symmetry>>(params, c.pattern, bonds);
+        // } else if(toml::find(data.at("model"), "name").as_string() == "KondoNecklace") {
+        //     ham = std::make_unique<Xped::KondoNecklace<Symmetry>>(params, c.pattern, bonds);
+        // } else
+        if(toml::find(data.at("model"), "name").as_string() == "Hubbard") {
             ham = std::make_unique<Xped::Hubbard<Symmetry>>(params, c.pattern, bonds);
         } else {
             throw std::invalid_argument("Specified model is not implemented.");
         }
+        ham->setDefaultObs();
 
         Xped::TMatrix<Xped::Qbasis<Symmetry, 1>> phys_basis(c.pattern);
         phys_basis.setConstant(ham->data_h[0].uncoupledDomain()[0]);
@@ -206,7 +208,7 @@ int main(int argc, char* argv[])
         Xped::Opts::CTM c_opts = Xped::Opts::ctm_from_toml(data.at("ctm"));
         constexpr Xped::Opts::CTMCheckpoint cp_opts{.MOVE = true, .CORNER = true};
         constexpr std::size_t TRank = 2;
-        Xped::iPEPSSolverAD<Scalar, Symmetry, cp_opts, TRank> Jack(o_opts, c_opts, Psi, std::move(ham));
+        Xped::iPEPSSolverAD<Scalar, Symmetry, cp_opts, TRank> Jack(o_opts, c_opts, Psi, *ham);
 
         // Xped::FermionBase<Symmetry> F(1);
         // Xped::OneSiteObservable<Symmetry> n(c.pattern);
@@ -218,28 +220,28 @@ int main(int argc, char* argv[])
         // Xped::OneSiteObservable<Symmetry> d(c.pattern);
         // for(auto& t : d.data) { t = F.d().data.template trim<2>(); }
 
-        Xped::SpinBase<Symmetry> B(1, 2);
-        Xped::TwoSiteObservable<Symmetry> SzSz(c.pattern, Xped::Opts::Bond::H | Xped::Opts::Bond::V | Xped::Opts::Bond::D1 | Xped::Opts::Bond::D2);
-        for(auto& t : SzSz.data_h) { t = Xped::tprod(B.Sz(), B.Sz()); }
-        for(auto& t : SzSz.data_v) { t = Xped::tprod(B.Sz(), B.Sz()); }
-        for(auto& t : SzSz.data_d1) { t = Xped::tprod(B.Sz(), B.Sz()); }
-        for(auto& t : SzSz.data_d2) { t = Xped::tprod(B.Sz(), B.Sz()); }
+        // Xped::SpinBase<Symmetry> B(1, 2);
+        // Xped::TwoSiteObservable<Symmetry> SzSz(c.pattern, Xped::Opts::Bond::H | Xped::Opts::Bond::V | Xped::Opts::Bond::D1 | Xped::Opts::Bond::D2);
+        // for(auto& t : SzSz.data_h) { t = Xped::tprod(B.Sz(), B.Sz()); }
+        // for(auto& t : SzSz.data_v) { t = Xped::tprod(B.Sz(), B.Sz()); }
+        // for(auto& t : SzSz.data_d1) { t = Xped::tprod(B.Sz(), B.Sz()); }
+        // for(auto& t : SzSz.data_d2) { t = Xped::tprod(B.Sz(), B.Sz()); }
 
-        Xped::TwoSiteObservable<Symmetry> SpSm(c.pattern, Xped::Opts::Bond::H | Xped::Opts::Bond::V | Xped::Opts::Bond::D1 | Xped::Opts::Bond::D2);
-        for(auto& t : SpSm.data_h) { t = Xped::tprod(B.Sp(), B.Sm()); }
-        for(auto& t : SpSm.data_v) { t = Xped::tprod(B.Sp(), B.Sm()); }
-        for(auto& t : SpSm.data_d1) { t = Xped::tprod(B.Sp(), B.Sm()); }
-        for(auto& t : SpSm.data_d2) { t = Xped::tprod(B.Sp(), B.Sm()); }
+        // Xped::TwoSiteObservable<Symmetry> SpSm(c.pattern, Xped::Opts::Bond::H | Xped::Opts::Bond::V | Xped::Opts::Bond::D1 | Xped::Opts::Bond::D2);
+        // for(auto& t : SpSm.data_h) { t = Xped::tprod(B.Sp(), B.Sm()); }
+        // for(auto& t : SpSm.data_v) { t = Xped::tprod(B.Sp(), B.Sm()); }
+        // for(auto& t : SpSm.data_d1) { t = Xped::tprod(B.Sp(), B.Sm()); }
+        // for(auto& t : SpSm.data_d2) { t = Xped::tprod(B.Sp(), B.Sm()); }
 
-        Xped::TwoSiteObservable<Symmetry> SmSp(c.pattern, Xped::Opts::Bond::H | Xped::Opts::Bond::V | Xped::Opts::Bond::D1 | Xped::Opts::Bond::D2);
-        for(auto& t : SmSp.data_h) { t = Xped::tprod(B.Sm(), B.Sp()); }
-        for(auto& t : SmSp.data_v) { t = Xped::tprod(B.Sm(), B.Sp()); }
-        for(auto& t : SmSp.data_d1) { t = Xped::tprod(B.Sm(), B.Sp()); }
-        for(auto& t : SmSp.data_d2) { t = Xped::tprod(B.Sm(), B.Sp()); }
-        Xped::OneSiteObservable<Symmetry> Sz(c.pattern);
-        for(auto& t : Sz.data) { t = B.Sz().data.template trim<2>(); }
-        Xped::OneSiteObservable<Symmetry> Sx(c.pattern);
-        for(auto& t : Sx.data) { t = B.Sx().data.template trim<2>(); }
+        // Xped::TwoSiteObservable<Symmetry> SmSp(c.pattern, Xped::Opts::Bond::H | Xped::Opts::Bond::V | Xped::Opts::Bond::D1 | Xped::Opts::Bond::D2);
+        // for(auto& t : SmSp.data_h) { t = Xped::tprod(B.Sm(), B.Sp()); }
+        // for(auto& t : SmSp.data_v) { t = Xped::tprod(B.Sm(), B.Sp()); }
+        // for(auto& t : SmSp.data_d1) { t = Xped::tprod(B.Sm(), B.Sp()); }
+        // for(auto& t : SmSp.data_d2) { t = Xped::tprod(B.Sm(), B.Sp()); }
+        // Xped::OneSiteObservable<Symmetry> Sz(c.pattern);
+        // for(auto& t : Sz.data) { t = B.Sz().data.template trim<2>(); }
+        // Xped::OneSiteObservable<Symmetry> Sx(c.pattern);
+        // for(auto& t : Sx.data) { t = B.Sx().data.template trim<2>(); }
         // Xped::OneSiteObservable<Symmetry> sz(c.pattern);
         // for(auto& t : sz.data) { t = B.Sz(1).data.template trim<2>(); }
         // Xped::OneSiteObservable<Symmetry> Szsz(c.pattern);
@@ -283,14 +285,15 @@ int main(int argc, char* argv[])
         //     //     auto o_Smsp = avg(env, Smsp);
         //     //     for(const auto d : o_Smsp) { fmt::print("Smsp={}\n", d); }
         // };
-        // Jack.callback = [n](XPED_CONST Xped::CTM<Scalar, Symmetry, 1>& env, std::size_t i) mutable {
+        // Jack.callback = [n, nup, ndn, d](XPED_CONST Xped::CTM<Scalar, Symmetry, TRank>& env, std::size_t i) mutable {
         //     fmt::print("Callback at iteration {}\n", i);
         //     auto o_n = avg(env, n);
-        //     // auto o_nup = avg(env, nup);
-        //     // auto o_ndn = avg(env, ndn);
-        //     // auto o_d = avg(env, d);
-        //     for(auto i = 0ul; i < o_n.size(); ++i) { fmt::print("n={}\n", o_n[i]); }
+        //     auto o_nup = avg(env, nup);
+        //     auto o_ndn = avg(env, ndn);
+        //     auto o_d = avg(env, d);
+        //     for(auto i = 0ul; i < o_n.size(); ++i) { fmt::print("n={}, nup={}, ndn={}, d={}\n", o_n[i], o_nup[i], o_ndn[i], o_d[i]); }
         // };
+        // Jack.callback = ham.getObservables(std::filesystem::path("obs/obs.h5"));
         Jack.solve<double>();
 #ifdef XPED_CACHE_PERMUTE_OUTPUT
         std::cout << "total hits=" << tree_cache</*shift*/ 0, /*Rank*/ 4, /*CoRank*/ 3, Symmetry>.cache.stats().total_hits()

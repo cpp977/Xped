@@ -1,13 +1,18 @@
 #ifndef XPED_KONDO_NECKLACE_HPP_
 #define XPED_KONDO_NECKLACE_HPP_
 
-#include <any>
 #include <map>
+#include <memory>
 #include <string>
+#include <vector>
+
+#include <highfive/H5File.hpp>
 
 #include "Xped/Core/Tensor.hpp"
+#include "Xped/PEPS/Models/Helpers.hpp"
 #include "Xped/PEPS/TwoSiteObservable.hpp"
 #include "Xped/Physics/SpinBase.hpp"
+#include "Xped/Util/Param.hpp"
 
 namespace Xped {
 
@@ -15,13 +20,19 @@ template <typename Symmetry>
 class KondoNecklace : public TwoSiteObservable<Symmetry>
 {
 public:
-    KondoNecklace(std::map<std::string, std::any>& params_in, const Pattern& pat, Opts::Bond bond = Opts::Bond::H | Opts::Bond::V)
+    KondoNecklace(std::map<std::string, Param>& params_in, const Pattern& pat_in, Opts::Bond bond = Opts::Bond::H | Opts::Bond::V)
         : TwoSiteObservable<Symmetry>(pat, bond)
         , params(params_in)
+        , pat(pat_in)
     {
-        // this->name = "KondoNecklace";
-        SpinBase<Symmetry> B(2, 2);
-        Tensor<double, 2, 2, Symmetry> gate;
+        B = SpinBase<Symmetry>(2, 2);
+        Tensor<double, 2, 2, Symmetry> gate, bond_gate;
+        if constexpr(std::is_same_v<Symmetry, Sym::SU2<Sym::SpinSU2>>) {
+            used_params = {"J", "Jk", "I"};
+        } else {
+            used_params = {"Jxy", "Jz", "Jkxy", "Jz", "Ixy", "Iz"};
+        }
+
         if constexpr(std::is_same_v<Symmetry, Sym::SU2<Sym::SpinSU2>>) {
             auto SS = (std::sqrt(3.) * tprod(B.Sdag(0), B.S(0))).eval();
 
@@ -31,8 +42,8 @@ public:
 
             auto SsxId = tprod(std::sqrt(3.) * SiteOperator<double, Symmetry>::prod(B.Sdag(0), B.S(1), Symmetry::qvacuum()), B.Id());
 
-            gate = std::any_cast<double>(params["J"]) * ss + 0.25 * std::any_cast<double>(params["Jk"]) * (SsxId + IdxSs) +
-                   std::any_cast<double>(params["I"]) * SS;
+            gate = params["J"].get<double>() * ss + 0.25 * params["Jk"].get<double>() * (SsxId + IdxSs) + params["I"].get<double>() * SS;
+            bond_gate = params["J"].get<double>() * ss + params["I"].get<double>() * SS;
         } else {
             auto SzSz = tprod(B.Sz(0), B.Sz(0));
             auto SpSm = tprod(B.Sp(0), B.Sm(0));
@@ -50,10 +61,12 @@ public:
             auto SpsmxId = tprod(B.Sp(0) * B.Sm(1), B.Id());
             auto SmspxId = tprod(B.Sm(0) * B.Sp(1), B.Id());
 
-            gate = std::any_cast<double>(params["Jz"]) * szsz + 0.5 * std::any_cast<double>(params["Jxy"]) * (spsm + smsp) +
-                   0.25 * (std::any_cast<double>(params["Jkz"]) * (SzszxId + IdxSzsz) +
-                           0.5 * std::any_cast<double>(params["Jkxy"]) * ((SpsmxId + IdxSpsm) + (SmspxId + IdxSmsp))) +
-                   std::any_cast<double>(params["Iz"]) * SzSz + 0.5 * std::any_cast<double>(params["Ixy"]) * (SpSm + SmSp);
+            gate = params["Jz"].get<double>() * szsz + 0.5 * params["Jxy"].get<double>() * (spsm + smsp) +
+                   0.25 * (params["Jkz"].get<double>() * (SzszxId + IdxSzsz) +
+                           0.5 * params["Jkxy"].get<double>() * ((SpsmxId + IdxSpsm) + (SmspxId + IdxSmsp))) +
+                   params["Iz"].get<double>() * SzSz + 0.5 * params["Ixy"].get<double>() * (SpSm + SmSp);
+            bond_gate = params["Jz"].get<double>() * szsz + 0.5 * params["Jxy"].get<double>() * (spsm + smsp) + params["Iz"].get<double>() * SzSz +
+                        0.5 * params["Ixy"].get<double>() * (SpSm + SmSp);
         }
 
         if((bond & Opts::Bond::H) == Opts::Bond::H) {
@@ -63,22 +76,71 @@ public:
             for(auto& t : this->data_v) { t = gate; }
         }
         if((bond & Opts::Bond::D1) == Opts::Bond::D1) {
-            for(auto& t : this->data_d1) { t = gate; }
+            for(auto& t : this->data_d1) { t = bond_gate; }
         }
         if((bond & Opts::Bond::D2) == Opts::Bond::D2) {
-            for(auto& t : this->data_d2) { t = gate; }
+            for(auto& t : this->data_d2) { t = bond_gate; }
         }
     }
 
-    std::string name() const override
+    virtual void setDefaultObs() override
     {
-        return "Kondo_Jz=" + std::to_string(std::any_cast<double>(params.at("Jz"))) +
-               "_Jxy=" + std::to_string(std::any_cast<double>(params.at("Jxy"))) + "_Jkz=" + std::to_string(std::any_cast<double>(params.at("Jkz"))) +
-               "_Jkxy=" + std::to_string(std::any_cast<double>(params.at("Jkxy"))) + "_Iz=" + std::to_string(std::any_cast<double>(params.at("Iz"))) +
-               "_Ixy=" + std::to_string(std::any_cast<double>(params.at("Ixy")));
+        auto Sz = std::make_unique<Xped::OneSiteObservable<Symmetry>>(pat);
+        for(auto& t : Sz->data) { t = B.Sz(0).data.template trim<2>(); }
+        auto sz = std::make_unique<Xped::OneSiteObservable<Symmetry>>(pat);
+        for(auto& t : sz->data) { t = B.Sz(1).data.template trim<2>(); }
+        obs.push_back(std::move(Sz));
+        obs.push_back(std::move(sz));
     }
 
-    std::map<std::string, std::any> params;
+    virtual std::string file_name() const override { return internal::create_filename("KondoNecklace", params, used_params); }
+
+    virtual std::string format() const override
+    {
+        return internal::format_params(fmt::format("KondoNecklace[sym={}]", Symmetry::name()), params, used_params);
+    }
+
+    virtual void computeObs(XPED_CONST CTM<double, Symmetry, 2>& env) override
+    {
+        for(auto& ob : obs) {
+            if(auto* one = dynamic_cast<OneSiteObservable<Symmetry>*>(ob.get()); one != nullptr) { avg(env, *one); }
+            if(auto* two = dynamic_cast<TwoSiteObservable<Symmetry>*>(ob.get()); two != nullptr) { avg(env, *two); }
+        }
+    }
+
+    virtual void computeObs(XPED_CONST CTM<double, Symmetry, 1>& env) override
+    {
+        for(auto& ob : obs) {
+            if(auto* one = dynamic_cast<OneSiteObservable<Symmetry>*>(ob.get()); one != nullptr) { avg(env, *one); }
+            if(auto* two = dynamic_cast<TwoSiteObservable<Symmetry>*>(ob.get()); two != nullptr) { avg(env, *two); }
+        }
+    }
+
+    virtual std::string getObsString(const std::string& offset) const override
+    {
+        std::string out;
+        for(const auto& ob : obs) {
+            out.append(ob->getResString(offset));
+            if(&ob != &obs.back()) { out.push_back('\n'); }
+        }
+        return out;
+    }
+
+    virtual void obsToFile(HighFive::File& file) const override
+    {
+        for(const auto& ob : obs) { ob->toFile(file); }
+    }
+
+    virtual void initObsfile(HighFive::File& file) const override
+    {
+        for(const auto& ob : obs) { ob->initFile(file); }
+    }
+
+    std::map<std::string, Param> params;
+    Pattern pat;
+    std::vector<std::string> used_params;
+    SpinBase<Symmetry> B;
+    std::vector<std::unique_ptr<ObservableBase>> obs;
 };
 
 } // namespace Xped

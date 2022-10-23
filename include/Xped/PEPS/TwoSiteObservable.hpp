@@ -1,12 +1,19 @@
 #ifndef XPED_TWO_SITE_OBSERVABLE_HPP_
 #define XPED_TWO_SITE_OBSERVABLE_HPP_
 
+#include "fmt/core.h"
+
+#include <highfive/H5DataSpace.hpp>
+
 #include "Xped/Core/Tensor.hpp"
 #include "Xped/PEPS/Bonds.hpp"
 #include "Xped/PEPS/ObservableBase.hpp"
 #include "Xped/PEPS/TMatrix.hpp"
 
 namespace Xped {
+
+template <typename, typename, std::size_t, bool, Opts::CTMCheckpoint>
+class CTM;
 
 template <typename Symmetry>
 struct TwoSiteObservable : public ObservableBase
@@ -62,6 +69,86 @@ struct TwoSiteObservable : public ObservableBase
         }
         return out;
     }
+
+    virtual std::string getResString(const std::string& offset) const override
+    {
+        std::string res;
+        if((bond & Opts::Bond::H) == Opts::Bond::H) {
+            fmt::format_to(std::back_inserter(res),
+                           "{}{:<10}: avg_h={:.2f}, vals_h={}\n",
+                           offset,
+                           this->name,
+                           obs_h.sum() / obs_h.size(),
+                           obs_h.uncompressedVector());
+        }
+        if((bond & Opts::Bond::V) == Opts::Bond::V) {
+            fmt::format_to(std::back_inserter(res),
+                           "{}{:<10}: avg_v={:.2f}, vals_v={}\n",
+                           offset,
+                           this->name,
+                           obs_v.sum() / obs_v.size(),
+                           obs_v.uncompressedVector());
+        }
+        if((bond & Opts::Bond::D1) == Opts::Bond::D1) {
+            fmt::format_to(std::back_inserter(res),
+                           "{}{:<10}: avg_d1={:.2f}, vals_d1={}\n",
+                           offset,
+                           this->name,
+                           obs_d1.sum() / obs_d1.size(),
+                           obs_d1.uncompressedVector());
+        }
+        if((bond & Opts::Bond::D2) == Opts::Bond::D2) {
+            fmt::format_to(std::back_inserter(res),
+                           "{}{:<10}: avg_d2={:.2f}, vals_d2={}",
+                           offset,
+                           this->name,
+                           obs_d2.sum() / obs_d2.size(),
+                           obs_d2.uncompressedVector());
+        }
+        return res;
+    }
+
+    virtual void toFile(HighFive::File& file) const override
+    {
+        auto write_component = [&file](std::string name, const auto& o) {
+            auto d = file.getDataSet("/" + name);
+            std::vector<std::vector<double>> data;
+            data.push_back(o.uncompressedVector());
+            std::size_t curr_size = d.getDimensions()[0];
+            d.resize({curr_size + 1, data[0].size()});
+            d.select({curr_size, 0}, {1, data[0].size()}).write(data);
+        };
+        if((bond & Opts::Bond::H) == Opts::Bond::H) { write_component(this->name + "_h", obs_h); }
+        if((bond & Opts::Bond::V) == Opts::Bond::V) { write_component(this->name + "_v", obs_v); }
+        if((bond & Opts::Bond::D1) == Opts::Bond::D1) { write_component(this->name + "_d1", obs_d1); }
+        if((bond & Opts::Bond::D2) == Opts::Bond::D2) { write_component(this->name + "_d2", obs_d2); }
+    }
+
+    virtual void initFile(HighFive::File& file) const override
+    {
+        HighFive::DataSpace dataspace = HighFive::DataSpace({0, 0}, {HighFive::DataSpace::UNLIMITED, HighFive::DataSpace::UNLIMITED});
+
+        // Use chunking
+        HighFive::DataSetCreateProps props;
+        props.add(HighFive::Chunking(std::vector<hsize_t>{2, 2}));
+
+        // Create the datasets
+        HighFive::DataSet dataset_h = file.createDataSet(this->name + "_h", dataspace, HighFive::create_datatype<double>(), props);
+        HighFive::DataSet dataset_v = file.createDataSet(this->name + "_v", dataspace, HighFive::create_datatype<double>(), props);
+        HighFive::DataSet dataset_d1 = file.createDataSet(this->name + "_d1", dataspace, HighFive::create_datatype<double>(), props);
+        HighFive::DataSet dataset_d2 = file.createDataSet(this->name + "_d2", dataspace, HighFive::create_datatype<double>(), props);
+    }
+
+    virtual void setDefaultObs() {}
+
+    virtual void computeObs(XPED_CONST CTM<double, Symmetry, 2, false, Opts::CTMCheckpoint{}>& env) {}
+    virtual void computeObs(XPED_CONST CTM<double, Symmetry, 1, false, Opts::CTMCheckpoint{}>& env) {}
+
+    virtual std::string getObsString(const std::string& offset) const { return ""; }
+
+    virtual void obsToFile(HighFive::File& file) const {}
+
+    virtual void initObsfile(HighFive::File& file) const {}
 
     template <typename Ar>
     void serialize(Ar& ar)

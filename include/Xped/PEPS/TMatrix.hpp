@@ -82,6 +82,14 @@ struct TMatrix
         ar& YAS_OBJECT_NVP("TMatrix", ("pattern", pat), ("tensors", tensors), ("is_changed", is_changed), ("name", name));
     }
 
+    std::vector<Ttype> uncompressedVector() const
+    {
+        std::vector<Ttype> out(pat.size());
+        for(int x = 0; x < pat.Lx; ++x) {
+            for(int y = 0; y < pat.Ly; ++y) { out[x + y * pat.Lx] = tensors[pat.uniqueIndex(x, y)]; }
+        }
+        return out;
+    }
     Pattern pat;
 
 private:

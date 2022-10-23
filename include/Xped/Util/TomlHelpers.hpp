@@ -9,6 +9,7 @@
 #include "toml.hpp"
 
 #include "Xped/PEPS/Bonds.hpp"
+#include "Xped/Util/Param.hpp"
 
 namespace Xped::util {
 
@@ -21,17 +22,17 @@ T enum_from_toml(const toml::value& t)
     return out;
 }
 
-std::map<std::string, std::any> params_from_toml(const toml::value& t)
+std::map<std::string, Param> params_from_toml(const toml::value& t)
 {
-    std::map<std::string, std::any> params;
+    std::map<std::string, Param> params;
     for(const auto& [k, v] : t.as_table()) {
         if(v.is_floating()) {
-            params[k] = static_cast<double>(v.as_floating());
+            params[k] = Param{.value = static_cast<double>(v.as_floating())};
         } else if(v.is_array()) {
             if(v.at(0).is_floating()) {
-                params[k] = toml::get<std::vector<double>>(v);
+                params[k] = Param{.value = toml::get<std::vector<double>>(v)};
             } else if(v.at(0).is_array()) {
-                params[k] = toml::get<std::vector<std::vector<double>>>(v);
+                params[k] = Param{.value = toml::get<std::vector<std::vector<double>>>(v)};
             }
         } else {
             throw std::invalid_argument("Bad model parameters.");

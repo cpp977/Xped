@@ -1,6 +1,10 @@
 #ifndef XPED_FERMIONSITE_HPP_
 #define XPED_FERMIONSITE_HPP_
 
+#include "fmt/ostream.h"
+#include "fmt/ranges.h"
+#include "fmt/std.h"
+
 #include "Xped/Physics/SiteOperator.hpp"
 #include "Xped/Physics/SpinIndex.hpp"
 #include "Xped/Physics/SpinOp.hpp"
@@ -100,6 +104,7 @@ protected:
 template <typename Symmetry_>
 Fermion<Symmetry_>::Fermion(bool REMOVE_DOUBLE, bool REMOVE_EMPTY, bool REMOVE_SINGLE, bool CONSIDER_SPIN, bool CONSIDER_CHARGE)
 {
+    HAS_SPIN = false;
     if(CONSIDER_SPIN) {
         for(std::size_t q = 0; q < Symmetry::Nq; ++q) {
             if(Symmetry::IS_SPIN[q]) {
@@ -108,10 +113,9 @@ Fermion<Symmetry_>::Fermion(bool REMOVE_DOUBLE, bool REMOVE_EMPTY, bool REMOVE_S
                 break;
             }
         }
-    } else {
-        HAS_SPIN = false;
     }
 
+    HAS_CHARGE = false;
     if(CONSIDER_CHARGE) {
         for(std::size_t q = 0; q < Symmetry::Nq; ++q) {
             if(Symmetry::IS_FERMIONIC[q] or Symmetry::IS_BOSONIC[q]) {
@@ -120,8 +124,6 @@ Fermion<Symmetry_>::Fermion(bool REMOVE_DOUBLE, bool REMOVE_EMPTY, bool REMOVE_S
                 break;
             }
         }
-    } else {
-        HAS_CHARGE = false;
     }
 
     // create basis for one Fermionic Site

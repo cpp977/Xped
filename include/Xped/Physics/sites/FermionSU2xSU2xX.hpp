@@ -79,8 +79,8 @@ Fermion<Sym::Combined<Sym::SU2<Sym::SpinSU2>, Sym::SU2<Sym::SpinSU2>, Symmetry_>
     fill_basis();
     basis_1s_.sort();
 
-    fmt::print("labels={}\n", labels);
-    std::cout << basis_1s_.info() << std::endl << basis_1s_ << std::endl;
+    // fmt::print("labels={}\n", labels);
+    // std::cout << basis_1s_.info() << std::endl << basis_1s_ << std::endl;
 
     qType Q_c = Symmetry::qvacuum();
     Q_c[0] = 2;

@@ -10,6 +10,7 @@
 
 #include "Xped/PEPS/UnitCell.hpp"
 #include "Xped/Util/Logging.hpp"
+#include "Xped/Util/TomlHelpers.hpp"
 
 namespace Xped::Opts {
 

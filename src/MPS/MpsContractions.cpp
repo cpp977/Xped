@@ -16,7 +16,7 @@ void contract_L(XPED_CONST Tensor<Scalar, 1, 1, Symmetry, false, AllocationPolic
 {
     SPDLOG_INFO("Entering contract_L().");
     Bnew.clear();
-    Bnew = Tensor<Scalar, 1, 1, Symmetry, false, AllocationPolicy>({{Bra.uncoupledCodomain()[0]}}, {{Ket.uncoupledCodomain()[0]}}, *Bold.world());
+    Bnew = Tensor<Scalar, 1, 1, Symmetry, false, AllocationPolicy>({{Bra.uncoupledCodomain()[0]}}, {{Ket.uncoupledCodomain()[0]}}, Bold.world());
     Bnew.setZero();
 
     for(std::size_t i = 0; i < Bra.sector().size(); i++) {
@@ -24,7 +24,7 @@ void contract_L(XPED_CONST Tensor<Scalar, 1, 1, Symmetry, false, AllocationPolic
         typename Symmetry::qType Q = Bra.sector(i);
         auto itKet = Ket.dict().find(Q);
         if(itKet == Ket.dict().end()) { continue; }
-        auto Mtmp = PlainInterface::construct_with_zero<Scalar>(dimQ, dimQ, *Bold.world());
+        auto Mtmp = PlainInterface::construct_with_zero<Scalar>(dimQ, dimQ, Bold.world());
         for(const auto& domainTree : Bra.domainTrees(Q)) {
             FusionTree<1, Symmetry> trivial;
             trivial.q_coupled = Q;
@@ -59,7 +59,7 @@ void contract_R(XPED_CONST Tensor<Scalar, 1, 1, Symmetry, false, AllocationPolic
 {
     SPDLOG_INFO("Entering contract_R().");
     Bnew.clear();
-    Bnew = Tensor<Scalar, 1, 1, Symmetry, false, AllocationPolicy>({{Ket.uncoupledDomain()[0]}}, {{Bra.uncoupledDomain()[0]}}, *Bold.world());
+    Bnew = Tensor<Scalar, 1, 1, Symmetry, false, AllocationPolicy>({{Ket.uncoupledDomain()[0]}}, {{Bra.uncoupledDomain()[0]}}, Bold.world());
     Bnew.setZero();
 
     for(std::size_t i = 0; i < Ket.sector().size(); i++) {
@@ -77,7 +77,7 @@ void contract_R(XPED_CONST Tensor<Scalar, 1, 1, Symmetry, false, AllocationPolic
             trivial.dim = dimQ;
 
             auto Qin = domainTree.q_uncoupled[0];
-            auto Mtmp = PlainInterface::construct_with_zero<Scalar>(domainTree.dims[0], domainTree.dims[0], *Bold.world());
+            auto Mtmp = PlainInterface::construct_with_zero<Scalar>(domainTree.dims[0], domainTree.dims[0], Bold.world());
 
             auto Mbra = Bra.subMatrix(domainTree, trivial);
             auto Mket = Ket.subMatrix(domainTree, trivial);

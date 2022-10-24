@@ -8,6 +8,7 @@
 
 #include "Xped/Core/Tensor.hpp"
 #include "Xped/PEPS/Models/Helpers.hpp"
+#include "Xped/PEPS/OneSiteObservable.hpp"
 #include "Xped/PEPS/TwoSiteObservable.hpp"
 #include "Xped/Physics/FermionBase.hpp"
 #include "Xped/Util/Param.hpp"
@@ -87,7 +88,7 @@ public:
         return internal::format_params(fmt::format("Hubbard[sym={}]", Symmetry::name()), params, used_params);
     }
 
-    virtual void computeObs(XPED_CONST CTM<double, Symmetry, 2>& env) override
+    virtual void computeObs(XPED_CONST CTM<double, Symmetry, 2, false, Opts::CTMCheckpoint{}>& env) override
     {
         for(auto& ob : obs) {
             if(auto* one = dynamic_cast<OneSiteObservable<Symmetry>*>(ob.get()); one != nullptr) { avg(env, *one); }
@@ -95,7 +96,7 @@ public:
         }
     }
 
-    virtual void computeObs(XPED_CONST CTM<double, Symmetry, 1>& env) override
+    virtual void computeObs(XPED_CONST CTM<double, Symmetry, 1, false, Opts::CTMCheckpoint{}>& env) override
     {
         for(auto& ob : obs) {
             if(auto* one = dynamic_cast<OneSiteObservable<Symmetry>*>(ob.get()); one != nullptr) { avg(env, *one); }

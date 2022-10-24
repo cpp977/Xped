@@ -6,6 +6,7 @@
 #include <highfive/H5DataSpace.hpp>
 
 #include "Xped/Core/Tensor.hpp"
+#include "Xped/PEPS/CTMOpts.hpp"
 #include "Xped/PEPS/ObservableBase.hpp"
 #include "Xped/PEPS/TMatrix.hpp"
 

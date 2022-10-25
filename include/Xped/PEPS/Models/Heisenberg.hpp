@@ -61,9 +61,13 @@ public:
 
     virtual void setDefaultObs() override
     {
-        auto Sz = std::make_unique<Xped::OneSiteObservable<Symmetry>>(pat);
+        auto Sz = std::make_unique<Xped::OneSiteObservable<Symmetry>>(pat, "Sz");
         for(auto& t : Sz->data) { t = B.Sz().data.template trim<2>(); }
         obs.push_back(std::move(Sz));
+
+        auto Sx = std::make_unique<Xped::OneSiteObservable<Symmetry>>(pat, "Sx");
+        for(auto& t : Sx->data) { t = B.Sx().data.template trim<2>(); }
+        obs.push_back(std::move(Sx));
     }
 
     virtual std::string file_name() const override { return internal::create_filename("Heisenberg", params, used_params); }

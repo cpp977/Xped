@@ -7,6 +7,9 @@
 #include <iostream>
 #include <sstream>
 
+#include "fmt/chrono.h"
+#include "fmt/core.h"
+
 namespace Xped::util {
 
 enum class TimeUnit
@@ -19,6 +22,21 @@ enum class TimeUnit
     NATURAL
 };
 
+std::string format_secs(std::chrono::duration<double, std::ratio<1, 1>> dts)
+{
+    if(dts.count() < 60.) {
+        return fmt::format("{:.2}", dts);
+    } else if(dts.count() >= 60. && dts.count() < 3600.) {
+        std::chrono::duration<double, std::ratio<60, 1>> dtm = dts;
+        return fmt::format("{:.2}", dtm);
+    } else if(dts.count() >= 3600. && dts.count() < 86400.) {
+        std::chrono::duration<double, std::ratio<3600, 1>> dth = dts;
+        return fmt::format("{:.2}", dth);
+    }
+    std::chrono::duration<double, std::ratio<86400, 1>> dtd = dts;
+    return fmt::format("{}d", dtd.count());
+}
+
 template <typename ClockClass = std::chrono::high_resolution_clock>
 class Stopwatch
 {
@@ -26,7 +44,7 @@ public:
     Stopwatch();
     Stopwatch(std::string filename_input);
 
-    double time(TimeUnit u = TimeUnit::SECONDS);
+    std::string time(TimeUnit u = TimeUnit::NATURAL);
 
     void start();
 
@@ -67,44 +85,26 @@ Stopwatch<ClockClass>::Stopwatch(std::string filename_input)
 }
 
 template <typename ClockClass>
-double Stopwatch<ClockClass>::time(TimeUnit u)
+std::string Stopwatch<ClockClass>::time(TimeUnit u)
 {
     t_end = ClockClass::now();
-    std::stringstream ss;
-
+    std::chrono::duration<double, std::ratio<1, 1>> dt = t_end - t_start;
     if(u == TimeUnit::MILLISECONDS) {
-        std::chrono::duration<double, std::ratio<1, 1000>> dt = t_end - t_start;
-        return dt.count();
+        std::chrono::duration<double, std::ratio<1, 1000>> dtms = dt;
+        return fmt::format("{}", dtms);
     } else if(u == TimeUnit::SECONDS) {
-        std::chrono::duration<double, std::ratio<1, 1>> dt = t_end - t_start;
-        return dt.count();
+        return fmt::format("{}", dt);
     } else if(u == TimeUnit::MINUTES) {
-        std::chrono::duration<double, std::ratio<60, 1>> dt = t_end - t_start;
-        return dt.count();
+        std::chrono::duration<double, std::ratio<60, 1>> dtm = dt;
+        return fmt::format("{}", dtm);
     } else if(u == TimeUnit::HOURS) {
-        std::chrono::duration<double, std::ratio<3600, 1>> dt = t_end - t_start;
-        return dt.count();
+        std::chrono::duration<double, std::ratio<3600, 1>> dth = dt;
+        return fmt::format("{}", dth);
     } else if(u == TimeUnit::DAYS) {
-        std::chrono::duration<double, std::ratio<86400, 1>> dt = t_end - t_start;
-        return dt.count();
-    } else if(u == TimeUnit::NATURAL) {
-        std::chrono::duration<double, std::ratio<1, 1>> dtTest = t_end - t_start;
-        if(dtTest.count() < 60.) {
-            std::chrono::duration<double, std::ratio<1, 1>> dt = t_end - t_start;
-            ss << dt.count() << "s";
-        } else if(dtTest.count() >= 60. && dtTest.count() < 3600.) {
-            std::chrono::duration<double, std::ratio<60, 1>> dt = t_end - t_start;
-            ss << dt.count() << "min";
-        } else if(dtTest.count() >= 3600. && dtTest.count() < 86400.) {
-            std::chrono::duration<double, std::ratio<3600, 1>> dt = t_end - t_start;
-            ss << dt.count() << "h";
-        } else {
-            std::chrono::duration<double, std::ratio<86400, 1>> dt = t_end - t_start;
-            ss << dt.count() << "d";
-        }
+        std::chrono::duration<double, std::ratio<86400, 1>> dtd = dt;
+        return fmt::format("{}d", dtd.count());
     }
-
-    return std::numeric_limits<double>::quiet_NaN();
+    return format_secs(dt);
 }
 
 template <typename ClockClass>

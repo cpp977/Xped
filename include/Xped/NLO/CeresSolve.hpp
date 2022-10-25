@@ -251,14 +251,14 @@ struct iPEPSSolverAD
         ceres::CallbackReturnType operator()(const ceres::IterationSummary& summary)
         {
             Log::per_iteration(solver.optim_opts.verbosity,
-                               "{}{:^4d}: E={:+.8f}, ΔE={:.1e}, |∇|={:.1e}, step time={:6.1f}s, total time={:6.1f}s",
+                               "{}{:^4d}: E={:+.8f}, ΔE={:.1e}, |∇|={:.1e}, step time={}, total time={}",
                                fmt::styled("Iteration=", fmt::emphasis::bold),
                                fmt::styled(summary.iteration, fmt::emphasis::bold),
                                summary.cost,
                                summary.cost_change,
                                summary.gradient_norm,
-                               summary.iteration_time_in_seconds,
-                               summary.cumulative_time_in_seconds);
+                               util::format_secs(std::chrono::duration<double, std::ratio<1, 1>>(summary.iteration_time_in_seconds)),
+                               util::format_secs(std::chrono::duration<double, std::ratio<1, 1>>(summary.cumulative_time_in_seconds)));
             if(solver.optim_opts.log_format == ".h5") {
                 HighFive::File file((solver.optim_opts.working_directory / solver.optim_opts.logging_directory).string() + "/" +
                                         solver.H.file_name() + ".h5",

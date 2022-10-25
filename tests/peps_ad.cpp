@@ -73,16 +73,14 @@ int main(int argc, char* argv[])
         Xped::mpi::XpedWorld world;
         auto my_logger = spdlog::basic_logger_mt("info", "logs/log.txt");
 #endif
-        spdlog::set_default_logger(my_logger);
         std::ios::sync_with_stdio(true);
 
         ArgParser args(argc, argv);
-        google::InitGoogleLogging(argv[0]);
 
         my_logger->sinks()[0]->set_pattern("[%H:%M:%S] [%n] [%^---%L---%$] [process %P] %v");
         if(world.rank == 0) {
             auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
-            console_sink->set_pattern("[%H:%M:%S] [%n] [%^---%L---%$] [process %P] %v");
+            console_sink->set_pattern("%v");
             my_logger->sinks().push_back(console_sink);
         }
         spdlog::set_default_logger(my_logger);
@@ -94,12 +92,12 @@ int main(int argc, char* argv[])
         typedef double Scalar;
         // using Symmetry = Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>;
         // using Symmetry = Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>;
-        using Symmetry =
-            Xped::Sym::Combined<Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>>;
+        // using Symmetry =
+        //     Xped::Sym::Combined<Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>>;
         // typedef Xped::Sym::SU2<Xped::Sym::SpinSU2> Symmetry;
         // typedef Xped::Sym::U1<Xped::Sym::SpinU1> Symmetry;
         // typedef Xped::Sym::ZN<Xped::Sym::SpinU1, 36, double> Symmetry;
-        // typedef Xped::Sym::U0<double> Symmetry;
+        typedef Xped::Sym::U0<double> Symmetry;
 
         std::unique_ptr<Xped::TwoSiteObservable<Symmetry>> ham;
 
@@ -187,12 +185,11 @@ int main(int argc, char* argv[])
             for(std::size_t i = 1; i < bs.size(); ++i) { bonds = bonds | bs[i]; }
         }
 
-        // if(toml::find(data.at("model"), "name").as_string() == "Heisenberg") {
-        //     ham = std::make_unique<Xped::Heisenberg<Symmetry>>(params, c.pattern, bonds);
-        // } else if(toml::find(data.at("model"), "name").as_string() == "KondoNecklace") {
-        //     ham = std::make_unique<Xped::KondoNecklace<Symmetry>>(params, c.pattern, bonds);
-        // } else
-        if(toml::find(data.at("model"), "name").as_string() == "Hubbard") {
+        if(toml::find(data.at("model"), "name").as_string() == "Heisenberg") {
+            ham = std::make_unique<Xped::Heisenberg<Symmetry>>(params, c.pattern, bonds);
+        } else if(toml::find(data.at("model"), "name").as_string() == "KondoNecklace") {
+            ham = std::make_unique<Xped::KondoNecklace<Symmetry>>(params, c.pattern, bonds);
+        } else if(toml::find(data.at("model"), "name").as_string() == "Hubbard") {
             ham = std::make_unique<Xped::Hubbard<Symmetry>>(params, c.pattern, bonds);
         } else {
             throw std::invalid_argument("Specified model is not implemented.");

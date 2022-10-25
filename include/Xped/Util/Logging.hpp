@@ -3,6 +3,8 @@
 
 #include "fmt/core.h"
 
+#include "spdlog/spdlog.h"
+
 #include <boost/describe.hpp>
 
 namespace Xped {
@@ -24,8 +26,9 @@ template <typename... Args>
 auto log(Verbosity verb, Verbosity policy, std::string_view fmt, Args&&... args)
 {
     if(verb <= policy) {
-        fmt::vprint(fmt, fmt::make_format_args(std::forward<Args>(args)...));
-        fmt::print("\n");
+        spdlog::info("{}", fmt::vformat(fmt, fmt::make_format_args(std::forward<Args>(args)...)));
+        // fmt::vprint(fmt, fmt::make_format_args(std::forward<Args>(args)...));
+        // fmt::print("\n");
     }
 }
 

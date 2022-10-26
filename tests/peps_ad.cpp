@@ -5,6 +5,23 @@
 #include <string>
 #include <vector>
 
+///////////////////////////////////////////////////////////////////////////////
+// Uncomment to customize level names (e.g. "MT TRACE")
+//
+// #define SPDLOG_LEVEL_NAMES { "TRACE", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL", "OFF" }
+// #define SPDLOG_LEVEL_NAMES \
+//     { \
+//         "DEBUG", "PER_ITERATION", "ON_ENTRY", "ON_EXIT", "WARNING", "CRITICAL", "SILENT" \
+//     } \
+///////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////
+// Uncomment to customize short level names (e.g. "MT")
+// These can be longer than one character.
+//
+// #define SPDLOG_SHORT_LEVEL_NAMES { "D", "I", "B", "E", "W", "C", "S" }
+///////////////////////////////////////////////////////////////////////////////
+
 #include "spdlog/spdlog.h"
 
 #include "spdlog/fmt/ostr.h"
@@ -78,11 +95,14 @@ int main(int argc, char* argv[])
         ArgParser args(argc, argv);
 
         my_logger->sinks()[0]->set_pattern("[%H:%M:%S] [%n] [%^---%L---%$] [process %P] %v");
+        my_logger->sinks()[0]->set_level(spdlog::level::trace);
         if(world.rank == 0) {
             auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
-            console_sink->set_pattern("%v");
+            console_sink->set_pattern("[%^---%l---%$] %v");
+            console_sink->set_level(spdlog::level::trace);
             my_logger->sinks().push_back(console_sink);
         }
+        my_logger->set_level(spdlog::level::trace);
         spdlog::set_default_logger(my_logger);
 
         SPDLOG_INFO("Number of MPI processes: {}", world.np);

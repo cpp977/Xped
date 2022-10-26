@@ -64,10 +64,18 @@ public:
         auto Sz = std::make_unique<Xped::OneSiteObservable<Symmetry>>(pat, "Sz");
         for(auto& t : Sz->data) { t = B.Sz().data.template trim<2>(); }
         obs.push_back(std::move(Sz));
-
-        auto Sx = std::make_unique<Xped::OneSiteObservable<Symmetry>>(pat, "Sx");
-        for(auto& t : Sx->data) { t = B.Sx().data.template trim<2>(); }
-        obs.push_back(std::move(Sx));
+        if constexpr(Symmetry::ALL_IS_TRIVIAL) {
+            auto Sx = std::make_unique<Xped::OneSiteObservable<Symmetry>>(pat, "Sx");
+            for(auto& t : Sx->data) { t = B.Sx().data.template trim<2>(); }
+            obs.push_back(std::move(Sx));
+        }
+        auto SzSz = std::make_unique<Xped::TwoSiteObservable<Symmetry>>(
+            pat, Xped::Opts::Bond::H | Xped::Opts::Bond::V | Xped::Opts::Bond::D1 | Xped::Opts::Bond::D2, "SzSz");
+        for(auto& t : SzSz->data_h) { t = Xped::tprod(B.Sz(), B.Sz()); }
+        for(auto& t : SzSz->data_v) { t = Xped::tprod(B.Sz(), B.Sz()); }
+        for(auto& t : SzSz->data_d1) { t = Xped::tprod(B.Sz(), B.Sz()); }
+        for(auto& t : SzSz->data_d2) { t = Xped::tprod(B.Sz(), B.Sz()); }
+        obs.push_back(std::move(SzSz));
     }
 
     virtual std::string file_name() const override { return internal::create_filename("Heisenberg", params, used_params); }

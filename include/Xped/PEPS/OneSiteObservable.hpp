@@ -39,13 +39,8 @@ struct OneSiteObservable : public ObservableBase
     virtual std::string getResString(const std::string& offset) const override
     {
         std::string res;
-        fmt::format_to(std::back_inserter(res), "{}{:<10}: avg={:.2f}, vals=[", offset, this->name, obs.sum() / obs.size());
-        auto data = obs.uncompressedVector();
-        for(auto i = 0; auto d : data) {
-            fmt::format_to(std::back_inserter(res), "{:.2f}", d);
-            if(i++ < data.size() - 1) { fmt::format_to(std::back_inserter(res), ", "); }
-        }
-        fmt::format_to(std::back_inserter(res), "]");
+        fmt::format_to(
+            std::back_inserter(res), "{}{:<10}: avg={:+.2f}, vals={::+.2f}", offset, this->name, obs.sum() / obs.size(), obs.uncompressedVector());
         return res;
     }
 

@@ -76,7 +76,7 @@ struct TwoSiteObservable : public ObservableBase
         std::string res;
         if((bond & Opts::Bond::H) == Opts::Bond::H) {
             fmt::format_to(std::back_inserter(res),
-                           "{}{:<10}: avg_h={:.2f}, vals_h={}\n",
+                           "{}{:<10}: avg_h={:+.2f}, vals_h={::+.2f}\n",
                            offset,
                            this->name,
                            obs_h.sum() / obs_h.size(),
@@ -84,7 +84,7 @@ struct TwoSiteObservable : public ObservableBase
         }
         if((bond & Opts::Bond::V) == Opts::Bond::V) {
             fmt::format_to(std::back_inserter(res),
-                           "{}{:<10}: avg_v={:.2f}, vals_v={}\n",
+                           "{}{:<10}: avg_v={:+.2f}, vals_v={::+.2f}\n",
                            offset,
                            this->name,
                            obs_v.sum() / obs_v.size(),
@@ -92,7 +92,7 @@ struct TwoSiteObservable : public ObservableBase
         }
         if((bond & Opts::Bond::D1) == Opts::Bond::D1) {
             fmt::format_to(std::back_inserter(res),
-                           "{}{:<10}: avg_d1={:.2f}, vals_d1={}\n",
+                           "{}{:<10}: avg_d1={:+.2f}, vals_d1={::+.2f}\n",
                            offset,
                            this->name,
                            obs_d1.sum() / obs_d1.size(),
@@ -100,7 +100,7 @@ struct TwoSiteObservable : public ObservableBase
         }
         if((bond & Opts::Bond::D2) == Opts::Bond::D2) {
             fmt::format_to(std::back_inserter(res),
-                           "{}{:<10}: avg_d2={:.2f}, vals_d2={}",
+                           "{}{:<10}: avg_d2={:+.2f}, vals_d2={::+.2f}",
                            offset,
                            this->name,
                            obs_d2.sum() / obs_d2.size(),

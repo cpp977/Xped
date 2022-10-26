@@ -9,7 +9,7 @@ index 8fa60e4c..cc1735b8 100644
 -// #define SPDLOG_LEVEL_NAMES { "MY TRACE", "MY DEBUG", "MY INFO", "MY WARNING", "MY ERROR", "MY CRITICAL", "OFF" }
 +#define SPDLOG_LEVEL_NAMES                                                                                                                 \
 +    {                                                                                                                                      \
-+        "DEBUG", "PER_ITERATION", "ON_ENTRY", "ON_EXIT", "WARNING", "CRITICAL", "SILENT"                                                   \
++        " debug  ", "per-iter", "on-entry", "on-exit ", "warning ", "critical", " silent "                                                 \
 +    }
  ///////////////////////////////////////////////////////////////////////////////
  

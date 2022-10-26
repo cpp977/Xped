@@ -40,7 +40,7 @@ struct OneSiteObservable : public ObservableBase
     {
         std::string res;
         fmt::format_to(
-            std::back_inserter(res), "{}{:<10}: avg={:+.2f}, vals={::+.2f}", offset, this->name, obs.sum() / obs.size(), obs.uncompressedVector());
+            std::back_inserter(res), "{}{:<10}: avg={:+.2f}, vals={::+.4f}", offset, this->name, obs.sum() / obs.size(), obs.uncompressedVector());
         return res;
     }
 

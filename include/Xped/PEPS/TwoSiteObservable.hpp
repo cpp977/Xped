@@ -27,8 +27,9 @@ struct TwoSiteObservable : public ObservableBase
       x,y: O_d1(x,y; x+1,y+1)
       x,y: O_d2(x,y; x+1,y-1)
      */
-    TwoSiteObservable(const Pattern& pat, Opts::Bond bond)
-        : bond(bond)
+    TwoSiteObservable(const Pattern& pat, Opts::Bond bond, const std::string& name_in = "")
+        : ObservableBase(name_in)
+        , bond(bond)
     {
         if((bond & Opts::Bond::H) == Opts::Bond::H) {
             data_h = TMatrix<Tensor<double, 2, 2, Symmetry, false>>(pat);
@@ -76,7 +77,7 @@ struct TwoSiteObservable : public ObservableBase
         std::string res;
         if((bond & Opts::Bond::H) == Opts::Bond::H) {
             fmt::format_to(std::back_inserter(res),
-                           "{}{:<10}: avg_h={:+.2f}, vals_h={::+.2f}\n",
+                           "{}{:<10}: avg_h={:+.2f}, vals_h={::+.4f}\n",
                            offset,
                            this->name,
                            obs_h.sum() / obs_h.size(),
@@ -84,7 +85,7 @@ struct TwoSiteObservable : public ObservableBase
         }
         if((bond & Opts::Bond::V) == Opts::Bond::V) {
             fmt::format_to(std::back_inserter(res),
-                           "{}{:<10}: avg_v={:+.2f}, vals_v={::+.2f}\n",
+                           "{}{:<10}: avg_v={:+.2f}, vals_v={::+.4f}\n",
                            offset,
                            this->name,
                            obs_v.sum() / obs_v.size(),
@@ -92,7 +93,7 @@ struct TwoSiteObservable : public ObservableBase
         }
         if((bond & Opts::Bond::D1) == Opts::Bond::D1) {
             fmt::format_to(std::back_inserter(res),
-                           "{}{:<10}: avg_d1={:+.2f}, vals_d1={::+.2f}\n",
+                           "{}{:<10}: avg_d1={:+.2f}, vals_d1={::+.4f}\n",
                            offset,
                            this->name,
                            obs_d1.sum() / obs_d1.size(),
@@ -100,7 +101,7 @@ struct TwoSiteObservable : public ObservableBase
         }
         if((bond & Opts::Bond::D2) == Opts::Bond::D2) {
             fmt::format_to(std::back_inserter(res),
-                           "{}{:<10}: avg_d2={:+.2f}, vals_d2={::+.2f}",
+                           "{}{:<10}: avg_d2={:+.2f}, vals_d2={::+.4f}",
                            offset,
                            this->name,
                            obs_d2.sum() / obs_d2.size(),

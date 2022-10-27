@@ -422,7 +422,6 @@ Qbasis<Symmetry, depth + 1, AllocationPolicy> Qbasis<Symmetry, depth, Allocation
                                                                                                  bool CONJ) const
 {
     Qbasis<Symmetry, depth + 1, AllocationPolicy> out;
-    // build the history of the combination. Data is relevant for MultipedeQ contractions which include a fuse of two leg.
     for(const auto& elem1 : this->data_) {
         auto [q1, num1, plain1] = elem1;
         for(const auto& elem2 : other.data_) {

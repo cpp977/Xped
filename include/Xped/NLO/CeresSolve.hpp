@@ -157,7 +157,8 @@ struct iPEPSSolverAD
         if(optim_opts.save_period > 0) { options.callbacks.push_back(&save_c); }
         ceres::GradientProblemSolver::Summary summary;
         ceres::Solve(options, *problem, parameters.data(), &summary);
-        custom_c(summary.iterations.back());
+        custom_c((summary.iterations.size() > 0) ? summary.iterations.back() : ceres::IterationSummary{});
+        obs_c((summary.iterations.size() > 0) ? summary.iterations.back() : ceres::IterationSummary{});
         Log::on_exit(optim_opts.verbosity, "{}", summary.FullReport());
     }
 

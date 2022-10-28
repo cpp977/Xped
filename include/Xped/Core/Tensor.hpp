@@ -285,10 +285,7 @@ public:
     Self twist(std::size_t leg) const;
 
     template <std::size_t... legs>
-    Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy> shiftQN(qType charge) const;
-
-    // template <std::size_t leg>
-    // Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy> shiftQN(qType charge) const;
+    Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy> shiftQN(std::array<qType, sizeof...(legs)> charges) const;
 
 #if XPED_HAS_NTTP
     template <auto a1, auto a2, std::size_t ResRank, bool TRACK = false, std::size_t OtherRank, std::size_t OtherCoRank, bool ENABLE_AD>

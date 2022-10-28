@@ -30,7 +30,7 @@ struct OneSiteObservable : public ObservableBase
         for(int x = 0; x < data.pat.Lx; ++x) {
             for(int y = 0; y < data.pat.Ly; ++y) {
                 if(not data.pat.isUnique(x, y)) { continue; }
-                out.data(x, y) = data(x, y).template shiftQN<0, 1>(charges(x, y));
+                out.data(x, y) = data(x, y).template shiftQN<0, 1>(std::array{charges(x, y), charges(x, y)});
             }
         }
         return out;

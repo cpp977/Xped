@@ -1,4 +1,5 @@
 #include <iostream>
+#include <numeric>
 #include <variant>
 #include <vector>
 
@@ -178,6 +179,14 @@ size_t Qbasis<Symmetry, depth, AllocationPolicy>::full_outer_num(const qType& q)
         }
     }
     return out;
+}
+
+template <typename Symmetry, std::size_t depth, typename AllocationPolicy>
+size_t Qbasis<Symmetry, depth, AllocationPolicy>::index(const qType& q) const
+{
+    auto it = cfind(q);
+    assert(it != data_.end() and "The quantum number is not in the basis");
+    return std::distance(data_.begin(), it);
 }
 
 template <typename Symmetry, std::size_t depth, typename AllocationPolicy>
@@ -364,7 +373,11 @@ template <typename Symmetry, std::size_t depth, typename AllocationPolicy>
 std::pair<std::vector<std::size_t>, Qbasis<Symmetry, depth, AllocationPolicy>> Qbasis<Symmetry, depth, AllocationPolicy>::shift(qType qshift) const
 {
     static_assert(depth == 1, "shift() in Qbasis is only for bases without depth.");
-    if(qshift == Symmetry::qvacuum()) { return std::make_pair(std::vector{0ul}, *this); }
+    if(qshift == Symmetry::qvacuum()) {
+        std::vector<std::size_t> out(this->Nq());
+        std::iota(out.begin(), out.end(), 0ul);
+        return std::make_pair(out, *this);
+    }
     assert(not Symmetry::ANY_NON_ABELIAN and "Nontrivial shifts only for Abelian symmetries.");
     Qbasis<Symmetry, depth, AllocationPolicy> out;
     for(const auto& [q, dim, plain] : data_) { out.push_back(Symmetry::reduceSilent(q, qshift)[0], plain.dim()); }
@@ -430,7 +443,7 @@ Qbasis<Symmetry, depth + 1, AllocationPolicy> Qbasis<Symmetry, depth, Allocation
             // auto plain = plain1.combine(plain2);
             auto qVec = Symmetry::reduceSilent(q1, q2);
             for(const auto& q : qVec) {
-                for(auto& thisTree : this->tree(q1))
+                for(const auto& thisTree : this->tree(q1))
                     for(const auto& otherTree : other.tree(q2)) {
                         auto totalTree = thisTree.enlarge(otherTree);
                         totalTree.q_coupled = q;

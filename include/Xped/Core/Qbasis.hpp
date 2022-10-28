@@ -146,7 +146,16 @@ public:
     size_t outer_num(const qType& q) const;
     /**Computes the total number with which the sector with quantum number \p q begins and takes into account the dimension of each irrep.*/
     size_t full_outer_num(const qType& q) const;
+    /**Returns the index of a given quantum number.*/
+    size_t index(const qType& q) const;
     ///\}
+
+    /**Inverse function to `index(const qType&)`.*/
+    qType qn(std::size_t index) const
+    {
+        assert(index < data_.size());
+        return std::get<0>(data_[index]);
+    };
 
     void remove(const qType& q);
 
@@ -229,7 +238,7 @@ public:
     inline const auto& tree(const qType& q) const
     {
         auto it = trees.find(q);
-        if(it == trees.end()) { assert(false); }
+        assert(it != trees.end());
         return it->second;
     }
 

@@ -49,6 +49,8 @@ struct FusionTree
 
     inline void computeDim() { dim = std::accumulate(dims.begin(), dims.end(), 1ul, std::multiplies<std::size_t>()); }
 
+    void computeIntermediates();
+
     bool operator<(const FusionTree<Rank, Symmetry>& other) const;
 
     bool operator==(const FusionTree<Rank, Symmetry>& other) const;

@@ -114,6 +114,23 @@ std::string FusionTree<Rank, Symmetry>::print() const
 }
 
 template <std::size_t Rank, typename Symmetry>
+void FusionTree<Rank, Symmetry>::computeIntermediates()
+{
+    assert(Symmetry::ALL_ABELIAN and "Cannot compute intermediate quantum numbers for non-Abelian symmetries.");
+    for(std::size_t i = 0; i < q_intermediates.size(); ++i) {
+        q_intermediates[i] = (i == 0) ? Symmetry::reduceSilent(q_uncoupled[0], q_uncoupled[1]).front()
+                                      : Symmetry::reduceSilent(q_intermediates[i - 1], q_uncoupled[i + 1]).front();
+    }
+    if constexpr(Rank < 2) {
+        q_coupled = q_uncoupled.front();
+    } else if constexpr(Rank == 2) {
+        q_coupled = Symmetry::reduceSilent(q_uncoupled[0], q_uncoupled[1]).front();
+    } else {
+        q_coupled = Symmetry::reduceSilent(q_intermediates.back(), q_uncoupled.back()).front();
+    }
+}
+
+template <std::size_t Rank, typename Symmetry>
 template <typename PlainLib>
 typename PlainLib::template TType<typename FusionTree<Rank, Symmetry>::Scalar, Rank + 1>
 FusionTree<Rank, Symmetry>::asTensor(const mpi::XpedWorld& world) const

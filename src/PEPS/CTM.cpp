@@ -6,12 +6,7 @@
 #include "Xped/PEPS/CTM.hpp"
 
 #include "Xped/Core/CoeffUnaryOp.hpp"
-#include "Xped/PEPS/Models/KondoNecklace.hpp"
 #include "Xped/PEPS/PEPSContractions.hpp"
-#include "Xped/Symmetry/SU2.hpp"
-#include "Xped/Symmetry/U0.hpp"
-#include "Xped/Symmetry/U1.hpp"
-#include "Xped/Util/Bool.hpp"
 
 #include "Xped/AD/reverse_pass_callback_alloc.hpp"
 

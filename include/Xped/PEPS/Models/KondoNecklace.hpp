@@ -22,7 +22,7 @@ class KondoNecklace : public TwoSiteObservable<Symmetry>
 {
 public:
     KondoNecklace(std::map<std::string, Param>& params_in, const Pattern& pat_in, Opts::Bond bond = Opts::Bond::H | Opts::Bond::V)
-        : TwoSiteObservable<Symmetry>(pat, bond)
+        : TwoSiteObservable<Symmetry>(pat_in, bond)
         , params(params_in)
         , pat(pat_in)
     {
@@ -31,7 +31,7 @@ public:
         if constexpr(std::is_same_v<Symmetry, Sym::SU2<Sym::SpinSU2>>) {
             used_params = {"J", "Jk", "I"};
         } else {
-            used_params = {"Jxy", "Jz", "Jkxy", "Jz", "Ixy", "Iz"};
+            used_params = {"Jxy", "Jz", "Jkxy", "Jkz", "Ixy", "Iz"};
         }
 
         if constexpr(std::is_same_v<Symmetry, Sym::SU2<Sym::SpinSU2>>) {
@@ -86,9 +86,9 @@ public:
 
     virtual void setDefaultObs() override
     {
-        auto Sz = std::make_unique<Xped::OneSiteObservable<Symmetry>>(pat);
+        auto Sz = std::make_unique<Xped::OneSiteObservable<Symmetry>>(pat, "Sz");
         for(auto& t : Sz->data) { t = B.Sz(0).data.template trim<2>(); }
-        auto sz = std::make_unique<Xped::OneSiteObservable<Symmetry>>(pat);
+        auto sz = std::make_unique<Xped::OneSiteObservable<Symmetry>>(pat, "sz");
         for(auto& t : sz->data) { t = B.Sz(1).data.template trim<2>(); }
         obs.push_back(std::move(Sz));
         obs.push_back(std::move(sz));

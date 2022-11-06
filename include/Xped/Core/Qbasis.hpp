@@ -211,7 +211,7 @@ public:
     Qbasis<Symmetry, 1, AllocationPolicy> forgetHistory() const;
 
     /**Prints the basis.*/
-    tabulate::Table print() const;
+    std::string print() const;
 
     /**Prints rough info.*/
     std::string info() const;
@@ -234,6 +234,8 @@ public:
 
     inline bool IS_SORTED() const { return IS_SORTED_; }
     inline bool IS_CONJ() const { return CONJ; }
+
+    inline void SET_CONJ() { CONJ = true; }
 
     inline const auto& tree(const qType& q) const
     {

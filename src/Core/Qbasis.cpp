@@ -498,30 +498,40 @@ std::string Qbasis<Symmetry, depth, AllocationPolicy>::info() const
 }
 
 template <typename Symmetry, std::size_t depth, typename AllocationPolicy>
-tabulate::Table Qbasis<Symmetry, depth, AllocationPolicy>::print() const
+std::string Qbasis<Symmetry, depth, AllocationPolicy>::print() const
 {
-    tabulate::Table t;
-    using Row_t = std::vector<std::variant<std::string, const char*, tabulate::Table>>;
-    t.add_row(Row_t({"Q", "Dim(Q)", "num"}));
-    for(const auto& entry : data_) {
-        auto [q_Phys, curr_num, plain] = entry;
-        std::stringstream ss, tt, uu;
-        ss << Sym::format<Symmetry>(q_Phys);
-        tt << plain.dim();
-        uu << curr_num;
-        t.add_row(Row_t({ss.str(), tt.str(), uu.str()}));
+    std::string out = info();
+    fmt::format_to(std::back_inserter(out), ": ");
+    for(std::size_t i = 0; const auto& [q, num, plain] : data_) {
+        if(i++ < data_.size() - 1) {
+            fmt::format_to(std::back_inserter(out), "q={}[{}], ", Sym::format<Symmetry>(q), plain.dim());
+        } else {
+            fmt::format_to(std::back_inserter(out), "q={}[{}]", Sym::format<Symmetry>(q), plain.dim());
+        }
     }
-    t.format()
-        .font_align(tabulate::FontAlign::center)
-        .font_style({tabulate::FontStyle::bold})
-        .border_top(" ")
-        .border_bottom(" ")
-        .border_left(" ")
-        .border_right(" ")
-        .corner(" ");
-    t[0].format().padding_top(1).padding_bottom(1).font_style({tabulate::FontStyle::underline}).font_background_color(tabulate::Color::red);
-    t[0][1].format().font_background_color(tabulate::Color::blue);
-    return t;
+    return out;
+    // tabulate::Table t;
+    // using Row_t = std::vector<std::variant<std::string, const char*, tabulate::Table>>;
+    // t.add_row(Row_t({"Q", "Dim(Q)", "num"}));
+    // for(const auto& entry : data_) {
+    //     auto [q_Phys, curr_num, plain] = entry;
+    //     std::stringstream ss, tt, uu;
+    //     ss << Sym::format<Symmetry>(q_Phys);
+    //     tt << plain.dim();
+    //     uu << curr_num;
+    //     t.add_row(Row_t({ss.str(), tt.str(), uu.str()}));
+    // }
+    // t.format()
+    //     .font_align(tabulate::FontAlign::center)
+    //     .font_style({tabulate::FontStyle::bold})
+    //     .border_top(" ")
+    //     .border_bottom(" ")
+    //     .border_left(" ")
+    //     .border_right(" ")
+    //     .corner(" ");
+    // t[0].format().padding_top(1).padding_bottom(1).font_style({tabulate::FontStyle::underline}).font_background_color(tabulate::Color::red);
+    // t[0][1].format().font_background_color(tabulate::Color::blue);
+    // return t;
 }
 
 template <typename Symmetry, std::size_t depth, typename AllocationPolicy>

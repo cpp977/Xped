@@ -5,6 +5,10 @@
 
 #include "Xped/Util/Macros.hpp"
 
+#include "Xped/Core/Tensor.hpp"
+
+#include "Xped/AD/ADTensor.hpp"
+
 #include "Xped/PEPS/OneSiteObservable.hpp"
 #include "Xped/PEPS/TMatrix.hpp"
 #include "Xped/PEPS/TwoSiteObservable.hpp"

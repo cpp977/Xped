@@ -137,7 +137,11 @@ public:
         ar& YAS_OBJECT_NVP("iPEPS", ("D", D), ("cell", cell_), ("As", As), ("Adags", Adags), ("charges", charges_));
     }
 
-    // private:
+    void loadFromMatlab(const std::filesystem::path& p, const std::string& root_name);
+
+    bool checkConsistency() const;
+
+private:
     void init(const TMatrix<Qbasis<Symmetry, 1>>& leftBasis,
               const TMatrix<Qbasis<Symmetry, 1>>& topBasis,
               const TMatrix<Qbasis<Symmetry, 1>>& rightBasis,

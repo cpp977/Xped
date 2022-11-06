@@ -5,29 +5,6 @@
 #include <string>
 #include <vector>
 
-///////////////////////////////////////////////////////////////////////////////
-// Uncomment to customize level names (e.g. "MT TRACE")
-//
-// #define SPDLOG_LEVEL_NAMES { "TRACE", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL", "OFF" }
-// #define SPDLOG_LEVEL_NAMES \
-//     { \
-//         "DEBUG", "PER_ITERATION", "ON_ENTRY", "ON_EXIT", "WARNING", "CRITICAL", "SILENT" \
-//     } \
-///////////////////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////////////////
-// Uncomment to customize short level names (e.g. "MT")
-// These can be longer than one character.
-//
-// #define SPDLOG_SHORT_LEVEL_NAMES { "D", "I", "B", "E", "W", "C", "S" }
-///////////////////////////////////////////////////////////////////////////////
-
-#include "spdlog/spdlog.h"
-
-#include "spdlog/fmt/ostr.h"
-#include "spdlog/sinks/basic_file_sink.h"
-#include "spdlog/sinks/stdout_color_sinks.h"
-
 #include "toml.hpp"
 
 #ifdef _OPENMP
@@ -40,9 +17,11 @@
 #include "ceres/gradient_problem.h"
 #include "ceres/gradient_problem_solver.h"
 
+#include "Xped/Util/Macros.hpp"
+
+#include "Xped/Util/Logging.hpp"
 #include "Xped/Util/Permutations.hpp"
 
-#include "Xped/Util/Macros.hpp"
 #include "Xped/Util/Mpi.hpp"
 #include "Xped/Util/TomlHelpers.hpp"
 
@@ -85,29 +64,20 @@ int main(int argc, char* argv[])
 #ifdef XPED_USE_MPI
         MPI_Init(&argc, &argv);
         Xped::mpi::XpedWorld world(argc, argv);
-        auto my_logger = spdlog::basic_logger_mt("info", "logs/log_" + to_string(world.rank) + ".txt");
 #else
         Xped::mpi::XpedWorld world;
-        auto my_logger = spdlog::basic_logger_mt("info", "logs/log.txt");
 #endif
-        std::ios::sync_with_stdio(true);
+        // std::ios::sync_with_stdio(true);
+
+        Xped::Log::init_logging(world, "log");
 
         ArgParser args(argc, argv);
 
-        my_logger->sinks()[0]->set_pattern("[%H:%M:%S] [%n] [%^---%L---%$] [process %P] %v");
-        my_logger->sinks()[0]->set_level(spdlog::level::trace);
-        if(world.rank == 0) {
-            auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
-            console_sink->set_pattern("[%^---%l---%$] %v");
-            console_sink->set_level(spdlog::level::trace);
-            my_logger->sinks().push_back(console_sink);
-        }
-        my_logger->set_level(spdlog::level::trace);
-        spdlog::set_default_logger(my_logger);
+        Xped::Log::globalLevel = args.get<Xped::Verbosity>("verb", Xped::Verbosity::DEBUG);
 
-        SPDLOG_INFO("Number of MPI processes: {}", world.np);
-        SPDLOG_INFO("I am process number #={}", world.rank);
-        SPDLOG_INFO("Number of MPI processes: {}", world.np);
+        // SPDLOG_INFO("Number of MPI processes: {}", world.np);
+        // SPDLOG_INFO("I am process number #={}", world.rank);
+        // SPDLOG_INFO("Number of MPI processes: {}", world.np);
 
         typedef double Scalar;
         // using Symmetry = Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>;
@@ -116,8 +86,8 @@ int main(int argc, char* argv[])
         //     Xped::Sym::Combined<Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>>;
         // typedef Xped::Sym::SU2<Xped::Sym::SpinSU2> Symmetry;
         // typedef Xped::Sym::U1<Xped::Sym::SpinU1> Symmetry;
-        // typedef Xped::Sym::ZN<Xped::Sym::SpinU1, 36, double> Symmetry;
-        typedef Xped::Sym::U0<double> Symmetry;
+        typedef Xped::Sym::ZN<Xped::Sym::SpinU1, 36, double> Symmetry;
+        // typedef Xped::Sym::U0<double> Symmetry;
 
         std::unique_ptr<Xped::TwoSiteObservable<Symmetry>> ham;
 
@@ -133,7 +103,7 @@ int main(int argc, char* argv[])
 
         Xped::UnitCell c;
         if(data.at("ipeps").contains("cell")) {
-            c = Xped::UnitCell(toml::get<std::vector<std::vector<std::string>>>(toml::find(data.at("ipeps"), "cell")));
+            c = Xped::UnitCell(toml::get<std::vector<std::vector<std::size_t>>>(toml::find(data.at("ipeps"), "cell")));
         }
 
         Xped::TMatrix<Symmetry::qType> charges(c.pattern);

@@ -1,6 +1,7 @@
 #ifndef XPED_CTM_H_
 #define XPED_CTM_H_
 
+#include <filesystem>
 #include <memory>
 
 #include "yas/serialize.hpp"
@@ -123,6 +124,7 @@ public:
     void grow_all();
 
     void init();
+    void loadFromMatlab(const std::filesystem::path& p, const std::string& root_name);
 
     template <bool TRACK = ENABLE_AD, bool CP = CPOpts.MOVE>
     void left_move();

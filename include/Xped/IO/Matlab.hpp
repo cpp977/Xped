@@ -7,8 +7,10 @@
 
 namespace Xped::IO {
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
-Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy> loadMatlabTensor(const HighFive::Group& t, const HighFive::Group& base)
+Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>
+loadMatlabTensor(const HighFive::Group& t, const HighFive::Group& base, std::array<bool, Rank + CoRank> conj = std::array<bool, Rank + CoRank>{})
 {
+    constexpr int scale = 1;
     constexpr std::size_t full_rank = Rank + CoRank;
     auto get_indices = [](auto combined_index, std::array<std::size_t, full_rank> dims) -> auto
     {
@@ -38,8 +40,9 @@ Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy> loadMatlabTensor
         std::vector<std::vector<double>> ch;
         ch_dat.read(ch);
         charges[r] = ch;
-        for(std::size_t j = 0; j < ch[0].size(); ++j) { basis[r].push_back({static_cast<int>(ch[0][j])}, ch[1][j]); }
-        if(r >= Rank) {
+        for(std::size_t j = 0; j < ch[0].size(); ++j) { basis[r].push_back({(scale * static_cast<int>(ch[0][j])) % Symmetry::MOD_N[0]}, ch[1][j]); }
+        if(conj[r]) {
+            basis[r].SET_CONJ();
             for(auto& [q, trees] : basis[r].allTrees()) {
                 for(auto& tree : trees) { tree.IS_DUAL[0] = true; }
             }
@@ -63,18 +66,19 @@ Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy> loadMatlabTensor
         FusionTree<full_rank, Symmetry> tree;
         tree.q_coupled = Symmetry::qvacuum();
         for(std::size_t r = 0; r < full_rank; ++r) {
-            tree.q_uncoupled[r] = {static_cast<int>(charges[r][0][indices[r]])};
+            tree.q_uncoupled[r] = {(scale * static_cast<int>(charges[r][0][indices[r]])) % Symmetry::MOD_N[0]};
             tree.dims[r] = charges[r][1][indices[r]];
-            if(r >= Rank) { tree.IS_DUAL[r] = true; }
+            if(conj[r]) { tree.IS_DUAL[r] = true; }
         }
         tree.computeDim();
-        if constexpr(full_rank > 2) {
-            tree.q_intermediates[0] = Symmetry::reduceSilent(tree.q_uncoupled[0], tree.q_uncoupled[1])[0];
-            for(std::size_t intermediate = 1; intermediate < full_rank - 2; ++intermediate) {
-                tree.q_intermediates[intermediate] =
-                    Symmetry::reduceSilent(tree.q_intermediates[intermediate - 1], tree.q_uncoupled[intermediate + 1])[0];
-            }
-        }
+        tree.computeIntermediates();
+        // if constexpr(full_rank > 2) {
+        //     tree.q_intermediates[0] = Symmetry::reduceSilent(tree.q_uncoupled[0], tree.q_uncoupled[1])[0];
+        //     for(std::size_t intermediate = 1; intermediate < full_rank - 2; ++intermediate) {
+        //         tree.q_intermediates[intermediate] =
+        //             Symmetry::reduceSilent(tree.q_intermediates[intermediate - 1], tree.q_uncoupled[intermediate + 1])[0];
+        //     }
+        // }
         FusionTree<0, Symmetry> trivial;
         trivial.dim = 1;
         trivial.q_coupled = Symmetry::qvacuum();

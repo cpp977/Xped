@@ -18,9 +18,20 @@ struct Pattern
 {
     friend struct UnitCell;
 
-    Pattern(const std::vector<std::vector<std::string>>& pat = {{"a"}})
+    // Pattern(const std::vector<std::vector<std::string>>& pat = {{"a"}})
+    //     : data(pat)
+    // {
+    //     init();
+    // }
+
+    Pattern(const std::vector<std::vector<std::size_t>>& pat = {{0ul}}, bool TRANSPOSE = false)
         : data(pat)
     {
+        // data.resize(TRANSPOSE ? pat[0].size() : pat.size());
+        // for(auto y = 0ul; y < pat.size(); ++y) {
+        //     data[y].resize(TRANSPOSE ? pat.size() : pat[y].size());
+        //     for(auto x = 0ul; x < pat[y].size(); ++x) { data[y][x] = std::to_string(TRANSPOSE ? pat[x][y] : pat[y][x]); }
+        // }
         init();
     }
 
@@ -34,7 +45,7 @@ struct Pattern
     std::size_t index(const int x, const int y) const;
     std::size_t uniqueIndex(const int x, const int y) const;
     std::size_t uniqueIndex(const std::size_t index) const;
-    std::pair<int, int> coords(const std::size_t index) const;
+    // std::pair<int, int> coords(const std::size_t index) const;
     bool isUnique(const int x, const int y) const;
 
     tabulate::Table print() const;
@@ -52,10 +63,12 @@ struct Pattern
         init();
     }
 
-    std::map<std::string, std::size_t> label2index;
+    bool operator==(const Pattern& other) const { return data == other.data; }
+
+    std::map<std::size_t, std::size_t> label2index;
     std::map<std::size_t, std::size_t> index2unique;
-    std::vector<std::vector<std::string>> data;
-    std::map<std::string, std::vector<std::size_t>> sites_of_label;
+    std::vector<std::vector<std::size_t>> data;
+    std::map<std::size_t, std::vector<std::size_t>> sites_of_label;
     std::size_t Lx = 1, Ly = 1;
 };
 

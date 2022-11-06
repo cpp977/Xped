@@ -1,10 +1,14 @@
 #include <iostream>
 
+#include <highfive/H5File.hpp>
+
 #include "Xped/PEPS/iPEPS.hpp"
 
 #include "Xped/Util/Bool.hpp"
 
 #include "Xped/Core/AdjointOp.hpp"
+
+#include "Xped/IO/Matlab.hpp"
 
 #include "Xped/Symmetry/SU2.hpp"
 #include "Xped/Symmetry/U0.hpp"
@@ -83,6 +87,44 @@ void iPEPS<Scalar, Symmetry, ENABLE_AD>::init(const TMatrix<Qbasis<Symmetry, 1>>
 }
 
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>
+void iPEPS<Scalar, Symmetry, ENABLE_AD>::loadFromMatlab(const std::filesystem::path& p, const std::string& root_name)
+{
+    HighFive::File file(p.string(), HighFive::File::ReadOnly);
+    auto root = file.getGroup(root_name);
+
+    std::vector<std::vector<std::size_t>> pat_vec;
+    HighFive::DataSet pat_data = root.getDataSet("meta/pattern");
+    pat_data.read(pat_vec);
+    cell_ = UnitCell(std::move(Pattern(pat_vec, true)));
+    // std::cout << cell().pattern << std::endl;
+    // fmt::print("{}\n", cell().pattern.label2index);
+    // fmt::print("{}\n", cell().pattern.index2unique);
+
+    As.resize(cell().pattern);
+    Adags.resize(cell().pattern);
+
+    for(std::size_t i = 0; i < cell_.pattern.uniqueSize(); ++i) {
+        auto A_ref = root.getDataSet("A");
+        std::vector<HighFive::Reference> A;
+        A_ref.read(A);
+        auto g_A = A[i].template dereference<HighFive::Group>(root);
+        As[i] = Xped::IO::loadMatlabTensor<double, 5, 0, Symmetry, Xped::HeapPolicy>(g_A, root, std::array{true, true, false, false, true})
+                    .template permute<3, 3, 2, 1, 4, 0>();
+        Adags[i] = As[i].adjoint().eval().template permute<0, 3, 4, 2, 0, 1>(Bool<ENABLE_AD>{});
+    }
+    // for(int x = 0; x < cell().Lx; ++x) {
+    //     for(int y = 0; y < cell().Ly; ++y) {
+    //         fmt::print("Site: {},{}: \n", x, y);
+    //         std::cout << "left: " << ketBasis(x, y, Opts::LEG::LEFT) << std::endl;
+    //         std::cout << "top: " << ketBasis(x, y, Opts::LEG::UP) << std::endl;
+    //         std::cout << "right: " << ketBasis(x, y, Opts::LEG::RIGHT) << std::endl;
+    //         std::cout << "bottom: " << ketBasis(x, y, Opts::LEG::DOWN) << std::endl;
+    //         std::cout << "phys: " << ketBasis(x, y, Opts::LEG::PHYS) << std::endl << std::endl;
+    //     }
+    // }
+}
+
+template <typename Scalar, typename Symmetry, bool ENABLE_AD>
 iPEPS<Scalar, Symmetry, ENABLE_AD>::iPEPS(const iPEPS<Scalar, Symmetry, false>& other)
 {
     D = other.D;
@@ -90,6 +132,33 @@ iPEPS<Scalar, Symmetry, ENABLE_AD>::iPEPS(const iPEPS<Scalar, Symmetry, false>& 
     charges_ = other.charges();
     As = other.As;
     Adags = other.Adags;
+}
+
+template <typename Scalar, typename Symmetry, bool ENABLE_AD>
+bool iPEPS<Scalar, Symmetry, ENABLE_AD>::checkConsistency() const
+{
+    bool out = true;
+    for(int x = 0; x < cell().Lx; ++x) {
+        for(int y = 0; y < cell().Ly; ++y) {
+            if(ketBasis(x, y, Opts::LEG::LEFT) != ketBasis(x - 1, y, Opts::LEG::RIGHT)) {
+                fmt::print("Site ({},{}): left basis does not match other right basis.\n", x, y);
+                out = false;
+            }
+            if(ketBasis(x, y, Opts::LEG::RIGHT) != ketBasis(x + 1, y, Opts::LEG::LEFT)) {
+                fmt::print("Site ({},{}): right basis does not match other left basis.\n", x, y);
+                out = false;
+            }
+            if(ketBasis(x, y, Opts::LEG::UP) != ketBasis(x, y - 1, Opts::LEG::DOWN)) {
+                fmt::print("Site ({},{}): up basis does not match other down basis.\n", x, y);
+                out = false;
+            }
+            if(ketBasis(x, y, Opts::LEG::DOWN) != ketBasis(x, y + 1, Opts::LEG::UP)) {
+                fmt::print("Site ({},{}): down basis does not match other up basis.\n", x, y);
+                out = false;
+            }
+        }
+    }
+    return out;
 }
 
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>

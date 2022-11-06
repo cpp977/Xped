@@ -38,6 +38,8 @@ struct CTM
 
     Verbosity verbosity = Verbosity::ON_ENTRY;
 
+    std::string load = "";
+
     template <typename Ar>
     void serialize(Ar& ar)
     {
@@ -49,7 +51,8 @@ struct CTM
                            ("tol_N", tol_N),
                            ("reinit_env_tol", reinit_env_tol),
                            ("init", init),
-                           ("verbosity", verbosity));
+                           ("verbosity", verbosity),
+                           ("load", load));
     }
 
     inline auto info()
@@ -63,6 +66,7 @@ struct CTM
         fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• energy tolerance:", tol_E);
         fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• norm tolerance:", tol_N);
         fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• reinit_env_tol:", reinit_env_tol);
+        if(load.size() > 0) { fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• load from:", load); }
         fmt::format_to(std::back_inserter(res), "  {:<30} {}", "• verbosity:", fmt::streamed(verbosity));
         return res;
     }
@@ -78,6 +82,7 @@ inline CTM ctm_from_toml(const toml::value& t)
     res.tol_E = t.contains("tol_E") ? t.at("tol_E").as_floating() : res.tol_E;
     res.reinit_env_tol = t.contains("reinit_env_tol") ? t.at("reinit_env_tol").as_floating() : res.reinit_env_tol;
     if(t.contains("verbosity")) { res.verbosity = util::enum_from_toml<Verbosity>(t.at("verbosity")); }
+    res.load = t.contains("load") ? static_cast<std::string>(t.at("load").as_string()) : res.load;
     // res.cell = t.contains("cell") ? UnitCell(toml::get<std::vector<std::vector<std::string>>>(toml::find(t, "cell"))) : UnitCell();
     return res;
 }

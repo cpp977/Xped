@@ -66,6 +66,11 @@ struct iPEPSSolverAD
             constexpr std::size_t flags = yas::file /*IO type*/ | yas::binary; /*IO format*/
             yas::load<flags>((this->H.file_name() + ".xped").c_str(), *this);
         } else {
+            if(optim_opts.load != "") {
+                Psi->loadFromMatlab(std::filesystem::path(optim_opts.load), "cpp");
+                std::cout << Psi->cell().pattern << std::endl << H.data_h.pat << std::endl;
+                assert(Psi->cell().pattern == H.data_h.pat);
+            }
             problem = std::make_unique<ceres::GradientProblem>(
                 new EnergyFunctor(std::move(std::make_unique<CTMSolver<Scalar, Symmetry, CPOpts, TRank>>(ctm_opts)), H, Psi));
             std::filesystem::create_directories(optim_opts.working_directory / optim_opts.logging_directory);
@@ -94,11 +99,6 @@ struct iPEPSSolverAD
                 HighFive::File file((optim_opts.working_directory / optim_opts.obs_directory).string() + "/" + this->H.file_name() + ".h5",
                                     optim_opts.resume ? HighFive::File::ReadWrite : HighFive::File::Excl);
                 H.initObsfile(file);
-                // HighFive::DataSpace dataspace = HighFive::DataSpace({0}, {HighFive::DataSpace::UNLIMITED});
-
-                // // // Use chunking
-                // HighFive::DataSetCreateProps props;
-                // props.add(HighFive::Chunking(std::vector<hsize_t>{10}));
             }
         }
     }

@@ -1,6 +1,8 @@
 #ifndef XPED_CTM_SOLVER_HPP_
 #define XPED_CTM_SOLVER_HPP_
 
+#include <filesystem>
+
 #include "yas/serialize.hpp"
 #include "yas/std_types.hpp"
 
@@ -26,6 +28,11 @@ public:
         : opts(opts)
     {
         Jack = CTM<Scalar, Symmetry, TRank, false>(opts.chi, opts.init); //, opts.cell);
+        if(opts.load != "") {
+            Jack.loadFromMatlab(std::filesystem::path(opts.load), "cpp");
+            REINIT_ENV = false;
+            Jack.info();
+        }
     }
 
     template <typename HamScalar>

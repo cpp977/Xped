@@ -3,6 +3,8 @@
 
 #include <cmath>
 
+#include "stan/math/rev.hpp"
+
 #include "Xped/Util/Bool.hpp"
 
 #include "Xped/Core/Tensor.hpp"

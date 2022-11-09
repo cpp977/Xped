@@ -444,7 +444,7 @@ XTensor<TRACK, Scalar, Rank, CoRank, Symmetry> operator*(const Tensor<Scalar, Ra
         });
         return res;
     } else {
-        (t.val() * s).eval();
+        return (t.val() * s).eval();
     }
 }
 

@@ -398,9 +398,12 @@ Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::tSVD(size_t max
     allSV.resize(std::min(maxKeep, numberOfStates));
     SPDLOG_INFO("numberOfStates after resize {}", allSV.size());
     // std::erase_if(allSV, [eps_svd](const pair<typename Symmetry::qType, Scalar> &sv) { return (sv < eps_svd); }); c++-20 version
-    allSV.erase(std::remove_if(
-                    allSV.begin(), allSV.end(), [eps_svd](const std::pair<typename Symmetry::qType, double>& sv) { return (sv.second < eps_svd); }),
-                allSV.end());
+    if(eps_svd > 0.) {
+        allSV.erase(std::remove_if(allSV.begin(),
+                                   allSV.end(),
+                                   [eps_svd](const std::pair<typename Symmetry::qType, double>& sv) { return (sv.second < eps_svd); }),
+                    allSV.end());
+    }
     SPDLOG_INFO("numberOfStates after erase {}", allSV.size());
     // cout << "saving sv for expansion to file, #sv=" << allSV.size() << endl;
     // ofstream Filer("sv_expand");
@@ -853,18 +856,18 @@ Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::tSVD(size_t max
     }
 
     template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
-    void Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::print(std::ostream & o, bool PRINT_MATRICES) const
+    void Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::print(std::ostream& o, bool PRINT_MATRICES) const
     {
         // std::stringstream ss;
         fmt::print(o, "Tensor<{},{}>: domain=[", Rank, CoRank);
         if(Rank == 0) o << "], codomain[";
         for(auto i = 0ul; i < Rank; ++i) {
-            o << uncoupledDomain()[i].info();
+            o << uncoupledDomain()[i].print();
             i < Rank - 1 ? o << ", " : o << "], codomain[";
         }
         if(CoRank == 0) { o << "]"; }
         for(auto i = 0ul; i < CoRank; ++i) {
-            o << uncoupledCodomain()[i].info();
+            o << uncoupledCodomain()[i].print();
             i < CoRank - 1 ? o << ", " : o << "]";
         }
 

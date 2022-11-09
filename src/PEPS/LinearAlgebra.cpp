@@ -91,6 +91,7 @@ std::array<TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, Scalar>>, 4> a
         for(int y = 0; y < env.cell().cols(); ++y) {
             if(not env.cell().pattern.isUnique(x, y)) { continue; }
             if(op.data_h.size() > 0) {
+                Log::debug("Compute horizontal at {},{}.", x, y);
                 o_h(x, y) = env.rho_h(x, y)
                                 .twist(0)
                                 .twist(1)
@@ -98,6 +99,7 @@ std::array<TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, Scalar>>, 4> a
                                 .trace();
             }
             if(op.data_v.size() > 0) {
+                Log::debug("Compute vertical at {},{}.", x, y);
                 o_v(x, y) = env.rho_v(x, y)
                                 .twist(0)
                                 .twist(1)
@@ -111,7 +113,9 @@ std::array<TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, Scalar>>, 4> a
                 if(op.data_h.size() > 0) { op.obs_h(x, y) = o_h(x, y); }
                 if(op.data_v.size() > 0) { op.obs_v(x, y) = o_v(x, y); }
             }
+
             if(op.data_d1.size() > 0 or op.data_d2.size() > 0) {
+                Log::debug("Compute diagonal at {},{}.", x, y);
                 auto Q1 = env.contractCorner(x, y, Opts::CORNER::UPPER_LEFT);
                 auto Q2 = env.contractCorner(x + 1, y, Opts::CORNER::UPPER_RIGHT);
                 auto Q3 = env.contractCorner(x + 1, y + 1, Opts::CORNER::LOWER_RIGHT);
@@ -122,9 +126,9 @@ std::array<TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, Scalar>>, 4> a
                     if constexpr(TRank == 2) {
                         [[maybe_unused]] double dumb;
                         auto [Hu, Hs, Hvdag] =
-                            shifted_op.data_d1(x, y).template permute<0, 0, 2, 1, 3>().tSVD(std::numeric_limits<std::size_t>::max(), 1.e-14, dumb);
-                        Hu = Hu * Hs.sqrt();
-                        Hvdag = Hs.sqrt() * Hvdag;
+                            shifted_op.data_d1(x, y).template permute<0, 0, 2, 1, 3>().tSVD(std::numeric_limits<std::size_t>::max(), 0., dumb);
+                        Hu = Hu * Hs.diag_sqrt().eval();
+                        Hvdag = Hs.diag_sqrt().eval() * Hvdag;
 
                         auto C1T1 =
                             env.C1s(x - 1, y - 1).template contract<std::array{-1, 1}, std::array{1, -2, -3, -4}, 1, ENABLE_AD>(env.T1s(x, y - 1));
@@ -165,10 +169,10 @@ std::array<TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, Scalar>>, 4> a
                     // norm = (Q1 * Q2 * Q3 * Q4).trace();
                     if constexpr(TRank == 2) {
                         [[maybe_unused]] double dumb;
-                        auto [Hu, Hs, Hvdag] = shifted_op.data_d2(x + 1, y).template permute<0, 0, 2, 1, 3>().tSVD(
-                            std::numeric_limits<std::size_t>::max(), 1.e-14, dumb);
-                        Hu = Hu * Hs.sqrt();
-                        Hvdag = Hs.sqrt() * Hvdag;
+                        auto [Hu, Hs, Hvdag] =
+                            shifted_op.data_d2(x + 1, y).template permute<0, 0, 2, 1, 3>().tSVD(std::numeric_limits<std::size_t>::max(), 0., dumb);
+                        Hu = Hu * Hs.diag_sqrt().eval();
+                        Hvdag = Hs.diag_sqrt().eval() * Hvdag;
 
                         auto T1C2 = env.T1s(x + 1, y - 1)
                                         .template contract<std::array{-1, 1, -2, -3}, std::array{1, -4}, 3, ENABLE_AD>(env.C2s(x + 2, y - 1));

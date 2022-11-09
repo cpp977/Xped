@@ -19,6 +19,12 @@ using std::size_t;
 namespace Xped {
 
 template <std::size_t Rank, typename Symmetry>
+bool FusionTree<Rank, Symmetry>::operator>(const FusionTree<Rank, Symmetry>& other) const
+{
+    return not this->operator<(other);
+}
+
+template <std::size_t Rank, typename Symmetry>
 bool FusionTree<Rank, Symmetry>::operator<(const FusionTree<Rank, Symmetry>& other) const
 {
     if(Symmetry::compare(q_uncoupled, other.q_uncoupled))
@@ -117,6 +123,7 @@ template <std::size_t Rank, typename Symmetry>
 void FusionTree<Rank, Symmetry>::computeIntermediates()
 {
     assert(Symmetry::ALL_ABELIAN and "Cannot compute intermediate quantum numbers for non-Abelian symmetries.");
+    if constexpr(Rank == 0) { return; }
     for(std::size_t i = 0; i < q_intermediates.size(); ++i) {
         q_intermediates[i] = (i == 0) ? Symmetry::reduceSilent(q_uncoupled[0], q_uncoupled[1]).front()
                                       : Symmetry::reduceSilent(q_intermediates[i - 1], q_uncoupled[i + 1]).front();

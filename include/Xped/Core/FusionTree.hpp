@@ -52,6 +52,7 @@ struct FusionTree
     void computeIntermediates();
 
     bool operator<(const FusionTree<Rank, Symmetry>& other) const;
+    bool operator>(const FusionTree<Rank, Symmetry>& other) const;
 
     bool operator==(const FusionTree<Rank, Symmetry>& other) const;
 

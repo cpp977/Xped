@@ -140,6 +140,29 @@ template <int shift, std::size_t Rank, std::size_t CoRank, typename Symmetry>
 std::unordered_map<std::pair<FusionTree<Rank - shift, Symmetry>, FusionTree<CoRank + shift, Symmetry>>, typename Symmetry::Scalar>
 permute(const FusionTree<Rank, Symmetry>& t1, const FusionTree<CoRank, Symmetry>& t2, const util::Permutation& p)
 {
+    if constexpr(Symmetry::ALL_ABELIAN) {
+        FusionTree<Rank - shift, Symmetry> out_domain;
+        FusionTree<CoRank + shift, Symmetry> out_codomain;
+        for(auto r = 0ul; r < Rank - shift; ++r) {
+            out_domain.q_uncoupled[r] = p.pi[r] < Rank ? t1.q_uncoupled[p.pi[r]] : Symmetry::conj(t2.q_uncoupled[p.pi[r] - Rank]);
+            out_domain.dims[r] = p.pi[r] < Rank ? t1.dims[p.pi[r]] : t2.dims[p.pi[r] - Rank];
+            out_domain.IS_DUAL[r] = p.pi[r] < Rank ? t1.IS_DUAL[p.pi[r]] : not t2.IS_DUAL[p.pi[r] - Rank];
+        }
+        for(auto c = 0ul; c < CoRank + shift; ++c) {
+            out_codomain.q_uncoupled[c] = p.pi[c + Rank - shift] < Rank ? Symmetry::conj(t1.q_uncoupled[p.pi[c + Rank - shift]])
+                                                                        : t2.q_uncoupled[p.pi[c + Rank - shift] - Rank];
+            out_codomain.dims[c] = p.pi[c + Rank - shift] < Rank ? t1.dims[p.pi[c + Rank - shift]] : t2.dims[p.pi[c + Rank - shift] - Rank];
+            out_codomain.IS_DUAL[c] =
+                p.pi[c + Rank - shift] < Rank ? not t1.IS_DUAL[p.pi[c + Rank - shift]] : t2.IS_DUAL[p.pi[c + Rank - shift] - Rank];
+        }
+        out_domain.computeDim();
+        out_domain.computeIntermediates();
+        out_codomain.computeDim();
+        out_codomain.computeIntermediates();
+        return std::unordered_map<std::pair<FusionTree<Rank - shift, Symmetry>, FusionTree<CoRank + shift, Symmetry>>, typename Symmetry::Scalar>{
+            {std::make_pair(out_domain, out_codomain), 1.}};
+    }
+
 #ifdef XPED_CACHE_PERMUTE_OUTPUT
     if constexpr(Symmetry::ANY_NON_ABELIAN and Rank + CoRank > 6) {
         if(tree_cache<shift, Rank, CoRank, Symmetry>.cache.contains(std::make_tuple(t1, t2, p))) {

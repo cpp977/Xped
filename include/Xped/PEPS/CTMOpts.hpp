@@ -94,6 +94,7 @@ struct CTMCheckpoint
     bool CORNER = false;
     bool PROJECTORS = false;
     bool RENORMALIZE = false;
+    bool RDM = false;
 
     auto info() const
     {
@@ -104,6 +105,7 @@ struct CTMCheckpoint
         fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• corner contraction:", CORNER);
         fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• projector computation:", PROJECTORS);
         fmt::format_to(std::back_inserter(res), "  {:<30} {}", "• Renormalization step:", RENORMALIZE);
+        fmt::format_to(std::back_inserter(res), "  {:<30} {}", "• RDM contraction:", RDM);
         return res;
     }
 };

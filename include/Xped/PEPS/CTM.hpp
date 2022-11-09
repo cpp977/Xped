@@ -204,9 +204,9 @@ private:
     template <bool TRACK = ENABLE_AD>
     void computeMs();
 
-    template <bool TRACK = ENABLE_AD>
+    template <bool TRACK = ENABLE_AD, bool CP = CPOpts.RDM>
     void computeRDM_h();
-    template <bool TRACK = ENABLE_AD>
+    template <bool TRACK = ENABLE_AD, bool CP = CPOpts.RDM>
     void computeRDM_v();
 
     template <bool TRACK = ENABLE_AD, bool CP = CPOpts.CORNER>

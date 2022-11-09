@@ -90,4 +90,16 @@ decompose(XPED_CONST Tensor<Scalar, 2, 2, Symmetry, true, AllocationPolicy>& T1,
     return std::make_pair(P1, P2);
 }
 
+template <typename Scalar, typename Symmetry, typename AllocationPolicy, typename DerivedL, typename DerivedT, typename DerivedR, typename DerivedB>
+Tensor<Scalar, 2, 3, Symmetry, false, AllocationPolicy> applyWeights(XPED_CONST Tensor<Scalar, 2, 3, Symmetry, false, AllocationPolicy>& A,
+                                                                     XPED_CONST TensorBase<DerivedL>& wL,
+                                                                     XPED_CONST TensorBase<DerivedT>& wT,
+                                                                     XPED_CONST TensorBase<DerivedR>& wR,
+                                                                     XPED_CONST TensorBase<DerivedB>& wB)
+{
+    return A.template contract<std::array{1, -2, -3, -4, -5}, std::array{1, -1}, 2>(wL)
+        .template contract<std::array{-1, 1, -3, -4, -5}, std::array{1, -2}, 2>(wT)
+        .template contract<std::array{-1, -2, 1, -4, -5}, std::array{1, -3}, 2>(wR)
+        .template contract<std::array{-1, -2, -3, 1, -5}, std::array{1, -4}, 2>(wB);
+}
 } // namespace Xped

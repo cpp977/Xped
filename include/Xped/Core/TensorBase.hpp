@@ -17,6 +17,9 @@ template <typename XprType>
 class CoeffUnaryOp;
 
 template <typename XprType>
+class BlockUnaryOp;
+
+template <typename XprType>
 class DiagCoeffUnaryOp;
 
 template <typename XprTypeLeft, typename XprTypeRight>
@@ -39,15 +42,22 @@ public:
     static constexpr std::size_t Rank = TensorTraits<Derived>::Rank;
     static constexpr std::size_t CoRank = TensorTraits<Derived>::CoRank;
 
+    using MatrixType = PlainInterface::MType<Scalar>;
+
     XPED_CONST AdjointOp<Derived> adjoint() XPED_CONST;
 
     // Unary operations
     XPED_CONST CoeffUnaryOp<Derived> unaryExpr(const std::function<Scalar(Scalar)>& coeff_func) XPED_CONST;
 
+    XPED_CONST BlockUnaryOp<Derived> unaryExpr(const std::function<MatrixType(const MatrixType&)>& coeff_func) XPED_CONST;
+
     XPED_CONST CoeffUnaryOp<Derived> sqrt() XPED_CONST;
     XPED_CONST CoeffUnaryOp<Derived> inv() XPED_CONST;
     XPED_CONST CoeffUnaryOp<Derived> square() XPED_CONST;
     XPED_CONST CoeffUnaryOp<Derived> abs() XPED_CONST;
+
+    XPED_CONST BlockUnaryOp<Derived> msqrt() XPED_CONST;
+    XPED_CONST BlockUnaryOp<Derived> mexp(Scalar factor) XPED_CONST;
 
     Derived& operator+=(const Scalar offset);
     Derived& operator-=(const Scalar offset);

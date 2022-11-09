@@ -126,6 +126,18 @@ XPED_CONST CoeffUnaryOp<Derived> TensorBase<Derived>::abs() XPED_CONST
 }
 
 template <typename Derived>
+XPED_CONST BlockUnaryOp<Derived> TensorBase<Derived>::msqrt() XPED_CONST
+{
+    return unaryExpr([](const MatrixType& m) { return PlainInterface::msqrt(m); });
+}
+
+template <typename Derived>
+XPED_CONST BlockUnaryOp<Derived> TensorBase<Derived>::mexp(Scalar factor) XPED_CONST
+{
+    return unaryExpr([factor](const MatrixType& m) { return PlainInterface::mexp(m, factor); });
+}
+
+template <typename Derived>
 XPED_CONST DiagCoeffUnaryOp<Derived> TensorBase<Derived>::diagUnaryExpr(const std::function<Scalar(Scalar)>& coeff_func) XPED_CONST
 {
     return DiagCoeffUnaryOp<Derived>(derived(), coeff_func);

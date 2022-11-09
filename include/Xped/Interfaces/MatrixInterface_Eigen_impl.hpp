@@ -3,6 +3,7 @@
 
 #include "Eigen/Core"
 #include "Eigen/Dense"
+#include <unsupported/Eigen/MatrixFunctions>
 
 #include "Xped/Util/Mpi.hpp"
 
@@ -156,6 +157,18 @@ struct MatrixInterface
                            const std::function<Scalar(Scalar, Scalar)>& func)
     {
         return M_left.binaryExpr(M_right, func);
+    }
+
+    template <typename Scalar, typename Derived>
+    static auto msqrt(const Eigen::MatrixBase<Derived>& M)
+    {
+        return M.sqrt();
+    }
+
+    template <typename Derived, typename Scalar>
+    static auto mexp(const Eigen::MatrixBase<Derived>& M, Scalar factor)
+    {
+        return (factor * M).exp();
     }
 
     template <typename Derived>

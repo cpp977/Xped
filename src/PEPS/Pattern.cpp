@@ -17,8 +17,8 @@ void Pattern::init()
 
     for(int x = 0; x < Lx; x++) {
         for(int y = 0; y < Ly; y++) {
-            index2unique[index(x, y)] = data[y][x];
-            label2index[data[y][x]] = data[y][x];
+            index2unique[index(x, y)] = data[x][y];
+            label2index[data[x][y]] = data[x][y];
             // auto it = label2index.find(data[y][x]);
             // if(it == label2index.end()) {
             //     label2index[data[y][x]] = index(x, y);
@@ -26,7 +26,7 @@ void Pattern::init()
             // } else {
             //     index2unique[index(x, y)] = index2unique.at(label2index.at(data[y][x]));
             // }
-            sites_of_label[data[y][x]].push_back(index(x, y));
+            sites_of_label[data[x][y]].push_back(index(x, y));
         }
     }
     if(Ly > 1) fmt::print("label2index={}\n", label2index);
@@ -57,15 +57,15 @@ std::size_t Pattern::index(const int x, const int y) const
     while(x_copy >= Lx) { x_copy -= static_cast<int>(Lx); }
     while(y_copy < 0) { y_copy += static_cast<int>(Ly); }
     while(y_copy >= Ly) { y_copy -= static_cast<int>(Ly); }
-    return static_cast<std::size_t>(y_copy + x_copy * Ly);
-    // return static_cast<std::size_t>(x_copy + y_copy * Lx);
+    // return static_cast<std::size_t>(y_copy + x_copy * Ly);
+    return static_cast<std::size_t>(x_copy + y_copy * Lx);
 }
 
 std::size_t Pattern::uniqueIndex(const int x, const int y) const { return uniqueIndex(index(x, y)); }
 
 std::size_t Pattern::uniqueIndex(const std::size_t index) const { return index2unique.at(index); }
 
-// std::pair<int, int> Pattern::coords(std::size_t index) const { return std::make_pair(static_cast<int>(index % Lx), static_cast<int>(index / Lx)); }
+std::pair<int, int> Pattern::coords(std::size_t index) const { return std::make_pair(static_cast<int>(index % Lx), static_cast<int>(index / Lx)); }
 
 // bool Pattern::isUnique(const int x, const int y) const { return (uniqueIndex(x, y) == index(x, y)); }
 bool Pattern::isUnique(const int x, const int y) const { return index(x, y) < uniqueSize(); }

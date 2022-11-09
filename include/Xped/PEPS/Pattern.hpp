@@ -45,7 +45,7 @@ struct Pattern
     std::size_t index(const int x, const int y) const;
     std::size_t uniqueIndex(const int x, const int y) const;
     std::size_t uniqueIndex(const std::size_t index) const;
-    // std::pair<int, int> coords(const std::size_t index) const;
+    std::pair<int, int> coords(const std::size_t index) const;
     bool isUnique(const int x, const int y) const;
 
     tabulate::Table print() const;

@@ -112,16 +112,16 @@ void iPEPS<Scalar, Symmetry, ENABLE_AD>::loadFromMatlab(const std::filesystem::p
                     .template permute<3, 3, 2, 1, 4, 0>();
         Adags[i] = As[i].adjoint().eval().template permute<0, 3, 4, 2, 0, 1>(Bool<ENABLE_AD>{});
     }
-    // for(int x = 0; x < cell().Lx; ++x) {
-    //     for(int y = 0; y < cell().Ly; ++y) {
-    //         fmt::print("Site: {},{}: \n", x, y);
-    //         std::cout << "left: " << ketBasis(x, y, Opts::LEG::LEFT) << std::endl;
-    //         std::cout << "top: " << ketBasis(x, y, Opts::LEG::UP) << std::endl;
-    //         std::cout << "right: " << ketBasis(x, y, Opts::LEG::RIGHT) << std::endl;
-    //         std::cout << "bottom: " << ketBasis(x, y, Opts::LEG::DOWN) << std::endl;
-    //         std::cout << "phys: " << ketBasis(x, y, Opts::LEG::PHYS) << std::endl << std::endl;
-    //     }
-    // }
+    for(int x = 0; x < cell().Lx; ++x) {
+        for(int y = 0; y < cell().Ly; ++y) {
+            fmt::print("Site: {},{}: \n", x, y);
+            std::cout << "left: " << ketBasis(x, y, Opts::LEG::LEFT) << std::endl;
+            std::cout << "top: " << ketBasis(x, y, Opts::LEG::UP) << std::endl;
+            std::cout << "right: " << ketBasis(x, y, Opts::LEG::RIGHT) << std::endl;
+            std::cout << "bottom: " << ketBasis(x, y, Opts::LEG::DOWN) << std::endl;
+            std::cout << "phys: " << ketBasis(x, y, Opts::LEG::PHYS) << std::endl << std::endl;
+        }
+    }
 }
 
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>
@@ -249,6 +249,24 @@ Qbasis<Symmetry, 1> iPEPS<Scalar, Symmetry, ENABLE_AD>::braBasis(const int x, co
     case Opts::LEG::DOWN: return Adags(x, y).uncoupledCodomain()[1]; break;
     case Opts::LEG::PHYS: return Adags(x, y).uncoupledDomain()[2]; break;
     default: std::terminate();
+    }
+}
+
+template <typename Scalar, typename Symmetry, bool ENABLE_AD>
+void iPEPS<Scalar, Symmetry, ENABLE_AD>::initWeightTensors()
+{
+    Gs.resize(cell().pattern);
+    whs.resize(cell().pattern);
+    wvs.resize(cell().pattern);
+    for(int x = 0; x < cell_.Lx; x++) {
+        for(int y = 0; y < cell_.Lx; y++) {
+            if(not cell_.pattern.isUnique(x, y)) { continue; }
+            Gs(x, y) = As(x, y);
+            whs(x, y) = Tensor<Scalar, 1, 1, Symmetry>::Identity(
+                {{Gs(x, y).ketBasis(Opts::LEG::RIGHT)}}, {{Gs(x, y).ketBasis(Opts::LEG::RIGHT)}}, Gs(x, y).world());
+            wvs(x, y) = Tensor<Scalar, 1, 1, Symmetry>::Identity(
+                {{Gs(x, y).ketBasis(Opts::LEG::UP)}}, {{Gs(x, y).ketBasis(Opts::LEG::UP)}}, Gs(x, y).world());
+        }
     }
 }
 

@@ -141,6 +141,8 @@ public:
 
     bool checkConsistency() const;
 
+    void initWeightTensors();
+
 private:
     void init(const TMatrix<Qbasis<Symmetry, 1>>& leftBasis,
               const TMatrix<Qbasis<Symmetry, 1>>& topBasis,
@@ -152,6 +154,10 @@ private:
 
     UnitCell cell_;
     TMatrix<Tensor<Scalar, 2, 3, Symmetry, ENABLE_AD>> As;
+    TMatrix<Tensor<Scalar, 2, 3, Symmetry, ENABLE_AD>> Gs;
+    TMatrix<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>> whs;
+    TMatrix<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>> wvs;
+
     TMatrix<Tensor<Scalar, 3, 2, Symmetry, ENABLE_AD>> Adags;
     TMatrix<qType> charges_;
 };

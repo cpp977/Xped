@@ -193,7 +193,8 @@ int main(int argc, char* argv[])
 
         Xped::Opts::Optim o_opts = Xped::Opts::optim_from_toml(data.at("optim"));
         Xped::Opts::CTM c_opts = Xped::Opts::ctm_from_toml(data.at("ctm"));
-        constexpr Xped::Opts::CTMCheckpoint cp_opts{.MOVE = true, .CORNER = true};
+        constexpr Xped::Opts::CTMCheckpoint cp_opts{
+            .GROW_ALL = true, .MOVE = true, .CORNER = true, .PROJECTORS = true, .RENORMALIZE = true, .RDM = true};
         constexpr std::size_t TRank = 2;
         Xped::iPEPSSolverAD<Scalar, Symmetry, cp_opts, TRank> Jack(o_opts, c_opts, Psi, *ham);
 

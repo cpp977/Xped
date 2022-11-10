@@ -321,7 +321,6 @@ void CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::solve(std::size_t steps)
         // SPDLOG_CRITICAL("Step={}", step);
         grow_all<TRACK>();
     }
-    Log::debug("Compute rdm.");
     computeRDM<true>();
     // stan::math::print_stack(std::cout);
 }
@@ -332,13 +331,9 @@ void CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::grow_all()
 {
     constexpr bool TRACK_INNER = TRACK ? not CP : false;
     [[maybe_unused]] auto curr = *this;
-    Log::debug("Left move:");
     left_move<TRACK_INNER>();
-    Log::debug("Right move:");
     right_move<TRACK_INNER>();
-    Log::debug("Top move:");
     top_move<TRACK_INNER>();
-    Log::debug("Bottom move:");
     bottom_move<TRACK_INNER>();
 
     if constexpr(TRACK and CP) {

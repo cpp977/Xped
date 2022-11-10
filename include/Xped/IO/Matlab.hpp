@@ -8,9 +8,11 @@
 namespace Xped::IO {
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
 Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>
-loadMatlabTensor(const HighFive::Group& t, const HighFive::Group& base, std::array<bool, Rank + CoRank> conj = std::array<bool, Rank + CoRank>{})
+loadMatlabTensor(const HighFive::Group& t,
+                 const HighFive::Group& base,
+                 std::array<bool, Rank + CoRank> conj = std::array<bool, Rank + CoRank>{},
+                 int qn_scale = 1)
 {
-    constexpr int scale = 1;
     constexpr std::size_t full_rank = Rank + CoRank;
     auto get_indices = [](auto combined_index, std::array<std::size_t, full_rank> dims) -> auto
     {
@@ -40,7 +42,9 @@ loadMatlabTensor(const HighFive::Group& t, const HighFive::Group& base, std::arr
         std::vector<std::vector<double>> ch;
         ch_dat.read(ch);
         charges[r] = ch;
-        for(std::size_t j = 0; j < ch[0].size(); ++j) { basis[r].push_back({(scale * static_cast<int>(ch[0][j])) % Symmetry::MOD_N[0]}, ch[1][j]); }
+        for(std::size_t j = 0; j < ch[0].size(); ++j) {
+            basis[r].push_back({(qn_scale * static_cast<int>(std::round(ch[0][j]))) % Symmetry::MOD_N[0]}, ch[1][j]);
+        }
         if(conj[r]) {
             basis[r].SET_CONJ();
             for(auto& [q, trees] : basis[r].allTrees()) {
@@ -66,7 +70,7 @@ loadMatlabTensor(const HighFive::Group& t, const HighFive::Group& base, std::arr
         FusionTree<full_rank, Symmetry> tree;
         tree.q_coupled = Symmetry::qvacuum();
         for(std::size_t r = 0; r < full_rank; ++r) {
-            tree.q_uncoupled[r] = {(scale * static_cast<int>(charges[r][0][indices[r]])) % Symmetry::MOD_N[0]};
+            tree.q_uncoupled[r] = {(qn_scale * static_cast<int>(std::round(charges[r][0][indices[r]]))) % Symmetry::MOD_N[0]};
             tree.dims[r] = charges[r][1][indices[r]];
             if(conj[r]) { tree.IS_DUAL[r] = true; }
         }

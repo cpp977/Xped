@@ -29,9 +29,9 @@ public:
     {
         Jack = CTM<Scalar, Symmetry, TRank, false>(opts.chi, opts.init); //, opts.cell);
         if(opts.load != "") {
-            Jack.loadFromMatlab(std::filesystem::path(opts.load), "cpp");
+            Jack.loadFromMatlab(std::filesystem::path(opts.load), "cpp", opts.qn_scale);
             REINIT_ENV = false;
-            Jack.info();
+            // Jack.info();
         }
     }
 

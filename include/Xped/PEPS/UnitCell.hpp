@@ -31,6 +31,8 @@ struct UnitCell
         ar& YAS_OBJECT_NVP("UnitCell", ("Lx", Lx), ("Ly", Ly), ("pattern", pattern));
     }
 
+    void loadFromMatlab(const std::filesystem::path& p, const std::string& root_name);
+
     inline std::size_t uniqueSize() const { return pattern.uniqueSize(); }
     inline std::size_t size() const { return Lx * Ly; }
 

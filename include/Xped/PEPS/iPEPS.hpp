@@ -137,7 +137,7 @@ public:
         ar& YAS_OBJECT_NVP("iPEPS", ("D", D), ("cell", cell_), ("As", As), ("Adags", Adags), ("charges", charges_));
     }
 
-    void loadFromMatlab(const std::filesystem::path& p, const std::string& root_name);
+    void loadFromMatlab(const std::filesystem::path& p, const std::string& root_name, int qn_scale = 1);
 
     bool checkConsistency() const;
 

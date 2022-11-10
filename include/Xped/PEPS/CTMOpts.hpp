@@ -39,6 +39,7 @@ struct CTM
     Verbosity verbosity = Verbosity::ON_ENTRY;
 
     std::string load = "";
+    int qn_scale = 1;
 
     template <typename Ar>
     void serialize(Ar& ar)
@@ -52,7 +53,8 @@ struct CTM
                            ("reinit_env_tol", reinit_env_tol),
                            ("init", init),
                            ("verbosity", verbosity),
-                           ("load", load));
+                           ("load", load),
+                           ("qn_scale", qn_scale));
     }
 
     inline auto info()
@@ -67,6 +69,7 @@ struct CTM
         fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• norm tolerance:", tol_N);
         fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• reinit_env_tol:", reinit_env_tol);
         if(load.size() > 0) { fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• load from:", load); }
+        if(load.size() > 0) { fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• scale loaded qn by:", qn_scale); }
         fmt::format_to(std::back_inserter(res), "  {:<30} {}", "• verbosity:", fmt::streamed(verbosity));
         return res;
     }
@@ -83,6 +86,7 @@ inline CTM ctm_from_toml(const toml::value& t)
     res.reinit_env_tol = t.contains("reinit_env_tol") ? t.at("reinit_env_tol").as_floating() : res.reinit_env_tol;
     if(t.contains("verbosity")) { res.verbosity = util::enum_from_toml<Verbosity>(t.at("verbosity")); }
     res.load = t.contains("load") ? static_cast<std::string>(t.at("load").as_string()) : res.load;
+    res.qn_scale = t.contains("qn_scale") ? (t.at("qn_scale").as_integer()) : res.qn_scale;
     // res.cell = t.contains("cell") ? UnitCell(toml::get<std::vector<std::vector<std::string>>>(toml::find(t, "cell"))) : UnitCell();
     return res;
 }
@@ -104,7 +108,7 @@ struct CTMCheckpoint
         fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• move:", MOVE);
         fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• corner contraction:", CORNER);
         fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• projector computation:", PROJECTORS);
-        fmt::format_to(std::back_inserter(res), "  {:<30} {}", "• Renormalization step:", RENORMALIZE);
+        fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• Renormalization step:", RENORMALIZE);
         fmt::format_to(std::back_inserter(res), "  {:<30} {}", "• RDM contraction:", RDM);
         return res;
     }

@@ -67,8 +67,7 @@ struct iPEPSSolverAD
             yas::load<flags>((this->H.file_name() + ".xped").c_str(), *this);
         } else {
             if(optim_opts.load != "") {
-                Psi->loadFromMatlab(std::filesystem::path(optim_opts.load), "cpp");
-                std::cout << Psi->cell().pattern << std::endl << H.data_h.pat << std::endl;
+                Psi->loadFromMatlab(std::filesystem::path(optim_opts.load), "cpp", optim_opts.qn_scale);
                 assert(Psi->cell().pattern == H.data_h.pat);
             }
             problem = std::make_unique<ceres::GradientProblem>(

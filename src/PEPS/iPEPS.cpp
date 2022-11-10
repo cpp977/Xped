@@ -87,18 +87,12 @@ void iPEPS<Scalar, Symmetry, ENABLE_AD>::init(const TMatrix<Qbasis<Symmetry, 1>>
 }
 
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>
-void iPEPS<Scalar, Symmetry, ENABLE_AD>::loadFromMatlab(const std::filesystem::path& p, const std::string& root_name)
+void iPEPS<Scalar, Symmetry, ENABLE_AD>::loadFromMatlab(const std::filesystem::path& p, const std::string& root_name, int qn_scale)
 {
     HighFive::File file(p.string(), HighFive::File::ReadOnly);
     auto root = file.getGroup(root_name);
 
-    std::vector<std::vector<std::size_t>> pat_vec;
-    HighFive::DataSet pat_data = root.getDataSet("meta/pattern");
-    pat_data.read(pat_vec);
-    cell_ = UnitCell(std::move(Pattern(pat_vec, true)));
-    // std::cout << cell().pattern << std::endl;
-    // fmt::print("{}\n", cell().pattern.label2index);
-    // fmt::print("{}\n", cell().pattern.index2unique);
+    cell_.loadFromMatlab(p, root_name);
 
     As.resize(cell().pattern);
     Adags.resize(cell().pattern);
@@ -108,20 +102,20 @@ void iPEPS<Scalar, Symmetry, ENABLE_AD>::loadFromMatlab(const std::filesystem::p
         std::vector<HighFive::Reference> A;
         A_ref.read(A);
         auto g_A = A[i].template dereference<HighFive::Group>(root);
-        As[i] = Xped::IO::loadMatlabTensor<double, 5, 0, Symmetry, Xped::HeapPolicy>(g_A, root, std::array{true, true, false, false, true})
+        As[i] = Xped::IO::loadMatlabTensor<double, 5, 0, Symmetry, Xped::HeapPolicy>(g_A, root, std::array{true, true, false, false, true}, qn_scale)
                     .template permute<3, 3, 2, 1, 4, 0>();
         Adags[i] = As[i].adjoint().eval().template permute<0, 3, 4, 2, 0, 1>(Bool<ENABLE_AD>{});
     }
-    for(int x = 0; x < cell().Lx; ++x) {
-        for(int y = 0; y < cell().Ly; ++y) {
-            fmt::print("Site: {},{}: \n", x, y);
-            std::cout << "left: " << ketBasis(x, y, Opts::LEG::LEFT) << std::endl;
-            std::cout << "top: " << ketBasis(x, y, Opts::LEG::UP) << std::endl;
-            std::cout << "right: " << ketBasis(x, y, Opts::LEG::RIGHT) << std::endl;
-            std::cout << "bottom: " << ketBasis(x, y, Opts::LEG::DOWN) << std::endl;
-            std::cout << "phys: " << ketBasis(x, y, Opts::LEG::PHYS) << std::endl << std::endl;
-        }
-    }
+    // for(int x = 0; x < cell().Lx; ++x) {
+    //     for(int y = 0; y < cell().Ly; ++y) {
+    //         fmt::print("Site: {},{}: \n", x, y);
+    //         std::cout << "left: " << ketBasis(x, y, Opts::LEG::LEFT) << std::endl;
+    //         std::cout << "top: " << ketBasis(x, y, Opts::LEG::UP) << std::endl;
+    //         std::cout << "right: " << ketBasis(x, y, Opts::LEG::RIGHT) << std::endl;
+    //         std::cout << "bottom: " << ketBasis(x, y, Opts::LEG::DOWN) << std::endl;
+    //         std::cout << "phys: " << ketBasis(x, y, Opts::LEG::PHYS) << std::endl << std::endl;
+    //     }
+    // }
 }
 
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>

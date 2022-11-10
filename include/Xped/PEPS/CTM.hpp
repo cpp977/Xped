@@ -124,7 +124,7 @@ public:
     void grow_all();
 
     void init();
-    void loadFromMatlab(const std::filesystem::path& p, const std::string& root_name);
+    void loadFromMatlab(const std::filesystem::path& p, const std::string& root_name, int qn_scale = 1);
 
     template <bool TRACK = ENABLE_AD, bool CP = CPOpts.MOVE>
     void left_move();

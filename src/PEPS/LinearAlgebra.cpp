@@ -91,7 +91,6 @@ std::array<TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, Scalar>>, 4> a
         for(int y = 0; y < env.cell().cols(); ++y) {
             if(not env.cell().pattern.isUnique(x, y)) { continue; }
             if(op.data_h.size() > 0) {
-                Log::debug("Compute horizontal at {},{}.", x, y);
                 o_h(x, y) = env.rho_h(x, y)
                                 .twist(0)
                                 .twist(1)
@@ -99,7 +98,6 @@ std::array<TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, Scalar>>, 4> a
                                 .trace();
             }
             if(op.data_v.size() > 0) {
-                Log::debug("Compute vertical at {},{}.", x, y);
                 o_v(x, y) = env.rho_v(x, y)
                                 .twist(0)
                                 .twist(1)
@@ -115,7 +113,6 @@ std::array<TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, Scalar>>, 4> a
             }
 
             if(op.data_d1.size() > 0 or op.data_d2.size() > 0) {
-                Log::debug("Compute diagonal at {},{}.", x, y);
                 auto Q1 = env.contractCorner(x, y, Opts::CORNER::UPPER_LEFT);
                 auto Q2 = env.contractCorner(x + 1, y, Opts::CORNER::UPPER_RIGHT);
                 auto Q3 = env.contractCorner(x + 1, y + 1, Opts::CORNER::LOWER_RIGHT);

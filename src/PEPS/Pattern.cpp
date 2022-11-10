@@ -6,32 +6,31 @@ namespace Xped {
 
 void Pattern::init()
 {
+    assert(data.size() > 0);
+    std::vector<std::size_t> flattened_pat;
+    for(auto const& row : data) { flattened_pat.insert(flattened_pat.end(), row.begin(), row.end()); }
+    std::sort(flattened_pat.begin(), flattened_pat.end());
+    auto last = std::unique(flattened_pat.begin(), flattened_pat.end());
+    flattened_pat.erase(last, flattened_pat.end());
+    auto offset = flattened_pat[0];
+    [[maybe_unused]] std::vector<std::size_t> check(flattened_pat.size());
+    std::iota(check.begin(), check.end(), offset);
+    assert(flattened_pat == check);
     for(auto& row : data) {
-        for(auto& val : row) { --val; }
+        for(auto& val : row) { val = val - offset; }
     }
     Lx = data.size();
     assert(Lx > 0);
     Ly = data[0].size();
     for([[maybe_unused]] const auto& row : data) { assert(row.size() == Ly); }
-    if(Ly > 1) fmt::print("init pattern with data={}\n", data);
 
     for(int x = 0; x < Lx; x++) {
         for(int y = 0; y < Ly; y++) {
             index2unique[index(x, y)] = data[x][y];
             label2index[data[x][y]] = data[x][y];
-            // auto it = label2index.find(data[y][x]);
-            // if(it == label2index.end()) {
-            //     label2index[data[y][x]] = index(x, y);
-            //     index2unique[index(x, y)] = index2unique.size();
-            // } else {
-            //     index2unique[index(x, y)] = index2unique.at(label2index.at(data[y][x]));
-            // }
             sites_of_label[data[x][y]].push_back(index(x, y));
         }
     }
-    if(Ly > 1) fmt::print("label2index={}\n", label2index);
-    if(Ly > 1) fmt::print("index2unique={}\n", index2unique);
-    if(Ly > 1) fmt::print("sites_of_label={}\n", sites_of_label);
 }
 
 Pattern Pattern::col(int y) const

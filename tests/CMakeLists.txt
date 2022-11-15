@@ -77,3 +77,9 @@ endif()
 #########################
 add_executable(peps_ad peps_ad.cpp)# $<TARGET_OBJECTS:test_suite>)
 target_link_libraries (peps_ad Xped)
+
+#########################
+#        simple_update_test      #
+#########################
+add_executable(simple_update simple_update.cpp)# $<TARGET_OBJECTS:test_suite>)
+target_link_libraries (simple_update Xped)

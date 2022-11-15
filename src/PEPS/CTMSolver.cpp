@@ -27,7 +27,7 @@ typename ScalarTraits<Scalar>::Real CTMSolver<Scalar, Symmetry, CPOpts, TRank>::
                   opts.max_presteps,
                   opts.track_steps);
     if(REINIT_ENV) {
-        Jack = CTM<Scalar, Symmetry, TRank, false>(Psi, opts.chi);
+        Jack = CTM<Scalar, Symmetry, TRank, false>(Psi, opts.chi, opts.init);
         Jack.init();
     }
 
@@ -40,7 +40,7 @@ typename ScalarTraits<Scalar>::Real CTMSolver<Scalar, Symmetry, CPOpts, TRank>::
         Jack.grow_all();
         Jack.computeRDM();
         auto [E_h, E_v, E_d1, E_d2] = avg(Jack, H);
-        double E = (E_h.sum() + E_v.sum() + E_d1.sum() + E_d2.sum()) / Jack.cell().uniqueSize();
+        E = (E_h.sum() + E_v.sum() + E_d1.sum() + E_d2.sum()) / Jack.cell().uniqueSize();
         step == 0
             ? Log::per_iteration(opts.verbosity, "  {: >3} {:2d}: E={:2.8f}, t={}", "▷", step, E, move_t.time())
             : Log::per_iteration(opts.verbosity, "  {: >3} {:2d}: E={:2.8f}, conv={:2.10g}, t={}", "▷", step, E, std::abs(E - Eprev), move_t.time());
@@ -56,7 +56,7 @@ typename ScalarTraits<Scalar>::Real CTMSolver<Scalar, Symmetry, CPOpts, TRank>::
     Log::per_iteration(opts.verbosity, "  {: >3} pre steps: {}", "•", pre_time);
     if(not CALC_GRAD) {
         REINIT_ENV = true;
-        Log::on_exit(opts.verbosity, "  CTMSolver(runtime={}): E={.8f}", total_t.time(), E);
+        Log::on_exit(opts.verbosity, "  CTMSolver(runtime={}): E={:.8f}", total_t.time(), E);
         return E;
     }
 

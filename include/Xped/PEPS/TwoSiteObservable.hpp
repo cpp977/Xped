@@ -49,7 +49,7 @@ struct TwoSiteObservable : public ObservableBase
         }
     }
 
-    TwoSiteObservable<Symmetry> shiftQN(const TMatrix<typename Symmetry::qType>& charges)
+    TwoSiteObservable<Symmetry> shiftQN(const TMatrix<typename Symmetry::qType>& charges) const
     {
         TwoSiteObservable<Symmetry> out(data_h.pat, bond);
         for(int x = 0; x < data_h.pat.Lx; ++x) {

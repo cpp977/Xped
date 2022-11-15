@@ -6,6 +6,7 @@
 
 #include "Xped/Core/Qbasis.hpp"
 #include "Xped/Core/Tensor.hpp"
+#include "Xped/PEPS/CTMOpts.hpp"
 #include "Xped/PEPS/TMatrix.hpp"
 #include "Xped/PEPS/UnitCell.hpp"
 #include "Xped/PEPS/iPEPSIterator.hpp"
@@ -17,10 +18,6 @@ template <typename Symmetry>
 struct OneSiteObservable;
 template <typename Symmetry>
 struct TwoSiteObservable;
-
-namespace Opts {
-struct CTMCheckpoint;
-}
 
 template <typename, typename, std::size_t, bool, Opts::CTMCheckpoint>
 class CTM;
@@ -55,6 +52,9 @@ class iPEPS
 
     template <typename, typename, std::size_t, bool, Opts::CTMCheckpoint>
     friend class CTM;
+
+    template <typename, typename, typename, typename>
+    friend class TimePropagator;
 
     friend class iPEPS<Scalar_, Symmetry_, true>;
 
@@ -142,6 +142,10 @@ public:
     bool checkConsistency() const;
 
     void initWeightTensors();
+    void updateAtensors();
+
+    Tensor<Scalar, 1, 1, Symmetry> Id_weight_h(int x, int y) const;
+    Tensor<Scalar, 1, 1, Symmetry> Id_weight_v(int x, int y) const;
 
 private:
     void init(const TMatrix<Qbasis<Symmetry, 1>>& leftBasis,

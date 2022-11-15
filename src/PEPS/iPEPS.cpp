@@ -84,6 +84,7 @@ void iPEPS<Scalar, Symmetry, ENABLE_AD>::init(const TMatrix<Qbasis<Symmetry, 1>>
             assert(As[pos].coupledDomain().dim() > 0 and "Bases of the A tensor have no fused blocks.");
         }
     }
+    D = leftBasis(0, 0).dim();
 }
 
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>
@@ -257,11 +258,35 @@ void iPEPS<Scalar, Symmetry, ENABLE_AD>::initWeightTensors()
             if(not cell_.pattern.isUnique(x, y)) { continue; }
             Gs(x, y) = As(x, y);
             whs(x, y) = Tensor<Scalar, 1, 1, Symmetry>::Identity(
-                {{Gs(x, y).ketBasis(Opts::LEG::RIGHT)}}, {{Gs(x, y).ketBasis(Opts::LEG::RIGHT)}}, Gs(x, y).world());
-            wvs(x, y) = Tensor<Scalar, 1, 1, Symmetry>::Identity(
-                {{Gs(x, y).ketBasis(Opts::LEG::UP)}}, {{Gs(x, y).ketBasis(Opts::LEG::UP)}}, Gs(x, y).world());
+                {{ketBasis(x, y, Opts::LEG::RIGHT)}}, {{ketBasis(x, y, Opts::LEG::RIGHT)}}, Gs(x, y).world());
+            wvs(x, y) =
+                Tensor<Scalar, 1, 1, Symmetry>::Identity({{ketBasis(x, y, Opts::LEG::UP)}}, {{ketBasis(x, y, Opts::LEG::UP)}}, Gs(x, y).world());
         }
     }
+}
+
+template <typename Scalar, typename Symmetry, bool ENABLE_AD>
+void iPEPS<Scalar, Symmetry, ENABLE_AD>::updateAtensors()
+{
+    for(int x = 0; x < cell_.Lx; ++x) {
+        for(int y = 0; y < cell_.Ly; ++y) {
+            if(not cell_.pattern.isUnique(x, y)) { continue; }
+            As(x, y) = applyWeights(Gs(x, y), whs(x - 1, y).diag_sqrt(), wvs(x, y).diag_sqrt(), whs(x, y).diag_sqrt(), wvs(x, y + 1).diag_sqrt());
+            Adags(x, y) = As(x, y).adjoint().eval().template permute<0, 3, 4, 2, 0, 1>(Bool<ENABLE_AD>{});
+        }
+    }
+}
+
+template <typename Scalar, typename Symmetry, bool ENABLE_AD>
+Tensor<Scalar, 1, 1, Symmetry> iPEPS<Scalar, Symmetry, ENABLE_AD>::Id_weight_h(int x, int y) const
+{
+    return Tensor<Scalar, 1, 1, Symmetry>::Identity(whs(x, y).uncoupledDomain(), whs(x, y).uncoupledCodomain(), whs(x, y).world());
+}
+
+template <typename Scalar, typename Symmetry, bool ENABLE_AD>
+Tensor<Scalar, 1, 1, Symmetry> iPEPS<Scalar, Symmetry, ENABLE_AD>::Id_weight_v(int x, int y) const
+{
+    return Tensor<Scalar, 1, 1, Symmetry>::Identity(wvs(x, y).uncoupledDomain(), wvs(x, y).uncoupledCodomain(), wvs(x, y).world());
 }
 
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>

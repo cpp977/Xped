@@ -244,6 +244,14 @@ std::pair<MType<typename Derived::Scalar>, MType<typename Derived::Scalar>> Matr
 }
 
 template <typename Derived>
+std::pair<MType<typename Derived::Scalar>, MType<typename Derived::Scalar>> MatrixInterface::qr(const Eigen::MatrixBase<Derived>& M)
+{
+    Eigen::HouseholderQR<MType<typename Derived::Scalar>> Quirinus;
+    Quirinus.compute(M);
+    return std::make_pair(Quirinus.householderQ(), Quirinus.matrixQR().template triangularView<Eigen::Upper>());
+}
+
+template <typename Derived>
 std::string MatrixInterface::print(const Eigen::DenseBase<Derived>& M)
 {
     std::stringstream ss;

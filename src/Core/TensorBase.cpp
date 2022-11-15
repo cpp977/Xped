@@ -7,6 +7,7 @@
 #include "Xped/Symmetry/U1.hpp"
 
 #include "Xped/Core/AdjointOp.hpp"
+#include "Xped/Core/BlockUnaryOp.hpp"
 #include "Xped/Core/CoeffBinaryOp.hpp"
 #include "Xped/Core/CoeffUnaryOp.hpp"
 #include "Xped/Core/DiagCoeffBinaryOp.hpp"
@@ -71,6 +72,12 @@ template <typename Derived>
 XPED_CONST CoeffUnaryOp<Derived> TensorBase<Derived>::unaryExpr(const std::function<Scalar(Scalar)>& coeff_func) XPED_CONST
 {
     return CoeffUnaryOp<Derived>(derived(), coeff_func);
+}
+
+template <typename Derived>
+XPED_CONST BlockUnaryOp<Derived> TensorBase<Derived>::unaryExpr(const std::function<MatrixType(const MatrixType&)>& coeff_func) XPED_CONST
+{
+    return BlockUnaryOp<Derived>(derived(), coeff_func);
 }
 
 template <typename Derived>

@@ -140,7 +140,7 @@ template <int shift, std::size_t Rank, std::size_t CoRank, typename Symmetry>
 std::unordered_map<std::pair<FusionTree<Rank - shift, Symmetry>, FusionTree<CoRank + shift, Symmetry>>, typename Symmetry::Scalar>
 permute(const FusionTree<Rank, Symmetry>& t1, const FusionTree<CoRank, Symmetry>& t2, const util::Permutation& p)
 {
-    if constexpr(Symmetry::ALL_ABELIAN) {
+    if constexpr(not Symmetry::ANY_NON_ABELIAN) {
         FusionTree<Rank - shift, Symmetry> out_domain;
         FusionTree<CoRank + shift, Symmetry> out_codomain;
         for(auto r = 0ul; r < Rank - shift; ++r) {

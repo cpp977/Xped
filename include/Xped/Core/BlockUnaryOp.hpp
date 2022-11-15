@@ -31,7 +31,7 @@ public:
     using AllocationPolicy = typename XprType::AllocationPolicy;
     typedef typename Symmetry::qType qType;
 
-    BlockUnaryOp(XPED_CONST XprType& xpr, const std::function<MatrixType(const MatrixType&)>& coeff_func)
+    BlockUnaryOp(XPED_CONST XprType& xpr, const std::function<PlainInterface::MType<Scalar>(const PlainInterface::MType<Scalar>&)>& coeff_func)
         : refxpr_(xpr)
         , coeff_func_(coeff_func)
     {}
@@ -61,7 +61,7 @@ public:
 
 protected:
     XPED_CONST XprType& refxpr_;
-    const std::function<MatrixType(const MatrixType&)> coeff_func_;
+    const std::function<PlainInterface::MType<Scalar>(const PlainInterface::MType<Scalar>&)> coeff_func_;
 };
 
 } // namespace Xped

@@ -1,6 +1,7 @@
 #ifndef XPED_UNIT_CELL_H_
 #define XPED_UNIT_CELL_H_
 
+#include <filesystem>
 #include <vector>
 
 #include "yas/serialize.hpp"

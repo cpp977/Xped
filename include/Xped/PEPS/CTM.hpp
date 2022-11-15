@@ -9,7 +9,6 @@
 
 #include "Xped/Core/Tensor.hpp"
 #include "Xped/PEPS/CTMOpts.hpp"
-#include "Xped/PEPS/LinearAlgebra.hpp"
 #include "Xped/PEPS/TMatrix.hpp"
 #include "Xped/PEPS/UnitCell.hpp"
 #include "Xped/PEPS/iPEPS.hpp"

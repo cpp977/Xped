@@ -9,18 +9,12 @@
 
 #include "Xped/AD/ADTensor.hpp"
 
+#include "Xped/PEPS/CTM.hpp"
 #include "Xped/PEPS/OneSiteObservable.hpp"
 #include "Xped/PEPS/TMatrix.hpp"
 #include "Xped/PEPS/TwoSiteObservable.hpp"
 
 namespace Xped {
-
-namespace Opts {
-struct CTMCheckpoint;
-}
-
-template <typename, typename, std::size_t, bool, Opts::CTMCheckpoint>
-class CTM;
 
 template <typename Scalar, typename Symmetry, std::size_t TRank, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
 std::pair<TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, Scalar>>, TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, Scalar>>>
@@ -39,4 +33,5 @@ std::array<TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, Scalar>>, 4> a
 #ifndef XPED_COMPILED_LIB
 #    include "PEPS/LinearAlgebra.cpp"
 #endif
+
 #endif

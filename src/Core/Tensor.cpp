@@ -393,6 +393,9 @@ Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::tSVD(size_t max
               [](const std::pair<typename Symmetry::qType, double>& sv1, const std::pair<typename Symmetry::qType, double>& sv2) {
                   return sv1.second > sv2.second;
               });
+    // Log::critical("allSV: ");
+    // for(const auto& [q, sq] : allSV) { fmt::print("{}:{}, ", q[0], sq); }
+    // std::cout << std::endl;
     SPDLOG_INFO("numberOfStates after sort {}", allSV.size());
     for(size_t i = maxKeep; i < allSV.size(); ++i) { truncWeight += Symmetry::degeneracy(allSV[i].first) * std::pow(std::abs(allSV[i].second), 2.); }
     allSV.resize(std::min(maxKeep, numberOfStates));
@@ -405,6 +408,10 @@ Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::tSVD(size_t max
                     allSV.end());
     }
     SPDLOG_INFO("numberOfStates after erase {}", allSV.size());
+    // Log::critical("allSV: ");
+    // for(const auto& [q, sq] : allSV) { fmt::print("{}:{}, ", q[0], sq); }
+    // std::cout << std::endl;
+
     // cout << "saving sv for expansion to file, #sv=" << allSV.size() << endl;
     // ofstream Filer("sv_expand");
     // size_t index=0;
@@ -451,6 +458,7 @@ Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::tSVD(size_t max
     std::stringstream ss;
     ss << truncBasis.print();
     SPDLOG_INFO(ss.str());
+    // std::cout << truncBasis.print() << std::endl;
 
     Tensor<Scalar, Rank, 1, Symmetry, false, AllocationPolicy> trunc_U(uncoupledDomain(), {{truncBasis}});
     Tensor<RealScalar, 1, 1, Symmetry, false, AllocationPolicy> trunc_Sigma({{truncBasis}}, {{truncBasis}});
@@ -482,61 +490,86 @@ Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::tSVD(size_t max
     return std::make_tuple(trunc_U, trunc_Sigma, trunc_Vdag);
 }
 
-    template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
-    std::pair<Tensor<typename ScalarTraits<Scalar>::Real, 1, 1, Symmetry, false, AllocationPolicy>,
-              Tensor<typename ScalarTraits<Scalar>::Real, Rank, 1, Symmetry, false, AllocationPolicy>>
-    Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::eigh() XPED_CONST
-    {
-        static_assert(Rank == CoRank, "Eigenvalue decomposition only possible for tensors with Rank==CoRank");
-        assert(coupledDomain() == coupledCodomain() and "Eigenvalue decomposition only possible for square matrices.");
-        // assert(*this == this->adjoint().eval() and "Input for eigh() needs to be Hermitian.");
+template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
+std::pair<Tensor<Scalar, Rank, 1, Symmetry, false, AllocationPolicy>, Tensor<Scalar, 1, CoRank, Symmetry, false, AllocationPolicy>>
+Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::tQR(bool RETURN_LQ) XPED_CONST
+{
+    auto middle = coupledDomain().dim() > coupledCodomain().dim() ? coupledCodomain().forgetHistory() : coupledDomain().forgetHistory();
+    Tensor<RealScalar, Rank, 1, Symmetry, false, AllocationPolicy> Q(uncoupledDomain(), {{middle}}, world());
+    Tensor<RealScalar, 1, CoRank, Symmetry, false, AllocationPolicy> R({{middle}}, uncoupledCodomain(), world());
 
-        Tensor<RealScalar, 1, 1, Symmetry, false, AllocationPolicy> D(
-            {{coupledDomain().forgetHistory()}}, {{coupledCodomain().forgetHistory()}}, world());
-        Tensor<RealScalar, Rank, 1, Symmetry, false, AllocationPolicy> V(uncoupledDomain(), {{coupledCodomain().forgetHistory()}}, world());
-
-        for(size_t i = 0; i < sector().size(); ++i) {
-            auto [Eigvals, Eigvecs] = PlainInterface::eigh(block(i));
-
-            D.push_back(sector(i), Eigvals);
-            V.push_back(sector(i), Eigvecs);
+    for(size_t i = 0; i < sector().size(); ++i) {
+        auto [Qmat, Rmat] = PlainInterface::qr(block(i));
+        if(RETURN_LQ) {
+            Qmat = (Qmat * PlainInterface::Identity<Scalar>(block(i).rows(), block(i).cols(), world())).adjoint();
+            Rmat = (PlainInterface::Identity<Scalar>(block(i).cols(), block(i).rows(), world()) * Rmat).adjoint();
+        } else {
+            Qmat = Qmat * PlainInterface::Identity<Scalar>(block(i).rows(), block(i).cols(), world());
+            Rmat = PlainInterface::Identity<Scalar>(block(i).cols(), block(i).rows(), world()) * Rmat;
         }
 
-        return std::make_pair(D, V);
+        Q.push_back(sector(i), Qmat);
+        R.push_back(sector(i), Rmat);
     }
-    // template<std::size_t Rank, std::size_t CoRank, typename Symmetry, typename MatrixLib_, typename TensorLib_>
-    // MatrixLib_& Xped<Rank, CoRank, Symmetry, MatrixLib_>::
-    // operator() (const FusionTree<Rank,Symmetry>& f1, const FusionTree<CoRank,Symmetry>& f2)
-    // {
-    //         assert(f1.q_coupled == f2.q_coupled);
-    //         std::array<std::size_t,Rank> zeros_domain = std::array<std::size_t,Rank>();
-    //         std::array<std::size_t,CoRank> zeros_codomain = std::array<std::size_t,CoRank>();
-    //         const auto left_offset_domain = domain.leftOffset(f1,zeros_domain);
-    //         const auto left_offset_codomain = codomain.leftOffset(f2,zeros_codomain);
-    //         const auto it = dict().find(f1.q_coupled);
-    //         return block_[it->second].block(left_offset_domain, left_offset_codomain, f1.dim, f2.dim);
-    // }
 
-    // template<std::size_t Rank, std::size_t CoRank, typename Symmetry, typename MatrixLib_, typename TensorLib_>
-    // Eigen::Map<MatrixLib_> Xped<Scalar_, Rank, CoRank, Symmetry_>::
-    // operator() (const FusionTree<Rank,Symmetry>& f1, const FusionTree<CoRank,Symmetry>& f2) const
-    // {
-    //         if(f1.q_coupled != f2.q_coupled) {return util::zero_init<MatrixType>();}
-    //         std::array<std::size_t,Rank> zeros_domain = std::array<std::size_t,Rank>();
-    //         std::array<std::size_t,CoRank> zeros_codomain = std::array<std::size_t,CoRank>();
-    //         const auto left_offset_domain = domain.leftOffset(f1,zeros_domain);
-    //         const auto left_offset_codomain = codomain.leftOffset(f2,zeros_codomain);
-    //         const auto it = dict().find(f1.q_coupled);
-    //         return block_[it->second].block(left_offset_domain, left_offset_codomain, f1.dim, f2.dim);
-    // }
+    return std::make_pair(Q, R);
+}
 
-    template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
-    auto Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::view(const FusionTree<Rank, Symmetry>& f1,
-                                                                               const FusionTree<CoRank, Symmetry>& f2)
-    {
-        const auto it = dict().find(f1.q_coupled);
-        assert(it != dict().end());
-        return view(f1, f2, it->second);
+template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
+std::pair<Tensor<typename ScalarTraits<Scalar>::Real, 1, 1, Symmetry, false, AllocationPolicy>,
+          Tensor<typename ScalarTraits<Scalar>::Real, Rank, 1, Symmetry, false, AllocationPolicy>>
+Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::eigh() XPED_CONST
+{
+    static_assert(Rank == CoRank, "Eigenvalue decomposition only possible for tensors with Rank==CoRank");
+    assert(coupledDomain() == coupledCodomain() and "Eigenvalue decomposition only possible for square matrices.");
+    // assert(*this == this->adjoint().eval() and "Input for eigh() needs to be Hermitian.");
+
+    Tensor<RealScalar, 1, 1, Symmetry, false, AllocationPolicy> D(
+        {{coupledDomain().forgetHistory()}}, {{coupledCodomain().forgetHistory()}}, world());
+    Tensor<RealScalar, Rank, 1, Symmetry, false, AllocationPolicy> V(uncoupledDomain(), {{coupledCodomain().forgetHistory()}}, world());
+
+    for(size_t i = 0; i < sector().size(); ++i) {
+        auto [Eigvals, Eigvecs] = PlainInterface::eigh(block(i));
+
+        D.push_back(sector(i), Eigvals);
+        V.push_back(sector(i), Eigvecs);
+    }
+
+    return std::make_pair(D, V);
+}
+// template<std::size_t Rank, std::size_t CoRank, typename Symmetry, typename MatrixLib_, typename TensorLib_>
+// MatrixLib_& Xped<Rank, CoRank, Symmetry, MatrixLib_>::
+// operator() (const FusionTree<Rank,Symmetry>& f1, const FusionTree<CoRank,Symmetry>& f2)
+// {
+//         assert(f1.q_coupled == f2.q_coupled);
+//         std::array<std::size_t,Rank> zeros_domain = std::array<std::size_t,Rank>();
+//         std::array<std::size_t,CoRank> zeros_codomain = std::array<std::size_t,CoRank>();
+//         const auto left_offset_domain = domain.leftOffset(f1,zeros_domain);
+//         const auto left_offset_codomain = codomain.leftOffset(f2,zeros_codomain);
+//         const auto it = dict().find(f1.q_coupled);
+//         return block_[it->second].block(left_offset_domain, left_offset_codomain, f1.dim, f2.dim);
+// }
+
+// template<std::size_t Rank, std::size_t CoRank, typename Symmetry, typename MatrixLib_, typename TensorLib_>
+// Eigen::Map<MatrixLib_> Xped<Scalar_, Rank, CoRank, Symmetry_>::
+// operator() (const FusionTree<Rank,Symmetry>& f1, const FusionTree<CoRank,Symmetry>& f2) const
+// {
+//         if(f1.q_coupled != f2.q_coupled) {return util::zero_init<MatrixType>();}
+//         std::array<std::size_t,Rank> zeros_domain = std::array<std::size_t,Rank>();
+//         std::array<std::size_t,CoRank> zeros_codomain = std::array<std::size_t,CoRank>();
+//         const auto left_offset_domain = domain.leftOffset(f1,zeros_domain);
+//         const auto left_offset_codomain = codomain.leftOffset(f2,zeros_codomain);
+//         const auto it = dict().find(f1.q_coupled);
+//         return block_[it->second].block(left_offset_domain, left_offset_codomain, f1.dim, f2.dim);
+// }
+
+template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
+auto Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::view(const FusionTree<Rank, Symmetry>& f1,
+                                                                           const FusionTree<CoRank, Symmetry>& f2)
+{
+    const auto it = dict().find(f1.q_coupled);
+    assert(it != dict().end());
+    return view(f1, f2, it->second);
     }
 
     template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>

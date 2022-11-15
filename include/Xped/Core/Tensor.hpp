@@ -193,7 +193,7 @@ public:
 
     auto subMatrix(const FusionTree<Rank, Symmetry>& f1, const FusionTree<CoRank, Symmetry>& f2)
     {
-        if(f1.q_coupled != f2.q_coupled) { assert(false); }
+        assert(f1.q_coupled == f2.q_coupled and "FusionTrees needs to have the same coupled qn.");
 
         const auto left_offset_domain = coupledDomain().leftOffset(f1);
         const auto left_offset_codomain = coupledCodomain().leftOffset(f2);
@@ -327,6 +327,9 @@ public:
         std::map<qarray<Symmetry::Nq>, VectorType> SVspec_dumb;
         return tSVD(maxKeep, eps_svd, truncWeight, S_dumb, SVspec_dumb, PRESERVE_MULTIPLETS, false); // false: Dont return singular value spectrum
     }
+
+    std::pair<Tensor<Scalar, Rank, 1, Symmetry, false, AllocationPolicy>, Tensor<Scalar, 1, CoRank, Symmetry, false, AllocationPolicy>>
+    tQR(bool RETURN_LQ = false) XPED_CONST;
 
     std::pair<Tensor<RealScalar, 1, 1, Symmetry, false, AllocationPolicy>, Tensor<RealScalar, Rank, 1, Symmetry, false, AllocationPolicy>>
     eigh() XPED_CONST;

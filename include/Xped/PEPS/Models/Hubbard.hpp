@@ -6,6 +6,11 @@
 
 #include <highfive/H5File.hpp>
 
+#include "Xped/Symmetry/SU2.hpp"
+#include "Xped/Symmetry/U0.hpp"
+#include "Xped/Symmetry/U1.hpp"
+#include "Xped/Symmetry/ZN.hpp"
+
 #include "Xped/Core/Tensor.hpp"
 #include "Xped/PEPS/Models/Helpers.hpp"
 #include "Xped/PEPS/OneSiteObservable.hpp"

@@ -8,6 +8,7 @@
 #include "Xped/Core/Tensor.hpp"
 #include "Xped/PEPS/Bonds.hpp"
 #include "Xped/PEPS/CTMOpts.hpp"
+#include "Xped/PEPS/LinearAlgebra.hpp"
 #include "Xped/PEPS/ObservableBase.hpp"
 #include "Xped/PEPS/TMatrix.hpp"
 

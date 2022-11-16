@@ -53,7 +53,7 @@ class iPEPS
     template <typename, typename, std::size_t, bool, Opts::CTMCheckpoint>
     friend class CTM;
 
-    template <typename, typename, typename, typename>
+    template <typename, typename, typename>
     friend class TimePropagator;
 
     friend class iPEPS<Scalar_, Symmetry_, true>;
@@ -147,14 +147,14 @@ public:
     Tensor<Scalar, 1, 1, Symmetry> Id_weight_h(int x, int y) const;
     Tensor<Scalar, 1, 1, Symmetry> Id_weight_v(int x, int y) const;
 
+    std::size_t D;
+
 private:
     void init(const TMatrix<Qbasis<Symmetry, 1>>& leftBasis,
               const TMatrix<Qbasis<Symmetry, 1>>& topBasis,
               const TMatrix<Qbasis<Symmetry, 1>>& rightBasis,
               const TMatrix<Qbasis<Symmetry, 1>>& bottomBasis,
               const TMatrix<Qbasis<Symmetry, 1>>& physBasis);
-
-    std::size_t D;
 
     UnitCell cell_;
     TMatrix<Tensor<Scalar, 2, 3, Symmetry, ENABLE_AD>> As;

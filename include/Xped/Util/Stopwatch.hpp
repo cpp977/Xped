@@ -44,7 +44,8 @@ public:
     Stopwatch();
     Stopwatch(std::string filename_input);
 
-    std::string time(TimeUnit u = TimeUnit::NATURAL);
+    std::string time_string(TimeUnit u = TimeUnit::NATURAL);
+    std::chrono::seconds time();
 
     void start();
 
@@ -85,7 +86,7 @@ Stopwatch<ClockClass>::Stopwatch(std::string filename_input)
 }
 
 template <typename ClockClass>
-std::string Stopwatch<ClockClass>::time(TimeUnit u)
+std::string Stopwatch<ClockClass>::time_string(TimeUnit u)
 {
     t_end = ClockClass::now();
     std::chrono::duration<double, std::ratio<1, 1>> dt = t_end - t_start;
@@ -105,6 +106,13 @@ std::string Stopwatch<ClockClass>::time(TimeUnit u)
         return fmt::format("{}d", dtd.count());
     }
     return format_secs(dt);
+}
+
+template <typename ClockClass>
+std::chrono::seconds Stopwatch<ClockClass>::time()
+{
+    t_end = ClockClass::now();
+    return std::chrono::duration_cast<std::chrono::seconds>(t_end - t_start);
 }
 
 template <typename ClockClass>

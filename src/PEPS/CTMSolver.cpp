@@ -18,7 +18,7 @@ typename ScalarTraits<Scalar>::Real CTMSolver<Scalar, Symmetry, CPOpts, TRank>::
     // Jack.info();
     Log::on_entry(opts.verbosity,
                   "  CTMSolver(χ={}, {}): UnitCell=({}x{}), init={}, reinit env={}, max steps(untracked)={}, steps(tracked)={}",
-                  Jack.chi(),
+                  opts.chi,
                   Symmetry::name(),
                   Jack.cell().Lx,
                   Jack.cell().Ly,
@@ -35,28 +35,33 @@ typename ScalarTraits<Scalar>::Real CTMSolver<Scalar, Symmetry, CPOpts, TRank>::
     double Eprev = std::numeric_limits<Scalar>::quiet_NaN();
     double Eprevprev = std::numeric_limits<Scalar>::quiet_NaN();
     util::Stopwatch<> pre_t;
+    std::size_t used_steps;
     for(std::size_t step = 0; step < opts.max_presteps; ++step) {
         util::Stopwatch<> move_t;
         Jack.grow_all();
         Jack.computeRDM();
         auto [E_h, E_v, E_d1, E_d2] = avg(Jack, H);
         E = (E_h.sum() + E_v.sum() + E_d1.sum() + E_d2.sum()) / Jack.cell().uniqueSize();
-        step == 0
-            ? Log::per_iteration(opts.verbosity, "  {: >3} {:2d}: E={:2.8f}, t={}", "▷", step, E, move_t.time())
-            : Log::per_iteration(opts.verbosity, "  {: >3} {:2d}: E={:2.8f}, conv={:2.10g}, t={}", "▷", step, E, std::abs(E - Eprev), move_t.time());
-        if(std::abs(E - Eprev) < opts.tol_E) { break; }
+        step == 0 ? Log::per_iteration(opts.verbosity, "  {: >3} {:2d}: E={:2.8f}, t={}", "▷", step, E, move_t.time_string())
+                  : Log::per_iteration(
+                        opts.verbosity, "  {: >3} {:2d}: E={:2.8f}, conv={:2.10g}, t={}", "▷", step, E, std::abs(E - Eprev), move_t.time_string());
+        if(std::abs(E - Eprev) < opts.tol_E) {
+            used_steps = step;
+            break;
+        }
         if(std::abs(E - Eprevprev) < opts.tol_E) {
             Log::per_iteration(opts.verbosity, "  {: >3} Oscillation -> break", "•");
+            used_steps = step;
             break;
         }
         Eprevprev = Eprev;
         Eprev = E;
     }
-    auto pre_time = pre_t.time();
+    auto pre_time = pre_t.time_string();
     Log::per_iteration(opts.verbosity, "  {: >3} pre steps: {}", "•", pre_time);
     if(not CALC_GRAD) {
         REINIT_ENV = true;
-        Log::on_exit(opts.verbosity, "  CTMSolver(runtime={}): E={:.8f}", total_t.time(), E);
+        Log::on_exit(opts.verbosity, "  CTMSolver(χ={}, runtime={}[{} steps]): E={:.8f}", opts.chi, total_t.time_string(), used_steps, E);
         return E;
     }
 
@@ -64,14 +69,14 @@ typename ScalarTraits<Scalar>::Real CTMSolver<Scalar, Symmetry, CPOpts, TRank>::
     Xped::CTM<double, Symmetry, TRank, true, CPOpts> Jim(Jack);
     util::Stopwatch<> forward_t;
     Jim.solve(opts.track_steps);
-    auto forward_time = forward_t.time();
+    auto forward_time = forward_t.time_string();
     Log::per_iteration(opts.verbosity, "  {: >3} forward pass: {}", "•", forward_time);
     auto [E_h, E_v, E_d1, E_d2] = avg(Jim, H);
     auto res = (E_h.sum() + E_v.sum() + E_d1.sum() + E_d2.sum()) / Jim.cell().uniqueSize();
     E = res.val();
     util::Stopwatch<> backward_t;
     stan::math::grad(res.vi_);
-    auto backward_time = backward_t.time();
+    auto backward_time = backward_t.time_string();
     Log::per_iteration(opts.verbosity, "  {: >3} backward pass: {}", "•", backward_time);
     std::size_t count = 0;
     for(auto it = Jim.Psi()->gradbegin(); it != Jim.Psi()->gradend(); ++it) { gradient[count++] = *it; }
@@ -79,7 +84,7 @@ typename ScalarTraits<Scalar>::Real CTMSolver<Scalar, Symmetry, CPOpts, TRank>::
     REINIT_ENV = grad_norm < opts.reinit_env_tol ? false : true;
     Log::on_exit(opts.verbosity,
                  "  CTMSolver(runtime={} [pre={}, forward={}, backward={}]): E={:.8f}, |∇|={:.1e}",
-                 total_t.time(),
+                 total_t.time_string(),
                  pre_time,
                  forward_time,
                  backward_time,

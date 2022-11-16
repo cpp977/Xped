@@ -3,13 +3,14 @@
 
 #include <memory>
 
+#include "Xped/PEPS/ImagOpts.hpp"
 #include "Xped/PEPS/SimpleUpdate.hpp"
 #include "Xped/PEPS/TwoSiteObservable.hpp"
 #include "Xped/PEPS/iPEPS.hpp"
 
 namespace Xped {
 
-template <typename Scalar_, typename TimeScalar_, typename Symmetry_, typename Update = SimpleUpdate<Scalar_, Symmetry_>>
+template <typename Scalar_, typename TimeScalar_, typename Symmetry_>
 class TimePropagator
 {
 public:
@@ -19,25 +20,35 @@ public:
 
     TimePropagator() = delete;
 
-    explicit TimePropagator(const TwoSiteObservable<Symmetry>& H_in, std::shared_ptr<iPEPS<Scalar, Symmetry>> Psi_in, const Update& updater_in)
+    explicit TimePropagator(const TwoSiteObservable<Symmetry>& H_in, std::shared_ptr<iPEPS<Scalar, Symmetry>> Psi_in, const Opts::Update& update_in)
         : H(H_in)
         , Psi(Psi_in)
         , cell_(Psi_in->cell())
-        , updater(updater_in)
+        , update(update_in)
     {
         Psi->initWeightTensors();
+        spectrum_h.resize(Psi->cell().pattern);
+        spectrum_v.resize(Psi->cell().pattern);
     }
 
     void t_step(TimeScalar_ dt);
+
+    TMatrix<Tensor<Scalar, 1, 1, Symmetry>> spectrum_h;
+    TMatrix<Tensor<Scalar, 1, 1, Symmetry>> spectrum_v;
 
 private:
     const TwoSiteObservable<Symmetry>& H;
     std::shared_ptr<iPEPS<Scalar, Symmetry>> Psi;
     UnitCell cell_;
-    Update updater;
+    Opts::Update update;
 
     void t_step_h(int x, int y, TimeScalar_ dt);
     void t_step_v(int x, int y, TimeScalar_ dt);
+
+    std::tuple<Tensor<Scalar, 2, 1, Symmetry>, Tensor<Scalar, 1, 1, Symmetry>, Tensor<Scalar, 1, 2, Symmetry>>
+    renormalize(const Tensor<Scalar, 2, 2, Symmetry>& bond,
+                const Tensor<Scalar, 3, 1, Symmetry>& left,
+                const Tensor<Scalar, 1, 3, Symmetry>& right) const;
 };
 
 } // namespace Xped

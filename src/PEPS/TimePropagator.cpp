@@ -4,8 +4,8 @@
 
 namespace Xped {
 
-template <typename Scalar, typename TimeScalar, typename Symmetry, typename Update>
-void TimePropagator<Scalar, TimeScalar, Symmetry, Update>::t_step(TimeScalar dt)
+template <typename Scalar, typename TimeScalar, typename Symmetry>
+void TimePropagator<Scalar, TimeScalar, Symmetry>::t_step(TimeScalar dt)
 {
     for(auto i = 0ul; i < cell_.uniqueSize(); ++i) {
         auto [x, y] = cell_.pattern.coords(i);
@@ -28,10 +28,11 @@ void TimePropagator<Scalar, TimeScalar, Symmetry, Update>::t_step(TimeScalar dt)
         // fmt::print("horizontal i={}: x,y={},{}\n", i, x, y);
         t_step_h(x, y, dt);
     }
+    Psi->updateAtensors();
 }
 
-template <typename Scalar, typename TimeScalar, typename Symmetry, typename Update>
-void TimePropagator<Scalar, TimeScalar, Symmetry, Update>::t_step_h(int x, int y, TimeScalar dt)
+template <typename Scalar, typename TimeScalar, typename Symmetry>
+void TimePropagator<Scalar, TimeScalar, Symmetry>::t_step_h(int x, int y, TimeScalar dt)
 {
     auto left_full = applyWeights(Psi->Gs(x, y), Psi->whs(x - 1, y), Psi->wvs(x, y), Psi->whs(x, y).diag_sqrt(), Psi->wvs(x, y + 1));
     auto right_full = applyWeights(Psi->Gs(x + 1, y), Psi->whs(x, y).diag_sqrt(), Psi->wvs(x + 1, y), Psi->whs(x + 1, y), Psi->wvs(x + 1, y + 1));
@@ -94,7 +95,8 @@ void TimePropagator<Scalar, TimeScalar, Symmetry, Update>::t_step_h(int x, int y
     // fmt::print("enlarged bond\n");
     // enlarged_bond.print(std::cout, true);
     // std::cout << std::endl;
-    auto [bond_lp, weight, bond_rp] = updater.renormalize(enlarged_bond, left, right, Psi->D);
+    auto [bond_lp, weight, bond_rp] = renormalize(enlarged_bond, left, right);
+    spectrum_h(x, y) = weight * (1. / weight.trace());
     Psi->whs(x, y) = weight * (1. / weight.maxNorm());
     // fmt::print("weight_h for site {},{}:\n", x, y);
     // weight.print(std::cout, true);
@@ -108,8 +110,8 @@ void TimePropagator<Scalar, TimeScalar, Symmetry, Update>::t_step_h(int x, int y
     Psi->Gs(x + 1, y) = Gtmp2; // * (1. / Gtmp2.maxNorm());
 }
 
-template <typename Scalar, typename TimeScalar, typename Symmetry, typename Update>
-void TimePropagator<Scalar, TimeScalar, Symmetry, Update>::t_step_v(int x, int y, TimeScalar dt)
+template <typename Scalar, typename TimeScalar, typename Symmetry>
+void TimePropagator<Scalar, TimeScalar, Symmetry>::t_step_v(int x, int y, TimeScalar dt)
 {
     auto top_full = applyWeights(Psi->Gs(x, y - 1), Psi->whs(x - 1, y - 1), Psi->wvs(x, y - 1), Psi->whs(x, y - 1), Psi->wvs(x, y).diag_sqrt());
     auto bottom_full = applyWeights(Psi->Gs(x, y), Psi->whs(x - 1, y), Psi->wvs(x, y).diag_sqrt(), Psi->whs(x, y), Psi->wvs(x, y + 1));
@@ -123,7 +125,8 @@ void TimePropagator<Scalar, TimeScalar, Symmetry, Update>::t_step_v(int x, int y
     auto bond = bond_t.template contract<std::array{-1, 1, -2}, std::array{1, -3, -4}, 2>(bond_b);
     auto shifted_ham = H.shiftQN(Psi->charges());
     auto enlarged_bond = shifted_ham.data_v(x, y - 1).mexp(-dt).eval().template contract<std::array{1, 2, -1, -3}, std::array{-2, 1, 2, -4}, 2>(bond);
-    auto [bond_tp, weight, bond_bp] = updater.renormalize(enlarged_bond, top, bottom, Psi->D);
+    auto [bond_tp, weight, bond_bp] = renormalize(enlarged_bond, top, bottom);
+    spectrum_v(x, y) = weight * (1. / weight.trace());
     Psi->wvs(x, y) = weight * (1. / weight.maxNorm());
     // fmt::print("weight_v for site {},{}:\n", x, y);
     // weight.print(std::cout, true);
@@ -135,6 +138,29 @@ void TimePropagator<Scalar, TimeScalar, Symmetry, Update>::t_step_v(int x, int y
     Gtmp1 = bond_bp.template contract<std::array{-2, -5, 1}, std::array{1, -1, -3, -4}, 2>(bottom);
     Gtmp2 = applyWeights(Gtmp1, Psi->whs(x - 1, y).diag_inv(), Psi->Id_weight_v(x, y), Psi->whs(x, y).diag_inv(), Psi->wvs(x, y + 1).diag_inv());
     Psi->Gs(x, y) = Gtmp2; // * (1. / Gtmp2.maxNorm());
+}
+
+template <typename Scalar, typename TimeScalar, typename Symmetry>
+std::tuple<Tensor<Scalar, 2, 1, Symmetry>, Tensor<Scalar, 1, 1, Symmetry>, Tensor<Scalar, 1, 2, Symmetry>>
+TimePropagator<Scalar, TimeScalar, Symmetry>::renormalize(const Tensor<Scalar, 2, 2, Symmetry>& bond,
+                                                          const Tensor<Scalar, 3, 1, Symmetry>& left,
+                                                          const Tensor<Scalar, 1, 3, Symmetry>& right) const
+{
+    std::tuple<Tensor<Scalar, 2, 1, Symmetry>, Tensor<Scalar, 1, 1, Symmetry>, Tensor<Scalar, 1, 2, Symmetry>> res;
+    switch(update) {
+    case Opts::Update::SIMPLE: {
+        double dummy;
+        res = bond.tSVD(Psi->D, 1.e-14, dummy, false);
+        break;
+    }
+    case Opts::Update::FULL: {
+        assert(false and "Full update not implemented");
+    }
+    case Opts::Update::CLUSTER: {
+        assert(false and "Cluster update not implemented");
+    }
+    }
+    return res;
 }
 
 } // namespace Xped

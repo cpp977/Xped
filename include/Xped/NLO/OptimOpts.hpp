@@ -5,9 +5,13 @@
 
 #include "fmt/color.h"
 
+#include "yas/serialize.hpp"
+#include "yas/std_types.hpp"
+
 #include "Xped/Util/EnumStream.hpp"
 #include "Xped/Util/Logging.hpp"
 #include "Xped/Util/TomlHelpers.hpp"
+#include "Xped/Util/YasHelpers.hpp"
 
 namespace Xped::Opts {
 
@@ -48,32 +52,8 @@ struct Optim
     Verbosity verbosity = Verbosity::PER_ITERATION;
 
     template <typename Ar>
-    void serialize(Ar& ar) const
-    {
-        ar& YAS_OBJECT_NVP("OptimOpts",
-                           ("alg", alg),
-                           ("LineSearch", ls),
-                           ("bfgs_scaling", bfgs_scaling),
-                           ("grad_tol", grad_tol),
-                           ("step_tol", step_tol),
-                           ("cost_tol", cost_tol),
-                           ("max_steps", max_steps),
-                           ("min_steps", min_steps),
-                           ("load", load),
-                           ("qn_scale", qn_scale),
-                           ("save_period", save_period),
-                           ("log_format", log_format),
-                           ("working_directory", working_directory.string()),
-                           ("logging_directory", logging_directory.string()),
-                           ("obs_directory", obs_directory.string()),
-                           ("verbosity", verbosity),
-                           ("display_obs", display_obs));
-    }
-
-    template <typename Ar>
     void serialize(Ar& ar)
     {
-        std::string working_dir, logging_dir, obs_dir;
         ar& YAS_OBJECT_NVP("OptimOpts",
                            ("alg", alg),
                            ("LineSearch", ls),
@@ -87,14 +67,11 @@ struct Optim
                            ("qn_scale", qn_scale),
                            ("save_period", save_period),
                            ("log_format", log_format),
-                           ("working_directory", working_dir),
-                           ("logging_directory", logging_dir),
-                           ("obs_directory", obs_dir),
+                           ("working_directory", working_directory),
+                           ("logging_directory", logging_directory),
+                           ("obs_directory", obs_directory),
                            ("verbosity", verbosity),
                            ("display_obs", display_obs));
-        working_directory = working_dir;
-        logging_directory = logging_dir;
-        obs_directory = obs_dir;
     }
 
     inline auto info()

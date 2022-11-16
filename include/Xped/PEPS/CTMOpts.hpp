@@ -3,12 +3,14 @@
 
 #include "toml.hpp"
 
+#include "yas/serialize.hpp"
+#include "yas/std_types.hpp"
+
 #include "fmt/color.h"
 #include "fmt/core.h"
 
 #include <boost/describe.hpp>
 
-#include "Xped/PEPS/UnitCell.hpp"
 #include "Xped/Util/Logging.hpp"
 #include "Xped/Util/TomlHelpers.hpp"
 
@@ -87,7 +89,6 @@ inline CTM ctm_from_toml(const toml::value& t)
     if(t.contains("verbosity")) { res.verbosity = util::enum_from_toml<Verbosity>(t.at("verbosity")); }
     res.load = t.contains("load") ? static_cast<std::string>(t.at("load").as_string()) : res.load;
     res.qn_scale = t.contains("qn_scale") ? (t.at("qn_scale").as_integer()) : res.qn_scale;
-    // res.cell = t.contains("cell") ? UnitCell(toml::get<std::vector<std::vector<std::string>>>(toml::find(t, "cell"))) : UnitCell();
     return res;
 }
 

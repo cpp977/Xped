@@ -27,6 +27,7 @@ XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100000)
 #include "Xped/PEPS/SimpleUpdate.hpp"
 #include "Xped/PEPS/TimePropagator.hpp"
 #include "Xped/PEPS/iPEPS.hpp"
+#include "Xped/PEPS/iPEPSSolverImag.hpp"
 
 #include "Xped/PEPS/Models/Heisenberg.hpp"
 #include "Xped/PEPS/Models/Hubbard.hpp"
@@ -58,8 +59,8 @@ int main(int argc, char* argv[])
         //     Xped::Sym::Combined<Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>>;
         // typedef Xped::Sym::SU2<Xped::Sym::SpinSU2> Symmetry;
         // typedef Xped::Sym::U1<Xped::Sym::SpinU1> Symmetry;
-        typedef Xped::Sym::ZN<Xped::Sym::SpinU1, 36, double> Symmetry;
-        // typedef Xped::Sym::U0<double> Symmetry;
+        // typedef Xped::Sym::ZN<Xped::Sym::SpinU1, 36, double> Symmetry;
+        typedef Xped::Sym::U0<double> Symmetry;
 
         std::unique_ptr<Xped::TwoSiteObservable<Symmetry>> ham;
 
@@ -162,27 +163,14 @@ int main(int argc, char* argv[])
         Xped::TMatrix<Xped::Qbasis<Symmetry, 1>> phys_basis(c.pattern);
         phys_basis.setConstant(ham->data_h[0].uncoupledDomain()[0]);
         auto Psi = std::make_shared<Xped::iPEPS<double, Symmetry, false>>(c, left_aux, top_aux, right_aux, bottom_aux, phys_basis, charges);
-        Psi->loadFromMatlab(std::filesystem::path("/home/user/matlab-tmp/heisenberg_D2.mat"), "cpp");
-        // Psi->setRandom();
+        // Psi->loadFromMatlab(std::filesystem::path("/home/user/matlab-tmp/heisenberg_D2.mat"), "cpp");
+        Psi->setRandom();
         // psi->info();
-
         Xped::Opts::CTM ctm_opts = Xped::Opts::ctm_from_toml(data.at("ctm"));
-        Xped::CTMSolver<Scalar, Symmetry, Xped::Opts::CTMCheckpoint{}> Jack(ctm_opts);
-        // Jack.solve<double>(Psi, nullptr, *ham, false);
+        Xped::Opts::Imag imag_opts = Xped::Opts::imag_from_toml(data.at("imag"));
 
-        Xped::SimpleUpdate<Scalar, Symmetry> simple_u;
-        Xped::TimePropagator<Scalar, double, Symmetry> Lucy(*ham, Psi, simple_u);
-
-        auto t_steps = args.get<std::size_t>("t_steps", 10);
-        auto dt = args.get<double>("dt", 0.1);
-        for(auto step = 0ul; step < t_steps; ++step) { Lucy.t_step(dt); }
-        for(auto step = 0ul; step < t_steps; ++step) { Lucy.t_step(dt / 10.); }
-        for(auto step = 0ul; step < t_steps; ++step) { Lucy.t_step(dt / 100.); }
-        for(auto step = 0ul; step < t_steps; ++step) { Lucy.t_step(dt / 1000.); }
-        Psi->updateAtensors();
-        Psi->info();
-        Jack.opts.chi = 40;
-        Jack.solve<double>(Psi, nullptr, *ham, false);
+        Xped::iPEPSSolverImag<Scalar, Symmetry> Lucy(imag_opts, ctm_opts, Psi, *ham);
+        Lucy.solve();
     }
 #ifdef XPED_CACHE_PERMUTE_OUTPUT
     std::cout << "total hits=" << tree_cache</*shift*/ 0, /*Rank*/ 4, /*CoRank*/ 3, Symmetry>.cache.stats().total_hits() << endl; // Hits for any key

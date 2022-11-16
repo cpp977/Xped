@@ -13,7 +13,7 @@
 
 namespace Xped {
 
-template <typename Scalar_, typename Symmetry_, Opts::CTMCheckpoint CPOpts, std::size_t TRank = 2>
+template <typename Scalar_, typename Symmetry_, Opts::CTMCheckpoint CPOpts = Opts::CTMCheckpoint{}, std::size_t TRank = 2>
 class CTMSolver
 {
 public:

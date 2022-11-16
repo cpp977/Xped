@@ -3,6 +3,8 @@
 #include <variant>
 #include <vector>
 
+#include "fmt/core.h"
+
 #include "Xped/Symmetry/functions.hpp"
 #include "Xped/Util/Random.hpp"
 

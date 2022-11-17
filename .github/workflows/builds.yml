@@ -101,4 +101,4 @@ jobs:
       working-directory: ${{runner.workspace}}/build
       shell: bash
       # Execute the build.  You can specify a specific target with "--target <NAME>"
-      run: cmake --build . --config $BUILD_TYPE -- VERBOSE=1 -j2
+      run: cmake --build . --config $BUILD_TYPE -- VERBOSE=1 -j1

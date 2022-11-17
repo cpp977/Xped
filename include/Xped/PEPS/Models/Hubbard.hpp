@@ -72,18 +72,25 @@ public:
 
     virtual void setDefaultObs() override
     {
-        auto n = std::make_unique<Xped::OneSiteObservable<Symmetry>>(pat, "n");
-        for(auto& t : n->data) { t = F.n().data.template trim<2>(); }
-        // auto nup = std::make_unique<Xped::OneSiteObservable<Symmetry>>(pat, "nup");
-        // for(auto& t : nup->data) { t = F.n(Xped::SPIN_INDEX::UP).data.template trim<2>(); }
-        // auto ndn = std::make_unique<Xped::OneSiteObservable<Symmetry>>(pat, "ndn");
-        // for(auto& t : ndn->data) { t = F.n(Xped::SPIN_INDEX::DN).data.template trim<2>(); }
-        // auto d = std::make_unique<Xped::OneSiteObservable<Symmetry>>(pat, "d");
-        // for(auto& t : d->data) { t = F.d().data.template trim<2>(); }
-        obs.push_back(std::move(n));
-        // obs.push_back(std::move(nup));
-        // obs.push_back(std::move(ndn));
-        // obs.push_back(std::move(d));
+        if constexpr(std::is_same_v<Symmetry,
+                                    Xped::Sym::Combined<Xped::Sym::SU2<Xped::Sym::SpinSU2>,
+                                                        Xped::Sym::SU2<Xped::Sym::SpinSU2>,
+                                                        Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>>>) {
+
+            auto n = std::make_unique<Xped::OneSiteObservable<Symmetry>>(pat, "n");
+            for(auto& t : n->data) { t = F.n().data.template trim<2>(); }
+            obs.push_back(std::move(n));
+        } else {
+            auto nup = std::make_unique<Xped::OneSiteObservable<Symmetry>>(pat, "nup");
+            for(auto& t : nup->data) { t = F.n(Xped::SPIN_INDEX::UP).data.template trim<2>(); }
+            auto ndn = std::make_unique<Xped::OneSiteObservable<Symmetry>>(pat, "ndn");
+            for(auto& t : ndn->data) { t = F.n(Xped::SPIN_INDEX::DN).data.template trim<2>(); }
+            auto d = std::make_unique<Xped::OneSiteObservable<Symmetry>>(pat, "d");
+            for(auto& t : d->data) { t = F.d().data.template trim<2>(); }
+            obs.push_back(std::move(nup));
+            obs.push_back(std::move(ndn));
+            obs.push_back(std::move(d));
+        }
     }
 
     virtual std::string file_name() const override { return internal::create_filename("Hubbard", params, used_params); }

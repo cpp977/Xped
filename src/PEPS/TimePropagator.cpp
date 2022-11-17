@@ -96,7 +96,7 @@ void TimePropagator<Scalar, TimeScalar, Symmetry>::t_step_h(int x, int y, TimeSc
     // enlarged_bond.print(std::cout, true);
     // std::cout << std::endl;
     auto [bond_lp, weight, bond_rp] = renormalize(enlarged_bond, left, right);
-    spectrum_h(x, y) = weight * (1. / weight.trace());
+    spectrum_h(x, y) = weight; // * (1. / weight.trace());
     Psi->whs(x, y) = weight * (1. / weight.maxNorm());
     // fmt::print("weight_h for site {},{}:\n", x, y);
     // weight.print(std::cout, true);
@@ -126,7 +126,7 @@ void TimePropagator<Scalar, TimeScalar, Symmetry>::t_step_v(int x, int y, TimeSc
     auto shifted_ham = H.shiftQN(Psi->charges());
     auto enlarged_bond = shifted_ham.data_v(x, y - 1).mexp(-dt).eval().template contract<std::array{1, 2, -1, -3}, std::array{-2, 1, 2, -4}, 2>(bond);
     auto [bond_tp, weight, bond_bp] = renormalize(enlarged_bond, top, bottom);
-    spectrum_v(x, y) = weight * (1. / weight.trace());
+    spectrum_v(x, y) = weight; // * (1. / weight.trace());
     Psi->wvs(x, y) = weight * (1. / weight.maxNorm());
     // fmt::print("weight_v for site {},{}:\n", x, y);
     // weight.print(std::cout, true);

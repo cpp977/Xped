@@ -23,6 +23,10 @@ struct iPEPSSolverImag
 
     {
         Jack = CTMSolver<Scalar, Symmetry>(ctm_opts);
+        if(imag_opts.load != "") {
+            Psi->loadFromMatlab(std::filesystem::path(imag_opts.load), "cpp", imag_opts.qn_scale);
+            assert(Psi->cell().pattern == H.data_h.pat);
+        }
     }
 
     void solve()

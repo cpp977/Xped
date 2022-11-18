@@ -1,6 +1,8 @@
 #ifndef XPED_EIGEN_DENSE_BASE_ADDONS_H_
 #define XPED_EIGEN_DENSE_BASE_ADDONS_H_
 
+#define EIGEN_STAN_MATRIXBASE_PLUGIN
+
 template <typename Ar>
 void serialize(Ar& ar) const
 {
@@ -21,5 +23,7 @@ void serialize(Ar& ar)
     Eigen::Map<Derived> m(data.data(), rows, cols);
     derived() = m;
 }
+
+#include "stan/math/prim/eigen_plugins.h"
 
 #endif

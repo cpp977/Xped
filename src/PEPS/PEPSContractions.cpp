@@ -97,8 +97,8 @@ Tensor<Scalar, 2, 3, Symmetry, false, AllocationPolicy> applyWeights(XPED_CONST 
                                                                      XPED_CONST TensorBase<DerivedR>& wR,
                                                                      XPED_CONST TensorBase<DerivedB>& wB)
 {
-    return A.template contract<std::array{1, -2, -3, -4, -5}, std::array{-1, 1}, 2>(wL.eval())
-        .template contract<std::array{-1, 1, -3, -4, -5}, std::array{-2, 1}, 2>(wT.eval())
+    return A.template contract<std::array{1, -2, -3, -4, -5}, std::array{-1, 1}, 2>(wL.eval().twist(1))
+        .template contract<std::array{-1, 1, -3, -4, -5}, std::array{-2, 1}, 2>(wT.eval().twist(1))
         .template contract<std::array{-1, -2, 1, -4, -5}, std::array{1, -3}, 2>(wR.eval())
         .template contract<std::array{-1, -2, -3, 1, -5}, std::array{1, -4}, 2>(wB.eval());
 }

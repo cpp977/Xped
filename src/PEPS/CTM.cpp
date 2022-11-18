@@ -213,66 +213,69 @@ void CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::loadFromMatlab(const std::
     T4s.resize(cell_.pattern);
 
     Svs.resize(cell_.pattern);
+    if constexpr(TRank == 2) {
+        for(std::size_t i = 0; i < cell_.pattern.uniqueSize(); ++i) {
+            auto C1_ref = root.getDataSet("C1");
+            std::vector<HighFive::Reference> C1;
+            C1_ref.read(C1);
+            auto g_C1_0 = C1[i].template dereference<HighFive::Group>(root);
+            C1s[i] = Xped::IO::loadMatlabTensor<double, 2, 0, Symmetry, Xped::HeapPolicy>(g_C1_0, root, std::array{true, true}, qn_scale)
+                         .template permute<2, 1, 0>();
 
-    for(std::size_t i = 0; i < cell_.pattern.uniqueSize(); ++i) {
-        auto C1_ref = root.getDataSet("C1");
-        std::vector<HighFive::Reference> C1;
-        C1_ref.read(C1);
-        auto g_C1_0 = C1[i].template dereference<HighFive::Group>(root);
-        C1s[i] = Xped::IO::loadMatlabTensor<double, 2, 0, Symmetry, Xped::HeapPolicy>(g_C1_0, root, std::array{true, true}, qn_scale)
-                     .template permute<2, 1, 0>();
+            auto C2_ref = root.getDataSet("C2");
+            std::vector<HighFive::Reference> C2;
+            C2_ref.read(C2);
+            auto g_C2_0 = C2[i].template dereference<HighFive::Group>(root);
+            C2s[i] = Xped::IO::loadMatlabTensor<double, 2, 0, Symmetry, Xped::HeapPolicy>(g_C2_0, root, std::array{false, true}, qn_scale)
+                         .template permute<1, 0, 1>();
 
-        auto C2_ref = root.getDataSet("C2");
-        std::vector<HighFive::Reference> C2;
-        C2_ref.read(C2);
-        auto g_C2_0 = C2[i].template dereference<HighFive::Group>(root);
-        C2s[i] = Xped::IO::loadMatlabTensor<double, 2, 0, Symmetry, Xped::HeapPolicy>(g_C2_0, root, std::array{false, true}, qn_scale)
-                     .template permute<1, 0, 1>();
+            auto C3_ref = root.getDataSet("C3");
+            std::vector<HighFive::Reference> C3;
+            C3_ref.read(C3);
+            auto g_C3_0 = C3[i].template dereference<HighFive::Group>(root);
+            C3s[i] = Xped::IO::loadMatlabTensor<double, 2, 0, Symmetry, Xped::HeapPolicy>(g_C3_0, root, std::array{false, false}, qn_scale);
 
-        auto C3_ref = root.getDataSet("C3");
-        std::vector<HighFive::Reference> C3;
-        C3_ref.read(C3);
-        auto g_C3_0 = C3[i].template dereference<HighFive::Group>(root);
-        C3s[i] = Xped::IO::loadMatlabTensor<double, 2, 0, Symmetry, Xped::HeapPolicy>(g_C3_0, root, std::array{false, false}, qn_scale);
+            auto C4_ref = root.getDataSet("C4");
+            std::vector<HighFive::Reference> C4;
+            C4_ref.read(C4);
+            auto g_C4_0 = C4[i].template dereference<HighFive::Group>(root);
+            C4s[i] = Xped::IO::loadMatlabTensor<double, 2, 0, Symmetry, Xped::HeapPolicy>(g_C4_0, root, std::array{true, false}, qn_scale)
+                         .template permute<1, 1, 0>();
 
-        auto C4_ref = root.getDataSet("C4");
-        std::vector<HighFive::Reference> C4;
-        C4_ref.read(C4);
-        auto g_C4_0 = C4[i].template dereference<HighFive::Group>(root);
-        C4s[i] = Xped::IO::loadMatlabTensor<double, 2, 0, Symmetry, Xped::HeapPolicy>(g_C4_0, root, std::array{true, false}, qn_scale)
-                     .template permute<1, 1, 0>();
+            auto T1_ref = root.getDataSet("T1");
+            std::vector<HighFive::Reference> T1;
+            T1_ref.read(T1);
+            auto g_T1_0 = T1[i].template dereference<HighFive::Group>(root);
+            T1s[i] = Xped::IO::loadMatlabTensor<double, TRank + 2, 0, Symmetry, Xped::HeapPolicy>(
+                         g_T1_0, root, std::array{true, false, true, false}, qn_scale)
+                         .template permute<TRank + 1, 1, 0, 2, 3>();
 
-        auto T1_ref = root.getDataSet("T1");
-        std::vector<HighFive::Reference> T1;
-        T1_ref.read(T1);
-        auto g_T1_0 = T1[i].template dereference<HighFive::Group>(root);
-        T1s[i] =
-            Xped::IO::loadMatlabTensor<double, TRank + 2, 0, Symmetry, Xped::HeapPolicy>(g_T1_0, root, std::array{true, false, true, false}, qn_scale)
-                .template permute<TRank + 1, 1, 0, 2, 3>();
+            auto T2_ref = root.getDataSet("T2");
+            std::vector<HighFive::Reference> T2;
+            T2_ref.read(T2);
+            auto g_T2_0 = T2[i].template dereference<HighFive::Group>(root);
+            T2s[i] = Xped::IO::loadMatlabTensor<double, TRank + 2, 0, Symmetry, Xped::HeapPolicy>(
+                         g_T2_0, root, std::array{false, true, false, true}, qn_scale)
+                         .template permute<1, 2, 3, 0, 1>();
 
-        auto T2_ref = root.getDataSet("T2");
-        std::vector<HighFive::Reference> T2;
-        T2_ref.read(T2);
-        auto g_T2_0 = T2[i].template dereference<HighFive::Group>(root);
-        T2s[i] =
-            Xped::IO::loadMatlabTensor<double, TRank + 2, 0, Symmetry, Xped::HeapPolicy>(g_T2_0, root, std::array{false, true, false, true}, qn_scale)
-                .template permute<1, 2, 3, 0, 1>();
+            auto T3_ref = root.getDataSet("T3");
+            std::vector<HighFive::Reference> T3;
+            T3_ref.read(T3);
+            auto g_T3_0 = T3[i].template dereference<HighFive::Group>(root);
+            T3s[i] = Xped::IO::loadMatlabTensor<double, TRank + 2, 0, Symmetry, Xped::HeapPolicy>(
+                         g_T3_0, root, std::array{true, false, false, true}, qn_scale)
+                         .template permute<1, 2, 3, 1, 0>();
 
-        auto T3_ref = root.getDataSet("T3");
-        std::vector<HighFive::Reference> T3;
-        T3_ref.read(T3);
-        auto g_T3_0 = T3[i].template dereference<HighFive::Group>(root);
-        T3s[i] =
-            Xped::IO::loadMatlabTensor<double, TRank + 2, 0, Symmetry, Xped::HeapPolicy>(g_T3_0, root, std::array{true, false, false, true}, qn_scale)
-                .template permute<1, 2, 3, 1, 0>();
-
-        auto T4_ref = root.getDataSet("T4");
-        std::vector<HighFive::Reference> T4;
-        T4_ref.read(T4);
-        auto g_T4_0 = T4[i].template dereference<HighFive::Group>(root);
-        T4s[i] =
-            Xped::IO::loadMatlabTensor<double, TRank + 2, 0, Symmetry, Xped::HeapPolicy>(g_T4_0, root, std::array{false, true, true, false}, qn_scale)
-                .template permute<TRank + 1, 0, 1, 2, 3>();
+            auto T4_ref = root.getDataSet("T4");
+            std::vector<HighFive::Reference> T4;
+            T4_ref.read(T4);
+            auto g_T4_0 = T4[i].template dereference<HighFive::Group>(root);
+            T4s[i] = Xped::IO::loadMatlabTensor<double, TRank + 2, 0, Symmetry, Xped::HeapPolicy>(
+                         g_T4_0, root, std::array{false, true, true, false}, qn_scale)
+                         .template permute<TRank + 1, 0, 1, 2, 3>();
+        }
+    } else {
+        init();
     }
 }
 

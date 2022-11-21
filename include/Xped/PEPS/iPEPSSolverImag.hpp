@@ -66,8 +66,18 @@ struct iPEPSSolverImag
                         TMatrix<double> diff_h(Psi->cell().pattern);
                         TMatrix<double> diff_v(Psi->cell().pattern);
                         for(auto i = 0ul; i < conv_h.size(); ++i) {
-                            diff_h[i] = (conv_h[i] - Jim.spectrum_h[i]).norm();
-                            diff_v[i] = (conv_v[i] - Jim.spectrum_v[i]).norm();
+                            if(conv_h[i].coupledDomain() != Jim.spectrum_h[i].coupledDomain() or
+                               conv_h[i].coupledCodomain() != Jim.spectrum_h[i].coupledCodomain()) {
+                                diff_h[i] = std::nan("1");
+                            } else {
+                                diff_h[i] = (conv_h[i] - Jim.spectrum_h[i]).norm();
+                            }
+                            if(conv_v[i].coupledDomain() != Jim.spectrum_v[i].coupledDomain() or
+                               conv_v[i].coupledCodomain() != Jim.spectrum_v[i].coupledCodomain()) {
+                                diff_h[i] = std::nan("1");
+                            } else {
+                                diff_v[i] = (conv_v[i] - Jim.spectrum_v[i]).norm();
+                            }
                         }
                         diff = std::max(*std::max_element(diff_h.begin(), diff_h.end()), *std::max_element(diff_v.begin(), diff_v.end()));
                         if(diff < imag_opts.tol) { break; }

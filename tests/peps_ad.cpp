@@ -81,13 +81,13 @@ int main(int argc, char* argv[])
         // SPDLOG_INFO("Number of MPI processes: {}", world.np);
 
         typedef double Scalar;
-        // using Symmetry = Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>;
+        using Symmetry = Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>;
         // using Symmetry = Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>;
         // using Symmetry =
         //     Xped::Sym::Combined<Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>>;
         // typedef Xped::Sym::SU2<Xped::Sym::SpinSU2> Symmetry;
         // typedef Xped::Sym::U1<Xped::Sym::SpinU1> Symmetry;
-        typedef Xped::Sym::ZN<Xped::Sym::SpinU1, 36, double> Symmetry;
+        // typedef Xped::Sym::ZN<Xped::Sym::SpinU1, 36, double> Symmetry;
         // typedef Xped::Sym::U0<double> Symmetry;
 
         std::unique_ptr<Xped::TwoSiteObservable<Symmetry>> ham;
@@ -110,9 +110,9 @@ int main(int argc, char* argv[])
         Xped::TMatrix<Symmetry::qType> charges(c.pattern);
         charges.setConstant(Symmetry::qvacuum());
         if(data.at("ipeps").contains("charges")) {
-            auto int_ch = toml::get<std::vector<std::vector<int>>>(toml::find(data.at("ipeps"), "charges"));
+            auto int_ch = toml::get<std::vector<std::vector<std::vector<int>>>>(toml::find(data.at("ipeps"), "charges"));
             for(int x = 0; x < c.Lx; ++x) {
-                for(int y = 0; y < c.Ly; ++y) { charges(x, y) = {int_ch[x][y]}; }
+                for(int y = 0; y < c.Ly; ++y) { charges(x, y) = int_ch[x][y]; }
             }
         }
 

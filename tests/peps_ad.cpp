@@ -48,6 +48,7 @@ XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100000)
 #include "Xped/PEPS/CTM.hpp"
 #include "Xped/PEPS/Models/Heisenberg.hpp"
 #include "Xped/PEPS/Models/Hubbard.hpp"
+#include "Xped/PEPS/Models/Kondo.hpp"
 #include "Xped/PEPS/Models/KondoNecklace.hpp"
 #include "Xped/PEPS/iPEPS.hpp"
 
@@ -81,7 +82,7 @@ int main(int argc, char* argv[])
         // SPDLOG_INFO("Number of MPI processes: {}", world.np);
 
         typedef double Scalar;
-        using Symmetry = Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>;
+        // using Symmetry = Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>;
         // using Symmetry = Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>;
         // using Symmetry =
         //     Xped::Sym::Combined<Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>>;
@@ -89,6 +90,7 @@ int main(int argc, char* argv[])
         // typedef Xped::Sym::U1<Xped::Sym::SpinU1> Symmetry;
         // typedef Xped::Sym::ZN<Xped::Sym::SpinU1, 36, double> Symmetry;
         // typedef Xped::Sym::U0<double> Symmetry;
+        using Symmetry = Xped::Sym::Combined<Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>>;
 
         std::unique_ptr<Xped::TwoSiteObservable<Symmetry>> ham;
 
@@ -182,6 +184,8 @@ int main(int argc, char* argv[])
             ham = std::make_unique<Xped::KondoNecklace<Symmetry>>(params, c.pattern, bonds);
         } else if(toml::find(data.at("model"), "name").as_string() == "Hubbard") {
             ham = std::make_unique<Xped::Hubbard<Symmetry>>(params, c.pattern, bonds);
+        } else if(toml::find(data.at("model"), "name").as_string() == "Kondo") {
+            ham = std::make_unique<Xped::Kondo<Symmetry>>(params, c.pattern, bonds);
         } else {
             throw std::invalid_argument("Specified model is not implemented.");
         }
@@ -189,7 +193,7 @@ int main(int argc, char* argv[])
 
         Xped::TMatrix<Xped::Qbasis<Symmetry, 1>> phys_basis(c.pattern);
         phys_basis.setConstant(ham->data_h[0].uncoupledDomain()[0]);
-        auto Psi = std::make_shared<Xped::iPEPS<double, Symmetry, false>>(c, left_aux, top_aux, right_aux, bottom_aux, phys_basis, charges);
+        auto Psi = std::make_shared<Xped::iPEPS<double, Symmetry, false>>(c, left_aux, top_aux, phys_basis, charges);
         Psi->setRandom();
 
         Xped::Opts::Optim o_opts = Xped::Opts::optim_from_toml(data.at("optim"));

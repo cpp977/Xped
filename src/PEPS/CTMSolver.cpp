@@ -15,17 +15,29 @@ typename ScalarTraits<Scalar>::Real CTMSolver<Scalar, Symmetry, CPOpts, TRank>::
 {
     util::Stopwatch<> total_t;
     Jack.set_A(Psi);
-    // Jack.info();
-    Log::on_entry(opts.verbosity,
-                  "  CTMSolver(χ={}, {}): UnitCell=({}x{}), init={}, reinit env={}, max steps(untracked)={}, steps(tracked)={}",
-                  opts.chi,
-                  Symmetry::name(),
-                  Jack.cell().Lx,
-                  Jack.cell().Ly,
-                  fmt::streamed(Jack.init_mode()),
-                  REINIT_ENV,
-                  opts.max_presteps,
-                  opts.track_steps);
+    if(CALC_GRAD) {
+        Log::on_entry(opts.verbosity,
+                      "  CTMSolver(χ={}, {}): UnitCell=({}x{}), init={}, reinit env={}, max steps(untracked)={}, steps(tracked)={}",
+                      opts.chi,
+                      Symmetry::name(),
+                      Jack.cell().Lx,
+                      Jack.cell().Ly,
+                      fmt::streamed(Jack.init_mode()),
+                      REINIT_ENV,
+                      opts.max_presteps,
+                      opts.track_steps);
+    } else {
+        Log::on_entry(opts.verbosity,
+                      "  CTMSolver(χ={}, {}): UnitCell=({}x{}), init={}, reinit env={}, max steps={}",
+                      opts.chi,
+                      Symmetry::name(),
+                      Jack.cell().Lx,
+                      Jack.cell().Ly,
+                      fmt::streamed(Jack.init_mode()),
+                      REINIT_ENV,
+                      opts.max_presteps);
+    }
+
     if(REINIT_ENV) {
         Jack = CTM<Scalar, Symmetry, TRank, false>(Psi, opts.chi, opts.init);
         Jack.init();
@@ -61,7 +73,8 @@ typename ScalarTraits<Scalar>::Real CTMSolver<Scalar, Symmetry, CPOpts, TRank>::
     Log::per_iteration(opts.verbosity, "  {: >3} pre steps: {}", "•", pre_time);
     if(not CALC_GRAD) {
         REINIT_ENV = true;
-        Log::on_exit(opts.verbosity, "  CTMSolver(χ={}, runtime={}[{} steps]): E={:.8f}", opts.chi, total_t.time_string(), used_steps, E);
+        Log::on_exit(
+            opts.verbosity, "  CTMSolver(χ={}({}), runtime={}[{} steps]): E={:.8f}", opts.chi, Jack.fullChi(), total_t.time_string(), used_steps, E);
         return E;
     }
 
@@ -83,8 +96,11 @@ typename ScalarTraits<Scalar>::Real CTMSolver<Scalar, Symmetry, CPOpts, TRank>::
     grad_norm = std::abs(*std::max_element(gradient, gradient + Psi->plainSize(), [](Scalar a, Scalar b) { return std::abs(a) < std::abs(b); }));
     REINIT_ENV = grad_norm < opts.reinit_env_tol ? false : true;
     Log::on_exit(opts.verbosity,
-                 "  CTMSolver(runtime={} [pre={}, forward={}, backward={}]): E={:.8f}, |∇|={:.1e}",
+                 "  CTMSolver(χ={}({}), runtime={} [{} steps, pre={}, forward={}, backward={}]): E={:.8f}, |∇|={:.1e}",
+                 opts.chi,
+                 Jack.fullChi(),
                  total_t.time_string(),
+                 used_steps,
                  pre_time,
                  forward_time,
                  backward_time,

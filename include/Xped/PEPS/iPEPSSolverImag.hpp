@@ -92,6 +92,10 @@ struct iPEPSSolverImag
                                    imag_opts.dts[i],
                                    step_t.time_string(),
                                    diff);
+                constexpr std::size_t flags = yas::file /*IO type*/ | yas::binary; /*IO format*/
+                yas::file_ostream ofs((H.file_name() + "_D" + std::to_string(D) + ".psi").c_str(), /*trunc*/ 1);
+                yas::save<flags>(ofs, *Psi);
+                // Psi->info();
             }
             evol_time += evol_t.time();
             util::Stopwatch<> ctm_t;
@@ -99,6 +103,8 @@ struct iPEPSSolverImag
                 Jack.opts.chi = chi;
                 Es[iD][ichi++] = Jack.template solve<double>(Psi, nullptr, H, false);
             }
+            H.computeObs(Jack.getCTM());
+            Log::per_iteration(imag_opts.verbosity, "  Observables:\n{}", H.getObsString("    "));
             ctm_time += ctm_t.time();
             ++iD;
         }

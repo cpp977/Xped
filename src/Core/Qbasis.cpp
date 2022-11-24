@@ -380,7 +380,10 @@ std::pair<std::vector<std::size_t>, Qbasis<Symmetry, depth, AllocationPolicy>> Q
         std::iota(out.begin(), out.end(), 0ul);
         return std::make_pair(out, *this);
     }
-    assert(not Symmetry::ANY_NON_ABELIAN and "Nontrivial shifts only for Abelian symmetries.");
+    for(auto q = 0u; q < Symmetry::Nq; ++q) {
+        if(qshift[q] != Symmetry::qvacuum()[q]) { assert(Symmetry::ABELIAN[q] and "Nontrivial shifts only for Abelian symmetries."); }
+    }
+
     Qbasis<Symmetry, depth, AllocationPolicy> out;
     for(const auto& [q, dim, plain] : data_) { out.push_back(Symmetry::reduceSilent(q, qshift)[0], plain.dim()); }
     auto idx_sort = out.sort();

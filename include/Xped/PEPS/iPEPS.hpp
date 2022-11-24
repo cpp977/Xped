@@ -72,15 +72,11 @@ public:
     iPEPS(const UnitCell& cell,
           const TMatrix<Qbasis<Symmetry, 1>>& leftBasis,
           const TMatrix<Qbasis<Symmetry, 1>>& topBasis,
-          const TMatrix<Qbasis<Symmetry, 1>>& rightBasis,
-          const TMatrix<Qbasis<Symmetry, 1>>& bottomBasis,
           const TMatrix<Qbasis<Symmetry, 1>>& physBasis);
 
     iPEPS(const UnitCell& cell,
           const TMatrix<Qbasis<Symmetry, 1>>& leftBasis,
           const TMatrix<Qbasis<Symmetry, 1>>& topBasis,
-          const TMatrix<Qbasis<Symmetry, 1>>& rightBasis,
-          const TMatrix<Qbasis<Symmetry, 1>>& bottomBasis,
           const TMatrix<Qbasis<Symmetry, 1>>& physBasis,
           const TMatrix<qType>& charges);
 
@@ -150,11 +146,8 @@ public:
     std::size_t D;
 
 private:
-    void init(const TMatrix<Qbasis<Symmetry, 1>>& leftBasis,
-              const TMatrix<Qbasis<Symmetry, 1>>& topBasis,
-              const TMatrix<Qbasis<Symmetry, 1>>& rightBasis,
-              const TMatrix<Qbasis<Symmetry, 1>>& bottomBasis,
-              const TMatrix<Qbasis<Symmetry, 1>>& physBasis);
+    void
+    init(const TMatrix<Qbasis<Symmetry, 1>>& leftBasis, const TMatrix<Qbasis<Symmetry, 1>>& topBasis, const TMatrix<Qbasis<Symmetry, 1>>& physBasis);
 
     UnitCell cell_;
     TMatrix<Tensor<Scalar, 2, 3, Symmetry, ENABLE_AD>> As;

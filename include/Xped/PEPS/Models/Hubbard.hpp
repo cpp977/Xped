@@ -40,7 +40,7 @@ public:
                    0.25 * 0.5 * params["U"].get<double>() * (tprod(F.n() * (F.n() - F.Id()), F.Id()) + tprod(F.Id(), F.n() * (F.n() - F.Id()))) -
                    0.25 * (params["mu"].get<double>() + 1.5 * params["U"].get<double>()) * (tprod(F.n(), F.Id()) + tprod(F.Id(), F.n()));
             bond_gate = -params["t"].get<double>() * (tprod(F.cdag(), F.c()) - tprod(F.c(), F.cdag()));
-        } else {
+        } else if constexpr(Symmetry::ALL_ABELIAN) {
             gate = -params["t"].get<double>() *
                        (tprod(F.cdag(SPIN_INDEX::UP), F.c(SPIN_INDEX::UP)) + tprod(F.cdag(SPIN_INDEX::DN), F.c(SPIN_INDEX::DN)) -
                         tprod(F.c(SPIN_INDEX::UP), F.cdag(SPIN_INDEX::UP)) - tprod(F.c(SPIN_INDEX::DN), F.cdag(SPIN_INDEX::DN))) +
@@ -54,6 +54,8 @@ public:
             bond_gate = -params["t"].get<double>() *
                         (tprod(F.cdag(SPIN_INDEX::UP), F.c(SPIN_INDEX::UP)) + tprod(F.cdag(SPIN_INDEX::DN), F.c(SPIN_INDEX::DN)) -
                          tprod(F.c(SPIN_INDEX::UP), F.cdag(SPIN_INDEX::UP)) - tprod(F.c(SPIN_INDEX::DN), F.cdag(SPIN_INDEX::DN)));
+        } else {
+            assert(false and "Symmetry is not supported in Hubbard model.");
         }
 
         if((bond & Opts::Bond::H) == Opts::Bond::H) {
@@ -80,7 +82,7 @@ public:
             auto n = std::make_unique<Xped::OneSiteObservable<Symmetry>>(pat, "n");
             for(auto& t : n->data) { t = F.n().data.template trim<2>(); }
             obs.push_back(std::move(n));
-        } else {
+        } else if constexpr(Symmetry::ALL_ABELIAN) {
             auto nup = std::make_unique<Xped::OneSiteObservable<Symmetry>>(pat, "nup");
             for(auto& t : nup->data) { t = F.n(Xped::SPIN_INDEX::UP).data.template trim<2>(); }
             auto ndn = std::make_unique<Xped::OneSiteObservable<Symmetry>>(pat, "ndn");

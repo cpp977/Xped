@@ -45,7 +45,7 @@ public:
 
             gate = params["J"].get<double>() * ss + params["I"].get<double>() * SS;
             local_gate = gate + 0.25 * params["Jk"].get<double>() * (SsxId + IdxSs);
-        } else {
+        } else if constexpr(Symmetry::ALL_ABELIAN) {
             auto SzSz = tprod(B.Sz(0), B.Sz(0));
             auto SpSm = tprod(B.Sp(0), B.Sm(0));
             auto SmSp = tprod(B.Sm(0), B.Sp(0));
@@ -65,6 +65,8 @@ public:
             gate = gate + params["Iz"].get<double>() * SzSz + 0.5 * params["Ixy"].get<double>() * (SpSm + SmSp);
             local_gate = gate + 0.25 * (params["Jkz"].get<double>() * (SzszxId + IdxSzsz) +
                                         0.5 * params["Jkxy"].get<double>() * ((SpsmxId + IdxSpsm) + (SmspxId + IdxSmsp)));
+        } else {
+            assert(false and "Symmetry is not supported in KondoNecklace model.");
         }
 
         if((bond & Opts::Bond::H) == Opts::Bond::H) {
@@ -84,7 +86,7 @@ public:
     virtual void setDefaultObs() override
     {
         if constexpr(std::is_same_v<Symmetry, Sym::SU2<Sym::SpinSU2>>) {
-        } else {
+        } else if constexpr(Symmetry::ALL_ABELIAN) {
             auto Sz = std::make_unique<Xped::OneSiteObservable<Symmetry>>(pat, "Sz");
             for(auto& t : Sz->data) { t = B.Sz(0).data.template trim<2>(); }
             auto sz = std::make_unique<Xped::OneSiteObservable<Symmetry>>(pat, "sz");

@@ -4,6 +4,7 @@
 #include "Xped/Physics/SiteOperator.hpp"
 #include "Xped/Physics/sites/Spin.hpp"
 #include "Xped/Physics/sites/SpinSU2.hpp"
+#include "Xped/Physics/sites/SpinSU2xX.hpp"
 #include "Xped/Symmetry/kind_dummies.hpp"
 
 #include "Xped/Util/Constfct.hpp" // for posmod

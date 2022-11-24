@@ -29,42 +29,36 @@ iPEPS<Scalar, Symmetry, ENABLE_AD>::iPEPS(const UnitCell& cell, const Qbasis<Sym
     TMatrix<Qbasis<Symmetry, 1>> phys;
     phys.setConstant(physBasis);
 
-    init(aux, aux, aux, aux, phys);
+    init(aux, aux, phys);
 }
 
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>
 iPEPS<Scalar, Symmetry, ENABLE_AD>::iPEPS(const UnitCell& cell,
                                           const TMatrix<Qbasis<Symmetry, 1>>& leftBasis,
                                           const TMatrix<Qbasis<Symmetry, 1>>& topBasis,
-                                          const TMatrix<Qbasis<Symmetry, 1>>& rightBasis,
-                                          const TMatrix<Qbasis<Symmetry, 1>>& bottomBasis,
                                           const TMatrix<Qbasis<Symmetry, 1>>& physBasis)
     : cell_(cell)
 {
     charges_ = TMatrix<qType>(cell_.pattern);
     charges_.setConstant(Symmetry::qvacuum());
-    init(leftBasis, topBasis, rightBasis, bottomBasis, physBasis);
+    init(leftBasis, topBasis, physBasis);
 }
 
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>
 iPEPS<Scalar, Symmetry, ENABLE_AD>::iPEPS(const UnitCell& cell,
                                           const TMatrix<Qbasis<Symmetry, 1>>& leftBasis,
                                           const TMatrix<Qbasis<Symmetry, 1>>& topBasis,
-                                          const TMatrix<Qbasis<Symmetry, 1>>& rightBasis,
-                                          const TMatrix<Qbasis<Symmetry, 1>>& bottomBasis,
                                           const TMatrix<Qbasis<Symmetry, 1>>& physBasis,
                                           const TMatrix<qType>& charges)
     : cell_(cell)
     , charges_(charges)
 {
-    init(leftBasis, topBasis, rightBasis, bottomBasis, physBasis);
+    init(leftBasis, topBasis, physBasis);
 }
 
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>
 void iPEPS<Scalar, Symmetry, ENABLE_AD>::init(const TMatrix<Qbasis<Symmetry, 1>>& leftBasis,
                                               const TMatrix<Qbasis<Symmetry, 1>>& topBasis,
-                                              const TMatrix<Qbasis<Symmetry, 1>>& rightBasis,
-                                              const TMatrix<Qbasis<Symmetry, 1>>& bottomBasis,
                                               const TMatrix<Qbasis<Symmetry, 1>>& physBasis)
 {
 
@@ -78,9 +72,10 @@ void iPEPS<Scalar, Symmetry, ENABLE_AD>::init(const TMatrix<Qbasis<Symmetry, 1>>
             // fmt::print("x={}, y={}, original basis which will be shifted by {}:\n", x, y, Sym::format<Symmetry>(charges_[pos]));
             // std::cout << physBasis[pos] << std::endl;
             // std::cout << "shifted:\n" << shifted_physBasis << std::endl;
-            As[pos] = Tensor<Scalar, 2, 3, Symmetry, ENABLE_AD>({{leftBasis[pos], topBasis[pos]}},
-                                                                {{rightBasis[pos], bottomBasis[pos], shifted_physBasis}});
+            As[pos] = Tensor<Scalar, 2, 3, Symmetry, ENABLE_AD>({{leftBasis(x, y), topBasis(x, y)}},
+                                                                {{leftBasis(x - 1, y), topBasis(x, y + 1), shifted_physBasis}});
             // As[pos].setZero();
+            std::cout << As[pos].coupledDomain() << std::endl << As[pos].coupledCodomain() << std::endl;
             assert(As[pos].coupledDomain().dim() > 0 and "Bases of the A tensor have no fused blocks.");
         }
     }

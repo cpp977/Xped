@@ -52,6 +52,7 @@ struct TwoSiteObservable : public ObservableBase
 
     TwoSiteObservable<Symmetry> shiftQN(const TMatrix<typename Symmetry::qType>& charges) const
     {
+        if(std::all_of(charges.cbegin(), charges.cend(), [](auto c) { return c == Symmetry::qvacuum(); })) { return *this; }
         TwoSiteObservable<Symmetry> out(data_h.pat, bond);
         for(int x = 0; x < data_h.pat.Lx; ++x) {
             for(int y = 0; y < data_h.pat.Ly; ++y) {

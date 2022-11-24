@@ -13,6 +13,8 @@
 #include "Xped/Util/TomlHelpers.hpp"
 #include "Xped/Util/YasHelpers.hpp"
 
+#include "Xped/PEPS/iPEPSOpts.hpp"
+
 namespace Xped::Opts {
 
 BOOST_DEFINE_ENUM_CLASS(Algorithm, L_BFGS, CONJUGATE_GRADIENT, NELDER_MEAD)
@@ -36,6 +38,7 @@ struct Optim
     std::size_t min_steps = 10;
 
     bool resume = false;
+    LoadFormat load_format = LoadFormat::NATIVE;
     std::string load = "";
     int qn_scale = 1;
 
@@ -64,6 +67,7 @@ struct Optim
                            ("max_steps", max_steps),
                            ("min_steps", min_steps),
                            ("load", load),
+                           ("load format", load_format),
                            ("qn_scale", qn_scale),
                            ("save_period", save_period),
                            ("log_format", log_format),
@@ -93,6 +97,7 @@ struct Optim
         fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• obs directory:", obs_directory.string());
         if(load.size() > 0) { fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• load from:", load); }
         if(load.size() > 0) { fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• scale loaded qn by:", qn_scale); }
+        if(load.size() > 0) { fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• load format:", fmt::streamed(load_format)); }
         fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• save period:", save_period);
         fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• verbosity:", fmt::streamed(verbosity));
         fmt::format_to(std::back_inserter(res), "  {:<30} {}", "• display obs to terminal:", display_obs);
@@ -114,6 +119,7 @@ inline Optim optim_from_toml(const toml::value& t)
     res.resume = t.contains("resume") ? t.at("resume").as_boolean() : res.resume;
     res.load = t.contains("load") ? static_cast<std::string>(t.at("load").as_string()) : res.load;
     res.qn_scale = t.contains("qn_scale") ? (t.at("qn_scale").as_integer()) : res.qn_scale;
+    if(t.contains("load_format")) { res.load_format = util::enum_from_toml<LoadFormat>(t.at("load_format")); }
     res.save_period = t.contains("save_period") ? t.at("save_period").as_integer() : res.save_period;
     res.log_format = t.contains("log_format") ? static_cast<std::string>(t.at("log_format").as_string()) : res.log_format;
     if(t.contains("working_directory")) {

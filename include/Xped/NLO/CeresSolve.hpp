@@ -67,7 +67,20 @@ struct iPEPSSolverAD
             yas::load<flags>((this->H.file_name() + ".xped").c_str(), *this);
         } else {
             if(optim_opts.load != "") {
-                Psi->loadFromMatlab(std::filesystem::path(optim_opts.load), "cpp", optim_opts.qn_scale);
+                switch(optim_opts.load_format) {
+                case Opts::LoadFormat::MATLAB: {
+                    Psi->loadFromMatlab(std::filesystem::path(optim_opts.load), "cpp", optim_opts.qn_scale);
+                    break;
+                }
+                case Opts::LoadFormat::NATIVE: {
+                    constexpr std::size_t flags = yas::file /*IO type*/ | yas::binary; /*IO format*/
+                    iPEPS<Scalar, Symmetry> tmp_Psi;
+                    yas::load<flags>((this->H.file_name() + "_D" + std::to_string(Psi->D) + ".psi").c_str(), tmp_Psi);
+                    Psi = std::make_shared<iPEPS<Scalar, Symmetry>>(std::move(tmp_Psi));
+                    break;
+                }
+                }
+                std::cout << Psi->cell().pattern << std::endl << H.data_h.pat << std::endl;
                 assert(Psi->cell().pattern == H.data_h.pat);
             }
             problem = std::make_unique<ceres::GradientProblem>(
@@ -120,7 +133,6 @@ struct iPEPSSolverAD
         // auto Dwain = std::make_unique<CTMSolver<Scalar, Symmetry, CPOpts, TRank>>(ctm_opts);
         // ceres::GradientProblem problem(new Energy<Scalar, Symmetry, CPOpts, TRank>(std::move(Dwain), H, Psi));
         // problem = ceres::GradientProblem(new EnergyFunctor(std::move(Dwain), H, Psi));
-
         std::vector<Scalar> parameters = Psi->data();
 
         // options.line_search_direction_type = ceres::NONLINEAR_CONJUGATE_GRADIENT;

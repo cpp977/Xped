@@ -108,11 +108,13 @@ inline Imag imag_from_toml(const toml::value& t)
     Imag res{};
     res.Ds = t.contains("Ds") ? toml::find<std::vector<std::size_t>>(t, "Ds") : res.Ds;
     res.chis = t.contains("chis") ? toml::find<std::vector<std::vector<std::size_t>>>(t, "chis") : res.chis;
-    res.t_steps = t.contains("t_steps") ? toml::find<std::vector<std::size_t>>(t, "t_steps") : res.t_steps;
-    res.dts = t.contains("dts") ? toml::find<std::vector<double>>(t, "dts") : res.dts;
     if(t.contains("update")) { res.update = util::enum_from_toml<Update>(t.at("update")); }
     res.max_steps = t.contains("max_steps") ? t.at("max_steps").as_integer() : res.max_steps;
     res.min_steps = t.contains("min_steps") ? t.at("min_steps").as_integer() : res.min_steps;
+    res.dts = t.contains("dts") ? toml::find<std::vector<double>>(t, "dts") : res.dts;
+    res.t_steps =
+        t.contains("t_steps") ? toml::find<std::vector<std::size_t>>(t, "t_steps") : std::vector<std::size_t>(res.dts.size(), res.max_steps);
+
     res.tol = t.contains("tol") ? t.at("tol").as_floating() : res.tol;
     res.resume = t.contains("resume") ? t.at("resume").as_boolean() : res.resume;
     if(t.contains("verbosity")) { res.verbosity = util::enum_from_toml<Verbosity>(t.at("verbosity")); }

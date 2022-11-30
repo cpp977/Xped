@@ -132,7 +132,7 @@ int main(int argc, char* argv[])
             for(std::size_t i = 0; i < reps; i++) {
                 Xped::util::Stopwatch<> norm;
                 double normsq __attribute__((unused)) = dot(Psi, Psi, DIR);
-                norm_times(i) = norm.time();
+                norm_times(i) = norm.time().count();
                 SPDLOG_WARN("<Psi|Psi>= {:03.2e}", normsq);
             }
             SPDLOG_CRITICAL("Time for norm: {}", norm_times.sum());

@@ -116,7 +116,7 @@ public:
         }
     }
 
-    std::size_t fullChi() const { return C1s[0].coupledDomain().fullDim(); }
+    std::size_t fullChi() const { return C1s[0].uncoupledCodomain()[0].fullDim(); }
 
     template <bool TRACK = ENABLE_AD>
     void solve(std::size_t max_steps);

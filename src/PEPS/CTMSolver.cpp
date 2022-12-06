@@ -47,7 +47,7 @@ typename ScalarTraits<Scalar>::Real CTMSolver<Scalar, Symmetry, CPOpts, TRank>::
     double Eprev = std::numeric_limits<Scalar>::quiet_NaN();
     double Eprevprev = std::numeric_limits<Scalar>::quiet_NaN();
     util::Stopwatch<> pre_t;
-    std::size_t used_steps;
+    std::size_t used_steps = 0ul;
     for(std::size_t step = 0; step < opts.max_presteps; ++step) {
         util::Stopwatch<> move_t;
         Jack.grow_all();
@@ -69,6 +69,7 @@ typename ScalarTraits<Scalar>::Real CTMSolver<Scalar, Symmetry, CPOpts, TRank>::
         Eprevprev = Eprev;
         Eprev = E;
     }
+    if(used_steps == 0) { used_steps = opts.max_presteps; }
     auto pre_time = pre_t.time_string();
     Log::per_iteration(opts.verbosity, "  {: >3} pre steps: {}", "•", pre_time);
     if(not CALC_GRAD) {

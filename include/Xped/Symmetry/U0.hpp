@@ -54,7 +54,7 @@ struct U0 : SymBase<U0<Scalar_>>
 
     static constexpr bool ANY_HAS_MULTIPLICITIES = false;
     static constexpr bool ANY_NON_ABELIAN = false;
-    static constexpr bool ANY_ABELIAN = false;
+    static constexpr bool ANY_ABELIAN = true;
     static constexpr bool ANY_IS_TRIVIAL = true;
     static constexpr bool ANY_IS_MODULAR = false;
     static constexpr bool ANY_IS_FERMIONIC = false;
@@ -63,7 +63,7 @@ struct U0 : SymBase<U0<Scalar_>>
 
     static constexpr bool ALL_HAS_MULTIPLICITIES = false;
     static constexpr bool ALL_NON_ABELIAN = false;
-    static constexpr bool ALL_ABELIAN = false;
+    static constexpr bool ALL_ABELIAN = true;
     static constexpr bool ALL_IS_TRIVIAL = true;
     static constexpr bool ALL_IS_MODULAR = false;
     static constexpr bool ALL_IS_FERMIONIC = false;

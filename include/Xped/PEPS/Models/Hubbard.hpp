@@ -30,17 +30,43 @@ public:
         , pat(pat_in)
     {
         F = FermionBase<Symmetry>(1);
-        used_params = {"U", /*"μ"*/ "mu", "t"};
-        Tensor<double, 2, 2, Symmetry> gate, bond_gate;
+        used_params = {"U", /*"μ"*/ "mu", "tprime", "t"};
+        Tensor<double, 2, 2, Symmetry> gate, bond_gate, hopping, hubbard, occ;
         if constexpr(std::is_same_v<Symmetry,
                                     Xped::Sym::Combined<Xped::Sym::SU2<Xped::Sym::SpinSU2>,
                                                         Xped::Sym::SU2<Xped::Sym::SpinSU2>,
                                                         Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>>>) {
+            hopping = (tprod(F.cdag(), F.c()) - tprod(F.c(), F.cdag())).eval();
+            hubbard = 0.25 * (tprod(F.n() * (F.n() - F.Id()), F.Id()) + tprod(F.Id(), F.n() * (F.n() - F.Id())));
+            occ = 0.25 * (tprod(F.n(), F.Id()) + tprod(F.Id(), F.n()));
             gate = -params["t"].get<double>() * (tprod(F.cdag(), F.c()) - tprod(F.c(), F.cdag())) +
                    0.25 * 0.5 * params["U"].get<double>() * (tprod(F.n() * (F.n() - F.Id()), F.Id()) + tprod(F.Id(), F.n() * (F.n() - F.Id()))) -
                    0.25 * (params["mu"].get<double>() + 1.5 * params["U"].get<double>()) * (tprod(F.n(), F.Id()) + tprod(F.Id(), F.n()));
             bond_gate = -params["t"].get<double>() * (tprod(F.cdag(), F.c()) - tprod(F.c(), F.cdag()));
+
+            if((bond & Opts::Bond::H) == Opts::Bond::H) {
+                for(auto& t : this->data_h) {
+                    t = -params["t"].get<double>() * hopping + 0.5 * params["U"].get<double>() * hubbard -
+                        (params["mu"].get<double>() + 1.5 * params["U"].get<double>()) * occ;
+                }
+            }
+            if((bond & Opts::Bond::V) == Opts::Bond::V) {
+                for(auto& t : this->data_v) {
+                    t = -params["t"].get<double>() * hopping + 0.5 * params["U"].get<double>() * hubbard -
+                        (params["mu"].get<double>() + 1.5 * params["U"].get<double>()) * occ;
+                }
+            }
+            if((bond & Opts::Bond::D1) == Opts::Bond::D1) {
+                for(auto& t : this->data_d1) { t = -params["tprime"].get<double>() * hopping; }
+            }
+            if((bond & Opts::Bond::D2) == Opts::Bond::D2) {
+                for(auto& t : this->data_d2) { t = -params["tprime"].get<double>() * hopping; }
+            }
         } else if constexpr(Symmetry::ALL_ABELIAN) {
+            hopping = (tprod(F.cdag(SPIN_INDEX::UP), F.c(SPIN_INDEX::UP)) + tprod(F.cdag(SPIN_INDEX::DN), F.c(SPIN_INDEX::DN)) -
+                       tprod(F.c(SPIN_INDEX::UP), F.cdag(SPIN_INDEX::UP)) - tprod(F.c(SPIN_INDEX::DN), F.cdag(SPIN_INDEX::DN)));
+            hubbard = 0.25 * (tprod(F.d(), F.Id()) + tprod(F.Id(), F.d()));
+            occ = 0.25 * (tprod(F.n(), F.Id()) + tprod(F.Id(), F.n()));
             gate = -params["t"].get<double>() *
                        (tprod(F.cdag(SPIN_INDEX::UP), F.c(SPIN_INDEX::UP)) + tprod(F.cdag(SPIN_INDEX::DN), F.c(SPIN_INDEX::DN)) -
                         tprod(F.c(SPIN_INDEX::UP), F.cdag(SPIN_INDEX::UP)) - tprod(F.c(SPIN_INDEX::DN), F.cdag(SPIN_INDEX::DN))) +
@@ -54,22 +80,27 @@ public:
             bond_gate = -params["t"].get<double>() *
                         (tprod(F.cdag(SPIN_INDEX::UP), F.c(SPIN_INDEX::UP)) + tprod(F.cdag(SPIN_INDEX::DN), F.c(SPIN_INDEX::DN)) -
                          tprod(F.c(SPIN_INDEX::UP), F.cdag(SPIN_INDEX::UP)) - tprod(F.c(SPIN_INDEX::DN), F.cdag(SPIN_INDEX::DN)));
+
+            if((bond & Opts::Bond::H) == Opts::Bond::H) {
+                for(auto& t : this->data_h) {
+                    t = -params["t"].get<double>() * hopping + params["U"].get<double>() * hubbard - params["mu"].get<double>() * occ;
+                }
+            }
+            if((bond & Opts::Bond::V) == Opts::Bond::V) {
+                for(auto& t : this->data_v) {
+                    t = -params["t"].get<double>() * hopping + params["U"].get<double>() * hubbard - params["mu"].get<double>() * occ;
+                }
+            }
+            if((bond & Opts::Bond::D1) == Opts::Bond::D1) {
+                for(auto& t : this->data_d1) { t = -params["tprime"].get<double>() * hopping; }
+            }
+            if((bond & Opts::Bond::D2) == Opts::Bond::D2) {
+                for(auto& t : this->data_d2) { t = -params["tprime"].get<double>() * hopping; }
+            }
         } else {
             assert(false and "Symmetry is not supported in Hubbard model.");
         }
-
-        if((bond & Opts::Bond::H) == Opts::Bond::H) {
-            for(auto& t : this->data_h) { t = gate; }
-        }
-        if((bond & Opts::Bond::V) == Opts::Bond::V) {
-            for(auto& t : this->data_v) { t = gate; }
-        }
-        if((bond & Opts::Bond::D1) == Opts::Bond::D1) {
-            for(auto& t : this->data_d1) { t = bond_gate; }
-        }
-        if((bond & Opts::Bond::D2) == Opts::Bond::D2) {
-            for(auto& t : this->data_d2) { t = bond_gate; }
-        }
+        // this->loadFromMatlab(std::filesystem::path("/home/user/matlab-tmp/hubbard_D2.mat"), "cpp");
     }
 
     virtual void setDefaultObs() override
@@ -87,11 +118,44 @@ public:
             for(auto& t : nup->data) { t = F.n(Xped::SPIN_INDEX::UP).data.template trim<2>(); }
             auto ndn = std::make_unique<Xped::OneSiteObservable<Symmetry>>(pat, "ndn");
             for(auto& t : ndn->data) { t = F.n(Xped::SPIN_INDEX::DN).data.template trim<2>(); }
+            auto n = std::make_unique<Xped::OneSiteObservable<Symmetry>>(pat, "n");
+            for(auto& t : n->data) { t = F.n().data.template trim<2>(); }
             auto d = std::make_unique<Xped::OneSiteObservable<Symmetry>>(pat, "d");
             for(auto& t : d->data) { t = F.d().data.template trim<2>(); }
+            auto Sz = std::make_unique<Xped::OneSiteObservable<Symmetry>>(pat, "Sz");
+            for(auto& t : Sz->data) { t = F.Sz().data.template trim<2>(); }
+            auto Sx = std::make_unique<Xped::OneSiteObservable<Symmetry>>(pat, "Sx");
+            for(auto& t : Sx->data) { t = F.Sx().data.template trim<2>(); }
             obs.push_back(std::move(nup));
             obs.push_back(std::move(ndn));
+            obs.push_back(std::move(n));
             obs.push_back(std::move(d));
+            obs.push_back(std::move(Sz));
+            obs.push_back(std::move(Sx));
+            auto hopping = (tprod(F.cdag(SPIN_INDEX::UP), F.c(SPIN_INDEX::UP)) + tprod(F.cdag(SPIN_INDEX::DN), F.c(SPIN_INDEX::DN)) -
+                            tprod(F.c(SPIN_INDEX::UP), F.cdag(SPIN_INDEX::UP)) - tprod(F.c(SPIN_INDEX::DN), F.cdag(SPIN_INDEX::DN)))
+                               .eval();
+            auto cdagc = std::make_unique<TwoSiteObservable<Symmetry>>(pat, Opts::Bond::H | Opts::Bond::V | Opts::Bond::D1 | Opts::Bond::D2, "cdagc");
+            for(auto& t : cdagc->data_h) { t = hopping; }
+            for(auto& t : cdagc->data_v) { t = hopping; }
+            for(auto& t : cdagc->data_d1) { t = hopping; }
+            for(auto& t : cdagc->data_d2) { t = hopping; }
+
+            auto SzSz = std::make_unique<TwoSiteObservable<Symmetry>>(pat, Opts::Bond::H | Opts::Bond::V | Opts::Bond::D1 | Opts::Bond::D2, "SzSz");
+            for(auto& t : SzSz->data_h) { t = tprod(F.Sz(), F.Sz()); }
+            for(auto& t : SzSz->data_v) { t = tprod(F.Sz(), F.Sz()); }
+            for(auto& t : SzSz->data_d1) { t = tprod(F.Sz(), F.Sz()); }
+            for(auto& t : SzSz->data_d2) { t = tprod(F.Sz(), F.Sz()); }
+
+            auto SxSx = std::make_unique<TwoSiteObservable<Symmetry>>(pat, Opts::Bond::H | Opts::Bond::V | Opts::Bond::D1 | Opts::Bond::D2, "SxSx");
+            for(auto& t : SxSx->data_h) { t = tprod(F.Sx(), F.Sx()); }
+            for(auto& t : SxSx->data_v) { t = tprod(F.Sx(), F.Sx()); }
+            for(auto& t : SxSx->data_d1) { t = tprod(F.Sx(), F.Sx()); }
+            for(auto& t : SxSx->data_d2) { t = tprod(F.Sx(), F.Sx()); }
+
+            obs.push_back(std::move(cdagc));
+            obs.push_back(std::move(SzSz));
+            obs.push_back(std::move(SxSx));
         }
     }
 

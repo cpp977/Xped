@@ -24,7 +24,19 @@ struct iPEPSSolverImag
     {
         Jack = CTMSolver<Scalar, Symmetry>(ctm_opts);
         if(imag_opts.load != "") {
-            Psi->loadFromMatlab(std::filesystem::path(imag_opts.load), "cpp", imag_opts.qn_scale);
+            switch(imag_opts.load_format) {
+            case Opts::LoadFormat::MATLAB: {
+                Psi->loadFromMatlab(std::filesystem::path(imag_opts.load), "cpp", imag_opts.qn_scale);
+                break;
+            }
+            case Opts::LoadFormat::NATIVE: {
+                constexpr std::size_t flags = yas::file /*IO type*/ | yas::binary; /*IO format*/
+                iPEPS<Scalar, Symmetry> tmp_Psi;
+                yas::load<flags>((this->H.file_name() + "_D" + std::to_string(Psi->D) + ".psi").c_str(), tmp_Psi);
+                Psi = std::make_shared<iPEPS<Scalar, Symmetry>>(std::move(tmp_Psi));
+                break;
+            }
+            }
             assert(Psi->cell().pattern == H.data_h.pat);
         }
     }

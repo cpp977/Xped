@@ -44,6 +44,7 @@ struct Imag
     bool resume = false;
 
     std::string load = "";
+    LoadFormat load_format = LoadFormat::NATIVE;
     int qn_scale = 1;
 
     Verbosity verbosity = Verbosity::ON_ENTRY;
@@ -73,6 +74,7 @@ struct Imag
                            ("log_format", log_format),
                            ("obs_directory", obs_directory),
                            ("load", load),
+                           ("load format", load_format),
                            ("display_obs", display_obs),
                            ("qn_scale", qn_scale));
         assert(Ds.size() == chis.size());
@@ -98,6 +100,7 @@ struct Imag
         fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• obs directory:", obs_directory.string());
         if(load.size() > 0) { fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• load from:", load); }
         if(load.size() > 0) { fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• scale loaded qn by:", qn_scale); }
+        if(load.size() > 0) { fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• load format:", fmt::streamed(load_format)); }
         fmt::format_to(std::back_inserter(res), "  {:<30} {}", "• verbosity:", fmt::streamed(verbosity));
         return res;
     }
@@ -128,6 +131,7 @@ inline Imag imag_from_toml(const toml::value& t)
     if(t.contains("obs_directory")) { res.obs_directory = std::filesystem::path(static_cast<std::string>(t.at("obs_directory").as_string())); }
     res.display_obs = t.contains("display_obs") ? t.at("display_obs").as_boolean() : res.display_obs;
     res.load = t.contains("load") ? static_cast<std::string>(t.at("load").as_string()) : res.load;
+    if(t.contains("load_format")) { res.load_format = util::enum_from_toml<LoadFormat>(t.at("load_format")); }
     res.qn_scale = t.contains("qn_scale") ? (t.at("qn_scale").as_integer()) : res.qn_scale;
     return res;
 }

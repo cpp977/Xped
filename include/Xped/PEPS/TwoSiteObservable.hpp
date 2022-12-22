@@ -80,6 +80,47 @@ struct TwoSiteObservable : public ObservableBase
         return out;
     }
 
+    void loadFromMatlab(const std::filesystem::path& p, const std::string& root_name, int qn_scale = 1)
+    {
+        HighFive::File file(p.string(), HighFive::File::ReadOnly);
+        auto root = file.getGroup(root_name);
+
+        UnitCell cell;
+        cell.loadFromMatlab(p, root_name);
+
+        // if((bond & Opts::Bond::H) == Opts::Bond::H) {
+        data_h = TMatrix<Tensor<double, 2, 2, Symmetry, false>>(cell.pattern);
+        obs_h = TMatrix<double>(cell.pattern);
+        // }
+        // if((bond & Opts::Bond::V) == Opts::Bond::V) {
+        data_v = TMatrix<Tensor<double, 2, 2, Symmetry, false>>(cell.pattern);
+        obs_v = TMatrix<double>(cell.pattern);
+        // }
+        // if((bond & Opts::Bond::D1) == Opts::Bond::D1) {
+        //     data_d1 = TMatrix<Tensor<double, 2, 2, Symmetry, false>>(pat);
+        //     obs_d1 = TMatrix<double>(pat);
+        // }
+        // if((bond & Opts::Bond::D2) == Opts::Bond::D2) {
+        //     data_d2 = TMatrix<Tensor<double, 2, 2, Symmetry, false>>(pat);
+        //     obs_d2 = TMatrix<double>(pat);
+        // }
+
+        for(std::size_t i = 0; i < cell.pattern.uniqueSize(); ++i) {
+            auto H_ref = root.getDataSet("H");
+            std::vector<HighFive::Reference> H;
+            H_ref.read(H);
+            auto g_Hh = H[2 * i].template dereference<HighFive::Group>(root);
+            auto g_Hv = H[2 * i + 1].template dereference<HighFive::Group>(root);
+            data_h[i] =
+                Xped::IO::loadMatlabTensor<double, 4, 0, Symmetry, Xped::HeapPolicy>(g_Hh, root, std::array{false, false, true, true}, qn_scale)
+                    .template permute<2, 0, 1, 2, 3>();
+            data_v[i] =
+                Xped::IO::loadMatlabTensor<double, 4, 0, Symmetry, Xped::HeapPolicy>(g_Hv, root, std::array{false, false, true, true}, qn_scale)
+                    .template permute<2, 0, 1, 2, 3>();
+        }
+        fmt::print("Loaded hamiltonian from matlab.\n");
+    }
+
     virtual std::string getResString(const std::string& offset) const override
     {
         std::string res;

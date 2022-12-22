@@ -370,7 +370,6 @@ Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::tSVD(size_t max
     for(size_t i = 0; i < sector().size(); ++i) {
         middle.push_back(sector(i), std::min(PlainInterface::rows(block(i)), PlainInterface::cols(block(i))));
     }
-
     Tensor<Scalar, Rank, 1, Symmetry, false, AllocationPolicy> U(uncoupledDomain(), {{middle}});
     Tensor<RealScalar, 1, 1, Symmetry, false, AllocationPolicy> Sigma({{middle}}, {{middle}});
     Tensor<Scalar, 1, CoRank, Symmetry, false, AllocationPolicy> Vdag({{middle}}, uncoupledCodomain());
@@ -904,10 +903,10 @@ auto Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::view(const
     {
         // std::stringstream ss;
         fmt::print(o, "Tensor<{},{}>: domain=[", Rank, CoRank);
-        if(Rank == 0) o << "], codomain[";
+        if(Rank == 0) o << "], codomain=[";
         for(auto i = 0ul; i < Rank; ++i) {
             o << uncoupledDomain()[i].print();
-            i < Rank - 1 ? o << ", " : o << "], codomain[";
+            i < Rank - 1 ? o << ", " : o << "], codomain=[";
         }
         if(CoRank == 0) { o << "]"; }
         for(auto i = 0ul; i < CoRank; ++i) {

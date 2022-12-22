@@ -72,6 +72,7 @@ std::string format(qarray<Symmetry::Nq> qnum)
         }
         if(q != Symmetry::Nq - 1) { ss << ","; }
     }
+    if(Symmetry::Nq == 0) { ss << "()"; }
     return ss.str();
 }
 

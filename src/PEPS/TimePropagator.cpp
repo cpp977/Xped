@@ -7,27 +7,109 @@ namespace Xped {
 template <typename Scalar, typename TimeScalar, typename Symmetry>
 void TimePropagator<Scalar, TimeScalar, Symmetry>::t_step(TimeScalar dt)
 {
-    for(auto i = 0ul; i < cell_.uniqueSize(); ++i) {
-        auto [x, y] = cell_.pattern.coords(i);
-        // fmt::print("horizontal i={}: x,y={},{}\n", i, x, y);
-        t_step_h(x, y, dt);
-    }
-    for(auto i = 0ul; i < cell_.uniqueSize(); ++i) {
-        auto [x, y] = cell_.pattern.coords(i);
-        // fmt::print("vertical i={}: x,y={},{}\n", i, x, y);
-        t_step_v(x, y, dt);
+    if(H.data_d1.size() > 0 and H.data_d2.size() == 0) {
+        for(auto i = 0ul; i < cell_.uniqueSize(); ++i) {
+            auto [x, y] = cell_.pattern.coords(i);
+            assert(cell_.pattern.uniqueIndex(x, y) != cell_.pattern.uniqueIndex(x + 1, y) and
+                   "Unit cell pattern is inconsistent with Hamiltonian terms");
+            assert(cell_.pattern.uniqueIndex(x + 1, y) != cell_.pattern.uniqueIndex(x + 1, y + 1) and
+                   "Unit cell pattern is inconsistent with Hamiltonian terms");
+            assert(cell_.pattern.uniqueIndex(x, y) != cell_.pattern.uniqueIndex(x + 1, y + 1) and
+                   "Unit cell pattern is inconsistent with Hamiltonian terms");
+            // fmt::print("diagonal i={}: x,y={},{}\n", i, x, y);
+            t_step_d1(x, y, dt, Opts::GATE_ORDER::VDH);
+        }
+
+        for(auto i = cell_.uniqueSize() - 1; i != std::numeric_limits<std::size_t>::max(); i--) {
+            auto [x, y] = cell_.pattern.coords(i);
+            // fmt::print("reverse diagonal i={}: x,y={},{}\n", i, x, y);
+            t_step_d1(x, y, dt, Opts::GATE_ORDER::HDV);
+        }
+    } else if(H.data_d2.size() > 0 and H.data_d1.size() == 0) {
+        for(auto i = 0ul; i < cell_.uniqueSize(); ++i) {
+            auto [x, y] = cell_.pattern.coords(i);
+            // fmt::print("diagonal 2 update for ({},{})\n", x, y);
+            assert(cell_.pattern.uniqueIndex(x, y - 1) != cell_.pattern.uniqueIndex(x + 1, y - 1) and
+                   "Unit cell pattern is inconsistent with Hamiltonian terms");
+            assert(cell_.pattern.uniqueIndex(x, y) != cell_.pattern.uniqueIndex(x, y - 1) and
+                   "Unit cell pattern is inconsistent with Hamiltonian terms");
+            assert(cell_.pattern.uniqueIndex(x, y) != cell_.pattern.uniqueIndex(x + 1, y - 1) and
+                   "Unit cell pattern is inconsistent with Hamiltonian terms");
+            // fmt::print("vertical i={}: x,y={},{}\n", i, x, y);
+            t_step_d2(x, y, dt, Opts::GATE_ORDER::VDH);
+        }
+
+        for(auto i = cell_.uniqueSize() - 1; i != std::numeric_limits<std::size_t>::max(); i--) {
+            auto [x, y] = cell_.pattern.coords(i);
+            // fmt::print("horizontal i={}: x,y={},{}\n", i, x, y);
+            t_step_d2(x, y, dt, Opts::GATE_ORDER::HDV);
+        }
+
+    } else if(H.data_d2.size() > 0 and H.data_d1.size() > 0) {
+        for(auto i = 0ul; i < cell_.uniqueSize(); ++i) {
+            auto [x, y] = cell_.pattern.coords(i);
+            assert(cell_.pattern.uniqueIndex(x, y) != cell_.pattern.uniqueIndex(x + 1, y) and
+                   "Unit cell pattern is inconsistent with Hamiltonian terms");
+            assert(cell_.pattern.uniqueIndex(x + 1, y) != cell_.pattern.uniqueIndex(x + 1, y + 1) and
+                   "Unit cell pattern is inconsistent with Hamiltonian terms");
+            assert(cell_.pattern.uniqueIndex(x, y) != cell_.pattern.uniqueIndex(x + 1, y + 1) and
+                   "Unit cell pattern is inconsistent with Hamiltonian terms");
+            // fmt::print("vertical i={}: x,y={},{}\n", i, x, y);
+            t_step_d1(x, y, dt, Opts::GATE_ORDER::VDH, 0.5);
+        }
+
+        for(auto i = 0ul; i < cell_.uniqueSize(); ++i) {
+            auto [x, y] = cell_.pattern.coords(i);
+            assert(cell_.pattern.uniqueIndex(x, y) != cell_.pattern.uniqueIndex(x + 1, y) and
+                   "Unit cell pattern is inconsistent with Hamiltonian terms");
+            assert(cell_.pattern.uniqueIndex(x, y) != cell_.pattern.uniqueIndex(x, y + 1) and
+                   "Unit cell pattern is inconsistent with Hamiltonian terms");
+            assert(cell_.pattern.uniqueIndex(x + 1, y) != cell_.pattern.uniqueIndex(x, y + 1) and
+                   "Unit cell pattern is inconsistent with Hamiltonian terms");
+            // fmt::print("vertical i={}: x,y={},{}\n", i, x, y);
+            t_step_d2(x, y, dt, Opts::GATE_ORDER::VDH, 0.5);
+        }
+
+        for(auto i = cell_.uniqueSize() - 1; i != std::numeric_limits<std::size_t>::max(); i--) {
+            auto [x, y] = cell_.pattern.coords(i);
+            // fmt::print("horizontal i={}: x,y={},{}\n", i, x, y);
+            t_step_d2(x, y, dt, Opts::GATE_ORDER::HDV, 0.5);
+        }
+
+        for(auto i = cell_.uniqueSize() - 1; i != std::numeric_limits<std::size_t>::max(); i--) {
+            auto [x, y] = cell_.pattern.coords(i);
+            // fmt::print("horizontal i={}: x,y={},{}\n", i, x, y);
+            t_step_d1(x, y, dt, Opts::GATE_ORDER::HDV, 0.5);
+        }
+
+    } else {
+        for(auto i = 0ul; i < cell_.uniqueSize(); ++i) {
+            auto [x, y] = cell_.pattern.coords(i);
+            assert(cell_.pattern.uniqueIndex(x, y) != cell_.pattern.uniqueIndex(x + 1, y) and
+                   "Unit cell pattern is inconsistent with Hamiltonian terms");
+            // fmt::print("horizontal i={}: x,y={},{}\n", i, x, y);
+            t_step_h(x, y, dt);
+        }
+        for(auto i = 0ul; i < cell_.uniqueSize(); ++i) {
+            auto [x, y] = cell_.pattern.coords(i);
+            assert(cell_.pattern.uniqueIndex(x, y - 1) != cell_.pattern.uniqueIndex(x, y) and
+                   "Unit cell pattern is inconsistent with Hamiltonian terms");
+            // fmt::print("vertical i={}: x,y={},{}\n", i, x, y);
+            t_step_v(x, y, dt);
+        }
+
+        for(auto i = cell_.uniqueSize() - 1; i != std::numeric_limits<std::size_t>::max(); i--) {
+            auto [x, y] = cell_.pattern.coords(i);
+            // fmt::print("vertical i={}: x,y={},{}\n", i, x, y);
+            t_step_v(x, y, dt);
+        }
+        for(auto i = cell_.uniqueSize() - 1; i != std::numeric_limits<std::size_t>::max(); i--) {
+            auto [x, y] = cell_.pattern.coords(i);
+            // fmt::print("horizontal i={}: x,y={},{}\n", i, x, y);
+            t_step_h(x, y, dt);
+        }
     }
 
-    for(auto i = cell_.uniqueSize() - 1; i != std::numeric_limits<std::size_t>::max(); i--) {
-        auto [x, y] = cell_.pattern.coords(i);
-        // fmt::print("vertical i={}: x,y={},{}\n", i, x, y);
-        t_step_v(x, y, dt);
-    }
-    for(auto i = cell_.uniqueSize() - 1; i != std::numeric_limits<std::size_t>::max(); i--) {
-        auto [x, y] = cell_.pattern.coords(i);
-        // fmt::print("horizontal i={}: x,y={},{}\n", i, x, y);
-        t_step_h(x, y, dt);
-    }
     Psi->updateAtensors();
 }
 
@@ -91,7 +173,8 @@ void TimePropagator<Scalar, TimeScalar, Symmetry>::t_step_h(int x, int y, TimeSc
     // bond.print(std::cout, true);
     // std::cout << std::endl;
     auto shifted_ham = H.shiftQN(Psi->charges());
-    auto enlarged_bond = shifted_ham.data_h(x, y).mexp(-dt).eval().template contract<std::array{1, 2, -1, -3}, std::array{-2, 1, 2, -4}, 2>(bond);
+    auto enlarged_bond =
+        shifted_ham.data_h(x, y).mexp(-dt).eval().twist(0).twist(1).template contract<std::array{1, 2, -1, -3}, std::array{-2, 1, 2, -4}, 2>(bond);
     // fmt::print("enlarged bond\n");
     // enlarged_bond.print(std::cout, true);
     // std::cout << std::endl;
@@ -124,7 +207,9 @@ void TimePropagator<Scalar, TimeScalar, Symmetry>::t_step_v(int x, int y, TimeSc
     // auto [bond_b, bottom] = bottom_full.template permute<0, 1, 4, 0, 2, 3>().tQR();
     auto bond = bond_t.template contract<std::array{-1, 1, -2}, std::array{1, -3, -4}, 2>(bond_b);
     auto shifted_ham = H.shiftQN(Psi->charges());
-    auto enlarged_bond = shifted_ham.data_v(x, y - 1).mexp(-dt).eval().template contract<std::array{1, 2, -1, -3}, std::array{-2, 1, 2, -4}, 2>(bond);
+    auto enlarged_bond =
+        shifted_ham.data_v(x, y - 1).mexp(-dt).eval().twist(0).twist(1).template contract<std::array{1, 2, -1, -3}, std::array{-2, 1, 2, -4}, 2>(
+            bond);
     auto [bond_tp, weight, bond_bp] = renormalize(enlarged_bond, top, bottom);
     spectrum_v(x, y) = weight; // * (1. / weight.trace());
     Psi->wvs(x, y) = weight * (1. / weight.maxNorm());
@@ -140,6 +225,181 @@ void TimePropagator<Scalar, TimeScalar, Symmetry>::t_step_v(int x, int y, TimeSc
     Psi->Gs(x, y) = Gtmp2; // * (1. / Gtmp2.maxNorm());
 }
 
+/*
+  A(x,y)--A
+        \ |
+          A
+*/
+template <typename Scalar, typename TimeScalar, typename Symmetry>
+void TimePropagator<Scalar, TimeScalar, Symmetry>::t_step_d1(int x, int y, TimeScalar dt, Opts::GATE_ORDER gate_order, TimeScalar s)
+{
+    auto tl_full = applyWeights(Psi->Gs(x, y), Psi->whs(x - 1, y), Psi->wvs(x, y), Psi->whs(x, y).diag_sqrt(), Psi->wvs(x, y + 1));
+    auto br_full =
+        applyWeights(Psi->Gs(x + 1, y + 1), Psi->whs(x, y + 1), Psi->wvs(x + 1, y + 1).diag_sqrt(), Psi->whs(x + 1, y + 1), Psi->wvs(x + 1, y + 2));
+    auto tr_full =
+        applyWeights(Psi->Gs(x + 1, y), Psi->whs(x, y).diag_sqrt(), Psi->wvs(x + 1, y), Psi->whs(x + 1, y), Psi->wvs(x + 1, y + 1).diag_sqrt());
+    [[maybe_unused]] double dumb;
+    auto [tl, tmp_tl, bond_tl] = tl_full.template permute<-1, 0, 1, 3, 2, 4>().tSVD(std::numeric_limits<std::size_t>::max(), 0., dumb, false);
+    bond_tl = tmp_tl * bond_tl;
+    auto [bond_br, tmp_br, br] = br_full.template permute<0, 1, 4, 0, 2, 3>().tSVD(std::numeric_limits<std::size_t>::max(), 0., dumb, false);
+    bond_br = bond_br * tmp_br;
+    auto tmp = bond_tl.template contract<std::array{-1, 1, -2}, std::array{1, -3, -4, -5, -6}, 2>(tr_full);
+    auto bond = tmp.template contract<std::array{-1, -2, -3, -4, 1, -5}, std::array{1, -6, -7}, 5>(bond_br);
+    auto shifted_ham = H.shiftQN(Psi->charges());
+    Tensor<Scalar, 2, 5, Symmetry> enlarged_bond;
+    switch(gate_order) {
+    case Opts::GATE_ORDER::HDV: {
+        enlarged_bond = shifted_ham.data_h(x, y)
+                            .mexp(-s * dt)
+                            .eval()
+                            .twist(0)
+                            .twist(1)
+                            .template contract<std::array{1, 2, -2, -5}, std::array{-1, 1, -3, -4, 2, -6, -7}, 2>(bond);
+        enlarged_bond = shifted_ham.data_d1(x, y)
+                            .mexp(-dt)
+                            .eval()
+                            .twist(0)
+                            .twist(1)
+                            .template contract<std::array{1, 2, -2, -6}, std::array{-1, 1, -3, -4, -5, 2, -7}, 2>(enlarged_bond);
+        enlarged_bond = shifted_ham.data_v(x + 1, y)
+                            .mexp(-s * dt)
+                            .eval()
+                            .twist(0)
+                            .twist(1)
+                            .template contract<std::array{1, 2, -5, -6}, std::array{-1, -2, -3, -4, 1, 2, -7}, 2>(enlarged_bond);
+        break;
+    }
+    case Opts::GATE_ORDER::VDH: {
+        enlarged_bond = shifted_ham.data_v(x + 1, y)
+                            .mexp(-s * dt)
+                            .eval()
+                            .twist(0)
+                            .twist(1)
+                            .template contract<std::array{1, 2, -5, -6}, std::array{-1, -2, -3, -4, 1, 2, -7}, 2>(bond);
+        enlarged_bond = shifted_ham.data_d1(x, y)
+                            .mexp(-dt)
+                            .eval()
+                            .twist(0)
+                            .twist(1)
+                            .template contract<std::array{1, 2, -2, -6}, std::array{-1, 1, -3, -4, -5, 2, -7}, 2>(enlarged_bond);
+        enlarged_bond = shifted_ham.data_h(x, y)
+                            .mexp(-s * dt)
+                            .eval()
+                            .twist(0)
+                            .twist(1)
+                            .template contract<std::array{1, 2, -2, -5}, std::array{-1, 1, -3, -4, 2, -6, -7}, 2>(enlarged_bond);
+        break;
+    }
+    }
+    auto [bond_tlp, weight_tl, tmp_trp, weight_br, bond_brp] = renormalize_d1(enlarged_bond);
+    auto trp = tmp_trp.template permute<2, 3, 0, 1, 4, 2>();
+
+    spectrum_h(x, y) = weight_tl; // * (1. / weight.trace());
+    spectrum_v(x + 1, y + 1) = weight_br; // * (1. / weight.trace());
+    Psi->whs(x, y) = weight_tl * (1. / weight_tl.maxNorm());
+    Psi->wvs(x + 1, y + 1) = weight_br * (1. / weight_br.maxNorm());
+
+    auto Gtmp1 = tl.template contract<std::array{-1, -2, -4, 1}, std::array{1, -5, -3}, 2>(bond_tlp);
+    auto Gtmp2 = applyWeights(Gtmp1, Psi->whs(x - 1, y).diag_inv(), Psi->wvs(x, y).diag_inv(), Psi->Id_weight_h(x, y), Psi->wvs(x, y + 1).diag_inv());
+    Psi->Gs(x, y) = Gtmp2; // * (1. / Gtmp2.maxNorm());
+
+    Gtmp1 = bond_brp.template contract<std::array{-2, -5, 1}, std::array{1, -1, -3, -4}, 2>(br);
+    Gtmp2 = applyWeights(
+        Gtmp1, Psi->whs(x, y + 1).diag_inv(), Psi->Id_weight_v(x + 1, y + 1), Psi->whs(x + 1, y + 1).diag_inv(), Psi->wvs(x + 1, y + 2).diag_inv());
+    Psi->Gs(x + 1, y + 1) = Gtmp2; // * (1. / Gtmp2.maxNorm());
+
+    Psi->Gs(x + 1, y) =
+        applyWeights(trp, Psi->Id_weight_h(x, y), Psi->wvs(x + 1, y).diag_inv(), Psi->whs(x + 1, y).diag_inv(), Psi->Id_weight_v(x + 1, y + 1));
+}
+
+/*
+  A--A
+  | /
+  A(x,y)
+*/
+template <typename Scalar, typename TimeScalar, typename Symmetry>
+void TimePropagator<Scalar, TimeScalar, Symmetry>::t_step_d2(int x, int y, TimeScalar dt, Opts::GATE_ORDER gate_order, TimeScalar s)
+{
+    auto tl_full =
+        applyWeights(Psi->Gs(x, y - 1), Psi->whs(x - 1, y - 1), Psi->wvs(x, y - 1), Psi->whs(x, y - 1).diag_sqrt(), Psi->wvs(x, y).diag_sqrt());
+    auto bl_full = applyWeights(Psi->Gs(x, y), Psi->whs(x - 1, y), Psi->wvs(x, y).diag_sqrt(), Psi->whs(x, y), Psi->wvs(x, y + 1));
+    auto tr_full =
+        applyWeights(Psi->Gs(x + 1, y - 1), Psi->whs(x, y - 1).diag_sqrt(), Psi->wvs(x + 1, y - 1), Psi->whs(x + 1, y - 1), Psi->wvs(x + 1, y));
+    [[maybe_unused]] double dumb;
+    auto [bond_tr, tmp_tr, tr] = tr_full.template permute<0, 0, 4, 1, 2, 3>().tSVD(std::numeric_limits<std::size_t>::max(), 0., dumb, false);
+    bond_tr = bond_tr * tmp_tr;
+    auto [bond_bl, tmp_bl, bl] = bl_full.template permute<0, 1, 4, 0, 2, 3>().tSVD(std::numeric_limits<std::size_t>::max(), 0., dumb, false);
+    bond_bl = bond_bl * tmp_bl;
+    // auto [bl, tmp_bl, bond_bl] = bl_full.template permute<-1, 0, 2, 3, 1, 4>().tSVD(std::numeric_limits<std::size_t>::max(), 0., dumb, false);
+    // bond_bl = tmp_bl * bond_bl;
+    auto tmp = bond_bl.twist(0).template contract<std::array{1, -1, -2}, std::array{-3, -4, -5, 1, -6}, 2>(tl_full);
+    auto bond = tmp.template contract<std::array{-1, -2, -3, -4, 1, -5}, std::array{1, -6, -7}, 5>(bond_tr);
+    auto shifted_ham = H.shiftQN(Psi->charges());
+    Tensor<Scalar, 2, 5, Symmetry> enlarged_bond;
+    switch(gate_order) {
+    case Opts::GATE_ORDER::HDV: {
+        enlarged_bond = shifted_ham.data_h(x, y - 1)
+                            .mexp(-s * dt)
+                            .eval()
+                            .twist(0)
+                            .twist(1)
+                            .template contract<std::array{1, 2, -5, -6}, std::array{-1, -2, -3, -4, 1, 2, -7}, 2>(bond);
+        enlarged_bond = shifted_ham.data_d2(x, y)
+                            .mexp(-dt)
+                            .eval()
+                            .twist(0)
+                            .twist(1)
+                            .template contract<std::array{1, 2, -1, -6}, std::array{1, -2, -3, -4, -5, 2, -7}, 2>(enlarged_bond);
+        enlarged_bond = shifted_ham.data_v(x, y - 1)
+                            .mexp(-s * dt)
+                            .eval()
+                            .twist(0)
+                            .twist(1)
+                            .template contract<std::array{1, 2, -5, -1}, std::array{2, -2, -3, -4, 1, -6, -7}, 2>(enlarged_bond);
+        break;
+    }
+    case Opts::GATE_ORDER::VDH: {
+        enlarged_bond = shifted_ham.data_v(x, y - 1)
+                            .mexp(-s * dt)
+                            .eval()
+                            .twist(0)
+                            .twist(1)
+                            .template contract<std::array{1, 2, -5, -1}, std::array{2, -2, -3, -4, 1, -6, -7}, 2>(bond);
+        enlarged_bond = shifted_ham.data_d2(x, y)
+                            .mexp(-dt)
+                            .eval()
+                            .twist(0)
+                            .twist(1)
+                            .template contract<std::array{1, 2, -1, -6}, std::array{1, -2, -3, -4, -5, 2, -7}, 2>(enlarged_bond);
+        enlarged_bond = shifted_ham.data_h(x, y - 1)
+                            .mexp(-s * dt)
+                            .eval()
+                            .twist(0)
+                            .twist(1)
+                            .template contract<std::array{1, 2, -5, -6}, std::array{-1, -2, -3, -4, 1, 2, -7}, 2>(enlarged_bond);
+        break;
+    }
+    }
+    auto [bond_blp, weight_bl, tmp_tlp, weight_tr, bond_trp] = renormalize_d2(enlarged_bond);
+    auto tlp = tmp_tlp.template permute<2, 0, 1, 4, 3, 2>();
+    spectrum_h(x, y - 1) = weight_tr; // * (1. / weight.trace());
+    spectrum_v(x, y) = weight_bl; // * (1. / weight.trace());
+    Psi->whs(x, y - 1) = weight_tr * (1. / weight_tr.maxNorm());
+    Psi->wvs(x, y) = weight_bl * (1. / weight_bl.maxNorm());
+
+    auto Gtmp1 = bond_blp.template contract<std::array{-2, -5, 1}, std::array{1, -1, -3, -4}, 2>(bl);
+    auto Gtmp2 = applyWeights(Gtmp1, Psi->whs(x - 1, y).diag_inv(), Psi->Id_weight_v(x, y), Psi->whs(x, y).diag_inv(), Psi->wvs(x, y + 1).diag_inv());
+    Psi->Gs(x, y) = Gtmp2; // * (1. / Gtmp2.maxNorm());
+
+    Gtmp1 = bond_trp.template contract<std::array{-1, -5, 1}, std::array{1, -2, -3, -4}, 2>(tr);
+    Gtmp2 = applyWeights(
+        Gtmp1, Psi->Id_weight_h(x, y - 1), Psi->wvs(x + 1, y - 1).diag_inv(), Psi->whs(x + 1, y - 1).diag_inv(), Psi->wvs(x + 1, y).diag_inv());
+    Psi->Gs(x + 1, y - 1) = Gtmp2; // * (1. / Gtmp2.maxNorm());
+
+    Psi->Gs(x, y - 1) =
+        applyWeights(tlp, Psi->whs(x - 1, y - 1).diag_inv(), Psi->wvs(x, y - 1).diag_inv(), Psi->Id_weight_h(x, y - 1), Psi->Id_weight_v(x, y));
+}
+
 template <typename Scalar, typename TimeScalar, typename Symmetry>
 std::tuple<Tensor<Scalar, 2, 1, Symmetry>, Tensor<Scalar, 1, 1, Symmetry>, Tensor<Scalar, 1, 2, Symmetry>>
 TimePropagator<Scalar, TimeScalar, Symmetry>::renormalize(const Tensor<Scalar, 2, 2, Symmetry>& bond,
@@ -151,6 +411,74 @@ TimePropagator<Scalar, TimeScalar, Symmetry>::renormalize(const Tensor<Scalar, 2
     case Opts::Update::SIMPLE: {
         double dummy;
         res = bond.tSVD(Psi->D, 1.e-14, dummy, false);
+        break;
+    }
+    case Opts::Update::FULL: {
+        assert(false and "Full update not implemented");
+    }
+    case Opts::Update::CLUSTER: {
+        assert(false and "Cluster update not implemented");
+    }
+    }
+    return res;
+}
+
+template <typename Scalar, typename TimeScalar, typename Symmetry>
+std::tuple<Tensor<Scalar, 1, 2, Symmetry>,
+           Tensor<Scalar, 1, 1, Symmetry>,
+           Tensor<Scalar, 4, 1, Symmetry>,
+           Tensor<Scalar, 1, 1, Symmetry>,
+           Tensor<Scalar, 1, 2, Symmetry>>
+TimePropagator<Scalar, TimeScalar, Symmetry>::renormalize_d2(const Tensor<Scalar, 2, 5, Symmetry>& bond) const
+{
+    std::tuple<Tensor<Scalar, 1, 2, Symmetry>,
+               Tensor<Scalar, 1, 1, Symmetry>,
+               Tensor<Scalar, 4, 1, Symmetry>,
+               Tensor<Scalar, 1, 1, Symmetry>,
+               Tensor<Scalar, 1, 2, Symmetry>>
+        res;
+    switch(update) {
+    case Opts::Update::SIMPLE: {
+        double dummy;
+        Tensor<Scalar, 5, 1, Symmetry> tmp;
+        std::tie(tmp, std::get<1>(res), std::get<0>(res)) = bond.template permute<-3, 2, 3, 4, 5, 6, 0, 1>().tSVD(Psi->D, 1.e-14, dummy, false);
+        Tensor<Scalar, 4, 1, Symmetry> tmp2;
+        std::tie(std::get<2>(res), std::get<3>(res), std::get<4>(res)) =
+            tmp.template permute<1, 0, 1, 2, 5, 3, 4>().tSVD(Psi->D, 1.e-14, dummy, false);
+        break;
+    }
+    case Opts::Update::FULL: {
+        assert(false and "Full update not implemented");
+    }
+    case Opts::Update::CLUSTER: {
+        assert(false and "Cluster update not implemented");
+    }
+    }
+    return res;
+}
+
+template <typename Scalar, typename TimeScalar, typename Symmetry>
+std::tuple<Tensor<Scalar, 2, 1, Symmetry>,
+           Tensor<Scalar, 1, 1, Symmetry>,
+           Tensor<Scalar, 4, 1, Symmetry>,
+           Tensor<Scalar, 1, 1, Symmetry>,
+           Tensor<Scalar, 1, 2, Symmetry>>
+TimePropagator<Scalar, TimeScalar, Symmetry>::renormalize_d1(const Tensor<Scalar, 2, 5, Symmetry>& bond) const
+{
+    std::tuple<Tensor<Scalar, 2, 1, Symmetry>,
+               Tensor<Scalar, 1, 1, Symmetry>,
+               Tensor<Scalar, 4, 1, Symmetry>,
+               Tensor<Scalar, 1, 1, Symmetry>,
+               Tensor<Scalar, 1, 2, Symmetry>>
+        res;
+    switch(update) {
+    case Opts::Update::SIMPLE: {
+        double dummy;
+        Tensor<Scalar, 1, 5, Symmetry> tmp;
+        std::tie(std::get<0>(res), std::get<1>(res), tmp) = bond.tSVD(Psi->D, 1.e-14, dummy, false);
+        Tensor<Scalar, 4, 1, Symmetry> tmp2;
+        std::tie(std::get<2>(res), std::get<3>(res), std::get<4>(res)) =
+            tmp.template permute<-3, 1, 2, 3, 0, 4, 5>().tSVD(Psi->D, 1.e-14, dummy, false);
         break;
     }
     case Opts::Update::FULL: {

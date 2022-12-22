@@ -10,6 +10,16 @@
 
 namespace Xped {
 
+namespace Opts {
+
+enum class GATE_ORDER
+{
+    HDV,
+    VDH
+};
+
+}
+
 template <typename Scalar_, typename TimeScalar_, typename Symmetry_>
 class TimePropagator
 {
@@ -45,10 +55,27 @@ private:
     void t_step_h(int x, int y, TimeScalar_ dt);
     void t_step_v(int x, int y, TimeScalar_ dt);
 
+    void t_step_d1(int x, int y, TimeScalar_ dt, Opts::GATE_ORDER gate_order, TimeScalar_ s = 1.);
+    void t_step_d2(int x, int y, TimeScalar_ dt, Opts::GATE_ORDER gate_order, TimeScalar_ s = 1.);
+
     std::tuple<Tensor<Scalar, 2, 1, Symmetry>, Tensor<Scalar, 1, 1, Symmetry>, Tensor<Scalar, 1, 2, Symmetry>>
     renormalize(const Tensor<Scalar, 2, 2, Symmetry>& bond,
                 const Tensor<Scalar, 3, 1, Symmetry>& left,
                 const Tensor<Scalar, 1, 3, Symmetry>& right) const;
+
+    std::tuple<Tensor<Scalar, 2, 1, Symmetry>,
+               Tensor<Scalar, 1, 1, Symmetry>,
+               Tensor<Scalar, 4, 1, Symmetry>,
+               Tensor<Scalar, 1, 1, Symmetry>,
+               Tensor<Scalar, 1, 2, Symmetry>>
+    renormalize_d1(const Tensor<Scalar, 2, 5, Symmetry>& bond) const;
+
+    std::tuple<Tensor<Scalar, 1, 2, Symmetry>,
+               Tensor<Scalar, 1, 1, Symmetry>,
+               Tensor<Scalar, 4, 1, Symmetry>,
+               Tensor<Scalar, 1, 1, Symmetry>,
+               Tensor<Scalar, 1, 2, Symmetry>>
+    renormalize_d2(const Tensor<Scalar, 2, 5, Symmetry>& bond) const;
 };
 
 } // namespace Xped

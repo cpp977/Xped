@@ -82,7 +82,7 @@ int main(int argc, char* argv[])
         // SPDLOG_INFO("Number of MPI processes: {}", world.np);
 
         typedef double Scalar;
-        // using Symmetry = Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>;
+        using Symmetry = Xped::Sym::ZN<Xped::Sym::FChargeU1, 36>;
         // using Symmetry = Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>;
         // using Symmetry =
         //     Xped::Sym::Combined<Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>>;
@@ -90,7 +90,7 @@ int main(int argc, char* argv[])
         // typedef Xped::Sym::U1<Xped::Sym::SpinU1> Symmetry;
         // typedef Xped::Sym::ZN<Xped::Sym::SpinU1, 36, double> Symmetry;
         // typedef Xped::Sym::U0<double> Symmetry;
-        using Symmetry = Xped::Sym::Combined<Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>>;
+        // using Symmetry = Xped::Sym::Combined<Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>>;
 
         std::unique_ptr<Xped::TwoSiteObservable<Symmetry>> ham;
 

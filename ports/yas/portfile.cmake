@@ -1,0 +1,11 @@
+vcpkg_from_github(
+	OUT_SOURCE_PATH SOURCE_PATH
+	REPO niXman/yas
+	REF b1d0519a2d2d52beb4f6b253f0b30f742116cbcb
+	SHA512 4a3846cf1c69d893b25881d3a5417d671b09bbd9a939ece1d66598737ea4149107585a6b4ee7d339dabd18d8fcb7bc224fa25d8d11b34573d5c70f56be2b4fa1
+	HEAD_REF master
+)
+
+file(INSTALL "${SOURCE_PATH}/include/yas" DESTINATION "${CURRENT_PACKAGES_DIR}/include")
+
+file(INSTALL "${SOURCE_PATH}/include/yas/version.hpp" DESTINATION "${CURRENT_PACKAGES_DIR}/share/${PORT}" RENAME copyright)

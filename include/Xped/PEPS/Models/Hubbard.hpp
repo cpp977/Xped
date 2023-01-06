@@ -32,10 +32,32 @@ public:
         F = FermionBase<Symmetry>(1);
         used_params = {"U", /*"μ"*/ "mu", "tprime", "t"};
         Tensor<double, 2, 2, Symmetry> gate, bond_gate, hopping, hubbard, occ;
-        if constexpr(std::is_same_v<Symmetry,
-                                    Xped::Sym::Combined<Xped::Sym::SU2<Xped::Sym::SpinSU2>,
-                                                        Xped::Sym::SU2<Xped::Sym::SpinSU2>,
-                                                        Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>>>) {
+        if constexpr(Symmetry::Nq == 2 and Symmetry::ANY_NON_ABELIAN) {
+            if constexpr(Symmetry::IS_SPIN[0] and Symmetry::NON_ABELIAN[0] and Symmetry::ABELIAN[1]) {
+                hopping = (std::sqrt(2.) * tprod(F.cdag(), F.c()) + std::sqrt(2.) * tprod(F.c(), F.cdag())).eval();
+                hubbard = 0.25 * (tprod(F.d(), F.Id()) + tprod(F.Id(), F.d()));
+                occ = 0.25 * (tprod(F.n(), F.Id()) + tprod(F.Id(), F.n()));
+                if((bond & Opts::Bond::H) == Opts::Bond::H) {
+                    for(auto& t : this->data_h) {
+                        t = -params["t"].get<double>() * hopping + params["U"].get<double>() * hubbard - params["mu"].get<double>() * occ;
+                    }
+                }
+                if((bond & Opts::Bond::V) == Opts::Bond::V) {
+                    for(auto& t : this->data_v) {
+                        t = -params["t"].get<double>() * hopping + params["U"].get<double>() * hubbard - params["mu"].get<double>() * occ;
+                    }
+                }
+                if((bond & Opts::Bond::D1) == Opts::Bond::D1) {
+                    for(auto& t : this->data_d1) { t = -params["tprime"].get<double>() * hopping; }
+                }
+                if((bond & Opts::Bond::D2) == Opts::Bond::D2) {
+                    for(auto& t : this->data_d2) { t = -params["tprime"].get<double>() * hopping; }
+                }
+            }
+        } else if constexpr(std::is_same_v<Symmetry,
+                                           Xped::Sym::Combined<Xped::Sym::SU2<Xped::Sym::SpinSU2>,
+                                                               Xped::Sym::SU2<Xped::Sym::SpinSU2>,
+                                                               Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>>>) {
             hopping = (tprod(F.cdag(), F.c()) - tprod(F.c(), F.cdag())).eval();
             hubbard = 0.25 * (tprod(F.n() * (F.n() - F.Id()), F.Id()) + tprod(F.Id(), F.n() * (F.n() - F.Id())));
             occ = 0.25 * (tprod(F.n(), F.Id()) + tprod(F.Id(), F.n()));
@@ -105,10 +127,19 @@ public:
 
     virtual void setDefaultObs() override
     {
-        if constexpr(std::is_same_v<Symmetry,
-                                    Xped::Sym::Combined<Xped::Sym::SU2<Xped::Sym::SpinSU2>,
-                                                        Xped::Sym::SU2<Xped::Sym::SpinSU2>,
-                                                        Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>>>) {
+        if constexpr(Symmetry::Nq == 2 and Symmetry::ANY_NON_ABELIAN) {
+            if constexpr(Symmetry::IS_SPIN[0] and Symmetry::NON_ABELIAN[0] and Symmetry::ABELIAN[1]) {
+                auto n = std::make_unique<Xped::OneSiteObservable<Symmetry>>(pat, "n");
+                for(auto& t : n->data) { t = F.n().data.template trim<2>(); }
+                obs.push_back(std::move(n));
+                auto d = std::make_unique<Xped::OneSiteObservable<Symmetry>>(pat, "d");
+                for(auto& t : d->data) { t = F.d().data.template trim<2>(); }
+                obs.push_back(std::move(d));
+            }
+        } else if constexpr(std::is_same_v<Symmetry,
+                                           Xped::Sym::Combined<Xped::Sym::SU2<Xped::Sym::SpinSU2>,
+                                                               Xped::Sym::SU2<Xped::Sym::SpinSU2>,
+                                                               Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>>>) {
 
             auto n = std::make_unique<Xped::OneSiteObservable<Symmetry>>(pat, "n");
             for(auto& t : n->data) { t = F.n().data.template trim<2>(); }

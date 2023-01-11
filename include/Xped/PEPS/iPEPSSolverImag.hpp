@@ -32,7 +32,7 @@ struct iPEPSSolverImag
             case Opts::LoadFormat::NATIVE: {
                 constexpr std::size_t flags = yas::file /*IO type*/ | yas::binary; /*IO format*/
                 iPEPS<Scalar, Symmetry> tmp_Psi;
-                yas::load<flags>((this->H.file_name() + "_D" + std::to_string(Psi->D) + ".psi").c_str(), tmp_Psi);
+                yas::load<flags>(imag_opts.load.c_str(), tmp_Psi);
                 Psi = std::make_shared<iPEPS<Scalar, Symmetry>>(std::move(tmp_Psi));
                 break;
             }

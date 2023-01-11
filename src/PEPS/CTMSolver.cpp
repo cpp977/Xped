@@ -37,7 +37,7 @@ typename ScalarTraits<Scalar>::Real CTMSolver<Scalar, Symmetry, CPOpts, TRank>::
                       REINIT_ENV,
                       opts.max_presteps);
     }
-
+    Log::on_entry(opts.verbosity, "   Environment for {}", Psi->info());
     if(REINIT_ENV) {
         Jack = CTM<Scalar, Symmetry, TRank, false>(Psi, opts.chi, opts.init);
         Jack.init();

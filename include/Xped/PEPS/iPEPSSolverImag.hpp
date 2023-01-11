@@ -109,6 +109,7 @@ struct iPEPSSolverImag
                 yas::save<flags>(ofs, *Psi);
                 // Psi->info();
             }
+            Log::per_iteration(imag_opts.verbosity, "  {}", Psi->info());
             evol_time += evol_t.time();
             util::Stopwatch<> ctm_t;
             for(auto ichi = 0; auto chi : imag_opts.chis[iD]) {

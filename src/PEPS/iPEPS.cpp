@@ -217,6 +217,30 @@ void iPEPS<Scalar, Symmetry, ENABLE_AD>::set_data(const Scalar* data, bool NORMA
 }
 
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>
+std::tuple<std::size_t, std::size_t, double> iPEPS<Scalar, Symmetry, ENABLE_AD>::calc_Ds() const
+{
+    auto Dmin = 0ul;
+    auto Dmax = std::numeric_limits<std::size_t>::max();
+    double Dsum = 0.;
+    for(auto i = 0ul; i < As.size(); ++i) {
+        auto [x, y] = cell().pattern.coords(i);
+        Dmin = std::max(ketBasis(x, y, Opts::LEG::LEFT).fullDim(), Dmin);
+        Dmin = std::max(ketBasis(x, y, Opts::LEG::UP).fullDim(), Dmin);
+        Dmin = std::max(ketBasis(x, y, Opts::LEG::RIGHT).fullDim(), Dmin);
+        Dmin = std::max(ketBasis(x, y, Opts::LEG::DOWN).fullDim(), Dmin);
+        Dmax = std::min(ketBasis(x, y, Opts::LEG::LEFT).fullDim(), Dmax);
+        Dmax = std::min(ketBasis(x, y, Opts::LEG::UP).fullDim(), Dmax);
+        Dmax = std::min(ketBasis(x, y, Opts::LEG::RIGHT).fullDim(), Dmax);
+        Dmax = std::min(ketBasis(x, y, Opts::LEG::DOWN).fullDim(), Dmax);
+        Dsum += ketBasis(x, y, Opts::LEG::LEFT).fullDim();
+        Dsum += ketBasis(x, y, Opts::LEG::UP).fullDim();
+        Dsum += ketBasis(x, y, Opts::LEG::RIGHT).fullDim();
+        Dsum += ketBasis(x, y, Opts::LEG::DOWN).fullDim();
+    }
+    return std::make_tuple(Dmin, Dmax, Dsum / (4. * As.size()));
+}
+
+template <typename Scalar, typename Symmetry, bool ENABLE_AD>
 Qbasis<Symmetry, 1> iPEPS<Scalar, Symmetry, ENABLE_AD>::ketBasis(const int x, const int y, const Opts::LEG leg) const
 {
     switch(leg) {
@@ -285,20 +309,24 @@ Tensor<Scalar, 1, 1, Symmetry> iPEPS<Scalar, Symmetry, ENABLE_AD>::Id_weight_v(i
 }
 
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>
-void iPEPS<Scalar, Symmetry, ENABLE_AD>::info() const
+std::string iPEPS<Scalar, Symmetry, ENABLE_AD>::info() const
 {
-    std::cout << "iPEPS(D=" << D << "): UnitCell=(" << cell_.Lx << "x" << cell_.Ly << ")" << std::endl;
-    std::cout << "Tensors:" << std::endl;
-    for(int x = 0; x < cell_.Lx; x++) {
-        for(int y = 0; y < cell_.Lx; y++) {
-            if(not cell_.pattern.isUnique(x, y)) {
-                std::cout << "Cell site: (" << x << "," << y << "): not unique." << std::endl;
-                continue;
-            }
-            std::cout << "Cell site: (" << x << "," << y << "), A:" << std::endl << As(x, y) << std::endl << std::endl;
-            std::cout << "Cell site: (" << x << "," << y << "), A†:" << std::endl << Adags(x, y) << std::endl;
-        }
-    }
+    std::string res;
+    auto [Dmin, Dmax, Davg] = calc_Ds();
+    fmt::format_to(
+        std::back_inserter(res), "iPEPS(D*={}): UnitCell=({}x{}), Dmin={}, Dmax={}, Davg={:.1f}", D, cell().Lx, cell().Ly, Dmin, Dmax, Davg);
+    return res;
+    // std::cout << "Tensors:" << std::endl;
+    // for(int x = 0; x < cell_.Lx; x++) {
+    //     for(int y = 0; y < cell_.Lx; y++) {
+    //         if(not cell_.pattern.isUnique(x, y)) {
+    //             std::cout << "Cell site: (" << x << "," << y << "): not unique." << std::endl;
+    //             continue;
+    //         }
+    //         std::cout << "Cell site: (" << x << "," << y << "), A:" << std::endl << As(x, y) << std::endl << std::endl;
+    //         std::cout << "Cell site: (" << x << "," << y << "), A†:" << std::endl << Adags(x, y) << std::endl;
+    //     }
+    // }
 }
 
 } // namespace Xped

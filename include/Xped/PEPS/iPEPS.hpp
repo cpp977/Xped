@@ -93,7 +93,8 @@ public:
 
     Qbasis<Symmetry, 1> ketBasis(const int x, const int y, const Opts::LEG leg) const;
     Qbasis<Symmetry, 1> braBasis(const int x, const int y, const Opts::LEG leg) const;
-    void info() const;
+
+    std::string info() const;
 
     std::vector<Scalar> data();
 
@@ -142,6 +143,8 @@ public:
 
     Tensor<Scalar, 1, 1, Symmetry> Id_weight_h(int x, int y) const;
     Tensor<Scalar, 1, 1, Symmetry> Id_weight_v(int x, int y) const;
+
+    std::tuple<std::size_t, std::size_t, double> calc_Ds() const;
 
     std::size_t D;
 

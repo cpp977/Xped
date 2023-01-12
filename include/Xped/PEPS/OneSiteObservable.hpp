@@ -45,26 +45,24 @@ struct OneSiteObservable : public ObservableBase
         return res;
     }
 
-    virtual void toFile(HighFive::File& file) const override
+    virtual void toFile(HighFive::File& file, const std::string& root = "/") const override
     {
-        auto d = file.getDataSet("/" + this->name);
+        if(not file.exist(root + this->name)) {
+            HighFive::DataSpace dataspace = HighFive::DataSpace({0, 0}, {HighFive::DataSpace::UNLIMITED, HighFive::DataSpace::UNLIMITED});
+
+            // Use chunking
+            HighFive::DataSetCreateProps props;
+            props.add(HighFive::Chunking(std::vector<hsize_t>{2, 2}));
+
+            // Create the dataset
+            HighFive::DataSet dataset = file.createDataSet(root + this->name, dataspace, HighFive::create_datatype<double>(), props);
+        }
+        auto d = file.getDataSet(root + this->name);
         std::vector<std::vector<double>> data;
         data.push_back(obs.uncompressedVector());
         std::size_t curr_size = d.getDimensions()[0];
         d.resize({curr_size + 1, data[0].size()});
         d.select({curr_size, 0}, {1, data[0].size()}).write(data);
-    }
-
-    virtual void initFile(HighFive::File& file) const override
-    {
-        HighFive::DataSpace dataspace = HighFive::DataSpace({0, 0}, {HighFive::DataSpace::UNLIMITED, HighFive::DataSpace::UNLIMITED});
-
-        // Use chunking
-        HighFive::DataSetCreateProps props;
-        props.add(HighFive::Chunking(std::vector<hsize_t>{2, 2}));
-
-        // Create the dataset
-        HighFive::DataSet dataset = file.createDataSet(this->name, dataspace, HighFive::create_datatype<double>(), props);
     }
 
     TMatrix<Tensor<double, 1, 1, Symmetry, false>> data;

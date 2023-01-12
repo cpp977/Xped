@@ -124,14 +124,9 @@ public:
             return out;
         }
 
-        virtual void obsToFile(HighFive::File & file) const override
+        virtual void obsToFile(HighFive::File& file, const std::string& root = "/") const override
         {
-            for(const auto& ob : obs) { ob->toFile(file); }
-        }
-
-        virtual void initObsfile(HighFive::File & file) const override
-        {
-            for(const auto& ob : obs) { ob->initFile(file); }
+            for(const auto& ob : obs) { ob->toFile(file, root); }
         }
 
         std::map<std::string, Param> params;
@@ -139,7 +134,7 @@ public:
         std::vector<std::string> used_params;
         SpinBase<Symmetry> B;
         std::vector<std::unique_ptr<ObservableBase>> obs;
-    };
+};
 
 } // namespace Xped
 #endif

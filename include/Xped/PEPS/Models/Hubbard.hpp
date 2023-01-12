@@ -155,14 +155,11 @@ public:
             for(auto& t : d->data) { t = F.d().data.template trim<2>(); }
             auto Sz = std::make_unique<Xped::OneSiteObservable<Symmetry>>(pat, "Sz");
             for(auto& t : Sz->data) { t = F.Sz().data.template trim<2>(); }
-            auto Sx = std::make_unique<Xped::OneSiteObservable<Symmetry>>(pat, "Sx");
-            for(auto& t : Sx->data) { t = F.Sx().data.template trim<2>(); }
             obs.push_back(std::move(nup));
             obs.push_back(std::move(ndn));
             obs.push_back(std::move(n));
             obs.push_back(std::move(d));
             obs.push_back(std::move(Sz));
-            obs.push_back(std::move(Sx));
             auto hopping = (tprod(F.cdag(SPIN_INDEX::UP), F.c(SPIN_INDEX::UP)) + tprod(F.cdag(SPIN_INDEX::DN), F.c(SPIN_INDEX::DN)) -
                             tprod(F.c(SPIN_INDEX::UP), F.cdag(SPIN_INDEX::UP)) - tprod(F.c(SPIN_INDEX::DN), F.cdag(SPIN_INDEX::DN)))
                                .eval();
@@ -178,67 +175,67 @@ public:
             for(auto& t : SzSz->data_d1) { t = tprod(F.Sz(), F.Sz()); }
             for(auto& t : SzSz->data_d2) { t = tprod(F.Sz(), F.Sz()); }
 
-            auto SxSx = std::make_unique<TwoSiteObservable<Symmetry>>(pat, Opts::Bond::H | Opts::Bond::V | Opts::Bond::D1 | Opts::Bond::D2, "SxSx");
-            for(auto& t : SxSx->data_h) { t = tprod(F.Sx(), F.Sx()); }
-            for(auto& t : SxSx->data_v) { t = tprod(F.Sx(), F.Sx()); }
-            for(auto& t : SxSx->data_d1) { t = tprod(F.Sx(), F.Sx()); }
-            for(auto& t : SxSx->data_d2) { t = tprod(F.Sx(), F.Sx()); }
-
             obs.push_back(std::move(cdagc));
             obs.push_back(std::move(SzSz));
-            obs.push_back(std::move(SxSx));
+            if constexpr(not Symmetry::ANY_IS_SPIN) {
+                auto Sx = std::make_unique<Xped::OneSiteObservable<Symmetry>>(pat, "Sx");
+                for(auto& t : Sx->data) { t = F.Sx().data.template trim<2>(); }
+
+                auto SxSx =
+                    std::make_unique<TwoSiteObservable<Symmetry>>(pat, Opts::Bond::H | Opts::Bond::V | Opts::Bond::D1 | Opts::Bond::D2, "SxSx");
+                for(auto& t : SxSx->data_h) { t = tprod(F.Sx(), F.Sx()); }
+                for(auto& t : SxSx->data_v) { t = tprod(F.Sx(), F.Sx()); }
+                for(auto& t : SxSx->data_d1) { t = tprod(F.Sx(), F.Sx()); }
+                for(auto& t : SxSx->data_d2) { t = tprod(F.Sx(), F.Sx()); }
+                obs.push_back(std::move(Sx));
+                obs.push_back(std::move(SxSx));
+            }
         }
-    }
 
-    virtual std::string file_name() const override { return internal::create_filename("Hubbard", params, used_params); }
+        virtual std::string file_name() const override { return internal::create_filename("Hubbard", params, used_params); }
 
-    virtual std::string format() const override
-    {
-        return internal::format_params(fmt::format("Hubbard[sym={}]", Symmetry::name()), params, used_params);
-    }
-
-    virtual void computeObs(XPED_CONST CTM<double, Symmetry, 2, false, Opts::CTMCheckpoint{}>& env) override
-    {
-        for(auto& ob : obs) {
-            if(auto* one = dynamic_cast<OneSiteObservable<Symmetry>*>(ob.get()); one != nullptr) { avg(env, *one); }
-            if(auto* two = dynamic_cast<TwoSiteObservable<Symmetry>*>(ob.get()); two != nullptr) { avg(env, *two); }
+        virtual std::string format() const override
+        {
+            return internal::format_params(fmt::format("Hubbard[sym={}]", Symmetry::name()), params, used_params);
         }
-    }
 
-    virtual void computeObs(XPED_CONST CTM<double, Symmetry, 1, false, Opts::CTMCheckpoint{}>& env) override
-    {
-        for(auto& ob : obs) {
-            if(auto* one = dynamic_cast<OneSiteObservable<Symmetry>*>(ob.get()); one != nullptr) { avg(env, *one); }
-            if(auto* two = dynamic_cast<TwoSiteObservable<Symmetry>*>(ob.get()); two != nullptr) { avg(env, *two); }
+        virtual void computeObs(XPED_CONST CTM<double, Symmetry, 2, false, Opts::CTMCheckpoint{}> & env) override
+        {
+            for(auto& ob : obs) {
+                if(auto* one = dynamic_cast<OneSiteObservable<Symmetry>*>(ob.get()); one != nullptr) { avg(env, *one); }
+                if(auto* two = dynamic_cast<TwoSiteObservable<Symmetry>*>(ob.get()); two != nullptr) { avg(env, *two); }
+            }
         }
-    }
 
-    virtual std::string getObsString(const std::string& offset) const override
-    {
-        std::string out;
-        for(auto i = 0ul; const auto& ob : obs) {
-            out.append(ob->getResString(offset));
-            if(i++ < obs.size() - 1) { out.push_back('\n'); }
+        virtual void computeObs(XPED_CONST CTM<double, Symmetry, 1, false, Opts::CTMCheckpoint{}> & env) override
+        {
+            for(auto& ob : obs) {
+                if(auto* one = dynamic_cast<OneSiteObservable<Symmetry>*>(ob.get()); one != nullptr) { avg(env, *one); }
+                if(auto* two = dynamic_cast<TwoSiteObservable<Symmetry>*>(ob.get()); two != nullptr) { avg(env, *two); }
+            }
         }
-        return out;
-    }
 
-    virtual void obsToFile(HighFive::File& file) const override
-    {
-        for(const auto& ob : obs) { ob->toFile(file); }
-    }
+        virtual std::string getObsString(const std::string& offset) const override
+        {
+            std::string out;
+            for(auto i = 0ul; const auto& ob : obs) {
+                out.append(ob->getResString(offset));
+                if(i++ < obs.size() - 1) { out.push_back('\n'); }
+            }
+            return out;
+        }
 
-    virtual void initObsfile(HighFive::File& file) const override
-    {
-        for(const auto& ob : obs) { ob->initFile(file); }
-    }
+        virtual void obsToFile(HighFive::File & file, const std::string& root = "/") const override
+        {
+            for(const auto& ob : obs) { ob->toFile(file, root); }
+        }
 
-    std::map<std::string, Param> params;
-    Pattern pat;
-    std::vector<std::string> used_params;
-    FermionBase<Symmetry> F;
-    std::vector<std::unique_ptr<ObservableBase>> obs;
-};
+        std::map<std::string, Param> params;
+        Pattern pat;
+        std::vector<std::string> used_params;
+        FermionBase<Symmetry> F;
+        std::vector<std::unique_ptr<ObservableBase>> obs;
+    };
 
 } // namespace Xped
 #endif

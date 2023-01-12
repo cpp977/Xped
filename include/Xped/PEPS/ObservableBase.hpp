@@ -18,9 +18,7 @@ struct ObservableBase
 
     virtual std::string getResString(const std::string& offset) const = 0;
 
-    virtual void toFile(HighFive::File& file) const = 0;
-
-    virtual void initFile(HighFive::File& file) const = 0;
+    virtual void toFile(HighFive::File& file, const std::string&) const = 0;
 
     std::string name = "Op";
     bool MEASURE = true;

@@ -159,10 +159,20 @@ struct TwoSiteObservable : public ObservableBase
         return res;
     }
 
-    virtual void toFile(HighFive::File& file) const override
+    virtual void toFile(HighFive::File& file, const std::string& root = "/") const override
     {
-        auto write_component = [&file](std::string name, const auto& o) {
-            auto d = file.getDataSet("/" + name);
+        auto write_component = [&file, &root](std::string name, const auto& o) {
+            if(not file.exist(root + name)) {
+                HighFive::DataSpace dataspace = HighFive::DataSpace({0, 0}, {HighFive::DataSpace::UNLIMITED, HighFive::DataSpace::UNLIMITED});
+
+                // Use chunking
+                HighFive::DataSetCreateProps props;
+                props.add(HighFive::Chunking(std::vector<hsize_t>{2, 2}));
+
+                // Create the dataset
+                HighFive::DataSet dataset = file.createDataSet(root + name, dataspace, HighFive::create_datatype<double>(), props);
+            }
+            auto d = file.getDataSet(root + name);
             std::vector<std::vector<double>> data;
             data.push_back(o.uncompressedVector());
             std::size_t curr_size = d.getDimensions()[0];
@@ -175,31 +185,14 @@ struct TwoSiteObservable : public ObservableBase
         if((bond & Opts::Bond::D2) == Opts::Bond::D2) { write_component(this->name + "_d2", obs_d2); }
     }
 
-    virtual void initFile(HighFive::File& file) const override
-    {
-        HighFive::DataSpace dataspace = HighFive::DataSpace({0, 0}, {HighFive::DataSpace::UNLIMITED, HighFive::DataSpace::UNLIMITED});
-
-        // Use chunking
-        HighFive::DataSetCreateProps props;
-        props.add(HighFive::Chunking(std::vector<hsize_t>{2, 2}));
-
-        // Create the datasets
-        HighFive::DataSet dataset_h = file.createDataSet(this->name + "_h", dataspace, HighFive::create_datatype<double>(), props);
-        HighFive::DataSet dataset_v = file.createDataSet(this->name + "_v", dataspace, HighFive::create_datatype<double>(), props);
-        HighFive::DataSet dataset_d1 = file.createDataSet(this->name + "_d1", dataspace, HighFive::create_datatype<double>(), props);
-        HighFive::DataSet dataset_d2 = file.createDataSet(this->name + "_d2", dataspace, HighFive::create_datatype<double>(), props);
-    }
-
     virtual void setDefaultObs() {}
 
     virtual void computeObs(XPED_CONST CTM<double, Symmetry, 2, false, Opts::CTMCheckpoint{}>& env) {}
     virtual void computeObs(XPED_CONST CTM<double, Symmetry, 1, false, Opts::CTMCheckpoint{}>& env) {}
 
-    virtual std::string getObsString(const std::string& offset) const { return ""; }
+    virtual std::string getObsString(const std::string&) const { return ""; }
 
-    virtual void obsToFile(HighFive::File& file) const {}
-
-    virtual void initObsfile(HighFive::File& file) const {}
+    virtual void obsToFile(HighFive::File&, const std::string& = "/") const {}
 
     template <typename Ar>
     void serialize(Ar& ar)

@@ -39,6 +39,11 @@ struct iPEPSSolverImag
             }
             assert(Psi->cell().pattern == H.data_h.pat);
         }
+        if(not imag_opts.obs_directory.empty()) {
+            std::filesystem::create_directories(imag_opts.working_directory / imag_opts.obs_directory);
+            HighFive::File file((imag_opts.working_directory / imag_opts.obs_directory).string() + "/" + H.file_name() + ".h5",
+                                imag_opts.resume ? HighFive::File::ReadWrite : HighFive::File::Excl);
+        }
     }
 
     void solve()
@@ -105,7 +110,7 @@ struct iPEPSSolverImag
                                    step_t.time_string(),
                                    diff);
                 constexpr std::size_t flags = yas::file /*IO type*/ | yas::binary; /*IO format*/
-                yas::file_ostream ofs((H.file_name() + "_D" + std::to_string(D) + ".psi").c_str(), /*trunc*/ 1);
+                yas::file_ostream ofs((H.file_name() + fmt::format("_D{}.psi", D)).c_str(), /*trunc*/ 1);
                 yas::save<flags>(ofs, *Psi);
                 // Psi->info();
             }
@@ -115,9 +120,15 @@ struct iPEPSSolverImag
             for(auto ichi = 0; auto chi : imag_opts.chis[iD]) {
                 Jack.opts.chi = chi;
                 Es[iD][ichi++] = Jack.template solve<double>(Psi, nullptr, H, false);
+                if(imag_opts.display_obs or not imag_opts.obs_directory.empty()) { H.computeObs(Jack.getCTM()); }
+                if(imag_opts.display_obs) { Log::per_iteration(imag_opts.verbosity, "  Observables:\n{}", H.getObsString("    ")); }
+                if(not imag_opts.obs_directory.empty()) {
+                    HighFive::File file((imag_opts.working_directory / imag_opts.obs_directory).string() + "/" + H.file_name() + ".h5",
+                                        HighFive::File::OpenOrCreate);
+                    H.obsToFile(file, fmt::format("/{}/{}/", D, chi));
+                }
             }
-            H.computeObs(Jack.getCTM());
-            Log::per_iteration(imag_opts.verbosity, "  Observables:\n{}", H.getObsString("    "));
+
             ctm_time += ctm_t.time();
             ++iD;
         }

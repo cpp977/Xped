@@ -110,7 +110,6 @@ struct iPEPSSolverAD
                 std::filesystem::create_directories(optim_opts.working_directory / optim_opts.obs_directory);
                 HighFive::File file((optim_opts.working_directory / optim_opts.obs_directory).string() + "/" + this->H.file_name() + ".h5",
                                     optim_opts.resume ? HighFive::File::ReadWrite : HighFive::File::Excl);
-                H.initObsfile(file);
             }
         }
     }
@@ -313,7 +312,7 @@ struct iPEPSSolverAD
                 HighFive::File file((solver.optim_opts.working_directory / solver.optim_opts.obs_directory).string() + "/" + solver.H.file_name() +
                                         ".h5",
                                     HighFive::File::OpenOrCreate);
-                solver.H.obsToFile(file);
+                solver.H.obsToFile(file, fmt::format("/{}/{}/", solver.Psi->D, solver.getCTMSolver()->getCTM().chi()));
             }
             return ceres::SOLVER_CONTINUE;
         }

@@ -44,8 +44,8 @@ typename ScalarTraits<Scalar>::Real CTMSolver<Scalar, Symmetry, CPOpts, TRank>::
     }
 
     double E = std::numeric_limits<Scalar>::quiet_NaN();
-    double Eprev = std::numeric_limits<Scalar>::quiet_NaN();
-    double Eprevprev = std::numeric_limits<Scalar>::quiet_NaN();
+    double Eprev = 1000.;
+    double Eprevprev = 1000.;
     util::Stopwatch<> pre_t;
     std::size_t used_steps = 0ul;
     for(std::size_t step = 0; step < opts.max_presteps; ++step) {

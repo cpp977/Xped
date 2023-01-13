@@ -269,7 +269,7 @@ void Fermion<Symmetry_>::fill_basis(bool REMOVE_DOUBLE, bool REMOVE_EMPTY, bool 
                 Q[sp_index] = 1;
                 this->basis_1s_.push_back(Q, 1);
                 labels.insert(std::make_pair("up", std::make_pair(Q, 0)));
-                Q[sp_index] = Symmetry::IS_MODULAR[sp_index] ? util::constFct::posmod(-1, Symmetry::MOD_N[ch_index]) : -1;
+                Q[sp_index] = Symmetry::IS_MODULAR[sp_index] ? util::constFct::posmod(-1, Symmetry::MOD_N[sp_index]) : -1;
                 this->basis_1s_.push_back(Q, 1);
                 labels.insert(std::make_pair("dn", std::make_pair(Q, 0)));
             }

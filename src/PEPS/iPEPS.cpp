@@ -217,27 +217,28 @@ void iPEPS<Scalar, Symmetry, ENABLE_AD>::set_data(const Scalar* data, bool NORMA
 }
 
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>
-std::tuple<std::size_t, std::size_t, double> iPEPS<Scalar, Symmetry, ENABLE_AD>::calc_Ds() const
+std::tuple<std::size_t, std::size_t, double, double> iPEPS<Scalar, Symmetry, ENABLE_AD>::calc_Ds() const
 {
-    auto Dmin = 0ul;
-    auto Dmax = std::numeric_limits<std::size_t>::max();
-    double Dsum = 0.;
+    std::vector<std::size_t> allDs;
+    allDs.reserve(4 * As.size());
     for(auto i = 0ul; i < As.size(); ++i) {
         auto [x, y] = cell().pattern.coords(i);
-        Dmin = std::max(ketBasis(x, y, Opts::LEG::LEFT).fullDim(), Dmin);
-        Dmin = std::max(ketBasis(x, y, Opts::LEG::UP).fullDim(), Dmin);
-        Dmin = std::max(ketBasis(x, y, Opts::LEG::RIGHT).fullDim(), Dmin);
-        Dmin = std::max(ketBasis(x, y, Opts::LEG::DOWN).fullDim(), Dmin);
-        Dmax = std::min(ketBasis(x, y, Opts::LEG::LEFT).fullDim(), Dmax);
-        Dmax = std::min(ketBasis(x, y, Opts::LEG::UP).fullDim(), Dmax);
-        Dmax = std::min(ketBasis(x, y, Opts::LEG::RIGHT).fullDim(), Dmax);
-        Dmax = std::min(ketBasis(x, y, Opts::LEG::DOWN).fullDim(), Dmax);
-        Dsum += ketBasis(x, y, Opts::LEG::LEFT).fullDim();
-        Dsum += ketBasis(x, y, Opts::LEG::UP).fullDim();
-        Dsum += ketBasis(x, y, Opts::LEG::RIGHT).fullDim();
-        Dsum += ketBasis(x, y, Opts::LEG::DOWN).fullDim();
+        allDs.push_back(ketBasis(x, y, Opts::LEG::LEFT).fullDim());
+        allDs.push_back(ketBasis(x, y, Opts::LEG::UP).fullDim());
+        allDs.push_back(ketBasis(x, y, Opts::LEG::RIGHT).fullDim());
+        allDs.push_back(ketBasis(x, y, Opts::LEG::DOWN).fullDim());
     }
-    return std::make_tuple(Dmin, Dmax, Dsum / (4. * As.size()));
+    auto Dmin = *std::min_element(allDs.begin(), allDs.end());
+    auto Dmax = *std::max_element(allDs.begin(), allDs.end());
+    double Dsum = std::accumulate(allDs.begin(), allDs.end(), 0.0);
+    double Dmean = Dsum / allDs.size();
+
+    std::vector<double> diff(allDs.size());
+    std::transform(allDs.begin(), allDs.end(), diff.begin(), [Dmean](double x) { return x - Dmean; });
+    double Dsq_sum = std::inner_product(diff.begin(), diff.end(), diff.begin(), 0.0);
+    double Dsigma = std::sqrt(Dsq_sum / allDs.size());
+
+    return std::make_tuple(Dmin, Dmax, Dmean, Dsigma);
 }
 
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>
@@ -312,9 +313,16 @@ template <typename Scalar, typename Symmetry, bool ENABLE_AD>
 std::string iPEPS<Scalar, Symmetry, ENABLE_AD>::info() const
 {
     std::string res;
-    auto [Dmin, Dmax, Davg] = calc_Ds();
-    fmt::format_to(
-        std::back_inserter(res), "iPEPS(D*={}): UnitCell=({}x{}), Dmin={}, Dmax={}, Davg={:.1f}", D, cell().Lx, cell().Ly, Dmin, Dmax, Davg);
+    auto [Dmin, Dmax, Davg, Dsigma] = calc_Ds();
+    fmt::format_to(std::back_inserter(res),
+                   "iPEPS(D*={}): UnitCell=({}x{}), Dmin={}, Dmax={}, Davg={:.1f}, Dσ={:.1f}",
+                   D,
+                   cell().Lx,
+                   cell().Ly,
+                   Dmin,
+                   Dmax,
+                   Davg,
+                   Dsigma);
     return res;
     // std::cout << "Tensors:" << std::endl;
     // for(int x = 0; x < cell_.Lx; x++) {

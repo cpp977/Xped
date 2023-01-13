@@ -144,7 +144,7 @@ public:
     Tensor<Scalar, 1, 1, Symmetry> Id_weight_h(int x, int y) const;
     Tensor<Scalar, 1, 1, Symmetry> Id_weight_v(int x, int y) const;
 
-    std::tuple<std::size_t, std::size_t, double> calc_Ds() const;
+    std::tuple<std::size_t, std::size_t, double, double> calc_Ds() const;
 
     std::size_t D;
 

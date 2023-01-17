@@ -380,7 +380,7 @@ auto CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::info() const
     //           << ", init=" << mode_string << std::endl;
     std::cout << "Tensors:" << std::endl;
     for(int x = 0; x < cell_.Lx; x++) {
-        for(int y = 0; y < cell_.Lx; y++) {
+        for(int y = 0; y < cell_.Ly; y++) {
             if(not cell_.pattern.isUnique(x, y)) {
                 std::cout << "Cell site: (" << x << "," << y << "): not unique." << std::endl;
                 continue;

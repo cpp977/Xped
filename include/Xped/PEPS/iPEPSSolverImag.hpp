@@ -119,14 +119,35 @@ struct iPEPSSolverImag
             util::Stopwatch<> ctm_t;
             for(auto ichi = 0; auto chi : imag_opts.chis[iD]) {
                 Jack.opts.chi = chi;
-                Es[iD][ichi++] = Jack.template solve<double>(Psi, nullptr, H, false);
+                Es[iD][ichi] = Jack.template solve<double>(Psi, nullptr, H, false);
+
                 if(imag_opts.display_obs or not imag_opts.obs_directory.empty()) { H.computeObs(Jack.getCTM()); }
                 if(imag_opts.display_obs) { Log::per_iteration(imag_opts.verbosity, "  Observables:\n{}", H.getObsString("    ")); }
                 if(not imag_opts.obs_directory.empty()) {
+                    std::string e_name = fmt::format("/{}/{}/energy", D, chi);
                     HighFive::File file((imag_opts.working_directory / imag_opts.obs_directory).string() + "/" + H.file_name() + ".h5",
                                         HighFive::File::OpenOrCreate);
+                    if(not file.exist(e_name)) {
+                        HighFive::DataSpace dataspace = HighFive::DataSpace({0, 0}, {HighFive::DataSpace::UNLIMITED, HighFive::DataSpace::UNLIMITED});
+
+                        // Use chunking
+                        HighFive::DataSetCreateProps props;
+                        props.add(HighFive::Chunking(std::vector<hsize_t>{2, 2}));
+
+                        // Create the dataset
+                        HighFive::DataSet dataset = file.createDataSet(e_name, dataspace, HighFive::create_datatype<double>(), props);
+                    }
+                    {
+                        auto d = file.getDataSet(e_name);
+                        std::vector<std::vector<double>> data;
+                        data.push_back(std::vector<double>(1, Es[iD][ichi]));
+                        std::size_t curr_size = d.getDimensions()[0];
+                        d.resize({curr_size + 1, data[0].size()});
+                        d.select({curr_size, 0}, {1, data[0].size()}).write(data);
+                    }
                     H.obsToFile(file, fmt::format("/{}/{}/", D, chi));
                 }
+                ++ichi;
             }
 
             ctm_time += ctm_t.time();

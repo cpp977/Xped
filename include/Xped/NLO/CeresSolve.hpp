@@ -312,6 +312,44 @@ struct iPEPSSolverAD
                 HighFive::File file((solver.optim_opts.working_directory / solver.optim_opts.obs_directory).string() + "/" + solver.H.file_name() +
                                         ".h5",
                                     HighFive::File::OpenOrCreate);
+                std::string e_name = fmt::format("/{}/{}/energy", solver.Psi->D, solver.getCTMSolver()->getCTM().chi());
+                if(not file.exist(e_name)) {
+                    HighFive::DataSpace dataspace = HighFive::DataSpace({0, 0}, {HighFive::DataSpace::UNLIMITED, HighFive::DataSpace::UNLIMITED});
+
+                    // Use chunking
+                    HighFive::DataSetCreateProps props;
+                    props.add(HighFive::Chunking(std::vector<hsize_t>{2, 2}));
+
+                    // Create the dataset
+                    HighFive::DataSet dataset = file.createDataSet(e_name, dataspace, HighFive::create_datatype<double>(), props);
+                }
+                {
+                    auto d = file.getDataSet(e_name);
+                    std::vector<std::vector<double>> data;
+                    data.push_back(std::vector<double>(1, summary.cost));
+                    std::size_t curr_size = d.getDimensions()[0];
+                    d.resize({curr_size + 1, data[0].size()});
+                    d.select({curr_size, 0}, {1, data[0].size()}).write(data);
+                }
+                std::string g_name = fmt::format("/{}/{}/grad", solver.Psi->D, solver.getCTMSolver()->getCTM().chi());
+                if(not file.exist(g_name)) {
+                    HighFive::DataSpace dataspace = HighFive::DataSpace({0, 0}, {HighFive::DataSpace::UNLIMITED, HighFive::DataSpace::UNLIMITED});
+
+                    // Use chunking
+                    HighFive::DataSetCreateProps props;
+                    props.add(HighFive::Chunking(std::vector<hsize_t>{2, 2}));
+
+                    // Create the dataset
+                    HighFive::DataSet dataset = file.createDataSet(g_name, dataspace, HighFive::create_datatype<double>(), props);
+                }
+                {
+                    auto d = file.getDataSet(g_name);
+                    std::vector<std::vector<double>> data;
+                    data.push_back(std::vector<double>(1, summary.gradient_norm));
+                    std::size_t curr_size = d.getDimensions()[0];
+                    d.resize({curr_size + 1, data[0].size()});
+                    d.select({curr_size, 0}, {1, data[0].size()}).write(data);
+                }
                 solver.H.obsToFile(file, fmt::format("/{}/{}/", solver.Psi->D, solver.getCTMSolver()->getCTM().chi()));
             }
             return ceres::SOLVER_CONTINUE;

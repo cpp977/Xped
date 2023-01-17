@@ -94,7 +94,8 @@ typename ScalarTraits<Scalar>::Real CTMSolver<Scalar, Symmetry, CPOpts, TRank>::
     Log::per_iteration(opts.verbosity, "  {: >3} backward pass: {}", "•", backward_time);
     std::size_t count = 0;
     for(auto it = Jim.Psi()->gradbegin(); it != Jim.Psi()->gradend(); ++it) { gradient[count++] = *it; }
-    grad_norm = std::abs(*std::max_element(gradient, gradient + Psi->plainSize(), [](Scalar a, Scalar b) { return std::abs(a) < std::abs(b); }));
+    // grad_norm = std::abs(*std::max_element(gradient, gradient + Psi->plainSize(), [](Scalar a, Scalar b) { return std::abs(a) < std::abs(b); }));
+    grad_norm = std::sqrt(std::inner_product(gradient, gradient + Psi->plainSize(), gradient, 0.));
     REINIT_ENV = grad_norm < opts.reinit_env_tol ? false : true;
     Log::on_exit(opts.verbosity,
                  "  CTMSolver(χ={}({}), runtime={} [{} steps, pre={}, forward={}, backward={}]): E={:.8f}, |∇|={:.1e}",

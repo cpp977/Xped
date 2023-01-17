@@ -75,7 +75,7 @@ void iPEPS<Scalar, Symmetry, ENABLE_AD>::init(const TMatrix<Qbasis<Symmetry, 1>>
             As[pos] = Tensor<Scalar, 2, 3, Symmetry, ENABLE_AD>({{leftBasis(x, y), topBasis(x, y)}},
                                                                 {{leftBasis(x - 1, y), topBasis(x, y + 1), shifted_physBasis}});
             // As[pos].setZero();
-            std::cout << As[pos].coupledDomain() << std::endl << As[pos].coupledCodomain() << std::endl;
+            // std::cout << fmt::format("A({},{}): ", x, y) << As[pos].coupledDomain() << std::endl << As[pos].coupledCodomain() << std::endl;
             assert(As[pos].coupledDomain().dim() > 0 and "Bases of the A tensor have no fused blocks.");
         }
     }
@@ -274,7 +274,7 @@ void iPEPS<Scalar, Symmetry, ENABLE_AD>::initWeightTensors()
     whs.resize(cell().pattern);
     wvs.resize(cell().pattern);
     for(int x = 0; x < cell_.Lx; x++) {
-        for(int y = 0; y < cell_.Lx; y++) {
+        for(int y = 0; y < cell_.Ly; y++) {
             if(not cell_.pattern.isUnique(x, y)) { continue; }
             Gs(x, y) = As(x, y);
             whs(x, y) = Tensor<Scalar, 1, 1, Symmetry>::Identity(
@@ -326,7 +326,7 @@ std::string iPEPS<Scalar, Symmetry, ENABLE_AD>::info() const
     return res;
     // std::cout << "Tensors:" << std::endl;
     // for(int x = 0; x < cell_.Lx; x++) {
-    //     for(int y = 0; y < cell_.Lx; y++) {
+    //     for(int y = 0; y < cell_.Ly; y++) {
     //         if(not cell_.pattern.isUnique(x, y)) {
     //             std::cout << "Cell site: (" << x << "," << y << "): not unique." << std::endl;
     //             continue;

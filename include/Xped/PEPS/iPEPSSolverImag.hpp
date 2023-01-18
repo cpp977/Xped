@@ -123,7 +123,7 @@ struct iPEPSSolverImag
                             }
                         }
                         diff = std::max(*std::max_element(diff_h.begin(), diff_h.end()), *std::max_element(diff_v.begin(), diff_v.end()));
-                        if(diff < imag_opts.tol) { break; }
+                        if(diff < imag_opts.tol * imag_opts.dts[i] * imag_opts.dts[i]) { break; }
                         conv_h = Jim.spectrum_h;
                         conv_v = Jim.spectrum_v;
                     }

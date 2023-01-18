@@ -20,8 +20,8 @@ struct iPEPSSolverImag
         : imag_opts(imag_opts)
         , Psi(Psi_in)
         , H(H_in)
-
     {
+        std::filesystem::create_directories(imag_opts.working_directory / imag_opts.obs_directory);
         Jack = CTMSolver<Scalar, Symmetry>(ctm_opts);
         if(imag_opts.load != "") {
             switch(imag_opts.load_format) {
@@ -32,7 +32,25 @@ struct iPEPSSolverImag
             case Opts::LoadFormat::NATIVE: {
                 constexpr std::size_t flags = yas::file /*IO type*/ | yas::binary; /*IO format*/
                 iPEPS<Scalar, Symmetry> tmp_Psi;
-                yas::load<flags>(imag_opts.load.c_str(), tmp_Psi);
+                try {
+                    yas::load<flags>((imag_opts.working_directory.string() + "/" + imag_opts.load).c_str(), tmp_Psi);
+                } catch(const yas::serialization_exception& se) {
+                    fmt::print(
+                        "Error while deserializing file ({}) with initial wavefunction.\nThis might be because of incompatible symmetries between this simulation and the loaded wavefunction.",
+                        imag_opts.working_directory.string() + "/" + imag_opts.load);
+                    std::cout << std::flush;
+                    throw;
+                } catch(const yas::io_exception& ie) {
+                    fmt::print("Error while loading file ({}) with initial wavefunction.\n",
+                               imag_opts.working_directory.string() + "/" + imag_opts.load);
+                    std::cout << std::flush;
+                    throw;
+                } catch(const std::exception& e) {
+                    fmt::print("Unknown error while loading file ({}) with initial wavefunction.\n",
+                               imag_opts.working_directory.string() + "/" + imag_opts.load);
+                    std::cout << std::flush;
+                    throw;
+                }
                 Psi = std::make_shared<iPEPS<Scalar, Symmetry>>(std::move(tmp_Psi));
                 break;
             }
@@ -41,8 +59,16 @@ struct iPEPSSolverImag
         }
         if(not imag_opts.obs_directory.empty()) {
             std::filesystem::create_directories(imag_opts.working_directory / imag_opts.obs_directory);
-            HighFive::File file((imag_opts.working_directory / imag_opts.obs_directory).string() + "/" + H.file_name() + ".h5",
-                                imag_opts.resume ? HighFive::File::ReadWrite : HighFive::File::Excl);
+            try {
+                HighFive::File file((imag_opts.working_directory / imag_opts.obs_directory).string() + "/" + H.file_name() + ".h5",
+                                    imag_opts.resume ? HighFive::File::ReadWrite : HighFive::File::Excl);
+            } catch(const std::exception& e) {
+                fmt::print(fg(fmt::color::red),
+                           "There already exists an observable file for this simulation:{}.\n",
+                           (imag_opts.working_directory / imag_opts.obs_directory).string() + "/" + this->H.file_name() + ".h5");
+                std::cout << std::flush;
+                throw;
+            }
         }
     }
 
@@ -110,7 +136,7 @@ struct iPEPSSolverImag
                                    step_t.time_string(),
                                    diff);
                 constexpr std::size_t flags = yas::file /*IO type*/ | yas::binary; /*IO format*/
-                yas::file_ostream ofs((H.file_name() + fmt::format("_D{}.psi", D)).c_str(), /*trunc*/ 1);
+                yas::file_ostream ofs((imag_opts.working_directory.string() + "/" + H.file_name() + fmt::format("_D{}.psi", D)).c_str(), /*trunc*/ 1);
                 yas::save<flags>(ofs, *Psi);
                 // Psi->info();
             }

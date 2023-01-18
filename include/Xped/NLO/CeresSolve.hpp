@@ -62,9 +62,17 @@ struct iPEPSSolverAD
         , H(H_in)
         , Psi(Psi_in)
     {
+        std::filesystem::create_directories(imag_opts.working_directory / imag_opts.obs_directory);
         if(optim_opts.resume) {
             constexpr std::size_t flags = yas::file /*IO type*/ | yas::binary; /*IO format*/
-            yas::load<flags>((this->H.file_name() + ".xped").c_str(), *this);
+            try {
+                yas::load<flags>((optim_opts.working_directory.string() + "/" + this->H.file_name() + ".ad").c_str(), *this);
+            } catch(const std::exception& e) {
+                fmt::print("Error while loading file ({}) for resuming simulation.\n",
+                           optim_opts.working_directory.string() + "/" + this->H.file_name() + ".ad");
+                std::cout << std::flush;
+                throw;
+            }
         } else {
             if(optim_opts.load != "") {
                 switch(optim_opts.load_format) {
@@ -75,41 +83,74 @@ struct iPEPSSolverAD
                 case Opts::LoadFormat::NATIVE: {
                     constexpr std::size_t flags = yas::file /*IO type*/ | yas::binary; /*IO format*/
                     iPEPS<Scalar, Symmetry> tmp_Psi;
-                    yas::load<flags>((this->H.file_name() + "_D" + std::to_string(Psi->D) + ".psi").c_str(), tmp_Psi);
+                    try {
+                        yas::load<flags>((optim_opts.working_directory.string() + "/" + optim_opts.load).c_str(), tmp_Psi);
+                    } catch(const yas::serialization_exception& se) {
+                        fmt::print(
+                            "Error while deserializing file ({}) with initial wavefunction.\nThis might be because of incompatible symmetries between this simulation and the loaded wavefunction.",
+                            optim_opts.working_directory.string() + "/" + optim_opts.load);
+                        std::cout << std::flush;
+                        throw;
+                    } catch(const yas::io_exception& ie) {
+                        fmt::print("Error while loading file ({}) with initial wavefunction.\n",
+                                   optim_opts.working_directory.string() + "/" + optim_opts.load);
+                        std::cout << std::flush;
+                        throw;
+                    } catch(const std::exception& e) {
+                        fmt::print("Unknown error while loading file ({}) with initial wavefunction.\n",
+                                   imag_opts.working_directory.string() + "/" + imag_opts.load);
+                        std::cout << std::flush;
+                        throw;
+                    }
                     Psi = std::make_shared<iPEPS<Scalar, Symmetry>>(std::move(tmp_Psi));
                     break;
                 }
                 }
-                std::cout << Psi->cell().pattern << std::endl << H.data_h.pat << std::endl;
                 assert(Psi->cell().pattern == H.data_h.pat);
             }
             problem = std::make_unique<ceres::GradientProblem>(
                 new EnergyFunctor(std::move(std::make_unique<CTMSolver<Scalar, Symmetry, CPOpts, TRank>>(ctm_opts)), H, Psi));
             std::filesystem::create_directories(optim_opts.working_directory / optim_opts.logging_directory);
             if(optim_opts.log_format == ".h5") {
-                HighFive::File file((optim_opts.working_directory / optim_opts.logging_directory).string() + "/" + this->H.file_name() + ".h5",
-                                    optim_opts.resume ? HighFive::File::ReadWrite : HighFive::File::Excl);
-                HighFive::DataSpace dataspace = HighFive::DataSpace({0}, {HighFive::DataSpace::UNLIMITED});
+                try {
+                    HighFive::File file((optim_opts.working_directory / optim_opts.logging_directory).string() + "/" + this->H.file_name() + ".h5",
+                                        optim_opts.resume ? HighFive::File::ReadWrite : HighFive::File::Excl);
+                    HighFive::DataSpace dataspace = HighFive::DataSpace({0}, {HighFive::DataSpace::UNLIMITED});
 
-                // // Use chunking
-                HighFive::DataSetCreateProps props;
-                props.add(HighFive::Chunking(std::vector<hsize_t>{10}));
+                    // // Use chunking
+                    HighFive::DataSetCreateProps props;
+                    props.add(HighFive::Chunking(std::vector<hsize_t>{10}));
 
-                // Create the dataset
-                if(not file.exist("/iteration")) {
-                    HighFive::DataSet dataset_i = file.createDataSet("/iteration", dataspace, HighFive::create_datatype<int>(), props);
-                }
-                if(not file.exist("/cost")) {
-                    HighFive::DataSet dataset_c = file.createDataSet("/cost", dataspace, HighFive::create_datatype<double>(), props);
-                }
-                if(not file.exist("/grad_norm")) {
-                    HighFive::DataSet dataset_g = file.createDataSet("/grad_norm", dataspace, HighFive::create_datatype<double>(), props);
+                    // Create the dataset
+                    if(not file.exist("/iteration")) {
+                        HighFive::DataSet dataset_i = file.createDataSet("/iteration", dataspace, HighFive::create_datatype<int>(), props);
+                    }
+                    if(not file.exist("/cost")) {
+                        HighFive::DataSet dataset_c = file.createDataSet("/cost", dataspace, HighFive::create_datatype<double>(), props);
+                    }
+                    if(not file.exist("/grad_norm")) {
+                        HighFive::DataSet dataset_g = file.createDataSet("/grad_norm", dataspace, HighFive::create_datatype<double>(), props);
+                    }
+                } catch(const std::exception& e) {
+                    fmt::print(fg(fmt::color::red),
+                               "There already exists a log file for this simulation:{}.\n",
+                               (optim_opts.working_directory / optim_opts.logging_directory).string() + "/" + this->H.file_name() + ".h5");
+                    std::cout << std::flush;
+                    throw;
                 }
             }
             if(not optim_opts.obs_directory.empty()) {
                 std::filesystem::create_directories(optim_opts.working_directory / optim_opts.obs_directory);
-                HighFive::File file((optim_opts.working_directory / optim_opts.obs_directory).string() + "/" + this->H.file_name() + ".h5",
-                                    optim_opts.resume ? HighFive::File::ReadWrite : HighFive::File::Excl);
+                try {
+                    HighFive::File file((optim_opts.working_directory / optim_opts.obs_directory).string() + "/" + this->H.file_name() + ".h5",
+                                        optim_opts.resume ? HighFive::File::ReadWrite : HighFive::File::Excl);
+                } catch(const std::exception& e) {
+                    fmt::print(fg(fmt::color::red),
+                               "There already exists an observable file for this simulation:{}.\n",
+                               (optim_opts.working_directory / optim_opts.obs_directory).string() + "/" + this->H.file_name() + ".h5");
+                    std::cout << std::flush;
+                    throw;
+                }
             }
         }
     }
@@ -368,9 +409,15 @@ struct iPEPSSolverAD
             assert(solver.optim_opts.save_period > 0);
             if(summary.iteration == 0) { return ceres::SOLVER_CONTINUE; }
             if(summary.iteration % solver.optim_opts.save_period == 0) {
-                yas::file_ostream ofs((solver.H.file_name() + ".xped").c_str(), /*trunc*/ 1);
                 constexpr std::size_t flags = yas::file /*IO type*/ | yas::binary; /*IO format*/
-                yas::save<flags>(ofs, solver);
+                yas::file_ostream ofs_ad(
+                    (solver.optim_opts.working_directory.string() + "/" + solver.H.file_name() + fmt::format("_D{}.ad", solver.Psi->D)).c_str(),
+                    /*trunc*/ 1);
+                yas::save<flags>(ofs_ad, solver);
+                yas::file_ostream ofs_psi(
+                    (solver.optim_opts.working_directory.string() + "/" + solver.H.file_name() + fmt::format("_D{}.psi", solver.Psi->D)).c_str(),
+                    /*trunc*/ 1);
+                yas::save<flags>(ofs_psi, *solver.Psi);
             }
             return ceres::SOLVER_CONTINUE;
         }

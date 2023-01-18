@@ -62,7 +62,7 @@ struct iPEPSSolverAD
         , H(H_in)
         , Psi(Psi_in)
     {
-        std::filesystem::create_directories(imag_opts.working_directory / imag_opts.obs_directory);
+        std::filesystem::create_directories(optim_opts.working_directory / optim_opts.obs_directory);
         if(optim_opts.resume) {
             constexpr std::size_t flags = yas::file /*IO type*/ | yas::binary; /*IO format*/
             try {
@@ -98,7 +98,7 @@ struct iPEPSSolverAD
                         throw;
                     } catch(const std::exception& e) {
                         fmt::print("Unknown error while loading file ({}) with initial wavefunction.\n",
-                                   imag_opts.working_directory.string() + "/" + imag_opts.load);
+                                   optim_opts.working_directory.string() + "/" + optim_opts.load);
                         std::cout << std::flush;
                         throw;
                     }

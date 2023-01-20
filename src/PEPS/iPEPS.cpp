@@ -165,13 +165,15 @@ void iPEPS<Scalar, Symmetry, ENABLE_AD>::setZero()
 }
 
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>
-void iPEPS<Scalar, Symmetry, ENABLE_AD>::setRandom()
+void iPEPS<Scalar, Symmetry, ENABLE_AD>::setRandom(std::size_t seed)
 {
+    static thread_local std::mt19937 engine(std::random_device{}());
+    engine.seed(seed);
     for(int x = 0; x < cell_.Lx; x++) {
         for(int y = 0; y < cell_.Ly; y++) {
             if(not cell_.pattern.isUnique(x, y)) { continue; }
             auto pos = cell_.pattern.uniqueIndex(x, y);
-            As[pos].setRandom();
+            As[pos].setRandom(engine);
             Adags[pos] = As[pos].adjoint().eval().template permute<0, 3, 4, 2, 0, 1>(Bool<ENABLE_AD>{});
         }
     }
@@ -324,17 +326,22 @@ std::string iPEPS<Scalar, Symmetry, ENABLE_AD>::info() const
                    Davg,
                    Dsigma);
     return res;
-    // std::cout << "Tensors:" << std::endl;
-    // for(int x = 0; x < cell_.Lx; x++) {
-    //     for(int y = 0; y < cell_.Ly; y++) {
-    //         if(not cell_.pattern.isUnique(x, y)) {
-    //             std::cout << "Cell site: (" << x << "," << y << "): not unique." << std::endl;
-    //             continue;
-    //         }
-    //         std::cout << "Cell site: (" << x << "," << y << "), A:" << std::endl << As(x, y) << std::endl << std::endl;
-    //         std::cout << "Cell site: (" << x << "," << y << "), A†:" << std::endl << Adags(x, y) << std::endl;
-    //     }
-    // }
+}
+
+template <typename Scalar, typename Symmetry, bool ENABLE_AD>
+void iPEPS<Scalar, Symmetry, ENABLE_AD>::debug_info() const
+{
+    std::cout << "Tensors:" << std::endl;
+    for(int x = 0; x < cell_.Lx; x++) {
+        for(int y = 0; y < cell_.Ly; y++) {
+            if(not cell_.pattern.isUnique(x, y)) {
+                std::cout << "Cell site: (" << x << "," << y << "): not unique." << std::endl;
+                continue;
+            }
+            std::cout << "Cell site: (" << x << "," << y << "), A:" << std::endl << As(x, y) << std::endl << std::endl;
+            std::cout << "Cell site: (" << x << "," << y << "), A†:" << std::endl << Adags(x, y) << std::endl;
+        }
+    }
 }
 
 } // namespace Xped

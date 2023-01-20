@@ -82,7 +82,7 @@ public:
 
     iPEPS(const iPEPS<Scalar, Symmetry, false>& other);
 
-    void setRandom();
+    void setRandom(std::size_t seed = 0ul);
     void setZero();
 
     void set_As(const std::vector<Tensor<Scalar, 2, 3, Symmetry, ENABLE_AD>>& As_in)
@@ -95,6 +95,7 @@ public:
     Qbasis<Symmetry, 1> braBasis(const int x, const int y, const Opts::LEG leg) const;
 
     std::string info() const;
+    void debug_info() const;
 
     std::vector<Scalar> data();
 

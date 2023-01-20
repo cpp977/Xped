@@ -26,13 +26,13 @@ using std::size_t;
 namespace Xped {
 
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
-void Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::setRandom()
+void Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::setRandom(std::mt19937& engine)
 {
     storage_.resize();
     SPDLOG_TRACE("Entering setRandom().");
     SPDLOG_TRACE("Start randomization loop with #={} iterations.", sector().size());
     for(size_t i = 0; i < sector().size(); ++i) {
-        PlainInterface::setRandom(block(i));
+        PlainInterface::setRandom(block(i), engine);
         SPDLOG_TRACE("Set block #={} to random.", i);
     }
     SPDLOG_TRACE("Leaving setRandom().");

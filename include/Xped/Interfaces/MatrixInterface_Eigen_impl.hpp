@@ -1,6 +1,8 @@
 #ifndef MATRIX_INTERFACE_EIGEN_IMPL_H_
 #define MATRIX_INTERFACE_EIGEN_IMPL_H_
 
+#include <random>
+
 #include "Eigen/Core"
 #include "Eigen/Dense"
 #include <unsupported/Eigen/MatrixFunctions>
@@ -41,10 +43,10 @@ struct MatrixInterface
     static void setZero(Eigen::MatrixBase<Derived>&& M);
 
     template <typename Derived>
-    static void setRandom(Eigen::MatrixBase<Derived>& M);
+    static void setRandom(Eigen::MatrixBase<Derived>& M, std::mt19937& engine);
 
     template <typename Derived>
-    static void setRandom(Eigen::MatrixBase<Derived>&& M);
+    static void setRandom(Eigen::MatrixBase<Derived>&& M, std::mt19937& engine);
 
     template <typename Derived>
     static void setIdentity(Eigen::MatrixBase<Derived>& M);

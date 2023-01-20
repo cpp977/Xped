@@ -77,6 +77,7 @@ public:
 
     void resize()
     {
+        clear();
         std::size_t curr = 0;
         for(const auto& [q, dim, plain] : m_domain) {
             if(m_codomain.IS_PRESENT(q)) {
@@ -164,6 +165,8 @@ public:
     {
         m_data.clear();
         m_sector.clear();
+        m_dict.clear();
+        m_offsets.clear();
     }
 
     template <typename Ar>

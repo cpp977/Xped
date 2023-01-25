@@ -67,14 +67,16 @@ public:
 
     iPEPS() = default;
 
-    iPEPS(const UnitCell& cell, const Qbasis<Symmetry, 1>& auxBasis, const Qbasis<Symmetry, 1>& physBasis);
+    iPEPS(const UnitCell& cell, std::size_t D, const Qbasis<Symmetry, 1>& auxBasis, const Qbasis<Symmetry, 1>& physBasis);
 
     iPEPS(const UnitCell& cell,
+          std::size_t D,
           const TMatrix<Qbasis<Symmetry, 1>>& leftBasis,
           const TMatrix<Qbasis<Symmetry, 1>>& topBasis,
           const TMatrix<Qbasis<Symmetry, 1>>& physBasis);
 
     iPEPS(const UnitCell& cell,
+          std::size_t D,
           const TMatrix<Qbasis<Symmetry, 1>>& leftBasis,
           const TMatrix<Qbasis<Symmetry, 1>>& topBasis,
           const TMatrix<Qbasis<Symmetry, 1>>& physBasis,

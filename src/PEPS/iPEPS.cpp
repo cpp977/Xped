@@ -17,8 +17,13 @@
 namespace Xped {
 
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>
-iPEPS<Scalar, Symmetry, ENABLE_AD>::iPEPS(const UnitCell& cell, const Qbasis<Symmetry, 1>& auxBasis, const Qbasis<Symmetry, 1>& physBasis)
-    : cell_(cell)
+iPEPS<Scalar, Symmetry, ENABLE_AD>::iPEPS(const UnitCell& cell,
+                                          std::size_t D,
+                                          const Qbasis<Symmetry, 1>& auxBasis,
+                                          const Qbasis<Symmetry, 1>& physBasis)
+    : D(D)
+    , cell_(cell)
+
 {
     charges_ = TMatrix<qType>(cell_.pattern);
     charges_.setConstant(Symmetry::qvacuum());
@@ -34,10 +39,13 @@ iPEPS<Scalar, Symmetry, ENABLE_AD>::iPEPS(const UnitCell& cell, const Qbasis<Sym
 
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>
 iPEPS<Scalar, Symmetry, ENABLE_AD>::iPEPS(const UnitCell& cell,
+                                          std::size_t D,
                                           const TMatrix<Qbasis<Symmetry, 1>>& leftBasis,
                                           const TMatrix<Qbasis<Symmetry, 1>>& topBasis,
                                           const TMatrix<Qbasis<Symmetry, 1>>& physBasis)
-    : cell_(cell)
+    : D(D)
+    , cell_(cell)
+
 {
     charges_ = TMatrix<qType>(cell_.pattern);
     charges_.setConstant(Symmetry::qvacuum());
@@ -46,11 +54,13 @@ iPEPS<Scalar, Symmetry, ENABLE_AD>::iPEPS(const UnitCell& cell,
 
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>
 iPEPS<Scalar, Symmetry, ENABLE_AD>::iPEPS(const UnitCell& cell,
+                                          std::size_t D,
                                           const TMatrix<Qbasis<Symmetry, 1>>& leftBasis,
                                           const TMatrix<Qbasis<Symmetry, 1>>& topBasis,
                                           const TMatrix<Qbasis<Symmetry, 1>>& physBasis,
                                           const TMatrix<qType>& charges)
-    : cell_(cell)
+    : D(D)
+    , cell_(cell)
     , charges_(charges)
 {
     init(leftBasis, topBasis, physBasis);
@@ -64,6 +74,11 @@ void iPEPS<Scalar, Symmetry, ENABLE_AD>::init(const TMatrix<Qbasis<Symmetry, 1>>
 
     As.resize(cell().pattern);
     Adags.resize(cell().pattern);
+
+    // for(auto i = 0; i < cell().uniqueSize(); ++i) {
+    //     if(left_basis[i].empty()) { left_basis[i] = init_basis(D); }
+    // }
+
     for(int x = 0; x < cell().Lx; x++) {
         for(int y = 0; y < cell().Ly; y++) {
             if(not cell().pattern.isUnique(x, y)) { continue; }
@@ -79,7 +94,6 @@ void iPEPS<Scalar, Symmetry, ENABLE_AD>::init(const TMatrix<Qbasis<Symmetry, 1>>
             assert(As[pos].coupledDomain().dim() > 0 and "Bases of the A tensor have no fused blocks.");
         }
     }
-    D = leftBasis(0, 0).dim();
 }
 
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>
@@ -99,6 +113,7 @@ void iPEPS<Scalar, Symmetry, ENABLE_AD>::loadFromMatlab(const std::filesystem::p
         A_ref.read(A);
         auto g_A = A[i].template dereference<HighFive::Group>(root);
         As[i] = Xped::IO::loadMatlabTensor<double, 5, 0, Symmetry, Xped::HeapPolicy>(g_A, root, std::array{true, true, false, false, true}, qn_scale)
+                    .twist(4)
                     .template permute<3, 3, 2, 1, 4, 0>();
         Adags[i] = As[i].adjoint().eval().template permute<0, 3, 4, 2, 0, 1>(Bool<ENABLE_AD>{});
     }

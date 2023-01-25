@@ -23,40 +23,6 @@ struct iPEPSSolverImag
     {
         std::filesystem::create_directories(imag_opts.working_directory / imag_opts.obs_directory);
         Jack = CTMSolver<Scalar, Symmetry>(ctm_opts);
-        if(imag_opts.load != "") {
-            switch(imag_opts.load_format) {
-            case Opts::LoadFormat::MATLAB: {
-                Psi->loadFromMatlab(std::filesystem::path(imag_opts.load), "cpp", imag_opts.qn_scale);
-                break;
-            }
-            case Opts::LoadFormat::NATIVE: {
-                constexpr std::size_t flags = yas::file /*IO type*/ | yas::binary; /*IO format*/
-                iPEPS<Scalar, Symmetry> tmp_Psi;
-                try {
-                    yas::load<flags>((imag_opts.working_directory.string() + "/" + imag_opts.load).c_str(), tmp_Psi);
-                } catch(const yas::serialization_exception& se) {
-                    fmt::print(
-                        "Error while deserializing file ({}) with initial wavefunction.\nThis might be because of incompatible symmetries between this simulation and the loaded wavefunction.",
-                        imag_opts.working_directory.string() + "/" + imag_opts.load);
-                    std::cout << std::flush;
-                    throw;
-                } catch(const yas::io_exception& ie) {
-                    fmt::print("Error while loading file ({}) with initial wavefunction.\n",
-                               imag_opts.working_directory.string() + "/" + imag_opts.load);
-                    std::cout << std::flush;
-                    throw;
-                } catch(const std::exception& e) {
-                    fmt::print("Unknown error while loading file ({}) with initial wavefunction.\n",
-                               imag_opts.working_directory.string() + "/" + imag_opts.load);
-                    std::cout << std::flush;
-                    throw;
-                }
-                Psi = std::make_shared<iPEPS<Scalar, Symmetry>>(std::move(tmp_Psi));
-                break;
-            }
-            }
-            assert(Psi->cell().pattern == H.data_h.pat);
-        }
         if(not imag_opts.obs_directory.empty()) {
             std::filesystem::create_directories(imag_opts.working_directory / imag_opts.obs_directory);
             try {
@@ -74,8 +40,6 @@ struct iPEPSSolverImag
 
     void solve()
     {
-        Xped::TimePropagator<Scalar, double, Symmetry> Jim(H, Psi, imag_opts.update);
-
         Log::on_entry(imag_opts.verbosity,
                       "{}: Model={}(Bonds: V:{}, H:{}, D1: {}, D2: {})",
                       fmt::styled("iPEPSSolverImag", fmt::emphasis::bold),
@@ -86,6 +50,8 @@ struct iPEPSSolverImag
                       (H.bond & Opts::Bond::D2) == Opts::Bond::D2);
         Log::on_entry(imag_opts.verbosity, "{}", imag_opts.info());
         Log::on_entry(imag_opts.verbosity, "{}", Jack.opts.info());
+
+        init_psi();
 
         std::vector<std::vector<double>> Es = std::vector(imag_opts.chis.size(), std::vector(imag_opts.chis[0].size(), 0.));
         util::Stopwatch<> total_t;
@@ -99,9 +65,10 @@ struct iPEPSSolverImag
                 TMatrix<Tensor<Scalar, 1, 1, Symmetry>> conv_v;
                 double diff;
                 std::size_t steps = 0ul;
+                TimePropagator<Scalar, double, Symmetry> Jim(H, imag_opts.dts[i], imag_opts.update, Psi->charges());
                 for(auto step = 0ul; step < imag_opts.t_steps[i]; ++step) {
                     ++steps;
-                    Jim.t_step(imag_opts.dts[i]);
+                    Jim.t_step(*Psi);
                     if(step == 0) {
                         conv_h = Jim.spectrum_h;
                         conv_v = Jim.spectrum_v;
@@ -123,7 +90,7 @@ struct iPEPSSolverImag
                             }
                         }
                         diff = std::max(*std::max_element(diff_h.begin(), diff_h.end()), *std::max_element(diff_v.begin(), diff_v.end()));
-                        if(diff < imag_opts.tol * imag_opts.dts[i] * imag_opts.dts[i]) { break; }
+                        if(diff < imag_opts.tol * imag_opts.dts[i] * imag_opts.dts[i] and step > imag_opts.min_steps) { break; }
                         conv_h = Jim.spectrum_h;
                         conv_v = Jim.spectrum_v;
                     }
@@ -140,6 +107,7 @@ struct iPEPSSolverImag
                 yas::save<flags>(ofs, *Psi);
                 // Psi->info();
             }
+            Psi->updateAtensors();
             Log::per_iteration(imag_opts.verbosity, "  {}", Psi->info());
             evol_time += evol_t.time();
             util::Stopwatch<> ctm_t;
@@ -188,6 +156,97 @@ struct iPEPSSolverImag
         for(auto i = 0ul; i < Es.size(); ++i) {
             for(auto j = 0; j < Es[i].size(); ++j) {
                 Log::on_exit(imag_opts.verbosity, "{:^4}D={:^2d}, χ={:^3d}: E={:.8f}", "↳", imag_opts.Ds[i], imag_opts.chis[i][j], Es[i][j]);
+            }
+        }
+    }
+
+    void init_psi()
+    {
+        if(imag_opts.load != "") {
+            switch(imag_opts.load_format) {
+            case Opts::LoadFormat::MATLAB: {
+                Log::on_entry(imag_opts.verbosity,
+                              "Load initial iPEPS from matlab file {}.\nScale the quantum numbers from matlab by {}.",
+                              imag_opts.load,
+                              imag_opts.qn_scale);
+                Psi->loadFromMatlab(std::filesystem::path(imag_opts.load), "cpp", imag_opts.qn_scale);
+                break;
+            }
+            case Opts::LoadFormat::NATIVE: {
+                Log::on_entry(imag_opts.verbosity, "Load initial iPEPS from native file {}.", imag_opts.load);
+                constexpr std::size_t flags = yas::file /*IO type*/ | yas::binary; /*IO format*/
+                iPEPS<Scalar, Symmetry> tmp_Psi;
+                try {
+                    yas::load<flags>((imag_opts.working_directory.string() + "/" + imag_opts.load).c_str(), tmp_Psi);
+                } catch(const yas::serialization_exception& se) {
+                    fmt::print(
+                        "Error while deserializing file ({}) with initial wavefunction.\nThis might be because of incompatible symmetries between this simulation and the loaded wavefunction.",
+                        imag_opts.working_directory.string() + "/" + imag_opts.load);
+                    std::cout << std::flush;
+                    throw;
+                } catch(const yas::io_exception& ie) {
+                    fmt::print("Error while loading file ({}) with initial wavefunction.\n",
+                               imag_opts.working_directory.string() + "/" + imag_opts.load);
+                    std::cout << std::flush;
+                    throw;
+                } catch(const std::exception& e) {
+                    fmt::print("Unknown error while loading file ({}) with initial wavefunction.\n",
+                               imag_opts.working_directory.string() + "/" + imag_opts.load);
+                    std::cout << std::flush;
+                    throw;
+                }
+                Psi = std::make_shared<iPEPS<Scalar, Symmetry>>(std::move(tmp_Psi));
+                break;
+            }
+            }
+            Psi->initWeightTensors();
+            assert(Psi->cell().pattern == H.data_h.pat);
+        } else {
+            if(imag_opts.multi_init) {
+                Log::on_entry(imag_opts.verbosity, "Try multiple seeds to find a good random initial state.");
+                Log::on_entry(imag_opts.verbosity, "Used protocol:");
+                Log::on_entry(imag_opts.verbosity, "  {:<10} {}", "• seeds:", imag_opts.init_seeds);
+                Log::on_entry(imag_opts.verbosity, "  {:<10} {}", "• Ds:", imag_opts.init_Ds);
+                Log::on_entry(imag_opts.verbosity, "  {:<10} {}", "• chi:", imag_opts.init_chi);
+                Log::on_entry(imag_opts.verbosity, "  {:<10} {}", "• t_steps:", imag_opts.init_t_steps);
+                Log::on_entry(imag_opts.verbosity, "  {:<10} {}", "• dts:", imag_opts.init_dts);
+                std::vector<std::shared_ptr<iPEPS<Scalar, Symmetry>>> init_Psis(imag_opts.init_seeds.size());
+                for(auto& init_Psi : init_Psis) { init_Psi = std::make_shared<iPEPS<Scalar, Symmetry>>(*Psi); }
+                std::vector<double> init_Es(imag_opts.init_seeds.size(), 0.);
+                for(auto i = 0ul; i < imag_opts.init_seeds.size(); ++i) {
+                    init_Psis[i]->setRandom(imag_opts.init_seeds[i]);
+                    init_Psis[i]->initWeightTensors();
+                    for(auto D : imag_opts.init_Ds) {
+                        init_Psis[i]->D = D;
+                        for(std::size_t j = 0; j < imag_opts.init_t_steps.size(); ++j) {
+                            util::Stopwatch<> step_t;
+                            TimePropagator<Scalar, double, Symmetry> Jim(H, imag_opts.init_dts[j], imag_opts.update, init_Psis[i]->charges());
+                            for(auto step = 0ul; step < imag_opts.init_t_steps[j]; ++step) { Jim.t_step(*init_Psis[i]); }
+                            Log::per_iteration(imag_opts.verbosity,
+                                               "  MultiInit(D={}, seed={}: Nτ={:^4d}, dτ={:.1e}): runtime={}",
+                                               D,
+                                               imag_opts.init_seeds[i],
+                                               imag_opts.init_t_steps[j],
+                                               imag_opts.init_dts[j],
+                                               step_t.time_string());
+                        }
+                        init_Psis[i]->updateAtensors();
+                        Log::per_iteration(imag_opts.verbosity, "  {}", init_Psis[i]->info());
+                    }
+                    Jack.opts.chi = imag_opts.init_chi;
+                    init_Es[i] = Jack.template solve<double>(init_Psis[i], nullptr, H, false);
+                }
+                std::size_t min_index = std::distance(init_Es.begin(), std::min_element(init_Es.begin(), init_Es.end()));
+                Log::on_entry(imag_opts.verbosity, "  Initilization with #{} seeds:", imag_opts.init_seeds.size());
+                for(auto i = 0ul; i < imag_opts.init_seeds.size(); ++i) {
+                    Log::on_entry(imag_opts.verbosity, "    seed={:<3d} --> energy={:.8f}", imag_opts.init_seeds[i], init_Es[i]);
+                }
+                Log::on_entry(imag_opts.verbosity, "  Chose seed={:<3d} with energy={:.8f}", imag_opts.init_seeds[min_index], init_Es[min_index]);
+                Psi = std::move(init_Psis[min_index]);
+            } else {
+                Log::on_entry(imag_opts.verbosity, "Start from random iPEPS with seed={}.", imag_opts.seed);
+                Psi->setRandom(imag_opts.seed);
+                Psi->initWeightTensors();
             }
         }
     }

@@ -30,52 +30,63 @@ public:
 
     TimePropagator() = delete;
 
-    explicit TimePropagator(const TwoSiteObservable<Symmetry>& H_in, std::shared_ptr<iPEPS<Scalar, Symmetry>> Psi_in, const Opts::Update& update_in)
+    explicit TimePropagator(const TwoSiteObservable<Symmetry>& H_in,
+                            TimeScalar dt_in,
+                            const Opts::Update& update_in,
+                            const TMatrix<typename Symmetry::qType>& charges_in)
         : H(H_in)
-        , Psi(Psi_in)
-        , cell_(Psi_in->cell())
+        , cell_(H_in.data_h.pat)
+        , dt(dt_in)
         , update(update_in)
+        , charges(charges_in)
     {
-        Psi->initWeightTensors();
-        spectrum_h.resize(Psi->cell().pattern);
-        spectrum_v.resize(Psi->cell().pattern);
+        initU();
+        spectrum_h.resize(cell_.pattern);
+        spectrum_v.resize(cell_.pattern);
     }
 
-    void t_step(TimeScalar_ dt);
+    void t_step(iPEPS<Scalar, Symmetry>& Psi);
 
     TMatrix<Tensor<Scalar, 1, 1, Symmetry>> spectrum_h;
     TMatrix<Tensor<Scalar, 1, 1, Symmetry>> spectrum_v;
 
 private:
     const TwoSiteObservable<Symmetry>& H;
-    std::shared_ptr<iPEPS<Scalar, Symmetry>> Psi;
     UnitCell cell_;
+    TimeScalar dt;
     Opts::Update update;
+    TMatrix<typename Symmetry::qType> charges;
 
-    void t_step_h(int x, int y, TimeScalar_ dt);
-    void t_step_v(int x, int y, TimeScalar_ dt);
+    TwoSiteObservable<Symmetry> U;
+    TwoSiteObservable<Symmetry> Usqrt;
 
-    void t_step_d1(int x, int y, TimeScalar_ dt, Opts::GATE_ORDER gate_order, TimeScalar_ s = 1.);
-    void t_step_d2(int x, int y, TimeScalar_ dt, Opts::GATE_ORDER gate_order, TimeScalar_ s = 1.);
+    void t_step_h(iPEPS<Scalar, Symmetry>& Psi, int x, int y);
+    void t_step_v(iPEPS<Scalar, Symmetry>& Psi, int x, int y);
+
+    void t_step_d1(iPEPS<Scalar, Symmetry>& Psi, int x, int y, Opts::GATE_ORDER gate_order, bool UPDATE_BOTH_DIAGONALS = false);
+    void t_step_d2(iPEPS<Scalar, Symmetry>& Psi, int x, int y, Opts::GATE_ORDER gate_order, bool UPDATE_BOTH_DIAGONALS = false);
 
     std::tuple<Tensor<Scalar, 2, 1, Symmetry>, Tensor<Scalar, 1, 1, Symmetry>, Tensor<Scalar, 1, 2, Symmetry>>
     renormalize(const Tensor<Scalar, 2, 2, Symmetry>& bond,
                 const Tensor<Scalar, 3, 1, Symmetry>& left,
-                const Tensor<Scalar, 1, 3, Symmetry>& right) const;
+                const Tensor<Scalar, 1, 3, Symmetry>& right,
+                std::size_t max_keep) const;
 
     std::tuple<Tensor<Scalar, 2, 1, Symmetry>,
                Tensor<Scalar, 1, 1, Symmetry>,
                Tensor<Scalar, 4, 1, Symmetry>,
                Tensor<Scalar, 1, 1, Symmetry>,
                Tensor<Scalar, 1, 2, Symmetry>>
-    renormalize_d1(const Tensor<Scalar, 2, 5, Symmetry>& bond) const;
+    renormalize_d1(const Tensor<Scalar, 2, 5, Symmetry>& bond, std::size_t max_keep) const;
 
     std::tuple<Tensor<Scalar, 1, 2, Symmetry>,
                Tensor<Scalar, 1, 1, Symmetry>,
                Tensor<Scalar, 4, 1, Symmetry>,
                Tensor<Scalar, 1, 1, Symmetry>,
                Tensor<Scalar, 1, 2, Symmetry>>
-    renormalize_d2(const Tensor<Scalar, 2, 5, Symmetry>& bond) const;
+    renormalize_d2(const Tensor<Scalar, 2, 5, Symmetry>& bond, std::size_t max_keep) const;
+
+    void initU();
 };
 
 } // namespace Xped

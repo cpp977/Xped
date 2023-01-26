@@ -47,6 +47,8 @@ struct Imag
     LoadFormat load_format = LoadFormat::NATIVE;
     int qn_scale = 1;
 
+    std::size_t seed = 0;
+
     Verbosity verbosity = Verbosity::ON_ENTRY;
 
     std::filesystem::path working_directory = std::filesystem::current_path();
@@ -55,6 +57,13 @@ struct Imag
 
     std::filesystem::path obs_directory = "obs";
     bool display_obs = true;
+
+    bool multi_init = false;
+    std::vector<std::size_t> init_seeds = {0, 1, 2};
+    std::vector<std::size_t> init_Ds = {2ul, 3ul, 2ul};
+    std::vector<std::size_t> init_t_steps = {40ul, 40ul, 40ul};
+    std::vector<double> init_dts = {0.1, 0.01, 0.001};
+    std::size_t init_chi = 28;
 
     template <typename Ar>
     void serialize(Ar& ar)
@@ -75,8 +84,15 @@ struct Imag
                            ("obs_directory", obs_directory),
                            ("load", load),
                            ("load format", load_format),
+                           ("seed", seed),
                            ("display_obs", display_obs),
-                           ("qn_scale", qn_scale));
+                           ("qn_scale", qn_scale),
+                           ("multi_init", multi_init),
+                           ("init_t_steps", init_t_steps),
+                           ("init_dts", init_dts),
+                           ("init_seeds", init_seeds),
+                           ("init_Ds", init_Ds),
+                           ("init_chi", init_chi));
         assert(Ds.size() == chis.size());
         assert(dts.size() == t_steps.size());
     }
@@ -101,6 +117,7 @@ struct Imag
         if(load.size() > 0) { fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• load from:", load); }
         if(load.size() > 0) { fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• scale loaded qn by:", qn_scale); }
         if(load.size() > 0) { fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• load format:", fmt::streamed(load_format)); }
+        if(load.size() == 0) { fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• seed:", seed); }
         fmt::format_to(std::back_inserter(res), "  {:<30} {}", "• verbosity:", fmt::streamed(verbosity));
         return res;
     }
@@ -133,6 +150,13 @@ inline Imag imag_from_toml(const toml::value& t)
     res.load = t.contains("load") ? static_cast<std::string>(t.at("load").as_string()) : res.load;
     if(t.contains("load_format")) { res.load_format = util::enum_from_toml<LoadFormat>(t.at("load_format")); }
     res.qn_scale = t.contains("qn_scale") ? (t.at("qn_scale").as_integer()) : res.qn_scale;
+    res.seed = t.contains("seed") ? (t.at("seed").as_integer()) : res.seed;
+    res.multi_init = t.contains("multi_init") ? (t.at("multi_init").as_boolean()) : res.multi_init;
+    if(res.multi_init) { res.init_dts = t.contains("init_dts") ? toml::find<std::vector<double>>(t, "init_dts") : res.init_dts; }
+    if(res.multi_init) { res.init_t_steps = t.contains("init_t_steps") ? toml::find<std::vector<std::size_t>>(t, "init_t_steps") : res.init_t_steps; }
+    if(res.multi_init) { res.init_seeds = t.contains("init_seeds") ? toml::find<std::vector<std::size_t>>(t, "init_seeds") : res.init_seeds; }
+    if(res.multi_init) { res.init_chi = t.contains("init_chi") ? t.at("init_chi").as_integer() : res.init_chi; }
+    if(res.multi_init) { res.init_Ds = t.contains("init_Ds") ? toml::find<std::vector<std::size_t>>(t, "init_Ds") : res.init_Ds; }
     return res;
 }
 

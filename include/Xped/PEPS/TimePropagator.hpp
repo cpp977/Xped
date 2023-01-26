@@ -59,6 +59,7 @@ private:
 
     TwoSiteObservable<Symmetry> U;
     TwoSiteObservable<Symmetry> Usqrt;
+    TwoSiteObservable<Symmetry> Usq;
 
     void t_step_h(iPEPS<Scalar, Symmetry>& Psi, int x, int y);
     void t_step_v(iPEPS<Scalar, Symmetry>& Psi, int x, int y);

@@ -48,10 +48,12 @@ public:
                     }
                 }
                 if((bond & Opts::Bond::D1) == Opts::Bond::D1) {
-                    for(auto& t : this->data_d1) { t = -params["tprime"].get<double>() * hopping; }
+                    // strange sign here but the code works fine
+                    for(auto& t : this->data_d1) { t = +params["tprime"].get<double>() * hopping; }
                 }
                 if((bond & Opts::Bond::D2) == Opts::Bond::D2) {
-                    for(auto& t : this->data_d2) { t = -params["tprime"].get<double>() * hopping; }
+                    // strange sign here but the code works fine
+                    for(auto& t : this->data_d2) { t = +params["tprime"].get<double>() * hopping; }
                 }
             }
         } else if constexpr(std::is_same_v<Symmetry,
@@ -86,38 +88,39 @@ public:
             }
         } else if constexpr(Symmetry::ALL_ABELIAN) {
             hopping = (tprod(F.cdag(SPIN_INDEX::UP), F.c(SPIN_INDEX::UP)) + tprod(F.cdag(SPIN_INDEX::DN), F.c(SPIN_INDEX::DN)) -
-                       tprod(F.c(SPIN_INDEX::UP), F.cdag(SPIN_INDEX::UP)) - tprod(F.c(SPIN_INDEX::DN), F.cdag(SPIN_INDEX::DN)));
-            hubbard = 0.25 * (tprod(F.d(), F.Id()) + tprod(F.Id(), F.d()));
-            occ = 0.25 * (tprod(F.n(), F.Id()) + tprod(F.Id(), F.n()));
-            gate = -params["t"].get<double>() *
-                       (tprod(F.cdag(SPIN_INDEX::UP), F.c(SPIN_INDEX::UP)) + tprod(F.cdag(SPIN_INDEX::DN), F.c(SPIN_INDEX::DN)) -
-                        tprod(F.c(SPIN_INDEX::UP), F.cdag(SPIN_INDEX::UP)) - tprod(F.c(SPIN_INDEX::DN), F.cdag(SPIN_INDEX::DN))) +
-                   0.25 * params["U"].get<double>() * (tprod(F.d(), F.Id()) + tprod(F.Id(), F.d())) -
-                   0.25 * params["mu"].get<double>() * (tprod(F.n(), F.Id()) + tprod(F.Id(), F.n()));
-            // auto [Es, Vs] = gate.eigh();
-            // gate.print(std::cout, true);
-            // std::cout << std::endl;
+                       tprod(F.c(SPIN_INDEX::UP), F.cdag(SPIN_INDEX::UP)) - tprod(F.c(SPIN_INDEX::DN), F.cdag(SPIN_INDEX::DN)))
+                          .eval();
+
+            hubbard = 0.25 * (tprod(F.d(), F.Id()) + tprod(F.Id(), F.d())).eval();
+            occ = 0.25 * (tprod(F.n(), F.Id()) + tprod(F.Id(), F.n())).eval();
+            // std::cout << hopping << std::endl;
+            // std::exit(0);
             // Es.print(std::cout, true);
             // std::cout << std::endl;
-            bond_gate = -params["t"].get<double>() *
-                        (tprod(F.cdag(SPIN_INDEX::UP), F.c(SPIN_INDEX::UP)) + tprod(F.cdag(SPIN_INDEX::DN), F.c(SPIN_INDEX::DN)) -
-                         tprod(F.c(SPIN_INDEX::UP), F.cdag(SPIN_INDEX::UP)) - tprod(F.c(SPIN_INDEX::DN), F.cdag(SPIN_INDEX::DN)));
 
             if((bond & Opts::Bond::H) == Opts::Bond::H) {
                 for(auto& t : this->data_h) {
                     t = -params["t"].get<double>() * hopping + params["U"].get<double>() * hubbard - params["mu"].get<double>() * occ;
+                    // t = params["t"].get<double>() * hopping;
                 }
             }
             if((bond & Opts::Bond::V) == Opts::Bond::V) {
                 for(auto& t : this->data_v) {
                     t = -params["t"].get<double>() * hopping + params["U"].get<double>() * hubbard - params["mu"].get<double>() * occ;
+                    // t = params["t"].get<double>() * hopping;
                 }
             }
             if((bond & Opts::Bond::D1) == Opts::Bond::D1) {
-                for(auto& t : this->data_d1) { t = -params["tprime"].get<double>() * hopping; }
+                for(auto& t : this->data_d1) {
+                    // strange sign here but the code works fine
+                    t = +params["tprime"].get<double>() * hopping;
+                }
             }
             if((bond & Opts::Bond::D2) == Opts::Bond::D2) {
-                for(auto& t : this->data_d2) { t = -params["tprime"].get<double>() * hopping; }
+                for(auto& t : this->data_d2) {
+                    // strange sign here but the code works fine
+                    t = +params["tprime"].get<double>() * hopping;
+                }
             }
         } else {
             assert(false and "Symmetry is not supported in Hubbard model.");
@@ -135,6 +138,14 @@ public:
                 auto d = std::make_unique<Xped::OneSiteObservable<Symmetry>>(pat, "d");
                 for(auto& t : d->data) { t = F.d().data.template trim<2>(); }
                 obs.push_back(std::move(d));
+                auto hopping = (std::sqrt(2.) * tprod(F.cdag(), F.c()) + std::sqrt(2.) * tprod(F.c(), F.cdag())).eval();
+                auto cdagc =
+                    std::make_unique<TwoSiteObservable<Symmetry>>(pat, Opts::Bond::H | Opts::Bond::V | Opts::Bond::D1 | Opts::Bond::D2, "cdagc");
+                for(auto& t : cdagc->data_h) { t = hopping; }
+                for(auto& t : cdagc->data_v) { t = hopping; }
+                for(auto& t : cdagc->data_d1) { t = -1. * hopping; }
+                for(auto& t : cdagc->data_d2) { t = -1. * hopping; }
+                obs.push_back(std::move(cdagc));
             }
         } else if constexpr(std::is_same_v<Symmetry,
                                            Xped::Sym::Combined<Xped::Sym::SU2<Xped::Sym::SpinSU2>,
@@ -166,8 +177,8 @@ public:
             auto cdagc = std::make_unique<TwoSiteObservable<Symmetry>>(pat, Opts::Bond::H | Opts::Bond::V | Opts::Bond::D1 | Opts::Bond::D2, "cdagc");
             for(auto& t : cdagc->data_h) { t = hopping; }
             for(auto& t : cdagc->data_v) { t = hopping; }
-            for(auto& t : cdagc->data_d1) { t = hopping; }
-            for(auto& t : cdagc->data_d2) { t = hopping; }
+            for(auto& t : cdagc->data_d1) { t = -1. * hopping; }
+            for(auto& t : cdagc->data_d2) { t = -1. * hopping; }
 
             auto SzSz = std::make_unique<TwoSiteObservable<Symmetry>>(pat, Opts::Bond::H | Opts::Bond::V | Opts::Bond::D1 | Opts::Bond::D2, "SzSz");
             for(auto& t : SzSz->data_h) { t = tprod(F.Sz(), F.Sz()); }
@@ -178,17 +189,17 @@ public:
             obs.push_back(std::move(cdagc));
             obs.push_back(std::move(SzSz));
             if constexpr(not Symmetry::ANY_IS_SPIN) {
-                auto Sx = std::make_unique<Xped::OneSiteObservable<Symmetry>>(pat, "Sx");
-                for(auto& t : Sx->data) { t = F.Sx().data.template trim<2>(); }
+                // auto Sx = std::make_unique<Xped::OneSiteObservable<Symmetry>>(pat, "Sx");
+                // for(auto& t : Sx->data) { t = F.Sx().data.template trim<2>(); }
 
-                auto SxSx =
-                    std::make_unique<TwoSiteObservable<Symmetry>>(pat, Opts::Bond::H | Opts::Bond::V | Opts::Bond::D1 | Opts::Bond::D2, "SxSx");
-                for(auto& t : SxSx->data_h) { t = tprod(F.Sx(), F.Sx()); }
-                for(auto& t : SxSx->data_v) { t = tprod(F.Sx(), F.Sx()); }
-                for(auto& t : SxSx->data_d1) { t = tprod(F.Sx(), F.Sx()); }
-                for(auto& t : SxSx->data_d2) { t = tprod(F.Sx(), F.Sx()); }
-                obs.push_back(std::move(Sx));
-                obs.push_back(std::move(SxSx));
+                // auto SxSx =
+                //     std::make_unique<TwoSiteObservable<Symmetry>>(pat, Opts::Bond::H | Opts::Bond::V | Opts::Bond::D1 | Opts::Bond::D2, "SxSx");
+                // for(auto& t : SxSx->data_h) { t = tprod(F.Sx(), F.Sx()); }
+                // for(auto& t : SxSx->data_v) { t = tprod(F.Sx(), F.Sx()); }
+                // for(auto& t : SxSx->data_d1) { t = tprod(F.Sx(), F.Sx()); }
+                // for(auto& t : SxSx->data_d2) { t = tprod(F.Sx(), F.Sx()); }
+                // obs.push_back(std::move(Sx));
+                // obs.push_back(std::move(SxSx));
             }
         }
     }

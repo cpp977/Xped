@@ -38,9 +38,12 @@ struct Optim
     std::size_t min_steps = 10;
 
     bool resume = false;
+
     LoadFormat load_format = LoadFormat::NATIVE;
     std::string load = "";
     int qn_scale = 1;
+
+    std::size_t seed = 0;
 
     std::size_t save_period = 0;
 
@@ -69,6 +72,7 @@ struct Optim
                            ("load", load),
                            ("load format", load_format),
                            ("qn_scale", qn_scale),
+                           ("seed", seed),
                            ("save_period", save_period),
                            ("log_format", log_format),
                            ("working_directory", working_directory),
@@ -98,6 +102,7 @@ struct Optim
         if(load.size() > 0) { fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• load from:", load); }
         if(load.size() > 0) { fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• scale loaded qn by:", qn_scale); }
         if(load.size() > 0) { fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• load format:", fmt::streamed(load_format)); }
+        if(load.size() == 0) { fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• seed:", seed); }
         fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• save period:", save_period);
         fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• verbosity:", fmt::streamed(verbosity));
         fmt::format_to(std::back_inserter(res), "  {:<30} {}", "• display obs to terminal:", display_obs);
@@ -131,6 +136,7 @@ inline Optim optim_from_toml(const toml::value& t)
     if(t.contains("obs_directory")) { res.obs_directory = std::filesystem::path(static_cast<std::string>(t.at("obs_directory").as_string())); }
     if(t.contains("verbosity")) { res.verbosity = util::enum_from_toml<Verbosity>(t.at("verbosity")); }
     res.display_obs = t.contains("display_obs") ? t.at("display_obs").as_boolean() : res.display_obs;
+    res.seed = t.contains("seed") ? (t.at("seed").as_integer()) : res.seed;
     return res;
 }
 

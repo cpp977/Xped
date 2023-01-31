@@ -22,26 +22,31 @@
         "toml11",
         "assert"
     ],
-    "default-features": [ "ad-eigen" ],
+    "default-features": [ "gcc-eigen" ],
     "features": {
-        "basic-eigen": {
-            "description": "Tensor operations with Eigen backend without extras."
-        },
-        "basic-ctf": {
-            "description": "Tensor operations with ctf backend (distributed memory) without extras.",
+        "gcc-eigen": {
+            "description": "Tensor operations with Eigen backend. Compiled by gcc.",
             "dependencies": [
-                "ctf",
-                "stan-math"
+                "stan-math",
+                "ceres"
             ]
         },
-        "basic-array": {
-            "description": "Tensor operations with array backend without extras.",
+        "clang-eigen": {
+            "description": "Tensor operations with Eigen backend. Compiled by clang.",
             "dependencies": [
-                "array"
+                "stan-math",
+                "ceres"
             ]
         },
-        "ad-eigen": {
-            "description": "Tensor operations with Eigen backend with automatic differentiation using the stan math and nonlinear optimization with google ceres.",
+        "clang-libcxx-eigen": {
+            "description": "Tensor operations with Eigen backend. Compiled by clang and used std library of llvm (libcxx).",
+            "dependencies": [
+                "stan-math",
+                "ceres"
+            ]
+        },
+        "icpx-eigen": {
+            "description": "Tensor operations with Eigen backend. Compiled by icpx.",
             "dependencies": [
                 "stan-math",
                 "ceres"

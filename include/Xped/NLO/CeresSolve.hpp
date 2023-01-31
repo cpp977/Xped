@@ -66,10 +66,10 @@ struct iPEPSSolverAD
         if(optim_opts.resume) {
             constexpr std::size_t flags = yas::file /*IO type*/ | yas::binary; /*IO format*/
             try {
-                yas::load<flags>((optim_opts.working_directory.string() + "/" + this->H.file_name() + ".ad").c_str(), *this);
+                yas::load<flags>((optim_opts.working_directory.string() + "/" + this->H.file_name() + fmt::format("_D{}.ad", Psi->D)).c_str(), *this);
             } catch(const std::exception& e) {
                 fmt::print("Error while loading file ({}) for resuming simulation.\n",
-                           optim_opts.working_directory.string() + "/" + this->H.file_name() + ".ad");
+                           optim_opts.working_directory.string() + "/" + this->H.file_name() + fmt::format("_D{}.ad", Psi->D));
                 std::cout << std::flush;
                 throw;
             }
@@ -107,6 +107,8 @@ struct iPEPSSolverAD
                 }
                 }
                 assert(Psi->cell().pattern == H.data_h.pat);
+            } else {
+                Psi->setRandom(optim_opts.seed);
             }
             problem = std::make_unique<ceres::GradientProblem>(
                 new EnergyFunctor(std::move(std::make_unique<CTMSolver<Scalar, Symmetry, CPOpts, TRank>>(ctm_opts)), H, Psi));

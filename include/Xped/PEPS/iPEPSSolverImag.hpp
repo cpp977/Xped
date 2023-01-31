@@ -237,7 +237,7 @@ struct iPEPSSolverImag
                     init_Es[i] = Jack.template solve<double>(init_Psis[i], nullptr, H, false);
                 }
                 std::size_t min_index = std::distance(init_Es.begin(), std::min_element(init_Es.begin(), init_Es.end()));
-                Log::on_entry(imag_opts.verbosity, "  Initilization with #{} seeds:", imag_opts.init_seeds.size());
+                Log::on_entry(imag_opts.verbosity, "  Initialization with #{} seeds:", imag_opts.init_seeds.size());
                 for(auto i = 0ul; i < imag_opts.init_seeds.size(); ++i) {
                     Log::on_entry(imag_opts.verbosity, "    seed={:<3d} --> energy={:.8f}", imag_opts.init_seeds[i], init_Es[i]);
                 }

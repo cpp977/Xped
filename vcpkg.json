@@ -19,7 +19,8 @@
         "boost-describe",
         "wignersun",
         "doctest",
-        "toml11"
+        "toml11",
+        "assert"
     ],
     "default-features": [ "ad-eigen" ],
     "features": {
@@ -27,7 +28,11 @@
             "description": "Tensor operations with Eigen backend without extras."
         },
         "basic-ctf": {
-            "description": "Tensor operations with ctf backend (distributed memory) without extras."
+            "description": "Tensor operations with ctf backend (distributed memory) without extras.",
+            "dependencies": [
+                "ctf",
+                "stan-math"
+            ]
         },
         "basic-array": {
             "description": "Tensor operations with array backend without extras.",

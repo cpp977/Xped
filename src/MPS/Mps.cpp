@@ -24,9 +24,12 @@ Mps<Scalar_, Symmetry_>::Mps(std::size_t L,
                              const std::vector<Qbasis<Symmetry, 1>>& qloc_in,
                              const qType& Qtarget_in,
                              std::size_t Mmax_in,
-                             std::size_t Nqmax_in)
+                             std::size_t Nqmax_in,
+                             std::size_t seed)
     : N_sites(L)
 {
+    static thread_local std::mt19937 engine(std::random_device{}());
+    engine.seed(seed);
     Qtarget.push_back(Qtarget_in);
     resizeArrays();
     qloc = qloc_in;
@@ -34,7 +37,7 @@ Mps<Scalar_, Symmetry_>::Mps(std::size_t L,
     gen_auxBasis(Mmax_in, Nqmax_in);
     for(size_t l = 0; l < N_sites; l++) {
         A.Ac[l] = Tensor<Scalar, 2, 1, Symmetry>({{inBasis(l), locBasis(l)}}, {{outBasis(l)}});
-        A.Ac[l].setRandom();
+        A.Ac[l].setRandom(engine);
     }
 }
 

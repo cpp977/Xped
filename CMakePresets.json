@@ -24,58 +24,93 @@
         }
     },
         {
-        "name": "basic-eigen",
-        "inherits": ["vcpkg","logging"],
+        "name": "clang",
+        "hidden": true,
+        "cacheVariables": {
+            "VCPKG_CHAINLOAD_TOOLCHAIN_FILE" : "${sourceDir}/triplets/x64-linux-clang.toolchain.cmake",
+            "VCPKG_TARGET_TRIPLET": "x64-linux-clang"
+        }
+    },
+        {
+        "name": "clang-libcxx",
+        "hidden": true,
+        "cacheVariables": {
+            "VCPKG_CHAINLOAD_TOOLCHAIN_FILE" : "${sourceDir}/triplets/x64-linux-clang-libcxx.toolchain.cmake",
+            "VCPKG_TARGET_TRIPLET": "x64-linux-clang-libcxx"
+        }
+    },
+        {
+        "name": "icpx",
+        "hidden": true,
+        "cacheVariables": {
+            "VCPKG_CHAINLOAD_TOOLCHAIN_FILE" : "${sourceDir}/triplets/x64-linux-icpx.toolchain.cmake",
+            "VCPKG_TARGET_TRIPLET": "x64-linux-icpx"
+        }
+    },
+        {
+        "name": "gcc",
+        "hidden": true,
+        "cacheVariables": {
+            "VCPKG_TARGET_TRIPLET": "x64-linux-icpx"
+        }
+    },
+        {
+        "name": "gcc-eigen",
+        "inherits": ["vcpkg","logging","gcc"],
         "cacheVariables": {
             "XPED_TENSOR_LIB": "Eigen",
             "XPED_VECTOR_LIB": "Eigen",
             "XPED_MATRIX_LIB": "Eigen",
             "XPED_USE_OPENMP": "ON",
-            "XPED_USE_AD": "OFF",
-            "VCPKG_MANIFEST_FEATURES": "basic-eigen",
-            "VCPKG_MANIFEST_NO_DEFAULT_FEATURES": "ON"
-        }
-    },
-        {
-        "name": "basic-array",
-        "inherits": ["vcpkg","logging"],
-        "cacheVariables": {
-            "XPED_TENSOR_LIB": "Array",
-            "XPED_VECTOR_LIB": "Eigen",
-            "XPED_MATRIX_LIB": "Eigen",
-            "XPED_USE_OPENMP": "ON",
-            "XPED_USE_AD": "OFF",
-            "VCPKG_MANIFEST_FEATURES": "basic-array",
-            "VCPKG_MANIFEST_NO_DEFAULT_FEATURES": "ON"
-        }
-    },
-        {
-        "name": "basic-ctf",
-        "inherits": ["vcpkg","logging"],
-        "cacheVariables": {
-            "XPED_TENSOR_LIB": "Cyclops",
-            "XPED_VECTOR_LIB": "Cyclops",
-            "XPED_MATRIX_LIB": "Cyclops",
-            "XPED_USE_OPENMP": "ON",
-            "XPED_USE_MPI": "ON",
-            "XPED_USE_SCALAPACK": "ON",
-            "XPED_USE_AD": "OFF",
-            "VCPKG_MANIFEST_FEATURES": "basic-ctf",
-            "VCPKG_MANIFEST_NO_DEFAULT_FEATURES": "ON"
-        }
-    },
-        {
-        "name": "ad-eigen",
-        "inherits": ["vcpkg","logging"],
-        "cacheVariables": {
-            "XPED_TENSOR_LIB": "Eigen",
-            "XPED_VECTOR_LIB": "Eigen",
-            "XPED_MATRIX_LIB": "Eigen",
-            "XPED_USE_OPENMP": "OFF",
             "XPED_USE_AD": "ON",
             "XPED_USE_NLO": "ON",
             "XPED_OPTIM_LIB": "ceres",
-            "VCPKG_MANIFEST_FEATURES": "ad-eigen",
+            "VCPKG_MANIFEST_FEATURES": "gcc-eigen",
+            "VCPKG_MANIFEST_NO_DEFAULT_FEATURES": "ON"
+        }
+    },
+        {
+        "name": "clang-eigen",
+        "inherits": ["vcpkg","logging","clang"],
+        "cacheVariables": {
+            "XPED_TENSOR_LIB": "Eigen",
+            "XPED_VECTOR_LIB": "Eigen",
+            "XPED_MATRIX_LIB": "Eigen",
+            "XPED_USE_OPENMP": "ON",
+            "XPED_USE_AD": "ON",
+            "XPED_USE_NLO": "ON",
+            "XPED_OPTIM_LIB": "ceres",
+            "VCPKG_MANIFEST_FEATURES": "clang-eigen",
+            "VCPKG_MANIFEST_NO_DEFAULT_FEATURES": "ON"
+        }
+    },
+        {
+        "name": "clang-libcxx-eigen",
+        "inherits": ["vcpkg","logging","clang-libcxx"],
+        "cacheVariables": {
+            "XPED_TENSOR_LIB": "Eigen",
+            "XPED_VECTOR_LIB": "Eigen",
+            "XPED_MATRIX_LIB": "Eigen",
+            "XPED_USE_OPENMP": "ON",
+            "XPED_USE_AD": "ON",
+            "XPED_USE_NLO": "ON",
+            "XPED_OPTIM_LIB": "ceres",
+            "VCPKG_MANIFEST_FEATURES": "clang-libcxx-eigen",
+            "VCPKG_MANIFEST_NO_DEFAULT_FEATURES": "ON"
+        }
+    },
+        {
+        "name": "icpx-eigen",
+        "inherits": ["vcpkg","logging","icpx"],
+        "cacheVariables": {
+            "XPED_TENSOR_LIB": "Eigen",
+            "XPED_VECTOR_LIB": "Eigen",
+            "XPED_MATRIX_LIB": "Eigen",
+            "XPED_USE_MKL": "ON",
+            "XPED_USE_AD": "ON",
+            "XPED_USE_NLO": "ON",
+            "XPED_OPTIM_LIB": "ceres",
+            "VCPKG_MANIFEST_FEATURES": "icpx-eigen",
             "VCPKG_MANIFEST_NO_DEFAULT_FEATURES": "ON"
         }
     }

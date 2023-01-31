@@ -89,9 +89,13 @@ struct ZN : public SymBase<ZN<Kind, N, Scalar_>>
     ZN(){};
 
     inline static constexpr qType qvacuum() { return {0}; }
-    inline static constexpr std::array<qType, 2> lowest_qs()
+    inline static constexpr auto lowest_qs()
     {
-        return std::array<qType, 2>{{qarray<1>(std::array<int, 1>{{1}}), qarray<1>(std::array<int, 1>{{N - 1}})}};
+        if constexpr(N == 2) {
+            return std::array<qType, 1>{{qarray<1>(std::array<int, 1>{{1}})}};
+        } else {
+            return std::array<qType, 2>{{qarray<1>(std::array<int, 1>{{1}}), qarray<1>(std::array<int, 1>{{N - 1}})}};
+        }
     }
 
     inline static std::string name()

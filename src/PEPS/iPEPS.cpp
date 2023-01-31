@@ -2,6 +2,8 @@
 
 #include <highfive/H5File.hpp>
 
+#include <assert.hpp>
+
 #include "Xped/PEPS/iPEPS.hpp"
 
 #include "Xped/Util/Bool.hpp"
@@ -71,27 +73,64 @@ void iPEPS<Scalar, Symmetry, ENABLE_AD>::init(const TMatrix<Qbasis<Symmetry, 1>>
                                               const TMatrix<Qbasis<Symmetry, 1>>& topBasis,
                                               const TMatrix<Qbasis<Symmetry, 1>>& physBasis)
 {
+    auto init_basis = [this](const Qbasis<Symmetry, 1>& phys_basis) {
+        Qbasis<Symmetry, 1> out;
+        std::size_t dim_per_charge = D < phys_basis.Nq() ? 1ul : D / phys_basis.Nq();
+        std::size_t dim_for_vac = D < phys_basis.Nq() ? 1ul : dim_per_charge + D % phys_basis.Nq();
+        auto inserted_states = 0ul;
+        auto phys_qs = phys_basis.unordered_qs();
+        bool HAS_VACUUM = true;
+        if(phys_qs.contains(Symmetry::qvacuum())) {
+            out.push_back(Symmetry::qvacuum(), dim_for_vac);
+            inserted_states += dim_for_vac;
+        } else {
+            HAS_VACUUM = false;
+        }
+        if(inserted_states == D) { return out; }
+        bool FIRST_INSERTION = true;
+        for(auto Q : Symmetry::lowest_qs()) {
+            if(phys_qs.contains(Q)) {
+                if(FIRST_INSERTION and not HAS_VACUUM) {
+                    out.push_back(Q, dim_for_vac);
+                    inserted_states += dim_for_vac;
+                    FIRST_INSERTION = false;
+                } else {
+                    out.push_back(Q, dim_per_charge);
+                    inserted_states += dim_per_charge;
+                }
+            }
+            if(inserted_states == D) { return out; }
+        }
+        for(auto Q : phys_qs) {
+            if(out.IS_PRESENT(Q)) { continue; }
+            out.push_back(Q, dim_per_charge);
+            inserted_states += dim_per_charge;
+            if(inserted_states == D) { break; }
+        }
+        VERIFY(inserted_states == D, "Failed to initialize quantum numbers for iPEPS A-tensor.");
+        return out;
+    };
 
     As.resize(cell().pattern);
     Adags.resize(cell().pattern);
-
-    // for(auto i = 0; i < cell().uniqueSize(); ++i) {
-    //     if(left_basis[i].empty()) { left_basis[i] = init_basis(D); }
-    // }
 
     for(int x = 0; x < cell().Lx; x++) {
         for(int y = 0; y < cell().Ly; y++) {
             if(not cell().pattern.isUnique(x, y)) { continue; }
             auto pos = cell().pattern.uniqueIndex(x, y);
             auto [dummy, shifted_physBasis] = physBasis[pos].shift(charges_[pos]);
+            auto left_basis_xy = leftBasis(x, y).dim() == 0 ? init_basis(shifted_physBasis) : leftBasis(x, y);
+            auto left_basis_xp1y = leftBasis(x + 1, y).dim() == 0 ? init_basis(shifted_physBasis) : leftBasis(x + 1, y);
+            auto top_basis_xy = topBasis(x, y).dim() == 0 ? init_basis(shifted_physBasis) : topBasis(x, y);
+            auto top_basis_xyp1 = topBasis(x, y + 1).dim() == 0 ? init_basis(shifted_physBasis) : topBasis(x, y + 1);
             // fmt::print("x={}, y={}, original basis which will be shifted by {}:\n", x, y, Sym::format<Symmetry>(charges_[pos]));
             // std::cout << physBasis[pos] << std::endl;
             // std::cout << "shifted:\n" << shifted_physBasis << std::endl;
-            As[pos] = Tensor<Scalar, 2, 3, Symmetry, ENABLE_AD>({{leftBasis(x, y), topBasis(x, y)}},
-                                                                {{leftBasis(x - 1, y), topBasis(x, y + 1), shifted_physBasis}});
+            As[pos] =
+                Tensor<Scalar, 2, 3, Symmetry, ENABLE_AD>({{left_basis_xy, top_basis_xy}}, {{left_basis_xp1y, top_basis_xyp1, shifted_physBasis}});
             // As[pos].setZero();
             // std::cout << fmt::format("A({},{}): ", x, y) << As[pos].coupledDomain() << std::endl << As[pos].coupledCodomain() << std::endl;
-            assert(As[pos].coupledDomain().dim() > 0 and "Bases of the A tensor have no fused blocks.");
+            VERIFY(As[pos].coupledDomain().dim() > 0 and "Bases of the A tensor have no fused blocks.");
         }
     }
 }

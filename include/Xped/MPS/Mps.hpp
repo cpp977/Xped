@@ -48,7 +48,8 @@ public:
         const std::vector<Qbasis<Symmetry, 1>>& qloc_in,
         const qType& Qtarget_in = Symmetry::qvacuum(),
         std::size_t Mmax_in = 10,
-        std::size_t Nqmax_in = 10);
+        std::size_t Nqmax_in = 10,
+        std::size_t seed = 0ul);
     //     : N_sites(L)
     // {
     //     Qtarget.push_back(Qtarget_in);

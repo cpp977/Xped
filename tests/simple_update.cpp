@@ -19,7 +19,7 @@
 
 #ifdef XPED_CACHE_PERMUTE_OUTPUT
 #    include "lru/lru.hpp"
-XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100000)
+XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 1000000)
 #endif
 
 #include "Xped/PEPS/CTMSolver.hpp"
@@ -34,8 +34,6 @@ XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100000)
 #include "Xped/PEPS/Models/Kondo.hpp"
 #include "Xped/PEPS/Models/KondoNecklace.hpp"
 
-#include "TOOLS/ArgParser.h"
-
 int main(int argc, char* argv[])
 {
     {
@@ -47,19 +45,15 @@ int main(int argc, char* argv[])
 #endif
         // std::ios::sync_with_stdio(true);
 
-        Xped::Log::init_logging(world, "log");
-
-        ArgParser args(argc, argv);
-
-        Xped::Log::globalLevel = args.get<Xped::Verbosity>("verb", Xped::Verbosity::DEBUG);
-
         typedef double Scalar;
         // using Symmetry = Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>;
         // using Symmetry = Xped::Sym::ZN<Xped::Sym::FChargeU1, 36>;
         // using Symmetry =
-        //     Xped::Sym::Combined<Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>>;
+        // Xped::Sym::Combined<Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>>;
         // using Symmetry = Xped::Sym::Combined<Xped::Sym::U1<Xped::Sym::SpinU1>, Xped::Sym::ZN<Xped::Sym::FChargeU1, 36>>;
         using Symmetry = Xped::Sym::Combined<Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>>;
+        // using Symmetry = Xped::Sym::Combined<Xped::Sym::ZN<Xped::Sym::SpinU1, 36>, Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>>;
+
         // typedef Xped::Sym::SU2<Xped::Sym::SpinSU2> Symmetry;
         // typedef Xped::Sym::U1<Xped::Sym::SpinU1> Symmetry;
         // typedef Xped::Sym::ZN<Xped::Sym::SpinU1, 36, double> Symmetry;
@@ -67,7 +61,8 @@ int main(int argc, char* argv[])
 
         std::unique_ptr<Xped::TwoSiteObservable<Symmetry>> ham;
 
-        auto config_file = args.get<std::string>("config_file", "config.toml");
+        std::string config_file = argc > 1 ? argv[1] : "config.toml";
+
         toml::value data;
         try {
             data = toml::parse(config_file);
@@ -91,31 +86,21 @@ int main(int argc, char* argv[])
             }
         }
 
-        Xped::TMatrix<Xped::Qbasis<Symmetry, 1>> left_aux(c.pattern), top_aux(c.pattern), right_aux(c.pattern), bottom_aux(c.pattern);
-        if(data.at("ipeps").at("aux_bases").contains("left_basis")) {
+        std::size_t D = toml::get_or<std::size_t>(toml::find(data.at("ipeps"), "D"), 2ul);
+
+        Xped::TMatrix<Xped::Qbasis<Symmetry, 1>> left_aux(c.pattern), top_aux(c.pattern);
+        if(data.at("ipeps").contains("aux_bases")) {
             auto left =
                 toml::get<std::vector<std::vector<std::pair<std::vector<int>, int>>>>(toml::find(data.at("ipeps").at("aux_bases"), "left_basis"));
             for(std::size_t i = 0; i < c.uniqueSize(); ++i) {
                 for(const auto& [q, dim_q] : left[i]) { left_aux[i].push_back(q, dim_q); }
                 left_aux[i].sort();
             }
-        } else {
-            for(std::size_t i = 0; i < c.uniqueSize(); ++i) {
-                left_aux[i].setRandom(toml::get<std::size_t>(toml::find(data.at("ipeps"), "D")));
-                left_aux[i].sort();
-            }
-        }
 
-        if(data.at("ipeps").at("aux_bases").contains("top_basis")) {
             auto top =
                 toml::get<std::vector<std::vector<std::pair<std::vector<int>, int>>>>(toml::find(data.at("ipeps").at("aux_bases"), "top_basis"));
             for(std::size_t i = 0; i < c.uniqueSize(); ++i) {
                 for(const auto& [q, dim_q] : top[i]) { top_aux[i].push_back(q, dim_q); }
-                top_aux[i].sort();
-            }
-        } else {
-            for(std::size_t i = 0; i < c.uniqueSize(); ++i) {
-                top_aux[i].setRandom(toml::get<std::size_t>(toml::find(data.at("ipeps"), "D")));
                 top_aux[i].sort();
             }
         }
@@ -148,14 +133,15 @@ int main(int argc, char* argv[])
         }
         ham->setDefaultObs();
 
-        Xped::TMatrix<Xped::Qbasis<Symmetry, 1>> phys_basis(c.pattern);
-        phys_basis.setConstant(ham->data_h[0].uncoupledDomain()[0]);
-        auto Psi = std::make_shared<Xped::iPEPS<double, Symmetry, false>>(c, left_aux, top_aux, phys_basis, charges);
-        // Psi->loadFromMatlab(std::filesystem::path("/home/user/matlab-tmp/heisenberg_D2.mat"), "cpp");
-        Psi->setRandom();
-        Psi->info();
         Xped::Opts::CTM ctm_opts = Xped::Opts::ctm_from_toml(data.at("ctm"));
         Xped::Opts::Imag imag_opts = Xped::Opts::imag_from_toml(data.at("imag"));
+
+        Xped::Log::init_logging(world, (imag_opts.working_directory / imag_opts.logging_directory).string() + "/" + ham->file_name() + ".txt");
+
+        Xped::TMatrix<Xped::Qbasis<Symmetry, 1>> phys_basis(c.pattern);
+        phys_basis.setConstant(ham->data_h[0].uncoupledDomain()[0]);
+        auto Psi = std::make_shared<Xped::iPEPS<double, Symmetry, false>>(c, D, left_aux, top_aux, phys_basis, charges);
+        Psi->setRandom();
 
         Xped::iPEPSSolverImag<Scalar, Symmetry> Lucy(imag_opts, ctm_opts, Psi, *ham);
         Lucy.solve();

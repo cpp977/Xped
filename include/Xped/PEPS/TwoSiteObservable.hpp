@@ -26,7 +26,7 @@ struct TwoSiteObservable : public ObservableBase
       x,y: O_h(x,y; x+1,y)
       x,y: O_v(x,y; x,y+1)
       x,y: O_d1(x,y; x+1,y+1)
-      x,y: O_d2(x,y; x+1,y-1)
+      x,y: O_d2(x,y; x-1,y+1)
      */
     TwoSiteObservable(const Pattern& pat, Opts::Bond bond, const std::string& name_in = "")
         : ObservableBase(name_in)

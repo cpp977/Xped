@@ -10,13 +10,14 @@ void perform_mps_contraction(std::size_t basis_size, mpi::XpedWorld& world)
     mpi::broadcast(loc, world.rank, 0, world);
 
     auto out = in.combine(loc).forgetHistory();
+    static thread_local std::mt19937 engine(std::random_device{}());
     Tensor<double, 2, 1, Symmetry> T1({{in, loc}}, {{out}}, world);
-    T1.setRandom();
+    T1.setRandom(engine);
     Tensor<double, 2, 1, Symmetry> T2({{in, loc}}, {{out}}, world);
-    T2.setRandom();
+    T2.setRandom(engine);
 
     Tensor<double, 1, 1, Symmetry> Bright({{out}}, {{out}}, world);
-    Bright.setRandom();
+    Bright.setRandom(engine);
     SPDLOG_INFO("Mps tests: Set tensors to random.");
     Tensor<double, 1, 1, Symmetry> Brightn;
     contract_R(Bright, T1, T2, Brightn);
@@ -24,7 +25,7 @@ void perform_mps_contraction(std::size_t basis_size, mpi::XpedWorld& world)
     CHECK((Brightn - Bcheck).norm() == doctest::Approx(0.));
     SPDLOG_INFO("Mps tests: right check done.");
     Tensor<double, 1, 1, Symmetry> Bleft({{in}}, {{in}}, world);
-    Bleft.setRandom();
+    Bleft.setRandom(engine);
     Tensor<double, 1, 1, Symmetry> Bleftn;
     contract_L(Bleft, T1, T2, Bleftn);
     Bcheck.clear();

@@ -17,8 +17,10 @@ void perform_tensor_permute(const std::size_t& size, mpi::XpedWorld& world)
     [[maybe_unused]] std::array<std::size_t, 4> perm{per...};
     SPDLOG_CRITICAL("Permutation: {} {} {} {}. Shift={}", perm[0], perm[1], perm[2], perm[3], shift);
 
+    static thread_local std::mt19937 engine(std::random_device{}());
+
     Tensor<double, 2, 2, Symmetry> t({{B, C}}, {{B, C}}, world);
-    t.setRandom();
+    t.setRandom(engine);
     XPED_MPI_BARRIER(world.comm)
     auto tplain = t.plainTensor();
     XPED_MPI_BARRIER(world.comm)
@@ -156,9 +158,10 @@ void perform_tensor_permute_intern(const std::size_t size, mpi::XpedWorld& world
     [[maybe_unused]] std::array<std::size_t, 4> perm{per...};
     SPDLOG_CRITICAL("Permutation: {} {} {} {}", perm[0], perm[1], perm[2], perm[3]);
     XPED_MPI_BARRIER(world.comm)
+    static thread_local std::mt19937 engine(std::random_device{}());
     Tensor<double, 4, 0, Symmetry> t({{B, B, B, B}}, {{}}, world);
     // if(world.rank == 0) { std::cout << t << std::endl; }
-    t.setRandom();
+    t.setRandom(engine);
     SPDLOG_WARN("Tensor t set to Random.");
     XPED_MPI_BARRIER(world.comm)
     auto tplain = t.plainTensor();
@@ -310,8 +313,9 @@ void test_tensor_transformation_to_plain(const Qbasis<Symmetry, 1>& B, const Qba
     // SPDLOG_INFO("basis C");
     // for(const auto& [q, pos, plain] : C.data_) { SPDLOG_INFO("QN: {}, deg={}", q.data[0], plain.dim()); }
 
+    static thread_local std::mt19937 engine(std::random_device{}());
     Tensor<double, 2, 2, Symmetry> t({{B, C}}, {{B, C}}, world);
-    t.setRandom();
+    t.setRandom(engine);
     // if(world.rank == 0) { std::cout << t << std::endl; }
     // SPDLOG_INFO(t);
     auto tplain = t.plainTensor();

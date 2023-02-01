@@ -33,7 +33,9 @@ public:
         F = FermionBase<Symmetry>(1);
         Tensor<double, 2, 2, Symmetry> gate, gate2, local_gate;
         if constexpr(Symmetry::Nq > 0 and Symmetry::ANY_NON_ABELIAN) {
-            if constexpr(Symmetry::IS_SPIN[0] and Symmetry::NON_ABELIAN[0] and Symmetry::ABELIAN[1]) { used_params = {"t", "Jk", "I"}; }
+            if constexpr(Symmetry::IS_SPIN[0] and Symmetry::NON_ABELIAN[0] and Symmetry::ABELIAN[1]) {
+                used_params = {"t", "Jk", "I", "tprime", "Iprime"};
+            }
         } else if constexpr(Symmetry::ALL_ABELIAN) {
             used_params = {"t", "Jkxy", "Jkz", "Ixy", "Iz", "tprime", "Izprime", "Ixyprime"};
         }
@@ -48,6 +50,7 @@ public:
                 auto IdxSs = tprod(Op::outerprod(F.Id(), B.Id()), std::sqrt(3.) * Op::outerprod(F.Sdag(), B.S(), Symmetry::qvacuum()));
                 auto SsxId = tprod(std::sqrt(3.) * Op::outerprod(F.Sdag(), B.S(), Symmetry::qvacuum()), Op::outerprod(F.Id(), B.Id()));
                 gate = -params["t"].get<double>() * hop + params["I"].get<double>() * SS;
+                gate2 = params["tprime"].get<double>() * hop + params["Iprime"].get<double>() * SS;
                 local_gate = gate + 0.25 * params["Jk"].get<double>() * (SsxId + IdxSs);
             }
         } else if constexpr(Symmetry::ALL_ABELIAN) {
@@ -70,7 +73,7 @@ public:
                            .eval();
 
             gate = -params["t"].get<double>() * hop + params["Iz"].get<double>() * SzSz + 0.5 * params["Ixy"].get<double>() * (SpSm + SmSp);
-            gate2 = -params["tprime"].get<double>() * hop + params["Izprime"].get<double>() * SzSz +
+            gate2 = params["tprime"].get<double>() * hop + params["Izprime"].get<double>() * SzSz +
                     0.5 * params["Ixyprime"].get<double>() * (SpSm + SmSp);
             local_gate = gate + 0.25 * (params["Jkz"].get<double>() * (SzszxId + IdxSzsz) +
                                         0.5 * params["Jkxy"].get<double>() * ((SpsmxId + IdxSpsm) + (SmspxId + IdxSmsp)));
@@ -110,9 +113,22 @@ public:
                          std::sqrt(2.) * tprod(Op::outerprod(F.c(), B.Id()), Op::outerprod(F.cdag(), B.Id())))
                             .eval();
                 }
+                for(auto& t : cdagc->data_d1) {
+                    t = (-1. * (std::sqrt(2.) * tprod(Op::outerprod(F.cdag(), B.Id()), Op::outerprod(F.c(), B.Id())) +
+                                std::sqrt(2.) * tprod(Op::outerprod(F.c(), B.Id()), Op::outerprod(F.cdag(), B.Id()))))
+                            .eval();
+                }
+                for(auto& t : cdagc->data_d2) {
+                    t = (-1. * (std::sqrt(2.) * tprod(Op::outerprod(F.cdag(), B.Id()), Op::outerprod(F.c(), B.Id())) +
+                                std::sqrt(2.) * tprod(Op::outerprod(F.c(), B.Id()), Op::outerprod(F.cdag(), B.Id()))))
+                            .eval();
+                }
+
                 auto SdagS = std::make_unique<TwoSiteObservable<Symmetry>>(pat, Opts::Bond::H | Opts::Bond::V, "SdagS");
                 for(auto& t : SdagS->data_h) { t = (std::sqrt(3.) * tprod(Op::outerprod(F.Id(), B.Sdag()), Op::outerprod(F.Id(), B.S()))).eval(); }
                 for(auto& t : SdagS->data_v) { t = (std::sqrt(3.) * tprod(Op::outerprod(F.Id(), B.Sdag()), Op::outerprod(F.Id(), B.S()))).eval(); }
+                for(auto& t : SdagS->data_d1) { t = (std::sqrt(3.) * tprod(Op::outerprod(F.Id(), B.Sdag()), Op::outerprod(F.Id(), B.S()))).eval(); }
+                for(auto& t : SdagS->data_d2) { t = (std::sqrt(3.) * tprod(Op::outerprod(F.Id(), B.Sdag()), Op::outerprod(F.Id(), B.S()))).eval(); }
                 obs.push_back(std::move(cdagc));
                 obs.push_back(std::move(SdagS));
             }
@@ -121,6 +137,10 @@ public:
             for(auto& t : Sz->data) { t = Op::outerprod(F.Id(), B.Sz(0)).data.template trim<2>(); }
             auto sz = std::make_unique<Xped::OneSiteObservable<Symmetry>>(pat, "sz");
             for(auto& t : sz->data) { t = Op::outerprod(F.Sz(0), B.Id()).data.template trim<2>(); }
+            auto Sx = std::make_unique<Xped::OneSiteObservable<Symmetry>>(pat, "Sx");
+            for(auto& t : Sx->data) { t = Op::outerprod(F.Id(), B.Sx(0)).data.template trim<2>(); }
+            auto sx = std::make_unique<Xped::OneSiteObservable<Symmetry>>(pat, "sx");
+            for(auto& t : sx->data) { t = Op::outerprod(F.Sx(0), B.Id()).data.template trim<2>(); }
             auto nup = std::make_unique<Xped::OneSiteObservable<Symmetry>>(pat, "nup");
             for(auto& t : nup->data) { t = Op::outerprod(F.n(Xped::SPIN_INDEX::UP), B.Id()).data.template trim<2>(); }
             auto ndn = std::make_unique<Xped::OneSiteObservable<Symmetry>>(pat, "ndn");
@@ -135,10 +155,15 @@ public:
             obs.push_back(std::move(d));
             obs.push_back(std::move(Sz));
             obs.push_back(std::move(sz));
+            obs.push_back(std::move(Sx));
+            obs.push_back(std::move(sx));
         }
     }
 
-    virtual std::string file_name() const override { return internal::create_filename("Kondo", params, used_params); }
+    virtual std::string file_name() const override
+    {
+        return internal::create_filename(fmt::format("Kondo_Lx={}_Ly={}", pat.Lx, pat.Ly), params, used_params);
+    }
 
     virtual std::string format() const override
     {

@@ -65,7 +65,7 @@ struct TwoSiteObservable : public ObservableBase
                 if((bond & Opts::Bond::V) == Opts::Bond::V) {
                     // out.data_v(x, y) = data_v(x, y).template shiftQN<0, 2>(charges(x, y)).template shiftQN<1, 3>(charges(x, y + 1));
                     out.data_v(x, y) =
-                        data_v(x, y).template shiftQN<0, 1, 2, 3>(std::array{charges(x, y), charges(x + 1, y), charges(x, y), charges(x + 1, y)});
+                        data_v(x, y).template shiftQN<0, 1, 2, 3>(std::array{charges(x, y), charges(x, y + 1), charges(x, y), charges(x, y + 1)});
                 }
                 if((bond & Opts::Bond::D1) == Opts::Bond::D1) {
                     out.data_d1(x, y) = data_d1(x, y).template shiftQN<0, 1, 2, 3>(
@@ -73,7 +73,7 @@ struct TwoSiteObservable : public ObservableBase
                 }
                 if((bond & Opts::Bond::D2) == Opts::Bond::D2) {
                     out.data_d2(x, y) = data_d2(x, y).template shiftQN<0, 1, 2, 3>(
-                        std::array{charges(x, y), charges(x + 1, y - 1), charges(x, y), charges(x + 1, y - 1)});
+                        std::array{charges(x, y), charges(x - 1, y + 1), charges(x, y), charges(x - 1, y + 1)});
                 }
             }
         }

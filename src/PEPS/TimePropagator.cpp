@@ -216,9 +216,15 @@ void TimePropagator<Scalar, TimeScalar, Symmetry>::t_step_v(iPEPS<Scalar, Symmet
 }
 
 /*
+  via upper right:
   A(x,y)--A
         \ |
           A
+
+  via lower left:
+  A(x,y)
+  |     \
+  A------A
 */
 template <typename Scalar, typename TimeScalar, typename Symmetry>
 void TimePropagator<Scalar, TimeScalar, Symmetry>::t_step_d1(iPEPS<Scalar, Symmetry>& Psi,
@@ -227,7 +233,6 @@ void TimePropagator<Scalar, TimeScalar, Symmetry>::t_step_d1(iPEPS<Scalar, Symme
                                                              Opts::GATE_ORDER gate_order,
                                                              bool UPDATE_BOTH_DIAGONALS)
 {
-    // Log::critical("Do ABE");
     auto tl_full = applyWeights(Psi.Gs(x, y), Psi.whs(x - 1, y), Psi.wvs(x, y), Psi.whs(x, y).diag_sqrt(), Psi.wvs(x, y + 1));
     auto br_full =
         applyWeights(Psi.Gs(x + 1, y + 1), Psi.whs(x, y + 1), Psi.wvs(x + 1, y + 1).diag_sqrt(), Psi.whs(x + 1, y + 1), Psi.wvs(x + 1, y + 2));
@@ -262,8 +267,6 @@ void TimePropagator<Scalar, TimeScalar, Symmetry>::t_step_d1(iPEPS<Scalar, Symme
     }
     }
     auto [bond_tlp, weight_tl, tmp_trp, weight_br, bond_brp] = renormalize_d1(enlarged_bond, Psi.D);
-    // std::cout << weight_tl << std::endl;
-    // std::cout << weight_br << std::endl;
     auto trp = tmp_trp.template permute<2, 3, 0, 1, 4, 2>();
 
     spectrum_h(x, y) = weight_tl; // * (1. / weight.trace());
@@ -285,19 +288,15 @@ void TimePropagator<Scalar, TimeScalar, Symmetry>::t_step_d1(iPEPS<Scalar, Symme
 }
 
 /*
-  A--A
+  via upper left:
+  A--A(x+1,y)
   | /
-  A(x,y)
-
-  A(x,y)--A
-  |      /
-  |     /
-  |    /
-  |   /
-  |  /
-  | /
-  |/
   A
+
+  via lower right:
+     A(x+1,y)
+   / |
+  A--A
 */
 template <typename Scalar, typename TimeScalar, typename Symmetry>
 void TimePropagator<Scalar, TimeScalar, Symmetry>::t_step_d2(iPEPS<Scalar, Symmetry>& Psi,
@@ -306,20 +305,14 @@ void TimePropagator<Scalar, TimeScalar, Symmetry>::t_step_d2(iPEPS<Scalar, Symme
                                                              Opts::GATE_ORDER gate_order,
                                                              bool UPDATE_BOTH_DIAGONALS)
 {
-    // Log::critical("Do ABC");
     auto tl_full = applyWeights(Psi.Gs(x, y), Psi.whs(x - 1, y), Psi.wvs(x, y), Psi.whs(x, y).diag_sqrt(), Psi.wvs(x, y + 1).diag_sqrt());
     auto bl_full = applyWeights(Psi.Gs(x, y + 1), Psi.whs(x - 1, y + 1), Psi.wvs(x, y + 1).diag_sqrt(), Psi.whs(x, y + 1), Psi.wvs(x, y + 2));
     auto tr_full = applyWeights(Psi.Gs(x + 1, y), Psi.whs(x, y).diag_sqrt(), Psi.wvs(x + 1, y), Psi.whs(x + 1, y), Psi.wvs(x + 1, y + 1));
-    // std::cout << bl_full << std::endl;
-    // std::cout << tl_full << std::endl;
-    // std::cout << tr_full << std::endl;
     [[maybe_unused]] double dumb;
     auto [bond_tr, tmp_tr, tr] = tr_full.template permute<0, 0, 4, 1, 2, 3>().tSVD(std::numeric_limits<std::size_t>::max(), 0., dumb, false);
     bond_tr = bond_tr * tmp_tr;
     auto [bond_bl, tmp_bl, bl] = bl_full.template permute<0, 1, 4, 0, 2, 3>().tSVD(std::numeric_limits<std::size_t>::max(), 0., dumb, false);
     bond_bl = bond_bl * tmp_bl;
-    // auto [bl, tmp_bl, bond_bl] = bl_full.template permute<-1, 0, 2, 3, 1, 4>().tSVD(std::numeric_limits<std::size_t>::max(), 0., dumb, false);
-    // bond_bl = tmp_bl * bond_bl;
     auto tmp = bond_bl.twist(0).template contract<std::array{1, -1, -2}, std::array{-3, -4, -5, 1, -6}, 2>(tl_full);
     auto bond = tmp.template contract<std::array{-1, -2, -3, -4, 1, -5}, std::array{1, -6, -7}, 5>(bond_tr);
     auto shifted_ham = H.shiftQN(Psi.charges());
@@ -347,8 +340,6 @@ void TimePropagator<Scalar, TimeScalar, Symmetry>::t_step_d2(iPEPS<Scalar, Symme
     }
     }
     auto [bond_blp, weight_bl, tmp_tlp, weight_tr, bond_trp] = renormalize_d2(enlarged_bond, Psi.D);
-    // std::cout << weight_bl << std::endl;
-    // std::cout << weight_tr << std::endl;
     auto tlp = tmp_tlp.template permute<2, 0, 1, 4, 3, 2>();
     spectrum_h(x, y) = weight_tr; // * (1. / weight.trace());
     spectrum_v(x, y + 1) = weight_bl; // * (1. / weight.trace());
@@ -466,28 +457,28 @@ void TimePropagator<Scalar, TimeScalar, Symmetry>::initU()
     U = TwoSiteObservable<Symmetry>(H.data_h.pat, H.bond);
     Usqrt = TwoSiteObservable<Symmetry>(H.data_h.pat, H.bond);
     Usq = TwoSiteObservable<Symmetry>(H.data_h.pat, H.bond);
-    if(H.data_h.size()) {
+    if(H.data_h.size() > 0) {
         for(auto i = 0ul; i < cell_.uniqueSize(); ++i) {
             U.data_h[i] = shifted_ham.data_h[i].mexp(-dt).eval();
             Usqrt.data_h[i] = shifted_ham.data_h[i].mexp(-0.5 * dt).eval();
             Usq.data_h[i] = shifted_ham.data_h[i].mexp(-2. * dt).eval();
         }
     }
-    if(H.data_v.size()) {
+    if(H.data_v.size() > 0) {
         for(auto i = 0ul; i < cell_.uniqueSize(); ++i) {
             U.data_v[i] = shifted_ham.data_v[i].mexp(-dt).eval();
             Usqrt.data_v[i] = shifted_ham.data_v[i].mexp(-0.5 * dt).eval();
             Usq.data_v[i] = shifted_ham.data_v[i].mexp(-2. * dt).eval();
         }
     }
-    if(H.data_d1.size()) {
+    if(H.data_d1.size() > 0) {
         for(auto i = 0ul; i < cell_.uniqueSize(); ++i) {
             U.data_d1[i] = shifted_ham.data_d1[i].mexp(-dt).eval();
             Usqrt.data_d1[i] = shifted_ham.data_d1[i].mexp(-0.5 * dt).eval();
             Usq.data_d1[i] = shifted_ham.data_d1[i].mexp(-2. * dt).eval();
         }
     }
-    if(H.data_d2.size()) {
+    if(H.data_d2.size() > 0) {
         for(auto i = 0ul; i < cell_.uniqueSize(); ++i) {
             U.data_d2[i] = shifted_ham.data_d2[i].mexp(-dt).eval();
             Usqrt.data_d2[i] = shifted_ham.data_d2[i].mexp(-0.5 * dt).eval();

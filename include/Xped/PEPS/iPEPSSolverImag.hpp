@@ -26,12 +26,14 @@ struct iPEPSSolverImag
         if(not imag_opts.obs_directory.empty()) {
             std::filesystem::create_directories(imag_opts.working_directory / imag_opts.obs_directory);
             try {
-                HighFive::File file((imag_opts.working_directory / imag_opts.obs_directory).string() + "/" + H.file_name() + ".h5",
+                HighFive::File file((imag_opts.working_directory / imag_opts.obs_directory).string() + "/" + H.file_name() +
+                                        fmt::format("_id={}.h5", imag_opts.id),
                                     imag_opts.resume ? HighFive::File::ReadWrite : HighFive::File::Excl);
             } catch(const std::exception& e) {
                 fmt::print(fg(fmt::color::red),
                            "There already exists an observable file for this simulation:{}.\n",
-                           (imag_opts.working_directory / imag_opts.obs_directory).string() + "/" + this->H.file_name() + ".h5");
+                           (imag_opts.working_directory / imag_opts.obs_directory).string() + "/" + this->H.file_name() +
+                               fmt::format("_id={}.h5", imag_opts.id));
                 std::cout << std::flush;
                 throw;
             }
@@ -63,7 +65,7 @@ struct iPEPSSolverImag
                 util::Stopwatch<> step_t;
                 TMatrix<Tensor<Scalar, 1, 1, Symmetry>> conv_h;
                 TMatrix<Tensor<Scalar, 1, 1, Symmetry>> conv_v;
-                double diff;
+                double diff = 0.;
                 std::size_t steps = 0ul;
                 TimePropagator<Scalar, double, Symmetry> Jim(H, imag_opts.dts[i], imag_opts.update, Psi->charges());
                 for(auto step = 0ul; step < imag_opts.t_steps[i]; ++step) {
@@ -103,7 +105,9 @@ struct iPEPSSolverImag
                                    step_t.time_string(),
                                    diff);
                 constexpr std::size_t flags = yas::file /*IO type*/ | yas::binary; /*IO format*/
-                yas::file_ostream ofs((imag_opts.working_directory.string() + "/" + H.file_name() + fmt::format("_D{}.psi", D)).c_str(), /*trunc*/ 1);
+                yas::file_ostream ofs(
+                    (imag_opts.working_directory.string() + "/" + H.file_name() + fmt::format("_D={}_id={}.psi", D, imag_opts.id)).c_str(),
+                    /*trunc*/ 1);
                 yas::save<flags>(ofs, *Psi);
                 // Psi->info();
             }
@@ -119,7 +123,8 @@ struct iPEPSSolverImag
                 if(imag_opts.display_obs) { Log::per_iteration(imag_opts.verbosity, "  Observables:\n{}", H.getObsString("    ")); }
                 if(not imag_opts.obs_directory.empty()) {
                     std::string e_name = fmt::format("/{}/{}/energy", D, chi);
-                    HighFive::File file((imag_opts.working_directory / imag_opts.obs_directory).string() + "/" + H.file_name() + ".h5",
+                    HighFive::File file((imag_opts.working_directory / imag_opts.obs_directory).string() + "/" + H.file_name() +
+                                            fmt::format("_id={}.h5", imag_opts.id),
                                         HighFive::File::OpenOrCreate);
                     if(not file.exist(e_name)) {
                         HighFive::DataSpace dataspace = HighFive::DataSpace({0, 0}, {HighFive::DataSpace::UNLIMITED, HighFive::DataSpace::UNLIMITED});

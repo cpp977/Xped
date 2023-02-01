@@ -47,7 +47,9 @@ struct Imag
     LoadFormat load_format = LoadFormat::NATIVE;
     int qn_scale = 1;
 
-    std::size_t seed = 0;
+    std::size_t seed = 0ul;
+
+    std::size_t id = 1ul;
 
     Verbosity verbosity = Verbosity::ON_ENTRY;
 
@@ -85,6 +87,7 @@ struct Imag
                            ("load", load),
                            ("load format", load_format),
                            ("seed", seed),
+                           ("id", id),
                            ("display_obs", display_obs),
                            ("qn_scale", qn_scale),
                            ("multi_init", multi_init),
@@ -118,6 +121,7 @@ struct Imag
         if(load.size() > 0) { fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• scale loaded qn by:", qn_scale); }
         if(load.size() > 0) { fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• load format:", fmt::streamed(load_format)); }
         if(load.size() == 0) { fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• seed:", seed); }
+        fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• id:", id);
         fmt::format_to(std::back_inserter(res), "  {:<30} {}", "• verbosity:", fmt::streamed(verbosity));
         return res;
     }
@@ -140,7 +144,12 @@ inline Imag imag_from_toml(const toml::value& t)
     if(t.contains("verbosity")) { res.verbosity = util::enum_from_toml<Verbosity>(t.at("verbosity")); }
     res.log_format = t.contains("log_format") ? static_cast<std::string>(t.at("log_format").as_string()) : res.log_format;
     if(t.contains("working_directory")) {
-        res.working_directory = std::filesystem::path(static_cast<std::string>(t.at("working_directory").as_string()));
+        std::filesystem::path tmp_wd(static_cast<std::string>(t.at("working_directory").as_string()));
+        if(tmp_wd.is_relative()) {
+            res.working_directory = std::filesystem::current_path() / tmp_wd;
+        } else {
+            res.working_directory = tmp_wd;
+        }
     }
     if(t.contains("logging_directory")) {
         res.logging_directory = std::filesystem::path(static_cast<std::string>(t.at("logging_directory").as_string()));
@@ -151,6 +160,7 @@ inline Imag imag_from_toml(const toml::value& t)
     if(t.contains("load_format")) { res.load_format = util::enum_from_toml<LoadFormat>(t.at("load_format")); }
     res.qn_scale = t.contains("qn_scale") ? (t.at("qn_scale").as_integer()) : res.qn_scale;
     res.seed = t.contains("seed") ? (t.at("seed").as_integer()) : res.seed;
+    res.id = t.contains("id") ? (t.at("id").as_integer()) : res.id;
     res.multi_init = t.contains("multi_init") ? (t.at("multi_init").as_boolean()) : res.multi_init;
     if(res.multi_init) { res.init_dts = t.contains("init_dts") ? toml::find<std::vector<double>>(t, "init_dts") : res.init_dts; }
     if(res.multi_init) { res.init_t_steps = t.contains("init_t_steps") ? toml::find<std::vector<std::size_t>>(t, "init_t_steps") : res.init_t_steps; }

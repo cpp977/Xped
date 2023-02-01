@@ -189,22 +189,25 @@ public:
             obs.push_back(std::move(cdagc));
             obs.push_back(std::move(SzSz));
             if constexpr(not Symmetry::ANY_IS_SPIN) {
-                // auto Sx = std::make_unique<Xped::OneSiteObservable<Symmetry>>(pat, "Sx");
-                // for(auto& t : Sx->data) { t = F.Sx().data.template trim<2>(); }
+                auto Sx = std::make_unique<Xped::OneSiteObservable<Symmetry>>(pat, "Sx");
+                for(auto& t : Sx->data) { t = F.Sx().data.template trim<2>(); }
 
-                // auto SxSx =
-                //     std::make_unique<TwoSiteObservable<Symmetry>>(pat, Opts::Bond::H | Opts::Bond::V | Opts::Bond::D1 | Opts::Bond::D2, "SxSx");
-                // for(auto& t : SxSx->data_h) { t = tprod(F.Sx(), F.Sx()); }
-                // for(auto& t : SxSx->data_v) { t = tprod(F.Sx(), F.Sx()); }
-                // for(auto& t : SxSx->data_d1) { t = tprod(F.Sx(), F.Sx()); }
-                // for(auto& t : SxSx->data_d2) { t = tprod(F.Sx(), F.Sx()); }
-                // obs.push_back(std::move(Sx));
-                // obs.push_back(std::move(SxSx));
+                auto SxSx =
+                    std::make_unique<TwoSiteObservable<Symmetry>>(pat, Opts::Bond::H | Opts::Bond::V | Opts::Bond::D1 | Opts::Bond::D2, "SxSx");
+                for(auto& t : SxSx->data_h) { t = tprod(F.Sx(), F.Sx()); }
+                for(auto& t : SxSx->data_v) { t = tprod(F.Sx(), F.Sx()); }
+                for(auto& t : SxSx->data_d1) { t = tprod(F.Sx(), F.Sx()); }
+                for(auto& t : SxSx->data_d2) { t = tprod(F.Sx(), F.Sx()); }
+                obs.push_back(std::move(Sx));
+                obs.push_back(std::move(SxSx));
             }
         }
     }
 
-    virtual std::string file_name() const override { return internal::create_filename("Hubbard", params, used_params); }
+    virtual std::string file_name() const override
+    {
+        return internal::create_filename(fmt::format("Hubbard_Lx={}_Ly={}", pat.Lx, pat.Ly), params, used_params);
+    }
 
     virtual std::string format() const override
     {

@@ -1,4 +1,4 @@
-#include <cassert>
+#include <assert.hpp>
 
 #include "Xped/PEPS/Pattern.hpp"
 
@@ -6,7 +6,7 @@ namespace Xped {
 
 void Pattern::init()
 {
-    assert(data.size() > 0);
+    DEBUG_ASSERT(data.size() > 0);
     std::vector<std::size_t> flattened_pat;
     for(auto const& row : data) { flattened_pat.insert(flattened_pat.end(), row.begin(), row.end()); }
     std::sort(flattened_pat.begin(), flattened_pat.end());
@@ -15,14 +15,14 @@ void Pattern::init()
     auto offset = flattened_pat[0];
     [[maybe_unused]] std::vector<std::size_t> check(flattened_pat.size());
     std::iota(check.begin(), check.end(), offset);
-    assert(flattened_pat == check);
+    DEBUG_ASSERT(flattened_pat == check);
     for(auto& row : data) {
         for(auto& val : row) { val = val - offset; }
     }
     Lx = data.size();
-    assert(Lx > 0);
+    DEBUG_ASSERT(Lx > 0);
     Ly = data[0].size();
-    for([[maybe_unused]] const auto& row : data) { assert(row.size() == Ly); }
+    for([[maybe_unused]] const auto& row : data) { DEBUG_ASSERT(row.size() == Ly); }
 
     for(int x = 0; x < Lx; x++) {
         for(int y = 0; y < Ly; y++) {
@@ -30,6 +30,9 @@ void Pattern::init()
             label2index[data[x][y]] = data[x][y];
             sites_of_label[data[x][y]].push_back(index(x, y));
         }
+    }
+    for(auto i = 0ul; i < uniqueSize(); ++i) {
+        DEBUG_ASSERT(i == index(coords(i).first, coords(i).second), "Index flattening in pattern is broken.");
     }
 }
 
@@ -65,6 +68,7 @@ std::size_t Pattern::uniqueIndex(const int x, const int y) const { return unique
 std::size_t Pattern::uniqueIndex(const std::size_t index) const { return index2unique.at(index); }
 
 std::pair<int, int> Pattern::coords(std::size_t index) const { return std::make_pair(static_cast<int>(index % Lx), static_cast<int>(index / Lx)); }
+// std::pair<int, int> Pattern::coords(std::size_t index) const { return std::make_pair(static_cast<int>(index / Ly), static_cast<int>(index % Ly)); }
 
 // bool Pattern::isUnique(const int x, const int y) const { return (uniqueIndex(x, y) == index(x, y)); }
 bool Pattern::isUnique(const int x, const int y) const { return index(x, y) < uniqueSize(); }

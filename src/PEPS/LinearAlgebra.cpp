@@ -178,7 +178,7 @@ std::array<TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, Scalar>>, 4> a
                         auto T1C2T2 = T1C2.template contract<std::array{-1, -2, -3, 1}, std::array{-4, -5, 1, -6}, 3, ENABLE_AD>(env.T2s(x + 2, y));
                         auto T1C2T2A = T1C2T2.template contract<std::array{-1, 1, -2, 2, -3, -4}, std::array{-5, 1, 2, -6, -7}, 4, ENABLE_AD>(
                             env.A->As(x + 1, y).twist(2));
-                        auto T1C2T2AH = T1C2T2A.template contract<std::array{-1, -2, -3, -4, -5, -6, 1}, std::array{-7, 1, -8}, 6, ENABLE_AD>(Hvdag);
+                        auto T1C2T2AH = T1C2T2A.template contract<std::array{-1, -2, -3, -4, -5, -6, 1}, std::array{1, -8, -7}, 6, ENABLE_AD>(Hu);
                         auto Q2H = T1C2T2AH.template contract<std::array{-1, 1, 2, -4, -2, -5, -7, 3}, std::array{-3, 1, 3, 2, -6}, 3, ENABLE_AD>(
                             env.A->Adags(x + 1, y).twist(4));
 
@@ -188,15 +188,13 @@ std::array<TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, Scalar>>, 4> a
                             env.T4s(x - 1, y + 1).template contract<std::array{-1, 1, -2, -3}, std::array{1, -4, -5, -6}, 3, ENABLE_AD>(C4T3);
                         auto T4C4T3A = T4C4T3.template contract<std::array{-1, 1, -2, 2, -3, -4}, std::array{1, -5, -6, 2, -7}, 4, ENABLE_AD>(
                             env.A->As(x, y + 1).twist(3));
-                        auto T4C4T3AH = T4C4T3A.template contract<std::array{-1, -2, -3, -4, -5, -6, 1}, std::array{1, -7, -8}, 6, ENABLE_AD>(Hu);
+                        auto T4C4T3AH = T4C4T3A.template contract<std::array{-1, -2, -3, -4, -5, -6, 1}, std::array{-8, 1, -7}, 6, ENABLE_AD>(Hvdag);
                         auto Q4H = T4C4T3AH.template contract<std::array{-4, 1, 2, -1, -5, -2, 3, -7}, std::array{1, -6, 3, -3, 2}, 3, ENABLE_AD>(
                             env.A->Adags(x, y + 1).twist(3));
                         Q2H = Q1 * Q2H;
                         Q4H = Q3 * Q4H.twist(0).twist(1).twist(2);
                         o_d2(x, y) =
-                            Q2H.template contract<std::array{1, 2, 3, 4, 5, 6, 7}, std::array{4, 5, 6, 1, 2, 3, 7}, 0, ENABLE_AD>(Q4H.twist(6))
-                                .trace() /
-                            norm;
+                            Q2H.template contract<std::array{1, 2, 3, 4, 5, 6, 7}, std::array{4, 5, 6, 1, 2, 3, 7}, 0, ENABLE_AD>(Q4H).trace() / norm;
                     } else if constexpr(TRank == 1) {
                         o_d2(x, y) = 0.;
                     }

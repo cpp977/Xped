@@ -1,5 +1,7 @@
 #include <unordered_set>
 
+#include <assert.hpp>
+
 #include "Xped/Util/Macros.hpp"
 
 #include "Xped/Symmetry/SU2.hpp"
@@ -22,7 +24,7 @@ template <typename Derived>
 template <bool>
 typename TensorTraits<Derived>::Scalar TensorBase<Derived>::trace() XPED_CONST
 {
-    assert(derived().coupledDomain() == derived().coupledCodomain());
+    DEBUG_ASSERT(derived().coupledDomain() == derived().coupledCodomain());
     Scalar out = 0.;
     for(size_t i = 0; i < derived().sector().size(); i++) {
         out += PlainInterface::trace(derived().block(i)) * Symmetry::degeneracy(derived().sector(i));
@@ -209,8 +211,8 @@ TensorBase<Derived>::operator*(XPED_CONST TensorBase<OtherDerived>& other) XPED_
     auto derived_ref = derived();
     auto other_derived_ref = other.derived();
     // fmt::print("world={}, other.world={}\n", derived_ref.world()->comm, other_derived_ref.world()->comm);
-    assert(derived_ref.world() == other_derived_ref.world());
-    assert(derived_ref.coupledCodomain() == other_derived_ref.coupledDomain());
+    DEBUG_ASSERT(derived_ref.world() == other_derived_ref.world());
+    DEBUG_ASSERT(derived_ref.coupledCodomain() == other_derived_ref.coupledDomain());
 
     Tensor<Scalar, Rank, TensorTraits<OtherDerived_>::CoRank, Symmetry, false, AllocationPolicy> Tout(
         derived_ref.uncoupledDomain(), other_derived_ref.uncoupledCodomain(), derived_ref.world());

@@ -1,6 +1,8 @@
 #ifndef XPED_DIAG_COEFF_BINARY_OP_H_
 #define XPED_DIAG_COEFF_BINARY_OP_H_
 
+#include <assert.hpp>
+
 #include "Xped/Core/Qbasis.hpp"
 
 #include "TensorBase.hpp"
@@ -39,13 +41,13 @@ public:
         static_assert(XprTypeLeft::Rank == XprTypeRight::Rank);
         static_assert(XprTypeLeft::CoRank == XprTypeRight::CoRank);
         static_assert(std::is_same<typename XprTypeLeft::Symmetry, typename XprTypeLeft::Symmetry>::value);
-        assert(refxpr_l_.sector() == refxpr_r_.sector());
-        assert(refxpr_l_.dict() == refxpr_r_.dict());
-        assert(refxpr_l_.world() == refxpr_r_.world());
-        assert(refxpr_l_.uncoupledDomain() == refxpr_r_.uncoupledDomain());
-        assert(refxpr_l_.uncoupledCodomain() == refxpr_r_.uncoupledCodomain());
-        assert(refxpr_l_.coupledDomain() == refxpr_r_.coupledDomain());
-        assert(refxpr_l_.coupledCodomain() == refxpr_r_.coupledCodomain());
+        DEBUG_ASSERT(refxpr_l_.sector() == refxpr_r_.sector());
+        DEBUG_ASSERT(refxpr_l_.dict() == refxpr_r_.dict());
+        DEBUG_ASSERT(refxpr_l_.world() == refxpr_r_.world());
+        DEBUG_ASSERT(refxpr_l_.uncoupledDomain() == refxpr_r_.uncoupledDomain());
+        DEBUG_ASSERT(refxpr_l_.uncoupledCodomain() == refxpr_r_.uncoupledCodomain());
+        DEBUG_ASSERT(refxpr_l_.coupledDomain() == refxpr_r_.coupledDomain());
+        DEBUG_ASSERT(refxpr_l_.coupledCodomain() == refxpr_r_.coupledCodomain());
     }
 
     inline const std::string name() const { return "CoeffBinaryOp"; }

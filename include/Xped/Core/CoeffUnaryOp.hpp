@@ -1,6 +1,8 @@
 #ifndef XPED_COEFF_UNARY_OP_H_
 #define XPED_COEFF_UNARY_OP_H_
 
+#include <assert.hpp>
+
 #include "Xped/Core/Qbasis.hpp"
 
 #include "TensorBase.hpp"

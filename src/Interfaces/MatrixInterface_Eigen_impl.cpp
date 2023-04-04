@@ -51,17 +51,23 @@ void MatrixInterface::setZero(Eigen::MatrixBase<Derived>&& M)
 template <typename Derived>
 void MatrixInterface::setRandom(Eigen::MatrixBase<Derived>& M, std::mt19937& engine)
 {
-    std::uniform_real_distribution<typename Derived::Scalar> distribution(-1., 1.);
-    M = M.NullaryExpr(M.rows(), M.cols(), [&engine, &distribution]() { return distribution(engine); });
+    using Scalar = typename Derived::Scalar;
+    std::uniform_real_distribution<typename ScalarTraits<Scalar>::Real> distribution(-1., 1.);
+    M = M.NullaryExpr(M.rows(), M.cols(), [&engine, &distribution]() {
+        if constexpr(ScalarTraits<Scalar>::IS_COMPLEX()) {
+            return std::complex(distribution(engine), distribution(engine));
+        } else {
+            return distribution(engine);
+        }
+    });
     // M.setRandom();
 }
 
 template <typename Derived>
 void MatrixInterface::setRandom(Eigen::MatrixBase<Derived>&& M, std::mt19937& engine)
 {
-    std::uniform_real_distribution<typename Derived::Scalar> distribution(-1., 1.);
-    M = M.NullaryExpr(M.rows(), M.cols(), [&engine, &distribution]() { return distribution(engine); });
-    // M.setRandom();
+    Eigen::MatrixBase<Derived>& tmp_M = M;
+    return setRandom(tmp_M, engine);
 }
 
 template <typename Derived>

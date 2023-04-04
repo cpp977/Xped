@@ -39,40 +39,40 @@ struct PlainInterface : public MatrixInterface, public TensorInterface, public V
     using VectorInterface::setRandom;
     using VectorInterface::setZero;
 
-    template <std::size_t Rank, typename Derived, typename Scalar>
+    template <std::size_t Rank, typename Derived, typename ClebschScalar, typename Scalar>
     static void set_block_from_tensor(Eigen::MatrixBase<Derived>& M,
                                       const Indextype& row,
                                       const Indextype& col,
                                       const Indextype& rows,
                                       const Indextype& cols,
-                                      const Scalar& scale,
+                                      const ClebschScalar& scale,
                                       const TType<Scalar, Rank>& T);
 
-    template <std::size_t Rank, typename Derived, typename Scalar>
+    template <std::size_t Rank, typename Derived, typename ClebschScalar, typename Scalar>
     static void add_to_block_from_tensor(Eigen::MatrixBase<Derived>& M,
                                          const Indextype& row,
                                          const Indextype& col,
                                          const Indextype& rows,
                                          const Indextype& cols,
-                                         const Scalar& scale,
+                                         const ClebschScalar& scale,
                                          const TType<Scalar, Rank>& T);
 
-    template <std::size_t Rank, typename Derived, typename Scalar>
+    template <std::size_t Rank, typename Derived, typename ClebschScalar, typename Scalar>
     static void set_block_from_tensor(Eigen::MatrixBase<Derived>&& M,
                                       const Indextype& row,
                                       const Indextype& col,
                                       const Indextype& rows,
                                       const Indextype& cols,
-                                      const Scalar& scale,
+                                      const ClebschScalar& scale,
                                       const TType<Scalar, Rank>& T);
 
-    template <std::size_t Rank, typename Derived, typename Scalar>
+    template <std::size_t Rank, typename Derived, typename ClebschScalar, typename Scalar>
     static void add_to_block_from_tensor(Eigen::MatrixBase<Derived>&& M,
                                          const Indextype& row,
                                          const Indextype& col,
                                          const Indextype& rows,
                                          const Indextype& cols,
-                                         const Scalar& scale,
+                                         const ClebschScalar& scale,
                                          const TType<Scalar, Rank>& T);
 
     template <std::size_t Rank, typename Derived>

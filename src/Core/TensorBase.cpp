@@ -24,18 +24,19 @@ template <typename Derived>
 template <bool>
 typename TensorTraits<Derived>::Scalar TensorBase<Derived>::trace() XPED_CONST
 {
+    using RealScalar = typename ScalarTraits<Scalar>::Real;
     DEBUG_ASSERT(derived().coupledDomain() == derived().coupledCodomain());
     Scalar out = 0.;
     for(size_t i = 0; i < derived().sector().size(); i++) {
-        out += PlainInterface::trace(derived().block(i)) * Symmetry::degeneracy(derived().sector(i));
+        out += PlainInterface::trace(derived().block(i)) * static_cast<RealScalar>(Symmetry::degeneracy(derived().sector(i)));
     }
     return out;
 }
 
 template <typename Derived>
-typename TensorTraits<Derived>::Scalar TensorBase<Derived>::maxNorm() XPED_CONST
+ScalarTraits<typename TensorTraits<Derived>::Scalar>::Real TensorBase<Derived>::maxNorm() XPED_CONST
 {
-    Scalar out = 0.;
+    typename ScalarTraits<Scalar>::Real out = 0.;
     for(size_t i = 0; i < derived().sector().size(); i++) {
         if(out < PlainInterface::maxNorm(derived().block(i))) { out = PlainInterface::maxNorm(derived().block(i)); }
     }
@@ -43,16 +44,18 @@ typename TensorTraits<Derived>::Scalar TensorBase<Derived>::maxNorm() XPED_CONST
 }
 
 template <typename Derived>
-typename TensorTraits<Derived>::Scalar TensorBase<Derived>::squaredNorm() XPED_CONST
+ScalarTraits<typename TensorTraits<Derived>::Scalar>::Real TensorBase<Derived>::squaredNorm() XPED_CONST
 {
-    return (*this * this->adjoint()).trace();
+    auto res = (*this * this->adjoint()).trace();
+    DEBUG_ASSERT(std::abs(std::imag(res)) < 1.e-12);
+    return std::real(res);
 }
 
 template <typename Derived>
-typename TensorTraits<Derived>::Scalar
+ScalarTraits<typename TensorTraits<Derived>::Scalar>::Real
 TensorBase<Derived>::maxCoeff(std::size_t& max_block, PlainInterface::MIndextype& max_row, PlainInterface::MIndextype& max_col) XPED_CONST
 {
-    Scalar out = 0.;
+    typename ScalarTraits<Scalar>::Real out = 0.;
     for(size_t i = 0; i < derived().sector().size(); i++) {
         PlainInterface::MIndextype max_row_tmp;
         PlainInterface::MIndextype max_col_tmp;

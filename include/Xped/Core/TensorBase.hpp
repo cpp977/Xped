@@ -108,13 +108,13 @@ public:
     template <bool = false>
     Scalar trace() XPED_CONST;
 
-    Scalar maxNorm() XPED_CONST;
+    ScalarTraits<Scalar>::Real maxNorm() XPED_CONST;
 
-    Scalar squaredNorm() XPED_CONST;
+    ScalarTraits<Scalar>::Real squaredNorm() XPED_CONST;
 
-    inline Scalar norm() XPED_CONST { return std::sqrt(squaredNorm()); }
+    inline ScalarTraits<Scalar>::Real norm() XPED_CONST { return std::sqrt(squaredNorm()); }
 
-    Scalar maxCoeff(std::size_t& max_block, PlainInterface::MIndextype& max_row, PlainInterface::MIndextype& max_col) XPED_CONST;
+    ScalarTraits<Scalar>::Real maxCoeff(std::size_t& max_block, PlainInterface::MIndextype& max_row, PlainInterface::MIndextype& max_col) XPED_CONST;
 
     inline Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy> eval() const
     {
@@ -138,6 +138,14 @@ template <typename DerivedLeft, typename DerivedRight>
 XPED_CONST CoeffBinaryOp<DerivedLeft, DerivedRight> operator+(XPED_CONST TensorBase<DerivedLeft>& left, XPED_CONST TensorBase<DerivedRight>& right)
 {
     return left.binaryExpr(right, [](const typename DerivedLeft::Scalar s1, const typename DerivedRight::Scalar s2) { return s1 + s2; });
+}
+
+template <typename DerivedLeft, typename DerivedRight>
+XPED_CONST CoeffBinaryOp<DerivedLeft, DerivedRight> operator+(TensorBase<DerivedLeft>&& left, TensorBase<DerivedRight>&& right)
+{
+    TensorBase<DerivedLeft>& tmp_left = left;
+    TensorBase<DerivedRight>& tmp_right = right;
+    return tmp_left.binaryExpr(tmp_right, [](const typename DerivedLeft::Scalar s1, const typename DerivedRight::Scalar s2) { return s1 + s2; });
 }
 
 template <typename DerivedLeft, typename DerivedRight>
@@ -174,6 +182,13 @@ template <bool = false, typename Derived>
 XPED_CONST CoeffUnaryOp<Derived> operator*(const typename Derived::Scalar factor, XPED_CONST TensorBase<Derived>& right)
 {
     return right.unaryExpr([factor](const typename Derived::Scalar s) { return s * factor; });
+}
+
+template <bool = false, typename Derived>
+XPED_CONST CoeffUnaryOp<Derived> operator*(const typename Derived::Scalar factor, TensorBase<Derived>&& right)
+{
+    TensorBase<Derived>& tmp_right = right;
+    return tmp_right.unaryExpr([factor](const typename Derived::Scalar s) { return s * factor; });
 }
 
 template <typename Derived>

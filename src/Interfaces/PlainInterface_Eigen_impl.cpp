@@ -17,49 +17,49 @@ using TType = Eigen::Tensor<Scalar, Rank>;
 template <typename Scalar>
 using VType = Eigen::Array<Scalar, Eigen::Dynamic, 1>;
 
-template <std::size_t Rank, typename Derived, typename Scalar>
+template <std::size_t Rank, typename Derived, typename ClebschScalar, typename Scalar>
 void PlainInterface::set_block_from_tensor(Eigen::MatrixBase<Derived>& M,
                                            const Indextype& row,
                                            const Indextype& col,
                                            const Indextype& rows,
                                            const Indextype& cols,
-                                           const Scalar& scale,
+                                           const ClebschScalar& scale,
                                            const TType<Scalar, Rank>& T)
 {
     M.block(row, col, rows, cols) = scale * Eigen::Map<cMType<Scalar>>(T.data(), rows, cols);
 }
 
-template <std::size_t Rank, typename Derived, typename Scalar>
+template <std::size_t Rank, typename Derived, typename ClebschScalar, typename Scalar>
 void PlainInterface::add_to_block_from_tensor(Eigen::MatrixBase<Derived>& M,
                                               const Indextype& row,
                                               const Indextype& col,
                                               const Indextype& rows,
                                               const Indextype& cols,
-                                              const Scalar& scale,
+                                              const ClebschScalar& scale,
                                               const TType<Scalar, Rank>& T)
 {
     M.block(row, col, rows, cols) += scale * Eigen::Map<cMType<Scalar>>(T.data(), rows, cols);
 }
 
-template <std::size_t Rank, typename Derived, typename Scalar>
+template <std::size_t Rank, typename Derived, typename ClebschScalar, typename Scalar>
 void PlainInterface::set_block_from_tensor(Eigen::MatrixBase<Derived>&& M,
                                            const Indextype& row,
                                            const Indextype& col,
                                            const Indextype& rows,
                                            const Indextype& cols,
-                                           const Scalar& scale,
+                                           const ClebschScalar& scale,
                                            const TType<Scalar, Rank>& T)
 {
     M.block(row, col, rows, cols) = scale * Eigen::Map<cMType<Scalar>>(T.data(), rows, cols);
 }
 
-template <std::size_t Rank, typename Derived, typename Scalar>
+template <std::size_t Rank, typename Derived, typename ClebschScalar, typename Scalar>
 void PlainInterface::add_to_block_from_tensor(Eigen::MatrixBase<Derived>&& M,
                                               const Indextype& row,
                                               const Indextype& col,
                                               const Indextype& rows,
                                               const Indextype& cols,
-                                              const Scalar& scale,
+                                              const ClebschScalar& scale,
                                               const TType<Scalar, Rank>& T)
 {
     M.block(row, col, rows, cols) += scale * Eigen::Map<cMType<Scalar>>(T.data(), rows, cols);

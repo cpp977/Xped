@@ -380,15 +380,15 @@ Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::tSVD(size_t max
         SPDLOG_INFO("Step i={} for mat with dim=({},{})", i, PlainInterface::rows<Scalar>(block(i)), PlainInterface::rows<Scalar>(block(i)));
         auto [Umat, Sigmavec, Vmatdag] = PlainInterface::svd(block(i));
         SPDLOG_INFO("Performed svd for step i={}", i);
-        std::vector<Scalar> svs;
-        PlainInterface::vec_to_stdvec<Scalar>(Sigmavec, svs);
+        std::vector<RealScalar> svs;
+        PlainInterface::vec_to_stdvec<RealScalar>(Sigmavec, svs);
 
         for(const auto& sv : svs) {
             SPDLOG_INFO("Move the element {} from sigma to allSV", sv);
             allSV.push_back(std::make_pair(sector(i), sv));
         }
         SPDLOG_INFO("Extracted singular values for step i={}", i);
-        auto Sigmamat = PlainInterface::vec_to_diagmat<Scalar>(Sigmavec);
+        auto Sigmamat = PlainInterface::vec_to_diagmat<RealScalar>(Sigmavec);
         U.push_back(sector(i), Umat);
         Sigma.push_back(sector(i), Sigmamat);
         Vdag.push_back(sector(i), Vmatdag);
@@ -485,7 +485,7 @@ Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::tSVD(size_t max
         // if(RETURN_SPEC) { SVspec.insert(std::make_pair(q, Sigma.block_[itSigma->second].diagonal().head(Nret).real())); }
         SPDLOG_INFO("Before return spec.");
         if(RETURN_SPEC) {
-            VectorType spec;
+            PlainInterface::VType<RealScalar> spec;
             PlainInterface::diagonal_head_matrix_to_vector(spec, Sigma.block(itSigma->second), Nret);
             SVspec.insert(std::make_pair(q, spec));
         }

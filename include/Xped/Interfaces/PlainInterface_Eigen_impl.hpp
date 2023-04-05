@@ -93,7 +93,7 @@ struct PlainInterface : public MatrixInterface, public TensorInterface, public V
     static void vec_add(const Eigen::Matrix<Scalar, -1, 1>& vec, MType<Scalar>& res);
 
     template <typename Derived>
-    static std::tuple<MType<typename Derived::Scalar>, VType<typename Derived::Scalar>, MType<typename Derived::Scalar>>
+    static std::tuple<MType<typename Derived::Scalar>, VType<typename Derived::RealScalar>, MType<typename Derived::Scalar>>
     svd(const Eigen::MatrixBase<Derived>& M);
 
     template <typename Scalar>

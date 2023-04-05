@@ -112,7 +112,7 @@ void PlainInterface::diagonal_head_matrix_to_vector(VType<typename Derived::Scal
 }
 
 template <typename Derived>
-std::tuple<MType<typename Derived::Scalar>, VType<typename Derived::Scalar>, MType<typename Derived::Scalar>>
+std::tuple<MType<typename Derived::Scalar>, VType<typename Derived::RealScalar>, MType<typename Derived::Scalar>>
 PlainInterface::svd(const Eigen::MatrixBase<Derived>& M)
 {
 #ifdef XPED_DONT_USE_BDCSVD

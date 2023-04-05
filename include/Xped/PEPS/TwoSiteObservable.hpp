@@ -188,6 +188,7 @@ struct TwoSiteObservable : public ObservableBase
     virtual void setDefaultObs() {}
 
     virtual void computeObs(XPED_CONST CTM<double, Symmetry, 2, false, Opts::CTMCheckpoint{}>& env) {}
+    virtual void computeObs(XPED_CONST CTM<std::complex<double>, Symmetry, 2, false, Opts::CTMCheckpoint{}>& env) {}
     virtual void computeObs(XPED_CONST CTM<double, Symmetry, 1, false, Opts::CTMCheckpoint{}>& env) {}
 
     virtual std::string getObsString(const std::string&) const { return ""; }

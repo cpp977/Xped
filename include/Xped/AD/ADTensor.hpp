@@ -5,6 +5,8 @@
 
 #include "stan/math/rev.hpp"
 
+// #include "Xped/AD/complex_var.hpp"
+
 #include "Xped/Util/Bool.hpp"
 
 #include "Xped/Core/Tensor.hpp"
@@ -159,8 +161,15 @@ public:
     }
 
 #if XPED_HAS_NTTP
-    template <auto a1, auto a2, std::size_t ResRank, bool TRACK = true, std::size_t OtherRank, std::size_t OtherCoRank, bool ENABLE_AD>
-    auto contract(const Tensor<Scalar, OtherRank, OtherCoRank, Symmetry, ENABLE_AD, AllocationPolicy>& other) XPED_CONST
+    template <auto a1,
+              auto a2,
+              std::size_t ResRank,
+              bool TRACK = true,
+              typename OtherScalar,
+              std::size_t OtherRank,
+              std::size_t OtherCoRank,
+              bool ENABLE_AD>
+    auto contract(const Tensor<OtherScalar, OtherRank, OtherCoRank, Symmetry, ENABLE_AD, AllocationPolicy>& other) XPED_CONST
     {
         constexpr auto perms = util::constFct::get_permutations<a1, Rank, a2, OtherRank, ResRank>();
         constexpr auto p1 = std::get<0>(perms);
@@ -198,7 +207,7 @@ public:
             return std::make_tuple(Uval, Sval, Vdagval);
         } else {
             Tensor<Scalar, Rank, 1, Symmetry, true, AllocationPolicy> U(Uval);
-            Tensor<Scalar, 1, 1, Symmetry, true, AllocationPolicy> S(Sval);
+            Tensor<RealScalar, 1, 1, Symmetry, true, AllocationPolicy> S(Sval);
             Tensor<Scalar, 1, CoRank, Symmetry, true, AllocationPolicy> Vdag(Vdagval);
 
             stan::math::reverse_pass_callback([curr = *this, U, S, Vdag]() mutable {
@@ -230,18 +239,18 @@ public:
                                 S_b.rows(),
                                 S_b.cols());
 
-                    auto F_inv = PlainInterface::construct<Scalar>(PlainInterface::rows(S_b), PlainInterface::cols(S_b), S.val().world());
+                    auto F_inv = PlainInterface::construct<RealScalar>(PlainInterface::rows(S_b), PlainInterface::cols(S_b), S.val().world());
                     PlainInterface::vec_diff(S_b.diagonal().eval(), F_inv);
-                    auto F =
-                        PlainInterface::unaryFunc<Scalar>(F_inv, [](Scalar d) { return (std::abs(d) < 1.e-12) ? d / (d * d + 1.e-12) : 1. / d; });
+                    auto F = PlainInterface::unaryFunc<RealScalar>(
+                        F_inv, [](RealScalar d) { return (std::abs(d) < 1.e-12) ? d / (d * d + 1.e-12) : 1. / d; });
                     // fmt::print("S={}\n", S_b.diagonal().transpose());
                     PlainInterface::MType<Scalar> tmp = S_b.diagonal().asDiagonal().inverse();
                     // fmt::print("S_inv={}\n", tmp.diagonal().transpose());
                     // fmt::print("F=\n{}\n", F);
-                    auto G_inv = PlainInterface::construct<Scalar>(PlainInterface::rows(S_b), PlainInterface::cols(S_b), S.val().world());
+                    auto G_inv = PlainInterface::construct<RealScalar>(PlainInterface::rows(S_b), PlainInterface::cols(S_b), S.val().world());
                     PlainInterface::vec_add(S_b.diagonal().eval(), G_inv);
-                    PlainInterface::MType<Scalar> G =
-                        PlainInterface::unaryFunc<Scalar>(G_inv, [](Scalar d) { return (d < 1.e-12) ? d / (d * d + 1.e-12) : 1. / d; });
+                    PlainInterface::MType<RealScalar> G =
+                        PlainInterface::unaryFunc<RealScalar>(G_inv, [](RealScalar d) { return (d < 1.e-12) ? d / (d * d + 1.e-12) : 1. / d; });
                     G.diagonal().setZero();
                     // fmt::print("G=\n{}\n", G);
                     auto Udag_dU = U_b.adjoint() * U.adj().block(j);
@@ -312,7 +321,7 @@ public:
             stan::math::reverse_pass_callback([curr = *this, res, max_block, max_row, max_col]() mutable {
                 Tensor<Scalar, Rank, CoRank, Symmetry, false> Zero(curr.uncoupledDomain(), curr.uncoupledCodomain(), curr.adj().world());
                 Zero.setZero();
-                Zero.block(max_block)(max_row, max_col) = std::signbit(curr.val().block(max_block)(max_row, max_col)) ? -1. : 1.;
+                Zero.block(max_block)(max_row, max_col) = std::signbit(std::real(curr.val().block(max_block)(max_row, max_col))) ? -1. : 1.;
                 curr.adj() += Zero * res.adj();
                 SPDLOG_WARN("reverse norm of {}, input adj norm={}, output adj norm={}", curr.name(), res.adj(), curr.adj().norm());
             });
@@ -465,12 +474,12 @@ XTensor<TRACK, Scalar, Rank, CoRank, Symmetry> operator*(const Tensor<Scalar, Ra
     }
 }
 
-template <bool TRACK = true, typename Scalar, std::size_t Rank, std::size_t MiddleRank, std::size_t CoRank, typename Symmetry>
-XTensor<TRACK, Scalar, Rank, CoRank, Symmetry> operator*(const Tensor<Scalar, Rank, MiddleRank, Symmetry, false>& left,
-                                                         const Tensor<Scalar, MiddleRank, CoRank, Symmetry, true>& right)
+template <bool TRACK = true, typename Scalar, typename OtherScalar, std::size_t Rank, std::size_t MiddleRank, std::size_t CoRank, typename Symmetry>
+XTensor<TRACK, std::common_type_t<Scalar, OtherScalar>, Rank, CoRank, Symmetry>
+operator*(const Tensor<Scalar, Rank, MiddleRank, Symmetry, false>& left, const Tensor<OtherScalar, MiddleRank, CoRank, Symmetry, true>& right)
 {
     if constexpr(TRACK) {
-        Tensor<Scalar, Rank, CoRank, Symmetry, true> res(left * right.val());
+        Tensor<std::common_type_t<Scalar, OtherScalar>, Rank, CoRank, Symmetry, true> res(left * right.val());
         Xped::reverse_pass_callback_alloc([res, left, right]() mutable {
             right.adj() += (left.adjoint() * res.adj());
             SPDLOG_WARN("reverse t*vt with t={} and vt={}, input adj norm={}, output adj norm={}",
@@ -485,12 +494,12 @@ XTensor<TRACK, Scalar, Rank, CoRank, Symmetry> operator*(const Tensor<Scalar, Ra
     }
 }
 
-template <bool TRACK = true, typename Scalar, std::size_t Rank, std::size_t MiddleRank, std::size_t CoRank, typename Symmetry>
-XTensor<TRACK, Scalar, Rank, CoRank, Symmetry> operator*(const Tensor<Scalar, Rank, MiddleRank, Symmetry, true>& left,
-                                                         const Tensor<Scalar, MiddleRank, CoRank, Symmetry, false>& right)
+template <bool TRACK = true, typename Scalar, typename OtherScalar, std::size_t Rank, std::size_t MiddleRank, std::size_t CoRank, typename Symmetry>
+XTensor<TRACK, std::common_type_t<Scalar, OtherScalar>, Rank, CoRank, Symmetry>
+operator*(const Tensor<Scalar, Rank, MiddleRank, Symmetry, true>& left, const Tensor<OtherScalar, MiddleRank, CoRank, Symmetry, false>& right)
 {
     if constexpr(TRACK) {
-        Tensor<Scalar, Rank, CoRank, Symmetry, true> res(left.val() * right);
+        Tensor<std::common_type_t<Scalar, OtherScalar>, Rank, CoRank, Symmetry, true> res(left.val() * right);
         Xped::reverse_pass_callback_alloc([res, left, right]() mutable {
             left.adj() += res.adj() * right.adjoint();
             SPDLOG_WARN("reverse vt*t with vt={} and t={}, input adj norm={}, output adj norm={}",
@@ -505,12 +514,12 @@ XTensor<TRACK, Scalar, Rank, CoRank, Symmetry> operator*(const Tensor<Scalar, Ra
     }
 }
 
-template <bool TRACK = true, typename Scalar, std::size_t Rank, std::size_t MiddleRank, std::size_t CoRank, typename Symmetry>
-XTensor<TRACK, Scalar, Rank, CoRank, Symmetry> operator*(const Tensor<Scalar, Rank, MiddleRank, Symmetry, true>& left,
-                                                         const Tensor<Scalar, MiddleRank, CoRank, Symmetry, true>& right)
+template <bool TRACK = true, typename Scalar, typename OtherScalar, std::size_t Rank, std::size_t MiddleRank, std::size_t CoRank, typename Symmetry>
+XTensor<TRACK, std::common_type_t<Scalar, OtherScalar>, Rank, CoRank, Symmetry>
+operator*(const Tensor<Scalar, Rank, MiddleRank, Symmetry, true>& left, const Tensor<OtherScalar, MiddleRank, CoRank, Symmetry, true>& right)
 {
     if constexpr(TRACK) {
-        Tensor<Scalar, Rank, CoRank, Symmetry, true> res(left.val() * right.val());
+        Tensor<std::common_type_t<Scalar, OtherScalar>, Rank, CoRank, Symmetry, true> res(left.val() * right.val());
         stan::math::reverse_pass_callback([res, left, right]() mutable {
             right.adj() += (left.val().adjoint() * res.adj());
             left.adj() += res.adj() * right.val().adjoint();
@@ -556,4 +565,11 @@ XTensor<TRACK, Scalar, Rank, CoRank, Symmetry> operator*(const Tensor<Scalar, Ra
 // }
 
 } // namespace Xped
+
+namespace std {
+
+stan::math::var_value<double> real(const stan::math::var_value<double>& z) { return z; }
+
+} // namespace std
+
 #endif

@@ -289,8 +289,15 @@ public:
     Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy> shiftQN(std::array<qType, sizeof...(legs)> charges) const;
 
 #if XPED_HAS_NTTP
-    template <auto a1, auto a2, std::size_t ResRank, bool TRACK = false, std::size_t OtherRank, std::size_t OtherCoRank, bool ENABLE_AD>
-    auto contract(XPED_CONST Tensor<Scalar, OtherRank, OtherCoRank, Symmetry, ENABLE_AD, AllocationPolicy>& other) XPED_CONST
+    template <auto a1,
+              auto a2,
+              std::size_t ResRank,
+              bool TRACK = false,
+              typename OtherScalar,
+              std::size_t OtherRank,
+              std::size_t OtherCoRank,
+              bool ENABLE_AD>
+    auto contract(XPED_CONST Tensor<OtherScalar, OtherRank, OtherCoRank, Symmetry, ENABLE_AD, AllocationPolicy>& other) XPED_CONST
     {
         constexpr auto perms = util::constFct::get_permutations<a1, Rank, a2, OtherRank, ResRank>();
         constexpr auto p1 = std::get<0>(perms);
@@ -371,16 +378,17 @@ Tensor<Scalar_, Rank, CoRank, Symmetry, false, AllocationPolicy>::Tensor(const T
     for(std::size_t i = 0; i < other.derived().sector().size(); ++i) { storage_.push_back(other.derived().sector(i), other.derived().block(i)); }
 }
 
-template <bool TRACK = false, typename Scalar, std::size_t Rank, std::size_t MiddleRank, std::size_t CoRank, typename Symmetry>
-Tensor<Scalar, Rank, CoRank, Symmetry, false> operator*(XPED_CONST Tensor<Scalar, Rank, MiddleRank, Symmetry, false>& left,
-                                                        XPED_CONST Tensor<Scalar, MiddleRank, CoRank, Symmetry, false>& right)
+template <bool TRACK = false, typename Scalar, typename OtherScalar, std::size_t Rank, std::size_t MiddleRank, std::size_t CoRank, typename Symmetry>
+Tensor<std::common_type_t<Scalar, OtherScalar>, Rank, CoRank, Symmetry, false>
+operator*(XPED_CONST Tensor<Scalar, Rank, MiddleRank, Symmetry, false>& left,
+          XPED_CONST Tensor<OtherScalar, MiddleRank, CoRank, Symmetry, false>& right)
 {
     return left.template operator*<TRACK>(right);
 }
 
-template <bool TRACK = false, typename Scalar, std::size_t Rank, std::size_t MiddleRank, std::size_t CoRank, typename Symmetry>
-Tensor<Scalar, Rank, CoRank, Symmetry, false> operator*(Tensor<Scalar, Rank, MiddleRank, Symmetry, false>&& left,
-                                                        Tensor<Scalar, MiddleRank, CoRank, Symmetry, false>&& right)
+template <bool TRACK = false, typename Scalar, typename OtherScalar, std::size_t Rank, std::size_t MiddleRank, std::size_t CoRank, typename Symmetry>
+Tensor<std::common_type_t<Scalar, OtherScalar>, Rank, CoRank, Symmetry, false>
+operator*(Tensor<Scalar, Rank, MiddleRank, Symmetry, false>&& left, Tensor<OtherScalar, MiddleRank, CoRank, Symmetry, false>&& right)
 {
     return left.template operator*<TRACK>(right);
 }

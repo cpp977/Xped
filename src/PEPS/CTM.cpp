@@ -25,7 +25,7 @@ CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::CTM(const CTM<Scalar, Symmetry,
     // opts = other.opts;
     HAS_RDM = false;
 
-    if(other.A != nullptr) { A = std::make_shared<iPEPS<double, Symmetry, ENABLE_AD>>(*other.A); }
+    if(other.A != nullptr) { A = std::make_shared<iPEPS<Scalar, Symmetry, ENABLE_AD>>(*other.A); }
     C1s = other.C1s;
     C2s = other.C2s;
     C3s = other.C3s;

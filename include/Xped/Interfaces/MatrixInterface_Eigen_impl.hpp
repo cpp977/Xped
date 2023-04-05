@@ -94,17 +94,19 @@ struct MatrixInterface
     static typename Derived::Scalar trace(const Eigen::MatrixBase<Derived>& M);
 
     template <typename Derived>
-    static typename Derived::Scalar maxNorm(const Eigen::MatrixBase<Derived>& M);
+    static typename Derived::RealScalar maxNorm(const Eigen::MatrixBase<Derived>& M);
 
     template <typename Derived>
-    static typename Derived::Scalar maxCoeff(const Eigen::MatrixBase<Derived>& M, MIndextype& maxrow, MIndextype& maxcol);
+    static typename Derived::RealScalar maxCoeff(const Eigen::MatrixBase<Derived>& M, MIndextype& maxrow, MIndextype& maxcol);
 
     // artithmetic
     template <typename DerivedL, typename DerivedR>
-    static MType<typename DerivedL::Scalar> kronecker_prod(const Eigen::MatrixBase<DerivedL>& M1, const Eigen::MatrixBase<DerivedR>& M2);
+    static MType<std::common_type_t<typename DerivedL::Scalar, typename DerivedR::Scalar>> kronecker_prod(const Eigen::MatrixBase<DerivedL>& M1,
+                                                                                                          const Eigen::MatrixBase<DerivedR>& M2);
 
     template <typename DerivedL, typename DerivedR>
-    static MType<typename DerivedL::Scalar> prod(const Eigen::MatrixBase<DerivedL>& M1, const Eigen::MatrixBase<DerivedR>& M2);
+    static MType<std::common_type_t<typename DerivedL::Scalar, typename DerivedR::Scalar>> prod(const Eigen::MatrixBase<DerivedL>& M1,
+                                                                                                const Eigen::MatrixBase<DerivedR>& M2);
 
     template <typename Scalar, typename MatrixExpr1, typename MatrixExpr2, typename MatrixExpr3, typename MatrixExprRes>
     static void optimal_prod(const Scalar& scale, const MatrixExpr1& M1, const MatrixExpr2& M2, const MatrixExpr3& M3, MatrixExprRes& Mres);

@@ -39,7 +39,7 @@ public:
     bool Evaluate(const double* parameters, double* cost, double* gradient) const override
     {
         Psi->set_data(parameters);
-        cost[0] = impl->template solve<double>(Psi, gradient, op, gradient != nullptr);
+        cost[0] = impl->template solve<double, true>(Psi, gradient, op);
         return true;
     }
     std::unique_ptr<CTMSolver<Scalar, Symmetry, CPOpts, TRank>> impl;

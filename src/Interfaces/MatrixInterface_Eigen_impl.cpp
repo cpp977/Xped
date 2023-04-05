@@ -133,26 +133,28 @@ typename Derived::Scalar MatrixInterface::trace(const Eigen::MatrixBase<Derived>
 }
 
 template <typename Derived>
-typename Derived::Scalar MatrixInterface::maxNorm(const Eigen::MatrixBase<Derived>& M)
+typename Derived::RealScalar MatrixInterface::maxNorm(const Eigen::MatrixBase<Derived>& M)
 {
     return M.template lpNorm<Eigen::Infinity>();
 }
 
 template <typename Derived>
-typename Derived::Scalar MatrixInterface::maxCoeff(const Eigen::MatrixBase<Derived>& M, MIndextype& maxrow, MIndextype& maxcol)
+typename Derived::RealScalar MatrixInterface::maxCoeff(const Eigen::MatrixBase<Derived>& M, MIndextype& maxrow, MIndextype& maxcol)
 {
-    return M.maxCoeff(&maxrow, &maxcol);
+    return M.array().abs().maxCoeff(&maxrow, &maxcol);
 }
 
 // artithmetic
 template <typename DerivedL, typename DerivedR>
-MType<typename DerivedL::Scalar> MatrixInterface::kronecker_prod(const Eigen::MatrixBase<DerivedL>& M1, const Eigen::MatrixBase<DerivedR>& M2)
+MType<std::common_type_t<typename DerivedL::Scalar, typename DerivedR::Scalar>> MatrixInterface::kronecker_prod(const Eigen::MatrixBase<DerivedL>& M1,
+                                                                                                                const Eigen::MatrixBase<DerivedR>& M2)
 {
     return Eigen::kroneckerProduct(M1, M2);
 }
 
 template <typename DerivedL, typename DerivedR>
-MType<typename DerivedL::Scalar> MatrixInterface::prod(const Eigen::MatrixBase<DerivedL>& M1, const Eigen::MatrixBase<DerivedR>& M2)
+MType<std::common_type_t<typename DerivedL::Scalar, typename DerivedR::Scalar>> MatrixInterface::prod(const Eigen::MatrixBase<DerivedL>& M1,
+                                                                                                      const Eigen::MatrixBase<DerivedR>& M2)
 {
     return M1 * M2;
 }

@@ -35,9 +35,8 @@ public:
         }
     }
 
-    template <typename HamScalar>
-    typename ScalarTraits<Scalar>::Real
-    solve(std::shared_ptr<iPEPS<Scalar, Symmetry>> Psi, Scalar* gradient, Hamiltonian<Symmetry>& H, bool CALC_GRAD = true);
+    template <typename HamScalar, bool AD>
+    typename ScalarTraits<Scalar>::Real solve(std::shared_ptr<iPEPS<Scalar, Symmetry>> Psi, Scalar* gradient, Hamiltonian<Symmetry>& H);
 
     XPED_CONST CTM<Scalar, Symmetry, TRank, false>& getCTM() XPED_CONST { return Jack; }
 

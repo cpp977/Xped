@@ -84,7 +84,7 @@ public:
     Derived& operator-=(XPED_CONST TensorBase<OtherDerived>& other);
 
     template <bool = false, typename OtherDerived>
-    Tensor<Scalar,
+    Tensor<std::common_type_t<Scalar, typename TensorTraits<OtherDerived>::Scalar>,
            TensorTraits<Derived>::Rank,
            TensorTraits<typename std::remove_const<std::remove_reference_t<OtherDerived>>::type>::CoRank,
            Symmetry,
@@ -93,7 +93,7 @@ public:
     operator*(XPED_CONST TensorBase<OtherDerived>& other) XPED_CONST;
 
     template <bool TRACK = false, typename OtherDerived>
-    Tensor<Scalar,
+    Tensor<std::common_type_t<Scalar, typename TensorTraits<OtherDerived>::Scalar>,
            Rank,
            TensorTraits<typename std::remove_const<std::remove_reference_t<OtherDerived>>::type>::CoRank,
            Symmetry,
@@ -108,13 +108,14 @@ public:
     template <bool = false>
     Scalar trace() XPED_CONST;
 
-    ScalarTraits<Scalar>::Real maxNorm() XPED_CONST;
+    typename ScalarTraits<Scalar>::Real maxNorm() XPED_CONST;
 
-    ScalarTraits<Scalar>::Real squaredNorm() XPED_CONST;
+    typename ScalarTraits<Scalar>::Real squaredNorm() XPED_CONST;
 
-    inline ScalarTraits<Scalar>::Real norm() XPED_CONST { return std::sqrt(squaredNorm()); }
+    inline typename ScalarTraits<Scalar>::Real norm() XPED_CONST { return std::sqrt(squaredNorm()); }
 
-    ScalarTraits<Scalar>::Real maxCoeff(std::size_t& max_block, PlainInterface::MIndextype& max_row, PlainInterface::MIndextype& max_col) XPED_CONST;
+    typename ScalarTraits<Scalar>::Real
+    maxCoeff(std::size_t& max_block, PlainInterface::MIndextype& max_row, PlainInterface::MIndextype& max_col) XPED_CONST;
 
     inline Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy> eval() const
     {

@@ -34,7 +34,7 @@ typename TensorTraits<Derived>::Scalar TensorBase<Derived>::trace() XPED_CONST
 }
 
 template <typename Derived>
-ScalarTraits<typename TensorTraits<Derived>::Scalar>::Real TensorBase<Derived>::maxNorm() XPED_CONST
+typename ScalarTraits<typename TensorTraits<Derived>::Scalar>::Real TensorBase<Derived>::maxNorm() XPED_CONST
 {
     typename ScalarTraits<Scalar>::Real out = 0.;
     for(size_t i = 0; i < derived().sector().size(); i++) {
@@ -44,7 +44,7 @@ ScalarTraits<typename TensorTraits<Derived>::Scalar>::Real TensorBase<Derived>::
 }
 
 template <typename Derived>
-ScalarTraits<typename TensorTraits<Derived>::Scalar>::Real TensorBase<Derived>::squaredNorm() XPED_CONST
+typename ScalarTraits<typename TensorTraits<Derived>::Scalar>::Real TensorBase<Derived>::squaredNorm() XPED_CONST
 {
     auto res = (*this * this->adjoint()).trace();
     DEBUG_ASSERT(std::abs(std::imag(res)) < 1.e-12);
@@ -52,7 +52,7 @@ ScalarTraits<typename TensorTraits<Derived>::Scalar>::Real TensorBase<Derived>::
 }
 
 template <typename Derived>
-ScalarTraits<typename TensorTraits<Derived>::Scalar>::Real
+typename ScalarTraits<typename TensorTraits<Derived>::Scalar>::Real
 TensorBase<Derived>::maxCoeff(std::size_t& max_block, PlainInterface::MIndextype& max_row, PlainInterface::MIndextype& max_col) XPED_CONST
 {
     typename ScalarTraits<Scalar>::Real out = 0.;
@@ -201,7 +201,7 @@ Derived& TensorBase<Derived>::operator-=(XPED_CONST TensorBase<OtherDerived>& ot
 
 template <typename Derived>
 template <bool, typename OtherDerived>
-Tensor<typename TensorTraits<Derived>::Scalar,
+Tensor<std::common_type_t<typename TensorTraits<Derived>::Scalar, typename TensorTraits<OtherDerived>::Scalar>,
        TensorTraits<Derived>::Rank,
        TensorTraits<typename std::remove_const<std::remove_reference_t<OtherDerived>>::type>::CoRank,
        typename TensorTraits<Derived>::Symmetry,
@@ -209,6 +209,7 @@ Tensor<typename TensorTraits<Derived>::Scalar,
        typename TensorTraits<Derived>::AllocationPolicy>
 TensorBase<Derived>::operator*(XPED_CONST TensorBase<OtherDerived>& other) XPED_CONST
 {
+    using ResScalar = std::common_type_t<typename TensorTraits<Derived>::Scalar, typename TensorTraits<OtherDerived>::Scalar>;
     typedef typename std::remove_const<std::remove_reference_t<OtherDerived>>::type OtherDerived_;
     static_assert(CoRank == TensorTraits<OtherDerived_>::Rank);
     auto derived_ref = derived();
@@ -217,7 +218,7 @@ TensorBase<Derived>::operator*(XPED_CONST TensorBase<OtherDerived>& other) XPED_
     DEBUG_ASSERT(derived_ref.world() == other_derived_ref.world());
     DEBUG_ASSERT(derived_ref.coupledCodomain() == other_derived_ref.coupledDomain());
 
-    Tensor<Scalar, Rank, TensorTraits<OtherDerived_>::CoRank, Symmetry, false, AllocationPolicy> Tout(
+    Tensor<ResScalar, Rank, TensorTraits<OtherDerived_>::CoRank, Symmetry, false, AllocationPolicy> Tout(
         derived_ref.uncoupledDomain(), other_derived_ref.uncoupledCodomain(), derived_ref.world());
     Tout.setZero();
     // std::unordered_set<typename Symmetry::qType> uniqueController;

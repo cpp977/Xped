@@ -117,7 +117,7 @@ struct iPEPSSolverImag
             util::Stopwatch<> ctm_t;
             for(auto ichi = 0; auto chi : imag_opts.chis[iD]) {
                 Jack.opts.chi = chi;
-                Es[iD][ichi] = Jack.template solve<double>(Psi, nullptr, H, false);
+                Es[iD][ichi] = Jack.template solve<double, false>(Psi, nullptr, H);
 
                 if(imag_opts.display_obs or not imag_opts.obs_directory.empty()) { H.computeObs(Jack.getCTM()); }
                 if(imag_opts.display_obs) { Log::per_iteration(imag_opts.verbosity, "  Observables:\n{}", H.getObsString("    ")); }
@@ -239,7 +239,7 @@ struct iPEPSSolverImag
                         Log::per_iteration(imag_opts.verbosity, "  {}", init_Psis[i]->info());
                     }
                     Jack.opts.chi = imag_opts.init_chi;
-                    init_Es[i] = Jack.template solve<double>(init_Psis[i], nullptr, H, false);
+                    init_Es[i] = Jack.template solve<double, false>(init_Psis[i], nullptr, H);
                 }
                 std::size_t min_index = std::distance(init_Es.begin(), std::min_element(init_Es.begin(), init_Es.end()));
                 Log::on_entry(imag_opts.verbosity, "  Initialization with #{} seeds:", imag_opts.init_seeds.size());

@@ -60,16 +60,16 @@ template <typename Scalar_, typename Symmetry_, std::size_t TRank = 2, bool ENAB
 class CTM
 {
     template <typename Scalar__, typename Symmetry__, std::size_t TRank__, bool ENABLE_AD__, Opts::CTMCheckpoint CPOpts__>
-    friend std::pair<TMatrix<std::conditional_t<ENABLE_AD__, stan::math::var, Scalar__>>,
-                     TMatrix<std::conditional_t<ENABLE_AD__, stan::math::var, Scalar__>>>
+    friend std::pair<TMatrix<std::conditional_t<ENABLE_AD__, stan::math::var, typename ScalarTraits<Scalar__>::Real>>,
+                     TMatrix<std::conditional_t<ENABLE_AD__, stan::math::var, typename ScalarTraits<Scalar__>::Real>>>
     avg(XPED_CONST CTM<Scalar__, Symmetry__, TRank__, ENABLE_AD__, CPOpts__>& env, XPED_CONST Tensor<Scalar__, 2, 2, Symmetry__, false>& op);
 
     template <typename Scalar__, typename Symmetry__, std::size_t TRank__, bool ENABLE_AD__, Opts::CTMCheckpoint CPOpts__>
-    friend TMatrix<std::conditional_t<ENABLE_AD__, stan::math::var, Scalar__>>
+    friend TMatrix<std::conditional_t<ENABLE_AD__, stan::math::var, typename ScalarTraits<Scalar__>::Real>>
     avg(XPED_CONST CTM<Scalar__, Symmetry__, TRank__, ENABLE_AD__, CPOpts__>& env, OneSiteObservable<Symmetry__>& op);
 
     template <typename Scalar__, typename Symmetry__, std::size_t TRank__, bool ENABLE_AD__, Opts::CTMCheckpoint CPOpts__>
-    friend std::array<TMatrix<std::conditional_t<ENABLE_AD__, stan::math::var, Scalar__>>, 4>
+    friend std::array<TMatrix<std::conditional_t<ENABLE_AD__, stan::math::var, typename ScalarTraits<Scalar__>::Real>>, 4>
     avg(XPED_CONST CTM<Scalar__, Symmetry__, TRank__, ENABLE_AD__, CPOpts__>& env, TwoSiteObservable<Symmetry__>& op);
 
     template <typename, typename, std::size_t, bool, Opts::CTMCheckpoint>

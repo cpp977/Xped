@@ -7,6 +7,7 @@
 #endif
 
 #include <cmath>
+#include <complex>
 #include <cstddef>
 #include <iostream>
 #include <sstream>
@@ -66,6 +67,8 @@ constexpr std::size_t U0_TENSOR_SIZE = 4;
 constexpr int MPI_NUM_PROC = 2;
 #endif
 
+using Scalar = std::complex<double>;
+
 TEST_SUITE_BEGIN("Tensor");
 
 #ifdef XPED_USE_MPI
@@ -91,7 +94,7 @@ TEST_CASE("Testing the transformation to plain Tensor.")
         }
         mpi::broadcast(B, test_world.rank, 0, test_world);
         mpi::broadcast(C, test_world.rank, 0, test_world);
-        test_tensor_transformation_to_plain(B, C, test_world);
+        test_tensor_transformation_to_plain<Scalar>(B, C, test_world);
     }
 
     SUBCASE("U1")
@@ -104,7 +107,7 @@ TEST_CASE("Testing the transformation to plain Tensor.")
         }
         mpi::broadcast(B, test_world.rank, 0, test_world);
         mpi::broadcast(C, test_world.rank, 0, test_world);
-        test_tensor_transformation_to_plain(B, C, test_world);
+        test_tensor_transformation_to_plain<Scalar>(B, C, test_world);
     }
 
     SUBCASE("U0")
@@ -117,7 +120,7 @@ TEST_CASE("Testing the transformation to plain Tensor.")
         }
         mpi::broadcast(B, test_world.rank, 0, test_world);
         mpi::broadcast(C, test_world.rank, 0, test_world);
-        test_tensor_transformation_to_plain(B, C, test_world);
+        test_tensor_transformation_to_plain<Scalar>(B, C, test_world);
     }
 }
 
@@ -135,19 +138,19 @@ TEST_CASE("Testing the permutation within the domain.")
     SUBCASE("SU2")
     {
         typedef Sym::SU2<Sym::SpinSU2> Symmetry;
-        test_tensor_permute_within_domain<Symmetry>(SU2_TENSOR_SIZE, test_world);
+        test_tensor_permute_within_domain<Symmetry, Scalar>(SU2_TENSOR_SIZE, test_world);
     }
 
     SUBCASE("U1")
     {
         typedef Sym::U1<Sym::SpinU1> Symmetry;
-        test_tensor_permute_within_domain<Symmetry>(U1_TENSOR_SIZE, test_world);
+        test_tensor_permute_within_domain<Symmetry, Scalar>(U1_TENSOR_SIZE, test_world);
     }
 
     SUBCASE("U0")
     {
         typedef Sym::U0<> Symmetry;
-        test_tensor_permute_within_domain<Symmetry>(U0_TENSOR_SIZE, test_world);
+        test_tensor_permute_within_domain<Symmetry, Scalar>(U0_TENSOR_SIZE, test_world);
     }
 }
 
@@ -165,19 +168,19 @@ TEST_CASE("Testing the permutation within the codomain.")
     SUBCASE("SU2")
     {
         typedef Sym::SU2<Sym::SpinSU2> Symmetry;
-        test_tensor_permute_within_codomain<Symmetry>(SU2_TENSOR_SIZE, test_world);
+        test_tensor_permute_within_codomain<Symmetry, Scalar>(SU2_TENSOR_SIZE, test_world);
     }
 
     SUBCASE("U1")
     {
         typedef Sym::U1<Sym::SpinU1> Symmetry;
-        test_tensor_permute_within_codomain<Symmetry>(U1_TENSOR_SIZE, test_world);
+        test_tensor_permute_within_codomain<Symmetry, Scalar>(U1_TENSOR_SIZE, test_world);
     }
 
     SUBCASE("U0")
     {
         typedef Sym::U0<> Symmetry;
-        test_tensor_permute_within_codomain<Symmetry>(U0_TENSOR_SIZE, test_world);
+        test_tensor_permute_within_codomain<Symmetry, Scalar>(U0_TENSOR_SIZE, test_world);
     }
 }
 
@@ -195,31 +198,31 @@ TEST_CASE("Testing the general permutation of legs.")
     SUBCASE("SU2")
     {
         typedef Sym::SU2<Sym::SpinSU2> Symmetry;
-        test_tensor_permute<Symmetry, -2>(SU2_TENSOR_SIZE, test_world);
-        test_tensor_permute<Symmetry, -1>(SU2_TENSOR_SIZE, test_world);
-        test_tensor_permute<Symmetry, +0>(SU2_TENSOR_SIZE, test_world);
-        test_tensor_permute<Symmetry, +1>(SU2_TENSOR_SIZE, test_world);
-        test_tensor_permute<Symmetry, +2>(SU2_TENSOR_SIZE, test_world);
+        test_tensor_permute<Symmetry, Scalar, -2>(SU2_TENSOR_SIZE, test_world);
+        test_tensor_permute<Symmetry, Scalar, -1>(SU2_TENSOR_SIZE, test_world);
+        test_tensor_permute<Symmetry, Scalar, +0>(SU2_TENSOR_SIZE, test_world);
+        test_tensor_permute<Symmetry, Scalar, +1>(SU2_TENSOR_SIZE, test_world);
+        test_tensor_permute<Symmetry, Scalar, +2>(SU2_TENSOR_SIZE, test_world);
     }
 
     SUBCASE("U1")
     {
         typedef Sym::U1<Sym::SpinU1> Symmetry;
-        test_tensor_permute<Symmetry, -2>(U1_TENSOR_SIZE, test_world);
-        test_tensor_permute<Symmetry, -1>(U1_TENSOR_SIZE, test_world);
-        test_tensor_permute<Symmetry, +0>(U1_TENSOR_SIZE, test_world);
-        test_tensor_permute<Symmetry, +1>(U1_TENSOR_SIZE, test_world);
-        test_tensor_permute<Symmetry, +2>(U1_TENSOR_SIZE, test_world);
+        test_tensor_permute<Symmetry, Scalar, -2>(U1_TENSOR_SIZE, test_world);
+        test_tensor_permute<Symmetry, Scalar, -1>(U1_TENSOR_SIZE, test_world);
+        test_tensor_permute<Symmetry, Scalar, +0>(U1_TENSOR_SIZE, test_world);
+        test_tensor_permute<Symmetry, Scalar, +1>(U1_TENSOR_SIZE, test_world);
+        test_tensor_permute<Symmetry, Scalar, +2>(U1_TENSOR_SIZE, test_world);
     }
 
     SUBCASE("U0")
     {
         typedef Sym::U0<> Symmetry;
-        test_tensor_permute<Symmetry, -2>(U0_TENSOR_SIZE, test_world);
-        test_tensor_permute<Symmetry, -1>(U0_TENSOR_SIZE, test_world);
-        test_tensor_permute<Symmetry, +0>(U0_TENSOR_SIZE, test_world);
-        test_tensor_permute<Symmetry, +1>(U0_TENSOR_SIZE, test_world);
-        test_tensor_permute<Symmetry, +2>(U0_TENSOR_SIZE, test_world);
+        test_tensor_permute<Symmetry, Scalar, -2>(U0_TENSOR_SIZE, test_world);
+        test_tensor_permute<Symmetry, Scalar, -1>(U0_TENSOR_SIZE, test_world);
+        test_tensor_permute<Symmetry, Scalar, +0>(U0_TENSOR_SIZE, test_world);
+        test_tensor_permute<Symmetry, Scalar, +1>(U0_TENSOR_SIZE, test_world);
+        test_tensor_permute<Symmetry, Scalar, +2>(U0_TENSOR_SIZE, test_world);
     }
 }
 

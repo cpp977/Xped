@@ -144,7 +144,7 @@ int main(int argc, char* argv[])
             for(std::size_t i = 1; i < bs.size(); ++i) { bonds = bonds | bs[i]; }
         }
 
-        std::unique_ptr<Xped::TwoSiteObservable<Symmetry>> ham;
+        std::unique_ptr<Xped::TwoSiteObservable<double, Symmetry>> ham;
         if(toml::find(data.at("model"), "name").as_string() == "Heisenberg") {
             ham = std::make_unique<Xped::Heisenberg<Symmetry>>(params, c.pattern, bonds);
         } else if(toml::find(data.at("model"), "name").as_string() == "KondoNecklace") {

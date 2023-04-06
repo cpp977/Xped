@@ -45,13 +45,13 @@ int main(int argc, char* argv[])
 #endif
         // std::ios::sync_with_stdio(true);
 
-        typedef double Scalar;
+        using Scalar = std::complex<double>;
         // using Symmetry = Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>;
-        // using Symmetry = Xped::Sym::ZN<Xped::Sym::FChargeU1, 36>;
+        using Symmetry = Xped::Sym::ZN<Xped::Sym::FChargeU1, 36>;
         // using Symmetry =
         // Xped::Sym::Combined<Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>>;
         // using Symmetry = Xped::Sym::Combined<Xped::Sym::U1<Xped::Sym::SpinU1>, Xped::Sym::ZN<Xped::Sym::FChargeU1, 36>>;
-        using Symmetry = Xped::Sym::Combined<Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>>;
+        // using Symmetry = Xped::Sym::Combined<Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>>;
         // using Symmetry = Xped::Sym::Combined<Xped::Sym::ZN<Xped::Sym::SpinU1, 36>, Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>>;
 
         // typedef Xped::Sym::SU2<Xped::Sym::SpinSU2> Symmetry;
@@ -59,7 +59,7 @@ int main(int argc, char* argv[])
         // typedef Xped::Sym::ZN<Xped::Sym::SpinU1, 36, double> Symmetry;
         // using Symmetry = Xped::Sym::U0<double>;
 
-        std::unique_ptr<Xped::TwoSiteObservable<Symmetry>> ham;
+        std::unique_ptr<Xped::TwoSiteObservable<double, Symmetry>> ham;
 
         std::string config_file = argc > 1 ? argv[1] : "config.toml";
 
@@ -140,7 +140,7 @@ int main(int argc, char* argv[])
 
         Xped::TMatrix<Xped::Qbasis<Symmetry, 1>> phys_basis(c.pattern);
         phys_basis.setConstant(ham->data_h[0].uncoupledDomain()[0]);
-        auto Psi = std::make_shared<Xped::iPEPS<double, Symmetry, false>>(c, D, left_aux, top_aux, phys_basis, charges);
+        auto Psi = std::make_shared<Xped::iPEPS<Scalar, Symmetry, false>>(c, D, left_aux, top_aux, phys_basis, charges);
         Psi->setRandom();
 
         Xped::iPEPSSolverImag<Scalar, Symmetry> Lucy(imag_opts, ctm_opts, Psi, *ham);

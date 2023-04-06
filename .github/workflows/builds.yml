@@ -27,7 +27,7 @@ jobs:
           - preset: clang-eigen
             compiler: clang++
             STORAGE: Contiguous
-          - triplet: clang-libcxx-eigen
+          - preset: clang-libcxx-eigen
             compiler: clang++
             STORAGE: Contiguous
     steps:

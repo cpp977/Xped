@@ -137,10 +137,6 @@ public:
             for(auto& t : Sz->data) { t = Op::outerprod(F.Id(), B.Sz(0)).data.template trim<2>(); }
             auto sz = std::make_unique<Xped::OneSiteObservable<double, Symmetry>>(pat, "sz");
             for(auto& t : sz->data) { t = Op::outerprod(F.Sz(0), B.Id()).data.template trim<2>(); }
-            auto Sx = std::make_unique<Xped::OneSiteObservable<double, Symmetry>>(pat, "Sx");
-            for(auto& t : Sx->data) { t = Op::outerprod(F.Id(), B.Sx(0)).data.template trim<2>(); }
-            auto sx = std::make_unique<Xped::OneSiteObservable<double, Symmetry>>(pat, "sx");
-            for(auto& t : sx->data) { t = Op::outerprod(F.Sx(0), B.Id()).data.template trim<2>(); }
             auto nup = std::make_unique<Xped::OneSiteObservable<double, Symmetry>>(pat, "nup");
             for(auto& t : nup->data) { t = Op::outerprod(F.n(Xped::SPIN_INDEX::UP), B.Id()).data.template trim<2>(); }
             auto ndn = std::make_unique<Xped::OneSiteObservable<double, Symmetry>>(pat, "ndn");
@@ -155,8 +151,15 @@ public:
             obs.push_back(std::move(d));
             obs.push_back(std::move(Sz));
             obs.push_back(std::move(sz));
-            obs.push_back(std::move(Sx));
-            obs.push_back(std::move(sx));
+            if constexpr(not Symmetry::ANY_IS_SPIN) {
+                auto Sx = std::make_unique<Xped::OneSiteObservable<double, Symmetry>>(pat, "Sx");
+                for(auto& t : Sx->data) { t = Op::outerprod(F.Id(), B.Sx(0)).data.template trim<2>(); }
+                auto sx = std::make_unique<Xped::OneSiteObservable<double, Symmetry>>(pat, "sx");
+                for(auto& t : sx->data) { t = Op::outerprod(F.Sx(0), B.Id()).data.template trim<2>(); }
+
+                obs.push_back(std::move(Sx));
+                obs.push_back(std::move(sx));
+            }
         }
     }
 

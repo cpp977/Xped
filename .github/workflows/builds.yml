@@ -21,17 +21,14 @@ jobs:
         # LIBCXX: [OFF]
         # compiler: [g++]
         include:
-          - triplet: x64-linux
+          - preset: gcc-eigen
             compiler: g++
-            LIBCXX: OFF
             STORAGE: Contiguous
-          - triplet: x64-linux-clang
+          - preset: clang-eigen
             compiler: clang++
-            LIBCXX: OFF
             STORAGE: Contiguous
-          - triplet: x64-linux-clang-libcxx
+          - triplet: clang-libcxx-eigen
             compiler: clang++
-            LIBCXX: ON
             STORAGE: Contiguous
     steps:
     - uses: actions/checkout@v3
@@ -95,7 +92,7 @@ jobs:
       env:
         CXX: ${{ matrix.compiler }}
         VCPKG_INSTALL_OPTIONS: "--debug"
-      run: cmake $GITHUB_WORKSPACE --preset=ad-eigen -DVCPKG_TARGET_TRIPLET=${{ matrix.triplet }} -DBLA_VENDOR=OpenBLAS -DXPED_USE_BLAS=ON -DXPED_USE_LAPACK=ON -DXPED_USE_OPENMP=OFF -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DXPED_USE_LIBCXX=${{ matrix.LIBCXX }} -DXPED_ENABLE_CCACHE=OFF -DXPED_BUILD_CYCLOPS=ON -DXPED_STORAGE=${{ matrix.STORAGE }}
+      run: cmake $GITHUB_WORKSPACE --preset={{ matrix.preset }} -DBLA_VENDOR=OpenBLAS -DXPED_USE_BLAS=ON -DXPED_USE_LAPACK=ON -DXPED_USE_OPENMP=OFF -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DXPED_ENABLE_CCACHE=OFF -DXPED_STORAGE=${{ matrix.STORAGE }}
           
     - name: Build
       working-directory: ${{runner.workspace}}/build

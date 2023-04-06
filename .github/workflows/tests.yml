@@ -21,17 +21,14 @@ jobs:
         # LIBCXX: [OFF]
         # compiler: [g++]
         include:
-          - triplet: x64-linux
+          - preset: gcc-eigen
             compiler: g++
-            LIBCXX: OFF
             STORAGE: Contiguous
-          - triplet: x64-linux-clang
+          - preset: clang-eigen
             compiler: clang++
-            LIBCXX: OFF
             STORAGE: Contiguous
-          - triplet: x64-linux-clang-libcxx
+          - preset: clang-libcxx-eigen
             compiler: clang++
-            LIBCXX: ON
             STORAGE: Contiguous
     steps:
     - uses: actions/checkout@v3

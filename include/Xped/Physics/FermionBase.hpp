@@ -28,6 +28,7 @@ class FermionBase : public Fermion<Symmetry_>
 public:
     using Symmetry = Symmetry_;
     using OperatorType = SiteOperator<Scalar, Symmetry>;
+    using OperatorTypeC = SiteOperator<std::complex<Scalar>, Symmetry>;
     using qType = typename Symmetry::qType;
 
     FermionBase() = default;
@@ -165,6 +166,9 @@ public:
 
     template <class Dummy = Symmetry>
     typename std::enable_if<Dummy::NO_SPIN_SYM(), OperatorType>::type Sx(std::size_t orbital = 0) const;
+
+    template <class Dummy = Symmetry>
+    typename std::enable_if<Dummy::NO_SPIN_SYM(), OperatorTypeC>::type Sy(std::size_t orbital = 0) const;
 
     template <class Dummy = Symmetry>
     typename std::enable_if<Dummy::NO_SPIN_SYM(), OperatorType>::type iSy(std::size_t orbital = 0) const;
@@ -638,10 +642,20 @@ typename std::enable_if<Dummy::NO_SPIN_SYM(), SiteOperator<double, Symmetry>>::t
 
 template <typename Symmetry>
 template <typename Dummy>
+typename std::enable_if<Dummy::NO_SPIN_SYM(), SiteOperator<std::complex<double>, Symmetry>>::type FermionBase<Symmetry>::Sy(std::size_t orbital) const
+{
+    using namespace std::complex_literals;
+    OperatorTypeC out = -1i * 0.5 * (Sp(orbital) - Sm(orbital));
+    out.label() = "Sy";
+    return out;
+}
+
+template <typename Symmetry>
+template <typename Dummy>
 typename std::enable_if<Dummy::NO_SPIN_SYM(), SiteOperator<double, Symmetry>>::type FermionBase<Symmetry>::iSy(std::size_t orbital) const
 {
     OperatorType out = 0.5 * (Sp(orbital) - Sm(orbital));
-    out.label() = "Sy";
+    out.label() = "iSy";
     return out;
 }
 

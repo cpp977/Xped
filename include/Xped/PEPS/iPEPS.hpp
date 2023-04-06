@@ -14,9 +14,9 @@
 
 namespace Xped {
 
-template <typename Symmetry>
+template <typename, typename, bool>
 struct OneSiteObservable;
-template <typename Symmetry>
+template <typename, typename, bool>
 struct TwoSiteObservable;
 
 template <typename, typename, std::size_t, bool, Opts::CTMCheckpoint>
@@ -37,18 +37,27 @@ class CTM;
 template <typename Scalar_, typename Symmetry_, bool ENABLE_AD_ = false>
 class iPEPS
 {
-    template <typename Scalar__, typename Symmetry__, std::size_t TRank__, bool ENABLE_AD__, Opts::CTMCheckpoint CPOpts__>
-    friend std::pair<TMatrix<std::conditional_t<ENABLE_AD__, stan::math::var, typename ScalarTraits<Scalar__>::Real>>,
-                     TMatrix<std::conditional_t<ENABLE_AD__, stan::math::var, typename ScalarTraits<Scalar__>::Real>>>
-    avg(XPED_CONST CTM<Scalar__, Symmetry__, TRank__, ENABLE_AD__, CPOpts__>& env, XPED_CONST Tensor<Scalar__, 2, 2, Symmetry__, false>& op);
+    template <typename Scalar__,
+              typename Symmetry__,
+              std::size_t TRank__,
+              bool ENABLE_AD__,
+              Opts::CTMCheckpoint CPOpts__,
+              typename OpScalar__,
+              bool HERMITIAN__>
+    friend TMatrix<std::conditional_t<ENABLE_AD__, stan::math::var, typename OneSiteObservable<OpScalar__, Symmetry__, HERMITIAN__>::ObsScalar>>
+    avg(XPED_CONST CTM<Scalar__, Symmetry__, TRank__, ENABLE_AD__, CPOpts__>& env, OneSiteObservable<OpScalar__, Symmetry__, HERMITIAN__>& op);
 
-    template <typename Scalar__, typename Symmetry__, std::size_t TRank__, bool ENABLE_AD__, Opts::CTMCheckpoint CPOpts__>
-    friend TMatrix<std::conditional_t<ENABLE_AD__, stan::math::var, typename ScalarTraits<Scalar__>::Real>>
-    avg(XPED_CONST CTM<Scalar__, Symmetry__, TRank__, ENABLE_AD__, CPOpts__>& env, OneSiteObservable<Symmetry__>& op);
-
-    template <typename Scalar__, typename Symmetry__, std::size_t TRank__, bool ENABLE_AD__, Opts::CTMCheckpoint CPOpts__>
-    friend std::array<TMatrix<std::conditional_t<ENABLE_AD__, stan::math::var, typename ScalarTraits<Scalar__>::Real>>, 4>
-    avg(XPED_CONST CTM<Scalar__, Symmetry__, TRank__, ENABLE_AD__, CPOpts__>& env, TwoSiteObservable<Symmetry__>& op);
+    template <typename Scalar__,
+              typename Symmetry__,
+              std::size_t TRank__,
+              bool ENABLE_AD__,
+              Opts::CTMCheckpoint CPOpts__,
+              typename OpScalar__,
+              bool HERMITIAN__>
+    friend std::array<
+        TMatrix<std::conditional_t<ENABLE_AD__, stan::math::var, typename TwoSiteObservable<OpScalar__, Symmetry__, HERMITIAN__>::ObsScalar>>,
+        4>
+    avg(XPED_CONST CTM<Scalar__, Symmetry__, TRank__, ENABLE_AD__, CPOpts__>& env, TwoSiteObservable<OpScalar__, Symmetry__, HERMITIAN__>& op);
 
     template <typename, typename, std::size_t, bool, Opts::CTMCheckpoint>
     friend class CTM;

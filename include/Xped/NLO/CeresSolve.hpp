@@ -22,7 +22,7 @@ template <typename Scalar, typename Symmetry, Opts::CTMCheckpoint CPOpts, std::s
 class Energy final : public ceres::FirstOrderFunction
 {
     template <typename Sym>
-    using Hamiltonian = TwoSiteObservable<Sym>;
+    using Hamiltonian = TwoSiteObservable<double, Sym, true>;
 
 public:
     Energy(std::unique_ptr<CTMSolver<Scalar, Symmetry, CPOpts, TRank>> solver,
@@ -52,7 +52,7 @@ template <typename Scalar, typename Symmetry, Opts::CTMCheckpoint CPOpts = Opts:
 struct iPEPSSolverAD
 {
     template <typename Sym>
-    using Hamiltonian = TwoSiteObservable<Sym>;
+    using Hamiltonian = TwoSiteObservable<double, Sym, true>;
     using EnergyFunctor = Energy<Scalar, Symmetry, CPOpts, TRank>;
 
     iPEPSSolverAD() = delete;

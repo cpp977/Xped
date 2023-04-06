@@ -247,7 +247,7 @@ void TimePropagator<Scalar, TimeScalar, Symmetry>::t_step_d1(iPEPS<Scalar, Symme
     Tensor<Scalar, 2, 5, Symmetry> enlarged_bond;
     switch(gate_order) {
     case Opts::GATE_ORDER::HDV: {
-        TwoSiteObservable<Symmetry> U_used = UPDATE_BOTH_DIAGONALS ? Usq : U;
+        TwoSiteObservable<double, Symmetry> U_used = UPDATE_BOTH_DIAGONALS ? Usq : U;
         enlarged_bond = U.data_h(x, y).twist(0).twist(1).template contract<std::array{1, 2, -2, -5}, std::array{-1, 1, -3, -4, 2, -6, -7}, 2>(bond);
         enlarged_bond = U_used.data_d1(x, y).twist(0).twist(1).template contract<std::array{1, 2, -2, -6}, std::array{-1, 1, -3, -4, -5, 2, -7}, 2>(
             enlarged_bond);
@@ -256,7 +256,7 @@ void TimePropagator<Scalar, TimeScalar, Symmetry>::t_step_d1(iPEPS<Scalar, Symme
         break;
     }
     case Opts::GATE_ORDER::VDH: {
-        TwoSiteObservable<Symmetry> U_used = UPDATE_BOTH_DIAGONALS ? Usq : U;
+        TwoSiteObservable<double, Symmetry> U_used = UPDATE_BOTH_DIAGONALS ? Usq : U;
         enlarged_bond =
             U.data_v(x + 1, y).twist(0).twist(1).template contract<std::array{1, 2, -5, -6}, std::array{-1, -2, -3, -4, 1, 2, -7}, 2>(bond);
         enlarged_bond = U_used.data_d1(x, y).twist(0).twist(1).template contract<std::array{1, 2, -2, -6}, std::array{-1, 1, -3, -4, -5, 2, -7}, 2>(
@@ -319,7 +319,7 @@ void TimePropagator<Scalar, TimeScalar, Symmetry>::t_step_d2(iPEPS<Scalar, Symme
     Tensor<Scalar, 2, 5, Symmetry> enlarged_bond;
     switch(gate_order) {
     case Opts::GATE_ORDER::HDV: {
-        TwoSiteObservable<Symmetry> U_used = UPDATE_BOTH_DIAGONALS ? Usq : U;
+        TwoSiteObservable<double, Symmetry> U_used = UPDATE_BOTH_DIAGONALS ? Usq : U;
         enlarged_bond = U.data_h(x, y).twist(0).twist(1).template contract<std::array{1, 2, -5, -6}, std::array{-1, -2, -3, -4, 1, 2, -7}, 2>(bond);
         enlarged_bond =
             U_used.data_d2(x + 1, y).twist(0).twist(1).template contract<std::array{1, 2, -1, -6}, std::array{1, -2, -3, -4, -5, 2, -7}, 2>(
@@ -329,7 +329,7 @@ void TimePropagator<Scalar, TimeScalar, Symmetry>::t_step_d2(iPEPS<Scalar, Symme
         break;
     }
     case Opts::GATE_ORDER::VDH: {
-        TwoSiteObservable<Symmetry> U_used = UPDATE_BOTH_DIAGONALS ? Usq : U;
+        TwoSiteObservable<double, Symmetry> U_used = UPDATE_BOTH_DIAGONALS ? Usq : U;
         enlarged_bond = U.data_v(x, y).twist(0).twist(1).template contract<std::array{1, 2, -5, -1}, std::array{2, -2, -3, -4, 1, -6, -7}, 2>(bond);
         enlarged_bond =
             U_used.data_d2(x + 1, y).twist(0).twist(1).template contract<std::array{1, 2, -1, -6}, std::array{1, -2, -3, -4, -5, 2, -7}, 2>(
@@ -454,9 +454,9 @@ template <typename Scalar, typename TimeScalar, typename Symmetry>
 void TimePropagator<Scalar, TimeScalar, Symmetry>::initU()
 {
     auto shifted_ham = H.shiftQN(charges);
-    U = TwoSiteObservable<Symmetry>(H.data_h.pat, H.bond);
-    Usqrt = TwoSiteObservable<Symmetry>(H.data_h.pat, H.bond);
-    Usq = TwoSiteObservable<Symmetry>(H.data_h.pat, H.bond);
+    U = TwoSiteObservable<double, Symmetry>(H.data_h.pat, H.bond);
+    Usqrt = TwoSiteObservable<double, Symmetry>(H.data_h.pat, H.bond);
+    Usq = TwoSiteObservable<double, Symmetry>(H.data_h.pat, H.bond);
     if(H.data_h.size() > 0) {
         for(auto i = 0ul; i < cell_.uniqueSize(); ++i) {
             U.data_h[i] = shifted_ham.data_h[i].mexp(-dt).eval();

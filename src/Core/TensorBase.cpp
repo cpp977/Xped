@@ -74,9 +74,10 @@ XPED_CONST AdjointOp<Derived> TensorBase<Derived>::adjoint() XPED_CONST
 }
 
 template <typename Derived>
-XPED_CONST CoeffUnaryOp<Derived> TensorBase<Derived>::unaryExpr(const std::function<Scalar(Scalar)>& coeff_func) XPED_CONST
+template <typename ReturnScalar>
+XPED_CONST CoeffUnaryOp<Derived, ReturnScalar> TensorBase<Derived>::unaryExpr(const std::function<ReturnScalar(Scalar)>& coeff_func) XPED_CONST
 {
-    return CoeffUnaryOp<Derived>(derived(), coeff_func);
+    return CoeffUnaryOp<Derived, ReturnScalar>(derived(), coeff_func);
 }
 
 template <typename Derived>
@@ -114,27 +115,27 @@ Derived& TensorBase<Derived>::operator/=(const Scalar divisor)
 }
 
 template <typename Derived>
-XPED_CONST CoeffUnaryOp<Derived> TensorBase<Derived>::sqrt() XPED_CONST
+XPED_CONST CoeffUnaryOp<Derived, typename TensorTraits<Derived>::Scalar> TensorBase<Derived>::sqrt() XPED_CONST
 {
-    return unaryExpr([](const Scalar s) { return std::sqrt(s); });
+    return unaryExpr<typename TensorTraits<Derived>::Scalar>([](const Scalar s) { return std::sqrt(s); });
 }
 
 template <typename Derived>
-XPED_CONST CoeffUnaryOp<Derived> TensorBase<Derived>::inv() XPED_CONST
+XPED_CONST CoeffUnaryOp<Derived, typename TensorTraits<Derived>::Scalar> TensorBase<Derived>::inv() XPED_CONST
 {
-    return unaryExpr([](const Scalar s) { return 1. / s; });
+    return unaryExpr<typename TensorTraits<Derived>::Scalar>([](const Scalar s) { return 1. / s; });
 }
 
 template <typename Derived>
-XPED_CONST CoeffUnaryOp<Derived> TensorBase<Derived>::square() XPED_CONST
+XPED_CONST CoeffUnaryOp<Derived, typename TensorTraits<Derived>::Scalar> TensorBase<Derived>::square() XPED_CONST
 {
-    return unaryExpr([](const Scalar s) { return std::pow(s, 2); });
+    return unaryExpr<typename TensorTraits<Derived>::Scalar>([](const Scalar s) { return std::pow(s, 2); });
 }
 
 template <typename Derived>
-XPED_CONST CoeffUnaryOp<Derived> TensorBase<Derived>::abs() XPED_CONST
+XPED_CONST CoeffUnaryOp<Derived, typename ScalarTraits<typename TensorTraits<Derived>::Scalar>::Real> TensorBase<Derived>::abs() XPED_CONST
 {
-    return unaryExpr([](const Scalar s) { return std::abs(s); });
+    return unaryExpr<typename ScalarTraits<typename TensorTraits<Derived>::Scalar>::Real>([](const Scalar s) { return std::abs(s); });
 }
 
 template <typename Derived>

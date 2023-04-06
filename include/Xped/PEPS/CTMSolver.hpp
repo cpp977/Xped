@@ -20,7 +20,7 @@ public:
     using Scalar = Scalar_;
     using Symmetry = Symmetry_;
     template <typename Sym>
-    using Hamiltonian = TwoSiteObservable<Sym>;
+    using Hamiltonian = TwoSiteObservable<double, Sym, true>;
 
     CTMSolver() = default;
 

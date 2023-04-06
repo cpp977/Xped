@@ -3,7 +3,7 @@
 namespace Xped {
 
 template <typename Scalar, typename Symmetry>
-SiteOperator<Scalar, Symmetry>::SiteOperator(qType Q, const Qbasis<Symmetry, 1>& basis, mpi::XpedWorld& world)
+SiteOperator<Scalar, Symmetry>::SiteOperator(qType Q, const Qbasis<Symmetry, 1>& basis, const mpi::XpedWorld& world)
     : Q(Q)
 {
     Qbasis<Symmetry, 1> opBasis;
@@ -15,7 +15,7 @@ template <typename Scalar, typename Symmetry>
 SiteOperator<Scalar, Symmetry>::SiteOperator(qType Q,
                                              const Qbasis<Symmetry, 1>& basis,
                                              const std::unordered_map<std::string, std::pair<qType, std::size_t>>& labels,
-                                             mpi::XpedWorld& world)
+                                             const mpi::XpedWorld& world)
     : Q(Q)
     , label_dict(labels)
 {
@@ -25,7 +25,7 @@ SiteOperator<Scalar, Symmetry>::SiteOperator(qType Q,
 }
 
 template <typename Scalar, typename Symmetry>
-SiteOperator<Scalar, Symmetry> SiteOperator<Scalar, Symmetry>::adjoint() const
+SiteOperator<Scalar, Symmetry> SiteOperator<Scalar, Symmetry>::adjoint() XPED_CONST
 {
     SiteOperator<Scalar, Symmetry> out(Symmetry::conj(Q), data.coupledDomain());
     out.data = data.adjoint().eval().template permute<+1, 0, 2, 1>();
@@ -33,8 +33,9 @@ SiteOperator<Scalar, Symmetry> SiteOperator<Scalar, Symmetry>::adjoint() const
 }
 
 template <typename Scalar, typename Symmetry>
-SiteOperator<Scalar, Symmetry>
-SiteOperator<Scalar, Symmetry>::prod(const SiteOperator<Scalar, Symmetry>& O1, const SiteOperator<Scalar, Symmetry>& O2, const qType& target)
+SiteOperator<Scalar, Symmetry> SiteOperator<Scalar, Symmetry>::prod(XPED_CONST SiteOperator<Scalar, Symmetry>& O1,
+                                                                    XPED_CONST SiteOperator<Scalar, Symmetry>& O2,
+                                                                    const qType& target)
 {
     SiteOperator<Scalar, Symmetry> out(target, O1.data.coupledDomain());
     Qbasis<Symmetry, 1> Otarget_op;
@@ -47,8 +48,9 @@ SiteOperator<Scalar, Symmetry>::prod(const SiteOperator<Scalar, Symmetry>& O1, c
 }
 
 template <typename Scalar, typename Symmetry>
-SiteOperator<Scalar, Symmetry>
-SiteOperator<Scalar, Symmetry>::outerprod(const SiteOperator<Scalar, Symmetry>& O1, const SiteOperator<Scalar, Symmetry>& O2, const qType& target)
+SiteOperator<Scalar, Symmetry> SiteOperator<Scalar, Symmetry>::outerprod(XPED_CONST SiteOperator<Scalar, Symmetry>& O1,
+                                                                         XPED_CONST SiteOperator<Scalar, Symmetry>& O2,
+                                                                         const qType& target)
 {
     auto fuse_bb =
         Tensor<Scalar, 2, 1, Symmetry, false>::Identity({{O1.data.uncoupledCodomain()[0], O2.data.uncoupledCodomain()[0]}},
@@ -109,7 +111,7 @@ std::string SiteOperator<Scalar, Symmetry>::print() const
 {
     std::stringstream ss;
     ss << "QN=" << Sym::format<Symmetry>(Q) << ": ";
-    data.print(ss);
+    data.print(ss, true);
     return ss.str();
 }
 

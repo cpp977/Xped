@@ -30,7 +30,7 @@ public:
 
     TimePropagator() = delete;
 
-    explicit TimePropagator(const TwoSiteObservable<Symmetry>& H_in,
+    explicit TimePropagator(const TwoSiteObservable<double, Symmetry>& H_in,
                             TimeScalar dt_in,
                             const Opts::Update& update_in,
                             const TMatrix<typename Symmetry::qType>& charges_in)
@@ -51,15 +51,15 @@ public:
     TMatrix<Tensor<Scalar, 1, 1, Symmetry>> spectrum_v;
 
 private:
-    const TwoSiteObservable<Symmetry>& H;
+    const TwoSiteObservable<double, Symmetry>& H;
     UnitCell cell_;
     TimeScalar dt;
     Opts::Update update;
     TMatrix<typename Symmetry::qType> charges;
 
-    TwoSiteObservable<Symmetry> U;
-    TwoSiteObservable<Symmetry> Usqrt;
-    TwoSiteObservable<Symmetry> Usq;
+    TwoSiteObservable<double, Symmetry> U;
+    TwoSiteObservable<double, Symmetry> Usqrt;
+    TwoSiteObservable<double, Symmetry> Usq;
 
     void t_step_h(iPEPS<Scalar, Symmetry>& Psi, int x, int y);
     void t_step_v(iPEPS<Scalar, Symmetry>& Psi, int x, int y);

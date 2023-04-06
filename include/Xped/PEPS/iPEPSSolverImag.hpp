@@ -12,7 +12,7 @@ template <typename Scalar, typename Symmetry>
 struct iPEPSSolverImag
 {
     template <typename Sym>
-    using Hamiltonian = TwoSiteObservable<Sym>;
+    using Hamiltonian = TwoSiteObservable<double, Sym, true>;
 
     iPEPSSolverImag() = delete;
 

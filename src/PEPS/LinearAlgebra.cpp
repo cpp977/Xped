@@ -6,32 +6,13 @@
 
 namespace Xped {
 
-template <typename Scalar, typename Symmetry, std::size_t TRank, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
-std::pair<TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, typename ScalarTraits<Scalar>::Real>>,
-          TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, typename ScalarTraits<Scalar>::Real>>>
-avg(XPED_CONST CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>& env, XPED_CONST Tensor<Scalar, 2, 2, Symmetry, false>& op)
+template <typename Scalar, typename Symmetry, std::size_t TRank, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts, typename OpScalar, bool HERMITIAN>
+TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, typename OneSiteObservable<OpScalar, Symmetry, HERMITIAN>::ObsScalar>>
+avg(XPED_CONST CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>& env, OneSiteObservable<OpScalar, Symmetry, HERMITIAN>& op)
 {
+    using ObsScalar = typename OneSiteObservable<OpScalar, Symmetry, HERMITIAN>::ObsScalar;
     assert(env.RDM_COMPUTED());
-    TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, typename ScalarTraits<Scalar>::Real>> o_h(env.cell().pattern);
-    TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, typename ScalarTraits<Scalar>::Real>> o_v(env.cell().pattern);
-    // PlainInterface::MType<std::conditional_t<ENABLE_AD, stan::math::var, Scalar>> o_h(env.cell().rows(), env.cell().cols());
-    // PlainInterface::MType<std::conditional_t<ENABLE_AD, stan::math::var, Scalar>> o_v(env.cell().rows(), env.cell().cols());
-    for(int x = 0; x < env.cell().rows(); ++x) {
-        for(int y = 0; y < env.cell().cols(); ++y) {
-            if(not env.cell().pattern.isUnique(x, y)) { continue; }
-            o_h(x, y) = std::real(env.rho_h(x, y).template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0>(op).trace());
-            o_v(x, y) = std::real(env.rho_v(x, y).template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0>(op).trace());
-        }
-    }
-    return std::make_pair(o_h, o_v);
-}
-
-template <typename Scalar, typename Symmetry, std::size_t TRank, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
-TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, typename ScalarTraits<Scalar>::Real>>
-avg(XPED_CONST CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>& env, OneSiteObservable<Symmetry>& op)
-{
-    assert(env.RDM_COMPUTED());
-    TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, typename ScalarTraits<Scalar>::Real>> o(env.cell().pattern);
+    TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, ObsScalar>> o(env.cell().pattern);
     o.setConstant(0.);
     if(not op.MEASURE) { return o; }
 
@@ -56,13 +37,21 @@ avg(XPED_CONST CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>& env, OneSiteObse
             // // o(x, y) = (C2T2C3T3C4 * Q1H).trace() / norm;
             // auto norm = (Q1 * C2T2C3T3C4).trace();
             // o(x, y) = (Q1H * C2T2C3T3C4).trace() / norm;
-
-            o(x, y) =
-                0.5 *
-                std::real(
+            if constexpr(ScalarTraits<ObsScalar>::IS_COMPLEX()) {
+                o(x, y) =
+                    0.5 *
                     (env.rho1_h(x, y).twist(0).template contract<std::array{1, 2}, std::array{2, 1}, 0, ENABLE_AD>(shifted_op.data(x, y)).trace() +
-                     env.rho1_v(x, y).twist(0).template contract<std::array{1, 2}, std::array{2, 1}, 0, ENABLE_AD>(shifted_op.data(x, y)).trace()));
-
+                     env.rho1_v(x, y).twist(0).template contract<std::array{1, 2}, std::array{2, 1}, 0, ENABLE_AD>(shifted_op.data(x, y)).trace());
+            } else {
+                o(x, y) =
+                    0.5 *
+                    std::real((
+                        env.rho1_h(x, y).twist(0).template contract<std::array{1, 2}, std::array{2, 1}, 0, ENABLE_AD>(shifted_op.data(x, y)).trace() +
+                        env.rho1_v(x, y)
+                            .twist(0)
+                            .template contract<std::array{1, 2}, std::array{2, 1}, 0, ENABLE_AD>(shifted_op.data(x, y))
+                            .trace()));
+            }
             if constexpr(ENABLE_AD) {
                 op.obs(x, y) = o(x, y).val();
             } else {
@@ -73,18 +62,21 @@ avg(XPED_CONST CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>& env, OneSiteObse
     return o;
 }
 
-template <typename Scalar, typename Symmetry, std::size_t TRank, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
-std::array<TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, typename ScalarTraits<Scalar>::Real>>, 4>
-avg(XPED_CONST CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>& env, TwoSiteObservable<Symmetry>& op)
+template <typename Scalar, typename Symmetry, std::size_t TRank, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts, typename OpScalar, bool HERMITIAN>
+std::array<TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, typename TwoSiteObservable<OpScalar, Symmetry, HERMITIAN>::ObsScalar>>, 4>
+avg(XPED_CONST CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>& env, TwoSiteObservable<OpScalar, Symmetry, HERMITIAN>& op)
 {
     assert(env.RDM_COMPUTED());
-    TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, typename ScalarTraits<Scalar>::Real>> o_h(env.cell().pattern);
+
+    using ObsScalar = typename OneSiteObservable<OpScalar, Symmetry, HERMITIAN>::ObsScalar;
+
+    TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, ObsScalar>> o_h(env.cell().pattern);
     o_h.setConstant(0.);
-    TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, typename ScalarTraits<Scalar>::Real>> o_v(env.cell().pattern);
+    TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, ObsScalar>> o_v(env.cell().pattern);
     o_v.setConstant(0.);
-    TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, typename ScalarTraits<Scalar>::Real>> o_d1(env.cell().pattern);
+    TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, ObsScalar>> o_d1(env.cell().pattern);
     o_d1.setConstant(0.);
-    TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, typename ScalarTraits<Scalar>::Real>> o_d2(env.cell().pattern);
+    TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, ObsScalar>> o_d2(env.cell().pattern);
     o_d2.setConstant(0.);
     if(not op.MEASURE) { return std::array{o_h, o_v, o_d1, o_d2}; }
 
@@ -94,18 +86,34 @@ avg(XPED_CONST CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>& env, TwoSiteObse
         for(int y = 0; y < env.cell().cols(); ++y) {
             if(not env.cell().pattern.isUnique(x, y)) { continue; }
             if(op.data_h.size() > 0) {
-                o_h(x, y) = std::real(env.rho_h(x, y)
-                                          .twist(0)
-                                          .twist(1)
-                                          .template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0>(shifted_op.data_h(x, y))
-                                          .trace());
+                if constexpr(ScalarTraits<ObsScalar>::IS_COMPLEX()) {
+                    o_h(x, y) = env.rho_h(x, y)
+                                    .twist(0)
+                                    .twist(1)
+                                    .template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0>(shifted_op.data_h(x, y))
+                                    .trace();
+                } else {
+                    o_h(x, y) = std::real(env.rho_h(x, y)
+                                              .twist(0)
+                                              .twist(1)
+                                              .template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0>(shifted_op.data_h(x, y))
+                                              .trace());
+                }
             }
             if(op.data_v.size() > 0) {
-                o_v(x, y) = std::real(env.rho_v(x, y)
-                                          .twist(0)
-                                          .twist(1)
-                                          .template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0>(shifted_op.data_v(x, y))
-                                          .trace());
+                if constexpr(ScalarTraits<ObsScalar>::IS_COMPLEX()) {
+                    o_v(x, y) = env.rho_v(x, y)
+                                    .twist(0)
+                                    .twist(1)
+                                    .template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0>(shifted_op.data_v(x, y))
+                                    .trace();
+                } else {
+                    o_v(x, y) = std::real(env.rho_v(x, y)
+                                              .twist(0)
+                                              .twist(1)
+                                              .template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0>(shifted_op.data_v(x, y))
+                                              .trace());
+                }
             }
             if constexpr(ENABLE_AD) {
                 if(op.data_h.size() > 0) { op.obs_h(x, y) = o_h(x, y).val(); }
@@ -152,9 +160,15 @@ avg(XPED_CONST CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>& env, TwoSiteObse
                             env.A->Adags(x + 1, y + 1));
                         Q1H = Q4.twist(3).twist(4).twist(5) * Q1H;
                         Q3H = Q2 * Q3H;
-                        o_d1(x, y) = std::real(
-                            Q1H.template contract<std::array{1, 2, 3, 4, 5, 6, 7}, std::array{4, 5, 6, 1, 2, 3, 7}, 0, ENABLE_AD>(Q3H).trace() /
-                            norm);
+                        if constexpr(ScalarTraits<ObsScalar>::IS_COMPLEX()) {
+                            o_d1(x, y) =
+                                Q1H.template contract<std::array{1, 2, 3, 4, 5, 6, 7}, std::array{4, 5, 6, 1, 2, 3, 7}, 0, ENABLE_AD>(Q3H).trace() /
+                                norm;
+                        } else {
+                            o_d1(x, y) = std::real(
+                                Q1H.template contract<std::array{1, 2, 3, 4, 5, 6, 7}, std::array{4, 5, 6, 1, 2, 3, 7}, 0, ENABLE_AD>(Q3H).trace() /
+                                norm);
+                        }
                     } else if constexpr(TRank == 1) {
                         o_d1(x, y) = 0.;
                     }
@@ -197,9 +211,15 @@ avg(XPED_CONST CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>& env, TwoSiteObse
                             env.A->Adags(x, y + 1).twist(3));
                         Q2H = Q1 * Q2H;
                         Q4H = Q3 * Q4H.twist(0).twist(1).twist(2);
-                        o_d2(x, y) = std::real(
-                            Q2H.template contract<std::array{1, 2, 3, 4, 5, 6, 7}, std::array{4, 5, 6, 1, 2, 3, 7}, 0, ENABLE_AD>(Q4H).trace() /
-                            norm);
+                        if constexpr(ScalarTraits<ObsScalar>::IS_COMPLEX()) {
+                            o_d2(x, y) =
+                                Q2H.template contract<std::array{1, 2, 3, 4, 5, 6, 7}, std::array{4, 5, 6, 1, 2, 3, 7}, 0, ENABLE_AD>(Q4H).trace() /
+                                norm;
+                        } else {
+                            o_d2(x, y) = std::real(
+                                Q2H.template contract<std::array{1, 2, 3, 4, 5, 6, 7}, std::array{4, 5, 6, 1, 2, 3, 7}, 0, ENABLE_AD>(Q4H).trace() /
+                                norm);
+                        }
                     } else if constexpr(TRank == 1) {
                         o_d2(x, y) = 0.;
                     }

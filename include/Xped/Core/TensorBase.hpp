@@ -10,22 +10,22 @@ struct TensorTraits
 {};
 
 // forward declarations
-template <typename XprType>
+template <typename>
 class AdjointOp;
 
-template <typename XprType>
+template <typename, typename>
 class CoeffUnaryOp;
 
-template <typename XprType>
+template <typename>
 class BlockUnaryOp;
 
-template <typename XprType>
+template <typename>
 class DiagCoeffUnaryOp;
 
-template <typename XprTypeLeft, typename XprTypeRight>
+template <typename, typename>
 class CoeffBinaryOp;
 
-template <typename XprTypeLeft, typename XprTypeRight>
+template <typename, typename>
 class DiagCoeffBinaryOp;
 
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, bool ENABLE_AD, typename AllocationPolicy>
@@ -47,14 +47,15 @@ public:
     XPED_CONST AdjointOp<Derived> adjoint() XPED_CONST;
 
     // Unary operations
-    XPED_CONST CoeffUnaryOp<Derived> unaryExpr(const std::function<Scalar(Scalar)>& coeff_func) XPED_CONST;
+    template <typename ReturnScalar>
+    XPED_CONST CoeffUnaryOp<Derived, ReturnScalar> unaryExpr(const std::function<ReturnScalar(Scalar)>& coeff_func) XPED_CONST;
 
     XPED_CONST BlockUnaryOp<Derived> unaryExpr(const std::function<MatrixType(const MatrixType&)>& coeff_func) XPED_CONST;
 
-    XPED_CONST CoeffUnaryOp<Derived> sqrt() XPED_CONST;
-    XPED_CONST CoeffUnaryOp<Derived> inv() XPED_CONST;
-    XPED_CONST CoeffUnaryOp<Derived> square() XPED_CONST;
-    XPED_CONST CoeffUnaryOp<Derived> abs() XPED_CONST;
+    XPED_CONST CoeffUnaryOp<Derived, Scalar> sqrt() XPED_CONST;
+    XPED_CONST CoeffUnaryOp<Derived, Scalar> inv() XPED_CONST;
+    XPED_CONST CoeffUnaryOp<Derived, Scalar> square() XPED_CONST;
+    XPED_CONST CoeffUnaryOp<Derived, typename ScalarTraits<Scalar>::Real> abs() XPED_CONST;
 
     XPED_CONST BlockUnaryOp<Derived> msqrt() XPED_CONST;
     XPED_CONST BlockUnaryOp<Derived> mexp(Scalar factor) XPED_CONST;
@@ -155,47 +156,54 @@ XPED_CONST CoeffBinaryOp<DerivedLeft, DerivedRight> operator-(XPED_CONST TensorB
     return left.binaryExpr(right, [](const typename DerivedLeft::Scalar s1, const typename DerivedRight::Scalar s2) { return s1 - s2; });
 }
 
-template <typename Derived>
-XPED_CONST CoeffUnaryOp<Derived> operator+(XPED_CONST TensorBase<Derived>& left, const typename Derived::Scalar offset)
+template <typename Derived, typename Scalar>
+XPED_CONST CoeffUnaryOp<Derived, std::common_type_t<typename Derived::Scalar, Scalar>> operator+(XPED_CONST TensorBase<Derived>& left, Scalar offset)
 {
-    return left.unaryExpr([offset](const typename Derived::Scalar s) { return offset + s; });
+    return left.template unaryExpr<std::common_type_t<typename Derived::Scalar, Scalar>>(
+        [offset](const typename Derived::Scalar s) { return offset + s; });
 }
 
-template <typename Derived>
-XPED_CONST CoeffUnaryOp<Derived> operator+(const typename Derived::Scalar offset, XPED_CONST TensorBase<Derived>& right)
+template <typename Derived, typename Scalar>
+XPED_CONST CoeffUnaryOp<Derived, std::common_type_t<typename Derived::Scalar, Scalar>> operator+(Scalar offset, XPED_CONST TensorBase<Derived>& right)
 {
-    return right.unaryExpr([offset](const typename Derived::Scalar s) { return offset + s; });
+    return right.template unaryExpr<std::common_type_t<typename Derived::Scalar, Scalar>>(
+        [offset](const typename Derived::Scalar s) { return offset + s; });
+};
+
+template <typename Derived, typename Scalar>
+XPED_CONST CoeffUnaryOp<Derived, std::common_type_t<typename Derived::Scalar, Scalar>> operator-(XPED_CONST TensorBase<Derived>& left, Scalar offset)
+{
+    return left.template unaryExpr<std::common_type_t<typename Derived::Scalar, Scalar>>(
+        [offset](const typename Derived::Scalar s) { return s - offset; });
 }
 
-template <typename Derived>
-XPED_CONST CoeffUnaryOp<Derived> operator-(XPED_CONST TensorBase<Derived>& left, const typename Derived::Scalar offset)
+template <bool = false, typename Derived, typename Scalar>
+XPED_CONST CoeffUnaryOp<Derived, std::common_type_t<typename Derived::Scalar, Scalar>> operator*(XPED_CONST TensorBase<Derived>& left, Scalar factor)
 {
-    return left.unaryExpr([offset](const typename Derived::Scalar s) { return s - offset; });
+    return left.template unaryExpr<std::common_type_t<typename Derived::Scalar, Scalar>>(
+        [factor](const typename Derived::Scalar s) { return s * factor; });
 }
 
-template <bool = false, typename Derived>
-XPED_CONST CoeffUnaryOp<Derived> operator*(XPED_CONST TensorBase<Derived>& left, const typename Derived::Scalar factor)
+template <bool = false, typename Derived, typename Scalar>
+XPED_CONST CoeffUnaryOp<Derived, std::common_type_t<typename Derived::Scalar, Scalar>> operator*(Scalar factor, XPED_CONST TensorBase<Derived>& right)
 {
-    return left.unaryExpr([factor](const typename Derived::Scalar s) { return s * factor; });
+    return right.template unaryExpr<std::common_type_t<typename Derived::Scalar, Scalar>>(
+        [factor](const typename Derived::Scalar s) { return s * factor; });
 }
 
-template <bool = false, typename Derived>
-XPED_CONST CoeffUnaryOp<Derived> operator*(const typename Derived::Scalar factor, XPED_CONST TensorBase<Derived>& right)
-{
-    return right.unaryExpr([factor](const typename Derived::Scalar s) { return s * factor; });
-}
-
-template <bool = false, typename Derived>
-XPED_CONST CoeffUnaryOp<Derived> operator*(const typename Derived::Scalar factor, TensorBase<Derived>&& right)
+template <bool = false, typename Derived, typename Scalar>
+XPED_CONST CoeffUnaryOp<Derived, std::common_type_t<typename Derived::Scalar, Scalar>> operator*(Scalar factor, TensorBase<Derived>&& right)
 {
     TensorBase<Derived>& tmp_right = right;
-    return tmp_right.unaryExpr([factor](const typename Derived::Scalar s) { return s * factor; });
+    return tmp_right.template unaryExpr<std::common_type_t<typename Derived::Scalar, Scalar>>(
+        [factor](const typename Derived::Scalar s) { return s * factor; });
 }
 
-template <typename Derived>
-XPED_CONST CoeffUnaryOp<Derived> operator/(XPED_CONST TensorBase<Derived>& left, const typename Derived::Scalar divisor)
+template <typename Derived, typename Scalar>
+XPED_CONST CoeffUnaryOp<Derived, std::common_type_t<typename Derived::Scalar, Scalar>> operator/(XPED_CONST TensorBase<Derived>& left, Scalar divisor)
 {
-    return left.unaryExpr([divisor](const typename Derived::Scalar s) { return s / divisor; });
+    return left.template unaryExpr<std::common_type_t<typename Derived::Scalar, Scalar>>(
+        [divisor](const typename Derived::Scalar s) { return s / divisor; });
 }
 
 } // namespace Xped

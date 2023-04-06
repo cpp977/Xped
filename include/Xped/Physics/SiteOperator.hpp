@@ -15,12 +15,12 @@ struct SiteOperator
 
     SiteOperator() = default;
 
-    SiteOperator(qType Q, const Qbasis<Symmetry, 1>& basis, mpi::XpedWorld& world = mpi::getUniverse());
+    SiteOperator(qType Q, const Qbasis<Symmetry, 1>& basis, const mpi::XpedWorld& world = mpi::getUniverse());
 
     SiteOperator(qType Q,
                  const Qbasis<Symmetry, 1>& basis,
                  const std::unordered_map<std::string, std::pair<qType, std::size_t>>& labels,
-                 mpi::XpedWorld& world = mpi::getUniverse());
+                 const mpi::XpedWorld& world = mpi::getUniverse());
 
     const auto operator()(const qType& bra, const qType& ket) const
     {
@@ -57,17 +57,17 @@ struct SiteOperator
         return this->operator()(it_bra->second.first, it_ket->second.first)(it_bra->second.second, it_ket->second.second);
     }
 
-    SiteOperator<Scalar, Symmetry> adjoint() const;
+    SiteOperator<Scalar, Symmetry> adjoint() XPED_CONST;
 
     void setZero() { data.setZero(); }
     void setIdentity() { data.setIdentity(); }
     void setRandom() { data.setRandom(); }
 
     static SiteOperator<Scalar, Symmetry>
-    prod(const SiteOperator<Scalar, Symmetry>& O1, const SiteOperator<Scalar, Symmetry>& O2, const qType& target);
+    prod(XPED_CONST SiteOperator<Scalar, Symmetry>& O1, XPED_CONST SiteOperator<Scalar, Symmetry>& O2, const qType& target);
     static SiteOperator<Scalar, Symmetry>
-    outerprod(const SiteOperator<Scalar, Symmetry>& O1, const SiteOperator<Scalar, Symmetry>& O2, const qType& target);
-    static SiteOperator<Scalar, Symmetry> outerprod(const SiteOperator<Scalar, Symmetry>& O1, const SiteOperator<Scalar, Symmetry>& O2)
+    outerprod(XPED_CONST SiteOperator<Scalar, Symmetry>& O1, XPED_CONST SiteOperator<Scalar, Symmetry>& O2, const qType& target);
+    static SiteOperator<Scalar, Symmetry> outerprod(XPED_CONST SiteOperator<Scalar, Symmetry>& O1, XPED_CONST SiteOperator<Scalar, Symmetry>& O2)
     {
         auto target = Symmetry::reduceSilent(O1.Q, O2.Q);
         assert(target.size() == 1 and "Use outerprod overload with specification of fuse quantum number!");
@@ -89,24 +89,31 @@ struct SiteOperator
     std::string label_;
 };
 
-template <typename Scalar, typename Symmetry>
-SiteOperator<Scalar, Symmetry> operator*(Scalar s, const SiteOperator<Scalar, Symmetry>& op)
+template <typename Scalar, typename Symmetry, typename OtherScalar>
+SiteOperator<std::common_type_t<Scalar, OtherScalar>, Symmetry> operator*(OtherScalar s, XPED_CONST SiteOperator<Scalar, Symmetry>& op)
 {
-    SiteOperator<Scalar, Symmetry> out = op;
+    SiteOperator<std::common_type_t<Scalar, OtherScalar>, Symmetry> out(op.Q, op.data.coupledDomain(), op.data.world());
+    out.data = s * op.data;
+    return out;
+}
+
+template <typename Scalar, typename Symmetry, typename OtherScalar>
+SiteOperator<std::common_type_t<Scalar, OtherScalar>, Symmetry> operator*(OtherScalar s, SiteOperator<Scalar, Symmetry>&& op)
+{
+    SiteOperator<Scalar, Symmetry>& tmp_op = op;
+    return s * tmp_op;
+}
+
+template <typename Scalar, typename Symmetry, typename OtherScalar>
+SiteOperator<std::common_type_t<Scalar, OtherScalar>, Symmetry> operator*(XPED_CONST SiteOperator<Scalar, Symmetry>& op, OtherScalar s)
+{
+    SiteOperator<std::common_type_t<Scalar, OtherScalar>, Symmetry> out(op.Q, op.data.coupledDomain(), op.data.world());
     out.data = s * op.data;
     return out;
 }
 
 template <typename Scalar, typename Symmetry>
-SiteOperator<Scalar, Symmetry> operator*(const SiteOperator<Scalar, Symmetry>& op, Scalar s)
-{
-    SiteOperator<Scalar, Symmetry> out = op;
-    out.data = s * op.data;
-    return out;
-}
-
-template <typename Scalar, typename Symmetry>
-SiteOperator<Scalar, Symmetry> operator*(const SiteOperator<Scalar, Symmetry>& O1, const SiteOperator<Scalar, Symmetry>& O2)
+SiteOperator<Scalar, Symmetry> operator*(XPED_CONST SiteOperator<Scalar, Symmetry>& O1, XPED_CONST SiteOperator<Scalar, Symmetry>& O2)
 {
     auto Qtots = Symmetry::reduceSilent(O1.Q, O2.Q);
     assert(Qtots.size() == 1 and
@@ -116,7 +123,7 @@ SiteOperator<Scalar, Symmetry> operator*(const SiteOperator<Scalar, Symmetry>& O
 }
 
 template <typename Scalar, typename Symmetry>
-SiteOperator<Scalar, Symmetry> operator+(const SiteOperator<Scalar, Symmetry>& O1, const SiteOperator<Scalar, Symmetry>& O2)
+SiteOperator<Scalar, Symmetry> operator+(XPED_CONST SiteOperator<Scalar, Symmetry>& O1, XPED_CONST SiteOperator<Scalar, Symmetry>& O2)
 {
     assert(O1.Q == O2.Q and "For addition of SiteOperator the operator quantum number needs to be the same.");
     SiteOperator<Scalar, Symmetry> out(O1.Q, O1.data.coupledDomain());
@@ -125,7 +132,7 @@ SiteOperator<Scalar, Symmetry> operator+(const SiteOperator<Scalar, Symmetry>& O
 }
 
 template <typename Scalar, typename Symmetry>
-SiteOperator<Scalar, Symmetry> operator-(const SiteOperator<Scalar, Symmetry>& O1, const SiteOperator<Scalar, Symmetry>& O2)
+SiteOperator<Scalar, Symmetry> operator-(XPED_CONST SiteOperator<Scalar, Symmetry>& O1, XPED_CONST SiteOperator<Scalar, Symmetry>& O2)
 {
     assert(O1.Q == O2.Q and "For subtraction of SiteOperator the operator quantum number needs to be the same.");
     SiteOperator<Scalar, Symmetry> out(O1.Q, O1.data.coupledDomain());
@@ -134,20 +141,44 @@ SiteOperator<Scalar, Symmetry> operator-(const SiteOperator<Scalar, Symmetry>& O
 }
 
 template <typename Scalar, typename Symmetry>
-SiteOperator<Scalar, Symmetry> kroneckerProduct(const SiteOperator<Scalar, Symmetry>& O1, const SiteOperator<Scalar, Symmetry>& O2)
+SiteOperator<Scalar, Symmetry> kroneckerProduct(XPED_CONST SiteOperator<Scalar, Symmetry>& O1, XPED_CONST SiteOperator<Scalar, Symmetry>& O2)
 {
     return SiteOperator<Scalar, Symmetry>::outerprod(O1, O2);
 }
 
 template <typename Scalar, typename Symmetry>
-Tensor<Scalar, 2, 2, Symmetry, false> tprod(const SiteOperator<Scalar, Symmetry>& O1, const SiteOperator<Scalar, Symmetry>& O2)
+Tensor<Scalar, 2, 2, Symmetry, false> tprod(XPED_CONST SiteOperator<Scalar, Symmetry>& O1,
+                                            XPED_CONST SiteOperator<Scalar, Symmetry>& O2,
+                                            bool ADD_TWIST = false,
+                                            bool REVERSE_ORDER = false)
 {
-    Qbasis<Symmetry, 1> Otarget_op;
-    Otarget_op.push_back(Symmetry::qvacuum(), 1);
-    Tensor<double, 2, 1, Symmetry, false> couple({{O2.data.uncoupledCodomain()[1], O1.data.uncoupledCodomain()[1]}}, {{Otarget_op}}, O1.data.world());
-    couple.setConstant(1.);
-    auto tmp1 = O1.data.template contract<std::array{-1, -2, 1}, std::array{-3, 1, -4}, 2>(couple);
-    return tmp1.template contract<std::array{-1, -3, 1, -5}, std::array{-2, -4, 1}, 2>(O2.data).template trim<4>();
+    if(not REVERSE_ORDER) {
+        Qbasis<Symmetry, 1> Otarget_op;
+        Otarget_op.push_back(Symmetry::qvacuum(), 1);
+        Tensor<double, 2, 1, Symmetry, false> couple(
+            {{O2.data.uncoupledCodomain()[1], O1.data.uncoupledCodomain()[1]}}, {{Otarget_op}}, O1.data.world());
+        couple.setConstant(1.);
+        auto tmp1 = ADD_TWIST ? O1.data.twist(2).template contract<std::array{-1, -2, 1}, std::array{-3, 1, -4}, 2>(couple)
+                              : O1.data.template contract<std::array{-1, -2, 1}, std::array{-3, 1, -4}, 2>(couple);
+        return tmp1.template contract<std::array{-1, -3, 1, -5}, std::array{-2, -4, 1}, 2>(O2.data).template trim<4>();
+    } else {
+        Qbasis<Symmetry, 1> Otarget_op;
+        Otarget_op.push_back(Symmetry::qvacuum(), 1);
+        Tensor<double, 2, 1, Symmetry, false> couple(
+            {{O1.data.uncoupledCodomain()[1], O2.data.uncoupledCodomain()[1]}}, {{Otarget_op}}, O1.data.world());
+        couple.setConstant(1.);
+        auto tmp1 = ADD_TWIST ? O1.data.twist(2).template contract<std::array{-1, -2, 1}, std::array{1, -3, -4}, 2>(couple)
+                              : O1.data.template contract<std::array{-1, -2, 1}, std::array{1, -3, -4}, 2>(couple);
+        return tmp1.template contract<std::array{-1, -3, 1, -5}, std::array{-2, -4, 1}, 2>(O2.data).template trim<4>();
+    }
+}
+
+template <typename Scalar, typename Symmetry>
+Tensor<Scalar, 2, 2, Symmetry, false> tprod(SiteOperator<Scalar, Symmetry>&& O1, SiteOperator<Scalar, Symmetry>&& O2)
+{
+    SiteOperator<Scalar, Symmetry> tmp_O1 = O1;
+    SiteOperator<Scalar, Symmetry> tmp_O2 = O2;
+    return tprod(tmp_O1, tmp_O2);
 }
 
 template <typename Scalar, typename Symmetry>

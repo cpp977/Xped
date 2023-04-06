@@ -6,6 +6,7 @@
 #include <highfive/H5File.hpp>
 
 namespace Xped {
+
 struct ObservableBase
 {
     explicit ObservableBase(const std::string& name_in = "", bool MEASURE_IN = true)

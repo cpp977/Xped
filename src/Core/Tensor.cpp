@@ -602,7 +602,7 @@ auto Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::view(const
     IndexType left_offset_domain = coupledDomain().leftOffset(f1);
     IndexType left_offset_codomain = coupledCodomain().leftOffset(f2);
 #ifdef XPED_USE_EIGEN_TENSOR_LIB
-    Eigen::TensorMap<Eigen::Tensor<double, 2>> tmat(block(block_number).data(),
+    Eigen::TensorMap<Eigen::Tensor<Scalar, 2>> tmat(block(block_number).data(),
                                                     std::array<IndexType, 2>{block(block_number).rows(), block(block_number).cols()});
     return tmat
         .slice(std::array<Eigen::Index, 2>{left_offset_domain, left_offset_codomain},
@@ -660,7 +660,7 @@ auto Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::view(const
     IndexType left_offset_codomain = coupledCodomain().leftOffset(f2);
 
 #ifdef XPED_USE_EIGEN_TENSOR_LIB
-    Eigen::TensorMap<const Eigen::Tensor<double, 2>> tmat(block(block_number).data(),
+    Eigen::TensorMap<const Eigen::Tensor<Scalar, 2>> tmat(block(block_number).data(),
                                                           std::array<IndexType, 2>{block(block_number).rows(), block(block_number).cols()});
     return tmat
         .slice(std::array<Eigen::Index, 2>{left_offset_domain, left_offset_codomain},

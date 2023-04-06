@@ -9,31 +9,31 @@
 
 namespace Xped {
 
-template <typename XprType>
+template <typename, typename>
 class CoeffUnaryOp;
 
-template <typename XprType>
-struct TensorTraits<CoeffUnaryOp<XprType>>
+template <typename XprType, typename ReturnScalar>
+struct TensorTraits<CoeffUnaryOp<XprType, ReturnScalar>>
 {
     static constexpr std::size_t Rank = XprType::Rank;
     static constexpr std::size_t CoRank = XprType::CoRank;
-    typedef typename XprType::Scalar Scalar;
+    typedef ReturnScalar Scalar;
     typedef typename XprType::Symmetry Symmetry;
     using AllocationPolicy = typename XprType::AllocationPolicy;
 };
 
-template <typename XprType>
-class CoeffUnaryOp : public TensorBase<CoeffUnaryOp<XprType>>
+template <typename XprType, typename ReturnScalar>
+class CoeffUnaryOp : public TensorBase<CoeffUnaryOp<XprType, ReturnScalar>>
 {
 public:
     static inline constexpr std::size_t Rank = XprType::Rank;
     static inline constexpr std::size_t CoRank = XprType::CoRank;
-    typedef typename XprType::Scalar Scalar;
+    using Scalar = ReturnScalar;
     typedef typename XprType::Symmetry Symmetry;
     using AllocationPolicy = typename XprType::AllocationPolicy;
     typedef typename Symmetry::qType qType;
 
-    CoeffUnaryOp(XPED_CONST XprType& xpr, const std::function<Scalar(Scalar)>& coeff_func)
+    CoeffUnaryOp(XPED_CONST XprType& xpr, const std::function<ReturnScalar(typename XprType::Scalar)>& coeff_func)
         : refxpr_(xpr)
         , coeff_func_(coeff_func)
     {}
@@ -45,8 +45,8 @@ public:
     inline const auto sector() const { return refxpr_.sector(); }
     inline const qType sector(std::size_t i) const { return refxpr_.sector(i); }
 
-    inline const auto block(std::size_t i) const { return PlainInterface::unaryFunc(refxpr_.block(i), coeff_func_); }
-    inline auto block(std::size_t i) { return PlainInterface::unaryFunc(refxpr_.block(i), coeff_func_); }
+    inline const auto block(std::size_t i) const { return PlainInterface::unaryFunc<ReturnScalar>(refxpr_.block(i), coeff_func_); }
+    inline auto block(std::size_t i) { return PlainInterface::unaryFunc<ReturnScalar>(refxpr_.block(i), coeff_func_); }
 
     inline const auto dict() const { return refxpr_.dict(); }
 
@@ -63,7 +63,7 @@ public:
 
 protected:
     XPED_CONST XprType& refxpr_;
-    const std::function<Scalar(Scalar)> coeff_func_;
+    const std::function<ReturnScalar(typename XprType::Scalar)> coeff_func_;
 };
 
 } // namespace Xped

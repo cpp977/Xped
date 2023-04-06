@@ -142,7 +142,7 @@ struct MatrixInterface
     }
 
     template <typename Scalar, typename Derived>
-    static auto unaryFunc(const Eigen::MatrixBase<Derived>& M, const std::function<Scalar(Scalar)>& func)
+    static auto unaryFunc(const Eigen::MatrixBase<Derived>& M, const std::function<Scalar(typename Derived::Scalar)>& func)
     {
         return M.unaryExpr(func);
     }

@@ -21,11 +21,11 @@ namespace Xped {
      j1j2: E/N =
 */
 template <typename Symmetry>
-class Heisenberg : public TwoSiteObservable<Symmetry>
+class Heisenberg : public TwoSiteObservable<double, Symmetry>
 {
 public:
     Heisenberg(std::map<std::string, Param>& params_in, const Pattern& pat_in, Opts::Bond bond = Opts::Bond::H | Opts::Bond::V)
-        : TwoSiteObservable<Symmetry>(pat_in, bond)
+        : TwoSiteObservable<double, Symmetry>(pat_in, bond)
         , params(params_in)
         , pat(pat_in)
     {
@@ -64,7 +64,7 @@ public:
     virtual void setDefaultObs() override
     {
         if constexpr(std::is_same_v<Symmetry, Sym::SU2<Sym::SpinSU2>>) {
-            auto SS = std::make_unique<Xped::TwoSiteObservable<Symmetry>>(
+            auto SS = std::make_unique<Xped::TwoSiteObservable<double, Symmetry>>(
                 pat, Xped::Opts::Bond::H | Xped::Opts::Bond::V | Xped::Opts::Bond::D1 | Xped::Opts::Bond::D2, "SS");
             for(auto& t : SS->data_h) { t = std::sqrt(3.) * Xped::tprod(B.Sdag(), B.S()); }
             for(auto& t : SS->data_v) { t = std::sqrt(3.) * Xped::tprod(B.Sdag(), B.S()); }
@@ -73,15 +73,15 @@ public:
             obs.push_back(std::move(SS));
 
         } else if constexpr(Symmetry::ALL_ABELIAN) {
-            auto Sz = std::make_unique<Xped::OneSiteObservable<Symmetry>>(pat, "Sz");
+            auto Sz = std::make_unique<Xped::OneSiteObservable<double, Symmetry>>(pat, "Sz");
             for(auto& t : Sz->data) { t = B.Sz().data.template trim<2>(); }
             obs.push_back(std::move(Sz));
             if constexpr(Symmetry::ALL_IS_TRIVIAL) {
-                auto Sx = std::make_unique<Xped::OneSiteObservable<Symmetry>>(pat, "Sx");
+                auto Sx = std::make_unique<Xped::OneSiteObservable<double, Symmetry>>(pat, "Sx");
                 for(auto& t : Sx->data) { t = B.Sx().data.template trim<2>(); }
                 obs.push_back(std::move(Sx));
             }
-            auto SzSz = std::make_unique<Xped::TwoSiteObservable<Symmetry>>(
+            auto SzSz = std::make_unique<Xped::TwoSiteObservable<double, Symmetry>>(
                 pat, Xped::Opts::Bond::H | Xped::Opts::Bond::V | Xped::Opts::Bond::D1 | Xped::Opts::Bond::D2, "SzSz");
             for(auto& t : SzSz->data_h) { t = Xped::tprod(B.Sz(), B.Sz()); }
             for(auto& t : SzSz->data_v) { t = Xped::tprod(B.Sz(), B.Sz()); }
@@ -101,24 +101,24 @@ public:
     virtual void computeObs(XPED_CONST CTM<double, Symmetry, 2, false, Opts::CTMCheckpoint{}>& env) override
     {
         for(auto& ob : obs) {
-            if(auto* one = dynamic_cast<OneSiteObservable<Symmetry>*>(ob.get()); one != nullptr) { avg(env, *one); }
-            if(auto* two = dynamic_cast<TwoSiteObservable<Symmetry>*>(ob.get()); two != nullptr) { avg(env, *two); }
+            if(auto* one = dynamic_cast<OneSiteObservable<double, Symmetry>*>(ob.get()); one != nullptr) { avg(env, *one); }
+            if(auto* two = dynamic_cast<TwoSiteObservable<double, Symmetry>*>(ob.get()); two != nullptr) { avg(env, *two); }
         }
     }
 
     virtual void computeObs(XPED_CONST CTM<std::complex<double>, Symmetry, 2, false, Opts::CTMCheckpoint{}>& env) override
     {
         for(auto& ob : obs) {
-            if(auto* one = dynamic_cast<OneSiteObservable<Symmetry>*>(ob.get()); one != nullptr) { avg(env, *one); }
-            if(auto* two = dynamic_cast<TwoSiteObservable<Symmetry>*>(ob.get()); two != nullptr) { avg(env, *two); }
+            if(auto* one = dynamic_cast<OneSiteObservable<double, Symmetry>*>(ob.get()); one != nullptr) { avg(env, *one); }
+            if(auto* two = dynamic_cast<TwoSiteObservable<double, Symmetry>*>(ob.get()); two != nullptr) { avg(env, *two); }
         }
     }
 
     virtual void computeObs(XPED_CONST CTM<double, Symmetry, 1, false, Opts::CTMCheckpoint{}>& env) override
     {
         for(auto& ob : obs) {
-            if(auto* one = dynamic_cast<OneSiteObservable<Symmetry>*>(ob.get()); one != nullptr) { avg(env, *one); }
-            if(auto* two = dynamic_cast<TwoSiteObservable<Symmetry>*>(ob.get()); two != nullptr) { avg(env, *two); }
+            if(auto* one = dynamic_cast<OneSiteObservable<double, Symmetry>*>(ob.get()); one != nullptr) { avg(env, *one); }
+            if(auto* two = dynamic_cast<TwoSiteObservable<double, Symmetry>*>(ob.get()); two != nullptr) { avg(env, *two); }
         }
     }
 

@@ -128,7 +128,12 @@ inline Optim optim_from_toml(const toml::value& t)
     res.save_period = t.contains("save_period") ? t.at("save_period").as_integer() : res.save_period;
     res.log_format = t.contains("log_format") ? static_cast<std::string>(t.at("log_format").as_string()) : res.log_format;
     if(t.contains("working_directory")) {
-        res.working_directory = std::filesystem::path(static_cast<std::string>(t.at("working_directory").as_string()));
+        std::filesystem::path tmp_wd(static_cast<std::string>(t.at("working_directory").as_string()));
+        if(tmp_wd.is_relative()) {
+            res.working_directory = std::filesystem::current_path() / tmp_wd;
+        } else {
+            res.working_directory = tmp_wd;
+        }
     }
     if(t.contains("logging_directory")) {
         res.logging_directory = std::filesystem::path(static_cast<std::string>(t.at("logging_directory").as_string()));

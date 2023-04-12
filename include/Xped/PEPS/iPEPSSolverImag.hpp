@@ -55,7 +55,7 @@ struct iPEPSSolverImag
 
         init_psi();
 
-        std::vector<std::vector<double>> Es = std::vector(imag_opts.chis.size());
+        std::vector<std::vector<double>> Es(imag_opts.chis.size());
         for(auto iD = 0ul; iD < Es.size(); ++iD) { Es[iD].resize(imag_opts.chis[iD].size()); }
         util::Stopwatch<> total_t;
         std::chrono::seconds evol_time{0}, ctm_time{0};

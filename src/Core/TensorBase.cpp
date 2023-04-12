@@ -139,6 +139,13 @@ XPED_CONST CoeffUnaryOp<Derived, typename ScalarTraits<typename TensorTraits<Der
 }
 
 template <typename Derived>
+template <typename OtherScalar>
+XPED_CONST CoeffUnaryOp<Derived, OtherScalar> TensorBase<Derived>::cast() XPED_CONST
+{
+    return unaryExpr<OtherScalar>([](const Scalar s) { return static_cast<OtherScalar>(s); });
+}
+
+template <typename Derived>
 XPED_CONST BlockUnaryOp<Derived> TensorBase<Derived>::msqrt() XPED_CONST
 {
     return unaryExpr([](const MatrixType& m) { return PlainInterface::msqrt(m); });

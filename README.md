@@ -37,15 +37,16 @@ Library for the manipulation of symmetric (block-sparse) tensors with arbitrary 
 | `XPED_LAPACKE` | `/usr/lib/x86_64-linux-gnu/liblapacke.so` | Path to a library. |
 | `XPED_LOG_LEVEL` | `SPDLOG_LEVEL_CRITICAL` | Compile time log level. |
 | `XPED_MATRIX_LIB` | `Eigen` | Used matrix library for plain tensor operations. |
-| `XPED_STORAGE` | `VecOfMat` | Used storage for Xped::Tensor. |
+| `XPED_OPTIM_LIB` | `ceres` | Used library for nonlinear gradient-based optimization. |
+| `XPED_STORAGE` | `Contiguous` | Used storage for Xped::Tensor. |
 | `XPED_TENSOR_LIB` | `Eigen` | Used tensor library for plain tensor operations. |
-| `XPED_USE_AD` | `OFF` | Use automatic differentiation (AD) with Xped Tensors. |
+| `XPED_USE_AD` | `ON` | Use automatic differentiation (AD) with Xped Tensors. |
 | `XPED_USE_BLAS` | `ON` | Enable blas linking. |
 | `XPED_USE_LAPACK` | `ON` | Enable lapack linking. |
 | `XPED_USE_LIBCXX` | `OFF` | Use libc++ from llvm. |
 | `XPED_USE_MKL` | `OFF` | Enable use of intel math kernel library (MKL). |
 | `XPED_USE_MPI` | `OFF` | Enable message parsing interface (mpi) parallelization |
-| `XPED_USE_NLO` | `OFF` | Use nonlinear optimization algorithms. |
+| `XPED_USE_NLO` | `ON` | Use nonlinear optimization algorithms. |
 | `XPED_USE_OPENMP` | `ON` | Enable openmp parallelization |
 | `XPED_USE_SCALAPACK` | `OFF` | Enable scalapack linking (only useful for MPI programs). |
 | `XPED_VECTOR_LIB` | `Eigen` | Used matrix library for plain tensor operations. |

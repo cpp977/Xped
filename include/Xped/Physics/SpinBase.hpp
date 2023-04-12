@@ -26,6 +26,7 @@ class SpinBase : public Spin<Symmetry_, order>
 public:
     using Symmetry = Symmetry_;
     using OperatorType = SiteOperator<Scalar, Symmetry>;
+    using OperatorTypeC = SiteOperator<std::complex<Scalar>, Symmetry>;
     using qType = typename Symmetry::qType;
 
     SpinBase() = default;
@@ -106,6 +107,9 @@ public:
 
     template <class Dummy = Symmetry>
     typename std::enable_if<Dummy::NO_SPIN_SYM(), OperatorType>::type Sx(std::size_t orbital = 0) const;
+
+    template <class Dummy = Symmetry>
+    typename std::enable_if<Dummy::NO_SPIN_SYM(), OperatorTypeC>::type Sy(std::size_t orbital = 0) const;
 
     template <class Dummy = Symmetry>
     typename std::enable_if<Dummy::NO_SPIN_SYM(), OperatorType>::type iSy(std::size_t orbital = 0) const;
@@ -468,6 +472,17 @@ typename std::enable_if<Dummy::NO_SPIN_SYM(), SiteOperator<double, Symmetry_>>::
 {
     OperatorType out = 0.5 * (Sp(orbital) + Sm(orbital));
     out.label() = "Sx";
+    return out;
+}
+
+template <typename Symmetry, std::size_t order>
+template <typename Dummy>
+typename std::enable_if<Dummy::NO_SPIN_SYM(), SiteOperator<std::complex<double>, Symmetry>>::type
+SpinBase<Symmetry, order>::Sy(std::size_t orbital) const
+{
+    using namespace std::complex_literals;
+    OperatorTypeC out = -1i * 0.5 * (Sp(orbital) - Sm(orbital));
+    out.label() = "Sy";
     return out;
 }
 

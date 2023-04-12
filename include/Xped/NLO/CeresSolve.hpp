@@ -38,14 +38,21 @@ public:
 
     bool Evaluate(const double* parameters, double* cost, double* gradient) const override
     {
-        Psi->set_data(parameters);
-        cost[0] = impl->template solve<double, true>(Psi, gradient, op);
+        if constexpr(ScalarTraits<Scalar>::IS_COMPLEX()) {
+            const std::complex<double>* params_compl = reinterpret_cast<const std::complex<double>*>(parameters);
+            Psi->set_data(params_compl);
+            std::complex<double>* gradient_compl = reinterpret_cast<std::complex<double>*>(gradient);
+            cost[0] = impl->template solve<Scalar, true>(Psi, gradient_compl, op);
+        } else {
+            Psi->set_data(parameters);
+            cost[0] = impl->template solve<Scalar, true>(Psi, gradient, op);
+        }
         return true;
     }
     std::unique_ptr<CTMSolver<Scalar, Symmetry, CPOpts, TRank>> impl;
     Hamiltonian<Symmetry>& op;
     std::shared_ptr<iPEPS<Scalar, Symmetry, false>> Psi;
-    int NumParameters() const override { return Psi->plainSize(); }
+    int NumParameters() const override { return ScalarTraits<Scalar>::IS_COMPLEX() ? 2 * Psi->plainSize() : Psi->plainSize(); }
 };
 
 template <typename Scalar, typename Symmetry, Opts::CTMCheckpoint CPOpts = Opts::CTMCheckpoint{}, std::size_t TRank = 2>
@@ -209,7 +216,12 @@ struct iPEPSSolverAD
         SaveCallback save_c(*this);
         if(optim_opts.save_period > 0) { options.callbacks.push_back(&save_c); }
         ceres::GradientProblemSolver::Summary summary;
-        ceres::Solve(options, *problem, parameters.data(), &summary);
+        if constexpr(ScalarTraits<Scalar>::IS_COMPLEX()) {
+            typename ScalarTraits<Scalar>::Real* params_real = reinterpret_cast<double*>(parameters.data());
+            ceres::Solve(options, *problem, params_real, &summary);
+        } else {
+            ceres::Solve(options, *problem, parameters.data(), &summary);
+        }
         custom_c((summary.iterations.size() > 0) ? summary.iterations.back() : ceres::IterationSummary{});
         obs_c((summary.iterations.size() > 0) ? summary.iterations.back() : ceres::IterationSummary{});
         Log::on_exit(optim_opts.verbosity, "{}", summary.FullReport());

@@ -73,9 +73,11 @@ int main(int argc, char* argv[])
         // SPDLOG_INFO("I am process number #={}", world.rank);
         // SPDLOG_INFO("Number of MPI processes: {}", world.np);
 
-        typedef double Scalar;
+        using Scalar = std::complex<double>;
+        // using Scalar = double;
         // using Symmetry = Xped::Sym::ZN<Xped::Sym::FChargeU1, 36>;
-        using Symmetry = Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>;
+        // using Symmetry = Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>;
+        using Symmetry = Xped::Sym::U0<double>;
         // using Symmetry =
         //     Xped::Sym::Combined<Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>>;
         // typedef Xped::Sym::SU2<Xped::Sym::SpinSU2> Symmetry;
@@ -165,7 +167,7 @@ int main(int argc, char* argv[])
 
         Xped::TMatrix<Xped::Qbasis<Symmetry, 1>> phys_basis(c.pattern);
         phys_basis.setConstant(ham->data_h[0].uncoupledDomain()[0]);
-        auto Psi = std::make_shared<Xped::iPEPS<double, Symmetry, false>>(c, D, left_aux, top_aux, phys_basis, charges);
+        auto Psi = std::make_shared<Xped::iPEPS<Scalar, Symmetry, false>>(c, D, left_aux, top_aux, phys_basis, charges);
         Psi->setRandom();
 
         constexpr Xped::Opts::CTMCheckpoint cp_opts{

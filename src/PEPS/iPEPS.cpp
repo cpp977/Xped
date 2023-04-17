@@ -117,20 +117,22 @@ void iPEPS<Scalar, Symmetry, ENABLE_AD>::init(const TMatrix<Qbasis<Symmetry, 1>>
     for(int x = 0; x < cell().Lx; x++) {
         for(int y = 0; y < cell().Ly; y++) {
             if(not cell().pattern.isUnique(x, y)) { continue; }
-            auto pos = cell().pattern.uniqueIndex(x, y);
-            auto [dummy, shifted_physBasis] = physBasis[pos].shift(charges_[pos]);
-            auto left_basis_xy = leftBasis(x, y).dim() == 0 ? init_basis(shifted_physBasis) : leftBasis(x, y);
-            auto left_basis_xp1y = leftBasis(x + 1, y).dim() == 0 ? init_basis(shifted_physBasis) : leftBasis(x + 1, y);
-            auto top_basis_xy = topBasis(x, y).dim() == 0 ? init_basis(shifted_physBasis) : topBasis(x, y);
-            auto top_basis_xyp1 = topBasis(x, y + 1).dim() == 0 ? init_basis(shifted_physBasis) : topBasis(x, y + 1);
+            // auto pos = cell().pattern.uniqueIndex(x, y);
+            auto [dummy_xy, shifted_physBasis_xy] = physBasis(x, y).shift(charges_(x, y));
+            auto [dummy_xp1y, shifted_physBasis_xp1y] = physBasis(x, y).shift(charges_(x + 1, y));
+            auto [dummy_xyp1, shifted_physBasis_xyp1] = physBasis(x, y).shift(charges_(x, y + 1));
+            auto left_basis_xy = leftBasis(x, y).dim() == 0 ? init_basis(shifted_physBasis_xy) : leftBasis(x, y);
+            auto left_basis_xp1y = leftBasis(x + 1, y).dim() == 0 ? init_basis(shifted_physBasis_xp1y) : leftBasis(x + 1, y);
+            auto top_basis_xy = topBasis(x, y).dim() == 0 ? init_basis(shifted_physBasis_xy) : topBasis(x, y);
+            auto top_basis_xyp1 = topBasis(x, y + 1).dim() == 0 ? init_basis(shifted_physBasis_xyp1) : topBasis(x, y + 1);
             // fmt::print("x={}, y={}, original basis which will be shifted by {}:\n", x, y, Sym::format<Symmetry>(charges_[pos]));
             // std::cout << physBasis[pos] << std::endl;
             // std::cout << "shifted:\n" << shifted_physBasis << std::endl;
-            As[pos] =
-                Tensor<Scalar, 2, 3, Symmetry, ENABLE_AD>({{left_basis_xy, top_basis_xy}}, {{left_basis_xp1y, top_basis_xyp1, shifted_physBasis}});
+            As(x, y) =
+                Tensor<Scalar, 2, 3, Symmetry, ENABLE_AD>({{left_basis_xy, top_basis_xy}}, {{left_basis_xp1y, top_basis_xyp1, shifted_physBasis_xy}});
             // As[pos].setZero();
             // std::cout << fmt::format("A({},{}): ", x, y) << As[pos].coupledDomain() << std::endl << As[pos].coupledCodomain() << std::endl;
-            VERIFY(As[pos].coupledDomain().dim() > 0 and "Bases of the A tensor have no fused blocks.");
+            VERIFY(As(x, y).coupledDomain().dim() > 0 and "Bases of the A tensor have no fused blocks.");
         }
     }
 }
@@ -231,6 +233,7 @@ void iPEPS<Scalar, Symmetry, ENABLE_AD>::setRandom(std::size_t seed)
             Adags[pos] = As[pos].adjoint().eval().template permute<0, 3, 4, 2, 0, 1>(Bool<ENABLE_AD>{});
         }
     }
+    // debug_info();
 }
 
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>
@@ -392,8 +395,8 @@ void iPEPS<Scalar, Symmetry, ENABLE_AD>::debug_info() const
                 std::cout << "Cell site: (" << x << "," << y << "): not unique." << std::endl;
                 continue;
             }
-            std::cout << "Cell site: (" << x << "," << y << "), A:" << std::endl << As(x, y) << std::endl << std::endl;
-            std::cout << "Cell site: (" << x << "," << y << "), A†:" << std::endl << Adags(x, y) << std::endl;
+            std::cout << "Cell site: (" << x << "," << y << "), A:" << std::endl << As(x, y) << std::endl;
+            std::cout << "Cell site: (" << x << "," << y << "), A†:" << std::endl << Adags(x, y) << std::endl << std::endl;
         }
     }
 }

@@ -28,8 +28,7 @@
         "hidden": true,
         "cacheVariables": {
             "VCPKG_CHAINLOAD_TOOLCHAIN_FILE" : "${sourceDir}/triplets/x64-linux-clang.toolchain.cmake",
-            "VCPKG_TARGET_TRIPLET": "x64-linux-clang",
-            "XPED_USE_LIBCXX" : "ON"
+            "VCPKG_TARGET_TRIPLET": "x64-linux-clang"
         }
     },
         {
@@ -37,7 +36,8 @@
         "hidden": true,
         "cacheVariables": {
             "VCPKG_CHAINLOAD_TOOLCHAIN_FILE" : "${sourceDir}/triplets/x64-linux-clang-libcxx.toolchain.cmake",
-            "VCPKG_TARGET_TRIPLET": "x64-linux-clang-libcxx"
+            "VCPKG_TARGET_TRIPLET": "x64-linux-clang-libcxx",
+            "XPED_USE_LIBCXX" : "ON"
         }
     },
         {

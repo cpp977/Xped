@@ -57,7 +57,7 @@ class Qbasis
 
 public:
     /**Does nothing.*/
-    Qbasis(){};
+    Qbasis() = default;
 
     /**
      * Inserts all quantum numbers in the Container \p qins with constant dimension \p dim into the basis.
@@ -259,9 +259,9 @@ private:
 
     // vector with entry: {Quantumnumber (QN), state number of the first plain state for this QN, all plain states for this QN in a Basis object.}
     //[{q1,0,plain_q1}, {q2,dim(plain_q1),plain_q2}, {q3,dim(plain_q1)+dim(plain_q2),plain_q3}, ..., {qi, sum_j^(i-1)dim(plain_qj), plain_qi}]
-    ContainerType data_;
+    ContainerType data_{};
     std::size_t curr_dim = 0;
-    TreeType trees;
+    TreeType trees{};
 
     bool IS_SORTED_ = false;
     bool CONJ = false;

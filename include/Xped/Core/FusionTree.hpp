@@ -25,11 +25,11 @@ struct FusionTree
     typedef typename Symmetry::qType qType;
     typedef typename Symmetry::Scalar Scalar;
 
-    std::array<qType, Rank> q_uncoupled;
-    qType q_coupled;
-    std::size_t dim;
-    std::array<size_t, Rank> dims;
-    std::array<qType, util::inter_dim(Rank)> q_intermediates;
+    std::array<qType, Rank> q_uncoupled{};
+    qType q_coupled{};
+    std::size_t dim{};
+    std::array<size_t, Rank> dims{};
+    std::array<qType, util::inter_dim(Rank)> q_intermediates{};
     std::array<size_t, util::mult_dim(Rank)> multiplicities =
         std::array<size_t, util::mult_dim(Rank)>(); // only for non-Abelian symmetries with outermultiplicity.
     std::array<bool, Rank> IS_DUAL{};

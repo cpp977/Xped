@@ -25,6 +25,8 @@
 #    define XPED_DEFAULT_VECTORLIB Xped::CyclopsVectorLib
 #endif
 
+#include "Xped/Core/ScalarTraits.hpp"
+
 #include "Xped/Interfaces/MatrixInterface.hpp"
 #include "Xped/Interfaces/TensorInterface.hpp"
 #include "Xped/Interfaces/VectorInterface.hpp"

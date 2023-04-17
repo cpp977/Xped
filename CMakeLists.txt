@@ -24,6 +24,9 @@ add_feature_info("The tests will be build." XPED_BUILD_TESTS "")
 option(XPED_BUILD_BENCHMARKS "Build the benchmarks." ON)
 add_feature_info("The benchmarks will be build." XPED_BUILD_BENCHMARKS "")
 
+option(XPED_BUILD_TOOLS "Build the tools." ON)
+add_feature_info("The tools will be build." XPED_BUILD_TOOLS "")
+
 set(XPED_STORAGE "Contiguous" CACHE STRING "Used storage for Xped::Tensor.")
 set(XPED_SUPPORTED_STORAGES "Contiguous;VecOfMat")
 set_property(CACHE XPED_STORAGE PROPERTY STRINGS ${XPED_SUPPORTED_STORAGES})
@@ -500,6 +503,10 @@ endif()
 
 if (XPED_BUILD_BENCHMARKS)
   add_subdirectory(benchmarks)
+endif()
+
+if (XPED_BUILD_TOOLS)
+  add_subdirectory(tools)
 endif()
 
 feature_summary(WHAT ENABLED_FEATURES PACKAGES_FOUND PACKAGES_NOT_FOUND

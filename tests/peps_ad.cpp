@@ -75,9 +75,9 @@ int main(int argc, char* argv[])
 
         using Scalar = std::complex<double>;
         // using Scalar = double;
-        // using Symmetry = Xped::Sym::ZN<Xped::Sym::FChargeU1, 36>;
+        using Symmetry = Xped::Sym::ZN<Xped::Sym::FChargeU1, 36>;
         // using Symmetry = Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>;
-        using Symmetry = Xped::Sym::U0<double>;
+        // using Symmetry = Xped::Sym::U0<double>;
         // using Symmetry =
         //     Xped::Sym::Combined<Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>>;
         // typedef Xped::Sym::SU2<Xped::Sym::SpinSU2> Symmetry;
@@ -114,7 +114,7 @@ int main(int argc, char* argv[])
 
         std::size_t D = toml::get_or<std::size_t>(toml::find(data.at("ipeps"), "D"), 2ul);
 
-        Xped::TMatrix<Xped::Qbasis<Symmetry, 1>> left_aux(c.pattern), top_aux(c.pattern), right_aux(c.pattern), bottom_aux(c.pattern);
+        Xped::TMatrix<Xped::Qbasis<Symmetry, 1>> left_aux(c.pattern), top_aux(c.pattern);
         if(data.at("ipeps").contains("aux_bases")) {
             auto left =
                 toml::get<std::vector<std::vector<std::pair<std::vector<int>, int>>>>(toml::find(data.at("ipeps").at("aux_bases"), "left_basis"));

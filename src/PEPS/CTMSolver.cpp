@@ -67,6 +67,7 @@ CTMSolver<Scalar, Symmetry, CPOpts, TRank>::solve(std::shared_ptr<iPEPS<Scalar, 
         Eprevprev = Eprev;
         Eprev = E;
     }
+    Jack.checkHermiticity();
     if(used_steps == 0) { used_steps = opts.max_presteps; }
     auto pre_time = pre_t.time_string();
     Log::per_iteration(opts.verbosity, "  {: >3} pre steps: {}", "•", pre_time);

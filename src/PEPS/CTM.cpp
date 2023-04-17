@@ -398,6 +398,24 @@ auto CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::info() const
 }
 
 template <typename Scalar, typename Symmetry, std::size_t TRank, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
+void CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::checkHermiticity() const
+{
+    if(not RDM_COMPUTED()) { return; }
+    for(int x = 0; x < cell_.Lx; ++x) {
+        for(int y = 0; y < cell_.Ly; ++y) {
+            if(rho_h_hermitian_check(x, y) > 1.e-5 or rho_v_hermitian_check(x, y) > 1.e-5) {
+                Log::warning(Log::globalLevel,
+                             "Nonhermitian reduced density-matrix! Site: x={},y={}, err_h={:2.10g}, err_v={:2.10g}",
+                             x,
+                             y,
+                             rho_h_hermitian_check(x, y),
+                             rho_v_hermitian_check(x, y));
+            }
+        }
+    }
+}
+
+template <typename Scalar, typename Symmetry, std::size_t TRank, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
 bool CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::checkConvergence(typename ScalarTraits<Scalar>::Real epsilon)
 {
     for(int x = 0; x < cell_.Lx; ++x) {
@@ -430,6 +448,8 @@ void CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::computeRDM_h()
     SPDLOG_INFO("Compute rho_h.");
     rho_h = TMatrix<Tensor<Scalar, 2, 2, Symmetry, ENABLE_AD>>(cell_.pattern);
     rho1_h = TMatrix<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>>(cell_.pattern);
+    rho_h_hermitian_check = TMatrix<double>(cell_.pattern);
+    rho1_h_hermitian_check = TMatrix<double>(cell_.pattern);
 
     for(int x = 0; x < cell_.Lx; x++) {
         for(int y = 0; y < cell_.Ly; y++) {
@@ -508,6 +528,9 @@ void CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::computeRDM_h()
                             .template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0, TRACK_INNER>(Id2.twist(0).twist(1))
                             .template trace<TRACK_INNER>();
             rho_h(x, y) = operator*<TRACK_INNER>(rho_h(x, y), (1. / norm));
+            if constexpr(not ENABLE_AD) {
+                rho_h_hermitian_check(x, y) = (rho_h(x, y) - rho_h(x, y).adjoint()).norm() / (rho_h(x, y) + rho_h(x, y).adjoint()).norm();
+            }
             // fmt::print("rho_h at ({},{}):\n", x, y);
             // rho_h(x, y).print(std::cout, true);
             // std::cout << std::endl;
@@ -515,6 +538,9 @@ void CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::computeRDM_h()
                 {{rho_h(x, y).uncoupledCodomain()[1]}}, {{rho_h(x, y).uncoupledDomain()[1]}}, rho_h(x, y).world());
             rho1_h(x, y) = rho_h(x, y).template contract<std::array{-1, 1, -2, 2}, std::array{2, 1}, 1, TRACK_INNER>(Id.twist(0));
             rho1_h(x, y) = operator*<TRACK_INNER>(rho1_h(x, y), (1. / rho1_h(x, y).template twist<TRACK_INNER>(0).template trace<TRACK_INNER>()));
+            if constexpr(not ENABLE_AD) {
+                rho1_h_hermitian_check(x, y) = (rho1_h(x, y) - rho1_h(x, y).adjoint()).norm() / (rho1_h(x, y) + rho1_h(x, y).adjoint()).norm();
+            }
             // rho1_h(x, y).print(std::cout, true);
             // std::cout << std::endl;
         }
@@ -542,6 +568,9 @@ void CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::computeRDM_v()
     SPDLOG_INFO("Compute rho_v.");
     rho_v = TMatrix<Tensor<Scalar, 2, 2, Symmetry, ENABLE_AD>>(cell_.pattern);
     rho1_v = TMatrix<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>>(cell_.pattern);
+    rho_v_hermitian_check = TMatrix<double>(cell_.pattern);
+    rho1_v_hermitian_check = TMatrix<double>(cell_.pattern);
+
     for(int x = 0; x < cell_.Lx; x++) {
         for(int y = 0; y < cell_.Ly; y++) {
             if(rho_v.isChanged(x, y)) { continue; }
@@ -626,8 +655,10 @@ void CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::computeRDM_v()
             auto norm = rho_v(x, y)
                             .template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0, TRACK_INNER>(Id2.twist(0).twist(1))
                             .template trace<TRACK_INNER>();
-
             rho_v(x, y) = operator*<TRACK_INNER>(rho_v(x, y), (1. / norm));
+            if constexpr(not ENABLE_AD) {
+                rho_v_hermitian_check(x, y) = (rho_v(x, y) - rho_v(x, y).adjoint()).norm() / (rho_v(x, y) + rho_v(x, y).adjoint()).norm();
+            }
             // fmt::print("rho_v at ({},{}):\n", x, y);
             // rho_v(x, y).print(std::cout, true);
             // std::cout << std::endl;
@@ -635,6 +666,9 @@ void CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::computeRDM_v()
                 {{rho_v(x, y).uncoupledCodomain()[1]}}, {{rho_v(x, y).uncoupledDomain()[1]}}, rho_v(x, y).world());
             rho1_v(x, y) = rho_v(x, y).template contract<std::array{-1, 1, -2, 2}, std::array{2, 1}, 1, TRACK_INNER>(Id.twist(0));
             rho1_v(x, y) = operator*<TRACK_INNER>(rho1_v(x, y), (1. / rho1_v(x, y).template twist<TRACK_INNER>(0).template trace<TRACK_INNER>()));
+            if constexpr(not ENABLE_AD) {
+                rho1_v_hermitian_check(x, y) = (rho1_v(x, y) - rho1_v(x, y).adjoint()).norm() / (rho1_v(x, y) + rho1_v(x, y).adjoint()).norm();
+            }
             // rho1_v(x, y).print(std::cout, true);
             // std::cout << std::endl;
         }

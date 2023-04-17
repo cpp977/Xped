@@ -151,6 +151,8 @@ public:
     void computeRDM();
     bool RDM_COMPUTED() const { return HAS_RDM; }
 
+    void checkHermiticity() const;
+
     auto info() const;
 
     const UnitCell& cell() const { return cell_; }
@@ -207,7 +209,10 @@ private:
     TMatrix<Tensor<Scalar, 2, 2, Symmetry, ENABLE_AD>> rho_v;
     TMatrix<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>> rho1_h;
     TMatrix<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>> rho1_v;
-
+    TMatrix<double> rho_h_hermitian_check;
+    TMatrix<double> rho_v_hermitian_check;
+    TMatrix<double> rho1_h_hermitian_check;
+    TMatrix<double> rho1_v_hermitian_check;
     // template <bool TRACK = ENABLE_AD>
     // std::pair<Tensor<Scalar, 3, 3, Symmetry, TRACK>, Tensor<Scalar, 1, 1, Symmetry, TRACK>> get_projectors_left();
 

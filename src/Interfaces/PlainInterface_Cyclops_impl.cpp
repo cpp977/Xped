@@ -121,6 +121,18 @@ void PlainInterface::diagonal_head_matrix_to_vector(VType<typename ctf_traits<MT
     SPDLOG_INFO("Leaving PlainInterface::diagonal_head_matrix_to_vector().");
 }
 
+template <typename VT>
+static void vec_diff(VT&& vec, MType<typename ctf_traits<VT>::Scalar>& res)
+{
+    res["ij"] = vec["j"] - vec["i"];
+}
+
+template <typename VT>
+static void vec_add(VT&& vec, MType<typename ctf_traits<VT>::Scalar>& res)
+{
+    res["ij"] = vec["i"] + vec["j"];
+}
+
 template <typename MT>
 std::tuple<MType<typename ctf_traits<MT>::Scalar>, VType<typename ctf_traits<MT>::Scalar>, MType<typename ctf_traits<MT>::Scalar>>
 PlainInterface::svd(MT&& M)

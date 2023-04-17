@@ -1,0 +1,55 @@
+diff --git a/Makefile b/Makefile
+index 889af5c0..6c93da0d 100644
+--- a/Makefile
++++ b/Makefile
+@@ -10,30 +10,32 @@ export FCXX
+ export OFFLOAD_CXX
+ export LIBS
+ 
++IDIR=$(DESTDIR)/$(INSTALL_DIR)
++
+ all: $(BDIR)/lib/libctf.a $(BDIR)/lib_shared/libctf.so
+ 
+ 
+ .PHONY: install
+-install: $(INSTALL_DIR)/lib/libctf.so
++install: $(IDIR)/lib/libctf.so
+ 
+-$(INSTALL_DIR)/lib/libctf.so: $(BDIR)/lib/libctf.a $(BDIR)/lib_shared/libctf.so
++$(IDIR)/lib/libctf.so: $(BDIR)/lib/libctf.a $(BDIR)/lib_shared/libctf.so
+ 	if [ -d hptt ]; then  \
+ 		echo "WARNING: detected HPTT installation in hptt/, you might need to also install it manually separately."; \
+ 	fi
+ 	if [ -d scalapack ]; then \
+ 		echo "WARNING: detected ScaLAPACK installation in scalapack/, you might need to also install it manually separately."; \
+ 	fi
+-	mkdir -p $(INSTALL_DIR)/lib $(INSTALL_DIR)/include
+-	cp $(BDIR)/lib/libctf.a $(INSTALL_DIR)/lib
+-	cp $(BDIR)/lib_shared/libctf.so $(INSTALL_DIR)/lib
++	mkdir -p $(IDIR)/lib $(IDIR)/include
++	cp $(BDIR)/lib/libctf.a $(IDIR)/lib
++	cp $(BDIR)/lib_shared/libctf.so $(IDIR)/lib
+ 	cd src/scripts && bash ./expand_includes.sh && cd ..
+-	mv include/ctf_all.hpp $(INSTALL_DIR)/include/ctf.hpp
++	cp include/ctf_all.hpp $(IDIR)/include/ctf.hpp
+ 
+ .PHONY: uninstall
+ uninstall:
+-	rm $(INSTALL_DIR)/lib/libctf.a
+-	rm $(INSTALL_DIR)/lib/libctf.so
+-	rm $(INSTALL_DIR)/include/ctf.hpp
++	rm $(IDIR)/lib/libctf.a
++	rm $(IDIR)/lib/libctf.so
++	rm $(IDIR)/include/ctf.hpp
+ 
+ 
+ EXAMPLES = algebraic_multigrid apsp bitonic_sort btwn_central ccsd checkpoint dft_3D fft force_integration force_integration_sparse jacobi matmul neural_network particle_interaction qinformatics recursive_matmul scan sparse_mp3 sparse_permuted_slice spectral_element spmv sssp strassen trace mis mis2 ao_mo_transf block_sparse checkpoint_sparse hosvd mttkrp fft_with_idx_partition
+@@ -124,7 +126,7 @@ $(BDIR)/lib_python/ctf/tensor.o: $(BDIR)/setup.py $(BDIR)/lib_shared/libctf.so $
+ 
+ 
+ .PHONY: python_install
+-python_install: $(INSTALL_DIR)/lib/libctf.so pip
++python_install: $(IDIR)/lib/libctf.so pip
+ .PHONY: pip
+ pip: $(BDIR)/setup.py $(BDIR)/lib_shared/libctf.so $(PYTHON_SRC_FILES)
+ 	cd src_python; \

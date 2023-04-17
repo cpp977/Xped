@@ -42,16 +42,16 @@ XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100)
 #include "Xped/MPS/Mps.hpp"
 #include "Xped/MPS/MpsAlgebra.hpp"
 
-#include "Xped/PEPS/Models/KondoNecklace.hpp"
+// #include "Xped/PEPS/Models/KondoNecklace.hpp"
 // #include "Xped/PEPS/iPEPS.hpp"
 
-#include "Xped/Physics/SpinBase.hpp"
+// #include "Xped/Physics/FermionBase.hpp"
+// #include "Xped/Physics/SpinBase.hpp"
+// #include "Xped/Physics/SpinlessFermionBase.hpp"
 
 #include "Xped/Util/Stopwatch.hpp"
 
 #include "Xped/IO/Matlab.hpp"
-
-#include "TOOLS/ArgParser.h"
 
 int main(int argc, char* argv[])
 {
@@ -66,9 +66,36 @@ int main(int argc, char* argv[])
     spdlog::set_default_logger(my_logger);
     std::ios::sync_with_stdio(true);
 
-    ArgParser args(argc, argv);
+    // using Symmetry1 = Xped::Sym::Combined<Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>>;
+    // using Symmetry1 = Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>;
+    // using Symmetry2 = Xped::Sym::ZN<Xped::Sym::ChargeU1, 2>;
+    // Xped::FermionBase<Symmetry2> F1(1);
+    // Xped::FermionBase<Symmetry2> F2(2);
+    // auto hopping = (-1. * (tprod(F1.cdag(Xped::SPIN_INDEX::UP) * F1.sign_local(), F1.c(Xped::SPIN_INDEX::UP)) +
+    //                        tprod(F1.cdag(Xped::SPIN_INDEX::DN) * F1.sign_local(), F1.c(Xped::SPIN_INDEX::DN)) -
+    //                        tprod(F1.c(Xped::SPIN_INDEX::UP) * F1.sign_local(), F1.cdag(Xped::SPIN_INDEX::UP)) -
+    //                        tprod(F1.c(Xped::SPIN_INDEX::DN) * F1.sign_local(), F1.cdag(Xped::SPIN_INDEX::DN))))
+    //                    .eval();
+    // std::cout << hopping << std::endl;
+    // // std::cout << F2.cdag(Xped::SPIN_INDEX::UP, 1) << std::endl;
+    // // std::cout << F2.cdag(Xped::SPIN_INDEX::DN, 0) << std::endl;
+    // // std::cout << F2.cdag(Xped::SPIN_INDEX::DN, 1) << std::endl;
+    // auto cdagc =
+    //     -1. * (F2.cdag(Xped::SPIN_INDEX::UP, 0) * F2.c(Xped::SPIN_INDEX::UP, 1) - F2.c(Xped::SPIN_INDEX::UP, 0) * F2.cdag(Xped::SPIN_INDEX::UP, 1)
+    //     +
+    //            F2.cdag(Xped::SPIN_INDEX::DN, 0) * F2.c(Xped::SPIN_INDEX::DN, 1) - F2.c(Xped::SPIN_INDEX::DN, 0) * F2.cdag(Xped::SPIN_INDEX::DN,
+    //            1));
+    // std::cout << cdagc << std::endl;
 
-    auto Minit = args.get<std::size_t>("Minit", 10);
+    // auto cdagc2 =
+    //     (-1. * (tprod(F1.cdag(Xped::SPIN_INDEX::UP), F1.c(Xped::SPIN_INDEX::UP)) - tprod(F1.c(Xped::SPIN_INDEX::UP), F1.cdag(Xped::SPIN_INDEX::UP))
+    //     +
+    //             tprod(F1.cdag(Xped::SPIN_INDEX::DN), F1.c(Xped::SPIN_INDEX::DN)) - tprod(F1.c(Xped::SPIN_INDEX::DN),
+    //             F1.cdag(Xped::SPIN_INDEX::DN))))
+    //         .eval();
+
+    // std::cout << cdagc2 << std::endl;
+    // std::cout << cdagc2.adjoint().eval() << std::endl;
 
     my_logger->sinks()[0]->set_pattern("[%H:%M:%S] [%n] [%^---%L---%$] [process %P] %v");
     if(world.rank == 0) {
@@ -83,34 +110,40 @@ int main(int argc, char* argv[])
 
     SPDLOG_INFO("Number of MPI processes: {}", world.np);
 
-    HighFive::File file("/home/user/matlab-tmp/math5.mat", HighFive::File::ReadOnly);
-    auto py = file.getGroup("py");
+    using Symmetry = Xped::Sym::U0<>;
+    Xped::Qbasis<Symmetry, 1> B;
+    B.setRandom(10);
+    Xped::Tensor<double, 1, 1, Symmetry> T({{B}}, {{B}});
+    // static thread_local std::mt19937 engine(std::random_device{}());
+    // T.setRandom(engine);
+    // HighFive::File file("/home/user/matlab-tmp/math5.mat", HighFive::File::ReadOnly);
+    // auto py = file.getGroup("py");
 
-    auto C1_ref = py.getDataSet("C1");
-    std::vector<HighFive::Reference> C1;
-    C1_ref.read(C1);
-    auto g_C1_0 = C1[0].template dereference<HighFive::Group>(py);
-    auto C = Xped::IO::loadMatlabTensor<double, 2, 0, Xped::Sym::ZN<Xped::Sym::ChargeU1, 36>, Xped::HeapPolicy>(g_C1_0, py);
-    // std::cout << C.squaredNorm() << std::endl;
-    // std::cout << (C.template contract<std::array{1, 2}, std::array{1, 2}, 0>(C.adjoint().eval())).trace() << std::endl;
+    // auto C1_ref = py.getDataSet("C1");
+    // std::vector<HighFive::Reference> C1;
+    // C1_ref.read(C1);
+    // auto g_C1_0 = C1[0].template dereference<HighFive::Group>(py);
+    // auto C = Xped::IO::loadMatlabTensor<double, 2, 0, Xped::Sym::ZN<Xped::Sym::ChargeU1, 36>, Xped::HeapPolicy>(g_C1_0, py);
+    // // std::cout << C.squaredNorm() << std::endl;
+    // // std::cout << (C.template contract<std::array{1, 2}, std::array{1, 2}, 0>(C.adjoint().eval())).trace() << std::endl;
 
-    auto T1_ref = py.getDataSet("T1");
-    std::vector<HighFive::Reference> T1;
-    T1_ref.read(T1);
-    auto g_T1_0 = T1[0].template dereference<HighFive::Group>(py);
-    auto T = Xped::IO::loadMatlabTensor<double, 0, 4, Xped::Sym::ZN<Xped::Sym::ChargeU1, 36>, Xped::HeapPolicy>(g_T1_0, py);
-    // std::cout << T.squaredNorm() << std::endl;
-    // std::cout << (T.template contract<std::array{1, 2, 3, 4}, std::array{1, 2, 3, 4}, 0>(T.adjoint().eval())).trace() << std::endl;
+    // auto T1_ref = py.getDataSet("T1");
+    // std::vector<HighFive::Reference> T1;
+    // T1_ref.read(T1);
+    // auto g_T1_0 = T1[0].template dereference<HighFive::Group>(py);
+    // auto T = Xped::IO::loadMatlabTensor<double, 0, 4, Xped::Sym::ZN<Xped::Sym::ChargeU1, 36>, Xped::HeapPolicy>(g_T1_0, py);
+    // // std::cout << T.squaredNorm() << std::endl;
+    // // std::cout << (T.template contract<std::array{1, 2, 3, 4}, std::array{1, 2, 3, 4}, 0>(T.adjoint().eval())).trace() << std::endl;
 
-    auto CT = C.template contract<std::array{1, -1}, std::array{1, -2, -3, -4}, 4>(T);
+    // auto CT = C.template contract<std::array{1, -1}, std::array{1, -2, -3, -4}, 4>(T);
 
-    auto H = Xped::IO::loadMatlabTensor<double, 2, 2, Xped::Sym::ZN<Xped::Sym::ChargeU1, 36>, Xped::HeapPolicy>(py.getGroup("H"), py);
-    auto [D, U] = H.eigh();
-    // D.print(std::cout);
-    // std::cout << H.squaredNorm() << std::endl;
+    // auto H = Xped::IO::loadMatlabTensor<double, 2, 2, Xped::Sym::ZN<Xped::Sym::ChargeU1, 36>, Xped::HeapPolicy>(py.getGroup("H"), py);
+    // auto [D, U] = H.eigh();
+    // // D.print(std::cout);
+    // // std::cout << H.squaredNorm() << std::endl;
 
-    // using Symmetry = Xped::Sym::U0<double>;
-    using Symmetry = Xped::Sym::U1<Xped::Sym::SpinU1, double>;
+    // // using Symmetry = Xped::Sym::U0<double>;
+    // using Symmetry = Xped::Sym::U1<Xped::Sym::SpinU1, double>;
     // Xped::Qbasis<Symmetry, 1> b;
     // b.push_back({2}, 1);
     // Xped::SiteOperator<double, Symmetry> S({3}, b);
@@ -119,12 +152,11 @@ int main(int argc, char* argv[])
     // auto S2 = std::sqrt(3.) * Xped::SiteOperator<double, Symmetry>::prod(S.adjoint(), S, {1});
     // auto SdxS = std::sqrt(3.) * Xped::SiteOperator<double, Symmetry>::outerprod(S.adjoint(), S, {1});
     // auto SxSd = std::sqrt(3.) * Xped::SiteOperator<double, Symmetry>::outerprod(S, S.adjoint(), {1});
-    auto Dloc = args.get<std::size_t>("Dloc", 2);
-    Xped::SpinBase<Symmetry> B(1, Dloc);
-    std::cout << B.Sz() << std::endl;
-    Xped::Tensor<double, 2, 2, Symmetry> ham = Xped::tprod(B.Sz(), B.Sz()) + 0.5 * (Xped::tprod(B.Sp(), B.Sm()) + Xped::tprod(B.Sm(), B.Sp()));
-    auto [Es, Us] = ham.eigh();
-    Es.print(std::cout);
+    // Xped::SpinBase<Symmetry> B(1, Dloc);
+    // std::cout << B.Sz() << std::endl;
+    // Xped::Tensor<double, 2, 2, Symmetry> ham = Xped::tprod(B.Sz(), B.Sz()) + 0.5 * (Xped::tprod(B.Sp(), B.Sm()) + Xped::tprod(B.Sm(), B.Sp()));
+    // auto [Es, Us] = ham.eigh();
+    // Es.print(std::cout);
     // std::cout << B.Sz(0) << std::endl;
     // std::cout << B.Sz(1) << std::endl;
     // std::cout << t << std::endl;

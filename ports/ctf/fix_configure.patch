@@ -1,0 +1,33 @@
+diff --git a/configure b/configure
+index 95da8250..88f38209 100755
+--- a/configure
++++ b/configure
+@@ -512,6 +512,9 @@ while [ "x$1" != "x" ]; do
+     --install-dir=*)
+       eval INSTALLDIR="$(printf "%q" "${1#--install-dir=}")"
+       ;;
++    --prefix=*)
++      eval INSTALLDIR="$(printf "%q" "${1#--prefix=}")"
++      ;;
+     --with-lapack)
+       WITH_LAPACK=1
+       ;;
+@@ -536,6 +539,18 @@ while [ "x$1" != "x" ]; do
+     --no-static)
+       WITH_STATIC=0
+       ;;
++    --disable-shared)
++      WITH_DYNAMIC=0
++      ;;
++    --disable-static)
++      WITH_STATIC=0
++      ;;
++    --enable-shared)
++      WITH_DYNAMIC=1
++      ;;
++    --enable-static)
++      WITH_STATIC=1
++      ;;
+     --verbose)
+       VERBOSE=1
+       ;;

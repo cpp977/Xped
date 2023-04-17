@@ -100,6 +100,38 @@ typename ctf_traits<MT>::Scalar MatrixInterface::trace(MT&& M)
     return out;
 }
 
+template <typename MT>
+typename ctf_traits<MT>::Scalar MatrixInterface::maxNorm(MT&& M)
+{
+    typename ctf_traits<MT>::Scalar out = M.norm_infty();
+    return out;
+}
+
+template <typename MT>
+typename ctf_traits<MT>::Scalar MatrixInterface::maxCoeff(MT&& M, MIndextype& maxrow, MIndextype& maxcol)
+{
+    typename ctf_traits<MT>::Scalar out = M.norm_infty();
+    assert(false and "maxCoeff() is not available for Cyclops backend. Use frobenius Norm instead.");
+    return out;
+}
+
+template <typename Scalar>
+static void setVal(MType<Scalar>& M, const MIndextype row, const MIndextype col, const Scalar& val)
+{
+    int64_t global_idx = 1 * row + M.nrow * col;
+
+    int64_t nvals;
+    int64_t* indices;
+    Scalar* data;
+    M.get_local_data(&nvals, &indices, &data);
+    for(int i = 0; i < nvals; i++) {
+        if(indices[i] == global_idx) { data[i] = val; }
+    }
+    M.write(nvals, indices, data);
+    free(indices);
+    delete[] data;
+}
+
 template <typename Scalar>
 Scalar MatrixInterface::getVal(const MType<Scalar>& M, const MIndextype& row, const MIndextype& col)
 {
@@ -217,6 +249,15 @@ MType<Scalar> MatrixInterface::diagUnaryFunc(MT&& M, const std::function<Scalar(
 }
 
 template <typename Scalar, typename MTL, typename MTR>
+MType<Scalar> diagBinaryFunc(MTL&& M_left, const MTR&& M_right, const std::function<Scalar(Scalar, Scalar)>& func)
+{
+    CTF::Function<Scalar> func_(func);
+    MType<typename ctf_traits<MTL>::Scalar> res(M_left.ncol, M_left.nrow, *M_left.wrld);
+    res["ii"] = func_(M_left["ii"], M_right["ii"]);
+    return res;
+}
+
+template <typename Scalar, typename MTL, typename MTR>
 MType<Scalar> binaryFunc(MTL&& M_left, const MTR&& M_right, const std::function<Scalar(Scalar, Scalar)>& func)
 {
     CTF::Function<Scalar> func_(func);
@@ -264,11 +305,19 @@ MatrixInterface::block(const MType<Scalar>& M, const MIndextype& row_off, const 
 }
 
 template <typename MT>
-std::pair<MType<typename ctf_traits<MT>::Scalar>, MType<typename ctf_traits<MT>::Scalar>> PlainInterface::eigh(MT&& M)
+std::pair<MType<typename ctf_traits<MT>::Scalar>, MType<typename ctf_traits<MT>::Scalar>> MatrixInterface::eigh(MT&& M)
 {
-    static_assert(false, "This method is not present for cyclops tensors.");
     MType<typename ctf_traits<MT>::Scalar> eigvals, eigvecs;
-    return std::make_tuple(eigvals, eigvecs);
+    assert(false and "Eigen decompisition is not present for cyclops tensors.");
+    return std::make_pair(eigvals, eigvecs);
+}
+
+template <typename MT>
+std::pair<MType<typename ctf_traits<MT>::Scalar>, MType<typename ctf_traits<MT>::Scalar>> MatrixInterface::qr(MT&& M)
+{
+    MType<typename ctf_traits<MT>::Scalar> Q, R;
+    M.qr(Q, R);
+    return std::make_pair(Q, R);
 }
 
 template <typename Scalar>

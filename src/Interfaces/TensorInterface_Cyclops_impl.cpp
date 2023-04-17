@@ -222,7 +222,7 @@ TType<Scalar, Rank> TensorInterface::tensorProd(TType<Scalar, Rank>& T1, TType<S
 template <typename Scalar, std::size_t Rank, typename Expr1, typename Expr2>
 void TensorInterface::addScale(const Expr1& src, Expr2& dst, const Scalar& scale)
 {
-    dst[get_idx<Rank>().data()] += src.scale[scale, get_idx<Rank>().data()];
+    dst[get_idx<Rank>().data()] += src.scale(scale, get_idx<Rank>().data());
 }
 
 // methods rvalue

@@ -71,6 +71,24 @@
         }
     },
         {
+        "name": "gcc-ctf",
+        "inherits": ["vcpkg","logging","gcc"],
+        "cacheVariables": {
+            "XPED_TENSOR_LIB": "Cyclops",
+            "XPED_VECTOR_LIB": "Cyclops",
+            "XPED_MATRIX_LIB": "Cyclops",
+            "XPED_USE_OPENMP": "ON",
+            "XPED_USE_MPI": "ON",
+            "XPED_USE_SCALAPACK": "ON",
+            "XPED_USE_AD": "ON",
+            "XPED_USE_NLO": "ON",
+            "XPED_USE_MKL": "OFF",
+            "XPED_OPTIM_LIB": "ceres",
+            "VCPKG_MANIFEST_FEATURES": "gcc-ctf",
+            "VCPKG_MANIFEST_NO_DEFAULT_FEATURES": "ON"
+        }
+    },
+        {
         "name": "clang-eigen",
         "inherits": ["vcpkg","logging","clang"],
         "cacheVariables": {

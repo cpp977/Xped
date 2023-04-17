@@ -18,6 +18,7 @@ struct PlainInterface : public MatrixInterface, public TensorInterface, public V
     using MatrixInterface::scale;
     using MatrixInterface::setConstant;
     using MatrixInterface::setRandom;
+    using MatrixInterface::setVal;
     using MatrixInterface::setZero;
 
     using TensorInterface::construct;
@@ -25,6 +26,7 @@ struct PlainInterface : public MatrixInterface, public TensorInterface, public V
     using TensorInterface::print;
     using TensorInterface::setConstant;
     using TensorInterface::setRandom;
+    using TensorInterface::setVal;
     using TensorInterface::setZero;
 
     using VectorInterface::construct;
@@ -63,6 +65,12 @@ struct PlainInterface : public MatrixInterface, public TensorInterface, public V
 
     template <typename MT>
     static void diagonal_head_matrix_to_vector(VType<typename ctf_traits<MT>::Scalar>& V, MT&& M, const Indextype& n_elems);
+
+    template <typename VT>
+    static void vec_diff(VT&& vec, MType<typename ctf_traits<VT>::Scalar>& res);
+
+    template <typename VT>
+    static void vec_add(VT&& vec, MType<typename ctf_traits<VT>::Scalar>& res);
 
     template <typename MT>
     static std::tuple<MType<typename ctf_traits<MT>::Scalar>, VType<typename ctf_traits<MT>::Scalar>, MType<typename ctf_traits<MT>::Scalar>>

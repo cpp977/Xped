@@ -1,0 +1,17 @@
+{
+  "name": "scalapack",
+  "version": "2.2.1",
+  "description": "Distributed linear algebra framework",
+  "homepage": "http://www.netlib.org/scalapack/",
+  "license": "bsd",
+  "dependencies": [
+    {
+      "name": "vcpkg-cmake",
+      "host": true
+    },
+    {
+      "name": "vcpkg-cmake-config",
+      "host": true
+    }
+  ]
+}

@@ -53,7 +53,9 @@ Spin<Sym::SU2<Sym::SpinSU2>, 0ul>::Spin(std::size_t D_input)
     S_1s_.data.setZero();
 
     Scalar locS = 0.5 * static_cast<double>(D - 1);
-    S_1s_(Q, Q)(0, 0) = std::sqrt(locS * (locS + 1.));
+    auto tmp = S_1s_(Q, Q);
+    PlainInterface::setVal(tmp, 0, 0, std::sqrt(locS * (locS + 1.)));
+    S_1s_(Q, Q) = tmp;
     Sdag_1s_ = S_1s_.adjoint();
     Q_1s_ = std::sqrt(2.) * OperatorType::prod(S_1s_, S_1s_, {5});
 }

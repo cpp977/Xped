@@ -31,6 +31,15 @@
                 "ceres"
             ]
         },
+        "gcc-ctf": {
+            "description": "Tensor operations with cyclops backend. Compiled by gcc.",
+            "dependencies": [
+                "stan-math",
+                "ctf",
+                "ceres",
+                "scalapack"
+            ]
+        },
         "clang-eigen": {
             "description": "Tensor operations with Eigen backend. Compiled by clang.",
             "dependencies": [

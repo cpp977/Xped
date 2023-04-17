@@ -1,0 +1,6 @@
+{
+  "name": "ctf",
+  "version-string": "1.5.5",
+  "description": "CTF is a library which supoorts distributed tensor operations using MPI.",
+  "dependencies": []
+}

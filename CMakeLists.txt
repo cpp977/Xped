@@ -253,6 +253,10 @@ if(XPED_USE_LAPACK)
   endif()
 endif()
 
+if(XPED_USE_SCALAPACK)
+  find_package(SCALAPACK REQUIRED)
+endif()
+
 if(XPED_USE_MKL)
   find_package(MKL REQUIRED)
   set_package_properties(LAPACK PROPERTIES
@@ -454,24 +458,14 @@ find_package(TBB CONFIG REQUIRED)
 # endif()
 
 if(${XPED_TENSOR_LIB} STREQUAL "Cyclops")
-  message(STATUS ${VCPKG_INSTALL_DIR})
   # message(STATUS ${HPTT_ROOT})
-  find_library(CYCLOPS_LIB NAMES ctf REQUIRED)
+  find_library(CYCLOPS_LIB NAMES libctf.a HINTS "${CMAKE_BINARY_DIR}/vcpkg_installed/${VCPKG_TARGET_TRIPLET}" REQUIRED NO_SYSTEM_ENVIRONMENT_PATH)
+  message(STATUS "Cyclops tensor framework lib: ${CYCLOPS_LIB}")
+  
   # find_library(HPTT_LIB NAMES hptt PATHS ${HPTT_ROOT} PATH_SUFFIXES lib REQUIRED)
   
-  add_library(cyclops_lib::all UNKNOWN IMPORTED)
-  target_link_libraries(cyclops_lib::all INTERFACE ${CYCLOPS_LIB})
-  # target_link_libraries(cyclops_lib::all INTERFACE ${HPTT_LIB})
-  set_target_properties(cyclops_lib::all PROPERTIES
-    IMPORTED_LOCATION "${CYCLOPS_LIB}"
-    )
-  message(STATUS ${CYCLOPS_LIB})
-
-  find_path(CYCLOPS_INCLUDE_DIR NAMES ctf.hpp REQUIRED)
-  target_include_directories(cyclops_lib::all INTERFACE ${CYCLOPS_INCLUDE_DIR})
-  message(STATUS ${CYCLOPS_INCLUDE_DIR})
-  include(cmake/PrintProperties.cmake)
-  print_target_properties(cyclops_lib::all)
+  find_path(CYCLOPS_INCLUDE_DIR NAMES ctf.hpp REQUIRED NO_SYSTEM_ENVIRONMENT_PATH)
+  message(STATUS "Cyclops tensor framework include: ${CYCLOPS_INCLUDE_DIR}")
 endif()
 
 # if(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")

@@ -72,6 +72,9 @@ struct MatrixInterface
     static void setConstant(MType<Scalar>& M, const Scalar& val);
 
     template <typename Scalar>
+    static void setVal(MType<Scalar>& M, const MIndextype row, const MIndextype col, const Scalar& val);
+
+    template <typename Scalar>
     static MType<Scalar> Identity(const MIndextype& rows, const MIndextype& cols, CTF::World& world);
 
     // shape
@@ -84,6 +87,12 @@ struct MatrixInterface
     // reduction
     template <typename MT>
     static typename ctf_traits<MT>::Scalar trace(MT&& M);
+
+    template <typename MT>
+    static typename ctf_traits<MT>::Scalar maxNorm(MT&& M);
+
+    template <typename MT>
+    static typename ctf_traits<MT>::Scalar maxCoeff(MT&& M, MIndextype& maxrow, MIndextype& maxcol);
 
     template <typename Scalar>
     static Scalar getVal(const MType<Scalar>& M, const MIndextype& row, const MIndextype& col);
@@ -100,6 +109,12 @@ struct MatrixInterface
     template <typename Scalar, typename MatrixExpr1, typename MatrixExpr2, typename MatrixExpr3, typename MatrixExprRes>
     static void optimal_prod_add(const Scalar& scale, MatrixExpr1&& M1, MatrixExpr2&& M2, MatrixExpr3&& M3, MatrixExprRes& Mres);
 
+    template <typename MT>
+    static MType<typename ctf_traits<MT>::Scalar> msqrt(MT&& M);
+
+    template <typename MT>
+    static MType<typename ctf_traits<MT>::Scalar> mexp(MT&& M);
+
     template <typename MT1, typename MT2>
     static MType<typename ctf_traits<MT1>::Scalar> add(MT1&& M1, MT2&& M2);
 
@@ -114,6 +129,9 @@ struct MatrixInterface
 
     template <typename Scalar, typename MT>
     static MType<Scalar> diagUnaryFunc(MT&& M, const std::function<Scalar(Scalar)>& func);
+
+    template <typename Scalar, typename MTL, typename MTR>
+    static MType<Scalar> diagBinaryFunc(MTL&& M_left, MTR&& M_right, const std::function<Scalar(Scalar, Scalar)>& func);
 
     template <typename Scalar, typename MTL, typename MTR>
     static MType<Scalar> binaryFunc(MTL&& M_left, MTR&& M_right, const std::function<Scalar(Scalar, Scalar)>& func);
@@ -134,7 +152,10 @@ struct MatrixInterface
     block(const MType<Scalar>& M, const MIndextype& row_off, const MIndextype& col_off, const MIndextype& rows, const MIndextype& cols);
 
     template <typename MT>
-    static std::pair<MType<typename ctf_traits<MT>::Scalar>, MType<typename ctf_traits<MT>::Scalar>> PlainInterface::eigh(MT&& M);
+    static std::pair<MType<typename ctf_traits<MT>::Scalar>, MType<typename ctf_traits<MT>::Scalar>> eigh(MT&& M);
+
+    template <typename MT>
+    static std::pair<MType<typename ctf_traits<MT>::Scalar>, MType<typename ctf_traits<MT>::Scalar>> qr(MT&& M);
 
     template <typename Scalar>
     static void add_to_block(MType<Scalar>& M1,

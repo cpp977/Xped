@@ -90,7 +90,7 @@ loadMatlabTensor(const HighFive::Group& t,
         auto submatrix = tmp.subMatrix(tree, trivial);
         std::size_t begin = off[i][1];
         std::size_t end = (i == off.size() - 1) ? raw.size() : off[i + 1][1];
-        for(auto i = begin; i < end; ++i) { submatrix(i - begin, 0) = raw[i]; }
+        for(auto i = begin; i < end; ++i) { PlainInterface::setVal(submatrix, i - begin, 0, raw[i]); }
     }
     return tmp.template permute<full_rank - Rank>(seq::make<std::size_t, full_rank>{});
 }

@@ -29,7 +29,7 @@ if(NOT XPED_COMPILED_LIB)
 
   # if(XPED_USE_AD)
   target_link_libraries(Xped INTERFACE SUNDIALS::kinsol)
-  # target_link_libraries(Xped INTERFACE TBB::tbb)
+  target_link_libraries(Xped INTERFACE TBB::tbb)
   target_include_directories(Xped BEFORE INTERFACE ${STAN_MATH_INCLUDE_DIRS})
     # target_compile_definitions(Xped INTERFACE STAN_THREADS)
   # endif()

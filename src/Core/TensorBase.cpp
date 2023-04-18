@@ -220,8 +220,8 @@ TensorBase<Derived>::operator*(XPED_CONST TensorBase<OtherDerived>& other) XPED_
     using ResScalar = std::common_type_t<typename TensorTraits<Derived>::Scalar, typename TensorTraits<OtherDerived>::Scalar>;
     typedef typename std::remove_const<std::remove_reference_t<OtherDerived>>::type OtherDerived_;
     static_assert(CoRank == TensorTraits<OtherDerived_>::Rank);
-    auto derived_ref = derived();
-    auto other_derived_ref = other.derived();
+    auto& derived_ref = derived();
+    auto& other_derived_ref = other.derived();
     // fmt::print("world={}, other.world={}\n", derived_ref.world()->comm, other_derived_ref.world()->comm);
     DEBUG_ASSERT(derived_ref.world() == other_derived_ref.world());
     DEBUG_ASSERT(derived_ref.coupledCodomain() == other_derived_ref.coupledDomain());
@@ -230,8 +230,8 @@ TensorBase<Derived>::operator*(XPED_CONST TensorBase<OtherDerived>& other) XPED_
         derived_ref.uncoupledDomain(), other_derived_ref.uncoupledCodomain(), derived_ref.world());
     Tout.setZero();
     // std::unordered_set<typename Symmetry::qType> uniqueController;
-    auto other_dict = other_derived_ref.dict();
-    auto this_dict = derived_ref.dict();
+    auto& other_dict = other_derived_ref.dict();
+    auto& this_dict = derived_ref.dict();
     for(size_t i = 0; i < derived_ref.sector().size(); i++) {
         // uniqueController.insert(derived_ref.sector(i));
         auto it = other_dict.find(derived_ref.sector(i));

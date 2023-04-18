@@ -527,6 +527,7 @@ void CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::computeRDM_h()
             auto norm = rho_h(x, y)
                             .template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0, TRACK_INNER>(Id2.twist(0).twist(1))
                             .template trace<TRACK_INNER>();
+            if(norm < 0.) { Log::warning(Log::globalLevel, "RDM_h: Negative norm detected."); }
             rho_h(x, y) = operator*<TRACK_INNER>(rho_h(x, y), (1. / norm));
             if constexpr(not ENABLE_AD) {
                 rho_h_hermitian_check(x, y) = (rho_h(x, y) - rho_h(x, y).adjoint()).norm() / (rho_h(x, y) + rho_h(x, y).adjoint()).norm();
@@ -655,6 +656,7 @@ void CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>::computeRDM_v()
             auto norm = rho_v(x, y)
                             .template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0, TRACK_INNER>(Id2.twist(0).twist(1))
                             .template trace<TRACK_INNER>();
+            if(norm < 0.) { Log::warning(Log::globalLevel, "RDM_v: Negative norm detected."); }
             rho_v(x, y) = operator*<TRACK_INNER>(rho_v(x, y), (1. / norm));
             if constexpr(not ENABLE_AD) {
                 rho_v_hermitian_check(x, y) = (rho_v(x, y) - rho_v(x, y).adjoint()).norm() / (rho_v(x, y) + rho_v(x, y).adjoint()).norm();

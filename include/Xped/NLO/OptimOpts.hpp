@@ -45,6 +45,8 @@ struct Optim
 
     std::size_t seed = 0;
 
+    std::size_t id = 1ul;
+
     std::size_t save_period = 0;
 
     std::string log_format = ".log";
@@ -73,6 +75,7 @@ struct Optim
                            ("load format", load_format),
                            ("qn_scale", qn_scale),
                            ("seed", seed),
+                           ("id", id),
                            ("save_period", save_period),
                            ("log_format", log_format),
                            ("working_directory", working_directory),
@@ -103,6 +106,7 @@ struct Optim
         if(load.size() > 0) { fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• scale loaded qn by:", qn_scale); }
         if(load.size() > 0) { fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• load format:", fmt::streamed(load_format)); }
         if(load.size() == 0) { fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• seed:", seed); }
+        fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• id:", id);
         fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• save period:", save_period);
         fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• verbosity:", fmt::streamed(verbosity));
         fmt::format_to(std::back_inserter(res), "  {:<30} {}", "• display obs to terminal:", display_obs);
@@ -142,6 +146,7 @@ inline Optim optim_from_toml(const toml::value& t)
     if(t.contains("verbosity")) { res.verbosity = util::enum_from_toml<Verbosity>(t.at("verbosity")); }
     res.display_obs = t.contains("display_obs") ? t.at("display_obs").as_boolean() : res.display_obs;
     res.seed = t.contains("seed") ? (t.at("seed").as_integer()) : res.seed;
+    res.id = t.contains("id") ? (t.at("id").as_integer()) : res.id;
     return res;
 }
 

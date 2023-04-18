@@ -73,10 +73,14 @@ struct iPEPSSolverAD
         if(optim_opts.resume) {
             constexpr std::size_t flags = yas::file /*IO type*/ | yas::binary; /*IO format*/
             try {
-                yas::load<flags>((optim_opts.working_directory.string() + "/" + this->H.file_name() + fmt::format("_D{}.ad", Psi->D)).c_str(), *this);
+                yas::load<flags>((optim_opts.working_directory.string() + "/" + this->H.file_name() +
+                                  fmt::format("_D{}_chi{}_id{}.ad", Psi->D, ctm_opts.chi, optim_opts.id))
+                                     .c_str(),
+                                 *this);
             } catch(const std::exception& e) {
                 fmt::print("Error while loading file ({}) for resuming simulation.\n",
-                           optim_opts.working_directory.string() + "/" + this->H.file_name() + fmt::format("_D{}.ad", Psi->D));
+                           optim_opts.working_directory.string() + "/" + this->H.file_name() +
+                               fmt::format("_D{}_chi{}_id{}.ad", Psi->D, ctm_opts.chi, optim_opts.id));
                 std::cout << std::flush;
                 throw;
             }
@@ -122,7 +126,8 @@ struct iPEPSSolverAD
             std::filesystem::create_directories(optim_opts.working_directory / optim_opts.logging_directory);
             if(optim_opts.log_format == ".h5") {
                 try {
-                    HighFive::File file((optim_opts.working_directory / optim_opts.logging_directory).string() + "/" + this->H.file_name() + ".h5",
+                    HighFive::File file((optim_opts.working_directory / optim_opts.logging_directory).string() + "/" + this->H.file_name() +
+                                            fmt::format("_D{}_chi{}_id{}.h5", Psi->D, ctm_opts.chi, optim_opts.id),
                                         optim_opts.resume ? HighFive::File::ReadWrite : HighFive::File::Excl);
                     HighFive::DataSpace dataspace = HighFive::DataSpace({0}, {HighFive::DataSpace::UNLIMITED});
 
@@ -143,7 +148,8 @@ struct iPEPSSolverAD
                 } catch(const std::exception& e) {
                     fmt::print(fg(fmt::color::red),
                                "There already exists a log file for this simulation:{}.\n",
-                               (optim_opts.working_directory / optim_opts.logging_directory).string() + "/" + this->H.file_name() + ".h5");
+                               (optim_opts.working_directory / optim_opts.logging_directory).string() + "/" + this->H.file_name() +
+                                   fmt::format("_D{}_chi{}_id{}.h5", Psi->D, ctm_opts.chi, optim_opts.id));
                     std::cout << std::flush;
                     throw;
                 }
@@ -151,12 +157,14 @@ struct iPEPSSolverAD
             if(not optim_opts.obs_directory.empty()) {
                 std::filesystem::create_directories(optim_opts.working_directory / optim_opts.obs_directory);
                 try {
-                    HighFive::File file((optim_opts.working_directory / optim_opts.obs_directory).string() + "/" + this->H.file_name() + ".h5",
+                    HighFive::File file((optim_opts.working_directory / optim_opts.obs_directory).string() + "/" + this->H.file_name() +
+                                            fmt::format("_D{}_chi{}_id{}.h5", Psi->D, ctm_opts.chi, optim_opts.id),
                                         optim_opts.resume ? HighFive::File::ReadWrite : HighFive::File::Excl);
                 } catch(const std::exception& e) {
                     fmt::print(fg(fmt::color::red),
                                "There already exists an observable file for this simulation:{}.\n",
-                               (optim_opts.working_directory / optim_opts.obs_directory).string() + "/" + this->H.file_name() + ".h5");
+                               (optim_opts.working_directory / optim_opts.obs_directory).string() + "/" + this->H.file_name() +
+                                   fmt::format("_D{}_chi{}_id{}.h5", Psi->D, ctm_opts.chi, optim_opts.id));
                     std::cout << std::flush;
                     throw;
                 }
@@ -241,6 +249,10 @@ struct iPEPSSolverAD
     };
 
     CTMSolver<Scalar, Symmetry, CPOpts, TRank>* getCTMSolver() { return dynamic_cast<const EnergyFunctor*>(problem->function())->impl.get(); }
+    const CTMSolver<Scalar, Symmetry, CPOpts, TRank>* getCTMSolver() const
+    {
+        return dynamic_cast<const EnergyFunctor*>(problem->function())->impl.get();
+    }
 
     Opts::Optim optim_opts;
     std::function<void(XPED_CONST CTM<Scalar, Symmetry, TRank>& ctm, std::size_t)> callback = [](XPED_CONST CTM<Scalar, Symmetry, TRank>&,
@@ -327,7 +339,8 @@ struct iPEPSSolverAD
                                util::format_secs(std::chrono::duration<double, std::ratio<1, 1>>(summary.cumulative_time_in_seconds)));
             if(solver.optim_opts.log_format == ".h5") {
                 HighFive::File file((solver.optim_opts.working_directory / solver.optim_opts.logging_directory).string() + "/" +
-                                        solver.H.file_name() + ".h5",
+                                        solver.H.file_name() +
+                                        fmt::format("_D{}_chi{}_id{}.h5", solver.Psi->D, solver.getCTMSolver()->opts.chi, solver.optim_opts.id),
                                     HighFive::File::OpenOrCreate);
                 auto insert_elem = [&file](const std::string& name, auto elem) {
                     auto d = file.getDataSet(name);
@@ -340,9 +353,11 @@ struct iPEPSSolverAD
                 insert_elem("/cost", summary.cost);
                 insert_elem("/grad_norm", summary.gradient_norm);
             } else {
-                std::ofstream ofs((solver.optim_opts.working_directory / solver.optim_opts.logging_directory).string() + "/" + solver.H.file_name() +
-                                      solver.optim_opts.log_format,
-                                  std::ios::app);
+                std::ofstream ofs(
+                    (solver.optim_opts.working_directory / solver.optim_opts.logging_directory).string() + "/" + solver.H.file_name() +
+                        fmt::format(
+                            "_D{}_chi{}_id{}{}", solver.Psi->D, solver.getCTMSolver()->opts.chi, solver.optim_opts.id, solver.optim_opts.log_format),
+                    std::ios::app);
                 ofs << summary.iteration << '\t' << summary.cost << '\t' << summary.gradient_norm << std::endl;
                 ofs.close();
             }
@@ -365,7 +380,7 @@ struct iPEPSSolverAD
             }
             if(not solver.optim_opts.obs_directory.empty()) {
                 HighFive::File file((solver.optim_opts.working_directory / solver.optim_opts.obs_directory).string() + "/" + solver.H.file_name() +
-                                        ".h5",
+                                        fmt::format("_D{}_chi{}_id{}.h5", solver.Psi->D, solver.getCTMSolver()->opts.chi, solver.optim_opts.id),
                                     HighFive::File::OpenOrCreate);
                 std::string e_name = fmt::format("/{}/{}/energy", solver.Psi->D, solver.getCTMSolver()->getCTM().chi());
                 if(not file.exist(e_name)) {
@@ -424,13 +439,15 @@ struct iPEPSSolverAD
             if(summary.iteration == 0) { return ceres::SOLVER_CONTINUE; }
             if(summary.iteration % solver.optim_opts.save_period == 0) {
                 constexpr std::size_t flags = yas::file /*IO type*/ | yas::binary; /*IO format*/
-                yas::file_ostream ofs_ad(
-                    (solver.optim_opts.working_directory.string() + "/" + solver.H.file_name() + fmt::format("_D{}.ad", solver.Psi->D)).c_str(),
-                    /*trunc*/ 1);
+                yas::file_ostream ofs_ad((solver.optim_opts.working_directory.string() + "/" + solver.H.file_name() +
+                                          fmt::format("_D{}_chi{}_id{}.ad", solver.Psi->D, solver.getCTMSolver()->opts.chi, solver.optim_opts.id))
+                                             .c_str(),
+                                         /*trunc*/ 1);
                 yas::save<flags>(ofs_ad, solver);
-                yas::file_ostream ofs_psi(
-                    (solver.optim_opts.working_directory.string() + "/" + solver.H.file_name() + fmt::format("_D{}.psi", solver.Psi->D)).c_str(),
-                    /*trunc*/ 1);
+                yas::file_ostream ofs_psi((solver.optim_opts.working_directory.string() + "/" + solver.H.file_name() +
+                                           fmt::format("_D{}_chi{}_id{}.psi", solver.Psi->D, solver.getCTMSolver()->opts.chi, solver.optim_opts.id))
+                                              .c_str(),
+                                          /*trunc*/ 1);
                 yas::save<flags>(ofs_psi, *solver.Psi);
             }
             return ceres::SOLVER_CONTINUE;

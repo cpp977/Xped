@@ -231,7 +231,7 @@ TensorBase<Derived>::operator*(XPED_CONST TensorBase<OtherDerived>& other) XPED_
     Tout.setZero();
     // std::unordered_set<typename Symmetry::qType> uniqueController;
     auto& other_dict = other_derived_ref.dict();
-    auto& this_dict = derived_ref.dict();
+    // auto& this_dict = derived_ref.dict();
     for(size_t i = 0; i < derived_ref.sector().size(); i++) {
         // uniqueController.insert(derived_ref.sector(i));
         auto it = other_dict.find(derived_ref.sector(i));

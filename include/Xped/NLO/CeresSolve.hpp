@@ -387,11 +387,7 @@ struct iPEPSSolverAD
             }
             if(not solver.optim_opts.obs_directory.empty()) {
                 HighFive::File file((solver.optim_opts.working_directory / solver.optim_opts.obs_directory).string() + "/" + solver.H.file_name() +
-                                        fmt::format("_D{}_chi{}_seed{}_id{}.h5",
-                                                    solver.Psi->D,
-                                                    solver.getCTMSolver()->opts.chi,
-                                                    solver.optim_opts.seed,
-                                                    solver.optim_opts.id),
+                                        fmt::format("seed{}_id{}.h5", solver.optim_opts.seed, solver.optim_opts.id),
                                     HighFive::File::OpenOrCreate);
                 std::string e_name = fmt::format("/{}/{}/energy", solver.Psi->D, solver.getCTMSolver()->getCTM().chi());
                 if(not file.exist(e_name)) {

@@ -105,6 +105,7 @@ struct iPEPSSolverImag
                                    imag_opts.dts[i],
                                    step_t.time_string(),
                                    diff);
+                Psi->updateAtensors();
                 constexpr std::size_t flags = yas::file /*IO type*/ | yas::binary; /*IO format*/
                 yas::file_ostream ofs(
                     (imag_opts.working_directory.string() + "/" + H.file_name() + fmt::format("_D={}_id={}.psi", D, imag_opts.id)).c_str(),
@@ -112,7 +113,6 @@ struct iPEPSSolverImag
                 yas::save<flags>(ofs, *Psi);
                 // Psi->info();
             }
-            Psi->updateAtensors();
             Log::per_iteration(imag_opts.verbosity, "  {}", Psi->info());
             evol_time += evol_t.time();
             util::Stopwatch<> ctm_t;

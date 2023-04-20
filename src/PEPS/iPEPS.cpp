@@ -108,6 +108,7 @@ void iPEPS<Scalar, Symmetry, ENABLE_AD>::init(const TMatrix<Qbasis<Symmetry, 1>>
             if(inserted_states == D) { break; }
         }
         VERIFY(inserted_states == D, "Failed to initialize quantum numbers for iPEPS A-tensor.");
+        out.sort();
         return out;
     };
 

@@ -25,17 +25,39 @@ struct iPEPSSolverImag
         Jack = CTMSolver<Scalar, Symmetry>(ctm_opts);
         if(not imag_opts.obs_directory.empty()) {
             std::filesystem::create_directories(imag_opts.working_directory / imag_opts.obs_directory);
-            try {
-                HighFive::File file((imag_opts.working_directory / imag_opts.obs_directory).string() + "/" + H.file_name() +
-                                        fmt::format("_id={}.h5", imag_opts.id),
-                                    imag_opts.resume ? HighFive::File::ReadWrite : HighFive::File::Excl);
-            } catch(const std::exception& e) {
-                fmt::print(fg(fmt::color::red),
-                           "There already exists an observable file for this simulation:{}.\n",
-                           (imag_opts.working_directory / imag_opts.obs_directory).string() + "/" + this->H.file_name() +
-                               fmt::format("_id={}.h5", imag_opts.id));
-                std::cout << std::flush;
-                throw;
+            if(std::filesystem::exists(imag_opts.working_directory / imag_opts.obs_directory /
+                                       std::filesystem::path(this->H.file_name() + fmt::format("_seed={}_id={}.h5", imag_opts.seed, imag_opts.id)))) {
+                HighFive::File file((imag_opts.working_directory / imag_opts.obs_directory).string() + "/" + this->H.file_name() +
+                                        fmt::format("_seed={}_id={}.h5", imag_opts.seed, imag_opts.id),
+                                    imag_opts.resume ? HighFive::File::ReadWrite : HighFive::File::ReadOnly);
+                for(auto iD = 0ul; auto D : imag_opts.Ds) {
+                    for(auto chi : imag_opts.chis[iD]) {
+                        if(file.exist(fmt::format("/{}/{}", D, chi))) {
+                            fmt::print(fg(fmt::color::red),
+                                       "There already exists data in observable file for D={}, chi={}.\n Filename:{}.\n",
+                                       D,
+                                       chi,
+                                       (imag_opts.working_directory / imag_opts.obs_directory).string() + "/" + this->H.file_name() +
+                                           fmt::format("_seed={}_id={}.h5", imag_opts.seed, imag_opts.id));
+                            std::cout << std::flush;
+                            throw;
+                        }
+                        ++iD;
+                    }
+                }
+            } else {
+                try {
+                    HighFive::File file((imag_opts.working_directory / imag_opts.obs_directory).string() + "/" + this->H.file_name() +
+                                            fmt::format("_seed={}_id={}.h5", imag_opts.seed, imag_opts.id),
+                                        imag_opts.resume ? HighFive::File::ReadWrite : HighFive::File::Excl);
+                } catch(const std::exception& e) {
+                    fmt::print(fg(fmt::color::red),
+                               "Error while creating the observable file for this simulation:{}.\n",
+                               (imag_opts.working_directory / imag_opts.obs_directory).string() + "/" + this->H.file_name() +
+                                   fmt::format("_seed={}_id={}.h5", imag_opts.seed, imag_opts.id));
+                    std::cout << std::flush;
+                    throw;
+                }
             }
         }
     }

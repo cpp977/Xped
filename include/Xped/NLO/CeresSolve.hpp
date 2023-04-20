@@ -69,7 +69,7 @@ struct iPEPSSolverAD
         , H(H_in)
         , Psi(Psi_in)
     {
-        std::filesystem::create_directories(optim_opts.working_directory / optim_opts.obs_directory);
+        std::filesystem::create_directories(optim_opts.working_directory);
         if(optim_opts.resume) {
             constexpr std::size_t flags = yas::file /*IO type*/ | yas::binary; /*IO format*/
             try {
@@ -160,7 +160,7 @@ struct iPEPSSolverAD
                        optim_opts.working_directory / optim_opts.obs_directory /
                        std::filesystem::path(this->H.file_name() + fmt::format("_seed={}_id={}.h5", optim_opts.seed, optim_opts.id)))) {
                     HighFive::File file((optim_opts.working_directory / optim_opts.obs_directory).string() + "/" + this->H.file_name() +
-                                            fmt::format("_seed={}_id={}.h5", Psi->D, ctm_opts.chi, optim_opts.seed, optim_opts.id),
+                                            fmt::format("_seed={}_id={}.h5", optim_opts.seed, optim_opts.id),
                                         optim_opts.resume ? HighFive::File::ReadWrite : HighFive::File::ReadOnly);
                     if(file.exist(fmt::format("/{}/{}", Psi->D, ctm_opts.chi))) {
                         fmt::print(fg(fmt::color::red),
@@ -168,7 +168,7 @@ struct iPEPSSolverAD
                                    Psi->D,
                                    ctm_opts.chi,
                                    (optim_opts.working_directory / optim_opts.obs_directory).string() + "/" + this->H.file_name() +
-                                       fmt::format("_seed={}_id={}.h5", Psi->D, ctm_opts.chi, optim_opts.seed, optim_opts.id));
+                                       fmt::format("_seed={}_id={}.h5", optim_opts.seed, optim_opts.id));
                         std::cout << std::flush;
                         throw;
                     }

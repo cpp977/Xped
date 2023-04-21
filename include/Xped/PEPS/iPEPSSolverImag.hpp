@@ -147,7 +147,7 @@ struct iPEPSSolverImag
                 if(not imag_opts.obs_directory.empty()) {
                     std::string e_name = fmt::format("/{}/{}/energy", D, chi);
                     HighFive::File file((imag_opts.working_directory / imag_opts.obs_directory).string() + "/" + H.file_name() +
-                                            fmt::format("_id={}.h5", imag_opts.id),
+                                            fmt::format("_seed={}_id={}.h5", imag_opts.seed, imag_opts.id),
                                         HighFive::File::OpenOrCreate);
                     if(not file.exist(e_name)) {
                         HighFive::DataSpace dataspace = HighFive::DataSpace({0, 0}, {HighFive::DataSpace::UNLIMITED, HighFive::DataSpace::UNLIMITED});

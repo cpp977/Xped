@@ -306,17 +306,19 @@ Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::shiftQN(std::ar
         }
         ++counter;
     }
+
     Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy> out;
 
-    if(std::all_of(idx_sorts.begin(), idx_sorts.end(), [](const auto& v) {
-           auto id_test = v;
-           std::iota(id_test.begin(), id_test.end(), 0ul);
-           return id_test == v;
-       })) {
-        out = Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>(
-            uncoupled_domain, uncoupled_codomain, this->data(), this->plainSize(), world());
-        return out;
-    }
+    // if(std::all_of(idx_sorts.begin(), idx_sorts.end(), [](const auto& v) {
+    //        auto id_test = v;
+    //        std::iota(id_test.begin(), id_test.end(), 0ul);
+    //        return id_test == v;
+    //    })) {
+    //     out = Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>(
+    //         uncoupled_domain, uncoupled_codomain, this->data(), this->plainSize(), world());
+    //     return out;
+    // }
+
     out = Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>(uncoupled_domain, uncoupled_codomain, world());
     out.setZero();
 

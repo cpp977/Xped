@@ -83,3 +83,6 @@ target_link_libraries (peps_ad Xped)
 #########################
 add_executable(simple_update simple_update.cpp)# $<TARGET_OBJECTS:test_suite>)
 target_link_libraries (simple_update Xped)
+
+add_executable(ad_ramp ad_ramp.cpp)# $<TARGET_OBJECTS:test_suite>)
+target_link_libraries (ad_ramp Xped)

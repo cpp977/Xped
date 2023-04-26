@@ -34,7 +34,7 @@ std::string format_secs(std::chrono::duration<double, std::ratio<1, 1>> dts)
         return fmt::format("{:.2}", dth);
     }
     std::chrono::duration<double, std::ratio<86400, 1>> dtd = dts;
-    return fmt::format("{}d", dtd.count());
+    return fmt::format("{:.2}d", dtd.count());
 }
 
 template <typename ClockClass = std::chrono::high_resolution_clock>

@@ -191,35 +191,35 @@ struct iPEPSSolverImag
     void init_psi()
     {
         if(imag_opts.load != "") {
+            std::filesystem::path load_p(imag_opts.load);
+            if(load_p.is_relative()) { load_p = imag_opts.working_directory / load_p; }
             switch(imag_opts.load_format) {
             case Opts::LoadFormat::MATLAB: {
                 Log::on_entry(imag_opts.verbosity,
                               "Load initial iPEPS from matlab file {}.\nScale the quantum numbers from matlab by {}.",
                               imag_opts.load,
                               imag_opts.qn_scale);
-                Psi->loadFromMatlab(std::filesystem::path(imag_opts.load), "cpp", imag_opts.qn_scale);
+                Psi->loadFromMatlab(load_p, "cpp", imag_opts.qn_scale);
                 break;
             }
             case Opts::LoadFormat::NATIVE: {
-                Log::on_entry(imag_opts.verbosity, "Load initial iPEPS from native file {}.", imag_opts.load);
+                Log::on_entry(imag_opts.verbosity, "Load initial iPEPS from native file {}.", load_p.string());
                 constexpr std::size_t flags = yas::file /*IO type*/ | yas::binary; /*IO format*/
                 iPEPS<Scalar, Symmetry> tmp_Psi;
                 try {
-                    yas::load<flags>((imag_opts.working_directory.string() + "/" + imag_opts.load).c_str(), tmp_Psi);
+                    yas::load<flags>(load_p.c_str(), tmp_Psi);
                 } catch(const yas::serialization_exception& se) {
                     fmt::print(
                         "Error while deserializing file ({}) with initial wavefunction.\nThis might be because of incompatible symmetries between this simulation and the loaded wavefunction.",
-                        imag_opts.working_directory.string() + "/" + imag_opts.load);
+                        load_p.string());
                     std::cout << std::flush;
                     throw;
                 } catch(const yas::io_exception& ie) {
-                    fmt::print("Error while loading file ({}) with initial wavefunction.\n",
-                               imag_opts.working_directory.string() + "/" + imag_opts.load);
+                    fmt::print("Error while loading file ({}) with initial wavefunction.\n", load_p.string());
                     std::cout << std::flush;
                     throw;
                 } catch(const std::exception& e) {
-                    fmt::print("Unknown error while loading file ({}) with initial wavefunction.\n",
-                               imag_opts.working_directory.string() + "/" + imag_opts.load);
+                    fmt::print("Unknown error while loading file ({}) with initial wavefunction.\n", load_p.string());
                     std::cout << std::flush;
                     throw;
                 }

@@ -89,16 +89,12 @@ public:
             for(auto& t : SzSz->data_d2) { t = Xped::tprod(B.Sz(), B.Sz()); }
             obs.push_back(std::move(SzSz));
             if constexpr(not Symmetry::ANY_IS_SPIN) {
-                auto Sx = std::make_unique<Xped::OneSiteObservable<double, Symmetry>>(pat, "Sx");
-                for(auto& t : Sx->data) { t = B.Sx().data.template trim<2>(); }
-
                 auto SxSx = std::make_unique<TwoSiteObservable<double, Symmetry>>(
                     pat, Opts::Bond::H | Opts::Bond::V | Opts::Bond::D1 | Opts::Bond::D2, "SxSx");
                 for(auto& t : SxSx->data_h) { t = tprod(B.Sx(), B.Sx()); }
                 for(auto& t : SxSx->data_v) { t = tprod(B.Sx(), B.Sx()); }
                 for(auto& t : SxSx->data_d1) { t = tprod(B.Sx(), B.Sx()); }
                 for(auto& t : SxSx->data_d2) { t = tprod(B.Sx(), B.Sx()); }
-                obs.push_back(std::move(Sx));
                 obs.push_back(std::move(SxSx));
                 auto Sy = std::make_unique<Xped::OneSiteObservable<std::complex<double>, Symmetry>>(pat, "Sy");
                 for(auto& t : Sy->data) { t = B.Sy().data.template trim<2>(); }

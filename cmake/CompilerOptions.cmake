@@ -228,4 +228,8 @@ function(set_project_options project_name)
     endif()
   endif()
 
+  if(XPED_PEDANTIC_ASSERTS)
+    target_compile_definitions(${project_name} INTERFACE XPED_PEDANTIC_ASSERTS=1)
+  endif()
+
 endfunction()

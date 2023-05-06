@@ -15,6 +15,8 @@ include(CMakeDependentOption)
 ###################################################################################################################################
 ###################################                          define options                   #####################################
 ###################################################################################################################################
+add_feature_info("Build type: ${CMAKE_BUILD_TYPE}" ON "")
+
 option(XPED_COMPILED_LIB "Configure the library as a compiled library. Long compile times." OFF)
 add_feature_info("Xped is configured to be a compiled library only." XPED_COMPILED_LIB "")
 
@@ -134,6 +136,9 @@ if(NOT (${XPED_EFFICIENCY_MODEL} IN_LIST XPED_SUPPORTED_EFFICIENCY_MODELS))
   message( FATAL_ERROR "You specified an unsupported efficiency model.")
 endif()
 add_feature_info("Build uses the ${XPED_EFFICIENCY_MODEL} model." XPED_EFFICIENCY_MODEL "")
+
+option(XPED_PEDANTIC_ASSERTS "Enables rigorous assertions for tensor operations." OFF)
+add_feature_info("Build has pedantic assertions for tensor operations." XPED_PEDANTIC_ASSERTS "")
 
 option(XPED_USE_LIBCXX "Use libc++ from llvm." OFF)
 add_feature_info("c++ standard library implementation from clang (libc++) will be used." XPED_USE_LIBCXX "")

@@ -63,11 +63,20 @@ bool FusionTree<Rank, Symmetry>::operator==(const FusionTree<Rank, Symmetry>& ot
 {
     if constexpr(Symmetry::ALL_IS_TRIVIAL) { return dims == other.dims; }
     if constexpr(not Symmetry::ANY_HAS_MULTIPLICITIES) {
+#ifdef XPED_PEDANTIC_ASSERTS
         return q_uncoupled == other.q_uncoupled and q_coupled == other.q_coupled and dims == other.dims and IS_DUAL == other.IS_DUAL and
                q_intermediates == other.q_intermediates;
+#else
+        return q_uncoupled == other.q_uncoupled and q_coupled == other.q_coupled and dims == other.dims and q_intermediates == other.q_intermediates;
+#endif
     }
+#ifdef XPED_PEDANTIC_ASSERTS
     return q_uncoupled == other.q_uncoupled and q_intermediates == other.q_intermediates and multiplicities == other.multiplicities and
            q_coupled == other.q_coupled and IS_DUAL == other.IS_DUAL and dims == other.dims;
+#else
+    return q_uncoupled == other.q_uncoupled and q_intermediates == other.q_intermediates and multiplicities == other.multiplicities and
+           q_coupled == other.q_coupled and dims == other.dims;
+#endif
 }
 
 template <std::size_t Rank, typename Symmetry>

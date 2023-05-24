@@ -11,6 +11,8 @@
 
 #include <boost/describe.hpp>
 
+#include <assert.hpp>
+
 #include "Xped/Util/Logging.hpp"
 #include "Xped/Util/TomlHelpers.hpp"
 
@@ -167,6 +169,10 @@ inline Imag imag_from_toml(const toml::value& t)
     if(res.multi_init) { res.init_seeds = t.contains("init_seeds") ? toml::find<std::vector<std::size_t>>(t, "init_seeds") : res.init_seeds; }
     if(res.multi_init) { res.init_chi = t.contains("init_chi") ? t.at("init_chi").as_integer() : res.init_chi; }
     if(res.multi_init) { res.init_Ds = t.contains("init_Ds") ? toml::find<std::vector<std::size_t>>(t, "init_Ds") : res.init_Ds; }
+
+    VERIFY(res.Ds.size() == res.chis.size());
+    VERIFY(res.dts.size() == res.t_steps.size());
+    VERIFY(res.init_dts.size() == res.init_t_steps.size());
     return res;
 }
 

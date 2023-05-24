@@ -10,6 +10,17 @@ Library for the manipulation of symmetric (block-sparse) tensors with arbitrary 
 ## License
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
+## Build
+1. Get the sources using:
+`git clone --recurse-submodules ssh://git@github.com/cpp977/Xped`
+2. Create build directory:
+`mkdir /dir/for/build && cd /dir/for/build`
+3. Configure with cmake:
+`cmake --preset=<preset> /path/to/source/Xped`
+This also installs dependencies via vcpkg so the first run takes several minutes.
+4. Build tests:
+`cd tests && make`
+
 ## Build Options
 
 | Option | Default | Description |

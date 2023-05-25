@@ -7,6 +7,7 @@
 #include "yas/serialize.hpp"
 #include "yas/std_types.hpp"
 
+#include "Xped/AD/ADTensor.hpp"
 #include "Xped/Core/Tensor.hpp"
 #include "Xped/PEPS/CTMOpts.hpp"
 #include "Xped/PEPS/TMatrix.hpp"

@@ -61,21 +61,93 @@ struct TwoSiteObservable : public ObservableBase
                 if(not data_h.pat.isUnique(x, y)) { continue; }
                 if((bond & Opts::Bond::H) == Opts::Bond::H) {
                     // out.data_h(x, y) = data_h(x, y).template shiftQN<0, 2>(charges(x, y)).template shiftQN<1, 3>(charges(x + 1, y));
+                    // out.data_h(x, y) =
+                    //     data_h(x, y).template shiftQN<0, 1, 2, 3>(std::array{charges(x, y), charges(x + 1, y), charges(x, y), charges(x + 1, y)});
+                    Qbasis<Symmetry, 1> c1;
+                    c1.push_back(charges(x, y), 1);
+                    Qbasis<Symmetry, 1> c2;
+                    c2.push_back(charges(x + 1, y), 1);
+                    Tensor<Scalar, 2, 2, Symmetry> id({{c1, c2}}, {{c1, c2}});
+                    id.setIdentity();
+                    auto tmp = data_h(x, y).template contract<std::array{-1, -3, -5, -7}, std::array{-2, -4, -6, -8}, 4>(id);
+                    Tensor<Scalar, 2, 1, Symmetry> fuser1({{data_h(x, y).uncoupledCodomain()[0], c1}},
+                                                          {{data_h(x, y).uncoupledCodomain()[0].combine(c1).forgetHistory()}});
+                    fuser1.setIdentity();
+                    Tensor<Scalar, 2, 1, Symmetry> fuser2({{data_h(x, y).uncoupledCodomain()[1], c2}},
+                                                          {{data_h(x, y).uncoupledCodomain()[1].combine(c2).forgetHistory()}});
+                    fuser2.setIdentity();
                     out.data_h(x, y) =
-                        data_h(x, y).template shiftQN<0, 1, 2, 3>(std::array{charges(x, y), charges(x + 1, y), charges(x, y), charges(x + 1, y)});
+                        tmp.template contract<std::array{-1, -2, -3, -4, 1, 2, -6, -7}, std::array{1, 2, -5}, 4>(fuser1)
+                            .template contract<std::array{-1, -2, -3, -4, -5, 1, 2}, std::array{1, 2, -6}, 4>(fuser2)
+                            .template contract<std::array{1, 2, -2, -3, -4, -5}, std::array{-1, 1, 2}, 3>(fuser1.adjoint().eval().twist(1).twist(2))
+                            .template contract<std::array{-1, 1, 2, -3, -4}, std::array{-2, 1, 2}, 2>(fuser2.adjoint().eval().twist(1).twist(2));
                 }
                 if((bond & Opts::Bond::V) == Opts::Bond::V) {
                     // out.data_v(x, y) = data_v(x, y).template shiftQN<0, 2>(charges(x, y)).template shiftQN<1, 3>(charges(x, y + 1));
+                    // out.data_v(x, y) =
+                    //     data_v(x, y).template shiftQN<0, 1, 2, 3>(std::array{charges(x, y), charges(x, y + 1), charges(x, y), charges(x, y + 1)});
+                    Qbasis<Symmetry, 1> c1;
+                    c1.push_back(charges(x, y), 1);
+                    Qbasis<Symmetry, 1> c2;
+                    c2.push_back(charges(x, y + 1), 1);
+                    Tensor<Scalar, 2, 2, Symmetry> id({{c1, c2}}, {{c1, c2}});
+                    id.setIdentity();
+                    auto tmp = data_v(x, y).template contract<std::array{-1, -3, -5, -7}, std::array{-2, -4, -6, -8}, 4>(id);
+                    Tensor<Scalar, 2, 1, Symmetry> fuser1({{data_v(x, y).uncoupledCodomain()[0], c1}},
+                                                          {{data_v(x, y).uncoupledCodomain()[0].combine(c1).forgetHistory()}});
+                    fuser1.setIdentity();
+                    Tensor<Scalar, 2, 1, Symmetry> fuser2({{data_v(x, y).uncoupledCodomain()[1], c2}},
+                                                          {{data_v(x, y).uncoupledCodomain()[1].combine(c2).forgetHistory()}});
+                    fuser2.setIdentity();
                     out.data_v(x, y) =
-                        data_v(x, y).template shiftQN<0, 1, 2, 3>(std::array{charges(x, y), charges(x, y + 1), charges(x, y), charges(x, y + 1)});
+                        tmp.template contract<std::array{-1, -2, -3, -4, 1, 2, -6, -7}, std::array{1, 2, -5}, 4>(fuser1)
+                            .template contract<std::array{-1, -2, -3, -4, -5, 1, 2}, std::array{1, 2, -6}, 4>(fuser2)
+                            .template contract<std::array{1, 2, -2, -3, -4, -5}, std::array{-1, 1, 2}, 3>(fuser1.adjoint().eval().twist(1).twist(2))
+                            .template contract<std::array{-1, 1, 2, -3, -4}, std::array{-2, 1, 2}, 2>(fuser2.adjoint().eval().twist(1).twist(2));
                 }
                 if((bond & Opts::Bond::D1) == Opts::Bond::D1) {
-                    out.data_d1(x, y) = data_d1(x, y).template shiftQN<0, 1, 2, 3>(
-                        std::array{charges(x, y), charges(x + 1, y + 1), charges(x, y), charges(x + 1, y + 1)});
+                    // out.data_d1(x,y) = data_d1(x, y).template shiftQN<0, 1, 2, 3>(
+                    //     std::array{charges(x, y), charges(x + 1, y + 1), charges(x, y), charges(x + 1, y + 1)});
+                    Qbasis<Symmetry, 1> c1;
+                    c1.push_back(charges(x, y), 1);
+                    Qbasis<Symmetry, 1> c2;
+                    c2.push_back(charges(x + 1, y + 1), 1);
+                    Tensor<Scalar, 2, 2, Symmetry> id({{c1, c2}}, {{c1, c2}});
+                    id.setIdentity();
+                    auto tmp = data_d1(x, y).template contract<std::array{-1, -3, -5, -7}, std::array{-2, -4, -6, -8}, 4>(id);
+                    Tensor<Scalar, 2, 1, Symmetry> fuser1({{data_d1(x, y).uncoupledCodomain()[0], c1}},
+                                                          {{data_d1(x, y).uncoupledCodomain()[0].combine(c1).forgetHistory()}});
+                    fuser1.setIdentity();
+                    Tensor<Scalar, 2, 1, Symmetry> fuser2({{data_d1(x, y).uncoupledCodomain()[1], c2}},
+                                                          {{data_d1(x, y).uncoupledCodomain()[1].combine(c2).forgetHistory()}});
+                    fuser2.setIdentity();
+                    out.data_d1(x, y) =
+                        tmp.template contract<std::array{-1, -2, -3, -4, 1, 2, -6, -7}, std::array{1, 2, -5}, 4>(fuser1)
+                            .template contract<std::array{-1, -2, -3, -4, -5, 1, 2}, std::array{1, 2, -6}, 4>(fuser2)
+                            .template contract<std::array{1, 2, -2, -3, -4, -5}, std::array{-1, 1, 2}, 3>(fuser1.adjoint().eval().twist(1).twist(2))
+                            .template contract<std::array{-1, 1, 2, -3, -4}, std::array{-2, 1, 2}, 2>(fuser2.adjoint().eval().twist(1).twist(2));
                 }
                 if((bond & Opts::Bond::D2) == Opts::Bond::D2) {
-                    out.data_d2(x, y) = data_d2(x, y).template shiftQN<0, 1, 2, 3>(
-                        std::array{charges(x, y), charges(x - 1, y + 1), charges(x, y), charges(x - 1, y + 1)});
+                    // out.data_d2(x, y) = data_d2(x, y).template shiftQN<0, 1, 2, 3>(
+                    //     std::array{charges(x, y), charges(x - 1, y + 1), charges(x, y), charges(x - 1, y + 1)});
+                    Qbasis<Symmetry, 1> c1;
+                    c1.push_back(charges(x, y), 1);
+                    Qbasis<Symmetry, 1> c2;
+                    c2.push_back(charges(x - 1, y + 1), 1);
+                    Tensor<Scalar, 2, 2, Symmetry> id({{c1, c2}}, {{c1, c2}});
+                    id.setIdentity();
+                    auto tmp = data_d2(x, y).template contract<std::array{-1, -3, -5, -7}, std::array{-2, -4, -6, -8}, 4>(id);
+                    Tensor<Scalar, 2, 1, Symmetry> fuser1({{data_d2(x, y).uncoupledCodomain()[0], c1}},
+                                                          {{data_d2(x, y).uncoupledCodomain()[0].combine(c1).forgetHistory()}});
+                    fuser1.setIdentity();
+                    Tensor<Scalar, 2, 1, Symmetry> fuser2({{data_d2(x, y).uncoupledCodomain()[1], c2}},
+                                                          {{data_d2(x, y).uncoupledCodomain()[1].combine(c2).forgetHistory()}});
+                    fuser2.setIdentity();
+                    out.data_d2(x, y) =
+                        tmp.template contract<std::array{-1, -2, -3, -4, 1, 2, -6, -7}, std::array{1, 2, -5}, 4>(fuser1)
+                            .template contract<std::array{-1, -2, -3, -4, -5, 1, 2}, std::array{1, 2, -6}, 4>(fuser2)
+                            .template contract<std::array{1, 2, -2, -3, -4, -5}, std::array{-1, 1, 2}, 3>(fuser1.adjoint().eval().twist(1).twist(2))
+                            .template contract<std::array{-1, 1, 2, -3, -4}, std::array{-2, 1, 2}, 2>(fuser2.adjoint().eval().twist(1).twist(2));
                 }
             }
         }

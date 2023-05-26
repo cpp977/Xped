@@ -34,7 +34,17 @@ struct OneSiteObservable : public ObservableBase
         for(int x = 0; x < data.pat.Lx; ++x) {
             for(int y = 0; y < data.pat.Ly; ++y) {
                 if(not data.pat.isUnique(x, y)) { continue; }
-                out.data(x, y) = data(x, y).template shiftQN<0, 1>(std::array{charges(x, y), charges(x, y)});
+                // out.data(x, y) = data(x, y).template shiftQN<0, 1>(std::array{charges(x, y), charges(x, y)});
+                Qbasis<Symmetry, 1> c;
+                c.push_back(charges(x, y), 1);
+                Tensor<Scalar, 1, 1, Symmetry> id({{c}}, {{c}});
+                id.setIdentity();
+                auto tmp = data(x, y).template contract<std::array{-1, -3}, std::array{-2, -4}, 2>(id);
+                Tensor<Scalar, 2, 1, Symmetry> fuser({{data(x, y).uncoupledCodomain()[0], c}},
+                                                     {{data(x, y).uncoupledCodomain()[0].combine(c).forgetHistory()}});
+                fuser.setIdentity();
+                out.data(x, y) = tmp.template contract<std::array{-1, -2, 1, 2}, std::array{1, 2, -3}, 2>(fuser)
+                                     .template contract<std::array{1, 2, -2}, std::array{-1, 1, 2}, 1>(fuser.adjoint().eval().twist(1).twist(2));
             }
         }
         return out;

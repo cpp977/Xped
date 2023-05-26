@@ -77,27 +77,28 @@ void iPEPS<Scalar, Symmetry, ENABLE_AD>::init(const TMatrix<Qbasis<Symmetry, 1>>
         Qbasis<Symmetry, 1> out;
         std::size_t dim_per_charge = D < phys_basis.Nq() ? 1ul : D / phys_basis.Nq();
         std::size_t dim_for_vac = D < phys_basis.Nq() ? 1ul : dim_per_charge + D % phys_basis.Nq();
+        // fmt::print("D={}, dim_p_c={}, dim_p_v={}\n", D, dim_per_charge, dim_for_vac);
         auto inserted_states = 0ul;
         auto phys_qs = phys_basis.unordered_qs();
         bool HAS_VACUUM = true;
-        if(phys_qs.contains(Symmetry::qvacuum())) {
-            out.push_back(Symmetry::qvacuum(), dim_for_vac);
-            inserted_states += dim_for_vac;
-        } else {
-            HAS_VACUUM = false;
-        }
+        // if(phys_qs.contains(Symmetry::qvacuum())) {
+        out.push_back(Symmetry::qvacuum(), dim_for_vac);
+        inserted_states += dim_for_vac;
+        // } else {
+        //     HAS_VACUUM = false;
+        // }
         if(inserted_states == D) { return out; }
         bool FIRST_INSERTION = true;
         for(auto Q : Symmetry::lowest_qs()) {
             if(phys_qs.contains(Q)) {
-                if(FIRST_INSERTION and not HAS_VACUUM) {
-                    out.push_back(Q, dim_for_vac);
-                    inserted_states += dim_for_vac;
-                    FIRST_INSERTION = false;
-                } else {
-                    out.push_back(Q, dim_per_charge);
-                    inserted_states += dim_per_charge;
-                }
+                // if(FIRST_INSERTION and not HAS_VACUUM) {
+                //     out.push_back(Q, dim_for_vac);
+                //     inserted_states += dim_for_vac;
+                //     FIRST_INSERTION = false;
+                // } else {
+                out.push_back(Q, dim_per_charge);
+                inserted_states += dim_per_charge;
+                // }
             }
             if(inserted_states == D) { return out; }
         }
@@ -126,6 +127,7 @@ void iPEPS<Scalar, Symmetry, ENABLE_AD>::init(const TMatrix<Qbasis<Symmetry, 1>>
             auto left_basis_xp1y = leftBasis(x + 1, y).dim() == 0 ? init_basis(shifted_physBasis_xp1y) : leftBasis(x + 1, y);
             auto top_basis_xy = topBasis(x, y).dim() == 0 ? init_basis(shifted_physBasis_xy) : topBasis(x, y);
             auto top_basis_xyp1 = topBasis(x, y + 1).dim() == 0 ? init_basis(shifted_physBasis_xyp1) : topBasis(x, y + 1);
+
             // fmt::print("x={}, y={}, original basis which will be shifted by {}:\n", x, y, Sym::format<Symmetry>(charges_[pos]));
             // std::cout << physBasis[pos] << std::endl;
             // std::cout << "shifted:\n" << shifted_physBasis << std::endl;
@@ -133,7 +135,9 @@ void iPEPS<Scalar, Symmetry, ENABLE_AD>::init(const TMatrix<Qbasis<Symmetry, 1>>
                 Tensor<Scalar, 2, 3, Symmetry, ENABLE_AD>({{left_basis_xy, top_basis_xy}}, {{left_basis_xp1y, top_basis_xyp1, shifted_physBasis_xy}});
             // As[pos].setZero();
             // std::cout << fmt::format("A({},{}): ", x, y) << As[pos].coupledDomain() << std::endl << As[pos].coupledCodomain() << std::endl;
-            VERIFY(As(x, y).coupledDomain().dim() > 0 and "Bases of the A tensor have no fused blocks.");
+            // fmt::print("{}\n{}\n", As(x, y).coupledDomain().printTrees(), As(x, y).coupledCodomain().printTrees());
+            VERIFY(As(x, y).coupledDomain().forgetHistory().intersection(As(x, y).coupledCodomain().forgetHistory()).dim() > 0 and
+                   "Bases of the A tensor have no fused blocks.");
         }
     }
 }

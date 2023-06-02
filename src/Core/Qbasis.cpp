@@ -544,7 +544,7 @@ std::string Qbasis<Symmetry, depth, AllocationPolicy>::printTrees() const
 {
     std::stringstream out;
     for(auto it = trees.begin(); it != trees.end(); it++) {
-        out << it->second.size() << " Fusion trees for Q=" << it->first << std::endl;
+        out << it->second.size() << " Fusion trees for Q=" << Sym::format<Symmetry>(it->first) << std::endl;
         for(const auto& i : it->second) { out << i.draw() << std::endl; }
         out << std::endl << "******************************************************************************************" << std::endl;
         ;

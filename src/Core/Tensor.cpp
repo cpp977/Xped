@@ -705,6 +705,7 @@ Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::subBlock(const 
     return subBlock(f1, f2, it->second);
 }
 
+//! [Showcase use of leftOffset]
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
 typename PlainInterface::TType<Scalar, Rank + CoRank>
 Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::subBlock(const FusionTree<Rank, Symmetry>& f1,
@@ -724,12 +725,8 @@ Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::subBlock(const 
 
     return PlainInterface::template tensor_from_matrix_block<Rank + CoRank>(
         block(block_number), left_offset_domain, left_offset_codomain, f1.dim, f2.dim, dims);
-    // MatrixType submatrix = block_[block_number].block(left_offset_domain, left_offset_codomain, f1.dim, f2.dim);
-    // std::cout << "from subblock:" << std::endl << submatrix << std::endl;
-    // TensorcMapType tensorview = PlainInterface::cMap(submatrix.data(), dims);
-    // TensorType T = PlainInterface::construct<Scalar, Rank + CoRank>(tensorview);
-    // return T;
 }
+//! [Showcase use of leftOffset]
 
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
 typename PlainInterface::TType<Scalar, Rank + CoRank> Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::plainTensor() const

@@ -6,6 +6,10 @@
 #include "fmt/ranges.h"
 #include "fmt/std.h"
 
+// template <typename T, typename Char>
+// struct fmt::formatter<std::complex<T>, Char> : ostream_formatter
+// {};
+
 template <typename T, typename Char>
 struct fmt::formatter<std::complex<T>, Char> : public fmt::formatter<T, Char>
 {
@@ -19,9 +23,6 @@ struct fmt::formatter<std::complex<T>, Char> : public fmt::formatter<T, Char>
     fmt::detail::dynamic_format_specs<Char> specs_;
     FMT_CONSTEXPR auto parse(format_parse_context& ctx) -> decltype(ctx.begin())
     {
-        using handler_type = fmt::detail::dynamic_specs_handler<format_parse_context>;
-        auto type = fmt::detail::type_constant<T, Char>::value;
-        fmt::detail::specs_checker<handler_type> handler(handler_type(specs_, ctx), type);
         auto it = ctx.begin();
         if(it != ctx.end()) {
             switch(*it) {
@@ -40,7 +41,8 @@ struct fmt::formatter<std::complex<T>, Char> : public fmt::formatter<T, Char>
             default: break;
             }
         }
-        parse_format_specs(ctx.begin(), ctx.end(), handler);
+        auto type = fmt::detail::type_constant<T, Char>::value;
+        parse_format_specs(ctx.begin(), ctx.end(), specs_, ctx, type);
         // todo: fixup alignment
         return base::parse(ctx);
     }

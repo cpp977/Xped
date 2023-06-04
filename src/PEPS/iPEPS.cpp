@@ -80,25 +80,13 @@ void iPEPS<Scalar, Symmetry, ENABLE_AD>::init(const TMatrix<Qbasis<Symmetry, 1>>
         // fmt::print("D={}, dim_p_c={}, dim_p_v={}\n", D, dim_per_charge, dim_for_vac);
         auto inserted_states = 0ul;
         auto phys_qs = phys_basis.unordered_qs();
-        bool HAS_VACUUM = true;
-        // if(phys_qs.contains(Symmetry::qvacuum())) {
         out.push_back(Symmetry::qvacuum(), dim_for_vac);
         inserted_states += dim_for_vac;
-        // } else {
-        //     HAS_VACUUM = false;
-        // }
         if(inserted_states == D) { return out; }
-        bool FIRST_INSERTION = true;
         for(auto Q : Symmetry::lowest_qs()) {
             if(phys_qs.contains(Q)) {
-                // if(FIRST_INSERTION and not HAS_VACUUM) {
-                //     out.push_back(Q, dim_for_vac);
-                //     inserted_states += dim_for_vac;
-                //     FIRST_INSERTION = false;
-                // } else {
                 out.push_back(Q, dim_per_charge);
                 inserted_states += dim_per_charge;
-                // }
             }
             if(inserted_states == D) { return out; }
         }

@@ -10,6 +10,9 @@ Library for the manipulation of symmetric (block-sparse) tensors with arbitrary 
 ## License
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
+## Quickstart
+
+
 ## Build
 1. Get the sources using:
 `git clone --recurse-submodules ssh://git@github.com/cpp977/Xped`
@@ -20,8 +23,16 @@ Library for the manipulation of symmetric (block-sparse) tensors with arbitrary 
 This also installs dependencies via vcpkg so the first run takes several minutes.
 4. Build tests:
 `cd tests && make`
+5. Run the tests:
+`ctest`
 
-## Build Options
+To control the build, it is recomennded to choose a CMake preset so that several options are already set automatically.
+The following follow the scheme `<compiler>-<backend>`. E.g. `gcc-eigen` uses the gnu c++ compiler and the Eigen backend.
+Supported compilers are gcc, clang and msvc.
+
+All build options can be seen in the following table.
+
+### Build Options
 
 | Option | Default | Description |
 | --- | --- | --- |

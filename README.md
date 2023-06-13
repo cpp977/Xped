@@ -61,6 +61,7 @@ All build options can be seen in the following table.
 | `XPED_LOG_LEVEL` | `SPDLOG_LEVEL_CRITICAL` | Compile time log level. |
 | `XPED_MATRIX_LIB` | `Eigen` | Used matrix library for plain tensor operations. |
 | `XPED_OPTIM_LIB` | `ceres` | Used library for nonlinear gradient-based optimization. |
+| `XPED_PEDANTIC_ASSERTS` | `OFF` | Enables rigorous assertions for tensor operations. |
 | `XPED_STORAGE` | `Contiguous` | Used storage for Xped::Tensor. |
 | `XPED_TENSOR_LIB` | `Eigen` | Used tensor library for plain tensor operations. |
 | `XPED_USE_AD` | `ON` | Use automatic differentiation (AD) with Xped Tensors. |

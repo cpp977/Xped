@@ -506,6 +506,7 @@ add_subdirectory(src)
 
 if (XPED_BUILD_TESTS)
   find_package(doctest 2.4.8 REQUIRED)
+  enable_testing()
   add_subdirectory(tests)
 endif()
 

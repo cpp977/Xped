@@ -1,5 +1,4 @@
 include(doctest)
-enable_testing()
 
 add_library(test_suite OBJECT driver.cpp)
 target_link_libraries (test_suite PUBLIC

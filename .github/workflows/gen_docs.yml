@@ -56,7 +56,7 @@ jobs:
       with:
         configurePreset: 'gcc-eigen-debug'
         configurePresetAdditionalArgs: "['-DBLA_VENDOR=OpenBLAS', '-DXPED_USE_OPENMP=OFF', '-DXPED_ENABLE_DOXYGEN=ON', '-DXPED_STORAGE=Contiguous']"
-        buildPreset: ${{ matrix.preset }}
+        buildPreset: 'gcc-eigen-debug'
         buildPresetAdditionalArgs: "['--target docs']"
 
     - name: Deploy

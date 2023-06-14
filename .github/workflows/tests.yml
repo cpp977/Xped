@@ -1,7 +1,12 @@
 name: Tests
 
-on: [push]
-
+on:
+  workflow_run:
+    workflows:
+      - Builds
+    types:
+      - completed
+      
 jobs:
   build:
     # The CMake configure and build commands are platform agnostic and should work equally

@@ -1,6 +1,11 @@
 name: Generate docs for cmake options
 
-on: [push]
+on:
+  workflow_run:
+    workflows:
+      - Builds
+    types:
+      - completed
 
 jobs:
   gen_options:

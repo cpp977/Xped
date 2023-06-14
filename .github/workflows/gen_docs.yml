@@ -1,0 +1,61 @@
+name: Generate documentation
+
+on:
+  workflow_run:
+    workflows:
+      - Builds
+    types:
+      - completed
+
+jobs:
+  gen_options:
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: 'true'
+    - run: sudo add-apt-repository ppa:ubuntu-toolchain-r/ppa
+    - run: sudo apt-get update
+    - run: sudo apt-get install openmpi-bin libopenmpi-dev        
+    - run: sudo apt-get install libopenblas-dev
+    - run: sudo apt-get install liblapacke-dev
+    - run: sudo apt-get install libomp-12-dev
+
+    - name: Set up GCC
+      uses: egor-tensin/setup-gcc@v1
+      with:
+        version: 10
+        platform: x64
+
+    - uses: actions/checkout@v3
+      with:
+        repository: cpp977/TOOLS
+        token: ${{ secrets.TOOLS_CLONE }}
+        ref: master
+        path: tools-src
+    - run: sudo mkdir -p /usr/local/include/TOOLS
+    - run: sudo cp -r $GITHUB_WORKSPACE/tools-src/* /usr/local/include/TOOLS/
+
+    - uses: lukka/get-cmake@latest
+
+    - name: Restore artifacts, or setup vcpkg (do not install any package)
+      uses: lukka/run-vcpkg@v11
+      with:
+          vcpkgJsonGlob: 'vcpkg.json'
+
+    - name: Run CMake+vcpkg+Ninja
+      uses: lukka/run-cmake@v10
+      with:
+        configurePreset: 'gcc-eigen-debug'
+        configurePresetAdditionalArgs: "['-DBLA_VENDOR=OpenBLAS', '-DXPED_USE_OPENMP=OFF', '-DXPED_ENABLE_DOXYGEN=ON', '-DXPED_STORAGE=${{ matrix.STORAGE }}']"
+        buildPreset: ${{ matrix.preset }}
+        configurePresetAdditionalArgs: "['--target docs']"
+
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: './gcc-eigen-debug/html'

@@ -118,7 +118,7 @@ jobs:
       run: |
         lcov --capture --directory . --output-file coverage.info
         lcov --remove coverage.info '/usr/*' --output-file coverage.info # filter system-files
-        # lcov --remove coverage.info '${{runner.workspace}}/../${{ matrix.preset }}/vcpkg_installed/*' --output-file coverage.info # filter system-files
+        lcov --remove coverage.info '${{runner.workspace}}/${{ matrix.preset }}/vcpkg_installed/*' --output-file coverage.info # filter system-files
         lcov --list coverage.info # debug info
         
     - name: Upload coverage to Codecov
@@ -126,8 +126,8 @@ jobs:
       uses: codecov/codecov-action@v1
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
-        file: ${{runner.workspace}}/build/tests/coverage.info
-        directory: ${{runner.workspace}}/build/tests
+        file: ${{runner.workspace}}/${{ matrix.preset }}/coverage.info
+        directory: ${{runner.workspace}}/${{ matrix.preset }}/tests
         flags: unittests
         name: coverage
         fail_ci_if_error: true

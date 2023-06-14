@@ -38,6 +38,7 @@ All build options can be seen in the following table.
 | --- | --- | --- |
 | `XPED_BUILD_BENCHMARKS` | `ON` | Build the benchmarks. |
 | `XPED_BUILD_CYCLOPS` | `OFF` | Build the cyclops library from source. |
+| `XPED_BUILD_EXAMPLES` | `OFF` | Build the benchmarks. |
 | `XPED_BUILD_TESTS` | `ON` | Build the tests. |
 | `XPED_BUILD_TOOLS` | `ON` | Build the tools. |
 | `XPED_COMPILED_LIB` | `OFF` | Configure the library as a compiled library. Long compile times. |

@@ -12,7 +12,7 @@ Library for the manipulation of symmetric (block-sparse) tensors with arbitrary 
 
 ## Quickstart
 
-[quickstart](https://github.com/cpp977/Xped/blob/3e65a9b532a2fa71e1c7091bb7585a10cf72b935/docs/snippets/quickstart.cpp#L1-L47 "quickstart")
+https://github.com/cpp977/Xped/blob/3e65a9b532a2fa71e1c7091bb7585a10cf72b935/docs/snippets/quickstart.cpp#L1-L47
 
 ## Build
 1. Get the sources using:

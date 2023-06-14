@@ -113,7 +113,7 @@ jobs:
     #   run: ctest -C $BUILD_TYPE
       
     - name: Generate coverage report
-      if: matrix.preset == 'g++-eigen-release'
+      if: matrix.preset == 'gcc-eigen-release'
       working-directory: ${{runner.workspace}}/${{ matrix.preset }}
       run: |
         lcov --capture --directory . --output-file coverage.info
@@ -122,7 +122,7 @@ jobs:
         lcov --list coverage.info # debug info
         
     - name: Upload coverage to Codecov
-      if: matrix.preset == 'g++-eigen-release'
+      if: matrix.preset == 'gcc-eigen-release'
       uses: codecov/codecov-action@v1
       with:
         token: ${{ secrets.CODECOV_TOKEN }}

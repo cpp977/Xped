@@ -2,10 +2,6 @@ name: Tests
 
 on: [push]
 
-env:
-  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
-  BUILD_TYPE: Release
-
 jobs:
   build:
     # The CMake configure and build commands are platform agnostic and should work equally
@@ -21,14 +17,11 @@ jobs:
         # LIBCXX: [OFF]
         # compiler: [g++]
         include:
-          - preset: gcc-eigen
-            compiler: g++
+          - preset: gcc-eigen-release
             STORAGE: Contiguous
-          - preset: clang-eigen
-            compiler: clang++
+          - preset: clang-eigen-release
             STORAGE: Contiguous
-          - preset: clang-libcxx-eigen
-            compiler: clang++
+          - preset: clang-libcxx-eigen-release
             STORAGE: Contiguous
     steps:
     - uses: actions/checkout@v3
@@ -84,39 +77,47 @@ jobs:
     - uses: lukka/get-cmake@latest
 
     - name: Restore artifacts, or setup vcpkg (do not install any package)
-      uses: lukka/run-vcpkg@v10
-        
-    - name: Configure CMake
-      shell: bash
-      working-directory: ${{runner.workspace}}/build
-      env:
-        CXX: ${{ matrix.compiler }}
-      run: cmake $GITHUB_WORKSPACE --preset=${{ matrix.preset }} -DBLA_VENDOR=OpenBLAS -DXPED_USE_BLAS=ON -DXPED_USE_LAPACK=ON -DXPED_USE_OPENMP=OFF -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DXPED_ENABLE_CCACHE=OFF -DXPED_BUILD_CYCLOPS=ON -DXPED_STORAGE=${{ matrix.STORAGE }} -DXPED_ENABLE_COVERAGE=ON
-          
-    - name: Build
-      working-directory: ${{runner.workspace}}/build
-      shell: bash
-      # Execute the build.  You can specify a specific target with "--target <NAME>"
-      run: cmake --build . --config $BUILD_TYPE -- VERBOSE=1 -j1
+      uses: lukka/run-vcpkg@v11
 
-    - name: Test
-      working-directory: ${{runner.workspace}}/build/tests
-      shell: bash
-      # Execute tests defined by the CMake configuration.  
-      # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
-      run: ctest -C $BUILD_TYPE
+    - name: Run CMake+vcpkg+Ninja
+        uses: lukka/run-cmake@v10
+        with:
+          configurePreset: ${{ matrix.preset }}
+          configurePresetAdditionalArgs: "['-DBLA_VENDOR=OpenBLAS', '-DXPED_USE_OPENMP=OFF', '-DXPED_ENABLE_COVERAGE=ON', '-DXPED_STORAGE=${{ matrix.STORAGE }}']"
+          buildPreset: ${{ matrix.preset }}
+          testPreset: ${{ matrix.preset }}
+          
+    # - name: Configure CMake
+    #   shell: bash
+    #   working-directory: ${{runner.workspace}}/build
+    #   env:
+    #     CXX: ${{ matrix.compiler }}
+    #   run: cmake $GITHUB_WORKSPACE --preset=${{ matrix.preset }} -DBLA_VENDOR=OpenBLAS -DXPED_USE_BLAS=ON -DXPED_USE_LAPACK=ON -DXPED_USE_OPENMP=OFF -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DXPED_ENABLE_CCACHE=OFF -DXPED_BUILD_CYCLOPS=ON -DXPED_STORAGE=${{ matrix.STORAGE }} -DXPED_ENABLE_COVERAGE=ON
+          
+    # - name: Build
+    #   working-directory: ${{runner.workspace}}/build
+    #   shell: bash
+    #   # Execute the build.  You can specify a specific target with "--target <NAME>"
+    #   run: cmake --build . --config $BUILD_TYPE -- VERBOSE=1 -j1
+
+    # - name: Test
+    #   working-directory: ${{runner.workspace}}/build/tests
+    #   shell: bash
+    #   # Execute tests defined by the CMake configuration.  
+    #   # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
+    #   run: ctest -C $BUILD_TYPE
       
     - name: Generate coverage report
-      if: matrix.compiler == 'g++'
-      working-directory: ${{runner.workspace}}/build/tests
+      if: matrix.preset == 'g++-eigen-release'
+      working-directory: ${{runner.workspace}}/../${{ matrix.preset }}
       run: |
         lcov --capture --directory . --output-file coverage.info
         lcov --remove coverage.info '/usr/*' --output-file coverage.info # filter system-files
-        lcov --remove coverage.info '${{runner.workspace}}/build/thirdparty/*' --output-file coverage.info # filter system-files
+        # lcov --remove coverage.info '${{runner.workspace}}/../${{ matrix.preset }}/vcpkg_installed/*' --output-file coverage.info # filter system-files
         lcov --list coverage.info # debug info
         
     - name: Upload coverage to Codecov
-      if: matrix.compiler == 'g++'
+      if: matrix.preset == 'g++-eigen-release'
       uses: codecov/codecov-action@v1
       with:
         token: ${{ secrets.CODECOV_TOKEN }}

@@ -1,137 +1,366 @@
 {
-    "version": 3,
-    "cmakeMinimumRequired": {
-        "major": 3,
-        "minor": 18,
-        "patch": 0
+  "version": 3,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 18,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "vcpkg",
+      "hidden": true,
+      "cacheVariables": {
+        "VCPKG_OVERLAY_PORTS": "${sourceDir}/ports",
+        "VCPKG_OVERLAY_TRIPLETS": "${sourceDir}/triplets",
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/vcpkg/scripts/buildsystems/vcpkg.cmake",
+        "VCPKG_INSTALL_OPTIONS": "",
+        "VCPKG_MANIFEST_NO_DEFAULT_FEATURES": "ON"
+      }
     },
-    "configurePresets": [
-        {
-        "name": "vcpkg",
-        "hidden": true,
-        "cacheVariables": {
-            "VCPKG_OVERLAY_PORTS": "${sourceDir}/ports",
-            "VCPKG_OVERLAY_TRIPLETS": "${sourceDir}/triplets",
-            "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/vcpkg/scripts/buildsystems/vcpkg.cmake",
-            "VCPKG_INSTALL_OPTIONS": ""
-        }
+    {
+      "name": "debug",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
     },
-        {
-        "name": "logging",
-        "hidden": true,
-        "cacheVariables": {
-            "XPED_LOG_LEVEL": "SPDLOG_LEVEL_CRITICAL"
-        }
+    {
+      "name": "release",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
     },
-        {
-        "name": "clang",
-        "hidden": true,
-        "cacheVariables": {
-            "VCPKG_CHAINLOAD_TOOLCHAIN_FILE" : "${sourceDir}/triplets/x64-linux-clang.toolchain.cmake",
-            "VCPKG_TARGET_TRIPLET": "x64-linux-clang"
-        }
+    {
+      "name": "logging",
+      "hidden": true,
+      "cacheVariables": {
+        "XPED_LOG_LEVEL": "SPDLOG_LEVEL_CRITICAL"
+      }
     },
-        {
-        "name": "clang-libcxx",
-        "hidden": true,
-        "cacheVariables": {
-            "VCPKG_CHAINLOAD_TOOLCHAIN_FILE" : "${sourceDir}/triplets/x64-linux-clang-libcxx.toolchain.cmake",
-            "VCPKG_TARGET_TRIPLET": "x64-linux-clang-libcxx",
-            "XPED_USE_LIBCXX" : "ON"
-        }
+    {
+      "name": "clang",
+      "hidden": true,
+      "cacheVariables": {
+        "VCPKG_CHAINLOAD_TOOLCHAIN_FILE": "${sourceDir}/triplets/x64-linux-clang.toolchain.cmake",
+        "VCPKG_TARGET_TRIPLET": "x64-linux-clang"
+      }
     },
-        {
-        "name": "icpx",
-        "hidden": true,
-        "cacheVariables": {
-            "VCPKG_CHAINLOAD_TOOLCHAIN_FILE" : "${sourceDir}/triplets/x64-linux-icpx.toolchain.cmake",
-            "VCPKG_TARGET_TRIPLET": "x64-linux-icpx"
-        }
+    {
+      "name": "clang-libcxx",
+      "hidden": true,
+      "cacheVariables": {
+        "VCPKG_CHAINLOAD_TOOLCHAIN_FILE": "${sourceDir}/triplets/x64-linux-clang-libcxx.toolchain.cmake",
+        "VCPKG_TARGET_TRIPLET": "x64-linux-clang-libcxx",
+        "XPED_USE_LIBCXX": "ON"
+      }
     },
-        {
-        "name": "gcc",
-        "hidden": true,
-        "cacheVariables": {
-            "VCPKG_TARGET_TRIPLET": "x64-linux"
-        }
+    {
+      "name": "icpx",
+      "hidden": true,
+      "cacheVariables": {
+        "VCPKG_CHAINLOAD_TOOLCHAIN_FILE": "${sourceDir}/triplets/x64-linux-icpx.toolchain.cmake",
+        "VCPKG_TARGET_TRIPLET": "x64-linux-icpx"
+      }
     },
-        {
-        "name": "gcc-eigen",
-        "inherits": ["vcpkg","logging","gcc"],
-        "cacheVariables": {
-            "XPED_TENSOR_LIB": "Eigen",
-            "XPED_VECTOR_LIB": "Eigen",
-            "XPED_MATRIX_LIB": "Eigen",
-            "XPED_USE_OPENMP": "ON",
-            "XPED_USE_AD": "ON",
-            "XPED_USE_NLO": "ON",
-            "XPED_OPTIM_LIB": "ceres",
-            "VCPKG_MANIFEST_FEATURES": "gcc-eigen",
-            "VCPKG_MANIFEST_NO_DEFAULT_FEATURES": "ON"
-        }
+    {
+      "name": "gcc",
+      "hidden": true,
+      "cacheVariables": {
+        "VCPKG_TARGET_TRIPLET": "x64-linux"
+      }
     },
-        {
-        "name": "gcc-ctf",
-        "inherits": ["vcpkg","logging","gcc"],
-        "cacheVariables": {
-            "XPED_TENSOR_LIB": "Cyclops",
-            "XPED_VECTOR_LIB": "Cyclops",
-            "XPED_MATRIX_LIB": "Cyclops",
-            "XPED_USE_OPENMP": "ON",
-            "XPED_USE_MPI": "ON",
-            "XPED_USE_SCALAPACK": "ON",
-            "XPED_USE_AD": "ON",
-            "XPED_USE_NLO": "ON",
-            "XPED_USE_MKL": "OFF",
-            "XPED_OPTIM_LIB": "ceres",
-            "VCPKG_MANIFEST_FEATURES": "gcc-ctf",
-            "VCPKG_MANIFEST_NO_DEFAULT_FEATURES": "ON"
-        }
+    {
+      "name": "windows",
+      "hidden": true,
+      "cacheVariables": {
+        "VCPKG_TARGET_TRIPLET": "x64-windows"
+      }
     },
-        {
-        "name": "clang-eigen",
-        "inherits": ["vcpkg","logging","clang"],
-        "cacheVariables": {
-            "XPED_TENSOR_LIB": "Eigen",
-            "XPED_VECTOR_LIB": "Eigen",
-            "XPED_MATRIX_LIB": "Eigen",
-            "XPED_USE_OPENMP": "ON",
-            "XPED_USE_AD": "ON",
-            "XPED_USE_NLO": "ON",
-            "XPED_OPTIM_LIB": "ceres",
-            "VCPKG_MANIFEST_FEATURES": "clang-eigen",
-            "VCPKG_MANIFEST_NO_DEFAULT_FEATURES": "ON"
-        }
+    {
+      "name": "eigen",
+      "hidden": true,
+      "cacheVariables": {
+        "XPED_TENSOR_LIB": "Eigen",
+        "XPED_VECTOR_LIB": "Eigen",
+        "XPED_MATRIX_LIB": "Eigen",
+        "XPED_USE_AD": "ON",
+        "XPED_USE_NLO": "ON",
+        "XPED_OPTIM_LIB": "ceres",
+        "VCPKG_MANIFEST_FEATURES": "eigen"
+      }
     },
-        {
-        "name": "clang-libcxx-eigen",
-        "inherits": ["vcpkg","logging","clang-libcxx"],
-        "cacheVariables": {
-            "XPED_TENSOR_LIB": "Eigen",
-            "XPED_VECTOR_LIB": "Eigen",
-            "XPED_MATRIX_LIB": "Eigen",
-            "XPED_USE_OPENMP": "ON",
-            "XPED_USE_AD": "ON",
-            "XPED_USE_NLO": "ON",
-            "XPED_OPTIM_LIB": "ceres",
-            "VCPKG_MANIFEST_FEATURES": "clang-libcxx-eigen",
-            "VCPKG_MANIFEST_NO_DEFAULT_FEATURES": "ON"
-        }
+    {
+      "name": "ctf",
+      "hidden": true,
+      "cacheVariables": {
+        "XPED_TENSOR_LIB": "Cyclops",
+        "XPED_VECTOR_LIB": "Cyclops",
+        "XPED_MATRIX_LIB": "Cyclops",
+        "XPED_USE_MPI": "ON",
+        "XPED_USE_SCALAPACK": "ON",
+        "XPED_USE_AD": "ON",
+        "XPED_USE_NLO": "ON",
+        "XPED_USE_MKL": "OFF",
+        "XPED_OPTIM_LIB": "ceres",
+        "VCPKG_MANIFEST_FEATURES": "ctf"
+      }
     },
-        {
-        "name": "icpx-eigen",
-        "inherits": ["vcpkg","logging","icpx"],
-        "cacheVariables": {
-            "XPED_TENSOR_LIB": "Eigen",
-            "XPED_VECTOR_LIB": "Eigen",
-            "XPED_MATRIX_LIB": "Eigen",
-            "XPED_USE_MKL": "ON",
-            "XPED_USE_AD": "ON",
-            "XPED_USE_NLO": "ON",
-            "XPED_OPTIM_LIB": "ceres",
-            "VCPKG_MANIFEST_FEATURES": "icpx-eigen",
-            "VCPKG_MANIFEST_NO_DEFAULT_FEATURES": "ON"
-        }
+    {
+      "name": "gcc-eigen-debug",
+      "inherits": [
+        "vcpkg",
+        "logging",
+        "gcc",
+        "eigen",
+        "debug"
+      ],
+      "binaryDir": "${sourceParentDir}/${presetName}",
+      "cacheVariables": {
+        "XPED_USE_OPENMP": "ON"
+      }
+    },
+    {
+      "name": "gcc-eigen-release",
+      "inherits": [
+        "vcpkg",
+        "logging",
+        "gcc",
+        "eigen",
+        "release"
+      ],
+      "binaryDir": "${sourceParentDir}/${presetName}",
+      "cacheVariables": {
+        "XPED_USE_OPENMP": "ON"
+      }
+    },
+    {
+      "name": "gcc-ctf-debug",
+      "inherits": [
+        "vcpkg",
+        "logging",
+        "gcc",
+        "ctf",
+        "debug"
+      ],
+      "binaryDir": "${sourceParentDir}/${presetName}",
+      "cacheVariables": {
+        "XPED_USE_OPENMP": "ON"
+      }
+    },
+    {
+      "name": "gcc-ctf-release",
+      "inherits": [
+        "vcpkg",
+        "logging",
+        "gcc",
+        "ctf",
+        "release"
+      ],
+      "binaryDir": "${sourceParentDir}/${presetName}",
+      "cacheVariables": {
+        "XPED_USE_OPENMP": "ON"
+      }
+    },
+    {
+    "name": "clang-eigen-debug",
+      "inherits": [
+        "vcpkg",
+        "logging",
+        "clang",
+        "eigen",
+        "debug"
+      ],
+      "binaryDir": "${sourceParentDir}/${presetName}",
+      "cacheVariables": {
+        "XPED_USE_OPENMP": "ON"
+      }
+    },
+    {
+      "name": "clang-eigen-release",
+      "inherits": [
+        "vcpkg",
+        "logging",
+        "clang",
+        "eigen",
+        "release"
+      ],
+      "binaryDir": "${sourceParentDir}/${presetName}",
+      "cacheVariables": {
+        "XPED_USE_OPENMP": "ON"
+      }
+    },
+    {
+    "name": "clang-libcxx-eigen-debug",
+      "inherits": [
+        "vcpkg",
+        "logging",
+        "clang-libcxx",
+        "eigen",
+        "debug"
+      ],
+      "binaryDir": "${sourceParentDir}/${presetName}",
+      "cacheVariables": {
+        "XPED_USE_OPENMP": "ON"
+      }
+    },
+    {
+      "name": "clang-libcxx-eigen-release",
+      "inherits": [
+        "vcpkg",
+        "logging",
+        "clang-libcxx",
+        "eigen",
+        "release"
+      ],
+      "binaryDir": "${sourceParentDir}/${presetName}",
+      "cacheVariables": {
+        "XPED_USE_OPENMP": "ON"
+      }
+    },
+    {
+      "name": "icpx-eigen-debug",
+      "inherits": [
+        "vcpkg",
+        "logging",
+        "icpx",
+        "eigen",
+        "debug"
+      ],
+      "binaryDir": "${sourceParentDir}/${presetName}",
+      "cacheVariables": {
+        "XPED_USE_MKL": "ON"
+      }
+    },
+    {
+      "name": "icpx-eigen-release",
+      "inherits": [
+        "vcpkg",
+        "logging",
+        "icpx",
+        "eigen",
+        "release"
+      ],
+      "binaryDir": "${sourceParentDir}/${presetName}",
+      "cacheVariables": {
+        "XPED_USE_MKL": "ON"
+      }
     }
-    ]
+  ],
+  "buildPresets": [
+    {
+      "name": "gcc-eigen-debug",
+      "configurePreset": "gcc-eigen-debug",
+      "displayName": "Build (Debug)",
+      "description": "Build with Ninja/vcpkg (Debug)",
+      "configuration": "Debug"
+    },
+    {
+      "name": "gcc-eigen-release",
+      "configurePreset": "gcc-eigen-release",
+      "displayName": "Build (Release)",
+      "description": "Build with Ninja/vcpkg (Release)",
+      "configuration": "Release"
+    },
+    {
+      "name": "clang-eigen-debug",
+      "configurePreset": "clang-eigen-debug",
+      "displayName": "Build (Debug)",
+      "description": "Build with Ninja/vcpkg (Debug)",
+      "configuration": "Debug"
+    },
+    {
+      "name": "clang-eigen-release",
+      "configurePreset": "clang-eigen-release",
+      "displayName": "Build (Release)",
+      "description": "Build with Ninja/vcpkg (Release)",
+      "configuration": "Release"
+    },
+    {
+      "name": "clang-libcxx-eigen-debug",
+      "configurePreset": "clang-libcxx-eigen-debug",
+      "displayName": "Build (Debug)",
+      "description": "Build with Ninja/vcpkg (Debug)",
+      "configuration": "Debug"
+    },
+    {
+      "name": "clang-libcxx-eigen-release",
+      "configurePreset": "clang-libcxx-eigen-release",
+      "displayName": "Build (Release)",
+      "description": "Build with Ninja/vcpkg (Release)",
+      "configuration": "Release"
+    },
+    {
+      "name": "icpx-eigen-debug",
+      "configurePreset": "icpx-eigen-debug",
+      "displayName": "Build (Debug)",
+      "description": "Build with Ninja/vcpkg (Debug)",
+      "configuration": "Debug"
+    },
+    {
+      "name": "icpx-eigen-release",
+      "configurePreset": "icpx-eigen-release",
+      "displayName": "Build (Release)",
+      "description": "Build with Ninja/vcpkg (Release)",
+      "configuration": "Release"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "gcc-eigen-debug",
+      "configurePreset": "gcc-eigen-debug",
+      "displayName": "Test (Debug)",
+      "description": "Test with Ninja/vcpkg (Debug)",
+      "configuration": "Debug"
+    },
+    {
+      "name": "gcc-eigen-release",
+      "configurePreset": "gcc-eigen-release",
+      "displayName": "Test (Release)",
+      "description": "Test with Ninja/vcpkg (Release)",
+      "configuration": "Release"
+    },
+    {
+      "name": "clang-eigen-debug",
+      "configurePreset": "clang-eigen-debug",
+      "displayName": "Test (Debug)",
+      "description": "Test with Ninja/vcpkg (Debug)",
+      "configuration": "Debug"
+    },
+    {
+      "name": "clang-eigen-release",
+      "configurePreset": "clang-eigen-release",
+      "displayName": "Test (Release)",
+      "description": "Test with Ninja/vcpkg (Release)",
+      "configuration": "Release"
+    },
+    {
+      "name": "clang-libcxx-eigen-debug",
+      "configurePreset": "clang-libcxx-eigen-debug",
+      "displayName": "Test (Debug)",
+      "description": "Test with Ninja/vcpkg (Debug)",
+      "configuration": "Debug"
+    },
+    {
+      "name": "clang-libcxx-eigen-release",
+      "configurePreset": "clang-libcxx-eigen-release",
+      "displayName": "Test (Release)",
+      "description": "Test with Ninja/vcpkg (Release)",
+      "configuration": "Release"
+    },
+    {
+      "name": "icpx-eigen-debug",
+      "configurePreset": "icpx-eigen-debug",
+      "displayName": "Test (Debug)",
+      "description": "Test with Ninja/vcpkg (Debug)",
+      "configuration": "Debug"
+    },
+    {
+      "name": "icpx-eigen-release",
+      "configurePreset": "icpx-eigen-release",
+      "displayName": "Test (Release)",
+      "description": "Test with Ninja/vcpkg (Release)",
+      "configuration": "Release"
+    }
+  ]
 }

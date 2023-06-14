@@ -22,17 +22,17 @@
         "toml11",
         "assert"
     ],
-    "default-features": [ "gcc-eigen" ],
+    "default-features": [ "eigen" ],
     "features": {
-        "gcc-eigen": {
-            "description": "Tensor operations with Eigen backend. Compiled by gcc.",
+        "eigen": {
+            "description": "Tensor operations with Eigen backend.",
             "dependencies": [
                 "stan-math",
                 "ceres"
             ]
         },
-        "gcc-ctf": {
-            "description": "Tensor operations with cyclops backend. Compiled by gcc.",
+        "ctf": {
+            "description": "Tensor operations with cyclops backend.",
             "dependencies": [
                 "stan-math",
                 "ctf",
@@ -40,24 +40,11 @@
                 "scalapack"
             ]
         },
-        "clang-eigen": {
-            "description": "Tensor operations with Eigen backend. Compiled by clang.",
+        "array": {
+            "description": "Tensor operations with array backend.",
             "dependencies": [
                 "stan-math",
-                "ceres"
-            ]
-        },
-        "clang-libcxx-eigen": {
-            "description": "Tensor operations with Eigen backend. Compiled by clang and used std library of llvm (libcxx).",
-            "dependencies": [
-                "stan-math",
-                "ceres"
-            ]
-        },
-        "icpx-eigen": {
-            "description": "Tensor operations with Eigen backend. Compiled by icpx.",
-            "dependencies": [
-                "stan-math",
+                "array",
                 "ceres"
             ]
         }

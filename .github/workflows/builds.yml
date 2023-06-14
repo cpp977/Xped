@@ -21,14 +21,11 @@ jobs:
         # LIBCXX: [OFF]
         # compiler: [g++]
         include:
-          - preset: gcc-eigen
-            compiler: g++
+          - preset: gcc-eigen-debug
             STORAGE: Contiguous
-          - preset: clang-eigen
-            compiler: clang++
+          - preset: clang-eigen-debug
             STORAGE: Contiguous
-          - preset: clang-libcxx-eigen
-            compiler: clang++
+          - preset: clang-libcxx-eigen-debug
             STORAGE: Contiguous
     steps:
     - uses: actions/checkout@v3
@@ -84,18 +81,26 @@ jobs:
     - uses: lukka/get-cmake@latest
 
     - name: Restore artifacts, or setup vcpkg (do not install any package)
-      uses: lukka/run-vcpkg@v10
-        
-    - name: Configure CMake
-      shell: bash
-      working-directory: ${{runner.workspace}}/build
-      env:
-        CXX: ${{ matrix.compiler }}
-        VCPKG_INSTALL_OPTIONS: "--debug"
-      run: cmake $GITHUB_WORKSPACE --preset=${{ matrix.preset }} -DBLA_VENDOR=OpenBLAS -DXPED_USE_BLAS=ON -DXPED_USE_LAPACK=ON -DXPED_USE_OPENMP=OFF -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DXPED_ENABLE_CCACHE=OFF -DXPED_STORAGE=${{ matrix.STORAGE }}
+      uses: lukka/run-vcpkg@v11
+      with:
+          vcpkgJsonGlob: 'vcpkg.json'
+
+    - name: Run CMake+vcpkg+Ninja
+        uses: lukka/run-cmake@v10
+        with:
+          configurePreset: ${{ matrix.preset }}
+          configurePresetAdditionalArgs: "['-DBLA_VENDOR=OpenBLAS', '-DXPED_USE_OPENMP=OFF', '-DXPED_STORAGE=${{ matrix.STORAGE }}']"
+          buildPreset: ${{ matrix.preset }}
+    # - name: Configure CMake
+    #   shell: bash
+    #   working-directory: ${{runner.workspace}}/build
+    #   env:
+    #     CXX: ${{ matrix.compiler }}
+    #     VCPKG_INSTALL_OPTIONS: "--debug"
+    #   run: cmake $GITHUB_WORKSPACE --preset=${{ matrix.preset }} -DBLA_VENDOR=OpenBLAS -DXPED_USE_BLAS=ON -DXPED_USE_LAPACK=ON -DXPED_USE_OPENMP=OFF -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DXPED_ENABLE_CCACHE=OFF -DXPED_STORAGE=${{ matrix.STORAGE }}
           
-    - name: Build
-      working-directory: ${{runner.workspace}}/build
-      shell: bash
-      # Execute the build.  You can specify a specific target with "--target <NAME>"
-      run: cmake --build . --config $BUILD_TYPE -- VERBOSE=1 -j1
+    # - name: Build
+    #   working-directory: ${{runner.workspace}}/build
+    #   shell: bash
+    #   # Execute the build.  You can specify a specific target with "--target <NAME>"
+    #   run: cmake --build . --config $BUILD_TYPE -- VERBOSE=1 -j1

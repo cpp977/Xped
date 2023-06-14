@@ -24,7 +24,7 @@ struct Pattern
     //     init();
     // }
 
-    Pattern(const std::vector<std::vector<std::size_t>>& pat = {{0ul}}, bool TRANSPOSE = false)
+    explicit Pattern(const std::vector<std::vector<std::size_t>>& pat = {{0ul}}, bool TRANSPOSE = false)
         : data(pat)
     {
         // data.resize(TRANSPOSE ? pat[0].size() : pat.size());

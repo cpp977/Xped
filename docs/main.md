@@ -1,0 +1,426 @@
+# Manual
+\mainpage
+Xped is c++ library for the definition and manipulation of symmetry preserving tensors for tensor network related algorithms.
+
+# Theory
+
+## Tensor
+
+Multiple definitions exist for the term *tensor* (see e.g. [wikipedia](https://en.wikipedia.org/wiki/Tensor "Tensor")).
+For the purpose of this library, a tensor \f$T\f$ is a multidimensional linear map between the tensor product of \f$d\f$ vector spaces \f$\mathbb{C}^{n_1}\otimes\cdots \otimes\mathbb{C}^{n_d}\f$ 
+which form the domain \f$\mathcal{D}\f$ and a tensor product of \f$c\f$ vector spaces \f$\mathcal{\mathbb{C}^{m_1}\otimes\cdots \otimes\mathbb{C}^{m_c}}\f$  which form the codomain \f$\mathcal{C}\f$:
+\f{align*}{
+T:\mathbb{C}^{n_1}\otimes\cdots \otimes\mathbb{C}^{n_d} &\to \mathbb{C}^{m_1}\otimes\cdots \otimes\mathbb{C}^{m_c} \\
+v_1\otimes\cdots\otimes v_d &\mapsto w_1\otimes\cdots\otimes w_c
+\f}
+The rank of the tensor \f$T\f$ is \f$r=d+c\f$. 
+The dimension of the domain is \f$dim_{\mathcal{D}}=n_1\cdots n_d\f$ and of the codomain \f$dim_{\mathcal{C}}=m_1\cdots m_c\f$.
+Since the map is multi-linear, its action is entirely defined by the action on the basis vectors.
+This defines the components of the tensor with respect to given bases:
+\f[
+    j_1\otimes\cdots\otimes j_c =  \sum_{i_1,\dots,i_d}T_{i_1,\dots,i_d}^{j_1,\dots,j_c} i_1\otimes\cdots\otimes i_d
+\f]
+
+By a canonical isomorphism \f$\pi_\mathcal{D}\f$, one can define the composite vector space \f$\mathbb{C}^{dim_\mathcal{D}}\f$ for the domain of the map:
+\f[
+\mathbb{C}^{dim_\mathcal{D}}\cong\mathbb{C}^{n_1}\otimes\cdots \otimes\mathbb{C}^{n_d}
+\f]
+Analogously, one can define a composite space \f$\mathbb{C}^{dim_\mathcal{C}}\f$ for the codomain.
+The tensor T is then an ordinary linear map:
+\f[
+T: \mathbb{C}^{dim_\mathcal{D}} \to \mathbb{C}^{dim_\mathcal{C}}
+\f]
+This map can be represented by a matrix which will be useful when storing the tensor in memory.
+
+## Symmetric tensor
+
+A symmetric tensor is a tensor which *respects* a given symmetry.
+To formalize this, lets assume a symmetry described by a group \f$G\f$.
+\f$G\f$ is represented on all individual vector spaces of the domain by \f$\mathcal{R}^i_G\f$ and codomain by \f$\mathcal{Q}^i_G\f$ of a tensor.
+Then a tensor \f$T\f$ is symmetric if:
+\f[
+    T(v_1\otimes\cdots\otimes v_d) = \mathcal{Q}^1_G\otimes\cdots\otimes \mathcal{Q}^c_G\left( T(\mathcal{R}^1_G(v_1)\otimes\cdots\otimes \mathcal{R}^d_G(v_d))\right)
+\f]
+That means the action of the tensor stays the same when the symmetry acts on the individual spaces.
+If the tensor is transformed with the isomorphisms \f$\pi_\mathcal{D}\f$ and \f$\pi_\mathcal{C}\f$ it becomes an ordinary linear map.
+Then Schur's lemma ([wikipedia](https://en.wikipedia.org/wiki/Schur%27s_lemma "Schur's lemma")) implies that this map is a constant if the composite representation of the symmetry on domain and codomain is irreducible.
+Generally, it will be reducible but may be decomposed into a direct sum of irreducible representations (irreps).
+The underlying matrix becomes then block diagonal.
+
+### Construction of isomorphism
+
+The block diagonal form of the underlying matrix is only manifest if the isomorphism \f$\pi_\mathcal{D}\f$ maps to a basis which is the decomposed into the direct sum of irreps.
+Hence, the crucial task is to find an appropriate isomorphism.
+A straight-forward method for obtaining \f$\pi_\mathcal{D}\f$ is the use of fusion trees which perform the mapping by a sequential pairwise fusion of two vector spaces into their product state.
+For a given binary fusion of two spaces, the Clebsch-Gordan expansion is used to find the decomposition of the product state into irreps.
+Each intermediate space is then combined with next unpaired space until all spaces are combined to the final domain/codomain of the tensor.
+It is important to store all the intermediate quantum numbers since for general symmetries, several different paths exist which lead to the same output.
+An example fusion tree of four quantum numbers \f$q_1,\dots,q_4\f$ coupled to \f$q_f\f$ looks as follows:
+\dot "Example of a canonical fusion tree"
+digraph G {
+    bgcolor="black"
+    node [fontcolor=white color=white]
+    edge [color=white style=filled]
+    {rank=same; q1 [shape=doublecircle, label=q₁]; q2 [shape=doublecircle, label=q₂]; q3 [shape=doublecircle, label=q₃]; q4 [shape=doublecircle, label=q₄]}
+    i12 [label=α, shape=invtriangle];
+    i123 [label=β, shape=invtriangle];
+    i1234 [label=γ, shape=invtriangle];
+    i1 [shape=doublecircle, label=i₁];
+    i2 [shape=doublecircle, label=i₂];
+    qf [shape=doublecircle];
+    q1->i12;
+    q2->i12;
+    i12->i1;
+    i1->i123;
+    q3->i123;
+    i123->i2;
+    i2->i1234;
+    q4->i1234;
+    i1234->qf;
+}
+\enddot
+The triangular shapes correspond to the binary Clebsch-Gordan decomposition.
+They carry another (Greek) label which is important for symmetries with outermultiplicity in their Clebsch-Gordan expansion (e.g. SU(3)).
+For Abelian symmetries, the complete fusion tree is entirely determined by the incoming quantum numbers and the intermediate values do not have to be stored.
+
+The fusion trees construct the isomorphisms \f$\pi_\mathcal{D}\f$ and \f$\pi_\mathcal{C}\f$. 
+\note The isomorphisms \f$\pi_\mathcal{D}\f$ and \f$\pi_\mathcal{C}\f$ are not constructed explicitly but only implicitly by storing all fusion trees.
+
+## Tensor operations
+
+For tensor network related algorithms, several tensor operations are ubiquitous.
+One needs to contract tensors together to obtain final results or needs to decompose a tensor with a singular value decomposition to truncate certain bonds in the network.
+A fundamental operation is the permutation of the legs of an individual tensor. It is needed for other high-level operations.
+
+### Permutations
+
+A permutation is a reshuffling of the individual legs of the tensor.
+This corresponds to a reordering of the individual vector spaces which form \f$\mathcal{D}\f$ and \f$\mathcal{C}\f$.
+For nonsymmetric tensors, this can be achieved by choosing appropriate new isomorphisms \f$\pi_\mathcal{D}^\prime\f$ and \f$\pi_\mathcal{C}^\prime\f$ 
+such that the permuted input is mapped to the correct state. This leads to a new view to the original data which can be left untouched.
+However, the data layout becomes strided and noncontiguous.
+For some operations, it is therefore more efficient to copy the underlying data so that the layout is again contiguous.
+
+In the case of symmetric tensors, the situation is more complicated. 
+A permutation requires a reordering of the incoming legs of the fusion trees.
+If the incoming legs are shuffled, the resultant fusion tree is not canonical anymore and therefore not useful for further operations which expects a canonical fusion tree.
+In order to get the reordered fusion tree in canonical form, one needs the recoupling symbols \f$F\f$ of the symmetry group \f$G\f$.
+\dot "Recoupling symbols"
+digraph G {
+    bgcolor="black"
+    node [fontcolor=white color=white]
+    edge [color=white style=filled]
+    {rank=same; q1 [shape=doublecircle, label=q₁]; q2 [shape=doublecircle, label=q₂]; q3 [shape=doublecircle, label=q₃]; q1p [shape=doublecircle, label=q₁]; q2p [shape=doublecircle, label=q₂]; q3p [shape=doublecircle, label=q₃]}
+    {rank=same; i1 [shape=doublecircle, label=q₁₂]; eq [shape=none, label="=ΣF", fontsize="50pt"]; i2 [shape=doublecircle, label=q₂₃]}
+    i12 [label=α, shape=invtriangle];
+    i12_3 [label=β, shape=invtriangle];
+    i23 [label=γ, shape=invtriangle];
+    i1_23 [label=δ, shape=invtriangle];
+    Q [shape=doublecircle];
+    Qp [shape=doublecircle, label=Q];
+    q1->i12;
+    q2->i12;
+    i12->i1;
+    i1->i12_3;
+    q3->i12_3;
+    i12_3->Q;
+    q2p->i23;
+    q3p->i23;
+    i23->i2;
+    i2->i1_23;
+    q1p->i1_23;
+    i1_23->Qp;
+    i1 -> eq [style=invis];
+    eq -> i2 [style=invis];
+    eq -> Qp [style=invis];
+}
+\enddot
+The sum goes over all possible intermediate quantum numbers \f$q_{23}\f$ and in the case of outermultiplicity also over \f$\gamma\f$ and \f$\delta\f$.
+The recoupling symbols define a unitary transformation between the composite spaces of different fusion orders.
+They are entirely determined by the Clebsch Gordan coefficients.
+
+To obtain the reordered fusion tree in canonical form, one needs a second basis operation which exchanges two incoming quantum numbers on the same node.
+This operations involves the swap symbol for the group.
+
+With these two operations, one can implement arbitrary permutations on a single fusion tree.
+A tensor consists of two fusion trees, one for the domain and one for the codomain.
+For permutations which shuffle across the domain and codomain, a third basic operation is needed.
+This involves the bending of a line pointing inwards to pointing outwards and is quantified by the turn symbol of the group.
+
+The permutation of the legs of a symmetric tensor is then performed by first permuting the fusion tree pair (consisting of domain tree and codomain tree) 
+and second by assigning the old data to the new tensor with careful attention to the recoupling-, swap- and turn symbols.
+
+### Contractions
+
+A tensor contraction boils down to the composition of the associated maps.
+I.e., if \f$T_1: \mathcal{D}\to\mathcal{I}\f$ and \f$T_2: \mathcal{I}\to\mathcal{C}\f$ than the contraction \f$T\f$ of \f$T_1\f$ and \f$T_2\f$ over all the elementary spaces in \f$\mathcal{I}\f$ is the composition:
+\f[
+    T = T_2 \circ T_1
+\f]
+The composition of tensors corresponds to the multiplication of the representing matrices which arise after the application of the isomorphisms \f$\pi_\mathcal{D}\f$ and \f$\pi_\mathcal{C}\f$.
+
+In the generic case, the indices of a tensor which should be contracted with indices of another tensor are located in its codomain.
+Therefore one has to permute the indices of both tensors so that an ordinary composition performs the contraction.
+After the composition, another permute might bring the indices in the desired order for the final result.
+
+### Decompositions
+
+A tensor decomposition can be seen as the inverse operation to a contraction.
+Because of that it can be handled similarly.
+An often encountered decomposition is the singular value decomposition ([svd](https://en.wikipedia.org/wiki/Singular_value_decomposition "singular value decomposition")).
+It can be applied to any linear map.
+Hence, the tensor is again interpreted as an ordinary linear map with the help of the isomorphisms \f$\pi_\mathcal{D}\f$ and \f$\pi_\mathcal{C}\f$.
+Then, the svd reads:
+\f[
+    T = U \Sigma V^\dagger
+\f]
+\f$U\f$ has the original domain of the tensor and \f$V\f$ has the original codomain, i.e. the cut is taken through the domain and codomain.
+
+For a general partition of indices, one can apply a permute operation to get an appropriate domain and codomain.
+
+# Implementation
+
+## Quick tour
+
+To get a feeling of how the library works, lets look at some simple examples for the core part of the library.
+All entities of the library are defined in `namespace Xped`.
+\include quickstart.cpp
+
+## Symmetries
+
+Each supported symmetry has its own class which supplies all methods related to the symmetry.
+Currently implemented are the following groups:
+* \f$Z_n\f$ \f$\rightarrow\f$ `template<std::size_t N, Xped::Sym::Kind> struct Xped::Sym::Zn;`
+* \f$\text{U}(1)\f$ \f$\rightarrow\f$ `template<Xped::Sym::Kind> struct Xped::Sym::U1;`
+* \f$\text{SU}(2)\f$ \f$\rightarrow\f$ `template<Xped::Sym::Kind> struct Xped::Sym::SU2;`
+* trivial \f$\rightarrow\f$ `struct Xped::Sym::U0;`
+
+Partial support exists also for general \f$\text{SU}(N)\f$ symmetry.
+
+All symmetry classes have a [CRTP](https://en.wikipedia.org/wiki/Curiously_recurring_template_pattern "CRTP") base class `template<typename Derived> struct Xped::Sym::SymBase;` to avoid duplicated code.
+The individual symmetry classes are stateless and methods are static.
+Some basic objects which are implemented in the symmetry classes are:
+* `using qType = ...` the type for the quantum numbers of the symmetry
+* `static std::vector<qType> basis_combine(qType ql, qType qr)` returns the decomposition of the direct product of two irreps into irreps.
+* `static constexpr qType qvacuum();` returns the quantum number of the trivial representation.
+
+To see the full list of required functions check `Symmetry/SU2.hpp`
+
+All symmetry classes take `Xped::Sym::Kind` as a template parameter. 
+It describes to which particles the symmetry relates to.
+Possible values are:
+* `Xped::Kind::Spin`
+* `Xped::Kind::Boson`
+* `Xped::Kind::Fermion`
+
+The difference between the first two is only when formatting related quantum numbers because spin quantum numbers can be half-integers but particle quantum numbers are only integers.
+The latter however, makes a crucial difference. If a symmetry is set up with `Xped::Kind::Fermion`, the fermionic commutation rules and respective signs are taken care off automatically for tensor operations.
+This is controlled by the methods
+```{.cpp}
+static Scalar coeff_swap(qType ql, qType qr);
+static Scalar coeff_twist(qType q);
+```
+The first methods adds a minus sign if two odd fermion-parity states are swapped.
+The second includes a sign if a odd parity state is twisted.
+
+## Fusion trees
+
+The struct `FusionTree` is a simple static storage of all relevant data for a single fusion path of `Rank` quantum numbers of a given `Symmetry`:
+```{.cpp}
+template<std::size_t Rank, typename Symmetry>
+struct FusionTree;
+```
+It has the following members:
+```{.cpp}
+std::array<qType, Rank> q_uncoupled{};
+qType q_coupled{};
+std::size_t dim{};
+std::array<size_t, Rank> dims{};
+std::array<qType, util::inter_dim(Rank)> q_intermediates{};
+std::array<size_t, util::mult_dim(Rank)> multiplicities = std::array<size_t, util::mult_dim(Rank)>(); // only for non-Abelian symmetries with outermultiplicity.
+std::array<bool, Rank> IS_DUAL{};
+```
+\warning This class does not check whether all the quantum numbers do fit together but it expects that it is constructed correctly.
+
+To display a `FusionTree`, there is the handy function `Xped::FusionTree::draw()`.
+It generates an ascii drawing of the tree. Here is an example for a rank=4 tree for an SU(2) symmetry:
+```
+ 2       0        1/2       1/2
+   \     /        /        /
+    \   /        /        /
+      μ         /        /
+       \       /        /
+        \ 2   /        /
+         \   /        /
+           μ         /
+            \       /
+             \ 3/2 /
+              \   /
+                μ
+                |
+                |
+                1
+```
+
+### Fusion tree manipulations 
+
+Fusion tree manipulations build the basis for tensor operations.
+The fundamental operation is the permutation of two adjacent incoming quantum numbers.
+Unless it involves the first two incoming quantum numbers which enters to the same binary fusion, this involves recoupling operations.
+Here, especially the \f$6j\f$-symbol of the symmetry group enters.
+At the end, a fusion tree can be written as a weighted sum over fusion trees with two adjacent quantum numbers exchanged.
+The respective method is `Xped::FusionTree::swap`:
+```{.cpp}
+/*Swaps quantum numbers pos and pos+1*/
+std::unordered_map<FusionTree<Rank, Symmetry>, typename Symmetry::Scalar> swap(const std::size_t& pos) const;
+```
+With the exchange of adjacent quantum numbers, one can implement arbitrary permutations of the incoming quantum numbers by decomposing the permutation into a chain of adjacent swaps.
+This is performed with `Xped::util::Permutation::decompose()`.
+The high-level function which performs the general permutation is `Xped::FusionTree::permute()`.
+
+## Hilbert bases
+
+To describe a Hilbert basis, the class `Qbasis` is used:
+```{.cpp}
+template<typename Symmetry, std::size_t depth, typename AllocationPolicy = HeapPolicy>
+class Xped::Qbasis;
+```
+This class stores a basis which is properly sorted with respect to a given `Symmetry`, i.e. it contains several multiplets of the symmetry.
+Furthermore, the basis can be a composite basis of several individual bases. This is controlled via the template parameter `depth`.
+To handle the composition, `Qbasis` uses `FusionTree` to remember the exact fusion process.
+Generally, bases are constructed with `depth=1` and composite bases are obtained using the method `Xped::Qbasis::combine()`.
+
+The most important member of `Qbasis` is:
+```{.cpp}
+std::vector<std::tuple<qType, std::size_t, Xped::Basis>> data_;
+```
+The actual type is more complicated because of `AllocationPolicy` but this does not matter here.
+Each entry of `data_` corresponds to a quantum number of type `qType` (first entry in the `tuple`).
+For each quantum number, the global number of the first plain state corresponds to the second element in the `tuple`.
+The third element of the `tuple` belongs to the plain basis states of this quantum number. The plain basis state are described by the simple `class Xped::Basis`.
+
+A few lines of code illustrate the use of the class:
+\include s_qbasis.cpp
+
+One of the key methods of `Qbasis` are `Xped::Qbasis::leftOffset()` and `Xped::Qbasis::rightOffset()`.
+If several bases are combined into a composite basis, each basis state in the composite basis belongs to a specific fusion.
+A rigorous order of all the fused states with same quantum number is fundamental to construct the isomorphism \f$\pi_\mathcal{D}\f$.
+The exact signature of `leftOffset()` is:
+```{.cpp}
+std::size_t leftOffset(const FusionTree<Symmetry, depth>& tree) const;
+```
+It takes a `FusionTree` as a parameter and returns the number of basis states which come *before* this tree.
+These methods are fundamental for getting tensor views from the large block diagonal matrix which is stored in memory.
+See the implementation of `Xped::Tensor::subBlock()`:
+\snippet Core/Tensor.cpp Showcase use of leftOffset
+
+## Tensor class
+
+The tensor class is the central object of the library:
+
+```{.cpp}
+template<typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, bool AD=false, typename AllocationPolicy=HeapPolicy>
+class Tensor;
+```
+It takes 6 template parameters but the last two are optional.
+The first four describe the underlying `Scalar` type, the rank and corank of the tensor (\f$d\f$ and \f$c\f$) and the symmetry under which the tensor is invariant.
+The fifth parameter decides whether the tensor can be used for automatic differentiation (AD).
+It is a `bool` parameter and both choices (`true` and `false`) corresponds to different explicit specializations of the general class template.
+For the AD part see [below](#automatic-differentiation).
+The last parameter controls the allocation procedure.
+
+The tensor class has only a single member variable:
+
+```{.cpp}
+Storage storage_;
+```
+
+The used storage is currently determined at configuration time by a cmake parameter.
+In the future, this can become an additional template parameter.
+
+The most important methods are:
+* `Xped::Tensor::permute();`
+* `Xped::Tensor::contract();`
+* `Xped::Tensor::tSVD();`
+
+### Storage
+
+For an efficient storage of the tensor data in the case of a symmetry constrain, the tensor is seen as an ordinary linear map between two vector spaces.
+This procedure was described in the Theory section above.
+In the case of a symmetry, the representing matrix of the linear map is block-diagonal.
+Therefore, the most compact storage is obtained when storing only the nonzero block-matrices of the large block-diagonal matrix.
+Each block is associated to a quantum number of the symmetry and contains all elements of the symmetry which can be fused to this quantum number.
+
+Two specific storage implementations are available:
+1. `VecOfMat` see Core/storage/StorageType_vecofmat.hpp
+2. `Contiguous` see Core/storage/StorageType_contiguous.hpp
+
+The first option stores a `std::vector` of matrices to describe the block-diagonal matrix.
+For this option the entire tensor is not contiguous in memory.
+
+The second option stores a large contiguous buffer (`std::vector<Scalar>`). 
+When a specific block of the block-diagonal matrix is requested, a view into this large buffer is returned which corresponds to the requested block.
+
+The `Storage` class must have two specific constructors.
+```{.cpp}
+    StorageType(const std::array<Xped::Qbasis<Symmetry, 1, AllocationPolicy>, Rank> basis_domain,
+                const std::array<Xped::Qbasis<Symmetry, 1, AllocationPolicy>, CoRank> basis_codomain,
+                const mpi::XpedWorld& world)
+```
+```{.cpp}
+    StorageType(const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, Rank> basis_domain,
+                const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, CoRank> basis_codomain,
+                const Scalar* data,
+                std::size_t size,
+                const mpi::XpedWorld& world)
+```
+
+Both take the individual bases of the domain and codomain as an `std::array` and the world to which the storage is associated in the case of distributed parallelism.
+The first constructor does not allocate actual memory but only sets the meta data of the storage.
+The second constructor allocates the needed storage and copies the contiguous data `data` into the tensor.
+If `size` does not match the total elements in the tensor, an assertion is raised.
+
+Additionally, the storage implementations need to include the following public methods.
+* `const MatrixType& block(std::size_t i) const;` returns a const reference to the ith block of the block-diagonal matrix
+* `MatrixType& block(std::size_t i);` returns a nonconst reference to the ith block of the block-diagonal matrix
+* `const MatrixType& block(qType q) const;` returns a const reference to the block belonging to the fused quantum number `q`.
+* `MatrixType& block(qType q);` returns a nonconst reference to the block belonging to the fused quantum number `q`.
+* `std::size_t plainSize() const;` returns the total number of scalars in the tensor summed over all blocks.
+* `const mpi::XpedWorld& world() const` returns the mpi world, the data is living in. This is only relevant for distributed tensors.
+
+For the complete interface check out Core/storage/StorageType_contiguous.hpp.
+
+### Automatic differentiation
+
+The `Tensor` class supports build in automatic differentiation (AD), i.e. for algorithms build on top of the `Tensor` class, the derivative can be computed automatically.
+To declare a tensor with AD support, one needs to set the respective template argument to `true`.
+The source code for the AD support for `Tensor` can be found in `include/Xped/AD/ADTensor.hpp` (and not in `Tensor.hpp` itself).
+It is an explicit specialization and of the `Tensor` class template. 
+In order to obtain the AD functionality, core features of the third-party library [stan/math](https://github.com/stan-dev/math "ad library") are used.
+
+Let's look at an example usage of the AD functionality:
+\include ad.cpp
+
+-------------------------------------------------------------------------------
+
+# Backends
+
+## Eigen
+
+## Cyclops tensor framework
+
+## array
+
+# Algorithms
+
+## Matrix product states (MPS)
+
+\todo Write documentation
+
+## Projected entangled pair states (PEPS)
+
+\todo Write documentation
+
+### Simple updates
+
+### Energy minimization with automatic differentiation

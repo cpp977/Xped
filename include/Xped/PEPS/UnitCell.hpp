@@ -19,7 +19,7 @@ struct UnitCell
         , pattern(pat)
     {}
 
-    UnitCell(const std::size_t Lx = 1, const std::size_t Ly = 1);
+    explicit UnitCell(const std::size_t Lx = 1, const std::size_t Ly = 1);
 
     std::size_t Lx = 1;
     std::size_t Ly = 1;

@@ -13,7 +13,7 @@ struct TMatrix
 {
     TMatrix() = default;
 
-    TMatrix(const Pattern& pat, const std::string name = "")
+    explicit TMatrix(const Pattern& pat, const std::string name = "")
         : pat(pat)
         , name(name)
     {

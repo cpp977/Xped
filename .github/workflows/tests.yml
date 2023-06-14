@@ -69,10 +69,10 @@ jobs:
         
     - run: clang++ --version
         
-    - name: Create Build Environment
-      # Some projects don't allow in-source building, so create a separate build directory
-      # We'll use this as our working directory for all subsequent commands
-      run: cmake -E make_directory ${{runner.workspace}}/build
+    # - name: Create Build Environment
+    #   # Some projects don't allow in-source building, so create a separate build directory
+    #   # We'll use this as our working directory for all subsequent commands
+    #   run: cmake -E make_directory ${{runner.workspace}}/build
 
     - uses: lukka/get-cmake@latest
 
@@ -80,12 +80,12 @@ jobs:
       uses: lukka/run-vcpkg@v11
 
     - name: Run CMake+vcpkg+Ninja
-        uses: lukka/run-cmake@v10
-        with:
-          configurePreset: ${{ matrix.preset }}
-          configurePresetAdditionalArgs: "['-DBLA_VENDOR=OpenBLAS', '-DXPED_USE_OPENMP=OFF', '-DXPED_ENABLE_COVERAGE=ON', '-DXPED_STORAGE=${{ matrix.STORAGE }}']"
-          buildPreset: ${{ matrix.preset }}
-          testPreset: ${{ matrix.preset }}
+      uses: lukka/run-cmake@v10
+      with:
+        configurePreset: ${{ matrix.preset }}
+        configurePresetAdditionalArgs: "['-DBLA_VENDOR=OpenBLAS', '-DXPED_USE_OPENMP=OFF', '-DXPED_ENABLE_COVERAGE=ON', '-DXPED_STORAGE=${{ matrix.STORAGE }}']"
+        buildPreset: ${{ matrix.preset }}
+        testPreset: ${{ matrix.preset }}
           
     # - name: Configure CMake
     #   shell: bash
@@ -109,7 +109,7 @@ jobs:
       
     - name: Generate coverage report
       if: matrix.preset == 'g++-eigen-release'
-      working-directory: ${{runner.workspace}}/../${{ matrix.preset }}
+      working-directory: ${{runner.workspace}}/${{ matrix.preset }}
       run: |
         lcov --capture --directory . --output-file coverage.info
         lcov --remove coverage.info '/usr/*' --output-file coverage.info # filter system-files

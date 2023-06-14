@@ -23,6 +23,7 @@ jobs:
     - run: sudo apt-get install libopenblas-dev
     - run: sudo apt-get install liblapacke-dev
     - run: sudo apt-get install libomp-12-dev
+    - run: sudo apt-get install graphviz
 
     - name: Set up GCC
       uses: egor-tensin/setup-gcc@v1

@@ -55,11 +55,9 @@ var NAVTREE =
     ] ],
     [ "Algorithms", "index.html#autotoc_md23", [
       [ "Matrix product states (MPS)", "index.html#autotoc_md24", null ],
-      [ "Projected entangled pair states (PEPS)", "index.html#autotoc_md25", [
-        [ "Simple updates", "index.html#autotoc_md26", null ],
-        [ "Energy minimization with automatic differentiation", "index.html#autotoc_md27", null ]
-      ] ]
+      [ "Projected entangled pair states (PEPS)", "index.html#autotoc_md25", null ]
     ] ],
+    [ "Todo List", "todo.html", null ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
       [ "Namespace Members", "namespacemembers.html", [
@@ -108,12 +106,12 @@ var NAVTREEINDEX =
 "classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01false_00_01AllocationPolicy___01_4.html#a2a3158c2e624dbf8b432fc20dfcb2c47",
 "classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#aea1087185a43564fb46681f0571e9f22",
 "functions_q.html",
-"namespaceXped_1_1PROP.html#afcdbc91bb96cfeeb72a7bc3424234ff7",
-"structXped_1_1Opts_1_1Bench.html",
-"structXped_1_1SiteOperator.html#a342dc4adc6f42646f57fa457dc3fc92c",
-"structXped_1_1Sym_1_1SymBase.html#ad8d5384347a32e349f46b0570e04e192",
-"structXped_1_1TwoSiteObservable.html#a952e643e4660069ab8280d31f0111270",
-"structXped_1_1util_1_1Permutation.html#a2ca4524822a8d1e5167734505f2f5239"
+"namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84ab",
+"structXped_1_1Opts_1_1Bench.html#a0914a6e10bf4ea844a312527af753d0d",
+"structXped_1_1SiteOperator.html#a6e30ed7833611546f407a75c3f64d4ae",
+"structXped_1_1Sym_1_1SymTraits.html",
+"structXped_1_1TwoSiteObservable.html#a985df92ebe366da0f2eac40056c9fb66",
+"structXped_1_1util_1_1Permutation.html#a329224cfb98ddf1ccb04b622987da3cb"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

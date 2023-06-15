@@ -471,6 +471,8 @@ Cyclops tensor framework (ctf)</h2>
 <dl class="section note"><dt>Note</dt><dd>The ctf backend is most useful for tensors without symmetry or with tensors with small internal symmetries.</dd></dl>
 <h2><a class="anchor" id="autotoc_md22"></a>
 array</h2>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000001">Todo:</a></b></dt><dd>Add documentation for array backend.</dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>The array backend needs some adaptions to be consistent with the code base.</dd></dl>
 <h1><a class="anchor" id="autotoc_md23"></a>
 Algorithms</h1>
 <p>On top of the core library, <a class="el" href="namespaceXped.html">Xped</a> also provides high-level tensor network algorithms.</p>
@@ -528,12 +530,9 @@ Projected entangled pair states (PEPS)</h2>
 </ul>
 <p>The PEPS code of <a class="el" href="namespaceXped.html">Xped</a> is located in <code>Xped/PEPS</code> and has the following capabilities:</p><ul>
 <li>CTMRG algorithm for arbitrary unit cells with potentially a custom pattern (AB/BA)</li>
-<li>s</li>
+<li>Imaginary time evolution using the simple update method with nearest and next-nearest Hamiltonian terms</li>
+<li>Direct energy-minimization using automatic differentiation </li>
 </ul>
-<h3><a class="anchor" id="autotoc_md26"></a>
-Simple updates</h3>
-<h3><a class="anchor" id="autotoc_md27"></a>
-Energy minimization with automatic differentiation</h3>
 </div></div><!-- PageDoc -->
 </div><!-- contents -->
 </div><!-- doc-content -->

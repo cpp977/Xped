@@ -17,18 +17,17 @@ https://github.com/cpp977/Xped/blob/3e65a9b532a2fa71e1c7091bb7585a10cf72b935/doc
 ## Build
 1. Get the sources using:
 `git clone --recurse-submodules ssh://git@github.com/cpp977/Xped`
-2. Create build directory:
-`mkdir /dir/for/build && cd /dir/for/build`
 3. Configure with cmake:
 `cmake --preset=<preset> /path/to/source/Xped`
 This also installs dependencies via vcpkg so the first run takes several minutes.
+The build directory is specified in the presets: `/path/to/source/Xped/../<preset-name>`
 4. Build tests:
-`cd tests && make`
+`cmake --build --preset=<preset>`
 5. Run the tests:
-`ctest`
+`ctest --preset=<preset>`
 
 To control the build, it is recomennded to choose a CMake preset so that several options are already set automatically.
-The following follow the scheme `<compiler>-<backend>`. E.g. `gcc-eigen` uses the gnu c++ compiler and the Eigen backend.
+The following follow the scheme `<compiler>-<backend>-<build-type>`. E.g. `gcc-eigen-release` uses the gnu c++ compiler and the Eigen backend.
 Supported compilers are gcc, clang and msvc.
 
 All build options can be seen in the following table.

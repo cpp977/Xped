@@ -7,12 +7,6 @@ Library for the manipulation of symmetric (block-sparse) tensors with arbitrary 
 
 |Builds  | Tests | 	Coverage |
 |:-: | :-: | :-: |
-| [![Builds](https://img.shields.io/github/license/Ileriayo/markdown-badges?style=for-the-badge)](https://github.com/cpp977/Xped/actions)|[![Tests](https://img.shields.io/github/license/Ileriayo/markdown-badges?style=for-the-badge)](https://github.com/cpp977/Xped/actions)|[![codecov](https://codecov.io/gh/cpp977/Xped/branch/master/graph/badge.svg?token=MRQLD834VO)](https://codecov.io/gh/cpp977/Xped)|
-
-## Status
-
-|Builds  | Tests | 	Coverage |
-|:-: | :-: | :-: |
 | [![Builds](https://github.com/cpp977/Xped/workflows/Builds/badge.svg)](https://github.com/cpp977/Xped/actions)|[![Tests](https://github.com/cpp977/Xped/workflows/Tests/badge.svg)](https://github.com/cpp977/Xped/actions)|[![codecov](https://codecov.io/gh/cpp977/Xped/branch/master/graph/badge.svg?token=MRQLD834VO)](https://codecov.io/gh/cpp977/Xped)|
 
 ## License
@@ -20,9 +14,10 @@ Library for the manipulation of symmetric (block-sparse) tensors with arbitrary 
 
 ## Quickstart
 
-https://github.com/cpp977/Xped/blob/1bf7ea5370ccf639763cca632ab7c1f75db2e842/docs/snippets/quickstart.cpp
+[![License](https://img.shields.io/static/v1?label=LICENSE&message=GPL&color=green&style=for-the-badge)](./LICENSE)
 
 ## Build
+
 1. Get the sources using:
 `git clone --recurse-submodules ssh://git@github.com/cpp977/Xped`
 3. Configure with cmake:

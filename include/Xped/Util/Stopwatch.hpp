@@ -46,6 +46,7 @@ public:
 
     std::string time_string(TimeUnit u = TimeUnit::NATURAL);
     std::chrono::seconds time();
+    double seconds();
 
     void start();
 
@@ -113,6 +114,13 @@ std::chrono::seconds Stopwatch<ClockClass>::time()
 {
     t_end = ClockClass::now();
     return std::chrono::duration_cast<std::chrono::seconds>(t_end - t_start);
+}
+
+template <typename ClockClass>
+double Stopwatch<ClockClass>::seconds()
+{
+    t_end = ClockClass::now();
+    return std::chrono::duration<double, std::ratio<1, 1>>(t_end - t_start).count();
 }
 
 template <typename ClockClass>

@@ -3,6 +3,8 @@
 
 #include <cstddef>
 
+#include <boost/describe.hpp>
+
 #include "Xped/Util/Macros.hpp"
 
 namespace Xped {
@@ -11,11 +13,7 @@ template <typename Scalar, typename Symmetry>
 class Mps;
 
 namespace DMRG {
-enum class DIRECTION
-{
-    LEFT = 0,
-    RIGHT = 1
-};
+BOOST_DEFINE_ENUM_CLASS(DIRECTION, LEFT, RIGHT)
 }
 
 template <typename Scalar, typename Symmetry>

@@ -450,10 +450,6 @@ find_package(TBB CONFIG REQUIRED)
 #     target_link_libraries(ceres PRIVATE glog)
 #   endif()
 # endif()
-
-# find_path(TOOLS_INCLUDE_DIR NAMES ArgParser.h PATHS ${TOOLS_ROOT} PATH_SUFFIXES TOOLS REQUIRED)
-# add_library(tools INTERFACE IMPORTED)
-# target_include_directories(tools INTERFACE ${TOOLS_INCLUDE_DIR}/..)
   
 # if(${XPED_TENSOR_LIB} STREQUAL "Array")
 #   CPMAddPackage(

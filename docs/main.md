@@ -445,8 +445,9 @@ On top of the core library, Xped also provides high-level tensor network algorit
 
 MPSs represent a one-dimensional tensor network tailored for strongly interacting one-dimensional physical lattice systems.
 For detailed information, check the following references:
-* One ref
-* Another reference
+* https://link.springer.com/article/10.1007/BF02099178
+* https://arxiv.org/abs/1008.3477
+* https://arxiv.org/abs/2011.12127
 
 The MPS code is located in the directory `Xped/MPS` and currently provides a `class MPS` and basic operations for them.
 An implementation of matrix product operators (MPO)s and algorithms like the density matrix renormalization-group (DMRG) or the time-dependent variational principle (TDVP)
@@ -459,10 +460,101 @@ A small example demonstrates the current capability:
 
 PEPS is a generalization of MPS for two-dimensional systems.
 For detailed information, check the following references:
-* One ref
-* Another reference
+* https://arxiv.org/abs/cond-mat/0407066
+* https://arxiv.org/abs/2011.12127
 
 The PEPS code of Xped is located in `Xped/PEPS` and has the following capabilities:
-* CTMRG algorithm for arbitrary unit cells with potentially a custom pattern (AB/BA)
+* CTMRG algorithm for arbitrary unit cells with custom pattern (AB/BA)
 * Imaginary time evolution using the simple update method with nearest and next-nearest Hamiltonian terms
 * Direct energy-minimization using automatic differentiation
+
+For PEPS simulations, the configuration is parsed as a toml file.
+The toml file has sections for CTM, imaginary time evolution and nonlinear optimization.
+The used model is specified in the section `[model]` and needs to be present in all simulations:
+Here is an example for the Hubbard model:
+```
+[model]
+name                    = "Hubbard"
+# specifies on which bonds the two-site gates of the Hamiltonian are active. In the case of Hubbard model, this is the hopping term.
+# V: vertical, H: horizontal, D1: diagonal top-left -> bottom-down, D2: diagonal bottom-left -> top-right
+bonds                   = ["V", "H", "D1"] # This leads to a triangular lattice
+[model.params]
+U                       = 8.0
+t                       = 1.0
+tprime                  = 1.0
+mu                      = 0.0
+```
+
+The unit cell and PEPS bond dimension are specified in the section `[ipeps]`:
+```
+[ipeps]
+D                       = 2
+# The cell can have a nontrivial pattern if numbers appear several times
+cell                    = [[1,2],
+                           [3,4]] # 2x2 unit cell without pattern
+# Charges can be used to force the total filling or total magnetization
+# This is only possible for Abelian symmetries
+charges                 = [[[+1], [-1]],
+                           [[-1], [+1]]] # This charge pattern forces a Neel state with zero total magnetization
+```
+
+### CTM
+
+The CTM procedure can be configured using toml configuration section `[ctm]`
+```
+[ctm]
+chi                     = 30
+max_presteps            = 30 # Maximum amount of steps without AD backtracking
+track_steps             = 4 # Fixed number of steps for AD backtracking after the presteps are run. (Only used for gradient based optimization)
+tol_E                   = 1e-10
+reinit_env_tol          = 1e-3
+init                    = "FROM_A" # Controls how the C and T-tensors are initialized
+verbosity               = "PER_ITERATION"
+```
+
+### Simple update
+
+Imaginary time evolution can be configured through the toml section `[Imag]`.
+```
+[Imag]
+update                  = "SIMPLE" # Currently this is the only supported update. After implemented, this can be set to e.g. FULL for full update
+tol                     = 0.1
+resume                  = false
+dts                     = [0.1, 0.05, 0.02, 0.01]
+t_steps                 = [60, 60, 60, 60]
+Ds                      = [2, 3, 4, 5]
+chis                    = [[20, 30], [30], [40], [50]]
+load                    = "path/to/previous/state"
+load_format             = "NATIVE" # NATIVE: State saved within Xped, MATLAB: State saved from matlab simulation
+working_directory       = "<wd>"
+obs_directory           = "obs"
+logging_directory       = "log"
+seed                    = 10
+id                      = 1
+verbosity               = "PER_ITERATION"
+```
+
+### Energy minimization
+
+Simulations for direct energy minimization using nonlinear optimization procedures are configured through the toml section `[optim]`.
+
+```
+[optim]
+algorithm               = "L_BFGS" # Could also be CONJUGATE_GRADIENT or what a custom optimization library supports
+linesearch              = "WOLFE"
+bfgs_scaling            = false
+grad_tol                = 1.0e-4
+cost_tol                = 1.0e-8
+step_tol                = 1.0e-10
+resume                  = false
+load                    = "/path/to/other/state"
+load_format             = "NATIVE" # NATIVE: State saved within Xped, MATLAB: State saved from matlab simulation
+max_steps               = 50
+log_format              = ".log" # can also be set to .h5 for hdf5 log output
+working_directory       = "<wd>"
+obs_directory           = "obs"
+logging_directory       = "log"
+seed                    = 1
+id                      = 1
+verbosity               = "PER_ITERATION"
+```

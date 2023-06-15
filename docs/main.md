@@ -433,6 +433,10 @@ It has an overhead for small tensors but allows to scale the compute power with 
 
 ## array
 
+\todo Add documentation for array backend.
+
+\warning The array backend needs some adaptions to be consistent with the code base.
+
 # Algorithms
 
 On top of the core library, Xped also provides high-level tensor network algorithms.
@@ -460,8 +464,5 @@ For detailed information, check the following references:
 
 The PEPS code of Xped is located in `Xped/PEPS` and has the following capabilities:
 * CTMRG algorithm for arbitrary unit cells with potentially a custom pattern (AB/BA)
-* s
-
-### Simple updates
-
-### Energy minimization with automatic differentiation
+* Imaginary time evolution using the simple update method with nearest and next-nearest Hamiltonian terms
+* Direct energy-minimization using automatic differentiation

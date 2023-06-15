@@ -92,12 +92,14 @@ int main(int argc, char* argv[])
             return 1;
         }
 
+        Xped::Pattern pat;
         Xped::UnitCell c;
-        if(data.at("ipeps").contains("cell")) {
-            c = Xped::UnitCell(toml::get<std::vector<std::vector<std::size_t>>>(toml::find(data.at("ipeps"), "cell")));
-        } else if(data.at("ipeps").contains("Lx")) {
-            c = Xped::UnitCell(toml::get<std::size_t>(toml::find(data.at("ipeps"), "Lx")),
-                               toml::get<std::size_t>(toml::find(data.at("ipeps"), "Ly")));
+        if(data.at("ipeps").contains("pattern")) {
+            pat = Xped::Pattern(toml::get<std::vector<std::vector<std::size_t>>>(toml::find(data.at("ipeps"), "cell")));
+            c = Xped::UnitCell(pat);
+        } else if(data.at("ipeps").contains("cell")) {
+            auto [Lx, Ly] = toml::get<std::pair<int, int>>(toml::find(data.at("ipeps"), "cell"));
+            c = Xped::UnitCell(Lx, Ly);
         }
 
         Xped::TMatrix<Symmetry::qType> charges(c.pattern);

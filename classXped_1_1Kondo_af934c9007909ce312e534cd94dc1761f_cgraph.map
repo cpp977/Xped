@@ -1,15 +1,20 @@
 <map id="Xped::Kondo::setDefaultObs" name="Xped::Kondo::setDefaultObs">
-<area shape="rect" id="node1" title=" " alt="" coords="5,235,209,260"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,380,209,405"/>
 <area shape="rect" id="node2" href="$classXped_1_1FermionBase.html#a9af250b34aee8bb3f18ed82392939856" title=" " alt="" coords="270,5,433,31"/>
 <area shape="rect" id="node3" href="$classXped_1_1FermionBase.html#a6ff1d726d5c0ffea5380c023a6be8edd" title=" " alt="" coords="258,55,445,80"/>
 <area shape="rect" id="node4" href="$classXped_1_1FermionBase.html#ac9a9cf6f36612caef69a549074ebe569" title=" " alt="" coords="269,104,433,129"/>
 <area shape="rect" id="node5" href="$classXped_1_1FermionBase.html#a4d356fef516b594a28eeaa363e1e9ea6" title=" " alt="" coords="267,153,435,179"/>
-<area shape="rect" id="node6" href="$classXped_1_1FermionBase.html#a792ff48a39a843145e1d6282d09df0b8" title=" " alt="" coords="269,203,433,228"/>
-<area shape="rect" id="node7" href="$structXped_1_1SiteOperator.html#a720627ab88a190cac75e3eb00960b96a" title=" " alt="" coords="265,252,437,307"/>
-<area shape="rect" id="node8" href="$classXped_1_1FermionBase.html#a1f98237d9fe3c3713a6ec905e5ccd8c3" title=" " alt="" coords="257,331,445,356"/>
-<area shape="rect" id="node9" href="$classXped_1_1FermionBase.html#ad0e1ebc2ac101561dce8e7feacd190fd" title=" " alt="" coords="265,380,437,405"/>
-<area shape="rect" id="node11" href="$classXped_1_1FermionBase.html#a5396e3f08109eb8b740065f575d4058e" title=" " alt="" coords="266,429,437,455"/>
-<area shape="rect" id="node12" href="$namespaceXped.html#a598efa5f2fbcd5d3eeee6ee640b4162f" title=" " alt="" coords="303,479,400,504"/>
-<area shape="rect" id="node10" href="$structXped_1_1SiteOperator.html#a74f66fcc1dde90722fce9c478edb9c5c" title=" " alt="" coords="513,373,658,413"/>
-<area shape="rect" id="node13" href="$classXped_1_1Qbasis.html#a34418f2e9ce5c917d3f3b65688c52249" title=" " alt="" coords="493,479,677,504"/>
+<area shape="rect" id="node6" href="$classXped_1_1SpinBase.html#a88c5a9f4ece2fff8b1ed52fd854a60f1" title=" " alt="" coords="280,203,423,228"/>
+<area shape="rect" id="node7" href="$classXped_1_1FermionBase.html#a792ff48a39a843145e1d6282d09df0b8" title=" " alt="" coords="269,252,433,277"/>
+<area shape="rect" id="node8" href="$structXped_1_1SiteOperator.html#a720627ab88a190cac75e3eb00960b96a" title=" " alt="" coords="265,301,437,356"/>
+<area shape="rect" id="node9" href="$classXped_1_1SpinBase.html#a4582ab811bac0fb0b98016553101bf02" title=" " alt="" coords="282,380,421,405"/>
+<area shape="rect" id="node10" href="$classXped_1_1FermionBase.html#a1f98237d9fe3c3713a6ec905e5ccd8c3" title=" " alt="" coords="257,429,445,455"/>
+<area shape="rect" id="node11" href="$classXped_1_1SpinBase.html#ae9ef4b645404cb40c9043e3029cc076f" title=" " alt="" coords="270,479,433,504"/>
+<area shape="rect" id="node12" href="$classXped_1_1FermionBase.html#ad0e1ebc2ac101561dce8e7feacd190fd" title=" " alt="" coords="265,528,437,553"/>
+<area shape="rect" id="node14" href="$classXped_1_1SpinBase.html#a9c33519ccdda646bfa325fd3d0638949" title=" " alt="" coords="278,577,425,603"/>
+<area shape="rect" id="node15" href="$classXped_1_1FermionBase.html#a5396e3f08109eb8b740065f575d4058e" title=" " alt="" coords="266,627,437,652"/>
+<area shape="rect" id="node16" href="$classXped_1_1SpinBase.html#a4823fa99799c0fac68007a9f62332adf" title=" " alt="" coords="278,676,425,701"/>
+<area shape="rect" id="node17" href="$namespaceXped.html#a598efa5f2fbcd5d3eeee6ee640b4162f" title=" " alt="" coords="303,725,400,751"/>
+<area shape="rect" id="node13" href="$structXped_1_1SiteOperator.html#a74f66fcc1dde90722fce9c478edb9c5c" title=" " alt="" coords="513,546,658,586"/>
+<area shape="rect" id="node18" href="$classXped_1_1Qbasis.html#a34418f2e9ce5c917d3f3b65688c52249" title=" " alt="" coords="493,725,677,751"/>
 </map>

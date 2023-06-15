@@ -1,9 +1,0 @@
-<map id="write" name="write">
-<area shape="rect" id="node1" title="Writes count bytes from buf to the filedescriptor fd." alt="" coords="367,141,421,166"/>
-<area shape="rect" id="node2" href="$structXped_1_1iPEPSSolverAD_1_1LoggingCallback.html#a576bda64e1737070530f11daa3bac368" title=" " alt="" coords="108,5,319,45"/>
-<area shape="rect" id="node3" href="$structXped_1_1iPEPSSolverAD_1_1ObsCallback.html#a07a7a0fcd983d80d73e790bd5e4d8209" title=" " alt="" coords="121,69,305,109"/>
-<area shape="rect" id="node4" href="$structXped_1_1iPEPSSolverImag.html#a820364bdb216b655c2857fbb56443cf0" title=" " alt="" coords="127,133,300,173"/>
-<area shape="rect" id="node6" href="$structXped_1_1OneSiteObservable.html#ac7988cb20acb9ac772321b64d30f1635" title=" " alt="" coords="119,197,307,237"/>
-<area shape="rect" id="node7" href="$structXped_1_1TwoSiteObservable.html#aeec4898d7703f898dbfdcf4a108d6372" title=" " alt="" coords="120,261,307,301"/>
-<area shape="rect" id="node5" href="$ad__ramp_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,141,60,166"/>
-</map>

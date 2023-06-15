@@ -155,7 +155,7 @@ $(document).ready(function(){initNavTree('SpinSU2_8hpp_source.html',''); initRes
 <div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>};</div>
 <div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span> </div>
 <div class="line"><a id="l00043" name="l00043"></a><span class="lineno"><a class="line" href="classXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4.html#a82d14626f19de7a30440aab06c2a9c11">   43</a></span><a class="code hl_class" href="classXped_1_1Spin.html">Spin&lt;Sym::SU2&lt;Sym::SpinSU2&gt;</a>, 0ul&gt;::Spin(std::size_t D_input)</div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    : <a class="code hl_class" href="classD.html">D</a>(D_input)</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    : D(D_input)</div>
 <div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>{</div>
 <div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    <span class="comment">// create basis for one Spin Site</span></div>
 <div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>    <span class="keyword">typename</span> <a class="code hl_struct" href="structXped_1_1qarray.html">Symmetry::qType</a> Q = {<span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(<a class="code hl_variable" href="classXped_1_1Spin.html#abc143400845a1124161209207182721b">D</a>)};</div>
@@ -166,7 +166,7 @@ $(document).ready(function(){initNavTree('SpinSU2_8hpp_source.html',''); initRes
 <div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    S_1s_ = <a class="code hl_class" href="structXped_1_1SiteOperator.html">OperatorType</a>({3}, <a class="code hl_variable" href="classXped_1_1Spin.html#a89f8ac4154a20d4bf4697e82ba07ce60">basis_1s_</a>);</div>
 <div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    S_1s_.<a class="code hl_variable" href="structXped_1_1SiteOperator.html#a049a4bfb520db156c7fbb4305795b50b">data</a>.setZero();</div>
 <div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span> </div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    Scalar locS = 0.5 * <span class="keyword">static_cast&lt;</span><span class="keywordtype">double</span><span class="keyword">&gt;</span>(<a class="code hl_class" href="classD.html">D</a> - 1);</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    Scalar locS = 0.5 * <span class="keyword">static_cast&lt;</span><span class="keywordtype">double</span><span class="keyword">&gt;</span>(<a class="code hl_variable" href="classXped_1_1Spin.html#abc143400845a1124161209207182721b">D</a> - 1);</div>
 <div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    <span class="keyword">auto</span> tmp = S_1s_(Q, Q);</div>
 <div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    <a class="code hl_function" href="structXped_1_1PlainInterface.html#ae37c412be210104ba3194b3b38652278">PlainInterface::setVal</a>(tmp, 0, 0, std::sqrt(locS * (locS + 1.)));</div>
 <div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    S_1s_(Q, Q) = tmp;</div>
@@ -178,7 +178,6 @@ $(document).ready(function(){initNavTree('SpinSU2_8hpp_source.html',''); initRes
 <div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span> </div>
 <div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span><span class="preprocessor">#endif</span></div>
 <div class="ttc" id="aSU2_8hpp_html"><div class="ttname"><a href="SU2_8hpp.html">SU2.hpp</a></div></div>
-<div class="ttc" id="aclassD_html"><div class="ttname"><a href="classD.html">D</a></div><div class="ttdef"><b>Definition:</b> diagrams_d.h:6</div></div>
 <div class="ttc" id="aclassXped_1_1Qbasis_html"><div class="ttname"><a href="classXped_1_1Qbasis.html">Xped::Qbasis</a></div><div class="ttdef"><b>Definition:</b> Qbasis.hpp:39</div></div>
 <div class="ttc" id="aclassXped_1_1Qbasis_html_a34418f2e9ce5c917d3f3b65688c52249"><div class="ttname"><a href="classXped_1_1Qbasis.html#a34418f2e9ce5c917d3f3b65688c52249">Xped::Qbasis::push_back</a></div><div class="ttdeci">void push_back(const qType &amp;q, const size_t &amp;inner_dim)</div><div class="ttdef"><b>Definition:</b> Qbasis.cpp:32</div></div>
 <div class="ttc" id="aclassXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4_html_a4f0c1c0fdf0be2140aaefae7957a1a17"><div class="ttname"><a href="classXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4.html#a4f0c1c0fdf0be2140aaefae7957a1a17">Xped::Spin&lt; Sym::SU2&lt; Sym::SpinSU2 &gt;, 0ul &gt;::basis_1s_</a></div><div class="ttdeci">Qbasis&lt; Symmetry, 1 &gt; basis_1s_</div><div class="ttdef"><b>Definition:</b> SpinSU2.hpp:35</div></div>

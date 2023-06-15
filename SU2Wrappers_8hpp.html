@@ -209,7 +209,7 @@ Functions</h2></td></tr>
 </li>
 </ul>
 </li>
-<li>FASTWIGXJ: <a class="el" href="classA.html">A</a> implementation wich uses hash-tables with precomputed symbols. This library builds up on top of WIGXJPF. See <a href="http://fy.chalmers.se/subatom/fastwigxj">http://fy.chalmers.se/subatom/fastwigxj</a> for reference and download. The library needs to be compiled first.<ul>
+<li>FASTWIGXJ: A implementation wich uses hash-tables with precomputed symbols. This library builds up on top of WIGXJPF. See <a href="http://fy.chalmers.se/subatom/fastwigxj">http://fy.chalmers.se/subatom/fastwigxj</a> for reference and download. The library needs to be compiled first.<ul>
 <li>Link parameter: -lwigxjpf -lfastwigxj -lwigxjpf_quadmath -lquadmath (Note, the order is important! with /path_to_fastwig/lib in the library path -L/path_to_fastwig/lib)</li>
 <li>macro: USE_FAST_WIG_SU2_COEFFS <dl class="section note"><dt>Note</dt><dd>The hash-tables need to be precomputed by the user and passed to Sym::initialize(). See manual <a href="http://fy.chalmers.se/subatom/fastwigxj/README">http://fy.chalmers.se/subatom/fastwigxj/README</a> for instructions. The precomputed tables are commonly named as table_Y.Xj, where X is {3,6,9} and Y the maximal value of J. The tables are commonly stored in the folder cgc_hash within the root-folder of the project. </dd>
 <dd>
@@ -219,7 +219,7 @@ When extensively using this library you may cite the corresponding publication (
 </li>
 </ul>
 </li>
-<li>General library + own hash function: <a class="el" href="classA.html">A</a> naive hash implementation which uses the coupl_Xj_base-functions but also handles a std::unordered_map for hashing the symbols. Note that this implmentation is not thread-safe! This is turned off per default but can be used by defining OWN_HASH_CGC. </li>
+<li>General library + own hash function: A naive hash implementation which uses the coupl_Xj_base-functions but also handles a std::unordered_map for hashing the symbols. Note that this implmentation is not thread-safe! This is turned off per default but can be used by defining OWN_HASH_CGC. </li>
 </ol>
 </div><h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="ac68f150b2865976ce5592de9fd52efa7" name="ac68f150b2865976ce5592de9fd52efa7"></a>

@@ -197,7 +197,7 @@ $(document).ready(function(){initNavTree('Spin_8hpp_source.html',''); initResiza
 <div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span> </div>
 <div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Symmetry_, std::<span class="keywordtype">size_t</span> spin_index&gt;</div>
 <div class="line"><a id="l00086" name="l00086"></a><span class="lineno"><a class="line" href="classXped_1_1Spin.html#aeded56d76ae86d9f4341046beef004e2">   86</a></span><a class="code hl_function" href="classXped_1_1Spin.html#ad5c8eda996ab48a1993c12491ace000c">Spin&lt;Symmetry_, spin_index&gt;::Spin</a>(std::size_t D_input)</div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>    : <a class="code hl_class" href="classD.html">D</a>(D_input)</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>    : D(D_input)</div>
 <div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>{</div>
 <div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>    <span class="comment">// create basis for one spin site</span></div>
 <div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>    <a class="code hl_function" href="classXped_1_1Spin.html#a7f4cc230694991b64dca474a75117e96">fill_basis</a>();</div>
@@ -235,10 +235,10 @@ $(document).ready(function(){initNavTree('Spin_8hpp_source.html',''); initResiza
 <div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>    <a class="code hl_class" href="structXped_1_1SiteOperator.html">OperatorType</a> Sbase = <a class="code hl_class" href="structXped_1_1SiteOperator.html">OperatorType</a>(getQ(SPINOP_LABEL::SP), basis_1s_, labels);</div>
 <div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>    Sbase.<a class="code hl_function" href="structXped_1_1SiteOperator.html#a6e30ed7833611546f407a75c3f64d4ae">setZero</a>();</div>
 <div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span> </div>
-<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>    <span class="keywordtype">double</span> S = 0.5 * (<a class="code hl_class" href="classD.html">D</a> - 1);</div>
-<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>    std::size_t Sx2 = <a class="code hl_class" href="classD.html">D</a> - 1;</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>    <span class="keywordtype">double</span> S = 0.5 * (D - 1);</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>    std::size_t Sx2 = D - 1;</div>
 <div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span> </div>
-<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>    <span class="keywordflow">for</span>(std::size_t i = 0; i &lt; <a class="code hl_class" href="classD.html">D</a> - 1; ++i) {</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>    <span class="keywordflow">for</span>(std::size_t i = 0; i &lt; D - 1; ++i) {</div>
 <div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>        <span class="keywordtype">int</span> Q = -<span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(Sx2) + 2 * <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(i);</div>
 <div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>        <span class="keywordtype">double</span> m = -S + <span class="keyword">static_cast&lt;</span><span class="keywordtype">double</span><span class="keyword">&gt;</span>(i);</div>
 <div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>        Sbase(std::to_string(Q + 2), std::to_string(Q)) = 0.5 * sqrt(S * (S + 1.) - m * (m + 1.));</div>
@@ -299,20 +299,20 @@ $(document).ready(function(){initNavTree('Spin_8hpp_source.html',''); initResiza
 <div class="line"><a id="l00186" name="l00186"></a><span class="lineno"><a class="line" href="classXped_1_1Spin.html#a7f4cc230694991b64dca474a75117e96">  186</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classXped_1_1Spin.html#a7f4cc230694991b64dca474a75117e96">Spin&lt;Symmetry_, spin_index&gt;::fill_basis</a>()</div>
 <div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>{</div>
 <div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>    <span class="comment">// double S = 0.5 * (D - 1);</span></div>
-<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>    std::size_t Sx2 = <a class="code hl_class" href="classD.html">D</a> - 1;</div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>    std::size_t Sx2 = D - 1;</div>
 <div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>    <span class="keyword">typename</span> Symmetry::qType Q = Symmetry::qvacuum();</div>
 <div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span> </div>
 <div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>    <span class="keywordflow">if</span> <span class="keyword">constexpr</span>(Symmetry::ALL_IS_TRIVIAL) {</div>
-<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>        basis_1s_.push_back(Q, <a class="code hl_class" href="classD.html">D</a>);</div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>        basis_1s_.push_back(Q, D);</div>
 <div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>        <span class="comment">// for(int i = D - 1; i &gt;= 0; --i) {</span></div>
-<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>        <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i = 0; i &lt; <a class="code hl_class" href="classD.html">D</a>; ++i) {</div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>        <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i = 0; i &lt; D; ++i) {</div>
 <div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>            <span class="keywordtype">int</span> Qint = -<span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(Sx2) + 2 * <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(i);</div>
 <div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>            labels.insert(std::make_pair(std::to_string(Qint), std::make_pair(Q, i)));</div>
 <div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>        }</div>
 <div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>    } <span class="keywordflow">else</span> <span class="keywordflow">if</span> <span class="keyword">constexpr</span>(Symmetry::IS_SPIN[spin_index]) {</div>
-<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>        assert(<a class="code hl_class" href="classD.html">D</a> &gt;= 1);</div>
+<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>        assert(D &gt;= 1);</div>
 <div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span>        <span class="comment">// for(int i = D - 1; i &gt;= 0; --i) {</span></div>
-<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>        <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i = 0; i &lt; <a class="code hl_class" href="classD.html">D</a>; ++i) {</div>
+<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>        <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i = 0; i &lt; D; ++i) {</div>
 <div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>            <span class="keywordtype">int</span> Qint = -<span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(Sx2) + 2 * <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(i);</div>
 <div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>            Q[spin_index] = Symmetry::IS_MODULAR[spin_index] ? util::constFct::posmod&lt;Symmetry::MOD_N[spin_index]&gt;(Qint) : Qint;</div>
 <div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>            labels.insert(std::make_pair(std::to_string(Qint), std::make_pair(Q, basis_1s_.inner_dim(Q))));</div>
@@ -320,9 +320,9 @@ $(document).ready(function(){initNavTree('Spin_8hpp_source.html',''); initResiza
 <div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>        }</div>
 <div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span>        basis_1s_.sort();</div>
 <div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>    } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>        basis_1s_.push_back(Q, <a class="code hl_class" href="classD.html">D</a>);</div>
+<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>        basis_1s_.push_back(Q, D);</div>
 <div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>        <span class="comment">// for(int i = D - 1; i &gt;= 0; --i) {</span></div>
-<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>        <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i = 0; i &lt; <a class="code hl_class" href="classD.html">D</a>; ++i) {</div>
+<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>        <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i = 0; i &lt; D; ++i) {</div>
 <div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>            <span class="keywordtype">int</span> Qint = -<span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(Sx2) + 2 * <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(i);</div>
 <div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>            labels.insert(std::make_pair(std::to_string(Qint), std::make_pair(Q, i)));</div>
 <div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>        }</div>
@@ -360,7 +360,6 @@ $(document).ready(function(){initNavTree('Spin_8hpp_source.html',''); initResiza
 <div class="ttc" id="aSpinOp_8hpp_html"><div class="ttname"><a href="SpinOp_8hpp.html">SpinOp.hpp</a></div></div>
 <div class="ttc" id="aU0_8hpp_html"><div class="ttname"><a href="U0_8hpp.html">U0.hpp</a></div></div>
 <div class="ttc" id="aU1_8hpp_html"><div class="ttname"><a href="U1_8hpp.html">U1.hpp</a></div></div>
-<div class="ttc" id="aclassD_html"><div class="ttname"><a href="classD.html">D</a></div><div class="ttdef"><b>Definition:</b> diagrams_d.h:6</div></div>
 <div class="ttc" id="aclassXped_1_1Qbasis_html"><div class="ttname"><a href="classXped_1_1Qbasis.html">Xped::Qbasis</a></div><div class="ttdef"><b>Definition:</b> Qbasis.hpp:39</div></div>
 <div class="ttc" id="aclassXped_1_1Spin_html"><div class="ttname"><a href="classXped_1_1Spin.html">Xped::Spin</a></div><div class="ttdef"><b>Definition:</b> Spin.hpp:16</div></div>
 <div class="ttc" id="aclassXped_1_1Spin_html_a0b7d5128acfa9e425c04c6c4e135fe89"><div class="ttname"><a href="classXped_1_1Spin.html#a0b7d5128acfa9e425c04c6c4e135fe89">Xped::Spin::F_1s</a></div><div class="ttdeci">OperatorType F_1s() const</div><div class="ttdef"><b>Definition:</b> Spin.hpp:28</div></div>

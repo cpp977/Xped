@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['kind_0',['KIND',['../namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84ab',1,'Xped::Sym']]],
-  ['kind_1',['Kind',['../namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b',1,'Xped']]]
+  ['sub_5flattice_0',['SUB_LATTICE',['../namespaceXped.html#a1a42291ac6ae035396572192799b58bb',1,'Xped']]]
 ];

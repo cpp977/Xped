@@ -1,7 +1,6 @@
 <map id="Xped::OneSiteObservable::toFile" name="Xped::OneSiteObservable::toFile">
-<area shape="rect" id="node1" title=" " alt="" coords="5,65,193,105"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,35,193,75"/>
 <area shape="rect" id="node2" href="$structXped_1_1TMatrix.html#a7109de5a3ee56bc260b4701614568b47" title=" " alt="" coords="241,35,457,75"/>
-<area shape="rect" id="node6" href="$structcmd_8h.html#af2a3ea719b83f672637febdd87c36c36" title="Writes count bytes from buf to the filedescriptor fd." alt="" coords="322,100,377,125"/>
 <area shape="rect" id="node3" href="$structXped_1_1Pattern.html#aa4972132b5e98496d7446a3a4929cbd8" title=" " alt="" coords="533,5,675,31"/>
 <area shape="rect" id="node4" href="$structXped_1_1Pattern.html#ab0d81d5406b7e376e5989f849ee70eb8" title=" " alt="" coords="505,79,703,104"/>
 <area shape="rect" id="node5" href="$structXped_1_1Pattern.html#a0c4bad3f4e541d6884540022e8b9aaf4" title=" " alt="" coords="751,79,904,104"/>

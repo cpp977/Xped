@@ -141,7 +141,7 @@ T: \mathbb{C}^{dim_\mathcal{D}} \to \mathbb{C}^{dim_\mathcal{C}}
 <p> This map can be represented by a matrix which will be useful when storing the tensor in memory.</p>
 <h2><a class="anchor" id="autotoc_md3"></a>
 Symmetric tensor</h2>
-<p><a class="el" href="classA.html">A</a> symmetric tensor is a tensor which <em>respects</em> a given symmetry. To formalize this, lets assume a symmetry described by a group \(G\). \(G\) is represented on all individual vector spaces of the domain by \(\mathcal{R}^i_G\) and codomain by \(\mathcal{Q}^i_G\) of a tensor. Then a tensor \(T\) is symmetric if:  </p><p class="formulaDsp">
+<p>A symmetric tensor is a tensor which <em>respects</em> a given symmetry. To formalize this, lets assume a symmetry described by a group \(G\). \(G\) is represented on all individual vector spaces of the domain by \(\mathcal{R}^i_G\) and codomain by \(\mathcal{Q}^i_G\) of a tensor. Then a tensor \(T\) is symmetric if:  </p><p class="formulaDsp">
 \[
     T(v_1\otimes\cdots\otimes v_d) = \mathcal{Q}^1_G\otimes\cdots\otimes \mathcal{Q}^c_G\left( T(\mathcal{R}^1_G(v_1)\otimes\cdots\otimes \mathcal{R}^d_G(v_d))\right)
 \]
@@ -149,7 +149,7 @@ Symmetric tensor</h2>
 <p> That means the action of the tensor stays the same when the symmetry acts on the individual spaces. If the tensor is transformed with the isomorphisms \(\pi_\mathcal{D}\) and \(\pi_\mathcal{C}\) it becomes an ordinary linear map. Then Schur's lemma (<a href="https://en.wikipedia.org/wiki/Schur%27s_lemma" title="Schur&apos;s lemma">wikipedia</a>) implies that this map is a constant if the composite representation of the symmetry on domain and codomain is irreducible. Generally, it will be reducible but may be decomposed into a direct sum of irreducible representations (irreps). The underlying matrix becomes then block diagonal.</p>
 <h3><a class="anchor" id="autotoc_md4"></a>
 Construction of isomorphism</h3>
-<p>The block diagonal form of the underlying matrix is only manifest if the isomorphism \(\pi_\mathcal{D}\) maps to a basis which is the decomposed into the direct sum of irreps. Hence, the crucial task is to find an appropriate isomorphism. <a class="el" href="classA.html">A</a> straight-forward method for obtaining \(\pi_\mathcal{D}\) is the use of fusion trees which perform the mapping by a sequential pairwise fusion of two vector spaces into their product state. For a given binary fusion of two spaces, the Clebsch-Gordan expansion is used to find the decomposition of the product state into irreps. Each intermediate space is then combined with next unpaired space until all spaces are combined to the final domain/codomain of the tensor. It is important to store all the intermediate quantum numbers since for general symmetries, several different paths exist which lead to the same output. An example fusion tree of four quantum numbers \(q_1,\dots,q_4\) coupled to \(q_f\) looks as follows: </p><div class="dotgraph">
+<p>The block diagonal form of the underlying matrix is only manifest if the isomorphism \(\pi_\mathcal{D}\) maps to a basis which is the decomposed into the direct sum of irreps. Hence, the crucial task is to find an appropriate isomorphism. A straight-forward method for obtaining \(\pi_\mathcal{D}\) is the use of fusion trees which perform the mapping by a sequential pairwise fusion of two vector spaces into their product state. For a given binary fusion of two spaces, the Clebsch-Gordan expansion is used to find the decomposition of the product state into irreps. Each intermediate space is then combined with next unpaired space until all spaces are combined to the final domain/codomain of the tensor. It is important to store all the intermediate quantum numbers since for general symmetries, several different paths exist which lead to the same output. An example fusion tree of four quantum numbers \(q_1,\dots,q_4\) coupled to \(q_f\) looks as follows: </p><div class="dotgraph">
 <img src="dot_inline_dotgraph_1.png" alt="dot_inline_dotgraph_1.png" border="0" usemap="#dot_inline_dotgraph_1.map"/>
 <div class="caption">
 Example of a canonical fusion tree</div>
@@ -158,22 +158,22 @@ Example of a canonical fusion tree</div>
 <p>The fusion trees construct the isomorphisms \(\pi_\mathcal{D}\) and \(\pi_\mathcal{C}\). </p><dl class="section note"><dt>Note</dt><dd>The isomorphisms \(\pi_\mathcal{D}\) and \(\pi_\mathcal{C}\) are not constructed explicitly but only implicitly by storing all fusion trees.</dd></dl>
 <h2><a class="anchor" id="autotoc_md5"></a>
 Tensor operations</h2>
-<p>For tensor network related algorithms, several tensor operations are ubiquitous. One needs to contract tensors together to obtain final results or needs to decompose a tensor with a singular value decomposition to truncate certain bonds in the network. <a class="el" href="classA.html">A</a> fundamental operation is the permutation of the legs of an individual tensor. It is needed for other high-level operations.</p>
+<p>For tensor network related algorithms, several tensor operations are ubiquitous. One needs to contract tensors together to obtain final results or needs to decompose a tensor with a singular value decomposition to truncate certain bonds in the network. A fundamental operation is the permutation of the legs of an individual tensor. It is needed for other high-level operations.</p>
 <h3><a class="anchor" id="autotoc_md6"></a>
 Permutations</h3>
-<p><a class="el" href="classA.html">A</a> permutation is a reshuffling of the individual legs of the tensor. This corresponds to a reordering of the individual vector spaces which form \(\mathcal{D}\) and \(\mathcal{C}\). For nonsymmetric tensors, this can be achieved by choosing appropriate new isomorphisms \(\pi_\mathcal{D}^\prime\) and \(\pi_\mathcal{C}^\prime\) such that the permuted input is mapped to the correct state. This leads to a new view to the original data which can be left untouched. However, the data layout becomes strided and noncontiguous. For some operations, it is therefore more efficient to copy the underlying data so that the layout is again contiguous.</p>
-<p>In the case of symmetric tensors, the situation is more complicated. <a class="el" href="classA.html">A</a> permutation requires a reordering of the incoming legs of the fusion trees. If the incoming legs are shuffled, the resultant fusion tree is not canonical anymore and therefore not useful for further operations which expects a canonical fusion tree. In order to get the reordered fusion tree in canonical form, one needs the recoupling symbols \(F\) of the symmetry group \(G\). </p><div class="dotgraph">
+<p>A permutation is a reshuffling of the individual legs of the tensor. This corresponds to a reordering of the individual vector spaces which form \(\mathcal{D}\) and \(\mathcal{C}\). For nonsymmetric tensors, this can be achieved by choosing appropriate new isomorphisms \(\pi_\mathcal{D}^\prime\) and \(\pi_\mathcal{C}^\prime\) such that the permuted input is mapped to the correct state. This leads to a new view to the original data which can be left untouched. However, the data layout becomes strided and noncontiguous. For some operations, it is therefore more efficient to copy the underlying data so that the layout is again contiguous.</p>
+<p>In the case of symmetric tensors, the situation is more complicated. A permutation requires a reordering of the incoming legs of the fusion trees. If the incoming legs are shuffled, the resultant fusion tree is not canonical anymore and therefore not useful for further operations which expects a canonical fusion tree. In order to get the reordered fusion tree in canonical form, one needs the recoupling symbols \(F\) of the symmetry group \(G\). </p><div class="dotgraph">
 <img src="dot_inline_dotgraph_2.png" alt="dot_inline_dotgraph_2.png" border="0" usemap="#dot_inline_dotgraph_2.map"/>
 <div class="caption">
 Recoupling symbols</div>
 </div>
 <p> The sum goes over all possible intermediate quantum numbers \(q_{23}\) and in the case of outermultiplicity also over \(\gamma\) and \(\delta\). The recoupling symbols define a unitary transformation between the composite spaces of different fusion orders. They are entirely determined by the Clebsch Gordan coefficients.</p>
 <p>To obtain the reordered fusion tree in canonical form, one needs a second basis operation which exchanges two incoming quantum numbers on the same node. This operations involves the swap symbol for the group.</p>
-<p>With these two operations, one can implement arbitrary permutations on a single fusion tree. <a class="el" href="classA.html">A</a> tensor consists of two fusion trees, one for the domain and one for the codomain. For permutations which shuffle across the domain and codomain, a third basic operation is needed. This involves the bending of a line pointing inwards to pointing outwards and is quantified by the turn symbol of the group.</p>
+<p>With these two operations, one can implement arbitrary permutations on a single fusion tree. A tensor consists of two fusion trees, one for the domain and one for the codomain. For permutations which shuffle across the domain and codomain, a third basic operation is needed. This involves the bending of a line pointing inwards to pointing outwards and is quantified by the turn symbol of the group.</p>
 <p>The permutation of the legs of a symmetric tensor is then performed by first permuting the fusion tree pair (consisting of domain tree and codomain tree) and second by assigning the old data to the new tensor with careful attention to the recoupling-, swap- and turn symbols.</p>
 <h3><a class="anchor" id="autotoc_md7"></a>
 Contractions</h3>
-<p><a class="el" href="classA.html">A</a> tensor contraction boils down to the composition of the associated maps. I.e., if \(T_1: \mathcal{D}\to\mathcal{I}\) and \(T_2: \mathcal{I}\to\mathcal{C}\) than the contraction \(T\) of \(T_1\) and \(T_2\) over all the elementary spaces in \(\mathcal{I}\) is the composition:  </p><p class="formulaDsp">
+<p>A tensor contraction boils down to the composition of the associated maps. I.e., if \(T_1: \mathcal{D}\to\mathcal{I}\) and \(T_2: \mathcal{I}\to\mathcal{C}\) than the contraction \(T\) of \(T_1\) and \(T_2\) over all the elementary spaces in \(\mathcal{I}\) is the composition:  </p><p class="formulaDsp">
 \[
     T = T_2 \circ T_1
 \]
@@ -182,7 +182,7 @@ Contractions</h3>
 <p>In the generic case, the indices of a tensor which should be contracted with indices of another tensor are located in its codomain. Therefore one has to permute the indices of both tensors so that an ordinary composition performs the contraction. After the composition, another permute might bring the indices in the desired order for the final result.</p>
 <h3><a class="anchor" id="autotoc_md8"></a>
 Decompositions</h3>
-<p><a class="el" href="classA.html">A</a> tensor decomposition can be seen as the inverse operation to a contraction. Because of that it can be handled similarly. An often encountered decomposition is the singular value decomposition (<a href="https://en.wikipedia.org/wiki/Singular_value_decomposition" title="singular value decomposition">svd</a>). It can be applied to any linear map. Hence, the tensor is again interpreted as an ordinary linear map with the help of the isomorphisms \(\pi_\mathcal{D}\) and \(\pi_\mathcal{C}\). Then, the svd reads:  </p><p class="formulaDsp">
+<p>A tensor decomposition can be seen as the inverse operation to a contraction. Because of that it can be handled similarly. An often encountered decomposition is the singular value decomposition (<a href="https://en.wikipedia.org/wiki/Singular_value_decomposition" title="singular value decomposition">svd</a>). It can be applied to any linear map. Hence, the tensor is again interpreted as an ordinary linear map with the help of the isomorphisms \(\pi_\mathcal{D}\) and \(\pi_\mathcal{C}\). Then, the svd reads:  </p><p class="formulaDsp">
 \[
     T = U \Sigma V^\dagger
 \]
@@ -197,7 +197,7 @@ Quick tour</h2>
 <div class="line"> </div>
 <div class="line"><span class="preprocessor">#include &quot;<a class="code" href="Tensor_8hpp.html">Xped/Core/Tensor.hpp</a>&quot;</span></div>
 <div class="line"> </div>
-<div class="line"><span class="keywordtype">int</span> <a class="code hl_function" href="example__test_8cpp.html#acdef7a1fd863a6d3770c1268cb06add3">main</a>()</div>
+<div class="line"><span class="keywordtype">int</span> <a class="code hl_function" href="bench_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97">main</a>()</div>
 <div class="line">{</div>
 <div class="line">    <span class="comment">// Make an alias for the symmetry. In this case a U1 symmetry for a spin.</span></div>
 <div class="line">    <span class="keyword">using </span>Symmetry = <a class="code hl_class" href="structXped_1_1Sym_1_1U1.html">Xped::Sym::U1&lt;Xped::Sym::Spin&gt;</a>;</div>
@@ -241,11 +241,11 @@ Quick tour</h2>
 <div class="line">    <span class="keyword">static_assert</span>(std::is_same_v&lt;<span class="keyword">decltype</span>(res), <a class="code hl_class" href="classXped_1_1Tensor.html">Xped::Tensor&lt;double, 2, 2, Symmetry&gt;</a>&gt;);</div>
 <div class="line">}</div>
 <div class="ttc" id="aTensor_8hpp_html"><div class="ttname"><a href="Tensor_8hpp.html">Tensor.hpp</a></div></div>
+<div class="ttc" id="abench_8cpp_html_a0ddf1224851353fc92bfbff6f499fa97"><div class="ttname"><a href="bench_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97">main</a></div><div class="ttdeci">int main(int argc, char *argv[])</div><div class="ttdef"><b>Definition:</b> bench.cpp:102</div></div>
 <div class="ttc" id="aclassXped_1_1Qbasis_html"><div class="ttname"><a href="classXped_1_1Qbasis.html">Xped::Qbasis</a></div><div class="ttdef"><b>Definition:</b> Qbasis.hpp:39</div></div>
 <div class="ttc" id="aclassXped_1_1Qbasis_html_a519e3bf1621c23e0334d5c4528b43a2d"><div class="ttname"><a href="classXped_1_1Qbasis.html#a519e3bf1621c23e0334d5c4528b43a2d">Xped::Qbasis::setRandom</a></div><div class="ttdeci">void setRandom(const std::size_t &amp;fullSize, const std::size_t &amp;max_sectorSize=5ul)</div><div class="ttdef"><b>Definition:</b> Qbasis.cpp:91</div></div>
 <div class="ttc" id="aclassXped_1_1Qbasis_html_aae178998f636f909aba92a11323582f7"><div class="ttname"><a href="classXped_1_1Qbasis.html#aae178998f636f909aba92a11323582f7">Xped::Qbasis::combine</a></div><div class="ttdeci">Qbasis&lt; Symmetry, depth+1, AllocationPolicy &gt; combine(const Qbasis&lt; Symmetry, 1, AllocationPolicy &gt; &amp;other, bool CONJ=false) const</div><div class="ttdef"><b>Definition:</b> Qbasis.cpp:439</div></div>
 <div class="ttc" id="aclassXped_1_1Tensor_html"><div class="ttname"><a href="classXped_1_1Tensor.html">Xped::Tensor</a></div><div class="ttdef"><b>Definition:</b> Tensor.hpp:40</div></div>
-<div class="ttc" id="aexample__test_8cpp_html_acdef7a1fd863a6d3770c1268cb06add3"><div class="ttname"><a href="example__test_8cpp.html#acdef7a1fd863a6d3770c1268cb06add3">main</a></div><div class="ttdeci">void main()</div><div class="ttdef"><b>Definition:</b> example_test.cpp:1</div></div>
 <div class="ttc" id="anamespaceXped_1_1Sym_html_a1272055ec37ad506c47b5e25781d84aba6d8846f6e78baf0163ffcaabdbb22982"><div class="ttname"><a href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84aba6d8846f6e78baf0163ffcaabdbb22982">Xped::Sym::T</a></div><div class="ttdeci">@ T</div><div class="ttdef"><b>Definition:</b> functions.hpp:35</div></div>
 <div class="ttc" id="anamespaceXped_1_1Sym_html_a1272055ec37ad506c47b5e25781d84abac5810691187df1b8aee980c45652d9da"><div class="ttname"><a href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abac5810691187df1b8aee980c45652d9da">Xped::Sym::S</a></div><div class="ttdeci">@ S</div><div class="ttdef"><b>Definition:</b> functions.hpp:33</div></div>
 <div class="ttc" id="astructXped_1_1Sym_1_1U1_html"><div class="ttname"><a href="structXped_1_1Sym_1_1U1.html">Xped::Sym::U1</a></div><div class="ttdef"><b>Definition:</b> U1.hpp:39</div></div>
@@ -311,24 +311,24 @@ Hilbert bases</h2>
 </div><!-- fragment --><p> This class stores a basis which is properly sorted with respect to a given <code>Symmetry</code>, i.e. it contains several multiplets of the symmetry. Furthermore, the basis can be a composite basis of several individual bases. This is controlled via the template parameter <code>depth</code>. To handle the composition, <code>Qbasis</code> uses <code>FusionTree</code> to remember the exact fusion process. Generally, bases are constructed with <code>depth=1</code> and composite bases are obtained using the method <code><a class="el" href="classXped_1_1Qbasis.html#aae178998f636f909aba92a11323582f7">Xped::Qbasis::combine()</a></code>.</p>
 <p>The most important member of <code>Qbasis</code> is: </p><div class="fragment"><div class="line">std::vector&lt;std::tuple&lt;qType, std::size_t, Xped::Basis&gt;&gt; data_;</div>
 </div><!-- fragment --><p> The actual type is more complicated because of <code>AllocationPolicy</code> but this does not matter here. Each entry of <code>data_</code> corresponds to a quantum number of type <code>qType</code> (first entry in the <code>tuple</code>). For each quantum number, the global number of the first plain state corresponds to the second element in the <code>tuple</code>. The third element of the <code>tuple</code> belongs to the plain basis states of this quantum number. The plain basis state are described by the simple <code>class <a class="el" href="classXped_1_1Basis.html">Xped::Basis</a></code>.</p>
-<p><a class="el" href="classA.html">A</a> few lines of code illustrate the use of the class: </p><div class="fragment"><div class="line"><span class="preprocessor">#include &lt;type_traits&gt;</span></div>
+<p>A few lines of code illustrate the use of the class: </p><div class="fragment"><div class="line"><span class="preprocessor">#include &lt;type_traits&gt;</span></div>
 <div class="line"> </div>
 <div class="line"><span class="preprocessor">#include &quot;<a class="code" href="Qbasis_8hpp.html">Xped/Core/Qbasis.hpp</a>&quot;</span></div>
 <div class="line"> </div>
-<div class="line"><span class="keywordtype">int</span> <a class="code hl_function" href="example__test_8cpp.html#acdef7a1fd863a6d3770c1268cb06add3">main</a>()</div>
+<div class="line"><span class="keywordtype">int</span> <a class="code hl_function" href="bench_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97">main</a>()</div>
 <div class="line">{</div>
 <div class="line">    <span class="keyword">using </span>Symmetry = <a class="code hl_class" href="structXped_1_1Sym_1_1SU2.html">Xped::Sym::SU2&lt;Xped::Kind::Spin&gt;</a>;</div>
 <div class="line"> </div>
-<div class="line">    <a class="code hl_class" href="classXped_1_1Qbasis.html">Xped::Qbasis&lt;Symmetry, 1&gt;</a> <a class="code hl_define" href="memgrp_8cpp.html#a7ddc550b157ed6f8db58e462b504ab0f">B</a>;</div>
+<div class="line">    <a class="code hl_class" href="classXped_1_1Qbasis.html">Xped::Qbasis&lt;Symmetry, 1&gt;</a> <a class="code hl_enumvalue" href="namespaceXped.html#a1a42291ac6ae035396572192799b58bbaa97b30e7f1891ad7527678439846f88f">B</a>;</div>
 <div class="line">    <span class="comment">// Add two states with spin 1/2 and one state with spin 3 into the basis.</span></div>
-<div class="line">    <a class="code hl_class" href="classB.html">B</a>.push_back({2}, 2); <span class="comment">// One has to use D=2s+1</span></div>
-<div class="line">    <a class="code hl_class" href="classB.html">B</a>.push_back({7}, 1);</div>
+<div class="line">    <a class="code hl_enumvalue" href="namespaceXped.html#a1a42291ac6ae035396572192799b58bbaa97b30e7f1891ad7527678439846f88f">B</a>.push_back({2}, 2); <span class="comment">// One has to use D=2s+1</span></div>
+<div class="line">    <a class="code hl_enumvalue" href="namespaceXped.html#a1a42291ac6ae035396572192799b58bbaa97b30e7f1891ad7527678439846f88f">B</a>.push_back({7}, 1);</div>
 <div class="line"> </div>
 <div class="line">    <span class="comment">// Print the basis (it has three multiplets with a total dimension of 11 states)</span></div>
-<div class="line">    <a class="code hl_function" href="namespaceXped_1_1Log.html#af5d366fa6265d9d60c4cb512ff96ccda">Log::debug</a>(<span class="stringliteral">&quot;{}&quot;</span>, <a class="code hl_class" href="classB.html">B</a>.print()); <span class="comment">// Basis(SU₂, dim=3[11]): q=1/2[2], q=3[1]</span></div>
+<div class="line">    <a class="code hl_function" href="namespaceXped_1_1Log.html#af5d366fa6265d9d60c4cb512ff96ccda">Log::debug</a>(<span class="stringliteral">&quot;{}&quot;</span>, <a class="code hl_enumvalue" href="namespaceXped.html#a1a42291ac6ae035396572192799b58bbaa97b30e7f1891ad7527678439846f88f">B</a>.print()); <span class="comment">// Basis(SU₂, dim=3[11]): q=1/2[2], q=3[1]</span></div>
 <div class="line"> </div>
 <div class="line">    <span class="comment">// Qbasis objects can be combined into a product basis</span></div>
-<div class="line">    <span class="keyword">auto</span> Bsq = <a class="code hl_class" href="classB.html">B</a>.combine(<a class="code hl_class" href="classB.html">B</a>);</div>
+<div class="line">    <span class="keyword">auto</span> Bsq = <a class="code hl_enumvalue" href="namespaceXped.html#a1a42291ac6ae035396572192799b58bbaa97b30e7f1891ad7527678439846f88f">B</a>.combine(<a class="code hl_enumvalue" href="namespaceXped.html#a1a42291ac6ae035396572192799b58bbaa97b30e7f1891ad7527678439846f88f">B</a>);</div>
 <div class="line">    <a class="code hl_function" href="namespaceXped_1_1Log.html#af5d366fa6265d9d60c4cb512ff96ccda">Log::debug</a>(<span class="stringliteral">&quot;Squared: {}&quot;</span>,</div>
 <div class="line">               Bsq.print()); <span class="comment">// Squared: Basis(SU₂, dim=23[121]): q=0[5], q=1[5], q=2[1], q=5/2[4], q=3[1], q=7/2[4], q=4[1], q=5[1], q=6[1]</span></div>
 <div class="line">    <span class="keyword">static_assert</span>(std::is_same_v&lt;<span class="keyword">decltype</span>(Bsq), Qbasis&lt;Symmetry, 2&gt;&gt;); <span class="comment">// Bsq has depth 2 because it is the result of a combination of two bases</span></div>
@@ -356,11 +356,10 @@ Hilbert bases</h2>
 <div class="line">    Bsq.clear();</div>
 <div class="line">}</div>
 <div class="ttc" id="aQbasis_8hpp_html"><div class="ttname"><a href="Qbasis_8hpp.html">Qbasis.hpp</a></div></div>
-<div class="ttc" id="aclassB_html"><div class="ttname"><a href="classB.html">B</a></div><div class="ttdef"><b>Definition:</b> diagrams_b.h:4</div></div>
-<div class="ttc" id="amemgrp_8cpp_html_a7ddc550b157ed6f8db58e462b504ab0f"><div class="ttname"><a href="memgrp_8cpp.html#a7ddc550b157ed6f8db58e462b504ab0f">B</a></div><div class="ttdeci">#define B</div><div class="ttdef"><b>Definition:</b> memgrp.cpp:39</div></div>
 <div class="ttc" id="anamespaceXped_1_1Log_html_af5d366fa6265d9d60c4cb512ff96ccda"><div class="ttname"><a href="namespaceXped_1_1Log.html#af5d366fa6265d9d60c4cb512ff96ccda">Xped::Log::debug</a></div><div class="ttdeci">constexpr void debug(Verbosity policy, Args &amp;&amp;... args)</div><div class="ttdef"><b>Definition:</b> Logging.hpp:120</div></div>
+<div class="ttc" id="anamespaceXped_html_a1a42291ac6ae035396572192799b58bbaa97b30e7f1891ad7527678439846f88f"><div class="ttname"><a href="namespaceXped.html#a1a42291ac6ae035396572192799b58bbaa97b30e7f1891ad7527678439846f88f">Xped::B</a></div><div class="ttdeci">@ B</div><div class="ttdef"><b>Definition:</b> SubLattice.hpp:11</div></div>
 <div class="ttc" id="astructXped_1_1Sym_1_1SU2_html"><div class="ttname"><a href="structXped_1_1Sym_1_1SU2.html">Xped::Sym::SU2</a></div><div class="ttdef"><b>Definition:</b> SU2.hpp:43</div></div>
-</div><!-- fragment --><p>One of the key methods of <code>Qbasis</code> are <code><a class="el" href="classXped_1_1Qbasis.html#a6f0525bceb581d19235cba8142b7fd0b">Xped::Qbasis::leftOffset()</a></code> and <code><a class="el" href="classXped_1_1Qbasis.html#ab14a8417792f1f2a7acebbd9072ff9b7">Xped::Qbasis::rightOffset()</a></code>. If several bases are combined into a composite basis, each basis state in the composite basis belongs to a specific fusion. <a class="el" href="classA.html">A</a> rigorous order of all the fused states with same quantum number is fundamental to construct the isomorphism \(\pi_\mathcal{D}\). The exact signature of <code>leftOffset()</code> is: </p><div class="fragment"><div class="line">std::size_t <a class="code hl_function" href="classXped_1_1Qbasis.html#a6f0525bceb581d19235cba8142b7fd0b">leftOffset</a>(<span class="keyword">const</span> FusionTree&lt;Symmetry, depth&gt;&amp; <a class="code hl_function" href="classXped_1_1Qbasis.html#a96f8b91e4b29cc52df12b1117cef8827">tree</a>) <span class="keyword">const</span>;</div>
+</div><!-- fragment --><p>One of the key methods of <code>Qbasis</code> are <code><a class="el" href="classXped_1_1Qbasis.html#a6f0525bceb581d19235cba8142b7fd0b">Xped::Qbasis::leftOffset()</a></code> and <code><a class="el" href="classXped_1_1Qbasis.html#ab14a8417792f1f2a7acebbd9072ff9b7">Xped::Qbasis::rightOffset()</a></code>. If several bases are combined into a composite basis, each basis state in the composite basis belongs to a specific fusion. A rigorous order of all the fused states with same quantum number is fundamental to construct the isomorphism \(\pi_\mathcal{D}\). The exact signature of <code>leftOffset()</code> is: </p><div class="fragment"><div class="line">std::size_t <a class="code hl_function" href="classXped_1_1Qbasis.html#a6f0525bceb581d19235cba8142b7fd0b">leftOffset</a>(<span class="keyword">const</span> FusionTree&lt;Symmetry, depth&gt;&amp; <a class="code hl_function" href="classXped_1_1Qbasis.html#a96f8b91e4b29cc52df12b1117cef8827">tree</a>) <span class="keyword">const</span>;</div>
 <div class="ttc" id="aclassXped_1_1Qbasis_html_a6f0525bceb581d19235cba8142b7fd0b"><div class="ttname"><a href="classXped_1_1Qbasis.html#a6f0525bceb581d19235cba8142b7fd0b">Xped::Qbasis::leftOffset</a></div><div class="ttdeci">size_t leftOffset(const FusionTree&lt; depth, Symmetry &gt; &amp;tree, const std::array&lt; size_t, depth &gt; &amp;plain=std::array&lt; std::size_t, depth &gt;()) const</div><div class="ttdef"><b>Definition:</b> Qbasis.cpp:206</div></div>
 <div class="ttc" id="aclassXped_1_1Qbasis_html_a96f8b91e4b29cc52df12b1117cef8827"><div class="ttname"><a href="classXped_1_1Qbasis.html#a96f8b91e4b29cc52df12b1117cef8827">Xped::Qbasis::tree</a></div><div class="ttdeci">const auto &amp; tree(const qType &amp;q) const</div><div class="ttdef"><b>Definition:</b> Qbasis.hpp:240</div></div>
 </div><!-- fragment --><p> It takes a <code>FusionTree</code> as a parameter and returns the number of basis states which come <em>before</em> this tree. These methods are fundamental for getting tensor views from the large block diagonal matrix which is stored in memory. See the implementation of <code>Xped::Tensor::subBlock()</code>: </p><div class="fragment"><div class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Scalar, std::<span class="keywordtype">size_t</span> Rank, std::<span class="keywordtype">size_t</span> CoRank, <span class="keyword">typename</span> Symmetry, <span class="keyword">typename</span> AllocationPolicy&gt;</div>
@@ -430,7 +429,7 @@ Automatic differentiation</h3>
 <p>The <code>Tensor</code> class supports build in automatic differentiation (AD), i.e. for algorithms build on top of the <code>Tensor</code> class, the derivative can be computed automatically. To declare a tensor with AD support, one needs to set the respective template argument to <code>true</code>. The source code for the AD support for <code>Tensor</code> can be found in <code><a class="el" href="ADTensor_8hpp.html">include/Xped/AD/ADTensor.hpp</a></code> (and not in <code><a class="el" href="Tensor_8hpp.html">Tensor.hpp</a></code> itself). It is an explicit specialization and of the <code>Tensor</code> class template. In order to obtain the AD functionality, core features of the third-party library <a href="https://github.com/stan-dev/math" title="ad library">stan/math</a> are used.</p>
 <p>Let's look at an example usage of the AD functionality: </p><div class="fragment"><div class="line"><span class="preprocessor">#include &quot;Xped/Core/ADTensor.hpp&quot;</span></div>
 <div class="line"> </div>
-<div class="line"><span class="keywordtype">int</span> <a class="code hl_function" href="example__test_8cpp.html#acdef7a1fd863a6d3770c1268cb06add3">main</a>()</div>
+<div class="line"><span class="keywordtype">int</span> <a class="code hl_function" href="bench_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97">main</a>()</div>
 <div class="line">{</div>
 <div class="line">    <span class="keyword">using </span>Symmetry = <a class="code hl_class" href="structXped_1_1Sym_1_1SU2.html">Xped::Sym::SU2&lt;Xped::Sym::Fermion&gt;</a>;</div>
 <div class="line"> </div>
@@ -468,7 +467,7 @@ Eigen</h2>
 <p>The Eigen library also supports the dispatch of fundamental matrix operations to external BLAS and LAPACK implementations. This feature can be used within <a class="el" href="namespaceXped.html">Xped</a> at configuration time using the <code>XPED_USE_BLAS</code> and similar options. If the intel math kernel library should be integrated, one can switch on the parameter <code>XPED_USE_MKL</code>.</p>
 <h2><a class="anchor" id="autotoc_md21"></a>
 Cyclops tensor framework (ctf)</h2>
-<p><a href="https://ctf.org">ctf</a> is a tensor framework for distributed parallelism. This allows the computations to spread over several different compute cores and allows to use the hardware more efficient. It has an overhead for small tensors but allows to scale the compute power with very large tensors.</p>
+<p><a href="https://solomon2.web.engr.illinois.edu/ctf/">ctf</a> is a tensor framework for distributed parallelism. This allows the computations to spread over several different compute cores and allows to use the hardware more efficient. It has an overhead for small tensors but allows to scale the compute power with very large tensors.</p>
 <dl class="section note"><dt>Note</dt><dd>The ctf backend is most useful for tensors without symmetry or with tensors with small internal symmetries.</dd></dl>
 <h2><a class="anchor" id="autotoc_md22"></a>
 array</h2>
@@ -482,7 +481,46 @@ Matrix product states (MPS)</h2>
 <li>Another reference</li>
 </ul>
 <p>The MPS code is located in the directory <code>Xped/MPS</code> and currently provides a <code>class MPS</code> and basic operations for them. An implementation of matrix product operators (MPO)s and algorithms like the density matrix renormalization-group (DMRG) or the time-dependent variational principle (TDVP) are future development goals.</p>
-<p><a class="el" href="classA.html">A</a> small example demonstrates the current capability: </p><div class="fragment"></div><!-- fragment --><h2><a class="anchor" id="autotoc_md25"></a>
+<p>A small example demonstrates the current capability: </p><div class="fragment"><div class="line"><span class="preprocessor">#include &quot;<a class="code" href="Mps_8hpp.html">Xped/MPS/Mps.hpp</a>&quot;</span></div>
+<div class="line"><span class="preprocessor">#include &quot;<a class="code" href="MpsAlgebra_8hpp.html">Xped/MPS/MpsAlgebra.hpp</a>&quot;</span></div>
+<div class="line"> </div>
+<div class="line"><span class="keywordtype">int</span> <a class="code hl_function" href="bench_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97">main</a>()</div>
+<div class="line">{</div>
+<div class="line">    <span class="comment">// Alias for the symmetry</span></div>
+<div class="line">    <span class="keyword">using </span>Symmetry = <a class="code hl_class" href="structXped_1_1Sym_1_1SU2.html">Xped::Sym::SU2&lt;Xped::Sym::SpinSU2&gt;</a>;</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Number of sites in the MPS</span></div>
+<div class="line">    std::size_t L = 100;</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Amount of quantum number blocks</span></div>
+<div class="line">    std::size_t Qinit = 10;</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Amount of basis states per quantum number block</span></div>
+<div class="line">    std::size_t Minit = 100;</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Target quantum number of the MPS</span></div>
+<div class="line">    Symmetry::qType Qtarget = Symmetry::qvacuum();</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// local (physical) basis of the MPS. In this case one spin 1/2</span></div>
+<div class="line">    <a class="code hl_class" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt;Symmetry, <span class="comment">/*depth=*/</span>1&gt; qloc;</div>
+<div class="line">    qloc.<a class="code hl_function" href="classXped_1_1Qbasis.html#a34418f2e9ce5c917d3f3b65688c52249">push_back</a>({2}, 1);</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Contruct the MPS (with random entries)</span></div>
+<div class="line">    <a class="code hl_class" href="classXped_1_1Mps.html">Xped::Mps&lt;double, Symmetry&gt;</a> Psi(L, qloc, Qtot, Minit, Qinit);</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Compute the norm</span></div>
+<div class="line">    <span class="keyword">auto</span> norm = <a class="code hl_function" href="namespaceXped.html#a9836742145802d6aff24f02e0803bd99">Xped::dot</a>(Psi, Psi);</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Sweep from left to put all A-tensors into right-canonical form</span></div>
+<div class="line">    <span class="keywordflow">for</span>(std::size_t l = 0; l &lt; L; ++l) { Psi.rightSweepStep(l, <a class="code hl_enumvalue" href="namespaceXped_1_1DMRG.html#ac8f38d99798200c2df341e7bed9576aea595e2d2f1a68ede96e96f849a85370bc">Xped::DMRG::BROOM::SVD</a>); }</div>
+<div class="line">}</div>
+<div class="ttc" id="aMpsAlgebra_8hpp_html"><div class="ttname"><a href="MpsAlgebra_8hpp.html">MpsAlgebra.hpp</a></div></div>
+<div class="ttc" id="aMps_8hpp_html"><div class="ttname"><a href="Mps_8hpp.html">Mps.hpp</a></div></div>
+<div class="ttc" id="aclassXped_1_1Mps_html"><div class="ttname"><a href="classXped_1_1Mps.html">Xped::Mps</a></div><div class="ttdef"><b>Definition:</b> Mps.hpp:27</div></div>
+<div class="ttc" id="aclassXped_1_1Qbasis_html_a34418f2e9ce5c917d3f3b65688c52249"><div class="ttname"><a href="classXped_1_1Qbasis.html#a34418f2e9ce5c917d3f3b65688c52249">Xped::Qbasis::push_back</a></div><div class="ttdeci">void push_back(const qType &amp;q, const size_t &amp;inner_dim)</div><div class="ttdef"><b>Definition:</b> Qbasis.cpp:32</div></div>
+<div class="ttc" id="anamespaceXped_1_1DMRG_html_ac8f38d99798200c2df341e7bed9576aea595e2d2f1a68ede96e96f849a85370bc"><div class="ttname"><a href="namespaceXped_1_1DMRG.html#ac8f38d99798200c2df341e7bed9576aea595e2d2f1a68ede96e96f849a85370bc">Xped::DMRG::BROOM::SVD</a></div><div class="ttdeci">@ SVD</div></div>
+<div class="ttc" id="anamespaceXped_html_a9836742145802d6aff24f02e0803bd99"><div class="ttname"><a href="namespaceXped.html#a9836742145802d6aff24f02e0803bd99">Xped::dot</a></div><div class="ttdeci">Symmetry::Scalar dot(XPED_CONST Mps&lt; Scalar, Symmetry &gt; &amp;Bra, XPED_CONST Mps&lt; Scalar, Symmetry &gt; &amp;Ket, const DMRG::DIRECTION DIR=DMRG::DIRECTION::RIGHT)</div><div class="ttdef"><b>Definition:</b> MpsAlgebra.cpp:15</div></div>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md25"></a>
 Projected entangled pair states (PEPS)</h2>
 <p>PEPS is a generalization of MPS for two-dimensional systems. For detailed information, check the following references:</p><ul>
 <li>One ref</li>

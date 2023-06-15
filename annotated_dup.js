@@ -1,13 +1,7 @@
 var annotated_dup =
 [
-    [ "docstring", "namespacedocstring.html", [
-      [ "PyClass", "classdocstring_1_1PyClass.html", "classdocstring_1_1PyClass" ]
-    ] ],
     [ "Models", "namespaceModels.html", [
       [ "Heisenberg", "classModels_1_1Heisenberg.html", "classModels_1_1Heisenberg" ]
-    ] ],
-    [ "pyexample", "namespacepyexample.html", [
-      [ "PyClass", "classpyexample_1_1PyClass.html", "classpyexample_1_1PyClass" ]
     ] ],
     [ "Xped", "namespaceXped.html", [
       [ "detail", "namespaceXped_1_1detail.html", [
@@ -145,25 +139,7 @@ var annotated_dup =
       [ "UnitCell", "structXped_1_1UnitCell.html", "structXped_1_1UnitCell" ],
       [ "VectorInterface", "structXped_1_1VectorInterface.html", "structXped_1_1VectorInterface" ]
     ] ],
-    [ "A", "classA.html", "classA" ],
-    [ "Afterdoc_Test", "classAfterdoc__Test.html", "classAfterdoc__Test" ],
-    [ "Autolink_Test", "classAutolink__Test.html", "classAutolink__Test" ],
-    [ "B", "classB.html", "classB" ],
-    [ "C", "classC.html", "classC" ],
-    [ "C1", "classC1.html", null ],
-    [ "C2", "classC2.html", null ],
-    [ "C3", "classC3.html", null ],
-    [ "C4", "classC4.html", null ],
-    [ "C5", "classC5.html", null ],
-    [ "Car", "structCar.html", "structCar" ],
-    [ "CoordStruct", "structCoordStruct.html", "structCoordStruct" ],
-    [ "D", "classD.html", "classD" ],
-    [ "E", "classE.html", null ],
     [ "Empty", "classEmpty.html", null ],
-    [ "Enum_Test", "classEnum__Test.html", "classEnum__Test" ],
-    [ "Example_Test", "classExample__Test.html", "classExample__Test" ],
-    [ "Fn_Test", "classFn__Test.html", "classFn__Test" ],
-    [ "Include_Test", "classInclude__Test.html", "classInclude__Test" ],
     [ "is_arena_tensor", "structis__arena__tensor.html", null ],
     [ "is_arena_tensor< Xped::ArenaTensor< Scalar, Rank, CoRank, Symmetry, false > >", "structis__arena__tensor_3_01Xped_1_1ArenaTensor_3_01Scalar_00_01Rank_00_01CoRank_00_01Symmetry_00_01false_01_4_01_4.html", null ],
     [ "is_arena_tensor_var", "structis__arena__tensor__var.html", null ],
@@ -171,20 +147,5 @@ var annotated_dup =
     [ "is_tensor", "structis__tensor.html", null ],
     [ "is_tensor< Xped::Tensor< Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy > >", "structis__tensor_3_01Xped_1_1Tensor_3_01Scalar_00_01Rank_00_01CoRank_00_01Symmetry_00_01false_00_01AllocationPolicy_01_4_01_4.html", null ],
     [ "is_tensor_var", "structis__tensor__var.html", null ],
-    [ "is_tensor_var< Xped::Tensor< Scalar, Rank, CoRank, Symmetry, true > >", "structis__tensor__var_3_01Xped_1_1Tensor_3_01Scalar_00_01Rank_00_01CoRank_00_01Symmetry_00_01true_01_4_01_4.html", null ],
-    [ "Javadoc_Test", "classJavadoc__Test.html", "classJavadoc__Test" ],
-    [ "Memgrp_Test", "classMemgrp__Test.html", "classMemgrp__Test" ],
-    [ "mux_using_with", "classmux__using__with.html", "classmux__using__with" ],
-    [ "Object", "structObject.html", null ],
-    [ "Overload_Test", "classOverload__Test.html", "classOverload__Test" ],
-    [ "Par_Test", "classPar__Test.html", null ],
-    [ "QTstyle_Test", "classQTstyle__Test.html", "classQTstyle__Test" ],
-    [ "SomeNiceClass", "classSomeNiceClass.html", null ],
-    [ "String", "classString.html", "classString" ],
-    [ "Tag", "classTag.html", "classTag" ],
-    [ "Test", "classTest.html", "classTest" ],
-    [ "Test< T * >", "classTest_3_01T_01_5_01_4.html", "classTest_3_01T_01_5_01_4" ],
-    [ "Test< void *, 200 >", "classTest_3_01void_01_5_00_01200_01_4.html", "classTest_3_01void_01_5_00_01200_01_4" ],
-    [ "Truck", "structTruck.html", "structTruck" ],
-    [ "Vehicle", "structVehicle.html", "structVehicle" ]
+    [ "is_tensor_var< Xped::Tensor< Scalar, Rank, CoRank, Symmetry, true > >", "structis__tensor__var_3_01Xped_1_1Tensor_3_01Scalar_00_01Rank_00_01CoRank_00_01Symmetry_00_01true_01_4_01_4.html", null ]
 ];

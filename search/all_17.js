@@ -1,7 +1,26 @@
 var searchData=
 [
-  ['warning_0',['warning',['../namespaceXped_1_1Log.html#a6435349a81ad74e93b98d68dea5812a4',1,'Xped::Log::warning(Verbosity policy, Args &amp;&amp;... args)'],['../namespaceXped_1_1Log.html#a940b17d1ba5b4a2283e10582a17e27df',1,'Xped::Log::warning(Args &amp;&amp;... args)']]],
-  ['working_5fdirectory_1',['working_directory',['../structXped_1_1Opts_1_1Optim.html#ac0c566cca8f9a55516d9b3fc4a39353e',1,'Xped::Opts::Optim::working_directory()'],['../structXped_1_1Opts_1_1Imag.html#ae2f90da55843f56f3a244f053da6ef0a',1,'Xped::Opts::Imag::working_directory()']]],
-  ['world_2',['world',['../classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#adb514c3c2400b6f44e3abd90345c0ee7',1,'Xped::Tensor&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::world()'],['../classXped_1_1AdjointOp.html#a2acc2d70aa16865a9373bbba2911ff03',1,'Xped::AdjointOp::world()'],['../classXped_1_1BlockUnaryOp.html#abdd2dae1b9ae78c3db9c55506e1c6f9c',1,'Xped::BlockUnaryOp::world()'],['../classXped_1_1CoeffBinaryOp.html#ab6c74edf4f6dc007e2b27d40520d119e',1,'Xped::CoeffBinaryOp::world()'],['../classXped_1_1CoeffUnaryOp.html#ad0226e5326627d60921a7685c2dacd38',1,'Xped::CoeffUnaryOp::world()'],['../classXped_1_1DiagCoeffBinaryOp.html#ab4197bfc6691d32a106102952a903bc0',1,'Xped::DiagCoeffBinaryOp::world()'],['../classXped_1_1DiagCoeffUnaryOp.html#ae94244620bf28bcbf4abb5a77076ea1a',1,'Xped::DiagCoeffUnaryOp::world()'],['../structXped_1_1StorageType.html#a019287d0f27c37031c8255b0e95f601a',1,'Xped::StorageType::world() const'],['../structXped_1_1StorageType.html#a019287d0f27c37031c8255b0e95f601a',1,'Xped::StorageType::world() const'],['../classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01false_00_01AllocationPolicy___01_4.html#aaace2536f7a9141703a506c6cce7110a',1,'Xped::Tensor&lt; Scalar_, Rank, CoRank, Symmetry_, false, AllocationPolicy_ &gt;::world()']]],
-  ['write_3',['write',['../structcmd_8h.html#af2a3ea719b83f672637febdd87c36c36',1,'structcmd.h']]]
+  ['constfct_0',['constFct',['../namespaceXped_1_1util_1_1constFct.html',1,'Xped::util']]],
+  ['detail_1',['detail',['../namespaceXped_1_1detail.html',1,'Xped']]],
+  ['dmrg_2',['DMRG',['../namespaceXped_1_1DMRG.html',1,'Xped']]],
+  ['internal_3',['internal',['../namespaceXped_1_1internal.html',1,'Xped']]],
+  ['io_4',['IO',['../namespaceXped_1_1IO.html',1,'Xped']]],
+  ['log_5',['Log',['../namespaceXped_1_1Log.html',1,'Xped']]],
+  ['mpi_6',['mpi',['../namespaceXped_1_1mpi.html',1,'Xped']]],
+  ['opts_7',['Opts',['../namespaceXped_1_1Opts.html',1,'Xped']]],
+  ['prop_8',['PROP',['../namespaceXped_1_1PROP.html',1,'Xped']]],
+  ['random_9',['random',['../namespaceXped_1_1random.html',1,'Xped']]],
+  ['sym_10',['Sym',['../namespaceXped_1_1Sym.html',1,'Xped']]],
+  ['treepair_11',['treepair',['../namespaceXped_1_1treepair.html',1,'Xped']]],
+  ['util_12',['util',['../namespaceXped_1_1util.html',1,'Xped']]],
+  ['xped_13',['Xped',['../index.html',1,'(Global Namespace)'],['../namespaceXped.html',1,'Xped']]],
+  ['xped_5fblas_5fstr_14',['XPED_BLAS_STR',['../Macros_8hpp.html#aba5d3e410dcc4171bd62a97fdb6ba1ec',1,'Macros.hpp']]],
+  ['xped_5finit_5ftree_5fcache_5fvariable_15',['XPED_INIT_TREE_CACHE_VARIABLE',['../Macros_8hpp.html#a72590f597d6441b5260309787ce661c5',1,'Macros.hpp']]],
+  ['xped_5fmax_5fthreads_16',['XPED_MAX_THREADS',['../bench_8cpp.html#a15b048780b6063cf1141e13a37003266',1,'bench.cpp']]],
+  ['xped_5fmpi_5fbarrier_17',['XPED_MPI_BARRIER',['../Macros_8hpp.html#ac5484eba6aa866cca7e4a23cd89bf756',1,'Macros.hpp']]],
+  ['xped_5ftime_5fefficient_18',['XPED_TIME_EFFICIENT',['../Macros_8hpp.html#acebf31fa46e856aab04cf45c5e07bceb',1,'Macros.hpp']]],
+  ['xped_5fuse_5fgsl_5fsu2_5fcoeffs_19',['XPED_USE_GSL_SU2_COEFFS',['../SU2Wrappers_8hpp.html#ac68f150b2865976ce5592de9fd52efa7',1,'SU2Wrappers.hpp']]],
+  ['xpedworld_20',['XpedWorld',['../structXped_1_1mpi_1_1XpedWorld.html',1,'Xped::mpi']]],
+  ['xscalar_21',['XScalar',['../namespaceXped.html#a841d520d325f4cb6be3295aa266c0596',1,'Xped']]],
+  ['xtensor_22',['XTensor',['../namespaceXped.html#a17ded7b20b7bf54efbb64db9df136ec1',1,'Xped']]]
 ];

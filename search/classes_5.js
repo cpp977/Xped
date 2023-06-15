@@ -8,6 +8,5 @@ var searchData=
   ['fermion_3c_20symmetry_20_3e_5',['Fermion&lt; Symmetry &gt;',['../classXped_1_1Fermion.html',1,'Xped']]],
   ['fermionbase_6',['FermionBase',['../classXped_1_1FermionBase.html',1,'Xped']]],
   ['fermionbase_3c_20symmetry_20_3e_7',['FermionBase&lt; Symmetry &gt;',['../classXped_1_1FermionBase.html',1,'Xped']]],
-  ['fn_5ftest_8',['Fn_Test',['../classFn__Test.html',1,'']]],
-  ['fusiontree_9',['FusionTree',['../structXped_1_1FusionTree.html',1,'Xped']]]
+  ['fusiontree_8',['FusionTree',['../structXped_1_1FusionTree.html',1,'Xped']]]
 ];

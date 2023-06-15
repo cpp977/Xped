@@ -1,14 +1,18 @@
 var searchData=
 [
-  ['p_5f1s_5f_0',['p_1s_',['../classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#a03c353c522d402025f2d8da724e4638c',1,'Xped::Fermion&lt; Sym::Combined&lt; Sym::SU2&lt; Sym::SpinSU2 &gt;, Symmetry_ &gt; &gt;::p_1s_()'],['../classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Sym_1_1SU2_fa9e0b6b268804d350c573819f69b97e.html#a7eb3857b1b4a87e067519a579adfb2a3',1,'Xped::Fermion&lt; Sym::Combined&lt; Sym::SU2&lt; Sym::SpinSU2 &gt;, Sym::SU2&lt; Sym::SpinSU2 &gt;, Symmetry_ &gt; &gt;::p_1s_()']]],
-  ['params_1',['params',['../classXped_1_1Heisenberg.html#af88c363e72c870ed8fe8b4b09552a53f',1,'Xped::Heisenberg::params()'],['../classXped_1_1Hubbard.html#a97d83b934ec21915e61977c93ebe7909',1,'Xped::Hubbard::params()'],['../classXped_1_1Kondo.html#a840106ce8805e92946d6fcb6d4889c92',1,'Xped::Kondo::params()'],['../classXped_1_1KondoNecklace.html#ad497d994e39c6b393a1b3b7cbdacfff0',1,'Xped::KondoNecklace::params()']]],
-  ['pat_2',['pat',['../classXped_1_1Heisenberg.html#a670bb27e6638164cb7af20aad159dbb9',1,'Xped::Heisenberg::pat()'],['../classXped_1_1Hubbard.html#a37295fe4704fadb6d1f1bce507172440',1,'Xped::Hubbard::pat()'],['../classXped_1_1Kondo.html#a886f403e986a3ab9cbc505f5d7042f04',1,'Xped::Kondo::pat()'],['../classXped_1_1KondoNecklace.html#a4576f621eaf31749ecbaef3d986b9206',1,'Xped::KondoNecklace::pat()'],['../structXped_1_1TMatrix.html#ab272f727dfc3c166504ad838a9912a8b',1,'Xped::TMatrix::pat()']]],
-  ['pattern_3',['pattern',['../structXped_1_1UnitCell.html#a1147be94c607059b756dcc3ddc20a9e4',1,'Xped::UnitCell']]],
-  ['pdag_5f1s_5f_4',['pdag_1s_',['../classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Sym_1_1SU2_fa9e0b6b268804d350c573819f69b97e.html#aa41dc93d7a3a47ffdf46b7d8a4be72d3',1,'Xped::Fermion&lt; Sym::Combined&lt; Sym::SU2&lt; Sym::SpinSU2 &gt;, Sym::SU2&lt; Sym::SpinSU2 &gt;, Symmetry_ &gt; &gt;::pdag_1s_()'],['../classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#adc3e30709593fff79606cbcc6787b6fd',1,'Xped::Fermion&lt; Sym::Combined&lt; Sym::SU2&lt; Sym::SpinSU2 &gt;, Symmetry_ &gt; &gt;::pdag_1s_()']]],
-  ['pi_5',['pi',['../structXped_1_1util_1_1Permutation.html#af29c1108ce0f164b38286869a1879ef7',1,'Xped::util::Permutation']]],
-  ['pi_5finv_6',['pi_inv',['../structXped_1_1util_1_1Permutation.html#a67904e8f21efea4a5b15e1f3c7542e9a',1,'Xped::util::Permutation']]],
-  ['problem_7',['problem',['../structXped_1_1iPEPSSolverAD.html#a7f43cc5189853aec6ce5fac39219cd07',1,'Xped::iPEPSSolverAD']]],
-  ['projectors_8',['PROJECTORS',['../structXped_1_1Opts_1_1CTMCheckpoint.html#a3bd7d2b2a5182001a4badf67d25d9ea5',1,'Xped::Opts::CTMCheckpoint']]],
-  ['psi_9',['Psi',['../classXped_1_1Energy.html#aa2c167c2d1ac6bac4e2e76e3b56d6bc4',1,'Xped::Energy::Psi()'],['../structXped_1_1iPEPSSolverAD.html#ac442b60fa8ab462e048d2a4a97b36f62',1,'Xped::iPEPSSolverAD::Psi()'],['../structXped_1_1iPEPSSolverImag.html#ade44887d91eefd81facb5def812c8cf3',1,'Xped::iPEPSSolverImag::Psi()']]],
-  ['publicvar_10',['publicVar',['../classJavadoc__Test.html#a44a516fbc3a4865e2dcae34649c9df6a',1,'Javadoc_Test::publicVar()'],['../classQTstyle__Test.html#aabf7b2e9ed83ea44aca4d213baae06d3',1,'QTstyle_Test::publicVar()']]]
+  ['q_0',['Q',['../structXped_1_1SiteOperator.html#afca18a44b8c9b009442a4be6a8c4a1b2',1,'Xped::SiteOperator']]],
+  ['q_5f1s_5f_1',['Q_1s_',['../classXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4.html#a64cb409da58e941450017dd693dbe323',1,'Xped::Spin&lt; Sym::SU2&lt; Sym::SpinSU2 &gt;, 0ul &gt;::Q_1s_()'],['../classXped_1_1Spin_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#a769171cb387863acb103326173f95f34',1,'Xped::Spin&lt; Sym::Combined&lt; Sym::SU2&lt; Sym::SpinSU2 &gt;, Symmetry_ &gt; &gt;::Q_1s_()']]],
+  ['q_5fcoupled_2',['q_coupled',['../structXped_1_1FusionTree.html#ad01fb14d173284d883470572c363a086',1,'Xped::FusionTree']]],
+  ['q_5fintermediates_3',['q_intermediates',['../structXped_1_1FusionTree.html#aa29ebd6f9a55d9ec1fbd43fbd7ac5520',1,'Xped::FusionTree']]],
+  ['q_5funcoupled_4',['q_uncoupled',['../structXped_1_1FusionTree.html#a384f6bd1de553a79b998133c78afbef5',1,'Xped::FusionTree']]],
+  ['qaux_5',['qaux',['../classXped_1_1Mps.html#a24d4c949ac5c8a9393a8bf58ea5a142e',1,'Xped::Mps']]],
+  ['qinit_6',['Qinit',['../structXped_1_1Opts_1_1Bench.html#a0914a6e10bf4ea844a312527af753d0d',1,'Xped::Opts::Bench']]],
+  ['qloc_7',['qloc',['../classXped_1_1Mps.html#a2a40e7d6532c14ec3ec3f31ebdf8f679',1,'Xped::Mps']]],
+  ['qm_5f1s_5f_8',['Qm_1s_',['../classXped_1_1Spin.html#aef3a1986c192414141330dff0cf82e67',1,'Xped::Spin']]],
+  ['qmz_5f1s_5f_9',['Qmz_1s_',['../classXped_1_1Spin.html#a3f0bb6a7a05b4252d0f154d3b65e9fe3',1,'Xped::Spin']]],
+  ['qn_5fscale_10',['qn_scale',['../structXped_1_1Opts_1_1Optim.html#a9e32876947d4ed39eb424a451b886367',1,'Xped::Opts::Optim::qn_scale()'],['../structXped_1_1Opts_1_1CTM.html#a30f0a09ef7ef91a6e3e9ad74d8595c47',1,'Xped::Opts::CTM::qn_scale()'],['../structXped_1_1Opts_1_1Imag.html#af5767dcb969b7e477b5e32cb0f3e6911',1,'Xped::Opts::Imag::qn_scale()']]],
+  ['qp_5f1s_5f_11',['Qp_1s_',['../classXped_1_1Spin.html#ab99f448594c66740b753866cd031d0e9',1,'Xped::Spin']]],
+  ['qpz_5f1s_5f_12',['Qpz_1s_',['../classXped_1_1Spin.html#aa70a98e224d6ab94c2fe4131027100e7',1,'Xped::Spin']]],
+  ['qtarget_13',['Qtarget',['../classXped_1_1Mps.html#a0e271f122ceb9de7fc6abb3e9f338f1d',1,'Xped::Mps']]],
+  ['qz_5f1s_5f_14',['Qz_1s_',['../classXped_1_1Spin.html#a46996e388657a15f79c6e951bba833dc',1,'Xped::Spin']]]
 ];

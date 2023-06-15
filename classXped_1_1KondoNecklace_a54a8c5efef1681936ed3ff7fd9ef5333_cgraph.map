@@ -1,5 +1,8 @@
 <map id="Xped::KondoNecklace::setDefaultObs" name="Xped::KondoNecklace::setDefaultObs">
-<area shape="rect" id="node1" title=" " alt="" coords="5,5,168,45"/>
-<area shape="rect" id="node2" href="$namespaceXped.html#a598efa5f2fbcd5d3eeee6ee640b4162f" title=" " alt="" coords="216,13,313,38"/>
-<area shape="rect" id="node3" href="$classXped_1_1Qbasis.html#a34418f2e9ce5c917d3f3b65688c52249" title=" " alt="" coords="361,13,545,38"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,73,168,113"/>
+<area shape="rect" id="node2" href="$classXped_1_1SpinBase.html#afefe0094e4f8c6b294bbd2c49d4c26cf" title=" " alt="" coords="216,5,368,31"/>
+<area shape="rect" id="node3" href="$classXped_1_1SpinBase.html#ab9782771ffc67c1f854e5ff379dce422" title=" " alt="" coords="219,55,365,80"/>
+<area shape="rect" id="node4" href="$classXped_1_1SpinBase.html#a4823fa99799c0fac68007a9f62332adf" title=" " alt="" coords="219,104,365,129"/>
+<area shape="rect" id="node5" href="$namespaceXped.html#a598efa5f2fbcd5d3eeee6ee640b4162f" title=" " alt="" coords="243,153,341,179"/>
+<area shape="rect" id="node6" href="$classXped_1_1Qbasis.html#a34418f2e9ce5c917d3f3b65688c52249" title=" " alt="" coords="416,153,600,179"/>
 </map>

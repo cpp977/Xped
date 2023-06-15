@@ -1,4 +1,6 @@
 <map id="Xped::SpinBase::Sx" name="Xped::SpinBase::Sx">
-<area shape="rect" id="node1" title=" " alt="" coords="228,5,375,31"/>
-<area shape="rect" id="node2" href="$classXped_1_1SpinBase.html#a3f21d6ed84f5163959c4edd5786419cd" title=" " alt="" coords="5,5,180,31"/>
+<area shape="rect" id="node1" title=" " alt="" coords="292,55,439,80"/>
+<area shape="rect" id="node2" href="$classXped_1_1SpinBase.html#a3f21d6ed84f5163959c4edd5786419cd" title=" " alt="" coords="37,5,212,31"/>
+<area shape="rect" id="node3" href="$classXped_1_1Heisenberg.html#ac1aacd931b318c81d00d68fa2e26d579" title=" " alt="" coords="5,55,244,80"/>
+<area shape="rect" id="node4" href="$classXped_1_1Kondo.html#af934c9007909ce312e534cd94dc1761f" title=" " alt="" coords="23,104,227,129"/>
 </map>

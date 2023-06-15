@@ -1,30 +1,14 @@
 var hierarchy =
 [
-    [ "A", "classA.html", [
-      [ "C", "classC.html", null ],
-      [ "D", "classD.html", [
-        [ "E", "classE.html", null ]
-      ] ]
-    ] ],
-    [ "Afterdoc_Test", "classAfterdoc__Test.html", null ],
     [ "Xped::Sym::AltSpinSU2", "structXped_1_1Sym_1_1AltSpinSU2.html", null ],
     [ "Xped::detail::appender< Prepend, T >", "structXped_1_1detail_1_1appender.html", null ],
     [ "Xped::detail::appender< Prepend, num_tuple< Sizes... > >", "structXped_1_1detail_1_1appender_3_01Prepend_00_01num__tuple_3_01Sizes_8_8_8_01_4_01_4.html", null ],
     [ "Xped::ArrayMatrixLib", "structXped_1_1ArrayMatrixLib.html", null ],
     [ "Xped::ArrayTensorLib", "structXped_1_1ArrayTensorLib.html", null ],
     [ "Xped::ArrayVectorLib", "structXped_1_1ArrayVectorLib.html", null ],
-    [ "Autolink_Test", "classAutolink__Test.html", null ],
-    [ "B", "classB.html", [
-      [ "D", "classD.html", null ]
-    ] ],
     [ "Xped::Basis", "classXped_1_1Basis.html", null ],
     [ "Xped::Opts::Bench", "structXped_1_1Opts_1_1Bench.html", null ],
     [ "Xped::Bool< b >", "structXped_1_1Bool.html", null ],
-    [ "C1", "classC1.html", null ],
-    [ "C2", "classC2.html", null ],
-    [ "C3", "classC3.html", null ],
-    [ "C4", "classC4.html", null ],
-    [ "C5", "classC5.html", null ],
     [ "stan::math::chainable_alloc", null, [
       [ "Xped::internal::reverse_pass_callback_alloc_vari< F >", "structXped_1_1internal_1_1reverse__pass__callback__alloc__vari.html", null ]
     ] ],
@@ -34,7 +18,6 @@ var hierarchy =
     [ "Xped::Sym::ChargeUp", "structXped_1_1Sym_1_1ChargeUp.html", null ],
     [ "Xped::Sym::ChargeZ2", "structXped_1_1Sym_1_1ChargeZ2.html", null ],
     [ "Xped::Sym::Combined< Syms >", "structXped_1_1Sym_1_1Combined.html", null ],
-    [ "CoordStruct", "structCoordStruct.html", null ],
     [ "Xped::detail::counter_tuple< Size, Counter >", "structXped_1_1detail_1_1counter__tuple.html", null ],
     [ "Xped::detail::counter_tuple< Size, Size >", "structXped_1_1detail_1_1counter__tuple_3_01Size_00_01Size_01_4.html", null ],
     [ "Xped::ctf_traits< T >", "structXped_1_1ctf__traits.html", null ],
@@ -56,10 +39,6 @@ var hierarchy =
     [ "Xped::EigenTensorLib", "structXped_1_1EigenTensorLib.html", null ],
     [ "Xped::EigenVectorLib", "structXped_1_1EigenVectorLib.html", null ],
     [ "Empty", "classEmpty.html", null ],
-    [ "Enum_Test", "classEnum__Test.html", null ],
-    [ "Example_Test", "classExample__Test.html", [
-      [ "Tag", "classTag.html", null ]
-    ] ],
     [ "Xped::Sym::FChargeSU2", "structXped_1_1Sym_1_1FChargeSU2.html", null ],
     [ "Xped::Sym::FChargeU1", "structXped_1_1Sym_1_1FChargeU1.html", null ],
     [ "Xped::Fermion< Symmetry_ >", "classXped_1_1Fermion.html", [
@@ -72,13 +51,11 @@ var hierarchy =
     [ "ceres::FirstOrderFunction", null, [
       [ "Xped::Energy< Scalar, Symmetry, CPOpts, TRank >", "classXped_1_1Energy.html", null ]
     ] ],
-    [ "Fn_Test", "classFn__Test.html", null ],
     [ "Xped::FusionTree< Rank, Symmetry >", "structXped_1_1FusionTree.html", null ],
     [ "Xped::GaugeTriple< TL, TR, TC >", "structXped_1_1GaugeTriple.html", null ],
     [ "Xped::HeapPolicy", "structXped_1_1HeapPolicy.html", null ],
     [ "Models::Heisenberg", "classModels_1_1Heisenberg.html", null ],
     [ "Xped::Opts::Imag", "structXped_1_1Opts_1_1Imag.html", null ],
-    [ "Include_Test", "classInclude__Test.html", null ],
     [ "Xped::iPEPS< Scalar_, Symmetry_, ENABLE_AD_ >", "classXped_1_1iPEPS.html", null ],
     [ "Xped::iPEPSSolverAD< Scalar, Symmetry, CPOpts, TRank >", "structXped_1_1iPEPSSolverAD.html", null ],
     [ "Xped::iPEPSSolverImag< Scalar, Symmetry >", "structXped_1_1iPEPSSolverImag.html", null ],
@@ -101,19 +78,11 @@ var hierarchy =
       [ "Xped::iPEPSIterator< Scalar, Symmetry, ENABLE_AD >", "classXped_1_1iPEPSIterator.html", null ],
       [ "Xped::internal::VecOfMatIterator< Element >", "classXped_1_1internal_1_1VecOfMatIterator.html", null ]
     ] ],
-    [ "Javadoc_Test", "classJavadoc__Test.html", null ],
     [ "Xped::MatrixInterface", "structXped_1_1MatrixInterface.html", [
       [ "Xped::PlainInterface", "structXped_1_1PlainInterface.html", null ]
     ] ],
-    [ "Memgrp_Test", "classMemgrp__Test.html", null ],
     [ "Xped::Mps< Scalar_, Symmetry_ >", "classXped_1_1Mps.html", null ],
     [ "Xped::detail::num_tuple< Size >", "structXped_1_1detail_1_1num__tuple.html", null ],
-    [ "Object", "structObject.html", [
-      [ "Vehicle", "structVehicle.html", [
-        [ "Car", "structCar.html", null ],
-        [ "Truck", "structTruck.html", null ]
-      ] ]
-    ] ],
     [ "Xped::ObservableBase", "structXped_1_1ObservableBase.html", [
       [ "Xped::TwoSiteObservable< double, Symmetry >", "structXped_1_1TwoSiteObservable.html", [
         [ "Xped::Heisenberg< Symmetry >", "classXped_1_1Heisenberg.html", null ],
@@ -126,13 +95,9 @@ var hierarchy =
       [ "Xped::TwoSiteObservable< Scalar, Symmetry, HERMITIAN >", "structXped_1_1TwoSiteObservable.html", null ]
     ] ],
     [ "Xped::Opts::Optim", "structXped_1_1Opts_1_1Optim.html", null ],
-    [ "Overload_Test", "classOverload__Test.html", null ],
-    [ "Par_Test", "classPar__Test.html", null ],
     [ "Xped::Param", "structXped_1_1Param.html", null ],
     [ "Xped::Pattern", "structXped_1_1Pattern.html", null ],
     [ "Xped::util::Permutation", "structXped_1_1util_1_1Permutation.html", null ],
-    [ "docstring.PyClass", "classdocstring_1_1PyClass.html", null ],
-    [ "pyexample.PyClass", "classpyexample_1_1PyClass.html", null ],
     [ "Xped::qarray< Nq >", "structXped_1_1qarray.html", null ],
     [ "Xped::Qbasis< Symmetry, depth, AllocationPolicy >", "classXped_1_1Qbasis.html", null ],
     [ "Xped::Qbasis< Symmetry, 1 >", "classXped_1_1Qbasis.html", null ],
@@ -140,7 +105,6 @@ var hierarchy =
     [ "Xped::Qbasis< Symmetry, Rank, AllocationPolicy >", "classXped_1_1Qbasis.html", null ],
     [ "Xped::Qbasis< Xped::Sym::Combined, 1 >", "classXped_1_1Qbasis.html", null ],
     [ "Xped::Qbasis< Xped::Sym::SU2, 1 >", "classXped_1_1Qbasis.html", null ],
-    [ "QTstyle_Test", "classQTstyle__Test.html", null ],
     [ "S1", null, [
       [ "Xped::Sym::Combined< S1 >", "structXped_1_1Sym_1_1Combined_3_01S1_01_4.html", null ]
     ] ],
@@ -151,7 +115,6 @@ var hierarchy =
     [ "Xped::SiteOperator< double, Symmetry >", "structXped_1_1SiteOperator.html", null ],
     [ "Xped::SiteOperator< Scalar, Symmetry >", "structXped_1_1SiteOperator.html", null ],
     [ "Xped::iPEPSSolverAD< Scalar, Symmetry, CPOpts, TRank >::SolverState", "structXped_1_1iPEPSSolverAD_1_1SolverState.html", null ],
-    [ "SomeNiceClass", "classSomeNiceClass.html", null ],
     [ "Xped::Spin< Symmetry_, spin_index >", "classXped_1_1Spin.html", [
       [ "Xped::SpinBase< Symmetry >", "classXped_1_1SpinBase.html", null ],
       [ "Xped::SpinBase< Symmetry_, order >", "classXped_1_1SpinBase.html", null ]
@@ -165,7 +128,6 @@ var hierarchy =
     [ "Xped::StanArenaPolicy", "structXped_1_1StanArenaPolicy.html", null ],
     [ "Xped::util::Stopwatch< ClockClass >", "classXped_1_1util_1_1Stopwatch.html", null ],
     [ "Xped::StorageType< Scalar, Rank, CoRank, Symmetry, AllocationPolicy >", "structXped_1_1StorageType.html", null ],
-    [ "String", "classString.html", null ],
     [ "Xped::Sym::SymBase< Derived >", "structXped_1_1Sym_1_1SymBase.html", [
       [ "Xped::Sym::S1xS2< S1, S2 >", "structXped_1_1Sym_1_1S1xS2.html", [
         [ "Xped::Sym::Combined< S1, S2 >", "structXped_1_1Sym_1_1Combined_3_01S1_00_01S2_01_4.html", null ]
@@ -228,10 +190,6 @@ var hierarchy =
     [ "Xped::TensorTraits< DiagCoeffBinaryOp< XprTypeLeft, XprTypeRight > >", "structXped_1_1TensorTraits_3_01DiagCoeffBinaryOp_3_01XprTypeLeft_00_01XprTypeRight_01_4_01_4.html", null ],
     [ "Xped::TensorTraits< DiagCoeffUnaryOp< XprType > >", "structXped_1_1TensorTraits_3_01DiagCoeffUnaryOp_3_01XprType_01_4_01_4.html", null ],
     [ "Xped::TensorTraits< Tensor< Scalar_, Rank_, CoRank_, Symmetry_, false, AllocationPolicy_ > >", "structXped_1_1TensorTraits_3_01Tensor_3_01Scalar___00_01Rank___00_01CoRank___00_01Symmetry___00_d3ca618e02c4592af64dcf90f2c6f8d0.html", null ],
-    [ "Test< T, i >", "classTest.html", null ],
-    [ "Test< void *, 200 >", "classTest_3_01void_01_5_00_01200_01_4.html", [
-      [ "Test< T * >", "classTest_3_01T_01_5_01_4.html", null ]
-    ] ],
     [ "Xped::TimePropagator< Scalar_, TimeScalar_, Symmetry_ >", "classXped_1_1TimePropagator.html", null ],
     [ "Xped::TimeProtocol", "structXped_1_1TimeProtocol.html", null ],
     [ "Xped::TMatrix< Ttype >", "structXped_1_1TMatrix.html", null ],

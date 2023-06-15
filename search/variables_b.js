@@ -1,15 +1,15 @@
 var searchData=
 [
-  ['l_0',['L',['../structXped_1_1Opts_1_1Bench.html#a4040214fc9577eff1f5b6c8e33b813f1',1,'Xped::Opts::Bench']]],
-  ['label2index_1',['label2index',['../structXped_1_1Pattern.html#a53deb8d6c7fe8dab128d39d9c67a7daa',1,'Xped::Pattern']]],
-  ['label_5f_2',['label_',['../structXped_1_1SiteOperator.html#a807901a679d55c4fc5dad40e236af3d7',1,'Xped::SiteOperator']]],
-  ['label_5fdict_3',['label_dict',['../structXped_1_1SiteOperator.html#aca1afd721f4ec864ec28c7c83094bd87',1,'Xped::SiteOperator']]],
-  ['labels_4',['labels',['../classXped_1_1Fermion.html#aa0967d9db1d46a6935a6d26a0b2133f2',1,'Xped::Fermion::labels()'],['../classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Sym_1_1SU2_fa9e0b6b268804d350c573819f69b97e.html#adb0258e28050ec5239dbc289c745c3d9',1,'Xped::Fermion&lt; Sym::Combined&lt; Sym::SU2&lt; Sym::SpinSU2 &gt;, Sym::SU2&lt; Sym::SpinSU2 &gt;, Symmetry_ &gt; &gt;::labels()'],['../classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#a635dbf9eba78058d57e3c627d76c760d',1,'Xped::Fermion&lt; Sym::Combined&lt; Sym::SU2&lt; Sym::SpinSU2 &gt;, Symmetry_ &gt; &gt;::labels()'],['../classXped_1_1Spin.html#ada6e4d4532f7eef86dfb3b82d9e99cdd',1,'Xped::Spin::labels()']]],
-  ['load_5',['load',['../structXped_1_1Opts_1_1Optim.html#aa03edb80ae06181763270d044b4c2cce',1,'Xped::Opts::Optim::load()'],['../structXped_1_1Opts_1_1CTM.html#a9b090a730ab881a9e8fa99668e79ee19',1,'Xped::Opts::CTM::load()'],['../structXped_1_1Opts_1_1Imag.html#a2f86ff839cf58a5b4c0041fd95653e09',1,'Xped::Opts::Imag::load()']]],
-  ['load_5fformat_6',['load_format',['../structXped_1_1Opts_1_1Optim.html#a3784c34b74fa33d45513c8eb161941a6',1,'Xped::Opts::Optim::load_format()'],['../structXped_1_1Opts_1_1Imag.html#ad19ee41b00dbaf5550672aa767f1d428',1,'Xped::Opts::Imag::load_format()']]],
-  ['log_5fformat_7',['log_format',['../structXped_1_1Opts_1_1Optim.html#a8deb7b463a35d749f5521a5622296b72',1,'Xped::Opts::Optim::log_format()'],['../structXped_1_1Opts_1_1Imag.html#a128fdb0df6c2b16c0050894612535607',1,'Xped::Opts::Imag::log_format()']]],
-  ['logging_5fdirectory_8',['logging_directory',['../structXped_1_1Opts_1_1Optim.html#a450c3f3921b8e54d45e4f08fd0d763b9',1,'Xped::Opts::Optim::logging_directory()'],['../structXped_1_1Opts_1_1Imag.html#add7568a28d2ecfa6628f5e08ba8c0c13',1,'Xped::Opts::Imag::logging_directory()']]],
-  ['ls_9',['ls',['../structXped_1_1Opts_1_1Optim.html#a19b8b0ceb9151635a84e406225445e00',1,'Xped::Opts::Optim']]],
-  ['lx_10',['Lx',['../structXped_1_1Pattern.html#a51d162622ae8c7c13e32055d3680220d',1,'Xped::Pattern::Lx()'],['../structXped_1_1UnitCell.html#a91b2a81c95a00ea497c49f9e2efcdecf',1,'Xped::UnitCell::Lx()']]],
-  ['ly_11',['Ly',['../structXped_1_1Pattern.html#a2d92beaf24f313917ec668a7174cb5f3',1,'Xped::Pattern::Ly()'],['../structXped_1_1UnitCell.html#a2281c69b864f00ccdaf461a57660c6f2',1,'Xped::UnitCell::Ly()']]]
+  ['max_5fnsv_0',['max_Nsv',['../classXped_1_1Mps.html#aea56e028058794118844241be57c8577',1,'Xped::Mps']]],
+  ['max_5fpresteps_1',['max_presteps',['../structXped_1_1Opts_1_1CTM.html#ac67d275dc1211ed3437ca7acd20603d0',1,'Xped::Opts::CTM']]],
+  ['max_5fsteps_2',['max_steps',['../structXped_1_1Opts_1_1Optim.html#a896593927564bd85cc3aa3eee7acc962',1,'Xped::Opts::Optim::max_steps()'],['../structXped_1_1Opts_1_1Imag.html#a603466edade8dc2f6a02f40a4cbbb07d',1,'Xped::Opts::Imag::max_steps()']]],
+  ['maxbasis_3',['maxBasis',['../classXped_1_1Mps.html#a9cd414ad785c5b2a5f58ddebc94dc251',1,'Xped::Mps']]],
+  ['measure_4',['MEASURE',['../structXped_1_1ObservableBase.html#af545b538ac4424df10dd948c8477e647',1,'Xped::ObservableBase']]],
+  ['min_5fnsv_5',['min_Nsv',['../classXped_1_1Mps.html#ae86e2fb02f31ad53dd6afe0ed5af3bbb',1,'Xped::Mps']]],
+  ['min_5fsteps_6',['min_steps',['../structXped_1_1Opts_1_1Optim.html#a43b948baf3174c80094178691e418fc4',1,'Xped::Opts::Optim::min_steps()'],['../structXped_1_1Opts_1_1Imag.html#adcc42774b830c04d0de01d4034505f98',1,'Xped::Opts::Imag::min_steps()']]],
+  ['minit_7',['Minit',['../structXped_1_1Opts_1_1Bench.html#a7654b377a8ee55546a77651bedbb5271',1,'Xped::Opts::Bench']]],
+  ['mod_5fn_8',['MOD_N',['../structXped_1_1Sym_1_1S1xS2.html#a04e368670ce42e4a4448982b6dc7e11e',1,'Xped::Sym::S1xS2::MOD_N()'],['../structXped_1_1Sym_1_1SU2.html#abc9b779078088f3a4ff4221c1e6fcd7e',1,'Xped::Sym::SU2::MOD_N()'],['../structXped_1_1Sym_1_1SUN.html#a945374a8598689f66af075d674c6daa5',1,'Xped::Sym::SUN::MOD_N()'],['../structXped_1_1Sym_1_1U0.html#a33c265cd213a6fc81a020d7f021220fe',1,'Xped::Sym::U0::MOD_N()'],['../structXped_1_1Sym_1_1U1.html#a565ca9678f14d5bc9a81e1d3fa1298ae',1,'Xped::Sym::U1::MOD_N()'],['../structXped_1_1Sym_1_1ZN.html#a64790f8ed14376b8b5d15671cdbc131c',1,'Xped::Sym::ZN::MOD_N()']]],
+  ['move_9',['MOVE',['../structXped_1_1Opts_1_1CTMCheckpoint.html#a8a3f5c8e56bb352817db217feb1928c6',1,'Xped::Opts::CTMCheckpoint']]],
+  ['multi_5finit_10',['multi_init',['../structXped_1_1Opts_1_1Imag.html#a1bab74d3f1e2f74b352ec0f949a22463',1,'Xped::Opts::Imag']]],
+  ['multiplicities_11',['multiplicities',['../structXped_1_1FusionTree.html#aab17b0b2ba2989e1ddb3aec1e1449b68',1,'Xped::FusionTree']]]
 ];

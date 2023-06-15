@@ -1,7 +1,28 @@
 var searchData=
 [
-  ['random_2ehpp_0',['Random.hpp',['../Random_8hpp.html',1,'']]],
-  ['relates_2ecpp_1',['relates.cpp',['../relates_8cpp.html',1,'']]],
-  ['restypedef_2ecpp_2',['restypedef.cpp',['../restypedef_8cpp.html',1,'']]],
-  ['reverse_5fpass_5fcallback_5falloc_2ehpp_3',['reverse_pass_callback_alloc.hpp',['../reverse__pass__callback__alloc_8hpp.html',1,'']]]
+  ['s1xs2_2ehpp_0',['S1xS2.hpp',['../S1xS2_8hpp.html',1,'']]],
+  ['scalartraits_2ehpp_1',['ScalarTraits.hpp',['../ScalarTraits_8hpp.html',1,'']]],
+  ['simple_5fupdate_2ecpp_2',['simple_update.cpp',['../simple__update_8cpp.html',1,'']]],
+  ['simpleupdate_2ecpp_3',['SimpleUpdate.cpp',['../SimpleUpdate_8cpp.html',1,'']]],
+  ['simpleupdate_2ehpp_4',['SimpleUpdate.hpp',['../SimpleUpdate_8hpp.html',1,'']]],
+  ['siteoperator_2ecpp_5',['SiteOperator.cpp',['../SiteOperator_8cpp.html',1,'']]],
+  ['siteoperator_2ehpp_6',['SiteOperator.hpp',['../SiteOperator_8hpp.html',1,'']]],
+  ['spin_2ehpp_7',['Spin.hpp',['../Spin_8hpp.html',1,'']]],
+  ['spinbase_2ehpp_8',['SpinBase.hpp',['../SpinBase_8hpp.html',1,'']]],
+  ['spinindex_2ehpp_9',['SpinIndex.hpp',['../SpinIndex_8hpp.html',1,'']]],
+  ['spinop_2ehpp_10',['SpinOp.hpp',['../SpinOp_8hpp.html',1,'']]],
+  ['spinsu2_2ehpp_11',['SpinSU2.hpp',['../SpinSU2_8hpp.html',1,'']]],
+  ['spinsu2xx_2ehpp_12',['SpinSU2xX.hpp',['../SpinSU2xX_8hpp.html',1,'']]],
+  ['stanarenapolicy_2ehpp_13',['StanArenaPolicy.hpp',['../StanArenaPolicy_8hpp.html',1,'']]],
+  ['stopwatch_2ehpp_14',['Stopwatch.hpp',['../Stopwatch_8hpp.html',1,'']]],
+  ['storagetype_2ehpp_15',['StorageType.hpp',['../StorageType_8hpp.html',1,'']]],
+  ['storagetype_5fcontiguous_2ehpp_16',['StorageType_contiguous.hpp',['../StorageType__contiguous_8hpp.html',1,'']]],
+  ['storagetype_5fvecofmat_2ehpp_17',['StorageType_vecofmat.hpp',['../StorageType__vecofmat_8hpp.html',1,'']]],
+  ['su2_2ecpp_18',['SU2.cpp',['../SU2_8cpp.html',1,'']]],
+  ['su2_2ehpp_19',['SU2.hpp',['../SU2_8hpp.html',1,'']]],
+  ['su2wrappers_2ehpp_20',['SU2Wrappers.hpp',['../SU2Wrappers_8hpp.html',1,'']]],
+  ['sublattice_2ehpp_21',['SubLattice.hpp',['../SubLattice_8hpp.html',1,'']]],
+  ['sun_2ecpp_22',['SUN.cpp',['../SUN_8cpp.html',1,'']]],
+  ['sun_2ehpp_23',['SUN.hpp',['../SUN_8hpp.html',1,'']]],
+  ['symbase_2ehpp_24',['SymBase.hpp',['../SymBase_8hpp.html',1,'']]]
 ];

@@ -1,5 +1,12 @@
 ## Xped
 Library for the manipulation of symmetric (block-sparse) tensors with arbitrary (**X**) amount of indices (**ped**).
+[![Licence](https://img.shields.io/github/license/Ileriayo/markdown-badges?style=for-the-badge)](./LICENSE)
+
+## Status
+
+|Builds  | Tests | 	Coverage |
+|:-: | :-: | :-: |
+| [![Builds](https://img.shields.io/github/license/Ileriayo/markdown-badges?style=for-the-badge)](https://github.com/cpp977/Xped/actions)|[![Tests](https://img.shields.io/github/license/Ileriayo/markdown-badges?style=for-the-badge)](https://github.com/cpp977/Xped/actions)|[![codecov](https://codecov.io/gh/cpp977/Xped/branch/master/graph/badge.svg?token=MRQLD834VO)](https://codecov.io/gh/cpp977/Xped)|
 
 ## Status
 
@@ -8,11 +15,11 @@ Library for the manipulation of symmetric (block-sparse) tensors with arbitrary 
 | [![Builds](https://github.com/cpp977/Xped/workflows/Builds/badge.svg)](https://github.com/cpp977/Xped/actions)|[![Tests](https://github.com/cpp977/Xped/workflows/Tests/badge.svg)](https://github.com/cpp977/Xped/actions)|[![codecov](https://codecov.io/gh/cpp977/Xped/branch/master/graph/badge.svg?token=MRQLD834VO)](https://codecov.io/gh/cpp977/Xped)|
 
 ## License
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![Licence](https://img.shields.io/github/license/Ileriayo/markdown-badges?style=for-the-badge)](./LICENSE)
 
 ## Quickstart
 
-https://github.com/cpp977/Xped/blob/3e65a9b532a2fa71e1c7091bb7585a10cf72b935/docs/snippets/quickstart.cpp#L1-L47
+https://github.com/cpp977/Xped/blob/1bf7ea5370ccf639763cca632ab7c1f75db2e842/docs/snippets/quickstart.cpp
 
 ## Build
 1. Get the sources using:

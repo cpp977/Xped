@@ -91,7 +91,6 @@ jobs:
       if: matrix.preset == 'gcc-eigen-release'
       uses: codecov/codecov-action@v1
       with:
-        token: ${{ secrets.CODECOV_TOKEN }}
         file: ${{runner.workspace}}/${{ matrix.preset }}/coverage.info
         directory: ${{runner.workspace}}/${{ matrix.preset }}/tests
         flags: unittests

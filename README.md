@@ -1,7 +1,7 @@
 [![License](https://img.shields.io/static/v1?label=LICENSE&message=GPL&color=green&style=for-the-badge)](./LICENSE)
 [![Documentation](https://img.shields.io/static/v1?label=DOCS&message=dev&color=blue&style=for-the-badge)](https://cpp977.github.io/Xped/)
-[![Linux](https://img.shields.io/static/v1?label=OS&message=LINUX&color=orange&style=for-the-badge)]
-[![Windows](https://img.shields.io/static/v1?label=OS&message=WINDOWS&color=orange&style=for-the-badge)]
+![Linux](https://img.shields.io/static/v1?label=OS&message=LINUX&color=orange&style=for-the-badge)
+![Windows](https://img.shields.io/static/v1?label=OS&message=WINDOWS&color=orange&style=for-the-badge)
 
 ## Xped
 Library for the manipulation of symmetric (block-sparse) tensors with arbitrary (**X**) amount of indices (**ped**).
@@ -11,9 +11,6 @@ Library for the manipulation of symmetric (block-sparse) tensors with arbitrary 
 |Builds  | Tests | 	Coverage |
 |:-: | :-: | :-: |
 | [![Builds](https://github.com/cpp977/Xped/workflows/Builds/badge.svg)](https://github.com/cpp977/Xped/actions)|[![Tests](https://github.com/cpp977/Xped/workflows/Tests/badge.svg)](https://github.com/cpp977/Xped/actions)|[![codecov](https://codecov.io/gh/cpp977/Xped/branch/master/graph/badge.svg?token=MRQLD834VO)](https://codecov.io/gh/cpp977/Xped)|
-
-## License
-[![License](https://img.shields.io/static/v1?label=LICENSE&message=GPL&color=green&style=for-the-badge)](./LICENSE)
 
 ## Quickstart
 

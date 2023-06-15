@@ -1,5 +1,8 @@
 var NAVTREEINDEX15 =
 {
+"structXped_1_1util_1_1Permutation.html#a2ca4524822a8d1e5167734505f2f5239":[5,0,2,11,1,16],
+"structXped_1_1util_1_1Permutation.html#a2ca4524822a8d1e5167734505f2f5239":[6,0,1,5,0,16],
+"structXped_1_1util_1_1Permutation.html#a329224cfb98ddf1ccb04b622987da3cb":[6,0,1,5,0,2],
 "structXped_1_1util_1_1Permutation.html#a329224cfb98ddf1ccb04b622987da3cb":[5,0,2,11,1,2],
 "structXped_1_1util_1_1Permutation.html#a43adba3d14da7a05a2286a2be0368bb4":[5,0,2,11,1,1],
 "structXped_1_1util_1_1Permutation.html#a43adba3d14da7a05a2286a2be0368bb4":[6,0,1,5,0,1],

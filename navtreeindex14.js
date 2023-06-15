@@ -1,5 +1,8 @@
 var NAVTREEINDEX14 =
 {
+"structXped_1_1TwoSiteObservable.html#a952e643e4660069ab8280d31f0111270":[5,0,2,87,21],
+"structXped_1_1TwoSiteObservable.html#a952e643e4660069ab8280d31f0111270":[6,0,1,81,21],
+"structXped_1_1TwoSiteObservable.html#a985df92ebe366da0f2eac40056c9fb66":[5,0,2,87,0],
 "structXped_1_1TwoSiteObservable.html#a985df92ebe366da0f2eac40056c9fb66":[6,0,1,81,0],
 "structXped_1_1TwoSiteObservable.html#aa37d1886553415b7fceac2ba4a4d78ae":[6,0,1,81,4],
 "structXped_1_1TwoSiteObservable.html#aa37d1886553415b7fceac2ba4a4d78ae":[5,0,2,87,4],
@@ -246,8 +249,5 @@ var NAVTREEINDEX14 =
 "structXped_1_1qarray.html#afcca0079d173229a54ad2ff56b8fe64d":[6,0,1,53,9],
 "structXped_1_1qarray.html#afcca0079d173229a54ad2ff56b8fe64d":[5,0,2,59,9],
 "structXped_1_1util_1_1Permutation.html":[6,0,1,5,0],
-"structXped_1_1util_1_1Permutation.html":[5,0,2,11,1],
-"structXped_1_1util_1_1Permutation.html#a2ca4524822a8d1e5167734505f2f5239":[5,0,2,11,1,16],
-"structXped_1_1util_1_1Permutation.html#a2ca4524822a8d1e5167734505f2f5239":[6,0,1,5,0,16],
-"structXped_1_1util_1_1Permutation.html#a329224cfb98ddf1ccb04b622987da3cb":[6,0,1,5,0,2]
+"structXped_1_1util_1_1Permutation.html":[5,0,2,11,1]
 };

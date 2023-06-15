@@ -1,5 +1,8 @@
 var NAVTREEINDEX13 =
 {
+"structXped_1_1Sym_1_1SymBase.html#ad8d5384347a32e349f46b0570e04e192":[6,0,1,4,16,1],
+"structXped_1_1Sym_1_1SymBase.html#ad8d5384347a32e349f46b0570e04e192":[5,0,2,9,16,1],
+"structXped_1_1Sym_1_1SymTraits.html":[6,0,1,4,17],
 "structXped_1_1Sym_1_1SymTraits.html":[5,0,2,9,17],
 "structXped_1_1Sym_1_1SymTraits_3_01S1xS2_3_01S1_00_01S2_01_4_01_4.html":[6,0,1,4,18],
 "structXped_1_1Sym_1_1SymTraits_3_01S1xS2_3_01S1_00_01S2_01_4_01_4.html":[5,0,2,9,18],
@@ -246,8 +249,5 @@ var NAVTREEINDEX13 =
 "structXped_1_1TwoSiteObservable.html#a73834a3565d7d913c181cfd9d2e3fe9a":[5,0,2,87,22],
 "structXped_1_1TwoSiteObservable.html#a73834a3565d7d913c181cfd9d2e3fe9a":[6,0,1,81,22],
 "structXped_1_1TwoSiteObservable.html#a75509a2d6970aab695d5f7668827c461":[5,0,2,87,14],
-"structXped_1_1TwoSiteObservable.html#a75509a2d6970aab695d5f7668827c461":[6,0,1,81,14],
-"structXped_1_1TwoSiteObservable.html#a952e643e4660069ab8280d31f0111270":[5,0,2,87,21],
-"structXped_1_1TwoSiteObservable.html#a952e643e4660069ab8280d31f0111270":[6,0,1,81,21],
-"structXped_1_1TwoSiteObservable.html#a985df92ebe366da0f2eac40056c9fb66":[5,0,2,87,0]
+"structXped_1_1TwoSiteObservable.html#a75509a2d6970aab695d5f7668827c461":[6,0,1,81,14]
 };

@@ -479,8 +479,9 @@ Algorithms</h1>
 <h2><a class="anchor" id="autotoc_md24"></a>
 Matrix product states (MPS)</h2>
 <p>MPSs represent a one-dimensional tensor network tailored for strongly interacting one-dimensional physical lattice systems. For detailed information, check the following references:</p><ul>
-<li>One ref</li>
-<li>Another reference</li>
+<li><a href="https://link.springer.com/article/10.1007/BF02099178">https://link.springer.com/article/10.1007/BF02099178</a></li>
+<li><a href="https://arxiv.org/abs/1008.3477">https://arxiv.org/abs/1008.3477</a></li>
+<li><a href="https://arxiv.org/abs/2011.12127">https://arxiv.org/abs/2011.12127</a></li>
 </ul>
 <p>The MPS code is located in the directory <code>Xped/MPS</code> and currently provides a <code>class MPS</code> and basic operations for them. An implementation of matrix product operators (MPO)s and algorithms like the density matrix renormalization-group (DMRG) or the time-dependent variational principle (TDVP) are future development goals.</p>
 <p>A small example demonstrates the current capability: </p><div class="fragment"><div class="line"><span class="preprocessor">#include &quot;<a class="code" href="Mps_8hpp.html">Xped/MPS/Mps.hpp</a>&quot;</span></div>
@@ -525,15 +526,83 @@ Matrix product states (MPS)</h2>
 </div><!-- fragment --><h2><a class="anchor" id="autotoc_md25"></a>
 Projected entangled pair states (PEPS)</h2>
 <p>PEPS is a generalization of MPS for two-dimensional systems. For detailed information, check the following references:</p><ul>
-<li>One ref</li>
-<li>Another reference</li>
+<li><a href="https://arxiv.org/abs/cond-mat/0407066">https://arxiv.org/abs/cond-mat/0407066</a></li>
+<li><a href="https://arxiv.org/abs/2011.12127">https://arxiv.org/abs/2011.12127</a></li>
 </ul>
 <p>The PEPS code of <a class="el" href="namespaceXped.html">Xped</a> is located in <code>Xped/PEPS</code> and has the following capabilities:</p><ul>
-<li>CTMRG algorithm for arbitrary unit cells with potentially a custom pattern (AB/BA)</li>
+<li>CTMRG algorithm for arbitrary unit cells with custom pattern (AB/BA)</li>
 <li>Imaginary time evolution using the simple update method with nearest and next-nearest Hamiltonian terms</li>
-<li>Direct energy-minimization using automatic differentiation </li>
+<li>Direct energy-minimization using automatic differentiation</li>
 </ul>
-</div></div><!-- PageDoc -->
+<p>For PEPS simulations, the configuration is parsed as a toml file. The toml file has sections for CTM, imaginary time evolution and nonlinear optimization. The used model is specified in the section <code>[model]</code> and needs to be present in all simulations: Here is an example for the Hubbard model: </p><div class="fragment"><div class="line">[model]</div>
+<div class="line">name                    = &quot;Hubbard&quot;</div>
+<div class="line"># specifies on which bonds the two-site gates of the Hamiltonian are active. In the case of Hubbard model, this is the hopping term.</div>
+<div class="line"># V: vertical, H: horizontal, D1: diagonal top-left -&gt; bottom-down, D2: diagonal bottom-left -&gt; top-right</div>
+<div class="line">bonds                   = [&quot;V&quot;, &quot;H&quot;, &quot;D1&quot;] # This leads to a triangular lattice</div>
+<div class="line">[model.params]</div>
+<div class="line">U                       = 8.0</div>
+<div class="line">t                       = 1.0</div>
+<div class="line">tprime                  = 1.0</div>
+<div class="line">mu                      = 0.0</div>
+</div><!-- fragment --><p>The unit cell and PEPS bond dimension are specified in the section <code>[ipeps]</code>: </p><div class="fragment"><div class="line">[ipeps]</div>
+<div class="line">D                       = 2</div>
+<div class="line"># The cell can have a nontrivial pattern if numbers appear several times</div>
+<div class="line">cell                    = [[1,2],</div>
+<div class="line">                           [3,4]] # 2x2 unit cell without pattern</div>
+<div class="line"># Charges can be used to force the total filling or total magnetization</div>
+<div class="line"># This is only possible for Abelian symmetries</div>
+<div class="line">charges                 = [[[+1], [-1]],</div>
+<div class="line">                           [[-1], [+1]]] # This charge pattern forces a Neel state with zero total magnetization</div>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md26"></a>
+CTM</h3>
+<p>The CTM procedure can be configured using toml configuration section <code>[ctm]</code> </p><div class="fragment"><div class="line">[ctm]</div>
+<div class="line">chi                     = 30</div>
+<div class="line">max_presteps            = 30 # Maximum amount of steps without AD backtracking</div>
+<div class="line">track_steps             = 4 # Fixed number of steps for AD backtracking after the presteps are run. (Only used for gradient based optimization)</div>
+<div class="line">tol_E                   = 1e-10</div>
+<div class="line">reinit_env_tol          = 1e-3</div>
+<div class="line">init                    = &quot;FROM_A&quot; # Controls how the C and T-tensors are initialized</div>
+<div class="line">verbosity               = &quot;PER_ITERATION&quot;</div>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md27"></a>
+Simple update</h3>
+<p>Imaginary time evolution can be configured through the toml section <code>[Imag]</code>. </p><div class="fragment"><div class="line">[Imag]</div>
+<div class="line">update                  = &quot;SIMPLE&quot; # Currently this is the only supported update. After implemented, this can be set to e.g. FULL for full update</div>
+<div class="line">tol                     = 0.1</div>
+<div class="line">resume                  = false</div>
+<div class="line">dts                     = [0.1, 0.05, 0.02, 0.01]</div>
+<div class="line">t_steps                 = [60, 60, 60, 60]</div>
+<div class="line">Ds                      = [2, 3, 4, 5]</div>
+<div class="line">chis                    = [[20, 30], [30], [40], [50]]</div>
+<div class="line">load                    = &quot;path/to/previous/state&quot;</div>
+<div class="line">load_format             = &quot;NATIVE&quot; # NATIVE: State saved within Xped, MATLAB: State saved from matlab simulation</div>
+<div class="line">working_directory       = &quot;&lt;wd&gt;&quot;</div>
+<div class="line">obs_directory           = &quot;obs&quot;</div>
+<div class="line">logging_directory       = &quot;log&quot;</div>
+<div class="line">seed                    = 10</div>
+<div class="line">id                      = 1</div>
+<div class="line">verbosity               = &quot;PER_ITERATION&quot;</div>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md28"></a>
+Energy minimization</h3>
+<p>Simulations for direct energy minimization using nonlinear optimization procedures are configured through the toml section <code>[optim]</code>.</p>
+<div class="fragment"><div class="line">[optim]</div>
+<div class="line">algorithm               = &quot;L_BFGS&quot; # Could also be CONJUGATE_GRADIENT or what a custom optimization library supports</div>
+<div class="line">linesearch              = &quot;WOLFE&quot;</div>
+<div class="line">bfgs_scaling            = false</div>
+<div class="line">grad_tol                = 1.0e-4</div>
+<div class="line">cost_tol                = 1.0e-8</div>
+<div class="line">step_tol                = 1.0e-10</div>
+<div class="line">resume                  = false</div>
+<div class="line">load                    = &quot;/path/to/other/state&quot;</div>
+<div class="line">load_format             = &quot;NATIVE&quot; # NATIVE: State saved within Xped, MATLAB: State saved from matlab simulation</div>
+<div class="line">max_steps               = 50</div>
+<div class="line">log_format              = &quot;.log&quot; # can also be set to .h5 for hdf5 log output</div>
+<div class="line">working_directory       = &quot;&lt;wd&gt;&quot;</div>
+<div class="line">obs_directory           = &quot;obs&quot;</div>
+<div class="line">logging_directory       = &quot;log&quot;</div>
+<div class="line">seed                    = 1</div>
+<div class="line">id                      = 1</div>
+<div class="line">verbosity               = &quot;PER_ITERATION&quot;</div>
+</div><!-- fragment --> </div></div><!-- PageDoc -->
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.9.2-->

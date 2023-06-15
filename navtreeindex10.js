@@ -1,5 +1,8 @@
 var NAVTREEINDEX10 =
 {
+"namespaceXped_1_1PROP.html#af8c09fbb3e7c0aaae9d5e0738f1a846e":[5,0,2,7,7],
+"namespaceXped_1_1PROP.html#afcdbc91bb96cfeeb72a7bc3424234ff7":[5,0,2,7,6],
+"namespaceXped_1_1Sym.html":[5,0,2,9],
 "namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84ab":[5,0,2,9,27],
 "namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84aba2149ee1e05891f54a563184b03039b2c":[5,0,2,9,27,5],
 "namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84aba271d9d46a5ceda95a33132feba74f3a3":[5,0,2,9,27,8],
@@ -246,8 +249,5 @@ var NAVTREEINDEX10 =
 "structXped_1_1OneSiteObservable.html#ac7988cb20acb9ac772321b64d30f1635":[6,0,1,49,4],
 "structXped_1_1OneSiteObservable.html#ac7988cb20acb9ac772321b64d30f1635":[5,0,2,55,4],
 "structXped_1_1OneSiteObservable.html#ae41da9828b759927cc300e2f0514f127":[5,0,2,55,1],
-"structXped_1_1OneSiteObservable.html#ae41da9828b759927cc300e2f0514f127":[6,0,1,49,1],
-"structXped_1_1Opts_1_1Bench.html":[6,0,1,3,0],
-"structXped_1_1Opts_1_1Bench.html":[5,0,2,6,0],
-"structXped_1_1Opts_1_1Bench.html#a0914a6e10bf4ea844a312527af753d0d":[6,0,1,3,0,7]
+"structXped_1_1OneSiteObservable.html#ae41da9828b759927cc300e2f0514f127":[6,0,1,49,1]
 };

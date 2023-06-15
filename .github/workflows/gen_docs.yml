@@ -31,15 +31,6 @@ jobs:
         version: 10
         platform: x64
 
-    - uses: actions/checkout@v3
-      with:
-        repository: cpp977/TOOLS
-        token: ${{ secrets.TOOLS_CLONE }}
-        ref: master
-        path: tools-src
-    - run: sudo mkdir -p /usr/local/include/TOOLS
-    - run: sudo cp -r $GITHUB_WORKSPACE/tools-src/* /usr/local/include/TOOLS/
-
     - uses: ssciwr/doxygen-install@v1
       with:
         version: "1.9.6"

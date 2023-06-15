@@ -24,15 +24,6 @@ jobs:
     - run: sudo apt-get install liblapacke-dev
     - run: sudo apt-get install libomp-12-dev
 
-    - uses: actions/checkout@v3
-      with:
-        repository: cpp977/TOOLS
-        token: ${{ secrets.TOOLS_CLONE }}
-        ref: master
-        path: tools-src
-    - run: sudo mkdir -p /usr/local/include/TOOLS
-    - run: sudo cp -r $GITHUB_WORKSPACE/tools-src/* /usr/local/include/TOOLS/
-
     - uses: cpp977/GenCMakeDoc@v1.0.0
       with:
         source_dir: $GITHUB_WORKSPACE

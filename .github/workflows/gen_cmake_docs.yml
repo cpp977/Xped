@@ -1,6 +1,11 @@
 name: Generate docs for cmake options
 
 on:
+  push:
+    paths:
+      - 'CMakeLists.txt'
+
+on:
   workflow_run:
     workflows:
       - Builds

@@ -425,7 +425,7 @@ If the intel math kernel library should be integrated, one can switch on the par
 
 ## Cyclops tensor framework (ctf)
 
-[ctf](https://ctf.org) is a tensor framework for distributed parallelism. 
+[ctf](https://solomon2.web.engr.illinois.edu/ctf/) is a tensor framework for distributed parallelism. 
 This allows the computations to spread over several different compute cores and allows to use the hardware more efficient.
 It has an overhead for small tensors but allows to scale the compute power with very large tensors.
 

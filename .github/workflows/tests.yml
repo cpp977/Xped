@@ -89,9 +89,10 @@ jobs:
         
     - name: Upload coverage to Codecov
       if: matrix.preset == 'gcc-eigen-release'
-      uses: codecov/codecov-action@v1
+      uses: codecov/codecov-action@v3
       with:
-        file: ${{runner.workspace}}/${{ matrix.preset }}/coverage.info
+        token: 6604ed1a-6dd1-4021-8450-93cb22163632
+        files: ${{runner.workspace}}/${{ matrix.preset }}/coverage.info
         directory: ${{runner.workspace}}/${{ matrix.preset }}/tests
         flags: unittests
         name: coverage

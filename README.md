@@ -10,11 +10,11 @@ Library for the manipulation of symmetric (block-sparse) tensors with arbitrary 
 | [![Builds](https://github.com/cpp977/Xped/workflows/Builds/badge.svg)](https://github.com/cpp977/Xped/actions)|[![Tests](https://github.com/cpp977/Xped/workflows/Tests/badge.svg)](https://github.com/cpp977/Xped/actions)|[![codecov](https://codecov.io/gh/cpp977/Xped/branch/master/graph/badge.svg?token=MRQLD834VO)](https://codecov.io/gh/cpp977/Xped)|
 
 ## License
-[![Licence](https://img.shields.io/github/license/Ileriayo/markdown-badges?style=for-the-badge)](./LICENSE)
+[![License](https://img.shields.io/static/v1?label=LICENSE&message=GPL&color=green&style=for-the-badge)](./LICENSE)
 
 ## Quickstart
 
-[![License](https://img.shields.io/static/v1?label=LICENSE&message=GPL&color=green&style=for-the-badge)](./LICENSE)
+https://github.com/cpp977/Xped/blob/ca22aae8ab1e113ec17cc1903e4a76764557406d/docs/snippets/quickstart.cpp
 
 ## Build
 

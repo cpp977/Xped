@@ -405,21 +405,62 @@ Let's look at an example usage of the AD functionality:
 
 # Backends
 
+The Xped library is designed to be a high-level library for symmetric tensors. 
+All operations for plain nonsymmetric tensors are reimplemented. 
+Instead, one can choose between different backends that deliver the functionality for plain tensors (or matrices).
+It is also possible to add a backend by implementing the required interface.
+
+Currently, three backends are available. The Eigen backend is tested most thoroughly. 
+
 ## Eigen
 
-## Cyclops tensor framework
+[Eigen](https://eigen.tuxfamily.org/index.php?title=Main_Page) is a famous c++ library for linear algebra.
+It is designed with an elegant API and highly optimized matrix operations.
+Additionally, it has a tensor module which is the basis for the TensorFlow framework by google.
+This part supports arbitrary ranked tensors and a wealth of operations including contractions and reductions.
+
+The Eigen library also supports the dispatch of fundamental matrix operations to external BLAS and LAPACK implementations.
+This feature can be used within Xped at configuration time using the `XPED_USE_BLAS` and similar options.
+If the intel math kernel library should be integrated, one can switch on the parameter `XPED_USE_MKL`.
+
+## Cyclops tensor framework (ctf)
+
+[ctf](https://ctf.org) is a tensor framework for distributed parallelism. 
+This allows the computations to spread over several different compute cores and allows to use the hardware more efficient.
+It has an overhead for small tensors but allows to scale the compute power with very large tensors.
+
+\note The ctf backend is most useful for tensors without symmetry or with tensors with small internal symmetries.
 
 ## array
 
 # Algorithms
 
+On top of the core library, Xped also provides high-level tensor network algorithms.
+
 ## Matrix product states (MPS)
 
-\todo Write documentation
+MPSs represent a one-dimensional tensor network tailored for strongly interacting one-dimensional physical lattice systems.
+For detailed information, check the following references:
+* One ref
+* Another reference
+
+The MPS code is located in the directory `Xped/MPS` and currently provides a `class MPS` and basic operations for them.
+An implementation of matrix product operators (MPO)s and algorithms like the density matrix renormalization-group (DMRG) or the time-dependent variational principle (TDVP)
+are future development goals.
+
+A small example demonstrates the current capability:
+\include s_mps.cpp
 
 ## Projected entangled pair states (PEPS)
 
-\todo Write documentation
+PEPS is a generalization of MPS for two-dimensional systems.
+For detailed information, check the following references:
+* One ref
+* Another reference
+
+The PEPS code of Xped is located in `Xped/PEPS` and has the following capabilities:
+* CTMRG algorithm for arbitrary unit cells with potentially a custom pattern (AB/BA)
+* s
 
 ### Simple updates
 

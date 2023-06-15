@@ -1,7 +1,7 @@
 ## Xped
 Library for the manipulation of symmetric (block-sparse) tensors with arbitrary (**X**) amount of indices (**ped**).
-[![Licence](https://img.shields.io/github/license/Ileriayo/markdown-badges?style=for-the-badge)](./LICENSE)
-[![Documentation](https://img.shields.io/github/license/Ileriayo/markdown-badges?style=for-the-badge)](https://cpp977.github.io/Xped/)
+[![License](https://img.shields.io/static/v1?label=LICENSE&message=GPL&color=green&style=for-the-badge)](./LICENSE)
+[![Documentation](https://img.shields.io/static/v1?label=DOCS&message=click&color=blue&style=for-the-badge)](https://cpp977.github.io/Xped/)
 
 ## Status
 

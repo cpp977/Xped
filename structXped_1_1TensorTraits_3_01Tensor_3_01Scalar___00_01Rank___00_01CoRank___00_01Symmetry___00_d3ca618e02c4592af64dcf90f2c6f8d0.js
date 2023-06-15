@@ -1,0 +1,7 @@
+var structXped_1_1TensorTraits_3_01Tensor_3_01Scalar___00_01Rank___00_01CoRank___00_01Symmetry___00_d3ca618e02c4592af64dcf90f2c6f8d0 =
+[
+    [ "AllocationPolicy", "structXped_1_1TensorTraits_3_01Tensor_3_01Scalar___00_01Rank___00_01CoRank___00_01Symmetry___00_d3ca618e02c4592af64dcf90f2c6f8d0.html#a25630488a21aecf7a02301cde0871497", null ],
+    [ "qType", "structXped_1_1TensorTraits_3_01Tensor_3_01Scalar___00_01Rank___00_01CoRank___00_01Symmetry___00_d3ca618e02c4592af64dcf90f2c6f8d0.html#a7c6854ec71733ec752616e5edb8387f6", null ],
+    [ "Scalar", "structXped_1_1TensorTraits_3_01Tensor_3_01Scalar___00_01Rank___00_01CoRank___00_01Symmetry___00_d3ca618e02c4592af64dcf90f2c6f8d0.html#a0112eb8ad1cfc393480c0b664bb70601", null ],
+    [ "Symmetry", "structXped_1_1TensorTraits_3_01Tensor_3_01Scalar___00_01Rank___00_01CoRank___00_01Symmetry___00_d3ca618e02c4592af64dcf90f2c6f8d0.html#a010d28602bbe476e600581f43509a326", null ]
+];

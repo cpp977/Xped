@@ -1,0 +1,292 @@
+<!-- HTML header for doxygen 1.9.6-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.6"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Xped: include/Xped/Interfaces/PlainInterface_Eigen_impl.hpp Source File</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+});
+</script>
+<script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript">
+  DoxygenAwesomeDarkModeToggle.lightModeIcon = '🌞'
+// icon from https://fonts.google.com/icons
+  DoxygenAwesomeDarkModeToggle.darkModeIcon = `<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px" viewBox="0 0 24 24" width="24px" fill="#009793"><g><rect fill="none" height="24" width="24"/></g><g><g><path d="M8.1,14.15C9.77,14.63,11,16.17,11,18c0,0.68-0.19,1.31-0.48,1.87c0.48,0.09,0.97,0.14,1.48,0.14 c1.48,0,2.9-0.41,4.13-1.15c-2.62-0.92-5.23-2.82-6.8-5.86C7.74,9.94,7.78,7.09,8.29,4.9c-2.57,1.33-4.3,4.01-4.3,7.1c0,0,0,0,0,0 c0.01,0,0.01,0,0.02,0C5.66,12,7.18,12.83,8.1,14.15z" opacity=".3"/><path d="M19.78,17.51c-2.47,0-6.57-1.33-8.68-5.43C8.77,7.57,10.6,3.6,11.63,2.01C6.27,2.2,1.98,6.59,1.98,12 c0,0.14,0.02,0.28,0.02,0.42C2.61,12.16,3.28,12,3.98,12c0,0,0,0,0,0c0-3.09,1.73-5.77,4.3-7.1C7.78,7.09,7.74,9.94,9.32,13 c1.57,3.04,4.18,4.95,6.8,5.86c-1.23,0.74-2.65,1.15-4.13,1.15c-0.5,0-1-0.05-1.48-0.14c-0.37,0.7-0.94,1.27-1.64,1.64 c0.98,0.32,2.03,0.5,3.11,0.5c3.5,0,6.58-1.8,8.37-4.52C20.18,17.5,19.98,17.51,19.78,17.51z"/><path d="M7,16l-0.18,0C6.4,14.84,5.3,14,4,14c-1.66,0-3,1.34-3,3s1.34,3,3,3c0.62,0,2.49,0,3,0c1.1,0,2-0.9,2-2 C9,16.9,8.1,16,7,16z"/></g></g></svg>`
+  DoxygenAwesomeDarkModeToggle.init()
+</script>
+</head>
+<body>
+  <!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/cpp977/Xped" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">Xped
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.9.6 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('PlainInterface__Eigen__impl_8hpp_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">PlainInterface_Eigen_impl.hpp</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="PlainInterface__Eigen__impl_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#ifndef PLAIN_INTERFACE_EIGEN_IMPL_H_</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#define PLAIN_INTERFACE_EIGEN_IMPL_H_</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span> </div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;Eigen/Core&gt;</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;unsupported/Eigen/CXX11/Tensor&gt;</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceXped.html">Xped</a> {</div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="keyword">struct </span>PlainInterface : <span class="keyword">public</span> MatrixInterface, <span class="keyword">public</span> TensorInterface, <span class="keyword">public</span> VectorInterface</div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span>{</div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno"><a class="line" href="structXped_1_1PlainInterface.html#a9f27e603ebaafef6be12f1bb56bfb9f2">   11</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="structXped_1_1PlainInterface.html#a2b8b941c6c09212ca31bff24a6e59020">Indextype</a> = Eigen::Index;</div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>    <span class="keyword">using </span><a class="code hl_function" href="structXped_1_1MatrixInterface.html#addf451b0639ee9eeb22cef528d231093">MatrixInterface::add</a>;</div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>    <span class="keyword">using </span><a class="code hl_function" href="structXped_1_1MatrixInterface.html#a983b326a00d48c6e5d35950c4221f56d">MatrixInterface::construct</a>;</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>    <span class="keyword">using </span><a class="code hl_function" href="structXped_1_1MatrixInterface.html#a3d13d4efe859824f3dc8fb21eb3e57fe">MatrixInterface::construct_with_zero</a>;</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>    <span class="keyword">using </span><a class="code hl_function" href="structXped_1_1MatrixInterface.html#a78cd9ec0e7ddbb0b1933abddfe9ce173">MatrixInterface::difference</a>;</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>    <span class="keyword">using </span><a class="code hl_function" href="structXped_1_1MatrixInterface.html#acb4da3d086993952411f682c472e6f68">MatrixInterface::get_raw_data</a>;</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    <span class="keyword">using </span><a class="code hl_function" href="structXped_1_1MatrixInterface.html#a57292ce4820ceae43ae6d03be55188d4">MatrixInterface::getVal</a>;</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    <span class="keyword">using </span><a class="code hl_function" href="structXped_1_1MatrixInterface.html#a400d40cebd0ac57e6c8ed09f1ba430e3">MatrixInterface::print</a>;</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    <span class="keyword">using </span><a class="code hl_function" href="structXped_1_1MatrixInterface.html#ae5dffc16db1dd5fa6ee176c7a1a2744a">MatrixInterface::scale</a>;</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    <span class="keyword">using </span><a class="code hl_function" href="structXped_1_1MatrixInterface.html#a36c805b0b0e3809e5b5d92969be2a6fa">MatrixInterface::setConstant</a>;</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    <span class="keyword">using </span><a class="code hl_function" href="structXped_1_1MatrixInterface.html#a5e64130a6aa6850ec3774ced220971ea">MatrixInterface::setRandom</a>;</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    <span class="keyword">using </span><a class="code hl_function" href="structXped_1_1MatrixInterface.html#ae37c412be210104ba3194b3b38652278">MatrixInterface::setVal</a>;</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    <span class="keyword">using </span><a class="code hl_function" href="structXped_1_1MatrixInterface.html#a312b0626ed3cb24c2d26da182390c2a2">MatrixInterface::setZero</a>;</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    <span class="keyword">using </span><a class="code hl_function" href="structXped_1_1TensorInterface.html#ab60406eb01e34f9de881f787fb7a1f3d">TensorInterface::construct</a>;</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    <span class="keyword">using </span><a class="code hl_function" href="structXped_1_1TensorInterface.html#ac8d594de1d6ab236fe37741da064e753">TensorInterface::get_raw_data</a>;</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    <span class="keyword">using </span><a class="code hl_function" href="structXped_1_1TensorInterface.html#ab01379da5912c894541d761a4dffceaf">TensorInterface::getVal</a>;</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    <span class="keyword">using </span><a class="code hl_function" href="structXped_1_1TensorInterface.html#aade3abc7f1bf5fe2cb0df18085f7238f">TensorInterface::print</a>;</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>    <span class="keyword">using </span><a class="code hl_function" href="structXped_1_1TensorInterface.html#a90d574be798bbf409c201cdb19c746fa">TensorInterface::setConstant</a>;</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>    <span class="keyword">using </span><a class="code hl_function" href="structXped_1_1TensorInterface.html#acb6b3830e7ba424f96281fc362149ff9">TensorInterface::setRandom</a>;</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    <span class="keyword">using </span><a class="code hl_function" href="structXped_1_1TensorInterface.html#abf838e4856338f33dc47504b1f731846">TensorInterface::setVal</a>;</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    <span class="keyword">using </span><a class="code hl_function" href="structXped_1_1TensorInterface.html#a7710ef13a75981334682b673675a6395">TensorInterface::setZero</a>;</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    <span class="keyword">using </span><a class="code hl_function" href="structXped_1_1VectorInterface.html#a5779a7f83a2dc8354c4e66a35793d86b">VectorInterface::construct</a>;</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    <span class="keyword">using </span><a class="code hl_function" href="structXped_1_1VectorInterface.html#a57c791d523d7e50aa9d6b25ecb1d2d66">VectorInterface::construct_with_zero</a>;</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    <span class="keyword">using </span><a class="code hl_function" href="structXped_1_1VectorInterface.html#aad8642b86de893fa5550791e83b4056d">VectorInterface::print</a>;</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    <span class="keyword">using </span><a class="code hl_function" href="structXped_1_1VectorInterface.html#ae6914b9a6be047eb1e1ba6631fb077f6">VectorInterface::scale</a>;</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    <span class="keyword">using </span><a class="code hl_function" href="structXped_1_1VectorInterface.html#ab3c6f098536d5a7d86bf2ef88e5724e4">VectorInterface::setConstant</a>;</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    <span class="keyword">using </span><a class="code hl_function" href="structXped_1_1VectorInterface.html#a9e7ec733a3ea9cf52915a3dc94ac56ca">VectorInterface::setRandom</a>;</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    <span class="keyword">using </span><a class="code hl_function" href="structXped_1_1VectorInterface.html#a31369a620d3c10a04a2fc26f1bc2fbae">VectorInterface::setZero</a>;</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    <span class="keyword">template</span> &lt;std::<span class="keywordtype">size_t</span> Rank, <span class="keyword">typename</span> Derived, <span class="keyword">typename</span> ClebschScalar, <span class="keyword">typename</span> Scalar&gt;</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>    <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code hl_function" href="structXped_1_1PlainInterface.html#aa5a35bd1be64852fc56ee30d556b4067">set_block_from_tensor</a>(Eigen::MatrixBase&lt;Derived&gt;&amp; M,</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>                                      <span class="keyword">const</span> <a class="code hl_typedef" href="structXped_1_1PlainInterface.html#a2b8b941c6c09212ca31bff24a6e59020">Indextype</a>&amp; row,</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>                                      <span class="keyword">const</span> <a class="code hl_typedef" href="structXped_1_1PlainInterface.html#a2b8b941c6c09212ca31bff24a6e59020">Indextype</a>&amp; col,</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>                                      <span class="keyword">const</span> <a class="code hl_typedef" href="structXped_1_1PlainInterface.html#a2b8b941c6c09212ca31bff24a6e59020">Indextype</a>&amp; <a class="code hl_function" href="structXped_1_1MatrixInterface.html#a8c1f094026d828247f81dc082eb74f39">rows</a>,</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>                                      <span class="keyword">const</span> <a class="code hl_typedef" href="structXped_1_1PlainInterface.html#a2b8b941c6c09212ca31bff24a6e59020">Indextype</a>&amp; <a class="code hl_function" href="structXped_1_1MatrixInterface.html#a70957be326673c58958f7763d89e1807">cols</a>,</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>                                      <span class="keyword">const</span> ClebschScalar&amp; <a class="code hl_function" href="structXped_1_1PlainInterface.html#ae5dffc16db1dd5fa6ee176c7a1a2744a">scale</a>,</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>                                      <span class="keyword">const</span> <a class="code hl_typedef" href="structXped_1_1TensorInterface.html#a0f8902cb310df0843eb180f637ab1dd7">TType&lt;Scalar, Rank&gt;</a>&amp; T);</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    <span class="keyword">template</span> &lt;std::<span class="keywordtype">size_t</span> Rank, <span class="keyword">typename</span> Derived, <span class="keyword">typename</span> ClebschScalar, <span class="keyword">typename</span> Scalar&gt;</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code hl_function" href="structXped_1_1PlainInterface.html#a2e8fba0dac76ffed98a4b0eb6e61569e">add_to_block_from_tensor</a>(Eigen::MatrixBase&lt;Derived&gt;&amp; M,</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>                                         <span class="keyword">const</span> <a class="code hl_typedef" href="structXped_1_1PlainInterface.html#a2b8b941c6c09212ca31bff24a6e59020">Indextype</a>&amp; row,</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>                                         <span class="keyword">const</span> <a class="code hl_typedef" href="structXped_1_1PlainInterface.html#a2b8b941c6c09212ca31bff24a6e59020">Indextype</a>&amp; col,</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>                                         <span class="keyword">const</span> <a class="code hl_typedef" href="structXped_1_1PlainInterface.html#a2b8b941c6c09212ca31bff24a6e59020">Indextype</a>&amp; <a class="code hl_function" href="structXped_1_1MatrixInterface.html#a8c1f094026d828247f81dc082eb74f39">rows</a>,</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>                                         <span class="keyword">const</span> <a class="code hl_typedef" href="structXped_1_1PlainInterface.html#a2b8b941c6c09212ca31bff24a6e59020">Indextype</a>&amp; <a class="code hl_function" href="structXped_1_1MatrixInterface.html#a70957be326673c58958f7763d89e1807">cols</a>,</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>                                         <span class="keyword">const</span> ClebschScalar&amp; <a class="code hl_function" href="structXped_1_1PlainInterface.html#ae5dffc16db1dd5fa6ee176c7a1a2744a">scale</a>,</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>                                         <span class="keyword">const</span> <a class="code hl_typedef" href="structXped_1_1TensorInterface.html#a0f8902cb310df0843eb180f637ab1dd7">TType&lt;Scalar, Rank&gt;</a>&amp; T);</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span> </div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    <span class="keyword">template</span> &lt;std::<span class="keywordtype">size_t</span> Rank, <span class="keyword">typename</span> Derived, <span class="keyword">typename</span> ClebschScalar, <span class="keyword">typename</span> Scalar&gt;</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code hl_function" href="structXped_1_1PlainInterface.html#aa5a35bd1be64852fc56ee30d556b4067">set_block_from_tensor</a>(Eigen::MatrixBase&lt;Derived&gt;&amp;&amp; M,</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>                                      <span class="keyword">const</span> <a class="code hl_typedef" href="structXped_1_1PlainInterface.html#a2b8b941c6c09212ca31bff24a6e59020">Indextype</a>&amp; row,</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>                                      <span class="keyword">const</span> <a class="code hl_typedef" href="structXped_1_1PlainInterface.html#a2b8b941c6c09212ca31bff24a6e59020">Indextype</a>&amp; col,</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>                                      <span class="keyword">const</span> <a class="code hl_typedef" href="structXped_1_1PlainInterface.html#a2b8b941c6c09212ca31bff24a6e59020">Indextype</a>&amp; <a class="code hl_function" href="structXped_1_1MatrixInterface.html#a8c1f094026d828247f81dc082eb74f39">rows</a>,</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>                                      <span class="keyword">const</span> <a class="code hl_typedef" href="structXped_1_1PlainInterface.html#a2b8b941c6c09212ca31bff24a6e59020">Indextype</a>&amp; <a class="code hl_function" href="structXped_1_1MatrixInterface.html#a70957be326673c58958f7763d89e1807">cols</a>,</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>                                      <span class="keyword">const</span> ClebschScalar&amp; <a class="code hl_function" href="structXped_1_1PlainInterface.html#ae5dffc16db1dd5fa6ee176c7a1a2744a">scale</a>,</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>                                      <span class="keyword">const</span> <a class="code hl_typedef" href="structXped_1_1TensorInterface.html#a0f8902cb310df0843eb180f637ab1dd7">TType&lt;Scalar, Rank&gt;</a>&amp; T);</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span> </div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    <span class="keyword">template</span> &lt;std::<span class="keywordtype">size_t</span> Rank, <span class="keyword">typename</span> Derived, <span class="keyword">typename</span> ClebschScalar, <span class="keyword">typename</span> Scalar&gt;</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>    <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code hl_function" href="structXped_1_1PlainInterface.html#a2e8fba0dac76ffed98a4b0eb6e61569e">add_to_block_from_tensor</a>(Eigen::MatrixBase&lt;Derived&gt;&amp;&amp; M,</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>                                         <span class="keyword">const</span> <a class="code hl_typedef" href="structXped_1_1PlainInterface.html#a2b8b941c6c09212ca31bff24a6e59020">Indextype</a>&amp; row,</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>                                         <span class="keyword">const</span> <a class="code hl_typedef" href="structXped_1_1PlainInterface.html#a2b8b941c6c09212ca31bff24a6e59020">Indextype</a>&amp; col,</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>                                         <span class="keyword">const</span> <a class="code hl_typedef" href="structXped_1_1PlainInterface.html#a2b8b941c6c09212ca31bff24a6e59020">Indextype</a>&amp; <a class="code hl_function" href="structXped_1_1MatrixInterface.html#a8c1f094026d828247f81dc082eb74f39">rows</a>,</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>                                         <span class="keyword">const</span> <a class="code hl_typedef" href="structXped_1_1PlainInterface.html#a2b8b941c6c09212ca31bff24a6e59020">Indextype</a>&amp; <a class="code hl_function" href="structXped_1_1MatrixInterface.html#a70957be326673c58958f7763d89e1807">cols</a>,</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>                                         <span class="keyword">const</span> ClebschScalar&amp; <a class="code hl_function" href="structXped_1_1PlainInterface.html#ae5dffc16db1dd5fa6ee176c7a1a2744a">scale</a>,</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>                                         <span class="keyword">const</span> <a class="code hl_typedef" href="structXped_1_1TensorInterface.html#a0f8902cb310df0843eb180f637ab1dd7">TType&lt;Scalar, Rank&gt;</a>&amp; T);</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span> </div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>    <span class="keyword">template</span> &lt;std::<span class="keywordtype">size_t</span> Rank, <span class="keyword">typename</span> Derived&gt;</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno"><a class="line" href="structXped_1_1PlainInterface.html#a5c027a9a814e0b5da8f116215abcc4f9">   79</a></span>    <span class="keyword">static</span> <a class="code hl_typedef" href="structXped_1_1TensorInterface.html#a0f8902cb310df0843eb180f637ab1dd7">TType&lt;typename Derived::Scalar, Rank&gt;</a> <a class="code hl_function" href="structXped_1_1PlainInterface.html#a5c027a9a814e0b5da8f116215abcc4f9">tensor_from_matrix_block</a>(<span class="keyword">const</span> Eigen::MatrixBase&lt;Derived&gt;&amp; M,</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>                                                                          <span class="keyword">const</span> <a class="code hl_typedef" href="structXped_1_1PlainInterface.html#a2b8b941c6c09212ca31bff24a6e59020">Indextype</a>&amp; row,</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>                                                                          <span class="keyword">const</span> <a class="code hl_typedef" href="structXped_1_1PlainInterface.html#a2b8b941c6c09212ca31bff24a6e59020">Indextype</a>&amp; col,</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>                                                                          <span class="keyword">const</span> <a class="code hl_typedef" href="structXped_1_1PlainInterface.html#a2b8b941c6c09212ca31bff24a6e59020">Indextype</a>&amp; <a class="code hl_function" href="structXped_1_1MatrixInterface.html#a8c1f094026d828247f81dc082eb74f39">rows</a>,</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>                                                                          <span class="keyword">const</span> <a class="code hl_typedef" href="structXped_1_1PlainInterface.html#a2b8b941c6c09212ca31bff24a6e59020">Indextype</a>&amp; <a class="code hl_function" href="structXped_1_1MatrixInterface.html#a70957be326673c58958f7763d89e1807">cols</a>,</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>                                                                          <span class="keyword">const</span> std::array&lt;Indextype, Rank&gt;&amp; dims);</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span> </div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Derived&gt;</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno"><a class="line" href="structXped_1_1PlainInterface.html#a471d2335ceb57469661be81bdbab8621">   87</a></span>    <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code hl_function" href="structXped_1_1PlainInterface.html#a471d2335ceb57469661be81bdbab8621">diagonal_head_matrix_to_vector</a>(<a class="code hl_typedef" href="structXped_1_1VectorInterface.html#af1ae6d8184aa7e163afb1776046ac0de">VType&lt;typename Derived::Scalar&gt;</a>&amp; V, <span class="keyword">const</span> Eigen::MatrixBase&lt;Derived&gt;&amp; M, <span class="keyword">const</span> <a class="code hl_typedef" href="structXped_1_1PlainInterface.html#a2b8b941c6c09212ca31bff24a6e59020">Indextype</a>&amp; n_elems);</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span> </div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Scalar&gt;</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>    <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code hl_function" href="structXped_1_1PlainInterface.html#a01adcebd66ec3627be17ad38330f485e">vec_diff</a>(<span class="keyword">const</span> Eigen::Matrix&lt;Scalar, -1, 1&gt;&amp; vec, <a class="code hl_typedef" href="structXped_1_1MatrixInterface.html#af3f987c824b2afbb0123390f8c0afff7">MType&lt;Scalar&gt;</a>&amp; res);</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span> </div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Scalar&gt;</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>    <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code hl_function" href="structXped_1_1PlainInterface.html#aff861342a398a459b17d031808e4c458">vec_add</a>(<span class="keyword">const</span> Eigen::Matrix&lt;Scalar, -1, 1&gt;&amp; vec, <a class="code hl_typedef" href="structXped_1_1MatrixInterface.html#af3f987c824b2afbb0123390f8c0afff7">MType&lt;Scalar&gt;</a>&amp; res);</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span> </div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Derived&gt;</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>    <span class="keyword">static</span> std::tuple&lt;MType&lt;typename Derived::Scalar&gt;, <a class="code hl_typedef" href="structXped_1_1VectorInterface.html#af1ae6d8184aa7e163afb1776046ac0de">VType&lt;typename Derived::RealScalar&gt;</a>, <a class="code hl_typedef" href="structXped_1_1MatrixInterface.html#af3f987c824b2afbb0123390f8c0afff7">MType&lt;typename Derived::Scalar&gt;</a>&gt;</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>    <a class="code hl_function" href="structXped_1_1PlainInterface.html#a6ad0a6033f9cf1d4453577b9b041da5c">svd</a>(<span class="keyword">const</span> Eigen::MatrixBase&lt;Derived&gt;&amp; M);</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span> </div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Scalar&gt;</div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno"><a class="line" href="structXped_1_1PlainInterface.html#a197a1bed4e5882a546742b5a4f64fb65">  100</a></span>    <span class="keyword">static</span> <a class="code hl_typedef" href="structXped_1_1MatrixInterface.html#af3f987c824b2afbb0123390f8c0afff7">MType&lt;Scalar&gt;</a> <a class="code hl_function" href="structXped_1_1PlainInterface.html#a197a1bed4e5882a546742b5a4f64fb65">vec_to_diagmat</a>(<span class="keyword">const</span> <a class="code hl_typedef" href="structXped_1_1VectorInterface.html#af1ae6d8184aa7e163afb1776046ac0de">VType&lt;Scalar&gt;</a>&amp; V);</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>};</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span> </div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>} <span class="comment">// namespace Xped</span></div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span> </div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span><span class="preprocessor">#ifndef XPED_COMPILED_LIB</span></div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span><span class="preprocessor">#    include &quot;<a class="code" href="PlainInterface__Eigen__impl_8cpp.html">Interfaces/PlainInterface_Eigen_impl.cpp</a>&quot;</span></div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span> </div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span><span class="preprocessor">#endif</span></div>
+<div class="ttc" id="aPlainInterface__Eigen__impl_8cpp_html"><div class="ttname"><a href="PlainInterface__Eigen__impl_8cpp.html">PlainInterface_Eigen_impl.cpp</a></div></div>
+<div class="ttc" id="anamespaceXped_html"><div class="ttname"><a href="namespaceXped.html">Xped</a></div><div class="ttdef"><b>Definition:</b> ADTensor.hpp:17</div></div>
+<div class="ttc" id="astructXped_1_1MatrixInterface_html_a312b0626ed3cb24c2d26da182390c2a2"><div class="ttname"><a href="structXped_1_1MatrixInterface.html#a312b0626ed3cb24c2d26da182390c2a2">Xped::MatrixInterface::setZero</a></div><div class="ttdeci">static void setZero(MType&lt; Scalar &gt; &amp;M)</div><div class="ttdef"><b>Definition:</b> MatrixInterface_Cyclops_impl.cpp:47</div></div>
+<div class="ttc" id="astructXped_1_1MatrixInterface_html_a36c805b0b0e3809e5b5d92969be2a6fa"><div class="ttname"><a href="structXped_1_1MatrixInterface.html#a36c805b0b0e3809e5b5d92969be2a6fa">Xped::MatrixInterface::setConstant</a></div><div class="ttdeci">static void setConstant(MType&lt; Scalar &gt; &amp;M, const Scalar &amp;val)</div><div class="ttdef"><b>Definition:</b> MatrixInterface_Cyclops_impl.cpp:65</div></div>
+<div class="ttc" id="astructXped_1_1MatrixInterface_html_a3d13d4efe859824f3dc8fb21eb3e57fe"><div class="ttname"><a href="structXped_1_1MatrixInterface.html#a3d13d4efe859824f3dc8fb21eb3e57fe">Xped::MatrixInterface::construct_with_zero</a></div><div class="ttdeci">static MType&lt; Scalar &gt; construct_with_zero(const MIndextype &amp;rows, const MIndextype &amp;cols, CTF::World &amp;world)</div><div class="ttdef"><b>Definition:</b> MatrixInterface_Cyclops_impl.cpp:32</div></div>
+<div class="ttc" id="astructXped_1_1MatrixInterface_html_a400d40cebd0ac57e6c8ed09f1ba430e3"><div class="ttname"><a href="structXped_1_1MatrixInterface.html#a400d40cebd0ac57e6c8ed09f1ba430e3">Xped::MatrixInterface::print</a></div><div class="ttdeci">static void print(MT &amp;&amp;M)</div><div class="ttdef"><b>Definition:</b> MatrixInterface_Cyclops_impl.cpp:343</div></div>
+<div class="ttc" id="astructXped_1_1MatrixInterface_html_a57292ce4820ceae43ae6d03be55188d4"><div class="ttname"><a href="structXped_1_1MatrixInterface.html#a57292ce4820ceae43ae6d03be55188d4">Xped::MatrixInterface::getVal</a></div><div class="ttdeci">static Scalar getVal(const MType&lt; Scalar &gt; &amp;M, const MIndextype &amp;row, const MIndextype &amp;col)</div><div class="ttdef"><b>Definition:</b> MatrixInterface_Cyclops_impl.cpp:136</div></div>
+<div class="ttc" id="astructXped_1_1MatrixInterface_html_a5e64130a6aa6850ec3774ced220971ea"><div class="ttname"><a href="structXped_1_1MatrixInterface.html#a5e64130a6aa6850ec3774ced220971ea">Xped::MatrixInterface::setRandom</a></div><div class="ttdeci">static void setRandom(MType&lt; Scalar &gt; &amp;M)</div><div class="ttdef"><b>Definition:</b> MatrixInterface_Cyclops_impl.cpp:53</div></div>
+<div class="ttc" id="astructXped_1_1MatrixInterface_html_a70957be326673c58958f7763d89e1807"><div class="ttname"><a href="structXped_1_1MatrixInterface.html#a70957be326673c58958f7763d89e1807">Xped::MatrixInterface::cols</a></div><div class="ttdeci">static MIndextype cols(const MType&lt; Scalar &gt; &amp;M)</div><div class="ttdef"><b>Definition:</b> MatrixInterface_Cyclops_impl.cpp:90</div></div>
+<div class="ttc" id="astructXped_1_1MatrixInterface_html_a78cd9ec0e7ddbb0b1933abddfe9ce173"><div class="ttname"><a href="structXped_1_1MatrixInterface.html#a78cd9ec0e7ddbb0b1933abddfe9ce173">Xped::MatrixInterface::difference</a></div><div class="ttdeci">static MType&lt; typename ctf_traits&lt; MT1 &gt;::Scalar &gt; difference(MT1 &amp;&amp;M1, MT2 &amp;&amp;M2)</div><div class="ttdef"><b>Definition:</b> MatrixInterface_Cyclops_impl.cpp:219</div></div>
+<div class="ttc" id="astructXped_1_1MatrixInterface_html_a8c1f094026d828247f81dc082eb74f39"><div class="ttname"><a href="structXped_1_1MatrixInterface.html#a8c1f094026d828247f81dc082eb74f39">Xped::MatrixInterface::rows</a></div><div class="ttdeci">static MIndextype rows(const MType&lt; Scalar &gt; &amp;M)</div><div class="ttdef"><b>Definition:</b> MatrixInterface_Cyclops_impl.cpp:84</div></div>
+<div class="ttc" id="astructXped_1_1MatrixInterface_html_a983b326a00d48c6e5d35950c4221f56d"><div class="ttname"><a href="structXped_1_1MatrixInterface.html#a983b326a00d48c6e5d35950c4221f56d">Xped::MatrixInterface::construct</a></div><div class="ttdeci">static MType&lt; Scalar &gt; construct(const MIndextype &amp;rows, const MIndextype &amp;cols, CTF::World &amp;world)</div><div class="ttdef"><b>Definition:</b> MatrixInterface_Cyclops_impl.cpp:26</div></div>
+<div class="ttc" id="astructXped_1_1MatrixInterface_html_acb4da3d086993952411f682c472e6f68"><div class="ttname"><a href="structXped_1_1MatrixInterface.html#acb4da3d086993952411f682c472e6f68">Xped::MatrixInterface::get_raw_data</a></div><div class="ttdeci">static const Scalar * get_raw_data(const Eigen::Matrix&lt; Scalar, -1, -1 &gt; &amp;M)</div><div class="ttdef"><b>Definition:</b> MatrixInterface_Eigen_impl.hpp:81</div></div>
+<div class="ttc" id="astructXped_1_1MatrixInterface_html_addf451b0639ee9eeb22cef528d231093"><div class="ttname"><a href="structXped_1_1MatrixInterface.html#addf451b0639ee9eeb22cef528d231093">Xped::MatrixInterface::add</a></div><div class="ttdeci">static MType&lt; typename ctf_traits&lt; MT1 &gt;::Scalar &gt; add(MT1 &amp;&amp;M1, MT2 &amp;&amp;M2)</div><div class="ttdef"><b>Definition:</b> MatrixInterface_Cyclops_impl.cpp:210</div></div>
+<div class="ttc" id="astructXped_1_1MatrixInterface_html_ae37c412be210104ba3194b3b38652278"><div class="ttname"><a href="structXped_1_1MatrixInterface.html#ae37c412be210104ba3194b3b38652278">Xped::MatrixInterface::setVal</a></div><div class="ttdeci">static void setVal(MType&lt; Scalar &gt; &amp;M, const MIndextype row, const MIndextype col, const Scalar &amp;val)</div></div>
+<div class="ttc" id="astructXped_1_1MatrixInterface_html_ae5dffc16db1dd5fa6ee176c7a1a2744a"><div class="ttname"><a href="structXped_1_1MatrixInterface.html#ae5dffc16db1dd5fa6ee176c7a1a2744a">Xped::MatrixInterface::scale</a></div><div class="ttdeci">static void scale(MType&lt; Scalar &gt; &amp;M, const Scalar &amp;val)</div><div class="ttdef"><b>Definition:</b> MatrixInterface_Cyclops_impl.cpp:228</div></div>
+<div class="ttc" id="astructXped_1_1MatrixInterface_html_af3f987c824b2afbb0123390f8c0afff7"><div class="ttname"><a href="structXped_1_1MatrixInterface.html#af3f987c824b2afbb0123390f8c0afff7">Xped::MatrixInterface::MType</a></div><div class="ttdeci">CTF::Matrix&lt; Scalar &gt; MType</div><div class="ttdef"><b>Definition:</b> MatrixInterface_Cyclops_impl.hpp:40</div></div>
+<div class="ttc" id="astructXped_1_1PlainInterface_html_a01adcebd66ec3627be17ad38330f485e"><div class="ttname"><a href="structXped_1_1PlainInterface.html#a01adcebd66ec3627be17ad38330f485e">Xped::PlainInterface::vec_diff</a></div><div class="ttdeci">static void vec_diff(VT &amp;&amp;vec, MType&lt; typename ctf_traits&lt; VT &gt;::Scalar &gt; &amp;res)</div></div>
+<div class="ttc" id="astructXped_1_1PlainInterface_html_a197a1bed4e5882a546742b5a4f64fb65"><div class="ttname"><a href="structXped_1_1PlainInterface.html#a197a1bed4e5882a546742b5a4f64fb65">Xped::PlainInterface::vec_to_diagmat</a></div><div class="ttdeci">static MType&lt; Scalar &gt; vec_to_diagmat(const VType&lt; Scalar &gt; &amp;V)</div></div>
+<div class="ttc" id="astructXped_1_1PlainInterface_html_a2b8b941c6c09212ca31bff24a6e59020"><div class="ttname"><a href="structXped_1_1PlainInterface.html#a2b8b941c6c09212ca31bff24a6e59020">Xped::PlainInterface::Indextype</a></div><div class="ttdeci">int Indextype</div><div class="ttdef"><b>Definition:</b> PlainInterface_Cyclops_impl.hpp:11</div></div>
+<div class="ttc" id="astructXped_1_1PlainInterface_html_a2e8fba0dac76ffed98a4b0eb6e61569e"><div class="ttname"><a href="structXped_1_1PlainInterface.html#a2e8fba0dac76ffed98a4b0eb6e61569e">Xped::PlainInterface::add_to_block_from_tensor</a></div><div class="ttdeci">static void add_to_block_from_tensor(MType&lt; Scalar &gt; &amp;M, const Indextype &amp;row_off, const Indextype &amp;col_off, const Indextype &amp;rows, const Indextype &amp;cols, const Scalar &amp;scale, const TType&lt; Scalar, Rank &gt; &amp;T)</div><div class="ttdef"><b>Definition:</b> PlainInterface_Cyclops_impl.cpp:63</div></div>
+<div class="ttc" id="astructXped_1_1PlainInterface_html_a471d2335ceb57469661be81bdbab8621"><div class="ttname"><a href="structXped_1_1PlainInterface.html#a471d2335ceb57469661be81bdbab8621">Xped::PlainInterface::diagonal_head_matrix_to_vector</a></div><div class="ttdeci">static void diagonal_head_matrix_to_vector(VType&lt; typename Derived::Scalar &gt; &amp;V, const Eigen::MatrixBase&lt; Derived &gt; &amp;M, const Indextype &amp;n_elems)</div></div>
+<div class="ttc" id="astructXped_1_1PlainInterface_html_a5c027a9a814e0b5da8f116215abcc4f9"><div class="ttname"><a href="structXped_1_1PlainInterface.html#a5c027a9a814e0b5da8f116215abcc4f9">Xped::PlainInterface::tensor_from_matrix_block</a></div><div class="ttdeci">static TType&lt; typename Derived::Scalar, Rank &gt; tensor_from_matrix_block(const Eigen::MatrixBase&lt; Derived &gt; &amp;M, const Indextype &amp;row, const Indextype &amp;col, const Indextype &amp;rows, const Indextype &amp;cols, const std::array&lt; Indextype, Rank &gt; &amp;dims)</div></div>
+<div class="ttc" id="astructXped_1_1PlainInterface_html_a6ad0a6033f9cf1d4453577b9b041da5c"><div class="ttname"><a href="structXped_1_1PlainInterface.html#a6ad0a6033f9cf1d4453577b9b041da5c">Xped::PlainInterface::svd</a></div><div class="ttdeci">static std::tuple&lt; MType&lt; typename ctf_traits&lt; MT &gt;::Scalar &gt;, VType&lt; typename ctf_traits&lt; MT &gt;::Scalar &gt;, MType&lt; typename ctf_traits&lt; MT &gt;::Scalar &gt; &gt; svd(MT &amp;&amp;M)</div><div class="ttdef"><b>Definition:</b> PlainInterface_Cyclops_impl.cpp:138</div></div>
+<div class="ttc" id="astructXped_1_1PlainInterface_html_aa5a35bd1be64852fc56ee30d556b4067"><div class="ttname"><a href="structXped_1_1PlainInterface.html#aa5a35bd1be64852fc56ee30d556b4067">Xped::PlainInterface::set_block_from_tensor</a></div><div class="ttdeci">static void set_block_from_tensor(MType&lt; Scalar &gt; &amp;M, const Indextype &amp;row_off, const Indextype &amp;col_off, const Indextype &amp;rows, const Indextype &amp;cols, const Scalar &amp;scale, const TType&lt; Scalar, Rank &gt; &amp;T)</div><div class="ttdef"><b>Definition:</b> PlainInterface_Cyclops_impl.cpp:36</div></div>
+<div class="ttc" id="astructXped_1_1PlainInterface_html_ae5dffc16db1dd5fa6ee176c7a1a2744a"><div class="ttname"><a href="structXped_1_1PlainInterface.html#ae5dffc16db1dd5fa6ee176c7a1a2744a">Xped::PlainInterface::scale</a></div><div class="ttdeci">static void scale(MType&lt; Scalar &gt; &amp;M, const Scalar &amp;val)</div><div class="ttdef"><b>Definition:</b> MatrixInterface_Cyclops_impl.cpp:228</div></div>
+<div class="ttc" id="astructXped_1_1PlainInterface_html_aff861342a398a459b17d031808e4c458"><div class="ttname"><a href="structXped_1_1PlainInterface.html#aff861342a398a459b17d031808e4c458">Xped::PlainInterface::vec_add</a></div><div class="ttdeci">static void vec_add(VT &amp;&amp;vec, MType&lt; typename ctf_traits&lt; VT &gt;::Scalar &gt; &amp;res)</div></div>
+<div class="ttc" id="astructXped_1_1TensorInterface_html_a0f8902cb310df0843eb180f637ab1dd7"><div class="ttname"><a href="structXped_1_1TensorInterface.html#a0f8902cb310df0843eb180f637ab1dd7">Xped::TensorInterface::TType</a></div><div class="ttdeci">nda::dense_array&lt; Scalar, Rank &gt; TType</div><div class="ttdef"><b>Definition:</b> TensorInterface_Array_impl.hpp:44</div></div>
+<div class="ttc" id="astructXped_1_1TensorInterface_html_a7710ef13a75981334682b673675a6395"><div class="ttname"><a href="structXped_1_1TensorInterface.html#a7710ef13a75981334682b673675a6395">Xped::TensorInterface::setZero</a></div><div class="ttdeci">static void setZero(TType&lt; Scalar, Rank &gt; &amp;T)</div><div class="ttdef"><b>Definition:</b> TensorInterface_Array_impl.hpp:95</div></div>
+<div class="ttc" id="astructXped_1_1TensorInterface_html_a90d574be798bbf409c201cdb19c746fa"><div class="ttname"><a href="structXped_1_1TensorInterface.html#a90d574be798bbf409c201cdb19c746fa">Xped::TensorInterface::setConstant</a></div><div class="ttdeci">static void setConstant(TType&lt; Scalar, Rank &gt; &amp;T, const Scalar &amp;val)</div><div class="ttdef"><b>Definition:</b> TensorInterface_Array_impl.hpp:107</div></div>
+<div class="ttc" id="astructXped_1_1TensorInterface_html_aade3abc7f1bf5fe2cb0df18085f7238f"><div class="ttname"><a href="structXped_1_1TensorInterface.html#aade3abc7f1bf5fe2cb0df18085f7238f">Xped::TensorInterface::print</a></div><div class="ttdeci">static std::string print(const TType&lt; Scalar, Rank &gt; &amp;T)</div><div class="ttdef"><b>Definition:</b> TensorInterface_Array_impl.hpp:389</div></div>
+<div class="ttc" id="astructXped_1_1TensorInterface_html_ab01379da5912c894541d761a4dffceaf"><div class="ttname"><a href="structXped_1_1TensorInterface.html#ab01379da5912c894541d761a4dffceaf">Xped::TensorInterface::getVal</a></div><div class="ttdeci">static Scalar getVal(const TType&lt; Scalar, Rank &gt; &amp;T, const std::array&lt; Indextype, Rank &gt; &amp;index)</div><div class="ttdef"><b>Definition:</b> TensorInterface_Array_impl.hpp:119</div></div>
+<div class="ttc" id="astructXped_1_1TensorInterface_html_ab60406eb01e34f9de881f787fb7a1f3d"><div class="ttname"><a href="structXped_1_1TensorInterface.html#ab60406eb01e34f9de881f787fb7a1f3d">Xped::TensorInterface::construct</a></div><div class="ttdeci">static TType&lt; Scalar, Rank &gt; construct(const std::array&lt; Indextype, Rank &gt; &amp;dims, mpi::XpedWorld &amp;world=mpi::getUniverse())</div><div class="ttdef"><b>Definition:</b> TensorInterface_Array_impl.hpp:58</div></div>
+<div class="ttc" id="astructXped_1_1TensorInterface_html_abf838e4856338f33dc47504b1f731846"><div class="ttname"><a href="structXped_1_1TensorInterface.html#abf838e4856338f33dc47504b1f731846">Xped::TensorInterface::setVal</a></div><div class="ttdeci">static void setVal(TType&lt; Scalar, Rank &gt; &amp;T, const std::array&lt; Indextype, Rank &gt; &amp;index, const Scalar &amp;val)</div><div class="ttdef"><b>Definition:</b> TensorInterface_Array_impl.hpp:113</div></div>
+<div class="ttc" id="astructXped_1_1TensorInterface_html_ac8d594de1d6ab236fe37741da064e753"><div class="ttname"><a href="structXped_1_1TensorInterface.html#ac8d594de1d6ab236fe37741da064e753">Xped::TensorInterface::get_raw_data</a></div><div class="ttdeci">static const Scalar * get_raw_data(const TType&lt; Scalar, Rank &gt; &amp;T)</div><div class="ttdef"><b>Definition:</b> TensorInterface_Array_impl.hpp:130</div></div>
+<div class="ttc" id="astructXped_1_1TensorInterface_html_acb6b3830e7ba424f96281fc362149ff9"><div class="ttname"><a href="structXped_1_1TensorInterface.html#acb6b3830e7ba424f96281fc362149ff9">Xped::TensorInterface::setRandom</a></div><div class="ttdeci">static void setRandom(TType&lt; Scalar, Rank &gt; &amp;T)</div><div class="ttdef"><b>Definition:</b> TensorInterface_Array_impl.hpp:101</div></div>
+<div class="ttc" id="astructXped_1_1VectorInterface_html_a31369a620d3c10a04a2fc26f1bc2fbae"><div class="ttname"><a href="structXped_1_1VectorInterface.html#a31369a620d3c10a04a2fc26f1bc2fbae">Xped::VectorInterface::setZero</a></div><div class="ttdeci">static void setZero(VType&lt; Scalar &gt; &amp;V)</div><div class="ttdef"><b>Definition:</b> VectorInterface_Cyclops_impl.cpp:34</div></div>
+<div class="ttc" id="astructXped_1_1VectorInterface_html_a5779a7f83a2dc8354c4e66a35793d86b"><div class="ttname"><a href="structXped_1_1VectorInterface.html#a5779a7f83a2dc8354c4e66a35793d86b">Xped::VectorInterface::construct</a></div><div class="ttdeci">static VType&lt; Scalar &gt; construct(const VIndextype &amp;elems, CTF::World &amp;world)</div><div class="ttdef"><b>Definition:</b> VectorInterface_Cyclops_impl.cpp:15</div></div>
+<div class="ttc" id="astructXped_1_1VectorInterface_html_a57c791d523d7e50aa9d6b25ecb1d2d66"><div class="ttname"><a href="structXped_1_1VectorInterface.html#a57c791d523d7e50aa9d6b25ecb1d2d66">Xped::VectorInterface::construct_with_zero</a></div><div class="ttdeci">static VType&lt; Scalar &gt; construct_with_zero(const VIndextype &amp;elems, CTF::World &amp;world)</div><div class="ttdef"><b>Definition:</b> VectorInterface_Cyclops_impl.cpp:21</div></div>
+<div class="ttc" id="astructXped_1_1VectorInterface_html_a9e7ec733a3ea9cf52915a3dc94ac56ca"><div class="ttname"><a href="structXped_1_1VectorInterface.html#a9e7ec733a3ea9cf52915a3dc94ac56ca">Xped::VectorInterface::setRandom</a></div><div class="ttdeci">static void setRandom(VType&lt; Scalar &gt; &amp;V)</div><div class="ttdef"><b>Definition:</b> VectorInterface_Cyclops_impl.cpp:40</div></div>
+<div class="ttc" id="astructXped_1_1VectorInterface_html_aad8642b86de893fa5550791e83b4056d"><div class="ttname"><a href="structXped_1_1VectorInterface.html#aad8642b86de893fa5550791e83b4056d">Xped::VectorInterface::print</a></div><div class="ttdeci">static std::string print(const VType&lt; Scalar &gt; &amp;V)</div><div class="ttdef"><b>Definition:</b> VectorInterface_Cyclops_impl.cpp:92</div></div>
+<div class="ttc" id="astructXped_1_1VectorInterface_html_ab3c6f098536d5a7d86bf2ef88e5724e4"><div class="ttname"><a href="structXped_1_1VectorInterface.html#ab3c6f098536d5a7d86bf2ef88e5724e4">Xped::VectorInterface::setConstant</a></div><div class="ttdeci">static void setConstant(VType&lt; Scalar &gt; &amp;V, const Scalar &amp;val)</div><div class="ttdef"><b>Definition:</b> VectorInterface_Cyclops_impl.cpp:46</div></div>
+<div class="ttc" id="astructXped_1_1VectorInterface_html_ae6914b9a6be047eb1e1ba6631fb077f6"><div class="ttname"><a href="structXped_1_1VectorInterface.html#ae6914b9a6be047eb1e1ba6631fb077f6">Xped::VectorInterface::scale</a></div><div class="ttdeci">static VType&lt; Scalar &gt; scale(VT1 &amp;&amp;V, const Scalar &amp;val)</div><div class="ttdef"><b>Definition:</b> VectorInterface_Cyclops_impl.cpp:75</div></div>
+<div class="ttc" id="astructXped_1_1VectorInterface_html_af1ae6d8184aa7e163afb1776046ac0de"><div class="ttname"><a href="structXped_1_1VectorInterface.html#af1ae6d8184aa7e163afb1776046ac0de">Xped::VectorInterface::VType</a></div><div class="ttdeci">CTF::Vector&lt; Scalar &gt; VType</div><div class="ttdef"><b>Definition:</b> VectorInterface_Cyclops_impl.hpp:12</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+<!-- HTML footer for doxygen 1.9.2-->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_4b24e72d7fcd206265f2d42a075103f3.html">Xped</a></li><li class="navelem"><a class="el" href="dir_d7d2c0c129191321783186cce88415cb.html">Interfaces</a></li><li class="navelem"><a class="el" href="PlainInterface__Eigen__impl_8hpp.html">PlainInterface_Eigen_impl.hpp</a></li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.6 </li>
+  </ul>
+</div>
+<script type="text/javascript">
+  // script for doxygen 1.9.2
+  $(function() {
+      toggleButton = document.createElement('doxygen-awesome-dark-mode-toggle')
+      toggleButton.title = "Toggle Light/Dark Mode"
+      $(document).ready(function(){
+          document.getElementById("MSearchBox").parentNode.appendChild(toggleButton)
+      })
+      $(window).resize(function(){
+          document.getElementById("MSearchBox").parentNode.appendChild(toggleButton)
+      })
+  })
+</script>
+</body>
+</html>

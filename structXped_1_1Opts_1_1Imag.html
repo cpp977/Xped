@@ -1,0 +1,651 @@
+<!-- HTML header for doxygen 1.9.6-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.6"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Xped: Xped::Opts::Imag Struct Reference</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+});
+</script>
+<script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript">
+  DoxygenAwesomeDarkModeToggle.lightModeIcon = '🌞'
+// icon from https://fonts.google.com/icons
+  DoxygenAwesomeDarkModeToggle.darkModeIcon = `<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px" viewBox="0 0 24 24" width="24px" fill="#009793"><g><rect fill="none" height="24" width="24"/></g><g><g><path d="M8.1,14.15C9.77,14.63,11,16.17,11,18c0,0.68-0.19,1.31-0.48,1.87c0.48,0.09,0.97,0.14,1.48,0.14 c1.48,0,2.9-0.41,4.13-1.15c-2.62-0.92-5.23-2.82-6.8-5.86C7.74,9.94,7.78,7.09,8.29,4.9c-2.57,1.33-4.3,4.01-4.3,7.1c0,0,0,0,0,0 c0.01,0,0.01,0,0.02,0C5.66,12,7.18,12.83,8.1,14.15z" opacity=".3"/><path d="M19.78,17.51c-2.47,0-6.57-1.33-8.68-5.43C8.77,7.57,10.6,3.6,11.63,2.01C6.27,2.2,1.98,6.59,1.98,12 c0,0.14,0.02,0.28,0.02,0.42C2.61,12.16,3.28,12,3.98,12c0,0,0,0,0,0c0-3.09,1.73-5.77,4.3-7.1C7.78,7.09,7.74,9.94,9.32,13 c1.57,3.04,4.18,4.95,6.8,5.86c-1.23,0.74-2.65,1.15-4.13,1.15c-0.5,0-1-0.05-1.48-0.14c-0.37,0.7-0.94,1.27-1.64,1.64 c0.98,0.32,2.03,0.5,3.11,0.5c3.5,0,6.58-1.8,8.37-4.52C20.18,17.5,19.98,17.51,19.78,17.51z"/><path d="M7,16l-0.18,0C6.4,14.84,5.3,14,4,14c-1.66,0-3,1.34-3,3s1.34,3,3,3c0.62,0,2.49,0,3,0c1.1,0,2-0.9,2-2 C9,16.9,8.1,16,7,16z"/></g></g></svg>`
+  DoxygenAwesomeDarkModeToggle.init()
+</script>
+</head>
+<body>
+  <!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/cpp977/Xped" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">Xped
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.9.6 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('structXped_1_1Opts_1_1Imag.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="structXped_1_1Opts_1_1Imag-members.html">List of all members</a>  </div>
+  <div class="headertitle"><div class="title">Xped::Opts::Imag Struct Reference</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p><code>#include &lt;<a class="el" href="ImagOpts_8hpp_source.html">ImagOpts.hpp</a>&gt;</code></p>
+<div class="dynheader">
+Collaboration diagram for Xped::Opts::Imag:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1Opts_1_1Imag__coll__graph.png" border="0" usemap="#aXped_1_1Opts_1_1Imag_coll__map" alt="Collaboration graph"/></div>
+<map name="aXped_1_1Opts_1_1Imag_coll__map" id="aXped_1_1Opts_1_1Imag_coll__map">
+<area shape="rect" title=" " alt="" coords="19,152,153,177"/>
+<area shape="rect" title=" " alt="" coords="5,5,65,31"/>
+<area shape="rect" title=" " alt="" coords="109,5,167,31"/>
+</map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a922e16fbc4f5892267507498875c91d4"><td class="memTemplParams" colspan="2">template&lt;typename Ar &gt; </td></tr>
+<tr class="memitem:a922e16fbc4f5892267507498875c91d4"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structXped_1_1Opts_1_1Imag.html#a922e16fbc4f5892267507498875c91d4">serialize</a> (Ar &amp;ar)</td></tr>
+<tr class="separator:a922e16fbc4f5892267507498875c91d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a59e5822cef2477879471848b573d6dc7"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Opts_1_1Imag.html#a59e5822cef2477879471848b573d6dc7">info</a> ()</td></tr>
+<tr class="separator:a59e5822cef2477879471848b573d6dc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:acc8ca89422332bfc6a4adbb87d219fb9"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Opts_1_1Imag.html#acc8ca89422332bfc6a4adbb87d219fb9">Ds</a> = {2ul, 3ul, 4ul}</td></tr>
+<tr class="separator:acc8ca89422332bfc6a4adbb87d219fb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5c184176400b2aa6626e629ed1e8f6d"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::vector&lt; std::size_t &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Opts_1_1Imag.html#aa5c184176400b2aa6626e629ed1e8f6d">chis</a> = {{20ul}, {30ul}, {40ul}}</td></tr>
+<tr class="separator:aa5c184176400b2aa6626e629ed1e8f6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a189e44ba22abf19a1a5c7f379f1f2990"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Opts_1_1Imag.html#a189e44ba22abf19a1a5c7f379f1f2990">t_steps</a> = {100ul, 100ul, 100ul, 100ul, 100ul, 100ul, 100ul, 100ul, 100ul}</td></tr>
+<tr class="separator:a189e44ba22abf19a1a5c7f379f1f2990"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aedde1fd674c0d86d48f6038667e17d7a"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Opts_1_1Imag.html#aedde1fd674c0d86d48f6038667e17d7a">dts</a> = {0.1, 0.05, 0.01, 0.005, 0.001, 0.0005, 0.0001, 0.00005, 0.00001}</td></tr>
+<tr class="separator:aedde1fd674c0d86d48f6038667e17d7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6658dc604a4ddf88fff635e0d23224b"><td class="memItemLeft" align="right" valign="top">Update&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Opts_1_1Imag.html#ab6658dc604a4ddf88fff635e0d23224b">update</a> = Update::SIMPLE</td></tr>
+<tr class="separator:ab6658dc604a4ddf88fff635e0d23224b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a603466edade8dc2f6a02f40a4cbbb07d"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Opts_1_1Imag.html#a603466edade8dc2f6a02f40a4cbbb07d">max_steps</a> = 50</td></tr>
+<tr class="separator:a603466edade8dc2f6a02f40a4cbbb07d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adcc42774b830c04d0de01d4034505f98"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Opts_1_1Imag.html#adcc42774b830c04d0de01d4034505f98">min_steps</a> = 0</td></tr>
+<tr class="separator:adcc42774b830c04d0de01d4034505f98"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a621fc3f9fa35dd64cb254715823fd5c3"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Opts_1_1Imag.html#a621fc3f9fa35dd64cb254715823fd5c3">tol</a> = 1.e-10</td></tr>
+<tr class="separator:a621fc3f9fa35dd64cb254715823fd5c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76f98cd60eb6425b199fc0df7937669a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Opts_1_1Imag.html#a76f98cd60eb6425b199fc0df7937669a">resume</a> = false</td></tr>
+<tr class="separator:a76f98cd60eb6425b199fc0df7937669a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2f86ff839cf58a5b4c0041fd95653e09"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Opts_1_1Imag.html#a2f86ff839cf58a5b4c0041fd95653e09">load</a> = &quot;&quot;</td></tr>
+<tr class="separator:a2f86ff839cf58a5b4c0041fd95653e09"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad19ee41b00dbaf5550672aa767f1d428"><td class="memItemLeft" align="right" valign="top">LoadFormat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Opts_1_1Imag.html#ad19ee41b00dbaf5550672aa767f1d428">load_format</a> = LoadFormat::NATIVE</td></tr>
+<tr class="separator:ad19ee41b00dbaf5550672aa767f1d428"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5767dcb969b7e477b5e32cb0f3e6911"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Opts_1_1Imag.html#af5767dcb969b7e477b5e32cb0f3e6911">qn_scale</a> = 1</td></tr>
+<tr class="separator:af5767dcb969b7e477b5e32cb0f3e6911"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae3a5241116d8150bc8c6fca0beafa77"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Opts_1_1Imag.html#aae3a5241116d8150bc8c6fca0beafa77">seed</a> = 0ul</td></tr>
+<tr class="separator:aae3a5241116d8150bc8c6fca0beafa77"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace06f13b1e844aa77eaf46600e0530a0"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Opts_1_1Imag.html#ace06f13b1e844aa77eaf46600e0530a0">id</a> = 1ul</td></tr>
+<tr class="separator:ace06f13b1e844aa77eaf46600e0530a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c394651d7975b73add06b00ea6785c8"><td class="memItemLeft" align="right" valign="top">Verbosity&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Opts_1_1Imag.html#a3c394651d7975b73add06b00ea6785c8">verbosity</a> = Verbosity::ON_ENTRY</td></tr>
+<tr class="separator:a3c394651d7975b73add06b00ea6785c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2f90da55843f56f3a244f053da6ef0a"><td class="memItemLeft" align="right" valign="top">std::filesystem::path&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Opts_1_1Imag.html#ae2f90da55843f56f3a244f053da6ef0a">working_directory</a> = std::filesystem::current_path()</td></tr>
+<tr class="separator:ae2f90da55843f56f3a244f053da6ef0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add7568a28d2ecfa6628f5e08ba8c0c13"><td class="memItemLeft" align="right" valign="top">std::filesystem::path&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Opts_1_1Imag.html#add7568a28d2ecfa6628f5e08ba8c0c13">logging_directory</a> = &quot;logs&quot;</td></tr>
+<tr class="separator:add7568a28d2ecfa6628f5e08ba8c0c13"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a128fdb0df6c2b16c0050894612535607"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Opts_1_1Imag.html#a128fdb0df6c2b16c0050894612535607">log_format</a> = &quot;.log&quot;</td></tr>
+<tr class="separator:a128fdb0df6c2b16c0050894612535607"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a303da0f4ff5dfdb6f9b65e8e920e6e76"><td class="memItemLeft" align="right" valign="top">std::filesystem::path&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Opts_1_1Imag.html#a303da0f4ff5dfdb6f9b65e8e920e6e76">obs_directory</a> = &quot;obs&quot;</td></tr>
+<tr class="separator:a303da0f4ff5dfdb6f9b65e8e920e6e76"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aefb00018e06c6f368bf849009df75a35"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Opts_1_1Imag.html#aefb00018e06c6f368bf849009df75a35">display_obs</a> = true</td></tr>
+<tr class="separator:aefb00018e06c6f368bf849009df75a35"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1bab74d3f1e2f74b352ec0f949a22463"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Opts_1_1Imag.html#a1bab74d3f1e2f74b352ec0f949a22463">multi_init</a> = false</td></tr>
+<tr class="separator:a1bab74d3f1e2f74b352ec0f949a22463"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee48e7136ef24380b719ede113627f65"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Opts_1_1Imag.html#aee48e7136ef24380b719ede113627f65">init_seeds</a> = {0, 1, 2}</td></tr>
+<tr class="separator:aee48e7136ef24380b719ede113627f65"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba767ac5c6c91ff445ad66114e0c572b"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Opts_1_1Imag.html#aba767ac5c6c91ff445ad66114e0c572b">init_Ds</a> = {2ul, 3ul, 2ul}</td></tr>
+<tr class="separator:aba767ac5c6c91ff445ad66114e0c572b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46ae8d687bdeda60f4207b3959595270"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Opts_1_1Imag.html#a46ae8d687bdeda60f4207b3959595270">init_t_steps</a> = {40ul, 40ul, 40ul}</td></tr>
+<tr class="separator:a46ae8d687bdeda60f4207b3959595270"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4036321df98c306df80a5de8385d36d"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Opts_1_1Imag.html#ad4036321df98c306df80a5de8385d36d">init_dts</a> = {0.1, 0.01, 0.001}</td></tr>
+<tr class="separator:ad4036321df98c306df80a5de8385d36d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a763e65176193db9a92a8675dcd924006"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Opts_1_1Imag.html#a763e65176193db9a92a8675dcd924006">init_chi</a> = 28</td></tr>
+<tr class="separator:a763e65176193db9a92a8675dcd924006"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a59e5822cef2477879471848b573d6dc7" name="a59e5822cef2477879471848b573d6dc7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a59e5822cef2477879471848b573d6dc7">&#9670;&#160;</a></span>info()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto Xped::Opts::Imag::info </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1Opts_1_1Imag_a59e5822cef2477879471848b573d6dc7_icgraph.png" border="0" usemap="#astructXped_1_1Opts_1_1Imag_a59e5822cef2477879471848b573d6dc7_icgraph" alt=""/></div>
+<map name="astructXped_1_1Opts_1_1Imag_a59e5822cef2477879471848b573d6dc7_icgraph" id="astructXped_1_1Opts_1_1Imag_a59e5822cef2477879471848b573d6dc7_icgraph">
+<area shape="rect" title=" " alt="" coords="329,13,496,38"/>
+<area shape="rect" href="structXped_1_1iPEPSSolverImag.html#a820364bdb216b655c2857fbb56443cf0" title=" " alt="" coords="108,5,281,45"/>
+<area shape="rect" href="ad__ramp_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,13,60,38"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a922e16fbc4f5892267507498875c91d4" name="a922e16fbc4f5892267507498875c91d4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a922e16fbc4f5892267507498875c91d4">&#9670;&#160;</a></span>serialize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Ar &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Xped::Opts::Imag::serialize </td>
+          <td>(</td>
+          <td class="paramtype">Ar &amp;&#160;</td>
+          <td class="paramname"><em>ar</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="aa5c184176400b2aa6626e629ed1e8f6d" name="aa5c184176400b2aa6626e629ed1e8f6d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa5c184176400b2aa6626e629ed1e8f6d">&#9670;&#160;</a></span>chis</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::vector&lt;std::size_t&gt; &gt; Xped::Opts::Imag::chis = {{20ul}, {30ul}, {40ul}}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aefb00018e06c6f368bf849009df75a35" name="aefb00018e06c6f368bf849009df75a35"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aefb00018e06c6f368bf849009df75a35">&#9670;&#160;</a></span>display_obs</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Xped::Opts::Imag::display_obs = true</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="acc8ca89422332bfc6a4adbb87d219fb9" name="acc8ca89422332bfc6a4adbb87d219fb9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc8ca89422332bfc6a4adbb87d219fb9">&#9670;&#160;</a></span>Ds</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::size_t&gt; Xped::Opts::Imag::Ds = {2ul, 3ul, 4ul}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aedde1fd674c0d86d48f6038667e17d7a" name="aedde1fd674c0d86d48f6038667e17d7a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aedde1fd674c0d86d48f6038667e17d7a">&#9670;&#160;</a></span>dts</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;double&gt; Xped::Opts::Imag::dts = {0.1, 0.05, 0.01, 0.005, 0.001, 0.0005, 0.0001, 0.00005, 0.00001}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ace06f13b1e844aa77eaf46600e0530a0" name="ace06f13b1e844aa77eaf46600e0530a0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ace06f13b1e844aa77eaf46600e0530a0">&#9670;&#160;</a></span>id</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t Xped::Opts::Imag::id = 1ul</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a763e65176193db9a92a8675dcd924006" name="a763e65176193db9a92a8675dcd924006"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a763e65176193db9a92a8675dcd924006">&#9670;&#160;</a></span>init_chi</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t Xped::Opts::Imag::init_chi = 28</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aba767ac5c6c91ff445ad66114e0c572b" name="aba767ac5c6c91ff445ad66114e0c572b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aba767ac5c6c91ff445ad66114e0c572b">&#9670;&#160;</a></span>init_Ds</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::size_t&gt; Xped::Opts::Imag::init_Ds = {2ul, 3ul, 2ul}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad4036321df98c306df80a5de8385d36d" name="ad4036321df98c306df80a5de8385d36d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad4036321df98c306df80a5de8385d36d">&#9670;&#160;</a></span>init_dts</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;double&gt; Xped::Opts::Imag::init_dts = {0.1, 0.01, 0.001}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aee48e7136ef24380b719ede113627f65" name="aee48e7136ef24380b719ede113627f65"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aee48e7136ef24380b719ede113627f65">&#9670;&#160;</a></span>init_seeds</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::size_t&gt; Xped::Opts::Imag::init_seeds = {0, 1, 2}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a46ae8d687bdeda60f4207b3959595270" name="a46ae8d687bdeda60f4207b3959595270"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a46ae8d687bdeda60f4207b3959595270">&#9670;&#160;</a></span>init_t_steps</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::size_t&gt; Xped::Opts::Imag::init_t_steps = {40ul, 40ul, 40ul}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2f86ff839cf58a5b4c0041fd95653e09" name="a2f86ff839cf58a5b4c0041fd95653e09"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2f86ff839cf58a5b4c0041fd95653e09">&#9670;&#160;</a></span>load</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string Xped::Opts::Imag::load = &quot;&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad19ee41b00dbaf5550672aa767f1d428" name="ad19ee41b00dbaf5550672aa767f1d428"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad19ee41b00dbaf5550672aa767f1d428">&#9670;&#160;</a></span>load_format</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">LoadFormat Xped::Opts::Imag::load_format = LoadFormat::NATIVE</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a128fdb0df6c2b16c0050894612535607" name="a128fdb0df6c2b16c0050894612535607"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a128fdb0df6c2b16c0050894612535607">&#9670;&#160;</a></span>log_format</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string Xped::Opts::Imag::log_format = &quot;.log&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="add7568a28d2ecfa6628f5e08ba8c0c13" name="add7568a28d2ecfa6628f5e08ba8c0c13"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#add7568a28d2ecfa6628f5e08ba8c0c13">&#9670;&#160;</a></span>logging_directory</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::filesystem::path Xped::Opts::Imag::logging_directory = &quot;logs&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a603466edade8dc2f6a02f40a4cbbb07d" name="a603466edade8dc2f6a02f40a4cbbb07d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a603466edade8dc2f6a02f40a4cbbb07d">&#9670;&#160;</a></span>max_steps</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t Xped::Opts::Imag::max_steps = 50</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="adcc42774b830c04d0de01d4034505f98" name="adcc42774b830c04d0de01d4034505f98"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adcc42774b830c04d0de01d4034505f98">&#9670;&#160;</a></span>min_steps</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t Xped::Opts::Imag::min_steps = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1bab74d3f1e2f74b352ec0f949a22463" name="a1bab74d3f1e2f74b352ec0f949a22463"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1bab74d3f1e2f74b352ec0f949a22463">&#9670;&#160;</a></span>multi_init</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Xped::Opts::Imag::multi_init = false</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a303da0f4ff5dfdb6f9b65e8e920e6e76" name="a303da0f4ff5dfdb6f9b65e8e920e6e76"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a303da0f4ff5dfdb6f9b65e8e920e6e76">&#9670;&#160;</a></span>obs_directory</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::filesystem::path Xped::Opts::Imag::obs_directory = &quot;obs&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af5767dcb969b7e477b5e32cb0f3e6911" name="af5767dcb969b7e477b5e32cb0f3e6911"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af5767dcb969b7e477b5e32cb0f3e6911">&#9670;&#160;</a></span>qn_scale</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Xped::Opts::Imag::qn_scale = 1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a76f98cd60eb6425b199fc0df7937669a" name="a76f98cd60eb6425b199fc0df7937669a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a76f98cd60eb6425b199fc0df7937669a">&#9670;&#160;</a></span>resume</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Xped::Opts::Imag::resume = false</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aae3a5241116d8150bc8c6fca0beafa77" name="aae3a5241116d8150bc8c6fca0beafa77"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aae3a5241116d8150bc8c6fca0beafa77">&#9670;&#160;</a></span>seed</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t Xped::Opts::Imag::seed = 0ul</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a189e44ba22abf19a1a5c7f379f1f2990" name="a189e44ba22abf19a1a5c7f379f1f2990"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a189e44ba22abf19a1a5c7f379f1f2990">&#9670;&#160;</a></span>t_steps</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::size_t&gt; Xped::Opts::Imag::t_steps = {100ul, 100ul, 100ul, 100ul, 100ul, 100ul, 100ul, 100ul, 100ul}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a621fc3f9fa35dd64cb254715823fd5c3" name="a621fc3f9fa35dd64cb254715823fd5c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a621fc3f9fa35dd64cb254715823fd5c3">&#9670;&#160;</a></span>tol</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Xped::Opts::Imag::tol = 1.e-10</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab6658dc604a4ddf88fff635e0d23224b" name="ab6658dc604a4ddf88fff635e0d23224b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab6658dc604a4ddf88fff635e0d23224b">&#9670;&#160;</a></span>update</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Update Xped::Opts::Imag::update = Update::SIMPLE</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3c394651d7975b73add06b00ea6785c8" name="a3c394651d7975b73add06b00ea6785c8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3c394651d7975b73add06b00ea6785c8">&#9670;&#160;</a></span>verbosity</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Verbosity Xped::Opts::Imag::verbosity = Verbosity::ON_ENTRY</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae2f90da55843f56f3a244f053da6ef0a" name="ae2f90da55843f56f3a244f053da6ef0a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae2f90da55843f56f3a244f053da6ef0a">&#9670;&#160;</a></span>working_directory</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::filesystem::path Xped::Opts::Imag::working_directory = std::filesystem::current_path()</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<hr/>The documentation for this struct was generated from the following file:<ul>
+<li>include/Xped/PEPS/<a class="el" href="ImagOpts_8hpp_source.html">ImagOpts.hpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- HTML footer for doxygen 1.9.2-->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="namespaceXped.html">Xped</a></li><li class="navelem"><a class="el" href="namespaceXped_1_1Opts.html">Opts</a></li><li class="navelem"><a class="el" href="structXped_1_1Opts_1_1Imag.html">Imag</a></li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.6 </li>
+  </ul>
+</div>
+<script type="text/javascript">
+  // script for doxygen 1.9.2
+  $(function() {
+      toggleButton = document.createElement('doxygen-awesome-dark-mode-toggle')
+      toggleButton.title = "Toggle Light/Dark Mode"
+      $(document).ready(function(){
+          document.getElementById("MSearchBox").parentNode.appendChild(toggleButton)
+      })
+      $(window).resize(function(){
+          document.getElementById("MSearchBox").parentNode.appendChild(toggleButton)
+      })
+  })
+</script>
+</body>
+</html>

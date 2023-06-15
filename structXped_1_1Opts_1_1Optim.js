@@ -1,0 +1,27 @@
+var structXped_1_1Opts_1_1Optim =
+[
+    [ "info", "structXped_1_1Opts_1_1Optim.html#a62ac5fcef7cb828e73fe522f469d3453", null ],
+    [ "serialize", "structXped_1_1Opts_1_1Optim.html#a8c42738cff8253be1e44e492ce19ba5b", null ],
+    [ "alg", "structXped_1_1Opts_1_1Optim.html#a25cbbb07413f9af8da68fd8b4094d0be", null ],
+    [ "bfgs_scaling", "structXped_1_1Opts_1_1Optim.html#a6acbd661d01d15388119d02ebad4bca5", null ],
+    [ "bfgs_xxx", "structXped_1_1Opts_1_1Optim.html#ab8c82a70f98026e3af8a2e6ccf38364a", null ],
+    [ "cost_tol", "structXped_1_1Opts_1_1Optim.html#afa3a40bcd6812ab8ca9400ddd9cc0068", null ],
+    [ "display_obs", "structXped_1_1Opts_1_1Optim.html#a4d45b56c97424e2a3ed05862ffd52ee4", null ],
+    [ "grad_tol", "structXped_1_1Opts_1_1Optim.html#a5cfed1010ff8b8a75fb76b3966e6167a", null ],
+    [ "id", "structXped_1_1Opts_1_1Optim.html#a60d03175c949c79cc5ca72ac2e49ade0", null ],
+    [ "load", "structXped_1_1Opts_1_1Optim.html#aa03edb80ae06181763270d044b4c2cce", null ],
+    [ "load_format", "structXped_1_1Opts_1_1Optim.html#a3784c34b74fa33d45513c8eb161941a6", null ],
+    [ "log_format", "structXped_1_1Opts_1_1Optim.html#a8deb7b463a35d749f5521a5622296b72", null ],
+    [ "logging_directory", "structXped_1_1Opts_1_1Optim.html#a450c3f3921b8e54d45e4f08fd0d763b9", null ],
+    [ "ls", "structXped_1_1Opts_1_1Optim.html#a19b8b0ceb9151635a84e406225445e00", null ],
+    [ "max_steps", "structXped_1_1Opts_1_1Optim.html#a896593927564bd85cc3aa3eee7acc962", null ],
+    [ "min_steps", "structXped_1_1Opts_1_1Optim.html#a43b948baf3174c80094178691e418fc4", null ],
+    [ "obs_directory", "structXped_1_1Opts_1_1Optim.html#ac1256b489e25a53c5ac652da7c5862f9", null ],
+    [ "qn_scale", "structXped_1_1Opts_1_1Optim.html#a9e32876947d4ed39eb424a451b886367", null ],
+    [ "resume", "structXped_1_1Opts_1_1Optim.html#a20a391f0a3664f9efd509f2f0f690110", null ],
+    [ "save_period", "structXped_1_1Opts_1_1Optim.html#aaec80e2aec37942ac3097ad227a04ff7", null ],
+    [ "seed", "structXped_1_1Opts_1_1Optim.html#a1c8381b6a5a3b4997476011802b231fc", null ],
+    [ "step_tol", "structXped_1_1Opts_1_1Optim.html#ad9b900dcd4d6d921999865dd84b62e00", null ],
+    [ "verbosity", "structXped_1_1Opts_1_1Optim.html#a707b01049ab86fe3a79f692ac71d2977", null ],
+    [ "working_directory", "structXped_1_1Opts_1_1Optim.html#ac0c566cca8f9a55516d9b3fc4a39353e", null ]
+];

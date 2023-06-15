@@ -1,0 +1,277 @@
+<!-- HTML header for doxygen 1.9.6-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.6"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Xped: src/Core/TensorHelper.cpp File Reference</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+});
+</script>
+<script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript">
+  DoxygenAwesomeDarkModeToggle.lightModeIcon = '🌞'
+// icon from https://fonts.google.com/icons
+  DoxygenAwesomeDarkModeToggle.darkModeIcon = `<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px" viewBox="0 0 24 24" width="24px" fill="#009793"><g><rect fill="none" height="24" width="24"/></g><g><g><path d="M8.1,14.15C9.77,14.63,11,16.17,11,18c0,0.68-0.19,1.31-0.48,1.87c0.48,0.09,0.97,0.14,1.48,0.14 c1.48,0,2.9-0.41,4.13-1.15c-2.62-0.92-5.23-2.82-6.8-5.86C7.74,9.94,7.78,7.09,8.29,4.9c-2.57,1.33-4.3,4.01-4.3,7.1c0,0,0,0,0,0 c0.01,0,0.01,0,0.02,0C5.66,12,7.18,12.83,8.1,14.15z" opacity=".3"/><path d="M19.78,17.51c-2.47,0-6.57-1.33-8.68-5.43C8.77,7.57,10.6,3.6,11.63,2.01C6.27,2.2,1.98,6.59,1.98,12 c0,0.14,0.02,0.28,0.02,0.42C2.61,12.16,3.28,12,3.98,12c0,0,0,0,0,0c0-3.09,1.73-5.77,4.3-7.1C7.78,7.09,7.74,9.94,9.32,13 c1.57,3.04,4.18,4.95,6.8,5.86c-1.23,0.74-2.65,1.15-4.13,1.15c-0.5,0-1-0.05-1.48-0.14c-0.37,0.7-0.94,1.27-1.64,1.64 c0.98,0.32,2.03,0.5,3.11,0.5c3.5,0,6.58-1.8,8.37-4.52C20.18,17.5,19.98,17.51,19.78,17.51z"/><path d="M7,16l-0.18,0C6.4,14.84,5.3,14,4,14c-1.66,0-3,1.34-3,3s1.34,3,3,3c0.62,0,2.49,0,3,0c1.1,0,2-0.9,2-2 C9,16.9,8.1,16,7,16z"/></g></g></svg>`
+  DoxygenAwesomeDarkModeToggle.init()
+</script>
+</head>
+<body>
+  <!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/cpp977/Xped" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">Xped
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.9.6 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('TensorHelper_8cpp.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#func-members">Functions</a>  </div>
+  <div class="headertitle"><div class="title">TensorHelper.cpp File Reference</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><code>#include &quot;<a class="el" href="TensorHelper_8hpp_source.html">Xped/Core/TensorHelper.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="SU2_8hpp_source.html">Xped/Symmetry/SU2.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="U0_8hpp_source.html">Xped/Symmetry/U0.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="U1_8hpp_source.html">Xped/Symmetry/U1.hpp</a>&quot;</code><br />
+</div><div class="textblock"><div class="dynheader">
+Include dependency graph for TensorHelper.cpp:</div>
+<div class="dyncontent">
+<div class="center"><img src="TensorHelper_8cpp__incl.png" border="0" usemap="#asrc_2Core_2TensorHelper_8cpp" alt=""/></div>
+<map name="asrc_2Core_2TensorHelper_8cpp" id="asrc_2Core_2TensorHelper_8cpp">
+<area shape="rect" title=" " alt="" coords="1163,5,1354,31"/>
+<area shape="rect" href="TensorHelper_8hpp.html" title=" " alt="" coords="1156,79,1361,104"/>
+<area shape="rect" href="SU2_8hpp.html" title=" " alt="" coords="1241,460,1426,485"/>
+<area shape="rect" href="U0_8hpp.html" title=" " alt="" coords="1450,460,1627,485"/>
+<area shape="rect" href="U1_8hpp.html" title=" " alt="" coords="1039,460,1217,485"/>
+<area shape="rect" href="Qbasis_8hpp.html" title=" " alt="" coords="1294,152,1389,177"/>
+<area shape="rect" href="Basis_8hpp.html" title=" " alt="" coords="1206,233,1362,258"/>
+<area shape="rect" href="FusionTree_8hpp.html" title=" " alt="" coords="1670,233,1861,258"/>
+<area shape="rect" href="hash_8hpp.html" title=" " alt="" coords="2105,460,2260,485"/>
+<area shape="rect" href="HeapPolicy_8hpp.html" title=" " alt="" coords="1437,225,1595,265"/>
+<area shape="rect" href="Qbasis_8cpp.html" title=" " alt="" coords="878,387,1005,412"/>
+<area shape="rect" href="Basis_8cpp.html" title=" " alt="" coords="1193,313,1311,339"/>
+<area shape="rect" title=" " alt="" coords="1897,460,2021,485"/>
+<area shape="rect" title=" " alt="" coords="1855,768,1987,793"/>
+<area shape="rect" title=" " alt="" coords="2422,768,2562,793"/>
+<area shape="rect" href="Mpi_8hpp.html" title=" " alt="" coords="1447,313,1585,339"/>
+<area shape="rect" href="Permutations_8hpp.html" title=" " alt="" coords="286,387,487,412"/>
+<area shape="rect" href="FusionTree_8cpp.html" title=" " alt="" coords="1669,387,1821,412"/>
+<area shape="rect" title=" " alt="" coords="2207,768,2398,793"/>
+<area shape="rect" href="qarray_8hpp.html" title=" " alt="" coords="2067,695,2266,720"/>
+<area shape="rect" href="JoinArray_8hpp.html" title=" " alt="" coords="2012,768,2183,793"/>
+<area shape="rect" href="Mpi_8cpp.html" title=" " alt="" coords="1350,387,1450,412"/>
+<area shape="rect" href="SymBase_8hpp.html" title=" " alt="" coords="854,541,1074,566"/>
+<area shape="rect" href="functions_8hpp.html" title=" " alt="" coords="1183,621,1401,647"/>
+<area shape="rect" href="kind__dummies_8hpp.html" title=" " alt="" coords="1371,533,1530,573"/>
+<area shape="rect" href="SU2_8cpp.html" title=" " alt="" coords="1149,541,1296,566"/>
+<area shape="rect" title=" " alt="" coords="851,621,914,647"/>
+<area shape="rect" title=" " alt="" coords="324,621,367,647"/>
+<area shape="rect" title=" " alt="" coords="939,621,1053,647"/>
+<area shape="rect" href="SU2Wrappers_8hpp.html" title=" " alt="" coords="278,695,525,720"/>
+<area shape="rect" href="Constfct_8hpp.html" title=" " alt="" coords="713,695,881,720"/>
+<area shape="rect" title=" " alt="" coords="549,695,689,720"/>
+<area shape="rect" title=" " alt="" coords="985,768,1069,793"/>
+<area shape="rect" href="PlainInterface_8hpp.html" title=" " alt="" coords="1643,621,1890,647"/>
+<area shape="rect" href="Random_8hpp.html" title=" " alt="" coords="649,621,817,647"/>
+<area shape="rect" href="ScalarTraits_8hpp.html" title=" " alt="" coords="906,695,1102,720"/>
+<area shape="rect" href="MatrixInterface_8hpp.html" title=" " alt="" coords="1407,695,1663,720"/>
+<area shape="rect" href="TensorInterface_8hpp.html" title=" " alt="" coords="1127,695,1383,720"/>
+<area shape="rect" href="VectorInterface_8hpp.html" title=" " alt="" coords="1687,695,1942,720"/>
+<area shape="rect" title=" " alt="" coords="113,768,191,793"/>
+<area shape="rect" title=" " alt="" coords="43,695,115,720"/>
+<area shape="rect" title=" " alt="" coords="189,695,253,720"/>
+<area shape="rect" title=" " alt="" coords="249,460,335,485"/>
+<area shape="rect" title=" " alt="" coords="359,460,415,485"/>
+<area shape="rect" title=" " alt="" coords="156,460,225,485"/>
+<area shape="rect" title=" " alt="" coords="740,460,820,485"/>
+<area shape="rect" title=" " alt="" coords="527,460,601,485"/>
+<area shape="rect" title=" " alt="" coords="439,460,502,485"/>
+<area shape="rect" title=" " alt="" coords="845,460,913,485"/>
+<area shape="rect" title=" " alt="" coords="626,460,715,485"/>
+</map>
+</div>
+</div><div class="textblock"><div class="dynheader">
+This graph shows which files directly or indirectly include this file:</div>
+<div class="dyncontent">
+<div class="center"><img src="TensorHelper_8cpp__dep__incl.png" border="0" usemap="#asrc_2Core_2TensorHelper_8cppdep" alt=""/></div>
+<map name="asrc_2Core_2TensorHelper_8cppdep" id="asrc_2Core_2TensorHelper_8cppdep">
+<area shape="rect" title=" " alt="" coords="1997,5,2187,31"/>
+<area shape="rect" href="TensorHelper_8hpp.html" title=" " alt="" coords="1999,79,2185,119"/>
+<area shape="rect" href="Tensor_8hpp.html" title=" " alt="" coords="1748,174,1961,199"/>
+<area shape="rect" href="StorageType__contiguous_8hpp.html" title=" " alt="" coords="1986,167,2198,207"/>
+<area shape="rect" href="StorageType__vecofmat_8hpp.html" title=" " alt="" coords="2223,167,2425,207"/>
+<area shape="rect" href="bench_8cpp.html" title=" " alt="" coords="2353,526,2525,551"/>
+<area shape="rect" href="peps__ad_8cpp.html" title=" " alt="" coords="787,871,957,896"/>
+<area shape="rect" href="ADTensor_8hpp.html" title=" " alt="" coords="1469,438,1691,463"/>
+<area shape="rect" href="CTM_8hpp.html" title=" " alt="" coords="1675,526,1877,551"/>
+<area shape="rect" href="LinearAlgebra_8hpp.html" title=" " alt="" coords="1620,607,1807,647"/>
+<area shape="rect" href="TwoSiteObservable_8hpp.html" title=" " alt="" coords="1507,695,1703,735"/>
+<area shape="rect" href="include_2Xped_2PEPS_2Models_2Heisenberg_8hpp.html" title=" " alt="" coords="1555,783,1749,823"/>
+<area shape="rect" href="Hubbard_8hpp.html" title=" " alt="" coords="851,783,1045,823"/>
+<area shape="rect" href="Kondo_8hpp.html" title=" " alt="" coords="1338,783,1531,823"/>
+<area shape="rect" href="KondoNecklace_8hpp.html" title=" " alt="" coords="1121,783,1314,823"/>
+<area shape="rect" href="vari__value_8hpp.html" title=" " alt="" coords="1531,255,1690,295"/>
+<area shape="rect" href="Matlab_8hpp.html" title=" " alt="" coords="1918,262,2119,287"/>
+<area shape="rect" href="iPEPS_8hpp.html" title=" " alt="" coords="1917,438,2128,463"/>
+<area shape="rect" href="main_8cpp.html" title=" " alt="" coords="2597,526,2702,551"/>
+<area shape="rect" href="Mps_8hpp.html" title=" " alt="" coords="2255,262,2452,287"/>
+<area shape="rect" href="MpsContractions_8hpp.html" title=" " alt="" coords="2851,262,3130,287"/>
+<area shape="rect" href="OneSiteObservable_8hpp.html" title=" " alt="" coords="1285,519,1483,559"/>
+<area shape="rect" href="PEPSContractions_8hpp.html" title=" " alt="" coords="2788,526,3076,551"/>
+<area shape="rect" href="SimpleUpdate_8hpp.html" title=" " alt="" coords="2617,695,2807,735"/>
+<area shape="rect" href="SiteOperator_8hpp.html" title=" " alt="" coords="734,431,893,471"/>
+<area shape="rect" href="Tensor_8cpp.html" title=" " alt="" coords="3155,262,3301,287"/>
+<area shape="rect" href="TensorBase_8cpp.html" title=" " alt="" coords="3377,262,3557,287"/>
+<area shape="rect" href="CTMSolver_8hpp.html" title=" " alt="" coords="1993,790,2236,815"/>
+<area shape="rect" href="CTM_8cpp.html" title=" " alt="" coords="2003,614,2141,639"/>
+<area shape="rect" href="ad__ramp_8cpp.html" title=" " alt="" coords="1818,871,1993,896"/>
+<area shape="rect" href="simple__update_8cpp.html" title=" " alt="" coords="1580,871,1793,896"/>
+<area shape="rect" href="CeresSolve_8hpp.html" title=" " alt="" coords="2017,871,2260,896"/>
+<area shape="rect" href="LinearAlgebra_8cpp.html" title=" " alt="" coords="1727,702,1926,727"/>
+<area shape="rect" href="TimePropagator_8hpp.html" title=" " alt="" coords="2311,790,2588,815"/>
+<area shape="rect" href="TimePropagator_8cpp.html" title=" " alt="" coords="2344,871,2555,896"/>
+<area shape="rect" href="iPEPS_8cpp.html" title=" " alt="" coords="1968,350,2112,375"/>
+<area shape="rect" href="Mps_8cpp.html" title=" " alt="" coords="2288,350,2419,375"/>
+<area shape="rect" href="MpsAlgebra_8cpp.html" title=" " alt="" coords="2443,350,2624,375"/>
+<area shape="rect" href="MpsAlgebra_8hpp.html" title=" " alt="" coords="2307,438,2554,463"/>
+<area shape="rect" href="MpsContractions_8cpp.html" title=" " alt="" coords="2884,350,3097,375"/>
+<area shape="rect" href="PEPSContractions_8cpp.html" title=" " alt="" coords="2803,614,3026,639"/>
+<area shape="rect" href="SimpleUpdate_8cpp.html" title=" " alt="" coords="2612,790,2812,815"/>
+<area shape="rect" href="FermionBase_8hpp.html" title=" " alt="" coords="835,695,994,735"/>
+<area shape="rect" href="SpinBase_8hpp.html" title=" " alt="" coords="1171,695,1330,735"/>
+<area shape="rect" href="Fermion_8hpp.html" title=" " alt="" coords="545,607,703,647"/>
+<area shape="rect" href="FermionSU2xSU2xX_8hpp.html" title=" " alt="" coords="477,519,696,559"/>
+<area shape="rect" href="FermionSU2xX_8hpp.html" title=" " alt="" coords="721,519,906,559"/>
+<area shape="rect" href="Spin_8hpp.html" title=" " alt="" coords="1171,607,1330,647"/>
+<area shape="rect" href="SiteOperator_8cpp.html" title=" " alt="" coords="195,526,402,551"/>
+<area shape="rect" href="TensorBase_8hpp.html" title=" " alt="" coords="3373,343,3560,383"/>
+</map>
+</div>
+</div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
+Namespaces</h2></td></tr>
+<tr class="memitem:namespaceXped"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceXped.html">Xped</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:namespaceXped_1_1internal"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceXped_1_1internal.html">Xped::internal</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:a770d9132147a53e0aeee5c1b36d24d48"><td class="memTemplParams" colspan="2">template&lt;std::size_t Rank1, std::size_t Rank2, typename Symmetry , typename AllocationPolicy &gt; </td></tr>
+<tr class="memitem:a770d9132147a53e0aeee5c1b36d24d48"><td class="memTemplItemLeft" align="right" valign="top">std::pair&lt; Qbasis&lt; Symmetry, Rank2+Rank1, AllocationPolicy &gt;, std::array&lt; Qbasis&lt; Symmetry, 1, AllocationPolicy &gt;, 0 &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceXped_1_1internal.html#a770d9132147a53e0aeee5c1b36d24d48">Xped::internal::build_FusionTree_Helper</a> (const Qbasis&lt; Symmetry, Rank2, AllocationPolicy &gt; &amp;coupled, const std::array&lt; Qbasis&lt; Symmetry, 1, AllocationPolicy &gt;, Rank1 &gt; &amp;uncoupled)</td></tr>
+<tr class="separator:a770d9132147a53e0aeee5c1b36d24d48"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a579cf19a08ab95c0ef6c06b1cfca632d"><td class="memTemplParams" colspan="2">template&lt;std::size_t Rank, typename Symmetry , typename AllocationPolicy &gt; </td></tr>
+<tr class="memitem:a579cf19a08ab95c0ef6c06b1cfca632d"><td class="memTemplItemLeft" align="right" valign="top">Qbasis&lt; Symmetry, Rank, AllocationPolicy &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceXped_1_1internal.html#a579cf19a08ab95c0ef6c06b1cfca632d">Xped::internal::build_FusionTree</a> (const std::array&lt; Qbasis&lt; Symmetry, 1, AllocationPolicy &gt;, Rank &gt; &amp;uncoupled)</td></tr>
+<tr class="separator:a579cf19a08ab95c0ef6c06b1cfca632d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- HTML footer for doxygen 1.9.2-->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_a2f0e5642e47e7ed59fe0f0829eafb5f.html">Core</a></li><li class="navelem"><a class="el" href="TensorHelper_8cpp.html">TensorHelper.cpp</a></li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.6 </li>
+  </ul>
+</div>
+<script type="text/javascript">
+  // script for doxygen 1.9.2
+  $(function() {
+      toggleButton = document.createElement('doxygen-awesome-dark-mode-toggle')
+      toggleButton.title = "Toggle Light/Dark Mode"
+      $(document).ready(function(){
+          document.getElementById("MSearchBox").parentNode.appendChild(toggleButton)
+      })
+      $(window).resize(function(){
+          document.getElementById("MSearchBox").parentNode.appendChild(toggleButton)
+      })
+  })
+</script>
+</body>
+</html>

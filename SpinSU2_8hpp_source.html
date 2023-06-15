@@ -1,0 +1,234 @@
+<!-- HTML header for doxygen 1.9.6-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.6"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Xped: include/Xped/Physics/sites/SpinSU2.hpp Source File</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+});
+</script>
+<script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript">
+  DoxygenAwesomeDarkModeToggle.lightModeIcon = '🌞'
+// icon from https://fonts.google.com/icons
+  DoxygenAwesomeDarkModeToggle.darkModeIcon = `<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px" viewBox="0 0 24 24" width="24px" fill="#009793"><g><rect fill="none" height="24" width="24"/></g><g><g><path d="M8.1,14.15C9.77,14.63,11,16.17,11,18c0,0.68-0.19,1.31-0.48,1.87c0.48,0.09,0.97,0.14,1.48,0.14 c1.48,0,2.9-0.41,4.13-1.15c-2.62-0.92-5.23-2.82-6.8-5.86C7.74,9.94,7.78,7.09,8.29,4.9c-2.57,1.33-4.3,4.01-4.3,7.1c0,0,0,0,0,0 c0.01,0,0.01,0,0.02,0C5.66,12,7.18,12.83,8.1,14.15z" opacity=".3"/><path d="M19.78,17.51c-2.47,0-6.57-1.33-8.68-5.43C8.77,7.57,10.6,3.6,11.63,2.01C6.27,2.2,1.98,6.59,1.98,12 c0,0.14,0.02,0.28,0.02,0.42C2.61,12.16,3.28,12,3.98,12c0,0,0,0,0,0c0-3.09,1.73-5.77,4.3-7.1C7.78,7.09,7.74,9.94,9.32,13 c1.57,3.04,4.18,4.95,6.8,5.86c-1.23,0.74-2.65,1.15-4.13,1.15c-0.5,0-1-0.05-1.48-0.14c-0.37,0.7-0.94,1.27-1.64,1.64 c0.98,0.32,2.03,0.5,3.11,0.5c3.5,0,6.58-1.8,8.37-4.52C20.18,17.5,19.98,17.51,19.78,17.51z"/><path d="M7,16l-0.18,0C6.4,14.84,5.3,14,4,14c-1.66,0-3,1.34-3,3s1.34,3,3,3c0.62,0,2.49,0,3,0c1.1,0,2-0.9,2-2 C9,16.9,8.1,16,7,16z"/></g></g></svg>`
+  DoxygenAwesomeDarkModeToggle.init()
+</script>
+</head>
+<body>
+  <!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/cpp977/Xped" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">Xped
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.9.6 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('SpinSU2_8hpp_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">SpinSU2.hpp</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="SpinSU2_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#ifndef XPED_SPINSU2_HPP_</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#define XPED_SPINSU2_HPP_</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span> </div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &quot;<a class="code" href="kind__dummies_8hpp.html">Xped/Symmetry/kind_dummies.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span> </div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &quot;<a class="code" href="SU2_8hpp.html">Xped/Symmetry/SU2.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span> </div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceXped.html">Xped</a> {</div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Symmetry, <span class="keywordtype">size_t</span> order&gt;</div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="keyword">class </span><a class="code hl_enumvalue" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607baf5a6a925d4084ae58bd71a8a95a84ba7">Spin</a>;</div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="keyword">template</span> &lt;&gt;</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno"><a class="line" href="classXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4.html">   14</a></span><span class="keyword">class </span><a class="code hl_class" href="classXped_1_1Spin.html">Spin</a>&lt;Sym::SU2&lt;Sym::SpinSU2&gt;, 0ul&gt;</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>{</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>    <span class="keyword">using </span>Scalar = double;</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    <span class="keyword">using </span><a class="code hl_class" href="structXped_1_1Sym_1_1SU2.html">Symmetry</a> = <a class="code hl_class" href="structXped_1_1Sym_1_1SU2.html">Sym::SU2&lt;Sym::SpinSU2&gt;</a>;</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    <span class="keyword">using </span><a class="code hl_class" href="structXped_1_1SiteOperator.html">OperatorType</a> = <a class="code hl_struct" href="structXped_1_1SiteOperator.html">SiteOperator&lt;Scalar, Symmetry&gt;</a>;</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno"><a class="line" href="classXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4.html#ab31f301ac105e5d12abf89375d0e0e49">   21</a></span>    <a class="code hl_function" href="classXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4.html#ab31f301ac105e5d12abf89375d0e0e49">Spin</a>(){};</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    <a class="code hl_function" href="classXped_1_1Spin.html#ad5c8eda996ab48a1993c12491ace000c">Spin</a>(std::size_t D_input);</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno"><a class="line" href="classXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4.html#a7eb1fbaaa3ae6b3834a232e23ce183a1">   24</a></span>    <a class="code hl_class" href="structXped_1_1SiteOperator.html">OperatorType</a> <a class="code hl_function" href="classXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4.html#a7eb1fbaaa3ae6b3834a232e23ce183a1">Id_1s</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code hl_variable" href="classXped_1_1Spin.html#a6947679566ca7fb272a52c2c95711e22">Id_1s_</a>; }</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno"><a class="line" href="classXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4.html#a78713a437f75c0beb18fcc8041e5d508">   26</a></span>    <a class="code hl_class" href="structXped_1_1SiteOperator.html">OperatorType</a> <a class="code hl_function" href="classXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4.html#a78713a437f75c0beb18fcc8041e5d508">S_1s</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> S_1s_; }</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno"><a class="line" href="classXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4.html#afc3cff150be13a43476547c8f4ee94b3">   28</a></span>    <a class="code hl_class" href="structXped_1_1SiteOperator.html">OperatorType</a> <a class="code hl_function" href="classXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4.html#afc3cff150be13a43476547c8f4ee94b3">Q_1s</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> Q_1s_; }</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="classXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4.html#a85c7fe24ad4391e3d4c114faf83e7e6c">   30</a></span>    <a class="code hl_class" href="classXped_1_1Qbasis.html">Qbasis&lt;Symmetry, 1&gt;</a> <a class="code hl_function" href="classXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4.html#a85c7fe24ad4391e3d4c114faf83e7e6c">basis_1s</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code hl_variable" href="classXped_1_1Spin.html#a89f8ac4154a20d4bf4697e82ba07ce60">basis_1s_</a>; }</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span> </div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="keyword">protected</span>:</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno"><a class="line" href="classXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4.html#a5113506568fbf0e899bdf53279ebd342">   33</a></span>    std::size_t <a class="code hl_variable" href="classXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4.html#a5113506568fbf0e899bdf53279ebd342">D</a>;</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno"><a class="line" href="classXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4.html#a4f0c1c0fdf0be2140aaefae7957a1a17">   35</a></span>    <a class="code hl_class" href="classXped_1_1Qbasis.html">Qbasis&lt;Symmetry, 1&gt;</a> <a class="code hl_variable" href="classXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4.html#a4f0c1c0fdf0be2140aaefae7957a1a17">basis_1s_</a>;</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno"><a class="line" href="classXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4.html#a545249d18b7e67d81e7b8da47d24b98c">   37</a></span>    <a class="code hl_class" href="structXped_1_1SiteOperator.html">OperatorType</a> <a class="code hl_variable" href="classXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4.html#a545249d18b7e67d81e7b8da47d24b98c">Id_1s_</a>; <span class="comment">// identity</span></div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno"><a class="line" href="classXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4.html#a91b5a8d5821c9a32bfc25af90b691ed3">   38</a></span>    <a class="code hl_class" href="structXped_1_1SiteOperator.html">OperatorType</a> <a class="code hl_variable" href="classXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4.html#a91b5a8d5821c9a32bfc25af90b691ed3">S_1s_</a>; <span class="comment">// spin</span></div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno"><a class="line" href="classXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4.html#ac457ca92a8d4d622030bfd88aba3eece">   39</a></span>    <a class="code hl_class" href="structXped_1_1SiteOperator.html">OperatorType</a> <a class="code hl_variable" href="classXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4.html#ac457ca92a8d4d622030bfd88aba3eece">Sdag_1s_</a>; <span class="comment">// spin</span></div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno"><a class="line" href="classXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4.html#a64cb409da58e941450017dd693dbe323">   40</a></span>    <a class="code hl_class" href="structXped_1_1SiteOperator.html">OperatorType</a> <a class="code hl_variable" href="classXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4.html#a64cb409da58e941450017dd693dbe323">Q_1s_</a>; <span class="comment">// quadrupole moment</span></div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>};</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span> </div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno"><a class="line" href="classXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4.html#a82d14626f19de7a30440aab06c2a9c11">   43</a></span><a class="code hl_class" href="classXped_1_1Spin.html">Spin&lt;Sym::SU2&lt;Sym::SpinSU2&gt;</a>, 0ul&gt;::Spin(std::size_t D_input)</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    : <a class="code hl_class" href="classD.html">D</a>(D_input)</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>{</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    <span class="comment">// create basis for one Spin Site</span></div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>    <span class="keyword">typename</span> <a class="code hl_struct" href="structXped_1_1qarray.html">Symmetry::qType</a> Q = {<span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(<a class="code hl_variable" href="classXped_1_1Spin.html#abc143400845a1124161209207182721b">D</a>)};</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    <a class="code hl_variable" href="classXped_1_1Spin.html#a89f8ac4154a20d4bf4697e82ba07ce60">basis_1s_</a>.<a class="code hl_function" href="classXped_1_1Qbasis.html#a34418f2e9ce5c917d3f3b65688c52249">push_back</a>(Q, 1);</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span> </div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    <a class="code hl_variable" href="classXped_1_1Spin.html#a6947679566ca7fb272a52c2c95711e22">Id_1s_</a> = <a class="code hl_class" href="structXped_1_1SiteOperator.html">OperatorType</a>({1}, <a class="code hl_variable" href="classXped_1_1Spin.html#a89f8ac4154a20d4bf4697e82ba07ce60">basis_1s_</a>);</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    <a class="code hl_variable" href="classXped_1_1Spin.html#a6947679566ca7fb272a52c2c95711e22">Id_1s_</a>.<a class="code hl_function" href="structXped_1_1SiteOperator.html#a77f67773038f4e13ea54c42ab7070b29">setIdentity</a>();</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    S_1s_ = <a class="code hl_class" href="structXped_1_1SiteOperator.html">OperatorType</a>({3}, <a class="code hl_variable" href="classXped_1_1Spin.html#a89f8ac4154a20d4bf4697e82ba07ce60">basis_1s_</a>);</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    S_1s_.<a class="code hl_variable" href="structXped_1_1SiteOperator.html#a049a4bfb520db156c7fbb4305795b50b">data</a>.setZero();</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span> </div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    Scalar locS = 0.5 * <span class="keyword">static_cast&lt;</span><span class="keywordtype">double</span><span class="keyword">&gt;</span>(<a class="code hl_class" href="classD.html">D</a> - 1);</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    <span class="keyword">auto</span> tmp = S_1s_(Q, Q);</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    <a class="code hl_function" href="structXped_1_1PlainInterface.html#ae37c412be210104ba3194b3b38652278">PlainInterface::setVal</a>(tmp, 0, 0, std::sqrt(locS * (locS + 1.)));</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    S_1s_(Q, Q) = tmp;</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    Sdag_1s_ = S_1s_.adjoint();</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    Q_1s_ = std::sqrt(2.) * <a class="code hl_function" href="structXped_1_1SiteOperator.html#a6050f6e3b739cac3800846df29811fc0">OperatorType::prod</a>(S_1s_, S_1s_, {5});</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>}</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span> </div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>} <span class="comment">// namespace Xped</span></div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span> </div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span><span class="preprocessor">#endif</span></div>
+<div class="ttc" id="aSU2_8hpp_html"><div class="ttname"><a href="SU2_8hpp.html">SU2.hpp</a></div></div>
+<div class="ttc" id="aclassD_html"><div class="ttname"><a href="classD.html">D</a></div><div class="ttdef"><b>Definition:</b> diagrams_d.h:6</div></div>
+<div class="ttc" id="aclassXped_1_1Qbasis_html"><div class="ttname"><a href="classXped_1_1Qbasis.html">Xped::Qbasis</a></div><div class="ttdef"><b>Definition:</b> Qbasis.hpp:39</div></div>
+<div class="ttc" id="aclassXped_1_1Qbasis_html_a34418f2e9ce5c917d3f3b65688c52249"><div class="ttname"><a href="classXped_1_1Qbasis.html#a34418f2e9ce5c917d3f3b65688c52249">Xped::Qbasis::push_back</a></div><div class="ttdeci">void push_back(const qType &amp;q, const size_t &amp;inner_dim)</div><div class="ttdef"><b>Definition:</b> Qbasis.cpp:32</div></div>
+<div class="ttc" id="aclassXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4_html_a4f0c1c0fdf0be2140aaefae7957a1a17"><div class="ttname"><a href="classXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4.html#a4f0c1c0fdf0be2140aaefae7957a1a17">Xped::Spin&lt; Sym::SU2&lt; Sym::SpinSU2 &gt;, 0ul &gt;::basis_1s_</a></div><div class="ttdeci">Qbasis&lt; Symmetry, 1 &gt; basis_1s_</div><div class="ttdef"><b>Definition:</b> SpinSU2.hpp:35</div></div>
+<div class="ttc" id="aclassXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4_html_a5113506568fbf0e899bdf53279ebd342"><div class="ttname"><a href="classXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4.html#a5113506568fbf0e899bdf53279ebd342">Xped::Spin&lt; Sym::SU2&lt; Sym::SpinSU2 &gt;, 0ul &gt;::D</a></div><div class="ttdeci">std::size_t D</div><div class="ttdef"><b>Definition:</b> SpinSU2.hpp:33</div></div>
+<div class="ttc" id="aclassXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4_html_a545249d18b7e67d81e7b8da47d24b98c"><div class="ttname"><a href="classXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4.html#a545249d18b7e67d81e7b8da47d24b98c">Xped::Spin&lt; Sym::SU2&lt; Sym::SpinSU2 &gt;, 0ul &gt;::Id_1s_</a></div><div class="ttdeci">OperatorType Id_1s_</div><div class="ttdef"><b>Definition:</b> SpinSU2.hpp:37</div></div>
+<div class="ttc" id="aclassXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4_html_a64cb409da58e941450017dd693dbe323"><div class="ttname"><a href="classXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4.html#a64cb409da58e941450017dd693dbe323">Xped::Spin&lt; Sym::SU2&lt; Sym::SpinSU2 &gt;, 0ul &gt;::Q_1s_</a></div><div class="ttdeci">OperatorType Q_1s_</div><div class="ttdef"><b>Definition:</b> SpinSU2.hpp:40</div></div>
+<div class="ttc" id="aclassXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4_html_a78713a437f75c0beb18fcc8041e5d508"><div class="ttname"><a href="classXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4.html#a78713a437f75c0beb18fcc8041e5d508">Xped::Spin&lt; Sym::SU2&lt; Sym::SpinSU2 &gt;, 0ul &gt;::S_1s</a></div><div class="ttdeci">OperatorType S_1s() const</div><div class="ttdef"><b>Definition:</b> SpinSU2.hpp:26</div></div>
+<div class="ttc" id="aclassXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4_html_a7eb1fbaaa3ae6b3834a232e23ce183a1"><div class="ttname"><a href="classXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4.html#a7eb1fbaaa3ae6b3834a232e23ce183a1">Xped::Spin&lt; Sym::SU2&lt; Sym::SpinSU2 &gt;, 0ul &gt;::Id_1s</a></div><div class="ttdeci">OperatorType Id_1s() const</div><div class="ttdef"><b>Definition:</b> SpinSU2.hpp:24</div></div>
+<div class="ttc" id="aclassXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4_html_a85c7fe24ad4391e3d4c114faf83e7e6c"><div class="ttname"><a href="classXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4.html#a85c7fe24ad4391e3d4c114faf83e7e6c">Xped::Spin&lt; Sym::SU2&lt; Sym::SpinSU2 &gt;, 0ul &gt;::basis_1s</a></div><div class="ttdeci">Qbasis&lt; Symmetry, 1 &gt; basis_1s() const</div><div class="ttdef"><b>Definition:</b> SpinSU2.hpp:30</div></div>
+<div class="ttc" id="aclassXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4_html_a91b5a8d5821c9a32bfc25af90b691ed3"><div class="ttname"><a href="classXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4.html#a91b5a8d5821c9a32bfc25af90b691ed3">Xped::Spin&lt; Sym::SU2&lt; Sym::SpinSU2 &gt;, 0ul &gt;::S_1s_</a></div><div class="ttdeci">OperatorType S_1s_</div><div class="ttdef"><b>Definition:</b> SpinSU2.hpp:38</div></div>
+<div class="ttc" id="aclassXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4_html_ab31f301ac105e5d12abf89375d0e0e49"><div class="ttname"><a href="classXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4.html#ab31f301ac105e5d12abf89375d0e0e49">Xped::Spin&lt; Sym::SU2&lt; Sym::SpinSU2 &gt;, 0ul &gt;::Spin</a></div><div class="ttdeci">Spin()</div><div class="ttdef"><b>Definition:</b> SpinSU2.hpp:21</div></div>
+<div class="ttc" id="aclassXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4_html_ac457ca92a8d4d622030bfd88aba3eece"><div class="ttname"><a href="classXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4.html#ac457ca92a8d4d622030bfd88aba3eece">Xped::Spin&lt; Sym::SU2&lt; Sym::SpinSU2 &gt;, 0ul &gt;::Sdag_1s_</a></div><div class="ttdeci">OperatorType Sdag_1s_</div><div class="ttdef"><b>Definition:</b> SpinSU2.hpp:39</div></div>
+<div class="ttc" id="aclassXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4_html_afc3cff150be13a43476547c8f4ee94b3"><div class="ttname"><a href="classXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4.html#afc3cff150be13a43476547c8f4ee94b3">Xped::Spin&lt; Sym::SU2&lt; Sym::SpinSU2 &gt;, 0ul &gt;::Q_1s</a></div><div class="ttdeci">OperatorType Q_1s() const</div><div class="ttdef"><b>Definition:</b> SpinSU2.hpp:28</div></div>
+<div class="ttc" id="aclassXped_1_1Spin_html"><div class="ttname"><a href="classXped_1_1Spin.html">Xped::Spin</a></div><div class="ttdef"><b>Definition:</b> Spin.hpp:16</div></div>
+<div class="ttc" id="aclassXped_1_1Spin_html_a6947679566ca7fb272a52c2c95711e22"><div class="ttname"><a href="classXped_1_1Spin.html#a6947679566ca7fb272a52c2c95711e22">Xped::Spin::Id_1s_</a></div><div class="ttdeci">OperatorType Id_1s_</div><div class="ttdef"><b>Definition:</b> Spin.hpp:62</div></div>
+<div class="ttc" id="aclassXped_1_1Spin_html_a89f8ac4154a20d4bf4697e82ba07ce60"><div class="ttname"><a href="classXped_1_1Spin.html#a89f8ac4154a20d4bf4697e82ba07ce60">Xped::Spin::basis_1s_</a></div><div class="ttdeci">Qbasis&lt; Symmetry, 1 &gt; basis_1s_</div><div class="ttdef"><b>Definition:</b> Spin.hpp:59</div></div>
+<div class="ttc" id="aclassXped_1_1Spin_html_abc143400845a1124161209207182721b"><div class="ttname"><a href="classXped_1_1Spin.html#abc143400845a1124161209207182721b">Xped::Spin::D</a></div><div class="ttdeci">std::size_t D</div><div class="ttdef"><b>Definition:</b> Spin.hpp:51</div></div>
+<div class="ttc" id="aclassXped_1_1Spin_html_ad5c8eda996ab48a1993c12491ace000c"><div class="ttname"><a href="classXped_1_1Spin.html#ad5c8eda996ab48a1993c12491ace000c">Xped::Spin::Spin</a></div><div class="ttdeci">Spin()</div><div class="ttdef"><b>Definition:</b> Spin.hpp:23</div></div>
+<div class="ttc" id="akind__dummies_8hpp_html"><div class="ttname"><a href="kind__dummies_8hpp.html">kind_dummies.hpp</a></div></div>
+<div class="ttc" id="anamespaceXped_html"><div class="ttname"><a href="namespaceXped.html">Xped</a></div><div class="ttdef"><b>Definition:</b> ADTensor.hpp:17</div></div>
+<div class="ttc" id="anamespaceXped_html_a6f053cb8ab1a1f82ecd1e8bd8fd4607baf5a6a925d4084ae58bd71a8a95a84ba7"><div class="ttname"><a href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607baf5a6a925d4084ae58bd71a8a95a84ba7">Xped::Kind::Spin</a></div><div class="ttdeci">@ Spin</div></div>
+<div class="ttc" id="astructXped_1_1PlainInterface_html_ae37c412be210104ba3194b3b38652278"><div class="ttname"><a href="structXped_1_1PlainInterface.html#ae37c412be210104ba3194b3b38652278">Xped::PlainInterface::setVal</a></div><div class="ttdeci">static void setVal(MType&lt; Scalar &gt; &amp;M, const MIndextype row, const MIndextype col, const Scalar &amp;val)</div></div>
+<div class="ttc" id="astructXped_1_1SiteOperator_html"><div class="ttname"><a href="structXped_1_1SiteOperator.html">Xped::SiteOperator&lt; Scalar, Symmetry &gt;</a></div></div>
+<div class="ttc" id="astructXped_1_1SiteOperator_html_a049a4bfb520db156c7fbb4305795b50b"><div class="ttname"><a href="structXped_1_1SiteOperator.html#a049a4bfb520db156c7fbb4305795b50b">Xped::SiteOperator::data</a></div><div class="ttdeci">Tensor&lt; Scalar, 1, 2, Symmetry, false &gt; data</div><div class="ttdef"><b>Definition:</b> SiteOperator.hpp:86</div></div>
+<div class="ttc" id="astructXped_1_1SiteOperator_html_a6050f6e3b739cac3800846df29811fc0"><div class="ttname"><a href="structXped_1_1SiteOperator.html#a6050f6e3b739cac3800846df29811fc0">Xped::SiteOperator&lt; Scalar, Symmetry &gt;::prod</a></div><div class="ttdeci">static SiteOperator&lt; Scalar, Symmetry &gt; prod(XPED_CONST SiteOperator&lt; Scalar, Symmetry &gt; &amp;O1, XPED_CONST SiteOperator&lt; Scalar, Symmetry &gt; &amp;O2, const qType &amp;target)</div><div class="ttdef"><b>Definition:</b> SiteOperator.cpp:36</div></div>
+<div class="ttc" id="astructXped_1_1SiteOperator_html_a77f67773038f4e13ea54c42ab7070b29"><div class="ttname"><a href="structXped_1_1SiteOperator.html#a77f67773038f4e13ea54c42ab7070b29">Xped::SiteOperator::setIdentity</a></div><div class="ttdeci">void setIdentity()</div><div class="ttdef"><b>Definition:</b> SiteOperator.hpp:63</div></div>
+<div class="ttc" id="astructXped_1_1Sym_1_1SU2_html"><div class="ttname"><a href="structXped_1_1Sym_1_1SU2.html">Xped::Sym::SU2</a></div><div class="ttdef"><b>Definition:</b> SU2.hpp:43</div></div>
+<div class="ttc" id="astructXped_1_1qarray_html"><div class="ttname"><a href="structXped_1_1qarray.html">Xped::qarray</a></div><div class="ttdef"><b>Definition:</b> qarray.hpp:30</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+<!-- HTML footer for doxygen 1.9.2-->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_4b24e72d7fcd206265f2d42a075103f3.html">Xped</a></li><li class="navelem"><a class="el" href="dir_ba68c186f2d21e121016dccd5f3226a6.html">Physics</a></li><li class="navelem"><a class="el" href="dir_7f2113579a4a1a13db0df96dea928ffe.html">sites</a></li><li class="navelem"><a class="el" href="SpinSU2_8hpp.html">SpinSU2.hpp</a></li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.6 </li>
+  </ul>
+</div>
+<script type="text/javascript">
+  // script for doxygen 1.9.2
+  $(function() {
+      toggleButton = document.createElement('doxygen-awesome-dark-mode-toggle')
+      toggleButton.title = "Toggle Light/Dark Mode"
+      $(document).ready(function(){
+          document.getElementById("MSearchBox").parentNode.appendChild(toggleButton)
+      })
+      $(window).resize(function(){
+          document.getElementById("MSearchBox").parentNode.appendChild(toggleButton)
+      })
+  })
+</script>
+</body>
+</html>

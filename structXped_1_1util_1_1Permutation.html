@@ -1,0 +1,763 @@
+<!-- HTML header for doxygen 1.9.6-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.6"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Xped: Xped::util::Permutation Struct Reference</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+});
+</script>
+<script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript">
+  DoxygenAwesomeDarkModeToggle.lightModeIcon = '🌞'
+// icon from https://fonts.google.com/icons
+  DoxygenAwesomeDarkModeToggle.darkModeIcon = `<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px" viewBox="0 0 24 24" width="24px" fill="#009793"><g><rect fill="none" height="24" width="24"/></g><g><g><path d="M8.1,14.15C9.77,14.63,11,16.17,11,18c0,0.68-0.19,1.31-0.48,1.87c0.48,0.09,0.97,0.14,1.48,0.14 c1.48,0,2.9-0.41,4.13-1.15c-2.62-0.92-5.23-2.82-6.8-5.86C7.74,9.94,7.78,7.09,8.29,4.9c-2.57,1.33-4.3,4.01-4.3,7.1c0,0,0,0,0,0 c0.01,0,0.01,0,0.02,0C5.66,12,7.18,12.83,8.1,14.15z" opacity=".3"/><path d="M19.78,17.51c-2.47,0-6.57-1.33-8.68-5.43C8.77,7.57,10.6,3.6,11.63,2.01C6.27,2.2,1.98,6.59,1.98,12 c0,0.14,0.02,0.28,0.02,0.42C2.61,12.16,3.28,12,3.98,12c0,0,0,0,0,0c0-3.09,1.73-5.77,4.3-7.1C7.78,7.09,7.74,9.94,9.32,13 c1.57,3.04,4.18,4.95,6.8,5.86c-1.23,0.74-2.65,1.15-4.13,1.15c-0.5,0-1-0.05-1.48-0.14c-0.37,0.7-0.94,1.27-1.64,1.64 c0.98,0.32,2.03,0.5,3.11,0.5c3.5,0,6.58-1.8,8.37-4.52C20.18,17.5,19.98,17.51,19.78,17.51z"/><path d="M7,16l-0.18,0C6.4,14.84,5.3,14,4,14c-1.66,0-3,1.34-3,3s1.34,3,3,3c0.62,0,2.49,0,3,0c1.1,0,2-0.9,2-2 C9,16.9,8.1,16,7,16z"/></g></g></svg>`
+  DoxygenAwesomeDarkModeToggle.init()
+</script>
+</head>
+<body>
+  <!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/cpp977/Xped" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">Xped
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.9.6 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('structXped_1_1util_1_1Permutation.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="#friends">Friends</a> &#124;
+<a href="structXped_1_1util_1_1Permutation-members.html">List of all members</a>  </div>
+  <div class="headertitle"><div class="title">Xped::util::Permutation Struct Reference</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p><code>#include &lt;<a class="el" href="Permutations_8hpp_source.html">Permutations.hpp</a>&gt;</code></p>
+<div class="dynheader">
+Collaboration diagram for Xped::util::Permutation:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1util_1_1Permutation__coll__graph.png" border="0" usemap="#aXped_1_1util_1_1Permutation_coll__map" alt="Collaboration graph"/></div>
+<map name="aXped_1_1util_1_1Permutation_coll__map" id="aXped_1_1util_1_1Permutation_coll__map">
+<area shape="rect" title=" " alt="" coords="5,93,177,119"/>
+<area shape="rect" title=" " alt="" coords="61,5,121,31"/>
+</map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:ac82ed8cdfd4cf6d5d2dba30ffc4b7165"><td class="memItemLeft" align="right" valign="top">typedef std::vector&lt; std::size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1util_1_1Permutation.html#ac82ed8cdfd4cf6d5d2dba30ffc4b7165">Cycle</a></td></tr>
+<tr class="separator:ac82ed8cdfd4cf6d5d2dba30ffc4b7165"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a43adba3d14da7a05a2286a2be0368bb4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1util_1_1Permutation.html#a43adba3d14da7a05a2286a2be0368bb4">Permutation</a> ()</td></tr>
+<tr class="separator:a43adba3d14da7a05a2286a2be0368bb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a329224cfb98ddf1ccb04b622987da3cb"><td class="memTemplParams" colspan="2">template&lt;typename Container &gt; </td></tr>
+<tr class="memitem:a329224cfb98ddf1ccb04b622987da3cb"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structXped_1_1util_1_1Permutation.html#a329224cfb98ddf1ccb04b622987da3cb">Permutation</a> (const Container &amp;in)</td></tr>
+<tr class="separator:a329224cfb98ddf1ccb04b622987da3cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1d6a14b6118be400cba59b5143a8214"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1util_1_1Permutation.html#ad1d6a14b6118be400cba59b5143a8214">Permutation</a> (const std::string filename)</td></tr>
+<tr class="separator:ad1d6a14b6118be400cba59b5143a8214"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa546c031862d3f4059e20a446f48f4c6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1util_1_1Permutation.html#aa546c031862d3f4059e20a446f48f4c6">initialize</a> ()</td></tr>
+<tr class="separator:aa546c031862d3f4059e20a446f48f4c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab7cd35536629c846ae075e85ce646a54"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1util_1_1Permutation.html#ab7cd35536629c846ae075e85ce646a54">operator==</a> (const <a class="el" href="structXped_1_1util_1_1Permutation.html">Permutation</a> &amp;other) const</td></tr>
+<tr class="separator:ab7cd35536629c846ae075e85ce646a54"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86e0c4a88e7134f58c6812a528b72082"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1util_1_1Permutation.html#a86e0c4a88e7134f58c6812a528b72082">print</a> () const</td></tr>
+<tr class="separator:a86e0c4a88e7134f58c6812a528b72082"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ca75b5bb207671e7ea2ee80596d43ac"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structXped_1_1util_1_1Transposition.html">Transposition</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1util_1_1Permutation.html#a6ca75b5bb207671e7ea2ee80596d43ac">transpositions</a> () const</td></tr>
+<tr class="separator:a6ca75b5bb207671e7ea2ee80596d43ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b76bfbb7328779124f25f65150b4000"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::vector&lt; <a class="el" href="structXped_1_1util_1_1Transposition.html">Transposition</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1util_1_1Permutation.html#a4b76bfbb7328779124f25f65150b4000">independentTranspositions</a> () const</td></tr>
+<tr class="separator:a4b76bfbb7328779124f25f65150b4000"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a48ae8f8b2b53d5ed94d87cfc7cd9ffe4"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1util_1_1Permutation.html#a48ae8f8b2b53d5ed94d87cfc7cd9ffe4">decompose</a> () const</td></tr>
+<tr class="separator:a48ae8f8b2b53d5ed94d87cfc7cd9ffe4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a61717429fa01ccc92f39208063edf4ef"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1util_1_1Permutation.html#a61717429fa01ccc92f39208063edf4ef">parity</a> ()</td></tr>
+<tr class="separator:a61717429fa01ccc92f39208063edf4ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad27774ad5f786d58e08937593332a943"><td class="memTemplParams" colspan="2">template&lt;typename Container &gt; </td></tr>
+<tr class="memitem:ad27774ad5f786d58e08937593332a943"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structXped_1_1util_1_1Permutation.html#ad27774ad5f786d58e08937593332a943">apply</a> (Container &amp;c) const</td></tr>
+<tr class="separator:ad27774ad5f786d58e08937593332a943"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa791a9db6ddf400e67519384ff2b31f5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1util_1_1Permutation.html">Permutation</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1util_1_1Permutation.html#aa791a9db6ddf400e67519384ff2b31f5">inverse</a> () const</td></tr>
+<tr class="separator:aa791a9db6ddf400e67519384ff2b31f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5eddea8167eac3c4242f7655d0c8ea4b"><td class="memTemplParams" colspan="2">template&lt;typename IndexType &gt; </td></tr>
+<tr class="memitem:a5eddea8167eac3c4242f7655d0c8ea4b"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; IndexType &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structXped_1_1util_1_1Permutation.html#a5eddea8167eac3c4242f7655d0c8ea4b">pi_as_index</a> () const</td></tr>
+<tr class="separator:a5eddea8167eac3c4242f7655d0c8ea4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a7f74dc070bcdc15a73d245b8144dafe8"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structXped_1_1util_1_1Permutation.html">Permutation</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1util_1_1Permutation.html#a7f74dc070bcdc15a73d245b8144dafe8">Identity</a> (std::size_t <a class="el" href="structXped_1_1util_1_1Permutation.html#a2ca4524822a8d1e5167734505f2f5239">N</a>)</td></tr>
+<tr class="separator:a7f74dc070bcdc15a73d245b8144dafe8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ebba680ca7cbe410a73d9845b8737a2"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; <a class="el" href="structXped_1_1util_1_1Permutation.html">Permutation</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1util_1_1Permutation.html#a5ebba680ca7cbe410a73d9845b8737a2">all</a> (std::size_t <a class="el" href="structXped_1_1util_1_1Permutation.html#a2ca4524822a8d1e5167734505f2f5239">N</a>)</td></tr>
+<tr class="separator:a5ebba680ca7cbe410a73d9845b8737a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:a2ca4524822a8d1e5167734505f2f5239"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1util_1_1Permutation.html#a2ca4524822a8d1e5167734505f2f5239">N</a></td></tr>
+<tr class="separator:a2ca4524822a8d1e5167734505f2f5239"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af29c1108ce0f164b38286869a1879ef7"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1util_1_1Permutation.html#af29c1108ce0f164b38286869a1879ef7">pi</a></td></tr>
+<tr class="separator:af29c1108ce0f164b38286869a1879ef7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67904e8f21efea4a5b15e1f3c7542e9a"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1util_1_1Permutation.html#a67904e8f21efea4a5b15e1f3c7542e9a">pi_inv</a></td></tr>
+<tr class="separator:a67904e8f21efea4a5b15e1f3c7542e9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8b67eeedd5c7e96b71c00e47134606e"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structXped_1_1util_1_1Permutation.html#ac82ed8cdfd4cf6d5d2dba30ffc4b7165">Cycle</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1util_1_1Permutation.html#af8b67eeedd5c7e96b71c00e47134606e">cycles</a></td></tr>
+<tr class="separator:af8b67eeedd5c7e96b71c00e47134606e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
+Friends</h2></td></tr>
+<tr class="memitem:ad39aafaf6e1e622bdf9900a95dba6c96"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1util_1_1Permutation.html#ad39aafaf6e1e622bdf9900a95dba6c96">hash_value</a> (const <a class="el" href="structXped_1_1util_1_1Permutation.html">Permutation</a> &amp;p)</td></tr>
+<tr class="separator:ad39aafaf6e1e622bdf9900a95dba6c96"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="ac82ed8cdfd4cf6d5d2dba30ffc4b7165" name="ac82ed8cdfd4cf6d5d2dba30ffc4b7165"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac82ed8cdfd4cf6d5d2dba30ffc4b7165">&#9670;&#160;</a></span>Cycle</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef std::vector&lt;std::size_t&gt; <a class="el" href="structXped_1_1util_1_1Permutation.html#ac82ed8cdfd4cf6d5d2dba30ffc4b7165">Xped::util::Permutation::Cycle</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a43adba3d14da7a05a2286a2be0368bb4" name="a43adba3d14da7a05a2286a2be0368bb4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a43adba3d14da7a05a2286a2be0368bb4">&#9670;&#160;</a></span>Permutation() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Xped::util::Permutation::Permutation </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1util_1_1Permutation_a43adba3d14da7a05a2286a2be0368bb4_icgraph.png" border="0" usemap="#astructXped_1_1util_1_1Permutation_a43adba3d14da7a05a2286a2be0368bb4_icgraph" alt=""/></div>
+<map name="astructXped_1_1util_1_1Permutation_a43adba3d14da7a05a2286a2be0368bb4_icgraph" id="astructXped_1_1util_1_1Permutation_a43adba3d14da7a05a2286a2be0368bb4_icgraph">
+<area shape="rect" title=" " alt="" coords="225,5,397,45"/>
+<area shape="rect" href="structXped_1_1util_1_1Permutation.html#a7f74dc070bcdc15a73d245b8144dafe8" title=" " alt="" coords="5,5,177,45"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a329224cfb98ddf1ccb04b622987da3cb" name="a329224cfb98ddf1ccb04b622987da3cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a329224cfb98ddf1ccb04b622987da3cb">&#9670;&#160;</a></span>Permutation() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Container &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Xped::util::Permutation::Permutation </td>
+          <td>(</td>
+          <td class="paramtype">const Container &amp;&#160;</td>
+          <td class="paramname"><em>in</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1util_1_1Permutation_a329224cfb98ddf1ccb04b622987da3cb_cgraph.png" border="0" usemap="#astructXped_1_1util_1_1Permutation_a329224cfb98ddf1ccb04b622987da3cb_cgraph" alt=""/></div>
+<map name="astructXped_1_1util_1_1Permutation_a329224cfb98ddf1ccb04b622987da3cb_cgraph" id="astructXped_1_1util_1_1Permutation_a329224cfb98ddf1ccb04b622987da3cb_cgraph">
+<area shape="rect" title=" " alt="" coords="5,5,177,45"/>
+<area shape="rect" href="structXped_1_1util_1_1Permutation.html#aa546c031862d3f4059e20a446f48f4c6" title=" " alt="" coords="225,5,397,45"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ad1d6a14b6118be400cba59b5143a8214" name="ad1d6a14b6118be400cba59b5143a8214"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad1d6a14b6118be400cba59b5143a8214">&#9670;&#160;</a></span>Permutation() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Xped::util::Permutation::Permutation </td>
+          <td>(</td>
+          <td class="paramtype">const std::string&#160;</td>
+          <td class="paramname"><em>filename</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1util_1_1Permutation_ad1d6a14b6118be400cba59b5143a8214_cgraph.png" border="0" usemap="#astructXped_1_1util_1_1Permutation_ad1d6a14b6118be400cba59b5143a8214_cgraph" alt=""/></div>
+<map name="astructXped_1_1util_1_1Permutation_ad1d6a14b6118be400cba59b5143a8214_cgraph" id="astructXped_1_1util_1_1Permutation_ad1d6a14b6118be400cba59b5143a8214_cgraph">
+<area shape="rect" title=" " alt="" coords="5,5,177,45"/>
+<area shape="rect" href="structXped_1_1util_1_1Permutation.html#aa546c031862d3f4059e20a446f48f4c6" title=" " alt="" coords="225,5,397,45"/>
+</map>
+</div>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a5ebba680ca7cbe410a73d9845b8737a2" name="a5ebba680ca7cbe410a73d9845b8737a2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5ebba680ca7cbe410a73d9845b8737a2">&#9670;&#160;</a></span>all()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::vector&lt; <a class="el" href="structXped_1_1util_1_1Permutation.html">Permutation</a> &gt; Xped::util::Permutation::all </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>N</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad27774ad5f786d58e08937593332a943" name="ad27774ad5f786d58e08937593332a943"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad27774ad5f786d58e08937593332a943">&#9670;&#160;</a></span>apply()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Container &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Xped::util::Permutation::apply </td>
+          <td>(</td>
+          <td class="paramtype">Container &amp;&#160;</td>
+          <td class="paramname"><em>c</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a48ae8f8b2b53d5ed94d87cfc7cd9ffe4" name="a48ae8f8b2b53d5ed94d87cfc7cd9ffe4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a48ae8f8b2b53d5ed94d87cfc7cd9ffe4">&#9670;&#160;</a></span>decompose()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; std::size_t &gt; Xped::util::Permutation::decompose </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1util_1_1Permutation_a48ae8f8b2b53d5ed94d87cfc7cd9ffe4_icgraph.png" border="0" usemap="#astructXped_1_1util_1_1Permutation_a48ae8f8b2b53d5ed94d87cfc7cd9ffe4_icgraph" alt=""/></div>
+<map name="astructXped_1_1util_1_1Permutation_a48ae8f8b2b53d5ed94d87cfc7cd9ffe4_icgraph" id="astructXped_1_1util_1_1Permutation_a48ae8f8b2b53d5ed94d87cfc7cd9ffe4_icgraph">
+<area shape="rect" title=" " alt="" coords="248,5,420,45"/>
+<area shape="rect" href="structXped_1_1FusionTree.html#a60a02db0d9fd8abfc5c7c4eb5a227489" title=" " alt="" coords="5,13,200,38"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a7f74dc070bcdc15a73d245b8144dafe8" name="a7f74dc070bcdc15a73d245b8144dafe8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7f74dc070bcdc15a73d245b8144dafe8">&#9670;&#160;</a></span>Identity()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="structXped_1_1util_1_1Permutation.html">Permutation</a> Xped::util::Permutation::Identity </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>N</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1util_1_1Permutation_a7f74dc070bcdc15a73d245b8144dafe8_cgraph.png" border="0" usemap="#astructXped_1_1util_1_1Permutation_a7f74dc070bcdc15a73d245b8144dafe8_cgraph" alt=""/></div>
+<map name="astructXped_1_1util_1_1Permutation_a7f74dc070bcdc15a73d245b8144dafe8_cgraph" id="astructXped_1_1util_1_1Permutation_a7f74dc070bcdc15a73d245b8144dafe8_cgraph">
+<area shape="rect" title=" " alt="" coords="5,5,177,45"/>
+<area shape="rect" href="structXped_1_1util_1_1Permutation.html#a43adba3d14da7a05a2286a2be0368bb4" title=" " alt="" coords="225,5,397,45"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a4b76bfbb7328779124f25f65150b4000" name="a4b76bfbb7328779124f25f65150b4000"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b76bfbb7328779124f25f65150b4000">&#9670;&#160;</a></span>independentTranspositions()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; std::vector&lt; <a class="el" href="structXped_1_1util_1_1Transposition.html">Transposition</a> &gt; &gt; Xped::util::Permutation::independentTranspositions </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa546c031862d3f4059e20a446f48f4c6" name="aa546c031862d3f4059e20a446f48f4c6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa546c031862d3f4059e20a446f48f4c6">&#9670;&#160;</a></span>initialize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Xped::util::Permutation::initialize </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1util_1_1Permutation_aa546c031862d3f4059e20a446f48f4c6_icgraph.png" border="0" usemap="#astructXped_1_1util_1_1Permutation_aa546c031862d3f4059e20a446f48f4c6_icgraph" alt=""/></div>
+<map name="astructXped_1_1util_1_1Permutation_aa546c031862d3f4059e20a446f48f4c6_icgraph" id="astructXped_1_1util_1_1Permutation_aa546c031862d3f4059e20a446f48f4c6_icgraph">
+<area shape="rect" title=" " alt="" coords="225,5,397,45"/>
+<area shape="rect" href="structXped_1_1util_1_1Permutation.html#a329224cfb98ddf1ccb04b622987da3cb" title=" " alt="" coords="5,5,177,45"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="aa791a9db6ddf400e67519384ff2b31f5" name="aa791a9db6ddf400e67519384ff2b31f5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa791a9db6ddf400e67519384ff2b31f5">&#9670;&#160;</a></span>inverse()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structXped_1_1util_1_1Permutation.html">Permutation</a> Xped::util::Permutation::inverse </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab7cd35536629c846ae075e85ce646a54" name="ab7cd35536629c846ae075e85ce646a54"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab7cd35536629c846ae075e85ce646a54">&#9670;&#160;</a></span>operator==()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Xped::util::Permutation::operator== </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1util_1_1Permutation.html">Permutation</a> &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a61717429fa01ccc92f39208063edf4ef" name="a61717429fa01ccc92f39208063edf4ef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a61717429fa01ccc92f39208063edf4ef">&#9670;&#160;</a></span>parity()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t Xped::util::Permutation::parity </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5eddea8167eac3c4242f7655d0c8ea4b" name="a5eddea8167eac3c4242f7655d0c8ea4b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5eddea8167eac3c4242f7655d0c8ea4b">&#9670;&#160;</a></span>pi_as_index()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename IndexType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; IndexType &gt; Xped::util::Permutation::pi_as_index </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a86e0c4a88e7134f58c6812a528b72082" name="a86e0c4a88e7134f58c6812a528b72082"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a86e0c4a88e7134f58c6812a528b72082">&#9670;&#160;</a></span>print()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string Xped::util::Permutation::print </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6ca75b5bb207671e7ea2ee80596d43ac" name="a6ca75b5bb207671e7ea2ee80596d43ac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6ca75b5bb207671e7ea2ee80596d43ac">&#9670;&#160;</a></span>transpositions()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="structXped_1_1util_1_1Transposition.html">Transposition</a> &gt; Xped::util::Permutation::transpositions </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Friends And Related Function Documentation</h2>
+<a id="ad39aafaf6e1e622bdf9900a95dba6c96" name="ad39aafaf6e1e622bdf9900a95dba6c96"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad39aafaf6e1e622bdf9900a95dba6c96">&#9670;&#160;</a></span>hash_value</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t hash_value </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1util_1_1Permutation.html">Permutation</a> &amp;&#160;</td>
+          <td class="paramname"><em>p</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="af8b67eeedd5c7e96b71c00e47134606e" name="af8b67eeedd5c7e96b71c00e47134606e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af8b67eeedd5c7e96b71c00e47134606e">&#9670;&#160;</a></span>cycles</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="structXped_1_1util_1_1Permutation.html#ac82ed8cdfd4cf6d5d2dba30ffc4b7165">Cycle</a>&gt; Xped::util::Permutation::cycles</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2ca4524822a8d1e5167734505f2f5239" name="a2ca4524822a8d1e5167734505f2f5239"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2ca4524822a8d1e5167734505f2f5239">&#9670;&#160;</a></span>N</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t Xped::util::Permutation::N</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af29c1108ce0f164b38286869a1879ef7" name="af29c1108ce0f164b38286869a1879ef7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af29c1108ce0f164b38286869a1879ef7">&#9670;&#160;</a></span>pi</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::size_t&gt; Xped::util::Permutation::pi</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a67904e8f21efea4a5b15e1f3c7542e9a" name="a67904e8f21efea4a5b15e1f3c7542e9a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a67904e8f21efea4a5b15e1f3c7542e9a">&#9670;&#160;</a></span>pi_inv</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::size_t&gt; Xped::util::Permutation::pi_inv</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<hr/>The documentation for this struct was generated from the following file:<ul>
+<li>include/Xped/Util/<a class="el" href="Permutations_8hpp_source.html">Permutations.hpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- HTML footer for doxygen 1.9.2-->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="namespaceXped.html">Xped</a></li><li class="navelem"><a class="el" href="namespaceXped_1_1util.html">util</a></li><li class="navelem"><a class="el" href="structXped_1_1util_1_1Permutation.html">Permutation</a></li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.6 </li>
+  </ul>
+</div>
+<script type="text/javascript">
+  // script for doxygen 1.9.2
+  $(function() {
+      toggleButton = document.createElement('doxygen-awesome-dark-mode-toggle')
+      toggleButton.title = "Toggle Light/Dark Mode"
+      $(document).ready(function(){
+          document.getElementById("MSearchBox").parentNode.appendChild(toggleButton)
+      })
+      $(window).resize(function(){
+          document.getElementById("MSearchBox").parentNode.appendChild(toggleButton)
+      })
+  })
+</script>
+</body>
+</html>

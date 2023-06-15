@@ -1,0 +1,1036 @@
+<!-- HTML header for doxygen 1.9.6-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.6"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Xped: HDF5Interface Class Reference</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+});
+</script>
+<script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript">
+  DoxygenAwesomeDarkModeToggle.lightModeIcon = '🌞'
+// icon from https://fonts.google.com/icons
+  DoxygenAwesomeDarkModeToggle.darkModeIcon = `<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px" viewBox="0 0 24 24" width="24px" fill="#009793"><g><rect fill="none" height="24" width="24"/></g><g><g><path d="M8.1,14.15C9.77,14.63,11,16.17,11,18c0,0.68-0.19,1.31-0.48,1.87c0.48,0.09,0.97,0.14,1.48,0.14 c1.48,0,2.9-0.41,4.13-1.15c-2.62-0.92-5.23-2.82-6.8-5.86C7.74,9.94,7.78,7.09,8.29,4.9c-2.57,1.33-4.3,4.01-4.3,7.1c0,0,0,0,0,0 c0.01,0,0.01,0,0.02,0C5.66,12,7.18,12.83,8.1,14.15z" opacity=".3"/><path d="M19.78,17.51c-2.47,0-6.57-1.33-8.68-5.43C8.77,7.57,10.6,3.6,11.63,2.01C6.27,2.2,1.98,6.59,1.98,12 c0,0.14,0.02,0.28,0.02,0.42C2.61,12.16,3.28,12,3.98,12c0,0,0,0,0,0c0-3.09,1.73-5.77,4.3-7.1C7.78,7.09,7.74,9.94,9.32,13 c1.57,3.04,4.18,4.95,6.8,5.86c-1.23,0.74-2.65,1.15-4.13,1.15c-0.5,0-1-0.05-1.48-0.14c-0.37,0.7-0.94,1.27-1.64,1.64 c0.98,0.32,2.03,0.5,3.11,0.5c3.5,0,6.58-1.8,8.37-4.52C20.18,17.5,19.98,17.51,19.78,17.51z"/><path d="M7,16l-0.18,0C6.4,14.84,5.3,14,4,14c-1.66,0-3,1.34-3,3s1.34,3,3,3c0.62,0,2.49,0,3,0c1.1,0,2-0.9,2-2 C9,16.9,8.1,16,7,16z"/></g></g></svg>`
+  DoxygenAwesomeDarkModeToggle.init()
+</script>
+</head>
+<body>
+  <!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/cpp977/Xped" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">Xped
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.9.6 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('classHDF5Interface.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="classHDF5Interface-members.html">List of all members</a>  </div>
+  <div class="headertitle"><div class="title">HDF5Interface Class Reference</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p><code>#include &lt;<a class="el" href="HDF5Interface_8h_source.html">HDF5Interface.h</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:af03870a4d3539aae2016e62f1e6e1156"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHDF5Interface.html#af03870a4d3539aae2016e62f1e6e1156">HDF5Interface</a> ()</td></tr>
+<tr class="separator:af03870a4d3539aae2016e62f1e6e1156"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac276746866c1f589016706719aec026d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHDF5Interface.html#ac276746866c1f589016706719aec026d">HDF5Interface</a> (std::string filename_input, <a class="el" href="HDF5Interface_8h.html#a564988e940fcc9a7b2b3128144b751b2">FILE_ACCESS_MODE</a> mode_input)</td></tr>
+<tr class="separator:ac276746866c1f589016706719aec026d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab77109edf1fc8394a4448b511b32bcdf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHDF5Interface.html#ab77109edf1fc8394a4448b511b32bcdf">switch_to</a> (<a class="el" href="HDF5Interface_8h.html#a564988e940fcc9a7b2b3128144b751b2">FILE_ACCESS_MODE</a> mode_input)</td></tr>
+<tr class="separator:ab77109edf1fc8394a4448b511b32bcdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a822dde76158731e871903e1f6eda64d2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHDF5Interface.html#a822dde76158731e871903e1f6eda64d2">close</a> ()</td></tr>
+<tr class="separator:a822dde76158731e871903e1f6eda64d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4bdc88e0ba62a181d3a8fa9ac586ca62"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHDF5Interface.html#a4bdc88e0ba62a181d3a8fa9ac586ca62">create_group</a> (std::string grp_name)</td></tr>
+<tr class="separator:a4bdc88e0ba62a181d3a8fa9ac586ca62"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acef2906bdb38a964ed401c6562b1962d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHDF5Interface.html#acef2906bdb38a964ed401c6562b1962d">HAS_GROUP</a> (std::string grp_name)</td></tr>
+<tr class="separator:acef2906bdb38a964ed401c6562b1962d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ab0456ab342edadc6a07a98aa81f583"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHDF5Interface.html#a0ab0456ab342edadc6a07a98aa81f583">get_groups</a> () const</td></tr>
+<tr class="separator:a0ab0456ab342edadc6a07a98aa81f583"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abbc9444fd268a954d7bb304cd5410951"><td class="memTemplParams" colspan="2">template&lt;typename ScalarType &gt; </td></tr>
+<tr class="memitem:abbc9444fd268a954d7bb304cd5410951"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classHDF5Interface.html#abbc9444fd268a954d7bb304cd5410951">save_scalar</a> (ScalarType x, std::string setname, std::string grp_name=&quot;&quot;)</td></tr>
+<tr class="separator:abbc9444fd268a954d7bb304cd5410951"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a819b5fc1aacb537119cbea2499ff31a3"><td class="memTemplParams" colspan="2">template&lt;typename ScalarType &gt; </td></tr>
+<tr class="memitem:a819b5fc1aacb537119cbea2499ff31a3"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classHDF5Interface.html#a819b5fc1aacb537119cbea2499ff31a3">load_scalar</a> (ScalarType &amp;x, std::string setname, std::string grp_name=&quot;&quot;)</td></tr>
+<tr class="separator:a819b5fc1aacb537119cbea2499ff31a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a54505e5effd9b629df8cf45c53861947"><td class="memTemplParams" colspan="2">template&lt;typename ScalarType &gt; </td></tr>
+<tr class="memitem:a54505e5effd9b629df8cf45c53861947"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classHDF5Interface.html#a54505e5effd9b629df8cf45c53861947">save_vector</a> (const ScalarType *vec, const size_t size, const std::string &amp;setname)</td></tr>
+<tr class="separator:a54505e5effd9b629df8cf45c53861947"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a203fbabc78899b3e8ff96420ccf99236"><td class="memTemplParams" colspan="2">template&lt;typename ScalarType &gt; </td></tr>
+<tr class="memitem:a203fbabc78899b3e8ff96420ccf99236"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classHDF5Interface.html#a203fbabc78899b3e8ff96420ccf99236">load_vector</a> (ScalarType *vec, const std::string &amp;setname)</td></tr>
+<tr class="separator:a203fbabc78899b3e8ff96420ccf99236"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a809f09f244dd5e14972db66a1c9daae2"><td class="memTemplParams" colspan="2">template&lt;typename ScalarType &gt; </td></tr>
+<tr class="memitem:a809f09f244dd5e14972db66a1c9daae2"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classHDF5Interface.html#a809f09f244dd5e14972db66a1c9daae2">save_matrix</a> (const MatrixType&lt; ScalarType &gt; &amp;mat, std::string setname, std::string grp_name=&quot;&quot;)</td></tr>
+<tr class="separator:a809f09f244dd5e14972db66a1c9daae2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a517861904c4387a532c6455b72488c30"><td class="memTemplParams" colspan="2">template&lt;typename ScalarType &gt; </td></tr>
+<tr class="memitem:a517861904c4387a532c6455b72488c30"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classHDF5Interface.html#a517861904c4387a532c6455b72488c30">load_matrix</a> (MatrixType&lt; ScalarType &gt; &amp;mat, std::string setname, std::string grp_name=&quot;&quot;)</td></tr>
+<tr class="separator:a517861904c4387a532c6455b72488c30"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a597cccac3e5d85d29bf440d8918fb99c"><td class="memTemplParams" colspan="2">template&lt;typename ScalarType &gt; </td></tr>
+<tr class="memitem:a597cccac3e5d85d29bf440d8918fb99c"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classHDF5Interface.html#a597cccac3e5d85d29bf440d8918fb99c">save_vector</a> (const VectorType&lt; ScalarType &gt; &amp;vec, std::string setname, std::string grp_name=&quot;&quot;)</td></tr>
+<tr class="separator:a597cccac3e5d85d29bf440d8918fb99c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4f65a1ead0c21e8c57043c6a8692fe4"><td class="memTemplParams" colspan="2">template&lt;typename ScalarType &gt; </td></tr>
+<tr class="memitem:ae4f65a1ead0c21e8c57043c6a8692fe4"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classHDF5Interface.html#ae4f65a1ead0c21e8c57043c6a8692fe4">load_vector</a> (VectorType&lt; ScalarType &gt; &amp;vec, std::string setname, std::string grp_name=&quot;&quot;)</td></tr>
+<tr class="separator:ae4f65a1ead0c21e8c57043c6a8692fe4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa3f3123e0714b3445ce89cbb5dd459e9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHDF5Interface.html#aa3f3123e0714b3445ce89cbb5dd459e9">save_char</a> (std::string x, std::string setname, std::string grp_name=&quot;&quot;)</td></tr>
+<tr class="separator:aa3f3123e0714b3445ce89cbb5dd459e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a373b6f86f345e3a86e4e56ba337c15fe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHDF5Interface.html#a373b6f86f345e3a86e4e56ba337c15fe">load_char</a> (std::string &amp;x, std::string setname, std::string grp_name=&quot;&quot;)</td></tr>
+<tr class="separator:a373b6f86f345e3a86e4e56ba337c15fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f2d1daf78881d63b3325417636ea424"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHDF5Interface.html#a4f2d1daf78881d63b3325417636ea424">get_vector_size</a> (const char *setname)</td></tr>
+<tr class="separator:a4f2d1daf78881d63b3325417636ea424"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae3a1d7d3dacd348ad9893a708ab5edce"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHDF5Interface.html#ae3a1d7d3dacd348ad9893a708ab5edce">CHECK</a> (std::string dataset)</td></tr>
+<tr class="separator:ae3a1d7d3dacd348ad9893a708ab5edce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aacc4e89ec397ec74ffbd8714a4d1fc0b"><td class="memTemplParams" colspan="2">template&lt;typename ScalarType &gt; </td></tr>
+<tr class="memitem:aacc4e89ec397ec74ffbd8714a4d1fc0b"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classHDF5Interface.html#aacc4e89ec397ec74ffbd8714a4d1fc0b">save_matrix</a> (const Eigen::Matrix&lt; ScalarType, Eigen::Dynamic, Eigen::Dynamic &gt; &amp;mat, std::string setname, std::string grp_name)</td></tr>
+<tr class="separator:aacc4e89ec397ec74ffbd8714a4d1fc0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46ecc15f8df6f202301241fda75eadc8"><td class="memTemplParams" colspan="2">template&lt;typename ScalarType &gt; </td></tr>
+<tr class="memitem:a46ecc15f8df6f202301241fda75eadc8"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classHDF5Interface.html#a46ecc15f8df6f202301241fda75eadc8">load_matrix</a> (Eigen::Matrix&lt; ScalarType, Eigen::Dynamic, Eigen::Dynamic &gt; &amp;mat, std::string setname, std::string grp_name)</td></tr>
+<tr class="separator:a46ecc15f8df6f202301241fda75eadc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5df5515872e23b741c8f4eb8dbd5ef9f"><td class="memTemplParams" colspan="2">template&lt;typename ScalarType &gt; </td></tr>
+<tr class="memitem:a5df5515872e23b741c8f4eb8dbd5ef9f"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classHDF5Interface.html#a5df5515872e23b741c8f4eb8dbd5ef9f">save_vector</a> (const Eigen::Matrix&lt; ScalarType, Eigen::Dynamic, 1 &gt; &amp;vec, std::string setname, std::string grp_name)</td></tr>
+<tr class="separator:a5df5515872e23b741c8f4eb8dbd5ef9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a017d43b84e3093f2082482e85c068402"><td class="memTemplParams" colspan="2">template&lt;typename ScalarType &gt; </td></tr>
+<tr class="memitem:a017d43b84e3093f2082482e85c068402"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classHDF5Interface.html#a017d43b84e3093f2082482e85c068402">load_vector</a> (Eigen::Matrix&lt; ScalarType, Eigen::Dynamic, 1 &gt; &amp;vec, std::string setname, std::string grp_name)</td></tr>
+<tr class="separator:a017d43b84e3093f2082482e85c068402"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a7966a33460f9a7d43457490374fd7a6f"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHDF5Interface.html#a7966a33460f9a7d43457490374fd7a6f">IS_VALID_HDF5</a> (std::string filename)</td></tr>
+<tr class="separator:a7966a33460f9a7d43457490374fd7a6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="af03870a4d3539aae2016e62f1e6e1156" name="af03870a4d3539aae2016e62f1e6e1156"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af03870a4d3539aae2016e62f1e6e1156">&#9670;&#160;</a></span>HDF5Interface() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">HDF5Interface::HDF5Interface </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac276746866c1f589016706719aec026d" name="ac276746866c1f589016706719aec026d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac276746866c1f589016706719aec026d">&#9670;&#160;</a></span>HDF5Interface() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">HDF5Interface::HDF5Interface </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>filename_input</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="HDF5Interface_8h.html#a564988e940fcc9a7b2b3128144b751b2">FILE_ACCESS_MODE</a>&#160;</td>
+          <td class="paramname"><em>mode_input</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classHDF5Interface_ac276746866c1f589016706719aec026d_cgraph.png" border="0" usemap="#aclassHDF5Interface_ac276746866c1f589016706719aec026d_cgraph" alt=""/></div>
+<map name="aclassHDF5Interface_ac276746866c1f589016706719aec026d_cgraph" id="aclassHDF5Interface_ac276746866c1f589016706719aec026d_cgraph">
+<area shape="rect" title=" " alt="" coords="5,5,224,31"/>
+<area shape="rect" href="classHDF5Interface.html#ab77109edf1fc8394a4448b511b32bcdf" title=" " alt="" coords="272,5,459,31"/>
+</map>
+</div>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="ae3a1d7d3dacd348ad9893a708ab5edce" name="ae3a1d7d3dacd348ad9893a708ab5edce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae3a1d7d3dacd348ad9893a708ab5edce">&#9670;&#160;</a></span>CHECK()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool HDF5Interface::CHECK </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>dataset</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a822dde76158731e871903e1f6eda64d2" name="a822dde76158731e871903e1f6eda64d2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a822dde76158731e871903e1f6eda64d2">&#9670;&#160;</a></span>close()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void HDF5Interface::close </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classHDF5Interface_a822dde76158731e871903e1f6eda64d2_icgraph.png" border="0" usemap="#aclassHDF5Interface_a822dde76158731e871903e1f6eda64d2_icgraph" alt=""/></div>
+<map name="aclassHDF5Interface_a822dde76158731e871903e1f6eda64d2_icgraph" id="aclassHDF5Interface_a822dde76158731e871903e1f6eda64d2_icgraph">
+<area shape="rect" title=" " alt="" coords="149,5,308,31"/>
+<area shape="rect" href="classPulse.html#a2d6daa985aa542f40f9298153acaafc6" title=" " alt="" coords="5,5,101,31"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a4bdc88e0ba62a181d3a8fa9ac586ca62" name="a4bdc88e0ba62a181d3a8fa9ac586ca62"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4bdc88e0ba62a181d3a8fa9ac586ca62">&#9670;&#160;</a></span>create_group()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void HDF5Interface::create_group </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>grp_name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classHDF5Interface_a4bdc88e0ba62a181d3a8fa9ac586ca62_cgraph.png" border="0" usemap="#aclassHDF5Interface_a4bdc88e0ba62a181d3a8fa9ac586ca62_cgraph" alt=""/></div>
+<map name="aclassHDF5Interface_a4bdc88e0ba62a181d3a8fa9ac586ca62_cgraph" id="aclassHDF5Interface_a4bdc88e0ba62a181d3a8fa9ac586ca62_cgraph">
+<area shape="rect" title=" " alt="" coords="5,5,171,45"/>
+<area shape="rect" href="classHDF5Interface.html#acef2906bdb38a964ed401c6562b1962d" title=" " alt="" coords="219,5,369,45"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a0ab0456ab342edadc6a07a98aa81f583" name="a0ab0456ab342edadc6a07a98aa81f583"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0ab0456ab342edadc6a07a98aa81f583">&#9670;&#160;</a></span>get_groups()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; std::string &gt; HDF5Interface::get_groups </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4f2d1daf78881d63b3325417636ea424" name="a4f2d1daf78881d63b3325417636ea424"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4f2d1daf78881d63b3325417636ea424">&#9670;&#160;</a></span>get_vector_size()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t HDF5Interface::get_vector_size </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>setname</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="acef2906bdb38a964ed401c6562b1962d" name="acef2906bdb38a964ed401c6562b1962d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acef2906bdb38a964ed401c6562b1962d">&#9670;&#160;</a></span>HAS_GROUP()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool HDF5Interface::HAS_GROUP </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>grp_name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classHDF5Interface_acef2906bdb38a964ed401c6562b1962d_icgraph.png" border="0" usemap="#aclassHDF5Interface_acef2906bdb38a964ed401c6562b1962d_icgraph" alt=""/></div>
+<map name="aclassHDF5Interface_acef2906bdb38a964ed401c6562b1962d_icgraph" id="aclassHDF5Interface_acef2906bdb38a964ed401c6562b1962d_icgraph">
+<area shape="rect" title=" " alt="" coords="219,5,369,45"/>
+<area shape="rect" href="classHDF5Interface.html#a4bdc88e0ba62a181d3a8fa9ac586ca62" title=" " alt="" coords="5,5,171,45"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a7966a33460f9a7d43457490374fd7a6f" name="a7966a33460f9a7d43457490374fd7a6f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7966a33460f9a7d43457490374fd7a6f">&#9670;&#160;</a></span>IS_VALID_HDF5()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool HDF5Interface::IS_VALID_HDF5 </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>filename</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a373b6f86f345e3a86e4e56ba337c15fe" name="a373b6f86f345e3a86e4e56ba337c15fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a373b6f86f345e3a86e4e56ba337c15fe">&#9670;&#160;</a></span>load_char()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void HDF5Interface::load_char </td>
+          <td>(</td>
+          <td class="paramtype">std::string &amp;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>setname</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>grp_name</em> = <code>&quot;&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a46ecc15f8df6f202301241fda75eadc8" name="a46ecc15f8df6f202301241fda75eadc8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a46ecc15f8df6f202301241fda75eadc8">&#9670;&#160;</a></span>load_matrix() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ScalarType &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void HDF5Interface::load_matrix </td>
+          <td>(</td>
+          <td class="paramtype">Eigen::Matrix&lt; ScalarType, Eigen::Dynamic, Eigen::Dynamic &gt; &amp;&#160;</td>
+          <td class="paramname"><em>mat</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>setname</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>grp_name</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a517861904c4387a532c6455b72488c30" name="a517861904c4387a532c6455b72488c30"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a517861904c4387a532c6455b72488c30">&#9670;&#160;</a></span>load_matrix() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ScalarType &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void HDF5Interface::load_matrix </td>
+          <td>(</td>
+          <td class="paramtype">MatrixType&lt; ScalarType &gt; &amp;&#160;</td>
+          <td class="paramname"><em>mat</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>setname</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>grp_name</em> = <code>&quot;&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a819b5fc1aacb537119cbea2499ff31a3" name="a819b5fc1aacb537119cbea2499ff31a3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a819b5fc1aacb537119cbea2499ff31a3">&#9670;&#160;</a></span>load_scalar()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ScalarType &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void HDF5Interface::load_scalar </td>
+          <td>(</td>
+          <td class="paramtype">ScalarType &amp;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>setname</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>grp_name</em> = <code>&quot;&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classHDF5Interface_a819b5fc1aacb537119cbea2499ff31a3_icgraph.png" border="0" usemap="#aclassHDF5Interface_a819b5fc1aacb537119cbea2499ff31a3_icgraph" alt=""/></div>
+<map name="aclassHDF5Interface_a819b5fc1aacb537119cbea2499ff31a3_icgraph" id="aclassHDF5Interface_a819b5fc1aacb537119cbea2499ff31a3_icgraph">
+<area shape="rect" title=" " alt="" coords="213,23,365,63"/>
+<area shape="rect" href="HDF5Eigen_8h.html#a219ca0c841ed78406e218bc396b03a8d" title=" " alt="" coords="39,5,132,31"/>
+<area shape="rect" href="HDF5Eigen_8h.html#a04b1f88aa5c0813e8c71b7beded2e2f2" title=" " alt="" coords="5,55,165,80"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a017d43b84e3093f2082482e85c068402" name="a017d43b84e3093f2082482e85c068402"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a017d43b84e3093f2082482e85c068402">&#9670;&#160;</a></span>load_vector() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ScalarType &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void HDF5Interface::load_vector </td>
+          <td>(</td>
+          <td class="paramtype">Eigen::Matrix&lt; ScalarType, Eigen::Dynamic, 1 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>vec</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>setname</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>grp_name</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a203fbabc78899b3e8ff96420ccf99236" name="a203fbabc78899b3e8ff96420ccf99236"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a203fbabc78899b3e8ff96420ccf99236">&#9670;&#160;</a></span>load_vector() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ScalarType &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void HDF5Interface::load_vector </td>
+          <td>(</td>
+          <td class="paramtype">ScalarType *&#160;</td>
+          <td class="paramname"><em>vec</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>setname</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classHDF5Interface_a203fbabc78899b3e8ff96420ccf99236_icgraph.png" border="0" usemap="#aclassHDF5Interface_a203fbabc78899b3e8ff96420ccf99236_icgraph" alt=""/></div>
+<map name="aclassHDF5Interface_a203fbabc78899b3e8ff96420ccf99236_icgraph" id="aclassHDF5Interface_a203fbabc78899b3e8ff96420ccf99236_icgraph">
+<area shape="rect" title=" " alt="" coords="213,23,365,63"/>
+<area shape="rect" href="HDF5Eigen_8h.html#a219ca0c841ed78406e218bc396b03a8d" title=" " alt="" coords="39,5,132,31"/>
+<area shape="rect" href="HDF5Eigen_8h.html#a04b1f88aa5c0813e8c71b7beded2e2f2" title=" " alt="" coords="5,55,165,80"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ae4f65a1ead0c21e8c57043c6a8692fe4" name="ae4f65a1ead0c21e8c57043c6a8692fe4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae4f65a1ead0c21e8c57043c6a8692fe4">&#9670;&#160;</a></span>load_vector() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ScalarType &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void HDF5Interface::load_vector </td>
+          <td>(</td>
+          <td class="paramtype">VectorType&lt; ScalarType &gt; &amp;&#160;</td>
+          <td class="paramname"><em>vec</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>setname</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>grp_name</em> = <code>&quot;&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa3f3123e0714b3445ce89cbb5dd459e9" name="aa3f3123e0714b3445ce89cbb5dd459e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa3f3123e0714b3445ce89cbb5dd459e9">&#9670;&#160;</a></span>save_char()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void HDF5Interface::save_char </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>setname</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>grp_name</em> = <code>&quot;&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classHDF5Interface_aa3f3123e0714b3445ce89cbb5dd459e9_icgraph.png" border="0" usemap="#aclassHDF5Interface_aa3f3123e0714b3445ce89cbb5dd459e9_icgraph" alt=""/></div>
+<map name="aclassHDF5Interface_aa3f3123e0714b3445ce89cbb5dd459e9_icgraph" id="aclassHDF5Interface_aa3f3123e0714b3445ce89cbb5dd459e9_icgraph">
+<area shape="rect" title=" " alt="" coords="177,5,368,31"/>
+<area shape="rect" href="structSaveData.html#ade6d2b8d33dace34858a7bc97a3d93f5" title=" " alt="" coords="5,5,129,31"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="aacc4e89ec397ec74ffbd8714a4d1fc0b" name="aacc4e89ec397ec74ffbd8714a4d1fc0b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aacc4e89ec397ec74ffbd8714a4d1fc0b">&#9670;&#160;</a></span>save_matrix() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ScalarType &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void HDF5Interface::save_matrix </td>
+          <td>(</td>
+          <td class="paramtype">const Eigen::Matrix&lt; ScalarType, Eigen::Dynamic, Eigen::Dynamic &gt; &amp;&#160;</td>
+          <td class="paramname"><em>mat</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>setname</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>grp_name</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a809f09f244dd5e14972db66a1c9daae2" name="a809f09f244dd5e14972db66a1c9daae2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a809f09f244dd5e14972db66a1c9daae2">&#9670;&#160;</a></span>save_matrix() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ScalarType &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void HDF5Interface::save_matrix </td>
+          <td>(</td>
+          <td class="paramtype">const MatrixType&lt; ScalarType &gt; &amp;&#160;</td>
+          <td class="paramname"><em>mat</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>setname</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>grp_name</em> = <code>&quot;&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classHDF5Interface_a809f09f244dd5e14972db66a1c9daae2_icgraph.png" border="0" usemap="#aclassHDF5Interface_a809f09f244dd5e14972db66a1c9daae2_icgraph" alt=""/></div>
+<map name="aclassHDF5Interface_a809f09f244dd5e14972db66a1c9daae2_icgraph" id="aclassHDF5Interface_a809f09f244dd5e14972db66a1c9daae2_icgraph">
+<area shape="rect" title=" " alt="" coords="177,5,332,45"/>
+<area shape="rect" href="structSaveData.html#ade6d2b8d33dace34858a7bc97a3d93f5" title=" " alt="" coords="5,13,129,38"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="abbc9444fd268a954d7bb304cd5410951" name="abbc9444fd268a954d7bb304cd5410951"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abbc9444fd268a954d7bb304cd5410951">&#9670;&#160;</a></span>save_scalar()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ScalarType &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void HDF5Interface::save_scalar </td>
+          <td>(</td>
+          <td class="paramtype">ScalarType&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>setname</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>grp_name</em> = <code>&quot;&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classHDF5Interface_abbc9444fd268a954d7bb304cd5410951_icgraph.png" border="0" usemap="#aclassHDF5Interface_abbc9444fd268a954d7bb304cd5410951_icgraph" alt=""/></div>
+<map name="aclassHDF5Interface_abbc9444fd268a954d7bb304cd5410951_icgraph" id="aclassHDF5Interface_abbc9444fd268a954d7bb304cd5410951_icgraph">
+<area shape="rect" title=" " alt="" coords="216,47,371,87"/>
+<area shape="rect" href="structSaveData.html#ade6d2b8d33dace34858a7bc97a3d93f5" title=" " alt="" coords="25,5,149,31"/>
+<area shape="rect" href="HDF5Eigen_8h.html#a09ae4677866debcac779284c18c6252b" title=" " alt="" coords="15,55,158,80"/>
+<area shape="rect" href="HDF5Eigen_8h.html#a74b57a16c313492342d70c1c1fc68ef3" title=" " alt="" coords="5,104,168,129"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a5df5515872e23b741c8f4eb8dbd5ef9f" name="a5df5515872e23b741c8f4eb8dbd5ef9f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5df5515872e23b741c8f4eb8dbd5ef9f">&#9670;&#160;</a></span>save_vector() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ScalarType &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void HDF5Interface::save_vector </td>
+          <td>(</td>
+          <td class="paramtype">const Eigen::Matrix&lt; ScalarType, Eigen::Dynamic, 1 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>vec</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>setname</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>grp_name</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a54505e5effd9b629df8cf45c53861947" name="a54505e5effd9b629df8cf45c53861947"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a54505e5effd9b629df8cf45c53861947">&#9670;&#160;</a></span>save_vector() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ScalarType &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void HDF5Interface::save_vector </td>
+          <td>(</td>
+          <td class="paramtype">const ScalarType *&#160;</td>
+          <td class="paramname"><em>vec</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const size_t&#160;</td>
+          <td class="paramname"><em>size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>setname</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classHDF5Interface_a54505e5effd9b629df8cf45c53861947_icgraph.png" border="0" usemap="#aclassHDF5Interface_a54505e5effd9b629df8cf45c53861947_icgraph" alt=""/></div>
+<map name="aclassHDF5Interface_a54505e5effd9b629df8cf45c53861947_icgraph" id="aclassHDF5Interface_a54505e5effd9b629df8cf45c53861947_icgraph">
+<area shape="rect" title=" " alt="" coords="216,73,371,113"/>
+<area shape="rect" href="structSaveData.html#ade6d2b8d33dace34858a7bc97a3d93f5" title=" " alt="" coords="25,5,149,31"/>
+<area shape="rect" href="classPulse.html#a2d6daa985aa542f40f9298153acaafc6" title=" " alt="" coords="39,55,135,80"/>
+<area shape="rect" href="HDF5Eigen_8h.html#a09ae4677866debcac779284c18c6252b" title=" " alt="" coords="15,104,158,129"/>
+<area shape="rect" href="HDF5Eigen_8h.html#a74b57a16c313492342d70c1c1fc68ef3" title=" " alt="" coords="5,153,168,179"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a597cccac3e5d85d29bf440d8918fb99c" name="a597cccac3e5d85d29bf440d8918fb99c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a597cccac3e5d85d29bf440d8918fb99c">&#9670;&#160;</a></span>save_vector() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ScalarType &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void HDF5Interface::save_vector </td>
+          <td>(</td>
+          <td class="paramtype">const VectorType&lt; ScalarType &gt; &amp;&#160;</td>
+          <td class="paramname"><em>vec</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>setname</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>grp_name</em> = <code>&quot;&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab77109edf1fc8394a4448b511b32bcdf" name="ab77109edf1fc8394a4448b511b32bcdf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab77109edf1fc8394a4448b511b32bcdf">&#9670;&#160;</a></span>switch_to()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void HDF5Interface::switch_to </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="HDF5Interface_8h.html#a564988e940fcc9a7b2b3128144b751b2">FILE_ACCESS_MODE</a>&#160;</td>
+          <td class="paramname"><em>mode_input</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classHDF5Interface_ab77109edf1fc8394a4448b511b32bcdf_icgraph.png" border="0" usemap="#aclassHDF5Interface_ab77109edf1fc8394a4448b511b32bcdf_icgraph" alt=""/></div>
+<map name="aclassHDF5Interface_ab77109edf1fc8394a4448b511b32bcdf_icgraph" id="aclassHDF5Interface_ab77109edf1fc8394a4448b511b32bcdf_icgraph">
+<area shape="rect" title=" " alt="" coords="272,5,459,31"/>
+<area shape="rect" href="classHDF5Interface.html#ac276746866c1f589016706719aec026d" title=" " alt="" coords="5,5,224,31"/>
+</map>
+</div>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>tools-src/<a class="el" href="HDF5Interface_8h_source.html">HDF5Interface.h</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- HTML footer for doxygen 1.9.2-->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="classHDF5Interface.html">HDF5Interface</a></li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.6 </li>
+  </ul>
+</div>
+<script type="text/javascript">
+  // script for doxygen 1.9.2
+  $(function() {
+      toggleButton = document.createElement('doxygen-awesome-dark-mode-toggle')
+      toggleButton.title = "Toggle Light/Dark Mode"
+      $(document).ready(function(){
+          document.getElementById("MSearchBox").parentNode.appendChild(toggleButton)
+      })
+      $(window).resize(function(){
+          document.getElementById("MSearchBox").parentNode.appendChild(toggleButton)
+      })
+  })
+</script>
+</body>
+</html>

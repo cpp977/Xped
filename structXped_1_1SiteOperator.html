@@ -1,0 +1,1071 @@
+<!-- HTML header for doxygen 1.9.6-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.6"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Xped: Xped::SiteOperator&lt; Scalar_, Symmetry_ &gt; Struct Template Reference</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+});
+</script>
+<script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript">
+  DoxygenAwesomeDarkModeToggle.lightModeIcon = '🌞'
+// icon from https://fonts.google.com/icons
+  DoxygenAwesomeDarkModeToggle.darkModeIcon = `<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px" viewBox="0 0 24 24" width="24px" fill="#009793"><g><rect fill="none" height="24" width="24"/></g><g><g><path d="M8.1,14.15C9.77,14.63,11,16.17,11,18c0,0.68-0.19,1.31-0.48,1.87c0.48,0.09,0.97,0.14,1.48,0.14 c1.48,0,2.9-0.41,4.13-1.15c-2.62-0.92-5.23-2.82-6.8-5.86C7.74,9.94,7.78,7.09,8.29,4.9c-2.57,1.33-4.3,4.01-4.3,7.1c0,0,0,0,0,0 c0.01,0,0.01,0,0.02,0C5.66,12,7.18,12.83,8.1,14.15z" opacity=".3"/><path d="M19.78,17.51c-2.47,0-6.57-1.33-8.68-5.43C8.77,7.57,10.6,3.6,11.63,2.01C6.27,2.2,1.98,6.59,1.98,12 c0,0.14,0.02,0.28,0.02,0.42C2.61,12.16,3.28,12,3.98,12c0,0,0,0,0,0c0-3.09,1.73-5.77,4.3-7.1C7.78,7.09,7.74,9.94,9.32,13 c1.57,3.04,4.18,4.95,6.8,5.86c-1.23,0.74-2.65,1.15-4.13,1.15c-0.5,0-1-0.05-1.48-0.14c-0.37,0.7-0.94,1.27-1.64,1.64 c0.98,0.32,2.03,0.5,3.11,0.5c3.5,0,6.58-1.8,8.37-4.52C20.18,17.5,19.98,17.51,19.78,17.51z"/><path d="M7,16l-0.18,0C6.4,14.84,5.3,14,4,14c-1.66,0-3,1.34-3,3s1.34,3,3,3c0.62,0,2.49,0,3,0c1.1,0,2-0.9,2-2 C9,16.9,8.1,16,7,16z"/></g></g></svg>`
+  DoxygenAwesomeDarkModeToggle.init()
+</script>
+</head>
+<body>
+  <!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/cpp977/Xped" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">Xped
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.9.6 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('structXped_1_1SiteOperator.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="structXped_1_1SiteOperator-members.html">List of all members</a>  </div>
+  <div class="headertitle"><div class="title">Xped::SiteOperator&lt; Scalar_, Symmetry_ &gt; Struct Template Reference</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p><code>#include &lt;<a class="el" href="SiteOperator_8hpp_source.html">SiteOperator.hpp</a>&gt;</code></p>
+<div class="dynheader">
+Collaboration diagram for Xped::SiteOperator&lt; Scalar_, Symmetry_ &gt;:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1SiteOperator__coll__graph.png" border="0" usemap="#aXped_1_1SiteOperator_3_01Scalar___00_01Symmetry___01_4_coll__map" alt="Collaboration graph"/></div>
+<map name="aXped_1_1SiteOperator_3_01Scalar___00_01Symmetry___01_4_coll__map" id="aXped_1_1SiteOperator_3_01Scalar___00_01Symmetry___01_4_coll__map">
+<area shape="rect" title=" " alt="" coords="77,108,259,148"/>
+<area shape="rect" href="classXped_1_1Tensor.html" title=" " alt="" coords="5,5,187,45"/>
+<area shape="rect" title=" " alt="" coords="211,13,269,38"/>
+</map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:abf3383cef96e302d505eceeb58205462"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1SiteOperator.html#abf3383cef96e302d505eceeb58205462">Scalar</a> = Scalar_</td></tr>
+<tr class="separator:abf3383cef96e302d505eceeb58205462"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2db195e753ed0cb94237fc30503f0a7f"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1SiteOperator.html#a2db195e753ed0cb94237fc30503f0a7f">Symmetry</a> = Symmetry_</td></tr>
+<tr class="separator:a2db195e753ed0cb94237fc30503f0a7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73136734f1853be619a5e17013ab6847"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1SiteOperator.html#a73136734f1853be619a5e17013ab6847">qType</a> = typename Symmetry::qType</td></tr>
+<tr class="separator:a73136734f1853be619a5e17013ab6847"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab47efab80a94f179acfddb91f9f8034f"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1SiteOperator.html#ab47efab80a94f179acfddb91f9f8034f">MatrixType</a> = typename <a class="el" href="classXped_1_1Tensor.html">Tensor</a>&lt; <a class="el" href="structXped_1_1SiteOperator.html#abf3383cef96e302d505eceeb58205462">Scalar</a>, 1, 2, <a class="el" href="structXped_1_1SiteOperator.html#a2db195e753ed0cb94237fc30503f0a7f">Symmetry</a>, false &gt;::MatrixType</td></tr>
+<tr class="separator:ab47efab80a94f179acfddb91f9f8034f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a9876140e7915a51cf0165fa3ef24ae4b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1SiteOperator.html#a9876140e7915a51cf0165fa3ef24ae4b">SiteOperator</a> ()=default</td></tr>
+<tr class="separator:a9876140e7915a51cf0165fa3ef24ae4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e2ef85b46b48abe08ec5844acbd5bdb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1SiteOperator.html#a2e2ef85b46b48abe08ec5844acbd5bdb">SiteOperator</a> (<a class="el" href="structXped_1_1SiteOperator.html#a73136734f1853be619a5e17013ab6847">qType</a> <a class="el" href="structXped_1_1SiteOperator.html#afca18a44b8c9b009442a4be6a8c4a1b2">Q</a>, const <a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; <a class="el" href="structXped_1_1SiteOperator.html#a2db195e753ed0cb94237fc30503f0a7f">Symmetry</a>, 1 &gt; &amp;basis, const <a class="el" href="structXped_1_1mpi_1_1XpedWorld.html">mpi::XpedWorld</a> &amp;world=<a class="el" href="namespaceXped_1_1mpi.html#a92c3bbdeab79e718b7d013a16ee5a0c9">mpi::getUniverse</a>())</td></tr>
+<tr class="separator:a2e2ef85b46b48abe08ec5844acbd5bdb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a90381e37dc2d75821c95567370634e89"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1SiteOperator.html#a90381e37dc2d75821c95567370634e89">SiteOperator</a> (<a class="el" href="structXped_1_1SiteOperator.html#a73136734f1853be619a5e17013ab6847">qType</a> <a class="el" href="structXped_1_1SiteOperator.html#afca18a44b8c9b009442a4be6a8c4a1b2">Q</a>, const <a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; <a class="el" href="structXped_1_1SiteOperator.html#a2db195e753ed0cb94237fc30503f0a7f">Symmetry</a>, 1 &gt; &amp;basis, const std::unordered_map&lt; std::string, std::pair&lt; <a class="el" href="structXped_1_1SiteOperator.html#a73136734f1853be619a5e17013ab6847">qType</a>, std::size_t &gt; &gt; &amp;labels, const <a class="el" href="structXped_1_1mpi_1_1XpedWorld.html">mpi::XpedWorld</a> &amp;world=<a class="el" href="namespaceXped_1_1mpi.html#a92c3bbdeab79e718b7d013a16ee5a0c9">mpi::getUniverse</a>())</td></tr>
+<tr class="separator:a90381e37dc2d75821c95567370634e89"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a342dc4adc6f42646f57fa457dc3fc92c"><td class="memItemLeft" align="right" valign="top">const auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1SiteOperator.html#a342dc4adc6f42646f57fa457dc3fc92c">operator()</a> (const <a class="el" href="structXped_1_1SiteOperator.html#a73136734f1853be619a5e17013ab6847">qType</a> &amp;bra, const <a class="el" href="structXped_1_1SiteOperator.html#a73136734f1853be619a5e17013ab6847">qType</a> &amp;ket) const</td></tr>
+<tr class="separator:a342dc4adc6f42646f57fa457dc3fc92c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a93fae27030a3fe3fdb7e703114382bca"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1SiteOperator.html#a93fae27030a3fe3fdb7e703114382bca">operator()</a> (const <a class="el" href="structXped_1_1SiteOperator.html#a73136734f1853be619a5e17013ab6847">qType</a> &amp;bra, const <a class="el" href="structXped_1_1SiteOperator.html#a73136734f1853be619a5e17013ab6847">qType</a> &amp;ket)</td></tr>
+<tr class="separator:a93fae27030a3fe3fdb7e703114382bca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad61b2724f227e2fc9e0dc58421ff94de"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="structXped_1_1SiteOperator.html#abf3383cef96e302d505eceeb58205462">Scalar</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1SiteOperator.html#ad61b2724f227e2fc9e0dc58421ff94de">operator()</a> (const std::string &amp;bra, const std::string &amp;ket) const</td></tr>
+<tr class="separator:ad61b2724f227e2fc9e0dc58421ff94de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aafafbbb3a82cdec8a3014fcb696534a1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1SiteOperator.html#abf3383cef96e302d505eceeb58205462">Scalar</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1SiteOperator.html#aafafbbb3a82cdec8a3014fcb696534a1">operator()</a> (const std::string &amp;bra, const std::string &amp;ket)</td></tr>
+<tr class="separator:aafafbbb3a82cdec8a3014fcb696534a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3388125c62b23c6cde963f7329d73fe"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1SiteOperator.html">SiteOperator</a>&lt; <a class="el" href="structXped_1_1SiteOperator.html#abf3383cef96e302d505eceeb58205462">Scalar</a>, <a class="el" href="structXped_1_1SiteOperator.html#a2db195e753ed0cb94237fc30503f0a7f">Symmetry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1SiteOperator.html#af3388125c62b23c6cde963f7329d73fe">adjoint</a> () XPED_CONST</td></tr>
+<tr class="separator:af3388125c62b23c6cde963f7329d73fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e30ed7833611546f407a75c3f64d4ae"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1SiteOperator.html#a6e30ed7833611546f407a75c3f64d4ae">setZero</a> ()</td></tr>
+<tr class="separator:a6e30ed7833611546f407a75c3f64d4ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a77f67773038f4e13ea54c42ab7070b29"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1SiteOperator.html#a77f67773038f4e13ea54c42ab7070b29">setIdentity</a> ()</td></tr>
+<tr class="separator:a77f67773038f4e13ea54c42ab7070b29"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a99aac46d53fdb4d1d13a007705d9b6e2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1SiteOperator.html#a99aac46d53fdb4d1d13a007705d9b6e2">setRandom</a> ()</td></tr>
+<tr class="separator:a99aac46d53fdb4d1d13a007705d9b6e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab0c7089ac010e4e4f4be073422dd7cbb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1SiteOperator.html#abf3383cef96e302d505eceeb58205462">Scalar</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1SiteOperator.html#ab0c7089ac010e4e4f4be073422dd7cbb">norm</a> () const</td></tr>
+<tr class="separator:ab0c7089ac010e4e4f4be073422dd7cbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3df5c9a90ffffddf1a18692467dee0a"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structXped_1_1SiteOperator.html#ab47efab80a94f179acfddb91f9f8034f">MatrixType</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1SiteOperator.html#af3df5c9a90ffffddf1a18692467dee0a">plain</a> () const</td></tr>
+<tr class="separator:af3df5c9a90ffffddf1a18692467dee0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a297092530a441587c143ebac71ac8223"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1SiteOperator.html#a297092530a441587c143ebac71ac8223">print</a> () const</td></tr>
+<tr class="separator:a297092530a441587c143ebac71ac8223"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74f66fcc1dde90722fce9c478edb9c5c"><td class="memItemLeft" align="right" valign="top">std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1SiteOperator.html#a74f66fcc1dde90722fce9c478edb9c5c">label</a> ()</td></tr>
+<tr class="separator:a74f66fcc1dde90722fce9c478edb9c5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a6050f6e3b739cac3800846df29811fc0"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structXped_1_1SiteOperator.html">SiteOperator</a>&lt; <a class="el" href="structXped_1_1SiteOperator.html#abf3383cef96e302d505eceeb58205462">Scalar</a>, <a class="el" href="structXped_1_1SiteOperator.html#a2db195e753ed0cb94237fc30503f0a7f">Symmetry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1SiteOperator.html#a6050f6e3b739cac3800846df29811fc0">prod</a> (XPED_CONST <a class="el" href="structXped_1_1SiteOperator.html">SiteOperator</a>&lt; <a class="el" href="structXped_1_1SiteOperator.html#abf3383cef96e302d505eceeb58205462">Scalar</a>, <a class="el" href="structXped_1_1SiteOperator.html#a2db195e753ed0cb94237fc30503f0a7f">Symmetry</a> &gt; &amp;O1, XPED_CONST <a class="el" href="structXped_1_1SiteOperator.html">SiteOperator</a>&lt; <a class="el" href="structXped_1_1SiteOperator.html#abf3383cef96e302d505eceeb58205462">Scalar</a>, <a class="el" href="structXped_1_1SiteOperator.html#a2db195e753ed0cb94237fc30503f0a7f">Symmetry</a> &gt; &amp;O2, const <a class="el" href="structXped_1_1SiteOperator.html#a73136734f1853be619a5e17013ab6847">qType</a> &amp;target)</td></tr>
+<tr class="separator:a6050f6e3b739cac3800846df29811fc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a720627ab88a190cac75e3eb00960b96a"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structXped_1_1SiteOperator.html">SiteOperator</a>&lt; <a class="el" href="structXped_1_1SiteOperator.html#abf3383cef96e302d505eceeb58205462">Scalar</a>, <a class="el" href="structXped_1_1SiteOperator.html#a2db195e753ed0cb94237fc30503f0a7f">Symmetry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1SiteOperator.html#a720627ab88a190cac75e3eb00960b96a">outerprod</a> (XPED_CONST <a class="el" href="structXped_1_1SiteOperator.html">SiteOperator</a>&lt; <a class="el" href="structXped_1_1SiteOperator.html#abf3383cef96e302d505eceeb58205462">Scalar</a>, <a class="el" href="structXped_1_1SiteOperator.html#a2db195e753ed0cb94237fc30503f0a7f">Symmetry</a> &gt; &amp;O1, XPED_CONST <a class="el" href="structXped_1_1SiteOperator.html">SiteOperator</a>&lt; <a class="el" href="structXped_1_1SiteOperator.html#abf3383cef96e302d505eceeb58205462">Scalar</a>, <a class="el" href="structXped_1_1SiteOperator.html#a2db195e753ed0cb94237fc30503f0a7f">Symmetry</a> &gt; &amp;O2, const <a class="el" href="structXped_1_1SiteOperator.html#a73136734f1853be619a5e17013ab6847">qType</a> &amp;target)</td></tr>
+<tr class="separator:a720627ab88a190cac75e3eb00960b96a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a924ea2fa276d5be3aee425c01e4d5572"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structXped_1_1SiteOperator.html">SiteOperator</a>&lt; <a class="el" href="structXped_1_1SiteOperator.html#abf3383cef96e302d505eceeb58205462">Scalar</a>, <a class="el" href="structXped_1_1SiteOperator.html#a2db195e753ed0cb94237fc30503f0a7f">Symmetry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1SiteOperator.html#a924ea2fa276d5be3aee425c01e4d5572">outerprod</a> (XPED_CONST <a class="el" href="structXped_1_1SiteOperator.html">SiteOperator</a>&lt; <a class="el" href="structXped_1_1SiteOperator.html#abf3383cef96e302d505eceeb58205462">Scalar</a>, <a class="el" href="structXped_1_1SiteOperator.html#a2db195e753ed0cb94237fc30503f0a7f">Symmetry</a> &gt; &amp;O1, XPED_CONST <a class="el" href="structXped_1_1SiteOperator.html">SiteOperator</a>&lt; <a class="el" href="structXped_1_1SiteOperator.html#abf3383cef96e302d505eceeb58205462">Scalar</a>, <a class="el" href="structXped_1_1SiteOperator.html#a2db195e753ed0cb94237fc30503f0a7f">Symmetry</a> &gt; &amp;O2)</td></tr>
+<tr class="separator:a924ea2fa276d5be3aee425c01e4d5572"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:a049a4bfb520db156c7fbb4305795b50b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classXped_1_1Tensor.html">Tensor</a>&lt; <a class="el" href="structXped_1_1SiteOperator.html#abf3383cef96e302d505eceeb58205462">Scalar</a>, 1, 2, <a class="el" href="structXped_1_1SiteOperator.html#a2db195e753ed0cb94237fc30503f0a7f">Symmetry</a>, false &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1SiteOperator.html#a049a4bfb520db156c7fbb4305795b50b">data</a></td></tr>
+<tr class="separator:a049a4bfb520db156c7fbb4305795b50b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afca18a44b8c9b009442a4be6a8c4a1b2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1SiteOperator.html#a73136734f1853be619a5e17013ab6847">qType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1SiteOperator.html#afca18a44b8c9b009442a4be6a8c4a1b2">Q</a></td></tr>
+<tr class="separator:afca18a44b8c9b009442a4be6a8c4a1b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca1afd721f4ec864ec28c7c83094bd87"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, std::pair&lt; <a class="el" href="structXped_1_1SiteOperator.html#a73136734f1853be619a5e17013ab6847">qType</a>, std::size_t &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1SiteOperator.html#aca1afd721f4ec864ec28c7c83094bd87">label_dict</a></td></tr>
+<tr class="separator:aca1afd721f4ec864ec28c7c83094bd87"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a807901a679d55c4fc5dad40e236af3d7"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1SiteOperator.html#a807901a679d55c4fc5dad40e236af3d7">label_</a></td></tr>
+<tr class="separator:a807901a679d55c4fc5dad40e236af3d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="ab47efab80a94f179acfddb91f9f8034f" name="ab47efab80a94f179acfddb91f9f8034f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab47efab80a94f179acfddb91f9f8034f">&#9670;&#160;</a></span>MatrixType</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="structXped_1_1SiteOperator.html">Xped::SiteOperator</a>&lt; Scalar_, Symmetry_ &gt;::MatrixType =  typename <a class="el" href="classXped_1_1Tensor.html">Tensor</a>&lt;<a class="el" href="structXped_1_1SiteOperator.html#abf3383cef96e302d505eceeb58205462">Scalar</a>, 1, 2, <a class="el" href="structXped_1_1SiteOperator.html#a2db195e753ed0cb94237fc30503f0a7f">Symmetry</a>, false&gt;::MatrixType</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a73136734f1853be619a5e17013ab6847" name="a73136734f1853be619a5e17013ab6847"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a73136734f1853be619a5e17013ab6847">&#9670;&#160;</a></span>qType</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="structXped_1_1SiteOperator.html">Xped::SiteOperator</a>&lt; Scalar_, Symmetry_ &gt;::qType =  typename Symmetry::qType</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abf3383cef96e302d505eceeb58205462" name="abf3383cef96e302d505eceeb58205462"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abf3383cef96e302d505eceeb58205462">&#9670;&#160;</a></span>Scalar</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="structXped_1_1SiteOperator.html">Xped::SiteOperator</a>&lt; Scalar_, Symmetry_ &gt;::Scalar =  Scalar_</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2db195e753ed0cb94237fc30503f0a7f" name="a2db195e753ed0cb94237fc30503f0a7f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2db195e753ed0cb94237fc30503f0a7f">&#9670;&#160;</a></span>Symmetry</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="structXped_1_1SiteOperator.html">Xped::SiteOperator</a>&lt; Scalar_, Symmetry_ &gt;::Symmetry =  Symmetry_</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a9876140e7915a51cf0165fa3ef24ae4b" name="a9876140e7915a51cf0165fa3ef24ae4b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9876140e7915a51cf0165fa3ef24ae4b">&#9670;&#160;</a></span>SiteOperator() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structXped_1_1SiteOperator.html">Xped::SiteOperator</a>&lt; Scalar_, Symmetry_ &gt;::SiteOperator </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">default</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2e2ef85b46b48abe08ec5844acbd5bdb" name="a2e2ef85b46b48abe08ec5844acbd5bdb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2e2ef85b46b48abe08ec5844acbd5bdb">&#9670;&#160;</a></span>SiteOperator() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="structXped_1_1SiteOperator.html#abf3383cef96e302d505eceeb58205462">Scalar</a> , typename <a class="el" href="structXped_1_1SiteOperator.html#a2db195e753ed0cb94237fc30503f0a7f">Symmetry</a> &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structXped_1_1SiteOperator.html">Xped::SiteOperator</a>&lt; <a class="el" href="structXped_1_1SiteOperator.html#abf3383cef96e302d505eceeb58205462">Scalar</a>, <a class="el" href="structXped_1_1SiteOperator.html#a2db195e753ed0cb94237fc30503f0a7f">Symmetry</a> &gt;::SiteOperator </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structXped_1_1SiteOperator.html#a73136734f1853be619a5e17013ab6847">qType</a>&#160;</td>
+          <td class="paramname"><em>Q</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; <a class="el" href="structXped_1_1SiteOperator.html#a2db195e753ed0cb94237fc30503f0a7f">Symmetry</a>, 1 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>basis</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1mpi_1_1XpedWorld.html">mpi::XpedWorld</a> &amp;&#160;</td>
+          <td class="paramname"><em>world</em> = <code><a class="el" href="namespaceXped_1_1mpi.html#a92c3bbdeab79e718b7d013a16ee5a0c9">mpi::getUniverse</a>()</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1SiteOperator_a2e2ef85b46b48abe08ec5844acbd5bdb_cgraph.png" border="0" usemap="#astructXped_1_1SiteOperator_a2e2ef85b46b48abe08ec5844acbd5bdb_cgraph" alt=""/></div>
+<map name="astructXped_1_1SiteOperator_a2e2ef85b46b48abe08ec5844acbd5bdb_cgraph" id="astructXped_1_1SiteOperator_a2e2ef85b46b48abe08ec5844acbd5bdb_cgraph">
+<area shape="rect" title=" " alt="" coords="5,5,151,45"/>
+<area shape="rect" href="classXped_1_1Qbasis.html#a34418f2e9ce5c917d3f3b65688c52249" title=" " alt="" coords="199,13,383,38"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a90381e37dc2d75821c95567370634e89" name="a90381e37dc2d75821c95567370634e89"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a90381e37dc2d75821c95567370634e89">&#9670;&#160;</a></span>SiteOperator() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="structXped_1_1SiteOperator.html#abf3383cef96e302d505eceeb58205462">Scalar</a> , typename <a class="el" href="structXped_1_1SiteOperator.html#a2db195e753ed0cb94237fc30503f0a7f">Symmetry</a> &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structXped_1_1SiteOperator.html">Xped::SiteOperator</a>&lt; <a class="el" href="structXped_1_1SiteOperator.html#abf3383cef96e302d505eceeb58205462">Scalar</a>, <a class="el" href="structXped_1_1SiteOperator.html#a2db195e753ed0cb94237fc30503f0a7f">Symmetry</a> &gt;::SiteOperator </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structXped_1_1SiteOperator.html#a73136734f1853be619a5e17013ab6847">qType</a>&#160;</td>
+          <td class="paramname"><em>Q</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; <a class="el" href="structXped_1_1SiteOperator.html#a2db195e753ed0cb94237fc30503f0a7f">Symmetry</a>, 1 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>basis</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::unordered_map&lt; std::string, std::pair&lt; <a class="el" href="structXped_1_1SiteOperator.html#a73136734f1853be619a5e17013ab6847">qType</a>, std::size_t &gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>labels</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1mpi_1_1XpedWorld.html">mpi::XpedWorld</a> &amp;&#160;</td>
+          <td class="paramname"><em>world</em> = <code><a class="el" href="namespaceXped_1_1mpi.html#a92c3bbdeab79e718b7d013a16ee5a0c9">mpi::getUniverse</a>()</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="af3388125c62b23c6cde963f7329d73fe" name="af3388125c62b23c6cde963f7329d73fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af3388125c62b23c6cde963f7329d73fe">&#9670;&#160;</a></span>adjoint()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="structXped_1_1SiteOperator.html#abf3383cef96e302d505eceeb58205462">Scalar</a> , typename <a class="el" href="structXped_1_1SiteOperator.html#a2db195e753ed0cb94237fc30503f0a7f">Symmetry</a> &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structXped_1_1SiteOperator.html">SiteOperator</a>&lt; <a class="el" href="structXped_1_1SiteOperator.html#abf3383cef96e302d505eceeb58205462">Scalar</a>, <a class="el" href="structXped_1_1SiteOperator.html#a2db195e753ed0cb94237fc30503f0a7f">Symmetry</a> &gt; <a class="el" href="structXped_1_1SiteOperator.html">Xped::SiteOperator</a>&lt; <a class="el" href="structXped_1_1SiteOperator.html#abf3383cef96e302d505eceeb58205462">Scalar</a>, <a class="el" href="structXped_1_1SiteOperator.html#a2db195e753ed0cb94237fc30503f0a7f">Symmetry</a> &gt;::adjoint</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1SiteOperator_af3388125c62b23c6cde963f7329d73fe_icgraph.png" border="0" usemap="#astructXped_1_1SiteOperator_af3388125c62b23c6cde963f7329d73fe_icgraph" alt=""/></div>
+<map name="astructXped_1_1SiteOperator_af3388125c62b23c6cde963f7329d73fe_icgraph" id="astructXped_1_1SiteOperator_af3388125c62b23c6cde963f7329d73fe_icgraph">
+<area shape="rect" title=" " alt="" coords="400,5,545,45"/>
+<area shape="rect" href="classXped_1_1Spin.html#a531e4c3b63de3f66124b2faee523ec0e" title=" " alt="" coords="180,13,352,38"/>
+<area shape="rect" href="classXped_1_1Spin.html#aeded56d76ae86d9f4341046beef004e2" title=" " alt="" coords="5,13,132,38"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a74f66fcc1dde90722fce9c478edb9c5c" name="a74f66fcc1dde90722fce9c478edb9c5c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a74f66fcc1dde90722fce9c478edb9c5c">&#9670;&#160;</a></span>label()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string &amp; <a class="el" href="structXped_1_1SiteOperator.html">Xped::SiteOperator</a>&lt; Scalar_, Symmetry_ &gt;::label </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1SiteOperator_a74f66fcc1dde90722fce9c478edb9c5c_icgraph.png" border="0" usemap="#astructXped_1_1SiteOperator_a74f66fcc1dde90722fce9c478edb9c5c_icgraph" alt=""/></div>
+<map name="astructXped_1_1SiteOperator_a74f66fcc1dde90722fce9c478edb9c5c_icgraph" id="astructXped_1_1SiteOperator_a74f66fcc1dde90722fce9c478edb9c5c_icgraph">
+<area shape="rect" title=" " alt="" coords="503,270,648,310"/>
+<area shape="rect" href="classXped_1_1FermionBase.html#a054e62636455d09d3d070df71541e0e3" title=" " alt="" coords="275,301,451,327"/>
+<area shape="rect" href="classXped_1_1SpinBase.html#a83df1b24e34eb6388bf334d1fe858744" title=" " alt="" coords="288,5,439,31"/>
+<area shape="rect" href="classXped_1_1FermionBase.html#a74f69ea61d302b45d4581407e832c92f" title=" " alt="" coords="276,104,451,129"/>
+<area shape="rect" href="classXped_1_1SpinBase.html#ae0217958dfb0b7cabaca94e7e23fb04e" title=" " alt="" coords="294,153,433,179"/>
+<area shape="rect" href="classXped_1_1FermionBase.html#a84da3ba17884b6a2da6e1d3d041ec7f6" title=" " alt="" coords="272,203,455,228"/>
+<area shape="rect" href="classXped_1_1SpinBase.html#aa3e32fc1fca0742c8c71888548ef5bed" title=" " alt="" coords="284,252,443,277"/>
+<area shape="rect" href="classXped_1_1FermionBase.html#ad0e1ebc2ac101561dce8e7feacd190fd" title=" " alt="" coords="277,351,449,376"/>
+<area shape="rect" href="classXped_1_1SpinBase.html#a9c33519ccdda646bfa325fd3d0638949" title=" " alt="" coords="290,55,437,80"/>
+<area shape="rect" href="classXped_1_1FermionBase.html#a99ede48f2760b0526dd636af82a863ce" title=" " alt="" coords="277,400,449,425"/>
+<area shape="rect" href="classXped_1_1SpinBase.html#a7346562fdb5d687089d9ca38ff1d9918" title=" " alt="" coords="290,449,437,475"/>
+<area shape="rect" href="classXped_1_1FermionBase.html#af250fa36323038f82180cbb2cb472897" title=" " alt="" coords="277,499,449,524"/>
+<area shape="rect" href="classXped_1_1FermionBase.html#ad05d9d17f406f7ba0a614c2551bcceeb" title=" " alt="" coords="278,548,449,573"/>
+<area shape="rect" href="classXped_1_1FermionBase.html#a2e18132ec42287bc24ed66b6b02b6822" title=" " alt="" coords="37,286,193,326"/>
+<area shape="rect" href="classXped_1_1SpinBase.html#a3f21d6ed84f5163959c4edd5786419cd" title=" " alt="" coords="27,31,202,56"/>
+<area shape="rect" href="classXped_1_1Hubbard.html#a78332db0beee19fa4d489c30469d4949" title=" " alt="" coords="5,400,224,425"/>
+<area shape="rect" href="classXped_1_1Kondo.html#af934c9007909ce312e534cd94dc1761f" title=" " alt="" coords="13,351,217,376"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ab0c7089ac010e4e4f4be073422dd7cbb" name="ab0c7089ac010e4e4f4be073422dd7cbb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab0c7089ac010e4e4f4be073422dd7cbb">&#9670;&#160;</a></span>norm()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="structXped_1_1SiteOperator.html#abf3383cef96e302d505eceeb58205462">Scalar</a> , typename <a class="el" href="structXped_1_1SiteOperator.html#a2db195e753ed0cb94237fc30503f0a7f">Symmetry</a> &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structXped_1_1SiteOperator.html#abf3383cef96e302d505eceeb58205462">Scalar</a> <a class="el" href="structXped_1_1SiteOperator.html">Xped::SiteOperator</a>&lt; <a class="el" href="structXped_1_1SiteOperator.html#abf3383cef96e302d505eceeb58205462">Scalar</a>, <a class="el" href="structXped_1_1SiteOperator.html#a2db195e753ed0cb94237fc30503f0a7f">Symmetry</a> &gt;::norm</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1SiteOperator_ab0c7089ac010e4e4f4be073422dd7cbb_cgraph.png" border="0" usemap="#astructXped_1_1SiteOperator_ab0c7089ac010e4e4f4be073422dd7cbb_cgraph" alt=""/></div>
+<map name="astructXped_1_1SiteOperator_ab0c7089ac010e4e4f4be073422dd7cbb_cgraph" id="astructXped_1_1SiteOperator_ab0c7089ac010e4e4f4be073422dd7cbb_cgraph">
+<area shape="rect" title=" " alt="" coords="5,5,151,45"/>
+<area shape="rect" href="structXped_1_1SiteOperator.html#a6050f6e3b739cac3800846df29811fc0" title=" " alt="" coords="199,5,344,45"/>
+<area shape="rect" href="classXped_1_1Qbasis.html#a34418f2e9ce5c917d3f3b65688c52249" title=" " alt="" coords="392,13,576,38"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a93fae27030a3fe3fdb7e703114382bca" name="a93fae27030a3fe3fdb7e703114382bca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a93fae27030a3fe3fdb7e703114382bca">&#9670;&#160;</a></span>operator()() <span class="overload">[1/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto <a class="el" href="structXped_1_1SiteOperator.html">Xped::SiteOperator</a>&lt; Scalar_, Symmetry_ &gt;::operator() </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1SiteOperator.html#a73136734f1853be619a5e17013ab6847">qType</a> &amp;&#160;</td>
+          <td class="paramname"><em>bra</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1SiteOperator.html#a73136734f1853be619a5e17013ab6847">qType</a> &amp;&#160;</td>
+          <td class="paramname"><em>ket</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a342dc4adc6f42646f57fa457dc3fc92c" name="a342dc4adc6f42646f57fa457dc3fc92c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a342dc4adc6f42646f57fa457dc3fc92c">&#9670;&#160;</a></span>operator()() <span class="overload">[2/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const auto <a class="el" href="structXped_1_1SiteOperator.html">Xped::SiteOperator</a>&lt; Scalar_, Symmetry_ &gt;::operator() </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1SiteOperator.html#a73136734f1853be619a5e17013ab6847">qType</a> &amp;&#160;</td>
+          <td class="paramname"><em>bra</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1SiteOperator.html#a73136734f1853be619a5e17013ab6847">qType</a> &amp;&#160;</td>
+          <td class="paramname"><em>ket</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1SiteOperator_a342dc4adc6f42646f57fa457dc3fc92c_icgraph.png" border="0" usemap="#astructXped_1_1SiteOperator_a342dc4adc6f42646f57fa457dc3fc92c_icgraph" alt=""/></div>
+<map name="astructXped_1_1SiteOperator_a342dc4adc6f42646f57fa457dc3fc92c_icgraph" id="astructXped_1_1SiteOperator_a342dc4adc6f42646f57fa457dc3fc92c_icgraph">
+<area shape="rect" title=" " alt="" coords="199,5,344,45"/>
+<area shape="rect" href="structXped_1_1SiteOperator.html#ad61b2724f227e2fc9e0dc58421ff94de" title=" " alt="" coords="5,5,151,45"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="aafafbbb3a82cdec8a3014fcb696534a1" name="aafafbbb3a82cdec8a3014fcb696534a1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aafafbbb3a82cdec8a3014fcb696534a1">&#9670;&#160;</a></span>operator()() <span class="overload">[3/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structXped_1_1SiteOperator.html#abf3383cef96e302d505eceeb58205462">Scalar</a> &amp; <a class="el" href="structXped_1_1SiteOperator.html">Xped::SiteOperator</a>&lt; Scalar_, Symmetry_ &gt;::operator() </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>bra</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>ket</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1SiteOperator_aafafbbb3a82cdec8a3014fcb696534a1_cgraph.png" border="0" usemap="#astructXped_1_1SiteOperator_aafafbbb3a82cdec8a3014fcb696534a1_cgraph" alt=""/></div>
+<map name="astructXped_1_1SiteOperator_aafafbbb3a82cdec8a3014fcb696534a1_cgraph" id="astructXped_1_1SiteOperator_aafafbbb3a82cdec8a3014fcb696534a1_cgraph">
+<area shape="rect" title=" " alt="" coords="5,5,151,45"/>
+<area shape="rect" href="structXped_1_1SiteOperator.html#a342dc4adc6f42646f57fa457dc3fc92c" title=" " alt="" coords="199,5,344,45"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ad61b2724f227e2fc9e0dc58421ff94de" name="ad61b2724f227e2fc9e0dc58421ff94de"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad61b2724f227e2fc9e0dc58421ff94de">&#9670;&#160;</a></span>operator()() <span class="overload">[4/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="structXped_1_1SiteOperator.html#abf3383cef96e302d505eceeb58205462">Scalar</a> &amp; <a class="el" href="structXped_1_1SiteOperator.html">Xped::SiteOperator</a>&lt; Scalar_, Symmetry_ &gt;::operator() </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>bra</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>ket</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1SiteOperator_ad61b2724f227e2fc9e0dc58421ff94de_cgraph.png" border="0" usemap="#astructXped_1_1SiteOperator_ad61b2724f227e2fc9e0dc58421ff94de_cgraph" alt=""/></div>
+<map name="astructXped_1_1SiteOperator_ad61b2724f227e2fc9e0dc58421ff94de_cgraph" id="astructXped_1_1SiteOperator_ad61b2724f227e2fc9e0dc58421ff94de_cgraph">
+<area shape="rect" title=" " alt="" coords="5,5,151,45"/>
+<area shape="rect" href="structXped_1_1SiteOperator.html#a342dc4adc6f42646f57fa457dc3fc92c" title=" " alt="" coords="199,5,344,45"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a924ea2fa276d5be3aee425c01e4d5572" name="a924ea2fa276d5be3aee425c01e4d5572"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a924ea2fa276d5be3aee425c01e4d5572">&#9670;&#160;</a></span>outerprod() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="structXped_1_1SiteOperator.html">SiteOperator</a>&lt; <a class="el" href="structXped_1_1SiteOperator.html#abf3383cef96e302d505eceeb58205462">Scalar</a>, <a class="el" href="structXped_1_1SiteOperator.html#a2db195e753ed0cb94237fc30503f0a7f">Symmetry</a> &gt; <a class="el" href="structXped_1_1SiteOperator.html">Xped::SiteOperator</a>&lt; Scalar_, Symmetry_ &gt;::outerprod </td>
+          <td>(</td>
+          <td class="paramtype">XPED_CONST <a class="el" href="structXped_1_1SiteOperator.html">SiteOperator</a>&lt; <a class="el" href="structXped_1_1SiteOperator.html#abf3383cef96e302d505eceeb58205462">Scalar</a>, <a class="el" href="structXped_1_1SiteOperator.html#a2db195e753ed0cb94237fc30503f0a7f">Symmetry</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>O1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">XPED_CONST <a class="el" href="structXped_1_1SiteOperator.html">SiteOperator</a>&lt; <a class="el" href="structXped_1_1SiteOperator.html#abf3383cef96e302d505eceeb58205462">Scalar</a>, <a class="el" href="structXped_1_1SiteOperator.html#a2db195e753ed0cb94237fc30503f0a7f">Symmetry</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>O2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1SiteOperator_a924ea2fa276d5be3aee425c01e4d5572_cgraph.png" border="0" usemap="#astructXped_1_1SiteOperator_a924ea2fa276d5be3aee425c01e4d5572_cgraph" alt=""/></div>
+<map name="astructXped_1_1SiteOperator_a924ea2fa276d5be3aee425c01e4d5572_cgraph" id="astructXped_1_1SiteOperator_a924ea2fa276d5be3aee425c01e4d5572_cgraph">
+<area shape="rect" title=" " alt="" coords="5,5,151,45"/>
+<area shape="rect" href="structXped_1_1SiteOperator.html#a720627ab88a190cac75e3eb00960b96a" title=" " alt="" coords="199,5,344,45"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a720627ab88a190cac75e3eb00960b96a" name="a720627ab88a190cac75e3eb00960b96a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a720627ab88a190cac75e3eb00960b96a">&#9670;&#160;</a></span>outerprod() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="structXped_1_1SiteOperator.html#abf3383cef96e302d505eceeb58205462">Scalar</a> , typename <a class="el" href="structXped_1_1SiteOperator.html#a2db195e753ed0cb94237fc30503f0a7f">Symmetry</a> &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structXped_1_1SiteOperator.html">SiteOperator</a>&lt; <a class="el" href="structXped_1_1SiteOperator.html#abf3383cef96e302d505eceeb58205462">Scalar</a>, <a class="el" href="structXped_1_1SiteOperator.html#a2db195e753ed0cb94237fc30503f0a7f">Symmetry</a> &gt; <a class="el" href="structXped_1_1SiteOperator.html">Xped::SiteOperator</a>&lt; <a class="el" href="structXped_1_1SiteOperator.html#abf3383cef96e302d505eceeb58205462">Scalar</a>, <a class="el" href="structXped_1_1SiteOperator.html#a2db195e753ed0cb94237fc30503f0a7f">Symmetry</a> &gt;::outerprod </td>
+          <td>(</td>
+          <td class="paramtype">XPED_CONST <a class="el" href="structXped_1_1SiteOperator.html">SiteOperator</a>&lt; <a class="el" href="structXped_1_1SiteOperator.html#abf3383cef96e302d505eceeb58205462">Scalar</a>, <a class="el" href="structXped_1_1SiteOperator.html#a2db195e753ed0cb94237fc30503f0a7f">Symmetry</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>O1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">XPED_CONST <a class="el" href="structXped_1_1SiteOperator.html">SiteOperator</a>&lt; <a class="el" href="structXped_1_1SiteOperator.html#abf3383cef96e302d505eceeb58205462">Scalar</a>, <a class="el" href="structXped_1_1SiteOperator.html#a2db195e753ed0cb94237fc30503f0a7f">Symmetry</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>O2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1SiteOperator.html#a73136734f1853be619a5e17013ab6847">qType</a> &amp;&#160;</td>
+          <td class="paramname"><em>target</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1SiteOperator_a720627ab88a190cac75e3eb00960b96a_icgraph.png" border="0" usemap="#astructXped_1_1SiteOperator_a720627ab88a190cac75e3eb00960b96a_icgraph" alt=""/></div>
+<map name="astructXped_1_1SiteOperator_a720627ab88a190cac75e3eb00960b96a_icgraph" id="astructXped_1_1SiteOperator_a720627ab88a190cac75e3eb00960b96a_icgraph">
+<area shape="rect" title=" " alt="" coords="229,27,375,67"/>
+<area shape="rect" href="namespaceXped.html#a74e49cdeb7697ecd3aa3d114659a200f" title=" " alt="" coords="5,5,181,31"/>
+<area shape="rect" href="structXped_1_1SiteOperator.html#a924ea2fa276d5be3aee425c01e4d5572" title=" " alt="" coords="21,55,166,95"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="af3df5c9a90ffffddf1a18692467dee0a" name="af3df5c9a90ffffddf1a18692467dee0a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af3df5c9a90ffffddf1a18692467dee0a">&#9670;&#160;</a></span>plain()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="structXped_1_1SiteOperator.html#abf3383cef96e302d505eceeb58205462">Scalar</a> , typename <a class="el" href="structXped_1_1SiteOperator.html#a2db195e753ed0cb94237fc30503f0a7f">Symmetry</a> &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; typename <a class="el" href="structXped_1_1SiteOperator.html">SiteOperator</a>&lt; <a class="el" href="structXped_1_1SiteOperator.html#abf3383cef96e302d505eceeb58205462">Scalar</a>, <a class="el" href="structXped_1_1SiteOperator.html#a2db195e753ed0cb94237fc30503f0a7f">Symmetry</a> &gt;<a class="el" href="structXped_1_1SiteOperator.html#ab47efab80a94f179acfddb91f9f8034f">::MatrixType</a> &gt; <a class="el" href="structXped_1_1SiteOperator.html">Xped::SiteOperator</a>&lt; <a class="el" href="structXped_1_1SiteOperator.html#abf3383cef96e302d505eceeb58205462">Scalar</a>, <a class="el" href="structXped_1_1SiteOperator.html#a2db195e753ed0cb94237fc30503f0a7f">Symmetry</a> &gt;::plain</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1SiteOperator_af3df5c9a90ffffddf1a18692467dee0a_cgraph.png" border="0" usemap="#astructXped_1_1SiteOperator_af3df5c9a90ffffddf1a18692467dee0a_cgraph" alt=""/></div>
+<map name="astructXped_1_1SiteOperator_af3df5c9a90ffffddf1a18692467dee0a_cgraph" id="astructXped_1_1SiteOperator_af3df5c9a90ffffddf1a18692467dee0a_cgraph">
+<area shape="rect" title=" " alt="" coords="5,37,151,77"/>
+<area shape="rect" href="structXped_1_1PlainInterface.html#a57292ce4820ceae43ae6d03be55188d4" title=" " alt="" coords="199,5,352,45"/>
+<area shape="rect" href="structXped_1_1PlainInterface.html#ae37c412be210104ba3194b3b38652278" title=" " alt="" coords="199,69,352,109"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a297092530a441587c143ebac71ac8223" name="a297092530a441587c143ebac71ac8223"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a297092530a441587c143ebac71ac8223">&#9670;&#160;</a></span>print()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="structXped_1_1SiteOperator.html#abf3383cef96e302d505eceeb58205462">Scalar</a> , typename <a class="el" href="structXped_1_1SiteOperator.html#a2db195e753ed0cb94237fc30503f0a7f">Symmetry</a> &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string <a class="el" href="structXped_1_1SiteOperator.html">Xped::SiteOperator</a>&lt; <a class="el" href="structXped_1_1SiteOperator.html#abf3383cef96e302d505eceeb58205462">Scalar</a>, <a class="el" href="structXped_1_1SiteOperator.html#a2db195e753ed0cb94237fc30503f0a7f">Symmetry</a> &gt;::print</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1SiteOperator_a297092530a441587c143ebac71ac8223_icgraph.png" border="0" usemap="#astructXped_1_1SiteOperator_a297092530a441587c143ebac71ac8223_icgraph" alt=""/></div>
+<map name="astructXped_1_1SiteOperator_a297092530a441587c143ebac71ac8223_icgraph" id="astructXped_1_1SiteOperator_a297092530a441587c143ebac71ac8223_icgraph">
+<area shape="rect" title=" " alt="" coords="193,5,339,45"/>
+<area shape="rect" href="namespaceXped.html#a39a80c60bceccb5806c77a3c303a437f" title=" " alt="" coords="5,13,145,38"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a6050f6e3b739cac3800846df29811fc0" name="a6050f6e3b739cac3800846df29811fc0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6050f6e3b739cac3800846df29811fc0">&#9670;&#160;</a></span>prod()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="structXped_1_1SiteOperator.html#abf3383cef96e302d505eceeb58205462">Scalar</a> , typename <a class="el" href="structXped_1_1SiteOperator.html#a2db195e753ed0cb94237fc30503f0a7f">Symmetry</a> &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structXped_1_1SiteOperator.html">SiteOperator</a>&lt; <a class="el" href="structXped_1_1SiteOperator.html#abf3383cef96e302d505eceeb58205462">Scalar</a>, <a class="el" href="structXped_1_1SiteOperator.html#a2db195e753ed0cb94237fc30503f0a7f">Symmetry</a> &gt; <a class="el" href="structXped_1_1SiteOperator.html">Xped::SiteOperator</a>&lt; <a class="el" href="structXped_1_1SiteOperator.html#abf3383cef96e302d505eceeb58205462">Scalar</a>, <a class="el" href="structXped_1_1SiteOperator.html#a2db195e753ed0cb94237fc30503f0a7f">Symmetry</a> &gt;::prod </td>
+          <td>(</td>
+          <td class="paramtype">XPED_CONST <a class="el" href="structXped_1_1SiteOperator.html">SiteOperator</a>&lt; <a class="el" href="structXped_1_1SiteOperator.html#abf3383cef96e302d505eceeb58205462">Scalar</a>, <a class="el" href="structXped_1_1SiteOperator.html#a2db195e753ed0cb94237fc30503f0a7f">Symmetry</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>O1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">XPED_CONST <a class="el" href="structXped_1_1SiteOperator.html">SiteOperator</a>&lt; <a class="el" href="structXped_1_1SiteOperator.html#abf3383cef96e302d505eceeb58205462">Scalar</a>, <a class="el" href="structXped_1_1SiteOperator.html#a2db195e753ed0cb94237fc30503f0a7f">Symmetry</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>O2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1SiteOperator.html#a73136734f1853be619a5e17013ab6847">qType</a> &amp;&#160;</td>
+          <td class="paramname"><em>target</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1SiteOperator_a6050f6e3b739cac3800846df29811fc0_cgraph.png" border="0" usemap="#astructXped_1_1SiteOperator_a6050f6e3b739cac3800846df29811fc0_cgraph" alt=""/></div>
+<map name="astructXped_1_1SiteOperator_a6050f6e3b739cac3800846df29811fc0_cgraph" id="astructXped_1_1SiteOperator_a6050f6e3b739cac3800846df29811fc0_cgraph">
+<area shape="rect" title=" " alt="" coords="5,5,151,45"/>
+<area shape="rect" href="classXped_1_1Qbasis.html#a34418f2e9ce5c917d3f3b65688c52249" title=" " alt="" coords="199,13,383,38"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1SiteOperator_a6050f6e3b739cac3800846df29811fc0_icgraph.png" border="0" usemap="#astructXped_1_1SiteOperator_a6050f6e3b739cac3800846df29811fc0_icgraph" alt=""/></div>
+<map name="astructXped_1_1SiteOperator_a6050f6e3b739cac3800846df29811fc0_icgraph" id="astructXped_1_1SiteOperator_a6050f6e3b739cac3800846df29811fc0_icgraph">
+<area shape="rect" title=" " alt="" coords="199,35,344,75"/>
+<area shape="rect" href="structXped_1_1SiteOperator.html#ab0c7089ac010e4e4f4be073422dd7cbb" title=" " alt="" coords="5,5,151,45"/>
+<area shape="rect" href="namespaceXped.html#a5c436b3b6c090c9968e0f43595bb34fc" title=" " alt="" coords="15,70,141,95"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a77f67773038f4e13ea54c42ab7070b29" name="a77f67773038f4e13ea54c42ab7070b29"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a77f67773038f4e13ea54c42ab7070b29">&#9670;&#160;</a></span>setIdentity()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="structXped_1_1SiteOperator.html">Xped::SiteOperator</a>&lt; Scalar_, Symmetry_ &gt;::setIdentity </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1SiteOperator_a77f67773038f4e13ea54c42ab7070b29_icgraph.png" border="0" usemap="#astructXped_1_1SiteOperator_a77f67773038f4e13ea54c42ab7070b29_icgraph" alt=""/></div>
+<map name="astructXped_1_1SiteOperator_a77f67773038f4e13ea54c42ab7070b29_icgraph" id="astructXped_1_1SiteOperator_a77f67773038f4e13ea54c42ab7070b29_icgraph">
+<area shape="rect" title=" " alt="" coords="224,41,369,81"/>
+<area shape="rect" href="classXped_1_1FermionBase.html#aaf13c778cec232d632c2c042d62e0200" title=" " alt="" coords="13,5,169,45"/>
+<area shape="rect" href="classXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4.html#a82d14626f19de7a30440aab06c2a9c11" title=" " alt="" coords="5,70,176,125"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a99aac46d53fdb4d1d13a007705d9b6e2" name="a99aac46d53fdb4d1d13a007705d9b6e2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a99aac46d53fdb4d1d13a007705d9b6e2">&#9670;&#160;</a></span>setRandom()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="structXped_1_1SiteOperator.html">Xped::SiteOperator</a>&lt; Scalar_, Symmetry_ &gt;::setRandom </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6e30ed7833611546f407a75c3f64d4ae" name="a6e30ed7833611546f407a75c3f64d4ae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6e30ed7833611546f407a75c3f64d4ae">&#9670;&#160;</a></span>setZero()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="structXped_1_1SiteOperator.html">Xped::SiteOperator</a>&lt; Scalar_, Symmetry_ &gt;::setZero </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1SiteOperator_a6e30ed7833611546f407a75c3f64d4ae_icgraph.png" border="0" usemap="#astructXped_1_1SiteOperator_a6e30ed7833611546f407a75c3f64d4ae_icgraph" alt=""/></div>
+<map name="astructXped_1_1SiteOperator_a6e30ed7833611546f407a75c3f64d4ae_icgraph" id="astructXped_1_1SiteOperator_a6e30ed7833611546f407a75c3f64d4ae_icgraph">
+<area shape="rect" title=" " alt="" coords="400,35,545,75"/>
+<area shape="rect" href="classXped_1_1FermionBase.html#aaf13c778cec232d632c2c042d62e0200" title=" " alt="" coords="188,5,344,45"/>
+<area shape="rect" href="classXped_1_1Spin.html#a531e4c3b63de3f66124b2faee523ec0e" title=" " alt="" coords="180,70,352,95"/>
+<area shape="rect" href="classXped_1_1Spin.html#aeded56d76ae86d9f4341046beef004e2" title=" " alt="" coords="5,70,132,95"/>
+</map>
+</div>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a049a4bfb520db156c7fbb4305795b50b" name="a049a4bfb520db156c7fbb4305795b50b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a049a4bfb520db156c7fbb4305795b50b">&#9670;&#160;</a></span>data</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classXped_1_1Tensor.html">Tensor</a>&lt;<a class="el" href="structXped_1_1SiteOperator.html#abf3383cef96e302d505eceeb58205462">Scalar</a>, 1, 2, <a class="el" href="structXped_1_1SiteOperator.html#a2db195e753ed0cb94237fc30503f0a7f">Symmetry</a>, false&gt; <a class="el" href="structXped_1_1SiteOperator.html">Xped::SiteOperator</a>&lt; Scalar_, Symmetry_ &gt;::data</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a807901a679d55c4fc5dad40e236af3d7" name="a807901a679d55c4fc5dad40e236af3d7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a807901a679d55c4fc5dad40e236af3d7">&#9670;&#160;</a></span>label_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string <a class="el" href="structXped_1_1SiteOperator.html">Xped::SiteOperator</a>&lt; Scalar_, Symmetry_ &gt;::label_</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aca1afd721f4ec864ec28c7c83094bd87" name="aca1afd721f4ec864ec28c7c83094bd87"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aca1afd721f4ec864ec28c7c83094bd87">&#9670;&#160;</a></span>label_dict</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unordered_map&lt;std::string, std::pair&lt;<a class="el" href="structXped_1_1SiteOperator.html#a73136734f1853be619a5e17013ab6847">qType</a>, std::size_t&gt; &gt; <a class="el" href="structXped_1_1SiteOperator.html">Xped::SiteOperator</a>&lt; Scalar_, Symmetry_ &gt;::label_dict</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="afca18a44b8c9b009442a4be6a8c4a1b2" name="afca18a44b8c9b009442a4be6a8c4a1b2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afca18a44b8c9b009442a4be6a8c4a1b2">&#9670;&#160;</a></span>Q</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structXped_1_1SiteOperator.html#a73136734f1853be619a5e17013ab6847">qType</a> <a class="el" href="structXped_1_1SiteOperator.html">Xped::SiteOperator</a>&lt; Scalar_, Symmetry_ &gt;::Q</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<hr/>The documentation for this struct was generated from the following files:<ul>
+<li>include/Xped/Physics/<a class="el" href="SiteOperator_8hpp_source.html">SiteOperator.hpp</a></li>
+<li>src/Physics/<a class="el" href="SiteOperator_8cpp.html">SiteOperator.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- HTML footer for doxygen 1.9.2-->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="namespaceXped.html">Xped</a></li><li class="navelem"><a class="el" href="structXped_1_1SiteOperator.html">SiteOperator</a></li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.6 </li>
+  </ul>
+</div>
+<script type="text/javascript">
+  // script for doxygen 1.9.2
+  $(function() {
+      toggleButton = document.createElement('doxygen-awesome-dark-mode-toggle')
+      toggleButton.title = "Toggle Light/Dark Mode"
+      $(document).ready(function(){
+          document.getElementById("MSearchBox").parentNode.appendChild(toggleButton)
+      })
+      $(window).resize(function(){
+          document.getElementById("MSearchBox").parentNode.appendChild(toggleButton)
+      })
+  })
+</script>
+</body>
+</html>

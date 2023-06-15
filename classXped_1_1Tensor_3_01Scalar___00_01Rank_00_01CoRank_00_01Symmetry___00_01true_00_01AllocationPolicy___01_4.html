@@ -1,0 +1,2148 @@
+<!-- HTML header for doxygen 1.9.6-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.6"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Xped: Xped::Tensor&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt; Class Template Reference</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+});
+</script>
+<script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript">
+  DoxygenAwesomeDarkModeToggle.lightModeIcon = '🌞'
+// icon from https://fonts.google.com/icons
+  DoxygenAwesomeDarkModeToggle.darkModeIcon = `<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px" viewBox="0 0 24 24" width="24px" fill="#009793"><g><rect fill="none" height="24" width="24"/></g><g><g><path d="M8.1,14.15C9.77,14.63,11,16.17,11,18c0,0.68-0.19,1.31-0.48,1.87c0.48,0.09,0.97,0.14,1.48,0.14 c1.48,0,2.9-0.41,4.13-1.15c-2.62-0.92-5.23-2.82-6.8-5.86C7.74,9.94,7.78,7.09,8.29,4.9c-2.57,1.33-4.3,4.01-4.3,7.1c0,0,0,0,0,0 c0.01,0,0.01,0,0.02,0C5.66,12,7.18,12.83,8.1,14.15z" opacity=".3"/><path d="M19.78,17.51c-2.47,0-6.57-1.33-8.68-5.43C8.77,7.57,10.6,3.6,11.63,2.01C6.27,2.2,1.98,6.59,1.98,12 c0,0.14,0.02,0.28,0.02,0.42C2.61,12.16,3.28,12,3.98,12c0,0,0,0,0,0c0-3.09,1.73-5.77,4.3-7.1C7.78,7.09,7.74,9.94,9.32,13 c1.57,3.04,4.18,4.95,6.8,5.86c-1.23,0.74-2.65,1.15-4.13,1.15c-0.5,0-1-0.05-1.48-0.14c-0.37,0.7-0.94,1.27-1.64,1.64 c0.98,0.32,2.03,0.5,3.11,0.5c3.5,0,6.58-1.8,8.37-4.52C20.18,17.5,19.98,17.51,19.78,17.51z"/><path d="M7,16l-0.18,0C6.4,14.84,5.3,14,4,14c-1.66,0-3,1.34-3,3s1.34,3,3,3c0.62,0,2.49,0,3,0c1.1,0,2-0.9,2-2 C9,16.9,8.1,16,7,16z"/></g></g></svg>`
+  DoxygenAwesomeDarkModeToggle.init()
+</script>
+</head>
+<body>
+  <!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/cpp977/Xped" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">Xped
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.9.6 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="#friends">Friends</a> &#124;
+<a href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4-members.html">List of all members</a>  </div>
+  <div class="headertitle"><div class="title">Xped::Tensor&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt; Class Template Reference</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p><code>#include &lt;<a class="el" href="ADTensor_8hpp_source.html">ADTensor.hpp</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a0f963b2b54901eefb9363077c18768e3"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a> = Scalar_</td></tr>
+<tr class="separator:a0f963b2b54901eefb9363077c18768e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf1fc28d1822d7ff9709c9428565e9de"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#adf1fc28d1822d7ff9709c9428565e9de">RealScalar</a> = typename <a class="el" href="structXped_1_1ScalarTraits.html">ScalarTraits</a>&lt; <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a> &gt;::Real</td></tr>
+<tr class="separator:adf1fc28d1822d7ff9709c9428565e9de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac16e70095b652e668315bd8f2d02939e"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ac16e70095b652e668315bd8f2d02939e">Symmetry</a> = Symmetry_</td></tr>
+<tr class="separator:ac16e70095b652e668315bd8f2d02939e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a361354c7ba3eb11f4b34e8c51d99e105"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a361354c7ba3eb11f4b34e8c51d99e105">qType</a> = typename Symmetry::qType</td></tr>
+<tr class="separator:a361354c7ba3eb11f4b34e8c51d99e105"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd59c2e54cbb47ee5a185f9afd5d02d7"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#afd59c2e54cbb47ee5a185f9afd5d02d7">AllocationPolicy</a> = AllocationPolicy_</td></tr>
+<tr class="separator:afd59c2e54cbb47ee5a185f9afd5d02d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b7aa86218786df37478b4034e2195fd"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a1b7aa86218786df37478b4034e2195fd">IndexType</a> = <a class="el" href="structXped_1_1PlainInterface.html#a2b8b941c6c09212ca31bff24a6e59020">PlainInterface::Indextype</a></td></tr>
+<tr class="separator:a1b7aa86218786df37478b4034e2195fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed96308cf3cfefbac2cf2fc603b10c22"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#aed96308cf3cfefbac2cf2fc603b10c22">VectorType</a> = <a class="el" href="structXped_1_1VectorInterface.html#af1ae6d8184aa7e163afb1776046ac0de">PlainInterface::VType</a>&lt; <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a> &gt;</td></tr>
+<tr class="separator:aed96308cf3cfefbac2cf2fc603b10c22"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac558c3ee066c4fdbfb396365b02e4504"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ac558c3ee066c4fdbfb396365b02e4504">MatrixType</a> = <a class="el" href="structXped_1_1MatrixInterface.html#af3f987c824b2afbb0123390f8c0afff7">PlainInterface::MType</a>&lt; <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a> &gt;</td></tr>
+<tr class="separator:ac558c3ee066c4fdbfb396365b02e4504"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a743b8354d5bdf2fd95867ed27b521d5b"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a743b8354d5bdf2fd95867ed27b521d5b">MatrixMapType</a> = <a class="el" href="structXped_1_1MatrixInterface.html#a0c02ce85db2b97bf94cdb3b4fb1de953">PlainInterface::MapMType</a>&lt; <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a> &gt;</td></tr>
+<tr class="separator:a743b8354d5bdf2fd95867ed27b521d5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a139a1694f3ab11785dc2763044e1242a"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a139a1694f3ab11785dc2763044e1242a">MatrixcMapType</a> = <a class="el" href="structXped_1_1MatrixInterface.html#aa344c753c88b000f2848639cf071e43f">PlainInterface::cMapMType</a>&lt; <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a> &gt;</td></tr>
+<tr class="separator:a139a1694f3ab11785dc2763044e1242a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b37da2be4c7eb67ee349d358bf6caa1"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a2b37da2be4c7eb67ee349d358bf6caa1">TensorType</a> = <a class="el" href="structXped_1_1TensorInterface.html#a0f8902cb310df0843eb180f637ab1dd7">PlainInterface::TType</a>&lt; <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a>, Rank+CoRank &gt;</td></tr>
+<tr class="separator:a2b37da2be4c7eb67ee349d358bf6caa1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a84d3859c08f40f27068feeb8dfa70c9b"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a84d3859c08f40f27068feeb8dfa70c9b">TensorMapType</a> = <a class="el" href="structXped_1_1TensorInterface.html#aa06be7e2d69950ed0c576d0a98d475b6">PlainInterface::MapTType</a>&lt; <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a>, Rank+CoRank &gt;</td></tr>
+<tr class="separator:a84d3859c08f40f27068feeb8dfa70c9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae62e5de98bd6c03cb5807e29d425189e"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ae62e5de98bd6c03cb5807e29d425189e">TensorcMapType</a> = <a class="el" href="structXped_1_1TensorInterface.html#af863967e11b7f620929c36fc222be1ed">PlainInterface::cMapTType</a>&lt; <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a>, Rank+CoRank &gt;</td></tr>
+<tr class="separator:ae62e5de98bd6c03cb5807e29d425189e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78a90fa2612cca27131b8455049ac819"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a78a90fa2612cca27131b8455049ac819">value_type</a> = <a class="el" href="classXped_1_1Tensor.html">Tensor</a>&lt; <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a>, Rank, CoRank, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ac16e70095b652e668315bd8f2d02939e">Symmetry</a>, false, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#afd59c2e54cbb47ee5a185f9afd5d02d7">AllocationPolicy</a> &gt;</td></tr>
+<tr class="separator:a78a90fa2612cca27131b8455049ac819"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8195f06233ddbb0822f2e8b30614106b"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a8195f06233ddbb0822f2e8b30614106b">vari_type</a> = stan::math::vari_value&lt; <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a78a90fa2612cca27131b8455049ac819">value_type</a> &gt;</td></tr>
+<tr class="separator:a8195f06233ddbb0822f2e8b30614106b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a07e633d1de773495642d9cb8df9dcc35"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a07e633d1de773495642d9cb8df9dcc35">is_uninitialized</a> () noexcept</td></tr>
+<tr class="separator:a07e633d1de773495642d9cb8df9dcc35"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af45ad5b53ac47a113bfb5f05e768a67c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#af45ad5b53ac47a113bfb5f05e768a67c">Tensor</a> ()</td></tr>
+<tr class="separator:af45ad5b53ac47a113bfb5f05e768a67c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a30a80217af1616b2ad2816a622a8d7c1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a30a80217af1616b2ad2816a622a8d7c1">Tensor</a> (const <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a>, Rank, CoRank, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ac16e70095b652e668315bd8f2d02939e">Symmetry</a>, false, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#afd59c2e54cbb47ee5a185f9afd5d02d7">AllocationPolicy</a> &gt; &amp;x)</td></tr>
+<tr class="separator:a30a80217af1616b2ad2816a622a8d7c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af43786a0650c4446e4bda773cf81b7ae"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#af43786a0650c4446e4bda773cf81b7ae">Tensor</a> (<a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a8195f06233ddbb0822f2e8b30614106b">vari_type</a> *vi)</td></tr>
+<tr class="separator:af43786a0650c4446e4bda773cf81b7ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abb4e178554a5e9d8742600e9565561b9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#abb4e178554a5e9d8742600e9565561b9">Tensor</a> (const std::array&lt; <a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ac16e70095b652e668315bd8f2d02939e">Symmetry</a>, 1, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#afd59c2e54cbb47ee5a185f9afd5d02d7">AllocationPolicy</a> &gt;, Rank &gt; &amp;basis_domain, const std::array&lt; <a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ac16e70095b652e668315bd8f2d02939e">Symmetry</a>, 1, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#afd59c2e54cbb47ee5a185f9afd5d02d7">AllocationPolicy</a> &gt;, CoRank &gt; &amp;basis_codomain, <a class="el" href="structXped_1_1mpi_1_1XpedWorld.html">mpi::XpedWorld</a> &amp;<a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#adb514c3c2400b6f44e3abd90345c0ee7">world</a>=<a class="el" href="namespaceXped_1_1mpi.html#a92c3bbdeab79e718b7d013a16ee5a0c9">mpi::getUniverse</a>())</td></tr>
+<tr class="separator:abb4e178554a5e9d8742600e9565561b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a2a4537f524b1e2abae885bf656bf27"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a9a2a4537f524b1e2abae885bf656bf27">setRandom</a> ()</td></tr>
+<tr class="separator:a9a2a4537f524b1e2abae885bf656bf27"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a35504edb707b8591c5745f274b27aff4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a35504edb707b8591c5745f274b27aff4">setIdentity</a> ()</td></tr>
+<tr class="separator:a35504edb707b8591c5745f274b27aff4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a35b76bfc53e8296b9f1b89bc3ef3483c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a35b76bfc53e8296b9f1b89bc3ef3483c">setZero</a> ()</td></tr>
+<tr class="separator:a35b76bfc53e8296b9f1b89bc3ef3483c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a334e0b94dd2fa7963466fe056f6fd971"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a334e0b94dd2fa7963466fe056f6fd971">setConstant</a> (<a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a> c)</td></tr>
+<tr class="separator:a334e0b94dd2fa7963466fe056f6fd971"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab9e5e584b335356b2525d0e27da097e5"><td class="memItemLeft" align="right" valign="top">const auto &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ab9e5e584b335356b2525d0e27da097e5">val</a> () const noexcept</td></tr>
+<tr class="separator:ab9e5e584b335356b2525d0e27da097e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7bea9f69f42f5ab87e6c68fd247304f9"><td class="memItemLeft" align="right" valign="top">auto &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a7bea9f69f42f5ab87e6c68fd247304f9">val_op</a> () noexcept</td></tr>
+<tr class="separator:a7bea9f69f42f5ab87e6c68fd247304f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a90b91d6e1d76a5571f0b21fd3effca1e"><td class="memItemLeft" align="right" valign="top">const auto &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a90b91d6e1d76a5571f0b21fd3effca1e">detach</a> () const noexcept</td></tr>
+<tr class="separator:a90b91d6e1d76a5571f0b21fd3effca1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ee9aecb94bd888b0267ce6cd048747f"><td class="memItemLeft" align="right" valign="top">auto &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a5ee9aecb94bd888b0267ce6cd048747f">adj</a> () noexcept</td></tr>
+<tr class="separator:a5ee9aecb94bd888b0267ce6cd048747f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76a722a3322060c3af2b3c714478544d"><td class="memItemLeft" align="right" valign="top">auto &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a76a722a3322060c3af2b3c714478544d">adj</a> () const noexcept</td></tr>
+<tr class="separator:a76a722a3322060c3af2b3c714478544d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a85ca1bfc2de257154cc5c257e68d69"><td class="memItemLeft" align="right" valign="top">auto &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a2a85ca1bfc2de257154cc5c257e68d69">adj_op</a> () noexcept</td></tr>
+<tr class="separator:a2a85ca1bfc2de257154cc5c257e68d69"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e3000f1c657f11f6828d160b94662da"><td class="memItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0e3000f1c657f11f6828d160b94662da">rank</a> () const noexcept</td></tr>
+<tr class="separator:a0e3000f1c657f11f6828d160b94662da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8e873d5453f0210ef9c949ed53fd0a2"><td class="memItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ad8e873d5453f0210ef9c949ed53fd0a2">corank</a> () const noexcept</td></tr>
+<tr class="separator:ad8e873d5453f0210ef9c949ed53fd0a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b7b8693beee5ddb949051c22e70f07e"><td class="memItemLeft" align="right" valign="top">const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a8b7b8693beee5ddb949051c22e70f07e">name</a> () const</td></tr>
+<tr class="separator:a8b7b8693beee5ddb949051c22e70f07e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a754921b79f66e698715bc55eba8de3e7"><td class="memItemLeft" align="right" valign="top">const auto &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a754921b79f66e698715bc55eba8de3e7">sector</a> () const</td></tr>
+<tr class="separator:a754921b79f66e698715bc55eba8de3e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab23d139344e97bcafb13493c43ff16c7"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a361354c7ba3eb11f4b34e8c51d99e105">qType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ab23d139344e97bcafb13493c43ff16c7">sector</a> (std::size_t i) const</td></tr>
+<tr class="separator:ab23d139344e97bcafb13493c43ff16c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af251358462d2d04c29d30dee97da8606"><td class="memItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#af251358462d2d04c29d30dee97da8606">CONTIGUOUS_STORAGE</a> () const</td></tr>
+<tr class="separator:af251358462d2d04c29d30dee97da8606"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac3626fd40adc9b5ca88b4dda4bdd912e"><td class="memItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ac3626fd40adc9b5ca88b4dda4bdd912e">AD_TENSOR</a> ()</td></tr>
+<tr class="separator:ac3626fd40adc9b5ca88b4dda4bdd912e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e34eaa30fc514de57ca56f5b6db378a"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a1e34eaa30fc514de57ca56f5b6db378a">plainSize</a> () const</td></tr>
+<tr class="separator:a1e34eaa30fc514de57ca56f5b6db378a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a85b4c90f1bbd46f2b13592b52d612b95"><td class="memItemLeft" align="right" valign="top">const std::array&lt; <a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ac16e70095b652e668315bd8f2d02939e">Symmetry</a>, 1, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#afd59c2e54cbb47ee5a185f9afd5d02d7">AllocationPolicy</a> &gt;, Rank &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a85b4c90f1bbd46f2b13592b52d612b95">uncoupledDomain</a> () const</td></tr>
+<tr class="separator:a85b4c90f1bbd46f2b13592b52d612b95"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8f3cab1e0ed5e0886256be964c0b104"><td class="memItemLeft" align="right" valign="top">const std::array&lt; <a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ac16e70095b652e668315bd8f2d02939e">Symmetry</a>, 1, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#afd59c2e54cbb47ee5a185f9afd5d02d7">AllocationPolicy</a> &gt;, CoRank &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ac8f3cab1e0ed5e0886256be964c0b104">uncoupledCodomain</a> () const</td></tr>
+<tr class="separator:ac8f3cab1e0ed5e0886256be964c0b104"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abb36b1b7dd4a07d37ed909773127267f"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ac16e70095b652e668315bd8f2d02939e">Symmetry</a>, Rank, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#afd59c2e54cbb47ee5a185f9afd5d02d7">AllocationPolicy</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#abb36b1b7dd4a07d37ed909773127267f">coupledDomain</a> () const</td></tr>
+<tr class="separator:abb36b1b7dd4a07d37ed909773127267f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a33033c825e3918945b9b05107e81a6d6"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ac16e70095b652e668315bd8f2d02939e">Symmetry</a>, CoRank, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#afd59c2e54cbb47ee5a185f9afd5d02d7">AllocationPolicy</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a33033c825e3918945b9b05107e81a6d6">coupledCodomain</a> () const</td></tr>
+<tr class="separator:a33033c825e3918945b9b05107e81a6d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adb514c3c2400b6f44e3abd90345c0ee7"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="structXped_1_1mpi_1_1XpedWorld.html">mpi::XpedWorld</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#adb514c3c2400b6f44e3abd90345c0ee7">world</a> () const</td></tr>
+<tr class="separator:adb514c3c2400b6f44e3abd90345c0ee7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af7f23edde35ef43b0270b807c9397d79"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#af7f23edde35ef43b0270b807c9397d79">begin</a> () const</td></tr>
+<tr class="separator:af7f23edde35ef43b0270b807c9397d79"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a85e9b1504794ebb67ee8bd064c8cf9"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a9a85e9b1504794ebb67ee8bd064c8cf9">end</a> () const</td></tr>
+<tr class="separator:a9a85e9b1504794ebb67ee8bd064c8cf9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa0dbaf4fbd616a0c22e8a5ea3aae9d2b"><td class="memItemLeft" align="right" valign="top">const auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#aa0dbaf4fbd616a0c22e8a5ea3aae9d2b">cbegin</a> () const</td></tr>
+<tr class="separator:aa0dbaf4fbd616a0c22e8a5ea3aae9d2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a751dc9c4aef9f53754b9f3489f10c0de"><td class="memItemLeft" align="right" valign="top">const auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a751dc9c4aef9f53754b9f3489f10c0de">cend</a> () const</td></tr>
+<tr class="separator:a751dc9c4aef9f53754b9f3489f10c0de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a571d2f1066f0bd4a3007cf013e5dcc06"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a571d2f1066f0bd4a3007cf013e5dcc06">gradbegin</a> () const</td></tr>
+<tr class="separator:a571d2f1066f0bd4a3007cf013e5dcc06"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f55fcc6609b790870757f0a51ffe354"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a4f55fcc6609b790870757f0a51ffe354">gradend</a> () const</td></tr>
+<tr class="separator:a4f55fcc6609b790870757f0a51ffe354"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a348f674bf437b56c0b92c2ee758986c6"><td class="memItemLeft" align="right" valign="top">const auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a348f674bf437b56c0b92c2ee758986c6">cgradbegin</a> () const</td></tr>
+<tr class="separator:a348f674bf437b56c0b92c2ee758986c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5855bad120d07697bb29dbb27e4167fc"><td class="memItemLeft" align="right" valign="top">const auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a5855bad120d07697bb29dbb27e4167fc">cgradend</a> () const</td></tr>
+<tr class="separator:a5855bad120d07697bb29dbb27e4167fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aab1bda50d45b225f5705e85f33681eaf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#aab1bda50d45b225f5705e85f33681eaf">set_data</a> (const <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a> *data, std::size_t size)</td></tr>
+<tr class="separator:aab1bda50d45b225f5705e85f33681eaf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d078f3a33b2aef3aa929950a7be1cee"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a8195f06233ddbb0822f2e8b30614106b">vari_type</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a4d078f3a33b2aef3aa929950a7be1cee">operator-&gt;</a> ()</td></tr>
+<tr class="separator:a4d078f3a33b2aef3aa929950a7be1cee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56a7d8ad798bc42c8377741333ee5b1c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classXped_1_1Tensor.html">Tensor</a>&lt; <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a>, Rank, CoRank, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ac16e70095b652e668315bd8f2d02939e">Symmetry</a>, true, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#afd59c2e54cbb47ee5a185f9afd5d02d7">AllocationPolicy</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a56a7d8ad798bc42c8377741333ee5b1c">eval</a> () const</td></tr>
+<tr class="separator:a56a7d8ad798bc42c8377741333ee5b1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a618da9b4bb23e6731586f52fa60f0002"><td class="memTemplParams" colspan="2">template&lt;bool TRACK = true&gt; </td></tr>
+<tr class="memitem:a618da9b4bb23e6731586f52fa60f0002"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a618da9b4bb23e6731586f52fa60f0002">adjoint</a> () const</td></tr>
+<tr class="separator:a618da9b4bb23e6731586f52fa60f0002"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f94a04119338d557ca968a71a3c4883"><td class="memTemplParams" colspan="2">template&lt;int shift, std::size_t... p, bool TRACK&gt; </td></tr>
+<tr class="memitem:a9f94a04119338d557ca968a71a3c4883"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a9f94a04119338d557ca968a71a3c4883">permute</a> (<a class="el" href="structXped_1_1Bool.html">Bool</a>&lt; TRACK &gt;) const</td></tr>
+<tr class="separator:a9f94a04119338d557ca968a71a3c4883"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac07dd430f826a756684928a39497060b"><td class="memTemplParams" colspan="2">template&lt;int shift, std::size_t... p, bool TRACK&gt; </td></tr>
+<tr class="memitem:ac07dd430f826a756684928a39497060b"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classXped_1_1Tensor.html">Tensor</a>&lt; <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a>, Rank - shift, CoRank+shift, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ac16e70095b652e668315bd8f2d02939e">Symmetry</a>, true, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#afd59c2e54cbb47ee5a185f9afd5d02d7">AllocationPolicy</a> &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ac07dd430f826a756684928a39497060b">permute</a> (seq::iseq&lt; std::size_t, p... &gt;, <a class="el" href="structXped_1_1Bool.html">Bool</a>&lt; TRACK &gt;) const</td></tr>
+<tr class="separator:ac07dd430f826a756684928a39497060b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea1087185a43564fb46681f0571e9f22"><td class="memTemplParams" colspan="2">template&lt;bool TRACK = true&gt; </td></tr>
+<tr class="memitem:aea1087185a43564fb46681f0571e9f22"><td class="memTemplItemLeft" align="right" valign="top">std::tuple&lt; <a class="el" href="namespaceXped.html#a17ded7b20b7bf54efbb64db9df136ec1">XTensor</a>&lt; TRACK, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a>, Rank, 1, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ac16e70095b652e668315bd8f2d02939e">Symmetry</a>, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#afd59c2e54cbb47ee5a185f9afd5d02d7">AllocationPolicy</a> &gt;, <a class="el" href="namespaceXped.html#a17ded7b20b7bf54efbb64db9df136ec1">XTensor</a>&lt; TRACK, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a>, 1, 1, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ac16e70095b652e668315bd8f2d02939e">Symmetry</a>, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#afd59c2e54cbb47ee5a185f9afd5d02d7">AllocationPolicy</a> &gt;, <a class="el" href="namespaceXped.html#a17ded7b20b7bf54efbb64db9df136ec1">XTensor</a>&lt; TRACK, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a>, 1, CoRank, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ac16e70095b652e668315bd8f2d02939e">Symmetry</a>, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#afd59c2e54cbb47ee5a185f9afd5d02d7">AllocationPolicy</a> &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#aea1087185a43564fb46681f0571e9f22">tSVD</a> (std::size_t maxKeep, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#adf1fc28d1822d7ff9709c9428565e9de">RealScalar</a> eps_svd, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#adf1fc28d1822d7ff9709c9428565e9de">RealScalar</a> &amp;truncWeight, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#adf1fc28d1822d7ff9709c9428565e9de">RealScalar</a> &amp;entropy, std::map&lt; <a class="el" href="structXped_1_1qarray.html">qarray</a>&lt; Symmetry::Nq &gt;, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#aed96308cf3cfefbac2cf2fc603b10c22">VectorType</a> &gt; &amp;SVspec, bool PRESERVE_MULTIPLETS=true, bool RETURN_SPEC=true) XPED_CONST</td></tr>
+<tr class="separator:aea1087185a43564fb46681f0571e9f22"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f42947424ed38b2bc684a1d54f32cea"><td class="memTemplParams" colspan="2">template&lt;bool TRACK = true&gt; </td></tr>
+<tr class="memitem:a8f42947424ed38b2bc684a1d54f32cea"><td class="memTemplItemLeft" align="right" valign="top">std::tuple&lt; <a class="el" href="namespaceXped.html#a17ded7b20b7bf54efbb64db9df136ec1">XTensor</a>&lt; TRACK, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a>, Rank, 1, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ac16e70095b652e668315bd8f2d02939e">Symmetry</a>, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#afd59c2e54cbb47ee5a185f9afd5d02d7">AllocationPolicy</a> &gt;, <a class="el" href="namespaceXped.html#a17ded7b20b7bf54efbb64db9df136ec1">XTensor</a>&lt; TRACK, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a>, 1, 1, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ac16e70095b652e668315bd8f2d02939e">Symmetry</a>, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#afd59c2e54cbb47ee5a185f9afd5d02d7">AllocationPolicy</a> &gt;, <a class="el" href="namespaceXped.html#a17ded7b20b7bf54efbb64db9df136ec1">XTensor</a>&lt; TRACK, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a>, 1, CoRank, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ac16e70095b652e668315bd8f2d02939e">Symmetry</a>, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#afd59c2e54cbb47ee5a185f9afd5d02d7">AllocationPolicy</a> &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a8f42947424ed38b2bc684a1d54f32cea">tSVD</a> (std::size_t maxKeep, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#adf1fc28d1822d7ff9709c9428565e9de">RealScalar</a> eps_svd, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#adf1fc28d1822d7ff9709c9428565e9de">RealScalar</a> &amp;truncWeight, bool PRESERVE_MULTIPLETS=true) XPED_CONST</td></tr>
+<tr class="separator:a8f42947424ed38b2bc684a1d54f32cea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada9bd03f91d1078bc25f2eebc35f3edb"><td class="memTemplParams" colspan="2">template&lt;bool TRACK = true&gt; </td></tr>
+<tr class="memitem:ada9bd03f91d1078bc25f2eebc35f3edb"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespaceXped.html#a841d520d325f4cb6be3295aa266c0596">XScalar</a>&lt; TRACK, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a> &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ada9bd03f91d1078bc25f2eebc35f3edb">norm</a> () const</td></tr>
+<tr class="separator:ada9bd03f91d1078bc25f2eebc35f3edb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7a01c8efe739d7fbd04918e333caec6"><td class="memTemplParams" colspan="2">template&lt;bool TRACK = true&gt; </td></tr>
+<tr class="memitem:ad7a01c8efe739d7fbd04918e333caec6"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespaceXped.html#a841d520d325f4cb6be3295aa266c0596">XScalar</a>&lt; TRACK, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a> &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ad7a01c8efe739d7fbd04918e333caec6">maxNorm</a> () const</td></tr>
+<tr class="separator:ad7a01c8efe739d7fbd04918e333caec6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abb47405f5ffffbd4e19cb3de6a5bbeb7"><td class="memTemplParams" colspan="2">template&lt;bool TRACK = true&gt; </td></tr>
+<tr class="memitem:abb47405f5ffffbd4e19cb3de6a5bbeb7"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespaceXped.html#a841d520d325f4cb6be3295aa266c0596">XScalar</a>&lt; TRACK, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a> &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#abb47405f5ffffbd4e19cb3de6a5bbeb7">trace</a> () const</td></tr>
+<tr class="separator:abb47405f5ffffbd4e19cb3de6a5bbeb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b16d950155af35294b4c6e14abc56dc"><td class="memTemplParams" colspan="2">template&lt;bool TRACK = true&gt; </td></tr>
+<tr class="memitem:a9b16d950155af35294b4c6e14abc56dc"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespaceXped.html#a17ded7b20b7bf54efbb64db9df136ec1">XTensor</a>&lt; TRACK, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a>, Rank, CoRank, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ac16e70095b652e668315bd8f2d02939e">Symmetry</a>, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#afd59c2e54cbb47ee5a185f9afd5d02d7">AllocationPolicy</a> &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a9b16d950155af35294b4c6e14abc56dc">diag_sqrt</a> () const</td></tr>
+<tr class="separator:a9b16d950155af35294b4c6e14abc56dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46f71dba0a62c1fef520c6efce4dc0a0"><td class="memTemplParams" colspan="2">template&lt;bool TRACK = true&gt; </td></tr>
+<tr class="memitem:a46f71dba0a62c1fef520c6efce4dc0a0"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespaceXped.html#a17ded7b20b7bf54efbb64db9df136ec1">XTensor</a>&lt; TRACK, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a>, Rank, CoRank, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ac16e70095b652e668315bd8f2d02939e">Symmetry</a>, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#afd59c2e54cbb47ee5a185f9afd5d02d7">AllocationPolicy</a> &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a46f71dba0a62c1fef520c6efce4dc0a0">diag_inv</a> () const</td></tr>
+<tr class="separator:a46f71dba0a62c1fef520c6efce4dc0a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b86a264d88a0e543d53d27d472962ce"><td class="memTemplParams" colspan="2">template&lt;bool TRACK = true&gt; </td></tr>
+<tr class="memitem:a0b86a264d88a0e543d53d27d472962ce"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespaceXped.html#a17ded7b20b7bf54efbb64db9df136ec1">XTensor</a>&lt; TRACK, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a>, Rank, CoRank, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ac16e70095b652e668315bd8f2d02939e">Symmetry</a>, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#afd59c2e54cbb47ee5a185f9afd5d02d7">AllocationPolicy</a> &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0b86a264d88a0e543d53d27d472962ce">twist</a> (std::size_t leg) const</td></tr>
+<tr class="separator:a0b86a264d88a0e543d53d27d472962ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a068a92764157aa08777a79406e57eb44"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a068a92764157aa08777a79406e57eb44">print</a> (std::ostream &amp;o, bool PRINT_MATRICES=true) const</td></tr>
+<tr class="separator:a068a92764157aa08777a79406e57eb44"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:a3513da0a749b5a60ad8ad118786a7422"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a8195f06233ddbb0822f2e8b30614106b">vari_type</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a3513da0a749b5a60ad8ad118786a7422">vi_</a></td></tr>
+<tr class="separator:a3513da0a749b5a60ad8ad118786a7422"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
+Friends</h2></td></tr>
+<tr class="memitem:a5090906a0837ac2796223936dc8e5bf0"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a5090906a0837ac2796223936dc8e5bf0">operator&lt;&lt;</a> (std::ostream &amp;os, const <a class="el" href="classXped_1_1Tensor.html">Tensor</a>&lt; <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a>, Rank, CoRank, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ac16e70095b652e668315bd8f2d02939e">Symmetry</a>, true, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#afd59c2e54cbb47ee5a185f9afd5d02d7">AllocationPolicy</a> &gt; &amp;v)</td></tr>
+<tr class="separator:a5090906a0837ac2796223936dc8e5bf0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="afd59c2e54cbb47ee5a185f9afd5d02d7" name="afd59c2e54cbb47ee5a185f9afd5d02d7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afd59c2e54cbb47ee5a185f9afd5d02d7">&#9670;&#160;</a></span>AllocationPolicy</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::AllocationPolicy =  AllocationPolicy_</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1b7aa86218786df37478b4034e2195fd" name="a1b7aa86218786df37478b4034e2195fd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1b7aa86218786df37478b4034e2195fd">&#9670;&#160;</a></span>IndexType</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::IndexType =  <a class="el" href="structXped_1_1PlainInterface.html#a2b8b941c6c09212ca31bff24a6e59020">PlainInterface::Indextype</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a139a1694f3ab11785dc2763044e1242a" name="a139a1694f3ab11785dc2763044e1242a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a139a1694f3ab11785dc2763044e1242a">&#9670;&#160;</a></span>MatrixcMapType</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::MatrixcMapType =  <a class="el" href="structXped_1_1MatrixInterface.html#aa344c753c88b000f2848639cf071e43f">PlainInterface::cMapMType</a>&lt;<a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a>&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a743b8354d5bdf2fd95867ed27b521d5b" name="a743b8354d5bdf2fd95867ed27b521d5b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a743b8354d5bdf2fd95867ed27b521d5b">&#9670;&#160;</a></span>MatrixMapType</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::MatrixMapType =  <a class="el" href="structXped_1_1MatrixInterface.html#a0c02ce85db2b97bf94cdb3b4fb1de953">PlainInterface::MapMType</a>&lt;<a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a>&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac558c3ee066c4fdbfb396365b02e4504" name="ac558c3ee066c4fdbfb396365b02e4504"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac558c3ee066c4fdbfb396365b02e4504">&#9670;&#160;</a></span>MatrixType</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::MatrixType =  <a class="el" href="structXped_1_1MatrixInterface.html#af3f987c824b2afbb0123390f8c0afff7">PlainInterface::MType</a>&lt;<a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a>&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a361354c7ba3eb11f4b34e8c51d99e105" name="a361354c7ba3eb11f4b34e8c51d99e105"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a361354c7ba3eb11f4b34e8c51d99e105">&#9670;&#160;</a></span>qType</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::qType =  typename Symmetry::qType</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="adf1fc28d1822d7ff9709c9428565e9de" name="adf1fc28d1822d7ff9709c9428565e9de"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adf1fc28d1822d7ff9709c9428565e9de">&#9670;&#160;</a></span>RealScalar</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::RealScalar =  typename <a class="el" href="structXped_1_1ScalarTraits.html">ScalarTraits</a>&lt;<a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a>&gt;::Real</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0f963b2b54901eefb9363077c18768e3" name="a0f963b2b54901eefb9363077c18768e3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0f963b2b54901eefb9363077c18768e3">&#9670;&#160;</a></span>Scalar</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::Scalar =  Scalar_</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac16e70095b652e668315bd8f2d02939e" name="ac16e70095b652e668315bd8f2d02939e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac16e70095b652e668315bd8f2d02939e">&#9670;&#160;</a></span>Symmetry</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::Symmetry =  Symmetry_</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae62e5de98bd6c03cb5807e29d425189e" name="ae62e5de98bd6c03cb5807e29d425189e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae62e5de98bd6c03cb5807e29d425189e">&#9670;&#160;</a></span>TensorcMapType</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::TensorcMapType =  <a class="el" href="structXped_1_1TensorInterface.html#af863967e11b7f620929c36fc222be1ed">PlainInterface::cMapTType</a>&lt;<a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a>, Rank + CoRank&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a84d3859c08f40f27068feeb8dfa70c9b" name="a84d3859c08f40f27068feeb8dfa70c9b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a84d3859c08f40f27068feeb8dfa70c9b">&#9670;&#160;</a></span>TensorMapType</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::TensorMapType =  <a class="el" href="structXped_1_1TensorInterface.html#aa06be7e2d69950ed0c576d0a98d475b6">PlainInterface::MapTType</a>&lt;<a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a>, Rank + CoRank&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2b37da2be4c7eb67ee349d358bf6caa1" name="a2b37da2be4c7eb67ee349d358bf6caa1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2b37da2be4c7eb67ee349d358bf6caa1">&#9670;&#160;</a></span>TensorType</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::TensorType =  <a class="el" href="structXped_1_1TensorInterface.html#a0f8902cb310df0843eb180f637ab1dd7">PlainInterface::TType</a>&lt;<a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a>, Rank + CoRank&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a78a90fa2612cca27131b8455049ac819" name="a78a90fa2612cca27131b8455049ac819"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a78a90fa2612cca27131b8455049ac819">&#9670;&#160;</a></span>value_type</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::value_type =  <a class="el" href="classXped_1_1Tensor.html">Tensor</a>&lt;<a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a>, Rank, CoRank, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ac16e70095b652e668315bd8f2d02939e">Symmetry</a>, false, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#afd59c2e54cbb47ee5a185f9afd5d02d7">AllocationPolicy</a>&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8195f06233ddbb0822f2e8b30614106b" name="a8195f06233ddbb0822f2e8b30614106b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8195f06233ddbb0822f2e8b30614106b">&#9670;&#160;</a></span>vari_type</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::vari_type =  stan::math::vari_value&lt;<a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a78a90fa2612cca27131b8455049ac819">value_type</a>&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aed96308cf3cfefbac2cf2fc603b10c22" name="aed96308cf3cfefbac2cf2fc603b10c22"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed96308cf3cfefbac2cf2fc603b10c22">&#9670;&#160;</a></span>VectorType</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::VectorType =  <a class="el" href="structXped_1_1VectorInterface.html#af1ae6d8184aa7e163afb1776046ac0de">PlainInterface::VType</a>&lt;<a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a>&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="af45ad5b53ac47a113bfb5f05e768a67c" name="af45ad5b53ac47a113bfb5f05e768a67c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af45ad5b53ac47a113bfb5f05e768a67c">&#9670;&#160;</a></span>Tensor() <span class="overload">[1/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::Tensor </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a30a80217af1616b2ad2816a622a8d7c1" name="a30a80217af1616b2ad2816a622a8d7c1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a30a80217af1616b2ad2816a622a8d7c1">&#9670;&#160;</a></span>Tensor() <span class="overload">[2/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::Tensor </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a>, Rank, CoRank, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ac16e70095b652e668315bd8f2d02939e">Symmetry</a>, false, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#afd59c2e54cbb47ee5a185f9afd5d02d7">AllocationPolicy</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>x</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af43786a0650c4446e4bda773cf81b7ae" name="af43786a0650c4446e4bda773cf81b7ae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af43786a0650c4446e4bda773cf81b7ae">&#9670;&#160;</a></span>Tensor() <span class="overload">[3/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::Tensor </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a8195f06233ddbb0822f2e8b30614106b">vari_type</a> *&#160;</td>
+          <td class="paramname"><em>vi</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abb4e178554a5e9d8742600e9565561b9" name="abb4e178554a5e9d8742600e9565561b9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abb4e178554a5e9d8742600e9565561b9">&#9670;&#160;</a></span>Tensor() <span class="overload">[4/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::Tensor </td>
+          <td>(</td>
+          <td class="paramtype">const std::array&lt; <a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ac16e70095b652e668315bd8f2d02939e">Symmetry</a>, 1, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#afd59c2e54cbb47ee5a185f9afd5d02d7">AllocationPolicy</a> &gt;, Rank &gt; &amp;&#160;</td>
+          <td class="paramname"><em>basis_domain</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::array&lt; <a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ac16e70095b652e668315bd8f2d02939e">Symmetry</a>, 1, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#afd59c2e54cbb47ee5a185f9afd5d02d7">AllocationPolicy</a> &gt;, CoRank &gt; &amp;&#160;</td>
+          <td class="paramname"><em>basis_codomain</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structXped_1_1mpi_1_1XpedWorld.html">mpi::XpedWorld</a> &amp;&#160;</td>
+          <td class="paramname"><em>world</em> = <code><a class="el" href="namespaceXped_1_1mpi.html#a92c3bbdeab79e718b7d013a16ee5a0c9">mpi::getUniverse</a>()</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="ac3626fd40adc9b5ca88b4dda4bdd912e" name="ac3626fd40adc9b5ca88b4dda4bdd912e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac3626fd40adc9b5ca88b4dda4bdd912e">&#9670;&#160;</a></span>AD_TENSOR()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::AD_TENSOR </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a76a722a3322060c3af2b3c714478544d" name="a76a722a3322060c3af2b3c714478544d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a76a722a3322060c3af2b3c714478544d">&#9670;&#160;</a></span>adj() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto &amp; <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::adj </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5ee9aecb94bd888b0267ce6cd048747f" name="a5ee9aecb94bd888b0267ce6cd048747f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5ee9aecb94bd888b0267ce6cd048747f">&#9670;&#160;</a></span>adj() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto &amp; <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::adj </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2a85ca1bfc2de257154cc5c257e68d69" name="a2a85ca1bfc2de257154cc5c257e68d69"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2a85ca1bfc2de257154cc5c257e68d69">&#9670;&#160;</a></span>adj_op()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto &amp; <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::adj_op </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a618da9b4bb23e6731586f52fa60f0002" name="a618da9b4bb23e6731586f52fa60f0002"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a618da9b4bb23e6731586f52fa60f0002">&#9670;&#160;</a></span>adjoint()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<div class="memtemplate">
+template&lt;bool TRACK = true&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::adjoint </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af7f23edde35ef43b0270b807c9397d79" name="af7f23edde35ef43b0270b807c9397d79"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af7f23edde35ef43b0270b807c9397d79">&#9670;&#160;</a></span>begin()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::begin </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa0dbaf4fbd616a0c22e8a5ea3aae9d2b" name="aa0dbaf4fbd616a0c22e8a5ea3aae9d2b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa0dbaf4fbd616a0c22e8a5ea3aae9d2b">&#9670;&#160;</a></span>cbegin()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const auto <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::cbegin </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a751dc9c4aef9f53754b9f3489f10c0de" name="a751dc9c4aef9f53754b9f3489f10c0de"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a751dc9c4aef9f53754b9f3489f10c0de">&#9670;&#160;</a></span>cend()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const auto <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::cend </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a348f674bf437b56c0b92c2ee758986c6" name="a348f674bf437b56c0b92c2ee758986c6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a348f674bf437b56c0b92c2ee758986c6">&#9670;&#160;</a></span>cgradbegin()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const auto <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::cgradbegin </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5855bad120d07697bb29dbb27e4167fc" name="a5855bad120d07697bb29dbb27e4167fc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5855bad120d07697bb29dbb27e4167fc">&#9670;&#160;</a></span>cgradend()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const auto <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::cgradend </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af251358462d2d04c29d30dee97da8606" name="af251358462d2d04c29d30dee97da8606"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af251358462d2d04c29d30dee97da8606">&#9670;&#160;</a></span>CONTIGUOUS_STORAGE()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::CONTIGUOUS_STORAGE </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad8e873d5453f0210ef9c949ed53fd0a2" name="ad8e873d5453f0210ef9c949ed53fd0a2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad8e873d5453f0210ef9c949ed53fd0a2">&#9670;&#160;</a></span>corank()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr std::size_t <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::corank </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a33033c825e3918945b9b05107e81a6d6" name="a33033c825e3918945b9b05107e81a6d6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a33033c825e3918945b9b05107e81a6d6">&#9670;&#160;</a></span>coupledCodomain()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ac16e70095b652e668315bd8f2d02939e">Symmetry</a>, CoRank, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#afd59c2e54cbb47ee5a185f9afd5d02d7">AllocationPolicy</a> &gt; &amp; <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::coupledCodomain </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abb36b1b7dd4a07d37ed909773127267f" name="abb36b1b7dd4a07d37ed909773127267f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abb36b1b7dd4a07d37ed909773127267f">&#9670;&#160;</a></span>coupledDomain()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ac16e70095b652e668315bd8f2d02939e">Symmetry</a>, Rank, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#afd59c2e54cbb47ee5a185f9afd5d02d7">AllocationPolicy</a> &gt; &amp; <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::coupledDomain </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a90b91d6e1d76a5571f0b21fd3effca1e" name="a90b91d6e1d76a5571f0b21fd3effca1e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a90b91d6e1d76a5571f0b21fd3effca1e">&#9670;&#160;</a></span>detach()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const auto &amp; <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::detach </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a46f71dba0a62c1fef520c6efce4dc0a0" name="a46f71dba0a62c1fef520c6efce4dc0a0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a46f71dba0a62c1fef520c6efce4dc0a0">&#9670;&#160;</a></span>diag_inv()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<div class="memtemplate">
+template&lt;bool TRACK = true&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespaceXped.html#a17ded7b20b7bf54efbb64db9df136ec1">XTensor</a>&lt; TRACK, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a>, Rank, CoRank, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ac16e70095b652e668315bd8f2d02939e">Symmetry</a>, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#afd59c2e54cbb47ee5a185f9afd5d02d7">AllocationPolicy</a> &gt; <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::diag_inv </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9b16d950155af35294b4c6e14abc56dc" name="a9b16d950155af35294b4c6e14abc56dc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9b16d950155af35294b4c6e14abc56dc">&#9670;&#160;</a></span>diag_sqrt()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<div class="memtemplate">
+template&lt;bool TRACK = true&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespaceXped.html#a17ded7b20b7bf54efbb64db9df136ec1">XTensor</a>&lt; TRACK, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a>, Rank, CoRank, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ac16e70095b652e668315bd8f2d02939e">Symmetry</a>, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#afd59c2e54cbb47ee5a185f9afd5d02d7">AllocationPolicy</a> &gt; <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::diag_sqrt </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9a85e9b1504794ebb67ee8bd064c8cf9" name="a9a85e9b1504794ebb67ee8bd064c8cf9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9a85e9b1504794ebb67ee8bd064c8cf9">&#9670;&#160;</a></span>end()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::end </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a56a7d8ad798bc42c8377741333ee5b1c" name="a56a7d8ad798bc42c8377741333ee5b1c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a56a7d8ad798bc42c8377741333ee5b1c">&#9670;&#160;</a></span>eval()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classXped_1_1Tensor.html">Tensor</a>&lt; <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a>, Rank, CoRank, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ac16e70095b652e668315bd8f2d02939e">Symmetry</a>, true, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#afd59c2e54cbb47ee5a185f9afd5d02d7">AllocationPolicy</a> &gt; <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::eval </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a571d2f1066f0bd4a3007cf013e5dcc06" name="a571d2f1066f0bd4a3007cf013e5dcc06"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a571d2f1066f0bd4a3007cf013e5dcc06">&#9670;&#160;</a></span>gradbegin()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::gradbegin </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4f55fcc6609b790870757f0a51ffe354" name="a4f55fcc6609b790870757f0a51ffe354"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4f55fcc6609b790870757f0a51ffe354">&#9670;&#160;</a></span>gradend()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::gradend </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a07e633d1de773495642d9cb8df9dcc35" name="a07e633d1de773495642d9cb8df9dcc35"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a07e633d1de773495642d9cb8df9dcc35">&#9670;&#160;</a></span>is_uninitialized()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::is_uninitialized </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad7a01c8efe739d7fbd04918e333caec6" name="ad7a01c8efe739d7fbd04918e333caec6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad7a01c8efe739d7fbd04918e333caec6">&#9670;&#160;</a></span>maxNorm()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<div class="memtemplate">
+template&lt;bool TRACK = true&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespaceXped.html#a841d520d325f4cb6be3295aa266c0596">XScalar</a>&lt; TRACK, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a> &gt; <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::maxNorm </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8b7b8693beee5ddb949051c22e70f07e" name="a8b7b8693beee5ddb949051c22e70f07e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8b7b8693beee5ddb949051c22e70f07e">&#9670;&#160;</a></span>name()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::string <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::name </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ada9bd03f91d1078bc25f2eebc35f3edb" name="ada9bd03f91d1078bc25f2eebc35f3edb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ada9bd03f91d1078bc25f2eebc35f3edb">&#9670;&#160;</a></span>norm()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<div class="memtemplate">
+template&lt;bool TRACK = true&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespaceXped.html#a841d520d325f4cb6be3295aa266c0596">XScalar</a>&lt; TRACK, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a> &gt; <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::norm </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4d078f3a33b2aef3aa929950a7be1cee" name="a4d078f3a33b2aef3aa929950a7be1cee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d078f3a33b2aef3aa929950a7be1cee">&#9670;&#160;</a></span>operator-&gt;()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a8195f06233ddbb0822f2e8b30614106b">vari_type</a> * <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::operator-&gt; </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9f94a04119338d557ca968a71a3c4883" name="a9f94a04119338d557ca968a71a3c4883"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9f94a04119338d557ca968a71a3c4883">&#9670;&#160;</a></span>permute() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<div class="memtemplate">
+template&lt;int shift, std::size_t... p, bool TRACK&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::permute </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structXped_1_1Bool.html">Bool</a>&lt; TRACK &gt;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4_a9f94a04119338d557ca968a71a3c4883_cgraph.png" border="0" usemap="#aclassXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4_a9f94a04119338d557ca968a71a3c4883_cgraph" alt=""/></div>
+<map name="aclassXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4_a9f94a04119338d557ca968a71a3c4883_cgraph" id="aclassXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4_a9f94a04119338d557ca968a71a3c4883_cgraph">
+<area shape="rect" title=" " alt="" coords="5,5,209,75"/>
+<area shape="rect" href="namespaceXped_1_1util_1_1constFct.html#ac90fe7f57934299774d683a5251f9f52" title=" " alt="" coords="257,20,423,60"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ac07dd430f826a756684928a39497060b" name="ac07dd430f826a756684928a39497060b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac07dd430f826a756684928a39497060b">&#9670;&#160;</a></span>permute() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<div class="memtemplate">
+template&lt;int shift, std::size_t... p, bool TRACK&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classXped_1_1Tensor.html">Tensor</a>&lt; <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a>, Rank - shift, CoRank+shift, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ac16e70095b652e668315bd8f2d02939e">Symmetry</a>, true, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#afd59c2e54cbb47ee5a185f9afd5d02d7">AllocationPolicy</a> &gt; <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::permute </td>
+          <td>(</td>
+          <td class="paramtype">seq::iseq&lt; std::size_t, p... &gt;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structXped_1_1Bool.html">Bool</a>&lt; TRACK &gt;&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1e34eaa30fc514de57ca56f5b6db378a" name="a1e34eaa30fc514de57ca56f5b6db378a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1e34eaa30fc514de57ca56f5b6db378a">&#9670;&#160;</a></span>plainSize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::plainSize </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a068a92764157aa08777a79406e57eb44" name="a068a92764157aa08777a79406e57eb44"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a068a92764157aa08777a79406e57eb44">&#9670;&#160;</a></span>print()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::print </td>
+          <td>(</td>
+          <td class="paramtype">std::ostream &amp;&#160;</td>
+          <td class="paramname"><em>o</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>PRINT_MATRICES</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0e3000f1c657f11f6828d160b94662da" name="a0e3000f1c657f11f6828d160b94662da"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0e3000f1c657f11f6828d160b94662da">&#9670;&#160;</a></span>rank()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr std::size_t <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::rank </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a754921b79f66e698715bc55eba8de3e7" name="a754921b79f66e698715bc55eba8de3e7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a754921b79f66e698715bc55eba8de3e7">&#9670;&#160;</a></span>sector() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const auto &amp; <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::sector </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab23d139344e97bcafb13493c43ff16c7" name="ab23d139344e97bcafb13493c43ff16c7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab23d139344e97bcafb13493c43ff16c7">&#9670;&#160;</a></span>sector() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a361354c7ba3eb11f4b34e8c51d99e105">qType</a> <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::sector </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>i</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aab1bda50d45b225f5705e85f33681eaf" name="aab1bda50d45b225f5705e85f33681eaf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aab1bda50d45b225f5705e85f33681eaf">&#9670;&#160;</a></span>set_data()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::set_data </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a> *&#160;</td>
+          <td class="paramname"><em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a334e0b94dd2fa7963466fe056f6fd971" name="a334e0b94dd2fa7963466fe056f6fd971"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a334e0b94dd2fa7963466fe056f6fd971">&#9670;&#160;</a></span>setConstant()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::setConstant </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a>&#160;</td>
+          <td class="paramname"><em>c</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a35504edb707b8591c5745f274b27aff4" name="a35504edb707b8591c5745f274b27aff4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a35504edb707b8591c5745f274b27aff4">&#9670;&#160;</a></span>setIdentity()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::setIdentity </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9a2a4537f524b1e2abae885bf656bf27" name="a9a2a4537f524b1e2abae885bf656bf27"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9a2a4537f524b1e2abae885bf656bf27">&#9670;&#160;</a></span>setRandom()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::setRandom </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a35b76bfc53e8296b9f1b89bc3ef3483c" name="a35b76bfc53e8296b9f1b89bc3ef3483c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a35b76bfc53e8296b9f1b89bc3ef3483c">&#9670;&#160;</a></span>setZero()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::setZero </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abb47405f5ffffbd4e19cb3de6a5bbeb7" name="abb47405f5ffffbd4e19cb3de6a5bbeb7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abb47405f5ffffbd4e19cb3de6a5bbeb7">&#9670;&#160;</a></span>trace()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<div class="memtemplate">
+template&lt;bool TRACK = true&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespaceXped.html#a841d520d325f4cb6be3295aa266c0596">XScalar</a>&lt; TRACK, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a> &gt; <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::trace </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8f42947424ed38b2bc684a1d54f32cea" name="a8f42947424ed38b2bc684a1d54f32cea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8f42947424ed38b2bc684a1d54f32cea">&#9670;&#160;</a></span>tSVD() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<div class="memtemplate">
+template&lt;bool TRACK = true&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::tuple&lt; <a class="el" href="namespaceXped.html#a17ded7b20b7bf54efbb64db9df136ec1">XTensor</a>&lt; TRACK, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a>, Rank, 1, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ac16e70095b652e668315bd8f2d02939e">Symmetry</a>, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#afd59c2e54cbb47ee5a185f9afd5d02d7">AllocationPolicy</a> &gt;, <a class="el" href="namespaceXped.html#a17ded7b20b7bf54efbb64db9df136ec1">XTensor</a>&lt; TRACK, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a>, 1, 1, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ac16e70095b652e668315bd8f2d02939e">Symmetry</a>, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#afd59c2e54cbb47ee5a185f9afd5d02d7">AllocationPolicy</a> &gt;, <a class="el" href="namespaceXped.html#a17ded7b20b7bf54efbb64db9df136ec1">XTensor</a>&lt; TRACK, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a>, 1, CoRank, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ac16e70095b652e668315bd8f2d02939e">Symmetry</a>, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#afd59c2e54cbb47ee5a185f9afd5d02d7">AllocationPolicy</a> &gt; &gt; <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::tSVD </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>maxKeep</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#adf1fc28d1822d7ff9709c9428565e9de">RealScalar</a>&#160;</td>
+          <td class="paramname"><em>eps_svd</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#adf1fc28d1822d7ff9709c9428565e9de">RealScalar</a> &amp;&#160;</td>
+          <td class="paramname"><em>truncWeight</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>PRESERVE_MULTIPLETS</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aea1087185a43564fb46681f0571e9f22" name="aea1087185a43564fb46681f0571e9f22"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aea1087185a43564fb46681f0571e9f22">&#9670;&#160;</a></span>tSVD() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<div class="memtemplate">
+template&lt;bool TRACK = true&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::tuple&lt; <a class="el" href="namespaceXped.html#a17ded7b20b7bf54efbb64db9df136ec1">XTensor</a>&lt; TRACK, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a>, Rank, 1, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ac16e70095b652e668315bd8f2d02939e">Symmetry</a>, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#afd59c2e54cbb47ee5a185f9afd5d02d7">AllocationPolicy</a> &gt;, <a class="el" href="namespaceXped.html#a17ded7b20b7bf54efbb64db9df136ec1">XTensor</a>&lt; TRACK, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a>, 1, 1, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ac16e70095b652e668315bd8f2d02939e">Symmetry</a>, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#afd59c2e54cbb47ee5a185f9afd5d02d7">AllocationPolicy</a> &gt;, <a class="el" href="namespaceXped.html#a17ded7b20b7bf54efbb64db9df136ec1">XTensor</a>&lt; TRACK, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a>, 1, CoRank, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ac16e70095b652e668315bd8f2d02939e">Symmetry</a>, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#afd59c2e54cbb47ee5a185f9afd5d02d7">AllocationPolicy</a> &gt; &gt; <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::tSVD </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>maxKeep</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#adf1fc28d1822d7ff9709c9428565e9de">RealScalar</a>&#160;</td>
+          <td class="paramname"><em>eps_svd</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#adf1fc28d1822d7ff9709c9428565e9de">RealScalar</a> &amp;&#160;</td>
+          <td class="paramname"><em>truncWeight</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#adf1fc28d1822d7ff9709c9428565e9de">RealScalar</a> &amp;&#160;</td>
+          <td class="paramname"><em>entropy</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::map&lt; <a class="el" href="structXped_1_1qarray.html">qarray</a>&lt; Symmetry::Nq &gt;, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#aed96308cf3cfefbac2cf2fc603b10c22">VectorType</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>SVspec</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>PRESERVE_MULTIPLETS</em> = <code>true</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>RETURN_SPEC</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4_aea1087185a43564fb46681f0571e9f22_cgraph.png" border="0" usemap="#aclassXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4_aea1087185a43564fb46681f0571e9f22_cgraph" alt=""/></div>
+<map name="aclassXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4_aea1087185a43564fb46681f0571e9f22_cgraph" id="aclassXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4_aea1087185a43564fb46681f0571e9f22_cgraph">
+<area shape="rect" title=" " alt="" coords="5,55,209,124"/>
+<area shape="rect" href="structXped_1_1MatrixInterface.html#a70957be326673c58958f7763d89e1807" title=" " alt="" coords="257,5,420,45"/>
+<area shape="rect" href="structXped_1_1MatrixInterface.html#a8c1f094026d828247f81dc082eb74f39" title=" " alt="" coords="257,69,420,109"/>
+<area shape="rect" href="structXped_1_1PlainInterface.html#a01adcebd66ec3627be17ad38330f485e" title=" " alt="" coords="262,133,415,173"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a0b86a264d88a0e543d53d27d472962ce" name="a0b86a264d88a0e543d53d27d472962ce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b86a264d88a0e543d53d27d472962ce">&#9670;&#160;</a></span>twist()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<div class="memtemplate">
+template&lt;bool TRACK = true&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespaceXped.html#a17ded7b20b7bf54efbb64db9df136ec1">XTensor</a>&lt; TRACK, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a>, Rank, CoRank, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ac16e70095b652e668315bd8f2d02939e">Symmetry</a>, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#afd59c2e54cbb47ee5a185f9afd5d02d7">AllocationPolicy</a> &gt; <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::twist </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>leg</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac8f3cab1e0ed5e0886256be964c0b104" name="ac8f3cab1e0ed5e0886256be964c0b104"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac8f3cab1e0ed5e0886256be964c0b104">&#9670;&#160;</a></span>uncoupledCodomain()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::array&lt; <a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ac16e70095b652e668315bd8f2d02939e">Symmetry</a>, 1, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#afd59c2e54cbb47ee5a185f9afd5d02d7">AllocationPolicy</a> &gt;, CoRank &gt; &amp; <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::uncoupledCodomain </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a85b4c90f1bbd46f2b13592b52d612b95" name="a85b4c90f1bbd46f2b13592b52d612b95"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a85b4c90f1bbd46f2b13592b52d612b95">&#9670;&#160;</a></span>uncoupledDomain()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::array&lt; <a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ac16e70095b652e668315bd8f2d02939e">Symmetry</a>, 1, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#afd59c2e54cbb47ee5a185f9afd5d02d7">AllocationPolicy</a> &gt;, Rank &gt; &amp; <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::uncoupledDomain </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab9e5e584b335356b2525d0e27da097e5" name="ab9e5e584b335356b2525d0e27da097e5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab9e5e584b335356b2525d0e27da097e5">&#9670;&#160;</a></span>val()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const auto &amp; <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::val </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7bea9f69f42f5ab87e6c68fd247304f9" name="a7bea9f69f42f5ab87e6c68fd247304f9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7bea9f69f42f5ab87e6c68fd247304f9">&#9670;&#160;</a></span>val_op()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto &amp; <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::val_op </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="adb514c3c2400b6f44e3abd90345c0ee7" name="adb514c3c2400b6f44e3abd90345c0ee7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adb514c3c2400b6f44e3abd90345c0ee7">&#9670;&#160;</a></span>world()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="structXped_1_1mpi_1_1XpedWorld.html">mpi::XpedWorld</a> &amp; <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::world </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Friends And Related Function Documentation</h2>
+<a id="a5090906a0837ac2796223936dc8e5bf0" name="a5090906a0837ac2796223936dc8e5bf0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5090906a0837ac2796223936dc8e5bf0">&#9670;&#160;</a></span>operator&lt;&lt;</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::ostream &amp; operator&lt;&lt; </td>
+          <td>(</td>
+          <td class="paramtype">std::ostream &amp;&#160;</td>
+          <td class="paramname"><em>os</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classXped_1_1Tensor.html">Tensor</a>&lt; <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a0f963b2b54901eefb9363077c18768e3">Scalar</a>, Rank, CoRank, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ac16e70095b652e668315bd8f2d02939e">Symmetry</a>, true, <a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#afd59c2e54cbb47ee5a185f9afd5d02d7">AllocationPolicy</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>v</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a3513da0a749b5a60ad8ad118786a7422" name="a3513da0a749b5a60ad8ad118786a7422"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3513da0a749b5a60ad8ad118786a7422">&#9670;&#160;</a></span>vi_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , std::size_t Rank, std::size_t CoRank, typename Symmetry_ , typename AllocationPolicy_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a8195f06233ddbb0822f2e8b30614106b">vari_type</a>* <a class="el" href="classXped_1_1Tensor.html">Xped::Tensor</a>&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;::vi_</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>include/Xped/AD/<a class="el" href="ADTensor_8hpp_source.html">ADTensor.hpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- HTML footer for doxygen 1.9.2-->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="namespaceXped.html">Xped</a></li><li class="navelem"><a class="el" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html">Tensor&lt; Scalar_, Rank, CoRank, Symmetry_, true, AllocationPolicy_ &gt;</a></li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.6 </li>
+  </ul>
+</div>
+<script type="text/javascript">
+  // script for doxygen 1.9.2
+  $(function() {
+      toggleButton = document.createElement('doxygen-awesome-dark-mode-toggle')
+      toggleButton.title = "Toggle Light/Dark Mode"
+      $(document).ready(function(){
+          document.getElementById("MSearchBox").parentNode.appendChild(toggleButton)
+      })
+      $(window).resize(function(){
+          document.getElementById("MSearchBox").parentNode.appendChild(toggleButton)
+      })
+  })
+</script>
+</body>
+</html>

@@ -1,0 +1,236 @@
+<!-- HTML header for doxygen 1.9.6-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.6"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Xped: include/Xped/PEPS/Models/Hubbard.hpp File Reference</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+});
+</script>
+<script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript">
+  DoxygenAwesomeDarkModeToggle.lightModeIcon = '🌞'
+// icon from https://fonts.google.com/icons
+  DoxygenAwesomeDarkModeToggle.darkModeIcon = `<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px" viewBox="0 0 24 24" width="24px" fill="#009793"><g><rect fill="none" height="24" width="24"/></g><g><g><path d="M8.1,14.15C9.77,14.63,11,16.17,11,18c0,0.68-0.19,1.31-0.48,1.87c0.48,0.09,0.97,0.14,1.48,0.14 c1.48,0,2.9-0.41,4.13-1.15c-2.62-0.92-5.23-2.82-6.8-5.86C7.74,9.94,7.78,7.09,8.29,4.9c-2.57,1.33-4.3,4.01-4.3,7.1c0,0,0,0,0,0 c0.01,0,0.01,0,0.02,0C5.66,12,7.18,12.83,8.1,14.15z" opacity=".3"/><path d="M19.78,17.51c-2.47,0-6.57-1.33-8.68-5.43C8.77,7.57,10.6,3.6,11.63,2.01C6.27,2.2,1.98,6.59,1.98,12 c0,0.14,0.02,0.28,0.02,0.42C2.61,12.16,3.28,12,3.98,12c0,0,0,0,0,0c0-3.09,1.73-5.77,4.3-7.1C7.78,7.09,7.74,9.94,9.32,13 c1.57,3.04,4.18,4.95,6.8,5.86c-1.23,0.74-2.65,1.15-4.13,1.15c-0.5,0-1-0.05-1.48-0.14c-0.37,0.7-0.94,1.27-1.64,1.64 c0.98,0.32,2.03,0.5,3.11,0.5c3.5,0,6.58-1.8,8.37-4.52C20.18,17.5,19.98,17.51,19.78,17.51z"/><path d="M7,16l-0.18,0C6.4,14.84,5.3,14,4,14c-1.66,0-3,1.34-3,3s1.34,3,3,3c0.62,0,2.49,0,3,0c1.1,0,2-0.9,2-2 C9,16.9,8.1,16,7,16z"/></g></g></svg>`
+  DoxygenAwesomeDarkModeToggle.init()
+</script>
+</head>
+<body>
+  <!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/cpp977/Xped" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">Xped
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.9.6 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('Hubbard_8hpp.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#namespaces">Namespaces</a>  </div>
+  <div class="headertitle"><div class="title">Hubbard.hpp File Reference</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><code>#include &lt;map&gt;</code><br />
+<code>#include &lt;string&gt;</code><br />
+<code>#include &lt;highfive/H5File.hpp&gt;</code><br />
+<code>#include &quot;<a class="el" href="SU2_8hpp_source.html">Xped/Symmetry/SU2.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="U0_8hpp_source.html">Xped/Symmetry/U0.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="U1_8hpp_source.html">Xped/Symmetry/U1.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="ZN_8hpp_source.html">Xped/Symmetry/ZN.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="Tensor_8hpp_source.html">Xped/Core/Tensor.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="Helpers_8hpp_source.html">Xped/PEPS/Models/Helpers.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="OneSiteObservable_8hpp_source.html">Xped/PEPS/OneSiteObservable.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="TwoSiteObservable_8hpp_source.html">Xped/PEPS/TwoSiteObservable.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="FermionBase_8hpp_source.html">Xped/Physics/FermionBase.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="Param_8hpp_source.html">Xped/Util/Param.hpp</a>&quot;</code><br />
+</div><div class="textblock"><div class="dynheader">
+Include dependency graph for Hubbard.hpp:</div>
+<div class="dyncontent">
+<div class="center"><img src="Hubbard_8hpp__incl.png" border="0" usemap="#ainclude_2Xped_2PEPS_2Models_2Hubbard_8hpp" alt=""/></div>
+<map name="ainclude_2Xped_2PEPS_2Models_2Hubbard_8hpp" id="ainclude_2Xped_2PEPS_2Models_2Hubbard_8hpp">
+<area shape="rect" title=" " alt="" coords="1563,5,1756,45"/>
+<area shape="rect" title=" " alt="" coords="564,167,614,192"/>
+<area shape="rect" title=" " alt="" coords="1788,555,1846,581"/>
+<area shape="rect" title=" " alt="" coords="354,394,501,419"/>
+<area shape="rect" href="SU2_8hpp.html" title=" " alt="" coords="2544,475,2730,500"/>
+<area shape="rect" href="U0_8hpp.html" title=" " alt="" coords="2343,475,2520,500"/>
+<area shape="rect" href="U1_8hpp.html" title=" " alt="" coords="2754,475,2931,500"/>
+<area shape="rect" href="ZN_8hpp.html" title=" " alt="" coords="3057,475,3236,500"/>
+<area shape="rect" href="Tensor_8hpp.html" title=" " alt="" coords="1553,313,1716,339"/>
+<area shape="rect" href="Helpers_8hpp.html" title=" " alt="" coords="753,93,977,119"/>
+<area shape="rect" href="Param_8hpp.html" title=" " alt="" coords="638,167,793,192"/>
+<area shape="rect" href="OneSiteObservable_8hpp.html" title=" " alt="" coords="664,240,912,265"/>
+<area shape="rect" href="TwoSiteObservable_8hpp.html" title=" " alt="" coords="1104,93,1351,119"/>
+<area shape="rect" href="FermionBase_8hpp.html" title=" " alt="" coords="3006,240,3231,265"/>
+<area shape="rect" href="SymBase_8hpp.html" title=" " alt="" coords="2527,555,2747,581"/>
+<area shape="rect" href="functions_8hpp.html" title=" " alt="" coords="2670,636,2889,661"/>
+<area shape="rect" href="qarray_8hpp.html" title=" " alt="" coords="2147,709,2346,735"/>
+<area shape="rect" href="kind__dummies_8hpp.html" title=" " alt="" coords="2874,548,3032,588"/>
+<area shape="rect" href="Mpi_8hpp.html" title=" " alt="" coords="2041,636,2180,661"/>
+<area shape="rect" href="SU2_8cpp.html" title=" " alt="" coords="2254,555,2401,581"/>
+<area shape="rect" href="Constfct_8hpp.html" title=" " alt="" coords="3148,709,3316,735"/>
+<area shape="rect" title=" " alt="" coords="1804,783,1936,808"/>
+<area shape="rect" title=" " alt="" coords="860,783,1000,808"/>
+<area shape="rect" title=" " alt="" coords="3300,783,3384,808"/>
+<area shape="rect" href="PlainInterface_8hpp.html" title=" " alt="" coords="703,636,950,661"/>
+<area shape="rect" href="Random_8hpp.html" title=" " alt="" coords="2254,636,2422,661"/>
+<area shape="rect" href="ScalarTraits_8hpp.html" title=" " alt="" coords="808,709,1004,735"/>
+<area shape="rect" title=" " alt="" coords="1950,709,2022,735"/>
+<area shape="rect" title=" " alt="" coords="3209,555,3265,581"/>
+<area shape="rect" title=" " alt="" coords="627,394,690,419"/>
+<area shape="rect" title=" " alt="" coords="2092,475,2216,500"/>
+<area shape="rect" href="Macros_8hpp.html" title=" " alt="" coords="1855,475,2016,500"/>
+<area shape="rect" href="Bool_8hpp.html" title=" " alt="" coords="2019,394,2162,419"/>
+<area shape="rect" href="FusionTree_8hpp.html" title=" " alt="" coords="1406,555,1596,581"/>
+<area shape="rect" href="Qbasis_8hpp.html" title=" " alt="" coords="1346,475,1512,500"/>
+<area shape="rect" href="HeapPolicy_8hpp.html" title=" " alt="" coords="1126,548,1284,588"/>
+<area shape="rect" href="TensorTypedefs_8hpp.html" title=" " alt="" coords="2186,394,2408,419"/>
+<area shape="rect" href="StorageType_8hpp.html" title=" " alt="" coords="1070,387,1266,427"/>
+<area shape="rect" href="treepair_8hpp.html" title=" " alt="" coords="1672,394,1842,419"/>
+<area shape="rect" href="TensorBase_8hpp.html" title=" " alt="" coords="754,555,949,581"/>
+<area shape="rect" href="TensorHelper_8hpp.html" title=" " alt="" coords="1290,394,1496,419"/>
+<area shape="rect" href="Tensor_8cpp.html" title=" " alt="" coords="2534,394,2658,419"/>
+<area shape="rect" title=" " alt="" coords="488,475,578,500"/>
+<area shape="rect" title=" " alt="" coords="304,313,498,339"/>
+<area shape="rect" href="CTMOpts_8hpp.html" title=" " alt="" coords="46,394,228,419"/>
+<area shape="rect" href="ObservableBase_8hpp.html" title=" " alt="" coords="1138,313,1368,339"/>
+<area shape="rect" href="TMatrix_8hpp.html" title=" " alt="" coords="840,313,1013,339"/>
+<area shape="rect" href="FmtHelpers_8hpp.html" title=" " alt="" coords="624,313,815,339"/>
+<area shape="rect" href="Bonds_8hpp.html" title=" " alt="" coords="1409,167,1572,192"/>
+<area shape="rect" href="LinearAlgebra_8hpp.html" title=" " alt="" coords="1121,167,1334,192"/>
+</map>
+</div>
+</div><div class="textblock"><div class="dynheader">
+This graph shows which files directly or indirectly include this file:</div>
+<div class="dyncontent">
+<div class="center"><img src="Hubbard_8hpp__dep__incl.png" border="0" usemap="#ainclude_2Xped_2PEPS_2Models_2Hubbard_8hppdep" alt=""/></div>
+<map name="ainclude_2Xped_2PEPS_2Models_2Hubbard_8hppdep" id="ainclude_2Xped_2PEPS_2Models_2Hubbard_8hppdep">
+<area shape="rect" title=" " alt="" coords="193,5,387,45"/>
+<area shape="rect" href="ad__ramp_8cpp.html" title=" " alt="" coords="5,93,180,119"/>
+<area shape="rect" href="peps__ad_8cpp.html" title=" " alt="" coords="205,93,375,119"/>
+<area shape="rect" href="simple__update_8cpp.html" title=" " alt="" coords="399,93,613,119"/>
+</map>
+</div>
+</div>
+<p><a href="Hubbard_8hpp_source.html">Go to the source code of this file.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Hubbard.html">Xped::Hubbard&lt; Symmetry &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
+Namespaces</h2></td></tr>
+<tr class="memitem:namespaceXped"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceXped.html">Xped</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- HTML footer for doxygen 1.9.2-->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_4b24e72d7fcd206265f2d42a075103f3.html">Xped</a></li><li class="navelem"><a class="el" href="dir_0a94ec382e67a5b939f1386eb107ebda.html">PEPS</a></li><li class="navelem"><a class="el" href="dir_9b930de37ccd65a3ddfe1a501ef9bdc1.html">Models</a></li><li class="navelem"><a class="el" href="Hubbard_8hpp.html">Hubbard.hpp</a></li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.6 </li>
+  </ul>
+</div>
+<script type="text/javascript">
+  // script for doxygen 1.9.2
+  $(function() {
+      toggleButton = document.createElement('doxygen-awesome-dark-mode-toggle')
+      toggleButton.title = "Toggle Light/Dark Mode"
+      $(document).ready(function(){
+          document.getElementById("MSearchBox").parentNode.appendChild(toggleButton)
+      })
+      $(window).resize(function(){
+          document.getElementById("MSearchBox").parentNode.appendChild(toggleButton)
+      })
+  })
+</script>
+</body>
+</html>

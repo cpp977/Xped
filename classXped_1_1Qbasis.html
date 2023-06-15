@@ -1,0 +1,1892 @@
+<!-- HTML header for doxygen 1.9.6-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.6"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Xped: Xped::Qbasis&lt; Symmetry, depth, AllocationPolicy &gt; Class Template Reference</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+});
+</script>
+<script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript">
+  DoxygenAwesomeDarkModeToggle.lightModeIcon = '🌞'
+// icon from https://fonts.google.com/icons
+  DoxygenAwesomeDarkModeToggle.darkModeIcon = `<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px" viewBox="0 0 24 24" width="24px" fill="#009793"><g><rect fill="none" height="24" width="24"/></g><g><g><path d="M8.1,14.15C9.77,14.63,11,16.17,11,18c0,0.68-0.19,1.31-0.48,1.87c0.48,0.09,0.97,0.14,1.48,0.14 c1.48,0,2.9-0.41,4.13-1.15c-2.62-0.92-5.23-2.82-6.8-5.86C7.74,9.94,7.78,7.09,8.29,4.9c-2.57,1.33-4.3,4.01-4.3,7.1c0,0,0,0,0,0 c0.01,0,0.01,0,0.02,0C5.66,12,7.18,12.83,8.1,14.15z" opacity=".3"/><path d="M19.78,17.51c-2.47,0-6.57-1.33-8.68-5.43C8.77,7.57,10.6,3.6,11.63,2.01C6.27,2.2,1.98,6.59,1.98,12 c0,0.14,0.02,0.28,0.02,0.42C2.61,12.16,3.28,12,3.98,12c0,0,0,0,0,0c0-3.09,1.73-5.77,4.3-7.1C7.78,7.09,7.74,9.94,9.32,13 c1.57,3.04,4.18,4.95,6.8,5.86c-1.23,0.74-2.65,1.15-4.13,1.15c-0.5,0-1-0.05-1.48-0.14c-0.37,0.7-0.94,1.27-1.64,1.64 c0.98,0.32,2.03,0.5,3.11,0.5c3.5,0,6.58-1.8,8.37-4.52C20.18,17.5,19.98,17.51,19.78,17.51z"/><path d="M7,16l-0.18,0C6.4,14.84,5.3,14,4,14c-1.66,0-3,1.34-3,3s1.34,3,3,3c0.62,0,2.49,0,3,0c1.1,0,2-0.9,2-2 C9,16.9,8.1,16,7,16z"/></g></g></svg>`
+  DoxygenAwesomeDarkModeToggle.init()
+</script>
+</head>
+<body>
+  <!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/cpp977/Xped" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">Xped
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.9.6 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('classXped_1_1Qbasis.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#friends">Friends</a> &#124;
+<a href="classXped_1_1Qbasis-members.html">List of all members</a>  </div>
+  <div class="headertitle"><div class="title">Xped::Qbasis&lt; Symmetry, depth, AllocationPolicy &gt; Class Template Reference</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p><code>#include &lt;<a class="el" href="Qbasis_8hpp_source.html">Qbasis.hpp</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a4bb127efd3dda9be1245f9750724078e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#a4bb127efd3dda9be1245f9750724078e">Qbasis</a> ()=default</td></tr>
+<tr class="separator:a4bb127efd3dda9be1245f9750724078e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9465d37b666ba2a1a3ac266447ba5736"><td class="memTemplParams" colspan="2">template&lt;typename Container &gt; </td></tr>
+<tr class="memitem:a9465d37b666ba2a1a3ac266447ba5736"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#a9465d37b666ba2a1a3ac266447ba5736">Qbasis</a> (const Container &amp;qins, const size_t &amp;<a class="el" href="classXped_1_1Qbasis.html#ae185c83191aa1e7e75bbef4e28b3f5e7">dim</a>)</td></tr>
+<tr class="separator:a9465d37b666ba2a1a3ac266447ba5736"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a237c97d5eade171dd0c0efaee7c29a10"><td class="memItemLeft" align="right" valign="top">qType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#a237c97d5eade171dd0c0efaee7c29a10">getQ</a> (const size_t &amp;num) const</td></tr>
+<tr class="separator:a237c97d5eade171dd0c0efaee7c29a10"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a427e9ba6651c309a0bee6ff2a467117b"><td class="memItemLeft" align="right" valign="top">qType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#a427e9ba6651c309a0bee6ff2a467117b">qn</a> (std::size_t <a class="el" href="classXped_1_1Qbasis.html#a32165cedf8dae8515f996a7105595a24">index</a>) const</td></tr>
+<tr class="separator:a427e9ba6651c309a0bee6ff2a467117b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab899d85bcbb80a73bf5a1f827e07f012"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#ab899d85bcbb80a73bf5a1f827e07f012">remove</a> (const qType &amp;q)</td></tr>
+<tr class="separator:ab899d85bcbb80a73bf5a1f827e07f012"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8128a0139b79018787bf0f85faab172d"><td class="memItemLeft" align="right" valign="top">qType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#a8128a0139b79018787bf0f85faab172d">maxQ</a> () const</td></tr>
+<tr class="separator:a8128a0139b79018787bf0f85faab172d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae02bc8f14aaec6bb14040bdd842ec1e7"><td class="memItemLeft" align="right" valign="top">qType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#ae02bc8f14aaec6bb14040bdd842ec1e7">minQ</a> () const</td></tr>
+<tr class="separator:ae02bc8f14aaec6bb14040bdd842ec1e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac898cf45a12a4273fab6efb6f43d9c7f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#ac898cf45a12a4273fab6efb6f43d9c7f">truncate</a> (const std::unordered_set&lt; qType &gt; &amp;<a class="el" href="classXped_1_1Qbasis.html#af11d20e086024b2d72ee5bcc7d7c8e8c">qs</a>, const std::size_t &amp;M)</td></tr>
+<tr class="separator:ac898cf45a12a4273fab6efb6f43d9c7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6f0525bceb581d19235cba8142b7fd0b"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#a6f0525bceb581d19235cba8142b7fd0b">leftOffset</a> (const <a class="el" href="structXped_1_1FusionTree.html">FusionTree</a>&lt; depth, Symmetry &gt; &amp;<a class="el" href="classXped_1_1Qbasis.html#a96f8b91e4b29cc52df12b1117cef8827">tree</a>, const std::array&lt; size_t, depth &gt; &amp;plain=std::array&lt; std::size_t, depth &gt;()) const</td></tr>
+<tr class="separator:a6f0525bceb581d19235cba8142b7fd0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab14a8417792f1f2a7acebbd9072ff9b7"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#ab14a8417792f1f2a7acebbd9072ff9b7">rightOffset</a> (const <a class="el" href="structXped_1_1FusionTree.html">FusionTree</a>&lt; depth, Symmetry &gt; &amp;<a class="el" href="classXped_1_1Qbasis.html#a96f8b91e4b29cc52df12b1117cef8827">tree</a>, const std::array&lt; size_t, depth &gt; &amp;plain=std::array&lt; std::size_t, depth &gt;()) const</td></tr>
+<tr class="separator:ab14a8417792f1f2a7acebbd9072ff9b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a34418f2e9ce5c917d3f3b65688c52249"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#a34418f2e9ce5c917d3f3b65688c52249">push_back</a> (const qType &amp;q, const size_t &amp;<a class="el" href="classXped_1_1Qbasis.html#aac9e2569d5bbc41f716576bdb7aff741">inner_dim</a>)</td></tr>
+<tr class="separator:a34418f2e9ce5c917d3f3b65688c52249"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a855753dd20f3d21747fb21a5e7e0174b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#a855753dd20f3d21747fb21a5e7e0174b">push_back</a> (const qType &amp;q, const size_t &amp;<a class="el" href="classXped_1_1Qbasis.html#aac9e2569d5bbc41f716576bdb7aff741">inner_dim</a>, const TreeVector&lt; depth &gt; &amp;<a class="el" href="classXped_1_1Qbasis.html#a96f8b91e4b29cc52df12b1117cef8827">tree</a>)</td></tr>
+<tr class="separator:a855753dd20f3d21747fb21a5e7e0174b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a519e3bf1621c23e0334d5c4528b43a2d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#a519e3bf1621c23e0334d5c4528b43a2d">setRandom</a> (const std::size_t &amp;fullSize, const std::size_t &amp;max_sectorSize=5ul)</td></tr>
+<tr class="separator:a519e3bf1621c23e0334d5c4528b43a2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf2eae41c47fc57e4aac7d6589ee777d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#aaf2eae41c47fc57e4aac7d6589ee777d">clear</a> ()</td></tr>
+<tr class="separator:aaf2eae41c47fc57e4aac7d6589ee777d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae178998f636f909aba92a11323582f7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; Symmetry, depth+1, AllocationPolicy &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#aae178998f636f909aba92a11323582f7">combine</a> (const <a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; Symmetry, 1, AllocationPolicy &gt; &amp;other, bool CONJ=false) const</td></tr>
+<tr class="separator:aae178998f636f909aba92a11323582f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46e38c8859772db1735c09141a6a815f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#a46e38c8859772db1735c09141a6a815f">add</a> (const <a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt; &amp;other) const</td></tr>
+<tr class="separator:a46e38c8859772db1735c09141a6a815f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56f3cdeeca8f68c119b7aa330f94e3fe"><td class="memItemLeft" align="right" valign="top">std::pair&lt; std::vector&lt; std::size_t &gt;, <a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#a56f3cdeeca8f68c119b7aa330f94e3fe">shift</a> (qType qshift) const</td></tr>
+<tr class="separator:a56f3cdeeca8f68c119b7aa330f94e3fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acdfe4d29b3336956b05fac1854680930"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#acdfe4d29b3336956b05fac1854680930">intersection</a> (const <a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt; &amp;other) const</td></tr>
+<tr class="separator:acdfe4d29b3336956b05fac1854680930"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46b5a057d2d3dd627caa5dafdbb03a4a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#a46b5a057d2d3dd627caa5dafdbb03a4a">conj</a> () const</td></tr>
+<tr class="separator:a46b5a057d2d3dd627caa5dafdbb03a4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a36b61019121c0a62577e0980f06356e4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; Symmetry, 1, AllocationPolicy &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#a36b61019121c0a62577e0980f06356e4">forgetHistory</a> () const</td></tr>
+<tr class="separator:a36b61019121c0a62577e0980f06356e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2372b994809b76ea83cff9f64690f899"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#a2372b994809b76ea83cff9f64690f899">print</a> () const</td></tr>
+<tr class="separator:a2372b994809b76ea83cff9f64690f899"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51bddd70176d9db0efadb9aa1fe174d4"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#a51bddd70176d9db0efadb9aa1fe174d4">info</a> () const</td></tr>
+<tr class="separator:a51bddd70176d9db0efadb9aa1fe174d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4cdbcd6080ff6dad0467419a0d5022ca"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#a4cdbcd6080ff6dad0467419a0d5022ca">printTrees</a> () const</td></tr>
+<tr class="separator:a4cdbcd6080ff6dad0467419a0d5022ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab4cfbfce99d5773704d14ce9ac044b44"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#ab4cfbfce99d5773704d14ce9ac044b44">operator==</a> (const <a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt; &amp;other) const</td></tr>
+<tr class="separator:ab4cfbfce99d5773704d14ce9ac044b44"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6114a40dd46743d7c80553286a52b77e"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#a6114a40dd46743d7c80553286a52b77e">begin</a> ()</td></tr>
+<tr class="separator:a6114a40dd46743d7c80553286a52b77e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae345ca2de0c5e4a5ebf1f695fe50ae30"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#ae345ca2de0c5e4a5ebf1f695fe50ae30">end</a> ()</td></tr>
+<tr class="separator:ae345ca2de0c5e4a5ebf1f695fe50ae30"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2f25783d004ba03ed6956ba1a79fa128"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#a2f25783d004ba03ed6956ba1a79fa128">cbegin</a> () const</td></tr>
+<tr class="separator:a2f25783d004ba03ed6956ba1a79fa128"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa7fd434c1a2d7db5281e3a2afa3c8ab7"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#aa7fd434c1a2d7db5281e3a2afa3c8ab7">cend</a> () const</td></tr>
+<tr class="separator:aa7fd434c1a2d7db5281e3a2afa3c8ab7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a17b1d80c09fcd2114d01369b329dfec7"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#a17b1d80c09fcd2114d01369b329dfec7">sort</a> ()</td></tr>
+<tr class="separator:a17b1d80c09fcd2114d01369b329dfec7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57a2180bf7523aa3988ee5e1081746d2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#a57a2180bf7523aa3988ee5e1081746d2">IS_SORTED</a> () const</td></tr>
+<tr class="separator:a57a2180bf7523aa3988ee5e1081746d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a87ec886c93de9df96eb0aa76deeed225"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#a87ec886c93de9df96eb0aa76deeed225">IS_CONJ</a> () const</td></tr>
+<tr class="separator:a87ec886c93de9df96eb0aa76deeed225"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b96ecd21ef479e1826a6f5f63ababfd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#a9b96ecd21ef479e1826a6f5f63ababfd">SET_CONJ</a> ()</td></tr>
+<tr class="separator:a9b96ecd21ef479e1826a6f5f63ababfd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96f8b91e4b29cc52df12b1117cef8827"><td class="memItemLeft" align="right" valign="top">const auto &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#a96f8b91e4b29cc52df12b1117cef8827">tree</a> (const qType &amp;q) const</td></tr>
+<tr class="separator:a96f8b91e4b29cc52df12b1117cef8827"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a31d60b8c03989cb9d46adbb11be2303d"><td class="memItemLeft" align="right" valign="top">TreeType &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#a31d60b8c03989cb9d46adbb11be2303d">allTrees</a> ()</td></tr>
+<tr class="separator:a31d60b8c03989cb9d46adbb11be2303d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a01ea6b1ac3a71b8c22c640eb32838b65"><td class="memTemplParams" colspan="2">template&lt;typename Ar &gt; </td></tr>
+<tr class="memitem:a01ea6b1ac3a71b8c22c640eb32838b65"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#a01ea6b1ac3a71b8c22c640eb32838b65">serialize</a> (Ar &amp;ar)</td></tr>
+<tr class="separator:a01ea6b1ac3a71b8c22c640eb32838b65"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader"></div></td></tr>
+<tr class="memitem:ae185c83191aa1e7e75bbef4e28b3f5e7"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#ae185c83191aa1e7e75bbef4e28b3f5e7">dim</a> () const</td></tr>
+<tr class="separator:ae185c83191aa1e7e75bbef4e28b3f5e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e7c93d9e7712a62073031515ad8cbb6"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#a0e7c93d9e7712a62073031515ad8cbb6">fullDim</a> () const</td></tr>
+<tr class="separator:a0e7c93d9e7712a62073031515ad8cbb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7707168253ac60a62d69056364bdf35f"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#a7707168253ac60a62d69056364bdf35f">largestSector</a> () const</td></tr>
+<tr class="separator:a7707168253ac60a62d69056364bdf35f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a40fc0854ec234ed606d736869b1db16e"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#a40fc0854ec234ed606d736869b1db16e">Nq</a> () const</td></tr>
+<tr class="separator:a40fc0854ec234ed606d736869b1db16e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader"></div></td></tr>
+<tr class="memitem:af11d20e086024b2d72ee5bcc7d7c8e8c"><td class="memItemLeft" align="right" valign="top">std::vector&lt; qType &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#af11d20e086024b2d72ee5bcc7d7c8e8c">qs</a> () const</td></tr>
+<tr class="separator:af11d20e086024b2d72ee5bcc7d7c8e8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5521a9499797b322e3f7259dcdb3189b"><td class="memItemLeft" align="right" valign="top">std::unordered_set&lt; qType &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#a5521a9499797b322e3f7259dcdb3189b">unordered_qs</a> () const</td></tr>
+<tr class="separator:a5521a9499797b322e3f7259dcdb3189b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader"></div></td></tr>
+<tr class="memitem:ae9f5056957ec5fb05e2bac876f053664"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#ae9f5056957ec5fb05e2bac876f053664">dims</a> () const</td></tr>
+<tr class="separator:ae9f5056957ec5fb05e2bac876f053664"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader"></div></td></tr>
+<tr class="memitem:af023255cc7ed794a2a4cee72cdfacdff"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#af023255cc7ed794a2a4cee72cdfacdff">IS_PRESENT</a> (const qType &amp;q) const</td></tr>
+<tr class="separator:af023255cc7ed794a2a4cee72cdfacdff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96217376f0ce18798537610f845d9660"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#a96217376f0ce18798537610f845d9660">NOT_PRESENT</a> (const qType &amp;q) const</td></tr>
+<tr class="separator:a96217376f0ce18798537610f845d9660"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader"></div></td></tr>
+<tr class="memitem:a984fc32434ab326c54077663660db0d2"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#a984fc32434ab326c54077663660db0d2">inner_num</a> (const size_t &amp;<a class="el" href="classXped_1_1Qbasis.html#a22e48fafe07baa7f204e9a6def08f6fb">outer_num</a>) const</td></tr>
+<tr class="separator:a984fc32434ab326c54077663660db0d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aac9e2569d5bbc41f716576bdb7aff741"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#aac9e2569d5bbc41f716576bdb7aff741">inner_dim</a> (const size_t &amp;num_in) const</td></tr>
+<tr class="separator:aac9e2569d5bbc41f716576bdb7aff741"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6f5b2ba03cbc045f6fe9d5529b525351"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#a6f5b2ba03cbc045f6fe9d5529b525351">inner_dim</a> (const qType &amp;q) const</td></tr>
+<tr class="separator:a6f5b2ba03cbc045f6fe9d5529b525351"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22e48fafe07baa7f204e9a6def08f6fb"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#a22e48fafe07baa7f204e9a6def08f6fb">outer_num</a> (const qType &amp;q) const</td></tr>
+<tr class="separator:a22e48fafe07baa7f204e9a6def08f6fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56e2dccd22dc335beaaa0c22f6e47c49"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#a56e2dccd22dc335beaaa0c22f6e47c49">full_outer_num</a> (const qType &amp;q) const</td></tr>
+<tr class="separator:a56e2dccd22dc335beaaa0c22f6e47c49"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a32165cedf8dae8515f996a7105595a24"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#a32165cedf8dae8515f996a7105595a24">index</a> (const qType &amp;q) const</td></tr>
+<tr class="separator:a32165cedf8dae8515f996a7105595a24"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a12336055b127c004e085ba05cf2397ce"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; Symmetry, 1, AllocationPolicy &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#a12336055b127c004e085ba05cf2397ce">TrivialBasis</a> ()</td></tr>
+<tr class="separator:a12336055b127c004e085ba05cf2397ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
+Friends</h2></td></tr>
+<tr class="memitem:afdcd2d2142ef5ab2bd37551d191489b8"><td class="memTemplParams" colspan="2">template&lt;typename Symmetry_ , std::size_t depth_, typename AllocationPolicy_ &gt; </td></tr>
+<tr class="memitem:afdcd2d2142ef5ab2bd37551d191489b8"><td class="memTemplItemLeft" align="right" valign="top">class&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classXped_1_1Qbasis.html#afdcd2d2142ef5ab2bd37551d191489b8">Qbasis</a></td></tr>
+<tr class="separator:afdcd2d2142ef5ab2bd37551d191489b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><div class="compoundTemplParams">template&lt;typename Symmetry, std::size_t depth, typename AllocationPolicy = HeapPolicy&gt;<br />
+class Xped::Qbasis&lt; Symmetry, depth, AllocationPolicy &gt;</div><p>\describe_Symmetry</p>
+<p>This class is a container like class for a basis of a Hilbert space in which global symmetries are present. For each irreducible representation (irrep) of the global symmetry (for each quantum number), the states of the Hilbert states that transforms under that irrep are collected together in a plain <a class="el" href="classXped_1_1Basis.html">Basis</a> object.</p>
+<p>One central function is the <a class="el" href="classXped_1_1Qbasis.html#aae178998f636f909aba92a11323582f7">combine()</a> method, which combine two instances of <a class="el" href="classXped_1_1Qbasis.html">Qbasis</a> to the tensor product basis, already proper sorted into irreps. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a4bb127efd3dda9be1245f9750724078e" name="a4bb127efd3dda9be1245f9750724078e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4bb127efd3dda9be1245f9750724078e">&#9670;&#160;</a></span>Qbasis() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = HeapPolicy&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;::Qbasis </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">default</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Does nothing. </p>
+
+</div>
+</div>
+<a id="a9465d37b666ba2a1a3ac266447ba5736" name="a9465d37b666ba2a1a3ac266447ba5736"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9465d37b666ba2a1a3ac266447ba5736">&#9670;&#160;</a></span>Qbasis() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = HeapPolicy&gt; </div>
+<div class="memtemplate">
+template&lt;typename Container &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;::Qbasis </td>
+          <td>(</td>
+          <td class="paramtype">const Container &amp;&#160;</td>
+          <td class="paramname"><em>qins</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const size_t &amp;&#160;</td>
+          <td class="paramname"><em>dim</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Inserts all quantum numbers in the Container <code>qins</code> with constant dimension <code>dim</code> into the basis. </p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1Qbasis_a9465d37b666ba2a1a3ac266447ba5736_cgraph.png" border="0" usemap="#aclassXped_1_1Qbasis_a9465d37b666ba2a1a3ac266447ba5736_cgraph" alt=""/></div>
+<map name="aclassXped_1_1Qbasis_a9465d37b666ba2a1a3ac266447ba5736_cgraph" id="aclassXped_1_1Qbasis_a9465d37b666ba2a1a3ac266447ba5736_cgraph">
+<area shape="rect" title=" " alt="" coords="5,31,164,56"/>
+<area shape="rect" href="classXped_1_1Qbasis.html#ae185c83191aa1e7e75bbef4e28b3f5e7" title=" " alt="" coords="234,5,374,31"/>
+<area shape="rect" href="classXped_1_1Qbasis.html#a34418f2e9ce5c917d3f3b65688c52249" title=" " alt="" coords="212,55,396,80"/>
+</map>
+</div>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a46e38c8859772db1735c09141a6a815f" name="a46e38c8859772db1735c09141a6a815f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a46e38c8859772db1735c09141a6a815f">&#9670;&#160;</a></span>add()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt; <a class="el" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;::add </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt; &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Adds two bases together. </p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1Qbasis_a46e38c8859772db1735c09141a6a815f_cgraph.png" border="0" usemap="#aclassXped_1_1Qbasis_a46e38c8859772db1735c09141a6a815f_cgraph" alt=""/></div>
+<map name="aclassXped_1_1Qbasis_a46e38c8859772db1735c09141a6a815f_cgraph" id="aclassXped_1_1Qbasis_a46e38c8859772db1735c09141a6a815f_cgraph">
+<area shape="rect" title=" " alt="" coords="5,31,144,56"/>
+<area shape="rect" href="classXped_1_1Qbasis.html#a34418f2e9ce5c917d3f3b65688c52249" title=" " alt="" coords="192,5,376,31"/>
+<area shape="rect" href="classXped_1_1Qbasis.html#a17b1d80c09fcd2114d01369b329dfec7" title=" " alt="" coords="214,55,354,80"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a31d60b8c03989cb9d46adbb11be2303d" name="a31d60b8c03989cb9d46adbb11be2303d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a31d60b8c03989cb9d46adbb11be2303d">&#9670;&#160;</a></span>allTrees()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = HeapPolicy&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">TreeType &amp; <a class="el" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;::allTrees </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6114a40dd46743d7c80553286a52b77e" name="a6114a40dd46743d7c80553286a52b77e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6114a40dd46743d7c80553286a52b77e">&#9670;&#160;</a></span>begin()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = HeapPolicy&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto <a class="el" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;::begin </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2f25783d004ba03ed6956ba1a79fa128" name="a2f25783d004ba03ed6956ba1a79fa128"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2f25783d004ba03ed6956ba1a79fa128">&#9670;&#160;</a></span>cbegin()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = HeapPolicy&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto <a class="el" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;::cbegin </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa7fd434c1a2d7db5281e3a2afa3c8ab7" name="aa7fd434c1a2d7db5281e3a2afa3c8ab7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa7fd434c1a2d7db5281e3a2afa3c8ab7">&#9670;&#160;</a></span>cend()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = HeapPolicy&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto <a class="el" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;::cend </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1Qbasis_aa7fd434c1a2d7db5281e3a2afa3c8ab7_icgraph.png" border="0" usemap="#aclassXped_1_1Qbasis_aa7fd434c1a2d7db5281e3a2afa3c8ab7_icgraph" alt=""/></div>
+<map name="aclassXped_1_1Qbasis_aa7fd434c1a2d7db5281e3a2afa3c8ab7_icgraph" id="aclassXped_1_1Qbasis_aa7fd434c1a2d7db5281e3a2afa3c8ab7_icgraph">
+<area shape="rect" title=" " alt="" coords="245,5,392,31"/>
+<area shape="rect" href="classXped_1_1Qbasis.html#acdfe4d29b3336956b05fac1854680930" title=" " alt="" coords="5,5,197,31"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="aaf2eae41c47fc57e4aac7d6589ee777d" name="aaf2eae41c47fc57e4aac7d6589ee777d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaf2eae41c47fc57e4aac7d6589ee777d">&#9670;&#160;</a></span>clear()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = HeapPolicy&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;::clear </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Completely clear the basis. </p>
+
+</div>
+</div>
+<a id="aae178998f636f909aba92a11323582f7" name="aae178998f636f909aba92a11323582f7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aae178998f636f909aba92a11323582f7">&#9670;&#160;</a></span>combine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; Symmetry, depth+1, AllocationPolicy &gt; <a class="el" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;::combine </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; Symmetry, 1, AllocationPolicy &gt; &amp;&#160;</td>
+          <td class="paramname"><em>other</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>CONJ</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns the tensor product basis, already properly sorted with respect to the resulting irreps. This function also saves the history of the combination process for later use. See <a class="el" href="classXped_1_1Qbasis.html#a6f0525bceb581d19235cba8142b7fd0b">leftOffset()</a> and <a class="el" href="classXped_1_1Qbasis.html#ab14a8417792f1f2a7acebbd9072ff9b7">rightOffset()</a>. </p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1Qbasis_aae178998f636f909aba92a11323582f7_cgraph.png" border="0" usemap="#aclassXped_1_1Qbasis_aae178998f636f909aba92a11323582f7_cgraph" alt=""/></div>
+<map name="aclassXped_1_1Qbasis_aae178998f636f909aba92a11323582f7_cgraph" id="aclassXped_1_1Qbasis_aae178998f636f909aba92a11323582f7_cgraph">
+<area shape="rect" title=" " alt="" coords="5,55,176,80"/>
+<area shape="rect" href="classXped_1_1Qbasis.html#a34418f2e9ce5c917d3f3b65688c52249" title=" " alt="" coords="224,5,408,31"/>
+<area shape="rect" href="classXped_1_1Qbasis.html#a17b1d80c09fcd2114d01369b329dfec7" title=" " alt="" coords="246,55,386,80"/>
+<area shape="rect" href="classXped_1_1Qbasis.html#a96f8b91e4b29cc52df12b1117cef8827" title=" " alt="" coords="245,104,387,129"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1Qbasis_aae178998f636f909aba92a11323582f7_icgraph.png" border="0" usemap="#aclassXped_1_1Qbasis_aae178998f636f909aba92a11323582f7_icgraph" alt=""/></div>
+<map name="aclassXped_1_1Qbasis_aae178998f636f909aba92a11323582f7_icgraph" id="aclassXped_1_1Qbasis_aae178998f636f909aba92a11323582f7_icgraph">
+<area shape="rect" title=" " alt="" coords="644,101,815,126"/>
+<area shape="rect" href="namespaceXped_1_1internal.html#a770d9132147a53e0aeee5c1b36d24d48" title=" " alt="" coords="424,29,577,69"/>
+<area shape="rect" href="classXped_1_1FermionBase.html#aaf13c778cec232d632c2c042d62e0200" title=" " alt="" coords="423,93,579,133"/>
+<area shape="rect" href="classXped_1_1SpinBase.html#ac92bbbe756f8a2bfaeb7998863abc632" title=" " alt="" coords="405,158,596,183"/>
+<area shape="rect" href="namespaceXped_1_1internal.html#a579cf19a08ab95c0ef6c06b1cfca632d" title=" " alt="" coords="204,29,357,69"/>
+<area shape="rect" href="structXped_1_1StorageType.html#a44f82ea1186633a04f0ee4dddc4a7f77" title=" " alt="" coords="5,29,156,69"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a46b5a057d2d3dd627caa5dafdbb03a4a" name="a46b5a057d2d3dd627caa5dafdbb03a4a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a46b5a057d2d3dd627caa5dafdbb03a4a">&#9670;&#160;</a></span>conj()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt; <a class="el" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;::conj</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1Qbasis_a46b5a057d2d3dd627caa5dafdbb03a4a_cgraph.png" border="0" usemap="#aclassXped_1_1Qbasis_a46b5a057d2d3dd627caa5dafdbb03a4a_cgraph" alt=""/></div>
+<map name="aclassXped_1_1Qbasis_a46b5a057d2d3dd627caa5dafdbb03a4a_cgraph" id="aclassXped_1_1Qbasis_a46b5a057d2d3dd627caa5dafdbb03a4a_cgraph">
+<area shape="rect" title=" " alt="" coords="5,31,148,56"/>
+<area shape="rect" href="classXped_1_1Qbasis.html#a34418f2e9ce5c917d3f3b65688c52249" title=" " alt="" coords="196,5,380,31"/>
+<area shape="rect" href="classXped_1_1Qbasis.html#a17b1d80c09fcd2114d01369b329dfec7" title=" " alt="" coords="218,55,358,80"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ae185c83191aa1e7e75bbef4e28b3f5e7" name="ae185c83191aa1e7e75bbef4e28b3f5e7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae185c83191aa1e7e75bbef4e28b3f5e7">&#9670;&#160;</a></span>dim()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = HeapPolicy&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t <a class="el" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;::dim </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns the number of (reduced) basis states. </p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1Qbasis_ae185c83191aa1e7e75bbef4e28b3f5e7_icgraph.png" border="0" usemap="#aclassXped_1_1Qbasis_ae185c83191aa1e7e75bbef4e28b3f5e7_icgraph" alt=""/></div>
+<map name="aclassXped_1_1Qbasis_ae185c83191aa1e7e75bbef4e28b3f5e7_icgraph" id="aclassXped_1_1Qbasis_ae185c83191aa1e7e75bbef4e28b3f5e7_icgraph">
+<area shape="rect" title=" " alt="" coords="244,92,384,117"/>
+<area shape="rect" href="classXped_1_1Qbasis.html#ae9f5056957ec5fb05e2bac876f053664" title=" " alt="" coords="27,5,174,31"/>
+<area shape="rect" href="classXped_1_1FermionBase.html#aaf13c778cec232d632c2c042d62e0200" title=" " alt="" coords="23,55,179,95"/>
+<area shape="rect" href="classXped_1_1Qbasis.html#a9465d37b666ba2a1a3ac266447ba5736" title=" " alt="" coords="21,120,180,145"/>
+<area shape="rect" href="classXped_1_1SpinBase.html#ac92bbbe756f8a2bfaeb7998863abc632" title=" " alt="" coords="5,169,196,195"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ae9f5056957ec5fb05e2bac876f053664" name="ae9f5056957ec5fb05e2bac876f053664"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae9f5056957ec5fb05e2bac876f053664">&#9670;&#160;</a></span>dims()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = HeapPolicy&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; std::size_t &gt; <a class="el" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;::dims </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1Qbasis_ae9f5056957ec5fb05e2bac876f053664_cgraph.png" border="0" usemap="#aclassXped_1_1Qbasis_ae9f5056957ec5fb05e2bac876f053664_cgraph" alt=""/></div>
+<map name="aclassXped_1_1Qbasis_ae9f5056957ec5fb05e2bac876f053664_cgraph" id="aclassXped_1_1Qbasis_ae9f5056957ec5fb05e2bac876f053664_cgraph">
+<area shape="rect" title=" " alt="" coords="5,5,152,31"/>
+<area shape="rect" href="classXped_1_1Qbasis.html#ae185c83191aa1e7e75bbef4e28b3f5e7" title=" " alt="" coords="200,5,340,31"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ae345ca2de0c5e4a5ebf1f695fe50ae30" name="ae345ca2de0c5e4a5ebf1f695fe50ae30"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae345ca2de0c5e4a5ebf1f695fe50ae30">&#9670;&#160;</a></span>end()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = HeapPolicy&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto <a class="el" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;::end </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a36b61019121c0a62577e0980f06356e4" name="a36b61019121c0a62577e0980f06356e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a36b61019121c0a62577e0980f06356e4">&#9670;&#160;</a></span>forgetHistory()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; Symmetry, 1, AllocationPolicy &gt; <a class="el" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;::forgetHistory</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1Qbasis_a36b61019121c0a62577e0980f06356e4_cgraph.png" border="0" usemap="#aclassXped_1_1Qbasis_a36b61019121c0a62577e0980f06356e4_cgraph" alt=""/></div>
+<map name="aclassXped_1_1Qbasis_a36b61019121c0a62577e0980f06356e4_cgraph" id="aclassXped_1_1Qbasis_a36b61019121c0a62577e0980f06356e4_cgraph">
+<area shape="rect" title=" " alt="" coords="5,5,207,31"/>
+<area shape="rect" href="classXped_1_1Qbasis.html#a34418f2e9ce5c917d3f3b65688c52249" title=" " alt="" coords="255,5,439,31"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a56e2dccd22dc335beaaa0c22f6e47c49" name="a56e2dccd22dc335beaaa0c22f6e47c49"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a56e2dccd22dc335beaaa0c22f6e47c49">&#9670;&#160;</a></span>full_outer_num()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t <a class="el" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;::full_outer_num </td>
+          <td>(</td>
+          <td class="paramtype">const qType &amp;&#160;</td>
+          <td class="paramname"><em>q</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Computes the total number with which the sector with quantum number <code>q</code> begins and takes into account the dimension of each irrep. </p>
+
+</div>
+</div>
+<a id="a0e7c93d9e7712a62073031515ad8cbb6" name="a0e7c93d9e7712a62073031515ad8cbb6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0e7c93d9e7712a62073031515ad8cbb6">&#9670;&#160;</a></span>fullDim()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = HeapPolicy&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t <a class="el" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;::fullDim </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns the full number of basis states. If irreps has internal states, the basis states transforming under this irreps are multiplied by this degeneracy. </p>
+
+</div>
+</div>
+<a id="a237c97d5eade171dd0c0efaee7c29a10" name="a237c97d5eade171dd0c0efaee7c29a10"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a237c97d5eade171dd0c0efaee7c29a10">&#9670;&#160;</a></span>getQ()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">Symmetry::qType <a class="el" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;::getQ </td>
+          <td>(</td>
+          <td class="paramtype">const size_t &amp;&#160;</td>
+          <td class="paramname"><em>num</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns the quantum number of the state with number <code>num</code>. </p>
+
+</div>
+</div>
+<a id="a32165cedf8dae8515f996a7105595a24" name="a32165cedf8dae8515f996a7105595a24"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a32165cedf8dae8515f996a7105595a24">&#9670;&#160;</a></span>index()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t <a class="el" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;::index </td>
+          <td>(</td>
+          <td class="paramtype">const qType &amp;&#160;</td>
+          <td class="paramname"><em>q</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns the index of a given quantum number. </p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1Qbasis_a32165cedf8dae8515f996a7105595a24_icgraph.png" border="0" usemap="#aclassXped_1_1Qbasis_a32165cedf8dae8515f996a7105595a24_icgraph" alt=""/></div>
+<map name="aclassXped_1_1Qbasis_a32165cedf8dae8515f996a7105595a24_icgraph" id="aclassXped_1_1Qbasis_a32165cedf8dae8515f996a7105595a24_icgraph">
+<area shape="rect" title=" " alt="" coords="184,5,335,31"/>
+<area shape="rect" href="classXped_1_1Qbasis.html#a427e9ba6651c309a0bee6ff2a467117b" title=" " alt="" coords="5,5,136,31"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a51bddd70176d9db0efadb9aa1fe174d4" name="a51bddd70176d9db0efadb9aa1fe174d4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a51bddd70176d9db0efadb9aa1fe174d4">&#9670;&#160;</a></span>info()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string <a class="el" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;::info</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Prints rough info. </p>
+
+</div>
+</div>
+<a id="a6f5b2ba03cbc045f6fe9d5529b525351" name="a6f5b2ba03cbc045f6fe9d5529b525351"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6f5b2ba03cbc045f6fe9d5529b525351">&#9670;&#160;</a></span>inner_dim() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t <a class="el" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;::inner_dim </td>
+          <td>(</td>
+          <td class="paramtype">const qType &amp;&#160;</td>
+          <td class="paramname"><em>q</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Computes the sector size of a state with quantum number <code>q</code>. </p>
+
+</div>
+</div>
+<a id="aac9e2569d5bbc41f716576bdb7aff741" name="aac9e2569d5bbc41f716576bdb7aff741"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aac9e2569d5bbc41f716576bdb7aff741">&#9670;&#160;</a></span>inner_dim() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t <a class="el" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;::inner_dim </td>
+          <td>(</td>
+          <td class="paramtype">const size_t &amp;&#160;</td>
+          <td class="paramname"><em>num_in</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Computes the sector size of a state with number <code>num_in</code>. </p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1Qbasis_aac9e2569d5bbc41f716576bdb7aff741_icgraph.png" border="0" usemap="#aclassXped_1_1Qbasis_aac9e2569d5bbc41f716576bdb7aff741_icgraph" alt=""/></div>
+<map name="aclassXped_1_1Qbasis_aac9e2569d5bbc41f716576bdb7aff741_icgraph" id="aclassXped_1_1Qbasis_aac9e2569d5bbc41f716576bdb7aff741_icgraph">
+<area shape="rect" title=" " alt="" coords="403,77,583,102"/>
+<area shape="rect" href="structXped_1_1StorageType.html#a81e55c7a5cf970a56b49ffc24faeb99b" title=" " alt="" coords="204,5,355,45"/>
+<area shape="rect" href="structXped_1_1StorageType.html#a4301223d752e66a38bb31442698e6456" title=" " alt="" coords="204,69,355,109"/>
+<area shape="rect" href="structXped_1_1StorageType.html#ad79978bea5edff88344cc6f005be0bb3" title=" " alt="" coords="204,133,355,173"/>
+<area shape="rect" href="structXped_1_1StorageType.html#aa4fb8ec50fb15c7c1df8763ae07f82f8" title=" " alt="" coords="5,5,156,45"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a984fc32434ab326c54077663660db0d2" name="a984fc32434ab326c54077663660db0d2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a984fc32434ab326c54077663660db0d2">&#9670;&#160;</a></span>inner_num()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t <a class="el" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;::inner_num </td>
+          <td>(</td>
+          <td class="paramtype">const size_t &amp;&#160;</td>
+          <td class="paramname"><em>outer_num</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Computes the number within the sector from the total number of the state </p>
+
+</div>
+</div>
+<a id="acdfe4d29b3336956b05fac1854680930" name="acdfe4d29b3336956b05fac1854680930"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acdfe4d29b3336956b05fac1854680930">&#9670;&#160;</a></span>intersection()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt; <a class="el" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;::intersection </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt; &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns the intersection of this and <code>other</code>. </p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1Qbasis_acdfe4d29b3336956b05fac1854680930_cgraph.png" border="0" usemap="#aclassXped_1_1Qbasis_acdfe4d29b3336956b05fac1854680930_cgraph" alt=""/></div>
+<map name="aclassXped_1_1Qbasis_acdfe4d29b3336956b05fac1854680930_cgraph" id="aclassXped_1_1Qbasis_acdfe4d29b3336956b05fac1854680930_cgraph">
+<area shape="rect" title=" " alt="" coords="5,31,197,56"/>
+<area shape="rect" href="classXped_1_1Qbasis.html#aa7fd434c1a2d7db5281e3a2afa3c8ab7" title=" " alt="" coords="264,5,411,31"/>
+<area shape="rect" href="classXped_1_1Qbasis.html#a34418f2e9ce5c917d3f3b65688c52249" title=" " alt="" coords="245,55,429,80"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a87ec886c93de9df96eb0aa76deeed225" name="a87ec886c93de9df96eb0aa76deeed225"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a87ec886c93de9df96eb0aa76deeed225">&#9670;&#160;</a></span>IS_CONJ()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = HeapPolicy&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;::IS_CONJ </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af023255cc7ed794a2a4cee72cdfacdff" name="af023255cc7ed794a2a4cee72cdfacdff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af023255cc7ed794a2a4cee72cdfacdff">&#9670;&#160;</a></span>IS_PRESENT()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = HeapPolicy&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;::IS_PRESENT </td>
+          <td>(</td>
+          <td class="paramtype">const qType &amp;&#160;</td>
+          <td class="paramname"><em>q</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Checks whether states with quantum number <code>q</code> are in the basis. Returns true if the state is present. </p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1Qbasis_af023255cc7ed794a2a4cee72cdfacdff_icgraph.png" border="0" usemap="#aclassXped_1_1Qbasis_af023255cc7ed794a2a4cee72cdfacdff_icgraph" alt=""/></div>
+<map name="aclassXped_1_1Qbasis_af023255cc7ed794a2a4cee72cdfacdff_icgraph" id="aclassXped_1_1Qbasis_af023255cc7ed794a2a4cee72cdfacdff_icgraph">
+<area shape="rect" title=" " alt="" coords="263,35,456,60"/>
+<area shape="rect" href="classXped_1_1Qbasis.html#a96217376f0ce18798537610f845d9660" title=" " alt="" coords="5,5,215,31"/>
+<area shape="rect" href="structXped_1_1StorageType.html#ad79978bea5edff88344cc6f005be0bb3" title=" " alt="" coords="35,55,185,95"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a57a2180bf7523aa3988ee5e1081746d2" name="a57a2180bf7523aa3988ee5e1081746d2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a57a2180bf7523aa3988ee5e1081746d2">&#9670;&#160;</a></span>IS_SORTED()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = HeapPolicy&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;::IS_SORTED </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7707168253ac60a62d69056364bdf35f" name="a7707168253ac60a62d69056364bdf35f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7707168253ac60a62d69056364bdf35f">&#9670;&#160;</a></span>largestSector()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t <a class="el" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;::largestSector</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns the largest state sector. </p>
+
+</div>
+</div>
+<a id="a6f0525bceb581d19235cba8142b7fd0b" name="a6f0525bceb581d19235cba8142b7fd0b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6f0525bceb581d19235cba8142b7fd0b">&#9670;&#160;</a></span>leftOffset()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t <a class="el" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;::leftOffset </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1FusionTree.html">FusionTree</a>&lt; depth, Symmetry &gt; &amp;&#160;</td>
+          <td class="paramname"><em>tree</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::array&lt; size_t, depth &gt; &amp;&#160;</td>
+          <td class="paramname"><em>plain</em> = <code>std::array&lt;std::size_t,&#160;depth&gt;()</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8128a0139b79018787bf0f85faab172d" name="a8128a0139b79018787bf0f85faab172d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8128a0139b79018787bf0f85faab172d">&#9670;&#160;</a></span>maxQ()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = HeapPolicy&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">qType <a class="el" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;::maxQ </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1Qbasis_a8128a0139b79018787bf0f85faab172d_cgraph.png" border="0" usemap="#aclassXped_1_1Qbasis_a8128a0139b79018787bf0f85faab172d_cgraph" alt=""/></div>
+<map name="aclassXped_1_1Qbasis_a8128a0139b79018787bf0f85faab172d_cgraph" id="aclassXped_1_1Qbasis_a8128a0139b79018787bf0f85faab172d_cgraph">
+<area shape="rect" title=" " alt="" coords="5,5,160,31"/>
+<area shape="rect" href="classXped_1_1Qbasis.html#af11d20e086024b2d72ee5bcc7d7c8e8c" title=" " alt="" coords="208,5,339,31"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ae02bc8f14aaec6bb14040bdd842ec1e7" name="ae02bc8f14aaec6bb14040bdd842ec1e7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae02bc8f14aaec6bb14040bdd842ec1e7">&#9670;&#160;</a></span>minQ()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = HeapPolicy&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">qType <a class="el" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;::minQ </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1Qbasis_ae02bc8f14aaec6bb14040bdd842ec1e7_cgraph.png" border="0" usemap="#aclassXped_1_1Qbasis_ae02bc8f14aaec6bb14040bdd842ec1e7_cgraph" alt=""/></div>
+<map name="aclassXped_1_1Qbasis_ae02bc8f14aaec6bb14040bdd842ec1e7_cgraph" id="aclassXped_1_1Qbasis_ae02bc8f14aaec6bb14040bdd842ec1e7_cgraph">
+<area shape="rect" title=" " alt="" coords="5,5,156,31"/>
+<area shape="rect" href="classXped_1_1Qbasis.html#af11d20e086024b2d72ee5bcc7d7c8e8c" title=" " alt="" coords="204,5,335,31"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a96217376f0ce18798537610f845d9660" name="a96217376f0ce18798537610f845d9660"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a96217376f0ce18798537610f845d9660">&#9670;&#160;</a></span>NOT_PRESENT()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = HeapPolicy&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;::NOT_PRESENT </td>
+          <td>(</td>
+          <td class="paramtype">const qType &amp;&#160;</td>
+          <td class="paramname"><em>q</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Checks whether states with quantum number <code>q</code> are not in the basis. Returns true if the state is absent. </p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1Qbasis_a96217376f0ce18798537610f845d9660_cgraph.png" border="0" usemap="#aclassXped_1_1Qbasis_a96217376f0ce18798537610f845d9660_cgraph" alt=""/></div>
+<map name="aclassXped_1_1Qbasis_a96217376f0ce18798537610f845d9660_cgraph" id="aclassXped_1_1Qbasis_a96217376f0ce18798537610f845d9660_cgraph">
+<area shape="rect" title=" " alt="" coords="5,5,215,31"/>
+<area shape="rect" href="classXped_1_1Qbasis.html#af023255cc7ed794a2a4cee72cdfacdff" title=" " alt="" coords="263,5,456,31"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a40fc0854ec234ed606d736869b1db16e" name="a40fc0854ec234ed606d736869b1db16e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a40fc0854ec234ed606d736869b1db16e">&#9670;&#160;</a></span>Nq()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = HeapPolicy&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t <a class="el" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;::Nq </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns the number of quantum numbers (irreps) contained in this basis. </p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1Qbasis_a40fc0854ec234ed606d736869b1db16e_icgraph.png" border="0" usemap="#aclassXped_1_1Qbasis_a40fc0854ec234ed606d736869b1db16e_icgraph" alt=""/></div>
+<map name="aclassXped_1_1Qbasis_a40fc0854ec234ed606d736869b1db16e_icgraph" id="aclassXped_1_1Qbasis_a40fc0854ec234ed606d736869b1db16e_icgraph">
+<area shape="rect" title=" " alt="" coords="204,13,337,38"/>
+<area shape="rect" href="structXped_1_1StorageType.html#ad79978bea5edff88344cc6f005be0bb3" title=" " alt="" coords="5,5,156,45"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ab4cfbfce99d5773704d14ce9ac044b44" name="ab4cfbfce99d5773704d14ce9ac044b44"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab4cfbfce99d5773704d14ce9ac044b44">&#9670;&#160;</a></span>operator==()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;::operator== </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt; &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a22e48fafe07baa7f204e9a6def08f6fb" name="a22e48fafe07baa7f204e9a6def08f6fb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a22e48fafe07baa7f204e9a6def08f6fb">&#9670;&#160;</a></span>outer_num()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t <a class="el" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;::outer_num </td>
+          <td>(</td>
+          <td class="paramtype">const qType &amp;&#160;</td>
+          <td class="paramname"><em>q</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Computes the total number with which the sector with quantum number <code>q</code> begins. </p>
+
+</div>
+</div>
+<a id="a2372b994809b76ea83cff9f64690f899" name="a2372b994809b76ea83cff9f64690f899"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2372b994809b76ea83cff9f64690f899">&#9670;&#160;</a></span>print()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string <a class="el" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;::print</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Prints the basis. </p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1Qbasis_a2372b994809b76ea83cff9f64690f899_icgraph.png" border="0" usemap="#aclassXped_1_1Qbasis_a2372b994809b76ea83cff9f64690f899_icgraph" alt=""/></div>
+<map name="aclassXped_1_1Qbasis_a2372b994809b76ea83cff9f64690f899_icgraph" id="aclassXped_1_1Qbasis_a2372b994809b76ea83cff9f64690f899_icgraph">
+<area shape="rect" title=" " alt="" coords="193,5,339,31"/>
+<area shape="rect" href="namespaceXped.html#a7b79ea8dd83aea90f18d4918df605abf" title=" " alt="" coords="5,5,145,31"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a4cdbcd6080ff6dad0467419a0d5022ca" name="a4cdbcd6080ff6dad0467419a0d5022ca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4cdbcd6080ff6dad0467419a0d5022ca">&#9670;&#160;</a></span>printTrees()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string <a class="el" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;::printTrees</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Prints the trees. </p>
+
+</div>
+</div>
+<a id="a34418f2e9ce5c917d3f3b65688c52249" name="a34418f2e9ce5c917d3f3b65688c52249"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a34418f2e9ce5c917d3f3b65688c52249">&#9670;&#160;</a></span>push_back() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;::push_back </td>
+          <td>(</td>
+          <td class="paramtype">const qType &amp;&#160;</td>
+          <td class="paramname"><em>q</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const size_t &amp;&#160;</td>
+          <td class="paramname"><em>inner_dim</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Insert the quantum number <code>q</code> with dimension <code>inner_dim</code> into the basis. </p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1Qbasis_a34418f2e9ce5c917d3f3b65688c52249_icgraph.png" border="0" usemap="#aclassXped_1_1Qbasis_a34418f2e9ce5c917d3f3b65688c52249_icgraph" alt=""/></div>
+<map name="aclassXped_1_1Qbasis_a34418f2e9ce5c917d3f3b65688c52249_icgraph" id="aclassXped_1_1Qbasis_a34418f2e9ce5c917d3f3b65688c52249_icgraph">
+<area shape="rect" title=" " alt="" coords="941,471,1125,496"/>
+<area shape="rect" href="classXped_1_1Qbasis.html#a46e38c8859772db1735c09141a6a815f" title=" " alt="" coords="723,5,862,31"/>
+<area shape="rect" href="namespaceXped_1_1internal.html#a579cf19a08ab95c0ef6c06b1cfca632d" title=" " alt="" coords="204,122,357,162"/>
+<area shape="rect" href="classXped_1_1Qbasis.html#aae178998f636f909aba92a11323582f7" title=" " alt="" coords="707,164,878,189"/>
+<area shape="rect" href="classXped_1_1FermionBase.html#aaf13c778cec232d632c2c042d62e0200" title=" " alt="" coords="447,106,603,146"/>
+<area shape="rect" href="classXped_1_1SpinBase.html#ac92bbbe756f8a2bfaeb7998863abc632" title=" " alt="" coords="429,259,620,284"/>
+<area shape="rect" href="classXped_1_1Qbasis.html#a46b5a057d2d3dd627caa5dafdbb03a4a" title=" " alt="" coords="721,265,864,291"/>
+<area shape="rect" href="classXped_1_1Qbasis.html#a36b61019121c0a62577e0980f06356e4" title=" " alt="" coords="692,315,893,340"/>
+<area shape="rect" href="classXped_1_1Qbasis.html#acdfe4d29b3336956b05fac1854680930" title=" " alt="" coords="697,364,889,389"/>
+<area shape="rect" href="bench_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="765,413,820,439"/>
+<area shape="rect" href="structXped_1_1SiteOperator.html#a6050f6e3b739cac3800846df29811fc0" title=" " alt="" coords="720,463,865,503"/>
+<area shape="rect" href="classXped_1_1Qbasis.html#a9465d37b666ba2a1a3ac266447ba5736" title=" " alt="" coords="713,528,872,553"/>
+<area shape="rect" href="classXped_1_1Qbasis.html#a56f3cdeeca8f68c119b7aa330f94e3fe" title=" " alt="" coords="721,577,864,603"/>
+<area shape="rect" href="structXped_1_1OneSiteObservable.html#a3cd09c87e832857bab159354d43f42bd" title=" " alt="" coords="699,627,887,667"/>
+<area shape="rect" href="structXped_1_1TwoSiteObservable.html#a22bc65d54f8c571975eeb9c82d7c796d" title=" " alt="" coords="699,691,886,731"/>
+<area shape="rect" href="structXped_1_1SiteOperator.html#a2e2ef85b46b48abe08ec5844acbd5bdb" title=" " alt="" coords="720,755,865,795"/>
+<area shape="rect" href="structXped_1_1SiteOperator.html#a90381e37dc2d75821c95567370634e89" title=" " alt="" coords="709,820,877,875"/>
+<area shape="rect" href="classXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4.html#a82d14626f19de7a30440aab06c2a9c11" title=" " alt="" coords="707,899,878,953"/>
+<area shape="rect" href="namespaceXped.html#a598efa5f2fbcd5d3eeee6ee640b4162f" title=" " alt="" coords="744,977,841,1003"/>
+<area shape="rect" href="classXped_1_1Qbasis.html#a12336055b127c004e085ba05cf2397ce" title=" " alt="" coords="698,1125,887,1151"/>
+<area shape="rect" href="structXped_1_1StorageType.html#a44f82ea1186633a04f0ee4dddc4a7f77" title=" " alt="" coords="5,122,156,162"/>
+<area shape="rect" href="namespaceXped_1_1internal.html#a770d9132147a53e0aeee5c1b36d24d48" title=" " alt="" coords="448,194,601,234"/>
+<area shape="rect" href="structXped_1_1SiteOperator.html#ab0c7089ac010e4e4f4be073422dd7cbb" title=" " alt="" coords="452,434,597,474"/>
+<area shape="rect" href="namespaceXped.html#a5c436b3b6c090c9968e0f43595bb34fc" title=" " alt="" coords="462,499,587,524"/>
+<area shape="rect" href="namespaceXped.html#a337f30a81eba4c6d336140d4f0f58f5d" title=" " alt="" coords="481,635,568,660"/>
+<area shape="rect" href="namespaceXped.html#ae03882f7c88965f20aef2f811acd3440" title=" " alt="" coords="481,699,568,724"/>
+<area shape="rect" href="classXped_1_1Heisenberg.html#a10ed9c0c74fe02b3d03afddbafa4b39b" title=" " alt="" coords="415,756,634,781"/>
+<area shape="rect" href="classXped_1_1Hubbard.html#a66bf8e6b8bc6ca545fc1766333d05113" title=" " alt="" coords="434,805,615,831"/>
+<area shape="rect" href="classXped_1_1Kondo.html#a9eb8c0e21b36ac95806bd123c4496149" title=" " alt="" coords="449,855,600,880"/>
+<area shape="rect" href="classXped_1_1KondoNecklace.html#a617d0590277d11915eaa84ababaec31a" title=" " alt="" coords="443,905,606,945"/>
+<area shape="rect" href="classXped_1_1Heisenberg.html#ac1aacd931b318c81d00d68fa2e26d579" title=" " alt="" coords="405,969,644,995"/>
+<area shape="rect" href="classXped_1_1Hubbard.html#a78332db0beee19fa4d489c30469d4949" title=" " alt="" coords="415,1019,634,1044"/>
+<area shape="rect" href="classXped_1_1Kondo.html#af934c9007909ce312e534cd94dc1761f" title=" " alt="" coords="423,1068,627,1093"/>
+<area shape="rect" href="classXped_1_1KondoNecklace.html#a54a8c5efef1681936ed3ff7fd9ef5333" title=" " alt="" coords="443,1118,606,1158"/>
+<area shape="rect" href="namespaceXped.html#a47b2669b739a76d46dc206c7d3dbf3d1" title=" " alt="" coords="476,1183,573,1208"/>
+<area shape="rect" href="classXped_1_1CTM.html#aedf7fd8b43f1c3dfa6de0d7f3a1974d9" title=" " alt="" coords="464,1232,585,1257"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a855753dd20f3d21747fb21a5e7e0174b" name="a855753dd20f3d21747fb21a5e7e0174b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a855753dd20f3d21747fb21a5e7e0174b">&#9670;&#160;</a></span>push_back() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;::push_back </td>
+          <td>(</td>
+          <td class="paramtype">const qType &amp;&#160;</td>
+          <td class="paramname"><em>q</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const size_t &amp;&#160;</td>
+          <td class="paramname"><em>inner_dim</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const TreeVector&lt; depth &gt; &amp;&#160;</td>
+          <td class="paramname"><em>tree</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a427e9ba6651c309a0bee6ff2a467117b" name="a427e9ba6651c309a0bee6ff2a467117b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a427e9ba6651c309a0bee6ff2a467117b">&#9670;&#160;</a></span>qn()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = HeapPolicy&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">qType <a class="el" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;::qn </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Inverse function to <code>index(const qType&amp;)</code>. </p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1Qbasis_a427e9ba6651c309a0bee6ff2a467117b_cgraph.png" border="0" usemap="#aclassXped_1_1Qbasis_a427e9ba6651c309a0bee6ff2a467117b_cgraph" alt=""/></div>
+<map name="aclassXped_1_1Qbasis_a427e9ba6651c309a0bee6ff2a467117b_cgraph" id="aclassXped_1_1Qbasis_a427e9ba6651c309a0bee6ff2a467117b_cgraph">
+<area shape="rect" title=" " alt="" coords="5,5,136,31"/>
+<area shape="rect" href="classXped_1_1Qbasis.html#a32165cedf8dae8515f996a7105595a24" title=" " alt="" coords="184,5,335,31"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="af11d20e086024b2d72ee5bcc7d7c8e8c" name="af11d20e086024b2d72ee5bcc7d7c8e8c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af11d20e086024b2d72ee5bcc7d7c8e8c">&#9670;&#160;</a></span>qs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = HeapPolicy&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; qType &gt; <a class="el" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;::qs </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1Qbasis_af11d20e086024b2d72ee5bcc7d7c8e8c_icgraph.png" border="0" usemap="#aclassXped_1_1Qbasis_af11d20e086024b2d72ee5bcc7d7c8e8c_icgraph" alt=""/></div>
+<map name="aclassXped_1_1Qbasis_af11d20e086024b2d72ee5bcc7d7c8e8c_icgraph" id="aclassXped_1_1Qbasis_af11d20e086024b2d72ee5bcc7d7c8e8c_icgraph">
+<area shape="rect" title=" " alt="" coords="208,31,339,56"/>
+<area shape="rect" href="classXped_1_1Qbasis.html#a8128a0139b79018787bf0f85faab172d" title=" " alt="" coords="5,5,160,31"/>
+<area shape="rect" href="classXped_1_1Qbasis.html#ae02bc8f14aaec6bb14040bdd842ec1e7" title=" " alt="" coords="7,55,158,80"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ab899d85bcbb80a73bf5a1f827e07f012" name="ab899d85bcbb80a73bf5a1f827e07f012"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab899d85bcbb80a73bf5a1f827e07f012">&#9670;&#160;</a></span>remove()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;::remove </td>
+          <td>(</td>
+          <td class="paramtype">const qType &amp;&#160;</td>
+          <td class="paramname"><em>q</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab14a8417792f1f2a7acebbd9072ff9b7" name="ab14a8417792f1f2a7acebbd9072ff9b7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab14a8417792f1f2a7acebbd9072ff9b7">&#9670;&#160;</a></span>rightOffset()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t <a class="el" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;::rightOffset </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1FusionTree.html">FusionTree</a>&lt; depth, Symmetry &gt; &amp;&#160;</td>
+          <td class="paramname"><em>tree</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::array&lt; size_t, depth &gt; &amp;&#160;</td>
+          <td class="paramname"><em>plain</em> = <code>std::array&lt;std::size_t,&#160;depth&gt;()</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a01ea6b1ac3a71b8c22c640eb32838b65" name="a01ea6b1ac3a71b8c22c640eb32838b65"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a01ea6b1ac3a71b8c22c640eb32838b65">&#9670;&#160;</a></span>serialize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = HeapPolicy&gt; </div>
+<div class="memtemplate">
+template&lt;typename Ar &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;::serialize </td>
+          <td>(</td>
+          <td class="paramtype">Ar &amp;&#160;</td>
+          <td class="paramname"><em>ar</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9b96ecd21ef479e1826a6f5f63ababfd" name="a9b96ecd21ef479e1826a6f5f63ababfd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9b96ecd21ef479e1826a6f5f63ababfd">&#9670;&#160;</a></span>SET_CONJ()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = HeapPolicy&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;::SET_CONJ </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a519e3bf1621c23e0334d5c4528b43a2d" name="a519e3bf1621c23e0334d5c4528b43a2d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a519e3bf1621c23e0334d5c4528b43a2d">&#9670;&#160;</a></span>setRandom()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;::setRandom </td>
+          <td>(</td>
+          <td class="paramtype">const std::size_t &amp;&#160;</td>
+          <td class="paramname"><em>fullSize</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::size_t &amp;&#160;</td>
+          <td class="paramname"><em>max_sectorSize</em> = <code>5ul</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a56f3cdeeca8f68c119b7aa330f94e3fe" name="a56f3cdeeca8f68c119b7aa330f94e3fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a56f3cdeeca8f68c119b7aa330f94e3fe">&#9670;&#160;</a></span>shift()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::pair&lt; std::vector&lt; std::size_t &gt;, <a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt; &gt; <a class="el" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;::shift </td>
+          <td>(</td>
+          <td class="paramtype">qType&#160;</td>
+          <td class="paramname"><em>qshift</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1Qbasis_a56f3cdeeca8f68c119b7aa330f94e3fe_cgraph.png" border="0" usemap="#aclassXped_1_1Qbasis_a56f3cdeeca8f68c119b7aa330f94e3fe_cgraph" alt=""/></div>
+<map name="aclassXped_1_1Qbasis_a56f3cdeeca8f68c119b7aa330f94e3fe_cgraph" id="aclassXped_1_1Qbasis_a56f3cdeeca8f68c119b7aa330f94e3fe_cgraph">
+<area shape="rect" title=" " alt="" coords="5,31,148,56"/>
+<area shape="rect" href="classXped_1_1Qbasis.html#a34418f2e9ce5c917d3f3b65688c52249" title=" " alt="" coords="196,5,380,31"/>
+<area shape="rect" href="classXped_1_1Qbasis.html#a17b1d80c09fcd2114d01369b329dfec7" title=" " alt="" coords="218,55,358,80"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a17b1d80c09fcd2114d01369b329dfec7" name="a17b1d80c09fcd2114d01369b329dfec7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a17b1d80c09fcd2114d01369b329dfec7">&#9670;&#160;</a></span>sort()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; std::size_t &gt; <a class="el" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;::sort</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Swaps with another <a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>. </p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1Qbasis_a17b1d80c09fcd2114d01369b329dfec7_icgraph.png" border="0" usemap="#aclassXped_1_1Qbasis_a17b1d80c09fcd2114d01369b329dfec7_icgraph" alt=""/></div>
+<map name="aclassXped_1_1Qbasis_a17b1d80c09fcd2114d01369b329dfec7_icgraph" id="aclassXped_1_1Qbasis_a17b1d80c09fcd2114d01369b329dfec7_icgraph">
+<area shape="rect" title=" " alt="" coords="863,126,1003,151"/>
+<area shape="rect" href="classXped_1_1Qbasis.html#a46e38c8859772db1735c09141a6a815f" title=" " alt="" coords="660,51,799,77"/>
+<area shape="rect" href="classXped_1_1Qbasis.html#aae178998f636f909aba92a11323582f7" title=" " alt="" coords="644,101,815,126"/>
+<area shape="rect" href="classXped_1_1Qbasis.html#a46b5a057d2d3dd627caa5dafdbb03a4a" title=" " alt="" coords="658,150,801,175"/>
+<area shape="rect" href="classXped_1_1Qbasis.html#a56f3cdeeca8f68c119b7aa330f94e3fe" title=" " alt="" coords="658,199,801,225"/>
+<area shape="rect" href="namespaceXped_1_1internal.html#a770d9132147a53e0aeee5c1b36d24d48" title=" " alt="" coords="424,29,577,69"/>
+<area shape="rect" href="classXped_1_1FermionBase.html#aaf13c778cec232d632c2c042d62e0200" title=" " alt="" coords="423,93,579,133"/>
+<area shape="rect" href="classXped_1_1SpinBase.html#ac92bbbe756f8a2bfaeb7998863abc632" title=" " alt="" coords="405,158,596,183"/>
+<area shape="rect" href="namespaceXped_1_1internal.html#a579cf19a08ab95c0ef6c06b1cfca632d" title=" " alt="" coords="204,29,357,69"/>
+<area shape="rect" href="structXped_1_1StorageType.html#a44f82ea1186633a04f0ee4dddc4a7f77" title=" " alt="" coords="5,29,156,69"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a96f8b91e4b29cc52df12b1117cef8827" name="a96f8b91e4b29cc52df12b1117cef8827"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a96f8b91e4b29cc52df12b1117cef8827">&#9670;&#160;</a></span>tree()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = HeapPolicy&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const auto &amp; <a class="el" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;::tree </td>
+          <td>(</td>
+          <td class="paramtype">const qType &amp;&#160;</td>
+          <td class="paramname"><em>q</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1Qbasis_a96f8b91e4b29cc52df12b1117cef8827_icgraph.png" border="0" usemap="#aclassXped_1_1Qbasis_a96f8b91e4b29cc52df12b1117cef8827_icgraph" alt=""/></div>
+<map name="aclassXped_1_1Qbasis_a96f8b91e4b29cc52df12b1117cef8827_icgraph" id="aclassXped_1_1Qbasis_a96f8b91e4b29cc52df12b1117cef8827_icgraph">
+<area shape="rect" title=" " alt="" coords="863,101,1004,126"/>
+<area shape="rect" href="classXped_1_1Qbasis.html#aae178998f636f909aba92a11323582f7" title=" " alt="" coords="644,101,815,126"/>
+<area shape="rect" href="namespaceXped_1_1internal.html#a770d9132147a53e0aeee5c1b36d24d48" title=" " alt="" coords="424,29,577,69"/>
+<area shape="rect" href="classXped_1_1FermionBase.html#aaf13c778cec232d632c2c042d62e0200" title=" " alt="" coords="423,93,579,133"/>
+<area shape="rect" href="classXped_1_1SpinBase.html#ac92bbbe756f8a2bfaeb7998863abc632" title=" " alt="" coords="405,158,596,183"/>
+<area shape="rect" href="namespaceXped_1_1internal.html#a579cf19a08ab95c0ef6c06b1cfca632d" title=" " alt="" coords="204,29,357,69"/>
+<area shape="rect" href="structXped_1_1StorageType.html#a44f82ea1186633a04f0ee4dddc4a7f77" title=" " alt="" coords="5,29,156,69"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a12336055b127c004e085ba05cf2397ce" name="a12336055b127c004e085ba05cf2397ce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a12336055b127c004e085ba05cf2397ce">&#9670;&#160;</a></span>TrivialBasis()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; Symmetry, 1, AllocationPolicy &gt; <a class="el" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;::TrivialBasis</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1Qbasis_a12336055b127c004e085ba05cf2397ce_cgraph.png" border="0" usemap="#aclassXped_1_1Qbasis_a12336055b127c004e085ba05cf2397ce_cgraph" alt=""/></div>
+<map name="aclassXped_1_1Qbasis_a12336055b127c004e085ba05cf2397ce_cgraph" id="aclassXped_1_1Qbasis_a12336055b127c004e085ba05cf2397ce_cgraph">
+<area shape="rect" title=" " alt="" coords="5,5,195,31"/>
+<area shape="rect" href="classXped_1_1Qbasis.html#a34418f2e9ce5c917d3f3b65688c52249" title=" " alt="" coords="243,5,427,31"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1Qbasis_a12336055b127c004e085ba05cf2397ce_icgraph.png" border="0" usemap="#aclassXped_1_1Qbasis_a12336055b127c004e085ba05cf2397ce_icgraph" alt=""/></div>
+<map name="aclassXped_1_1Qbasis_a12336055b127c004e085ba05cf2397ce_icgraph" id="aclassXped_1_1Qbasis_a12336055b127c004e085ba05cf2397ce_icgraph">
+<area shape="rect" title=" " alt="" coords="175,5,364,31"/>
+<area shape="rect" href="classXped_1_1CTM.html#aedf7fd8b43f1c3dfa6de0d7f3a1974d9" title=" " alt="" coords="5,5,127,31"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ac898cf45a12a4273fab6efb6f43d9c7f" name="ac898cf45a12a4273fab6efb6f43d9c7f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac898cf45a12a4273fab6efb6f43d9c7f">&#9670;&#160;</a></span>truncate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;::truncate </td>
+          <td>(</td>
+          <td class="paramtype">const std::unordered_set&lt; qType &gt; &amp;&#160;</td>
+          <td class="paramname"><em>qs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::size_t &amp;&#160;</td>
+          <td class="paramname"><em>M</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5521a9499797b322e3f7259dcdb3189b" name="a5521a9499797b322e3f7259dcdb3189b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5521a9499797b322e3f7259dcdb3189b">&#9670;&#160;</a></span>unordered_qs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = HeapPolicy&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unordered_set&lt; qType &gt; <a class="el" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt; Symmetry, depth, AllocationPolicy &gt;::unordered_qs </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Friends And Related Function Documentation</h2>
+<a id="afdcd2d2142ef5ab2bd37551d191489b8" name="afdcd2d2142ef5ab2bd37551d191489b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afdcd2d2142ef5ab2bd37551d191489b8">&#9670;&#160;</a></span>Qbasis</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = HeapPolicy&gt; </div>
+<div class="memtemplate">
+template&lt;typename Symmetry_ , std::size_t depth_, typename AllocationPolicy_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">friend class <a class="el" href="classXped_1_1Qbasis.html">Qbasis</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>include/Xped/Core/<a class="el" href="Basis_8hpp_source.html">Basis.hpp</a></li>
+<li>include/Xped/Core/<a class="el" href="Qbasis_8hpp_source.html">Qbasis.hpp</a></li>
+<li>src/Core/<a class="el" href="Qbasis_8cpp.html">Qbasis.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- HTML footer for doxygen 1.9.2-->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="namespaceXped.html">Xped</a></li><li class="navelem"><a class="el" href="classXped_1_1Qbasis.html">Qbasis</a></li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.6 </li>
+  </ul>
+</div>
+<script type="text/javascript">
+  // script for doxygen 1.9.2
+  $(function() {
+      toggleButton = document.createElement('doxygen-awesome-dark-mode-toggle')
+      toggleButton.title = "Toggle Light/Dark Mode"
+      $(document).ready(function(){
+          document.getElementById("MSearchBox").parentNode.appendChild(toggleButton)
+      })
+      $(window).resize(function(){
+          document.getElementById("MSearchBox").parentNode.appendChild(toggleButton)
+      })
+  })
+</script>
+</body>
+</html>

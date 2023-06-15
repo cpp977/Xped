@@ -1,0 +1,733 @@
+<!-- HTML header for doxygen 1.9.6-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.6"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Xped: Xped::Kondo&lt; Symmetry &gt; Class Template Reference</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+});
+</script>
+<script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript">
+  DoxygenAwesomeDarkModeToggle.lightModeIcon = '🌞'
+// icon from https://fonts.google.com/icons
+  DoxygenAwesomeDarkModeToggle.darkModeIcon = `<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px" viewBox="0 0 24 24" width="24px" fill="#009793"><g><rect fill="none" height="24" width="24"/></g><g><g><path d="M8.1,14.15C9.77,14.63,11,16.17,11,18c0,0.68-0.19,1.31-0.48,1.87c0.48,0.09,0.97,0.14,1.48,0.14 c1.48,0,2.9-0.41,4.13-1.15c-2.62-0.92-5.23-2.82-6.8-5.86C7.74,9.94,7.78,7.09,8.29,4.9c-2.57,1.33-4.3,4.01-4.3,7.1c0,0,0,0,0,0 c0.01,0,0.01,0,0.02,0C5.66,12,7.18,12.83,8.1,14.15z" opacity=".3"/><path d="M19.78,17.51c-2.47,0-6.57-1.33-8.68-5.43C8.77,7.57,10.6,3.6,11.63,2.01C6.27,2.2,1.98,6.59,1.98,12 c0,0.14,0.02,0.28,0.02,0.42C2.61,12.16,3.28,12,3.98,12c0,0,0,0,0,0c0-3.09,1.73-5.77,4.3-7.1C7.78,7.09,7.74,9.94,9.32,13 c1.57,3.04,4.18,4.95,6.8,5.86c-1.23,0.74-2.65,1.15-4.13,1.15c-0.5,0-1-0.05-1.48-0.14c-0.37,0.7-0.94,1.27-1.64,1.64 c0.98,0.32,2.03,0.5,3.11,0.5c3.5,0,6.58-1.8,8.37-4.52C20.18,17.5,19.98,17.51,19.78,17.51z"/><path d="M7,16l-0.18,0C6.4,14.84,5.3,14,4,14c-1.66,0-3,1.34-3,3s1.34,3,3,3c0.62,0,2.49,0,3,0c1.1,0,2-0.9,2-2 C9,16.9,8.1,16,7,16z"/></g></g></svg>`
+  DoxygenAwesomeDarkModeToggle.init()
+</script>
+</head>
+<body>
+  <!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/cpp977/Xped" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">Xped
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.9.6 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('classXped_1_1Kondo.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="classXped_1_1Kondo-members.html">List of all members</a>  </div>
+  <div class="headertitle"><div class="title">Xped::Kondo&lt; Symmetry &gt; Class Template Reference</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p><code>#include &lt;<a class="el" href="Kondo_8hpp_source.html">Kondo.hpp</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Xped::Kondo&lt; Symmetry &gt;:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1Kondo__inherit__graph.png" border="0" usemap="#aXped_1_1Kondo_3_01Symmetry_01_4_inherit__map" alt="Inheritance graph"/></div>
+<map name="aXped_1_1Kondo_3_01Symmetry_01_4_inherit__map" id="aXped_1_1Kondo_3_01Symmetry_01_4_inherit__map">
+<area shape="rect" title=" " alt="" coords="5,167,207,192"/>
+<area shape="rect" href="structXped_1_1TwoSiteObservable.html" title=" " alt="" coords="13,79,199,119"/>
+<area shape="rect" href="structXped_1_1ObservableBase.html" title=" " alt="" coords="21,5,191,31"/>
+</map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+<div class="dynheader">
+Collaboration diagram for Xped::Kondo&lt; Symmetry &gt;:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1Kondo__coll__graph.png" border="0" usemap="#aXped_1_1Kondo_3_01Symmetry_01_4_coll__map" alt="Collaboration graph"/></div>
+<map name="aXped_1_1Kondo_3_01Symmetry_01_4_coll__map" id="aXped_1_1Kondo_3_01Symmetry_01_4_coll__map">
+<area shape="rect" title=" " alt="" coords="1327,209,1528,235"/>
+<area shape="rect" href="structXped_1_1TwoSiteObservable.html" title=" " alt="" coords="1061,94,1248,134"/>
+<area shape="rect" href="structXped_1_1ObservableBase.html" title=" " alt="" coords="524,5,693,31"/>
+<area shape="rect" title=" " alt="" coords="67,148,125,173"/>
+<area shape="rect" href="structXped_1_1SiteOperator.html" title=" " alt="" coords="305,443,473,483"/>
+<area shape="rect" href="structXped_1_1TMatrix.html" title=" " alt="" coords="738,57,918,112"/>
+<area shape="rect" href="structXped_1_1Pattern.html" title=" " alt="" coords="335,160,444,185"/>
+<area shape="rect" href="structXped_1_1TMatrix.html" title=" " alt="" coords="724,147,932,172"/>
+<area shape="rect" title=" " alt="" coords="66,224,126,249"/>
+<area shape="rect" href="classXped_1_1Spin.html" title=" " alt="" coords="741,250,915,290"/>
+<area shape="rect" href="classXped_1_1Fermion.html" title=" " alt="" coords="717,613,939,639"/>
+<area shape="rect" href="classXped_1_1SpinBase.html" title=" " alt="" coords="1044,249,1265,275"/>
+<area shape="rect" href="classXped_1_1Qbasis.html" title=" " alt="" coords="279,339,500,364"/>
+<area shape="rect" href="classXped_1_1Tensor.html" title=" " alt="" coords="5,443,187,483"/>
+<area shape="rect" href="classXped_1_1FermionBase.html" title=" " alt="" coords="1075,345,1234,385"/>
+</map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a9eb8c0e21b36ac95806bd123c4496149"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Kondo.html#a9eb8c0e21b36ac95806bd123c4496149">Kondo</a> (std::map&lt; std::string, <a class="el" href="structXped_1_1Param.html">Param</a> &gt; &amp;params_in, const <a class="el" href="structXped_1_1Pattern.html">Pattern</a> &amp;pat_in, <a class="el" href="namespaceXped_1_1Opts.html#ae4a8447de96e9ccd51e29d758366ac11">Opts::Bond</a> <a class="el" href="structXped_1_1TwoSiteObservable.html#a75509a2d6970aab695d5f7668827c461">bond</a>=<a class="el" href="namespaceXped_1_1Opts.html#ae4a8447de96e9ccd51e29d758366ac11ac1d9f50f86825a1a2302ec2449c17196">Opts::Bond::H</a>|<a class="el" href="namespaceXped_1_1Opts.html#ae4a8447de96e9ccd51e29d758366ac11a5206560a306a2e085a437fd258eb57ce">Opts::Bond::V</a>)</td></tr>
+<tr class="separator:a9eb8c0e21b36ac95806bd123c4496149"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af934c9007909ce312e534cd94dc1761f"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Kondo.html#af934c9007909ce312e534cd94dc1761f">setDefaultObs</a> () override</td></tr>
+<tr class="separator:af934c9007909ce312e534cd94dc1761f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c0ee74401ea4d0bdda00a61124fa71d"><td class="memItemLeft" align="right" valign="top">virtual std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Kondo.html#a6c0ee74401ea4d0bdda00a61124fa71d">file_name</a> () const override</td></tr>
+<tr class="separator:a6c0ee74401ea4d0bdda00a61124fa71d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c07bb4b37f8eaf3288ffb39cc761c33"><td class="memItemLeft" align="right" valign="top">virtual std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Kondo.html#a3c07bb4b37f8eaf3288ffb39cc761c33">format</a> () const override</td></tr>
+<tr class="separator:a3c07bb4b37f8eaf3288ffb39cc761c33"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0188b2fd5211edf6e822dbbcd0212b14"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Kondo.html#a0188b2fd5211edf6e822dbbcd0212b14">computeObs</a> (XPED_CONST <a class="el" href="classXped_1_1CTM.html">CTM</a>&lt; double, Symmetry, 2, false, <a class="el" href="structXped_1_1Opts_1_1CTMCheckpoint.html">Opts::CTMCheckpoint</a>{}&gt; &amp;env) override</td></tr>
+<tr class="separator:a0188b2fd5211edf6e822dbbcd0212b14"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac5ee87b597115b02bc999354afcecbc0"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Kondo.html#ac5ee87b597115b02bc999354afcecbc0">computeObs</a> (XPED_CONST <a class="el" href="classXped_1_1CTM.html">CTM</a>&lt; std::complex&lt; double &gt;, Symmetry, 2, false, <a class="el" href="structXped_1_1Opts_1_1CTMCheckpoint.html">Opts::CTMCheckpoint</a>{}&gt; &amp;env) override</td></tr>
+<tr class="separator:ac5ee87b597115b02bc999354afcecbc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d3ed4bce61438598bc88c91ddbcc528"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Kondo.html#a2d3ed4bce61438598bc88c91ddbcc528">computeObs</a> (XPED_CONST <a class="el" href="classXped_1_1CTM.html">CTM</a>&lt; double, Symmetry, 1, false, <a class="el" href="structXped_1_1Opts_1_1CTMCheckpoint.html">Opts::CTMCheckpoint</a>{}&gt; &amp;env) override</td></tr>
+<tr class="separator:a2d3ed4bce61438598bc88c91ddbcc528"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe2fc2a0451160d03846383e812abdb6"><td class="memItemLeft" align="right" valign="top">virtual std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Kondo.html#afe2fc2a0451160d03846383e812abdb6">getObsString</a> (const std::string &amp;offset) const override</td></tr>
+<tr class="separator:afe2fc2a0451160d03846383e812abdb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb8ad7200a785a9bf34f1ce68dd4df5c"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Kondo.html#afb8ad7200a785a9bf34f1ce68dd4df5c">obsToFile</a> (HighFive::File &amp;file, const std::string &amp;root=&quot;/&quot;) const override</td></tr>
+<tr class="separator:afb8ad7200a785a9bf34f1ce68dd4df5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_structXped_1_1TwoSiteObservable"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_structXped_1_1TwoSiteObservable')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="structXped_1_1TwoSiteObservable.html">Xped::TwoSiteObservable&lt; double, Symmetry &gt;</a></td></tr>
+<tr class="memitem:ac9aa5dab891a1fec39f1ff0f7bf648d3 inherit pub_methods_structXped_1_1TwoSiteObservable"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TwoSiteObservable.html#ac9aa5dab891a1fec39f1ff0f7bf648d3">TwoSiteObservable</a> ()=default</td></tr>
+<tr class="separator:ac9aa5dab891a1fec39f1ff0f7bf648d3 inherit pub_methods_structXped_1_1TwoSiteObservable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a39c521320df2e0e53f3e46e08799b5ca inherit pub_methods_structXped_1_1TwoSiteObservable"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TwoSiteObservable.html#a39c521320df2e0e53f3e46e08799b5ca">TwoSiteObservable</a> (const <a class="el" href="structXped_1_1Pattern.html">Pattern</a> &amp;pat, <a class="el" href="namespaceXped_1_1Opts.html#ae4a8447de96e9ccd51e29d758366ac11">Opts::Bond</a> bond, const std::string &amp;name_in=&quot;&quot;)</td></tr>
+<tr class="separator:a39c521320df2e0e53f3e46e08799b5ca inherit pub_methods_structXped_1_1TwoSiteObservable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22bc65d54f8c571975eeb9c82d7c796d inherit pub_methods_structXped_1_1TwoSiteObservable"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1TwoSiteObservable.html">TwoSiteObservable</a>&lt; double, Symmetry, true &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TwoSiteObservable.html#a22bc65d54f8c571975eeb9c82d7c796d">shiftQN</a> (const <a class="el" href="structXped_1_1TMatrix.html">TMatrix</a>&lt; typename Symmetry::qType &gt; &amp;charges) const</td></tr>
+<tr class="separator:a22bc65d54f8c571975eeb9c82d7c796d inherit pub_methods_structXped_1_1TwoSiteObservable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d3df563ef8111da713fdcc5c59caf8c inherit pub_methods_structXped_1_1TwoSiteObservable"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TwoSiteObservable.html#a5d3df563ef8111da713fdcc5c59caf8c">loadFromMatlab</a> (const std::filesystem::path &amp;p, const std::string &amp;root_name, int qn_scale=1)</td></tr>
+<tr class="separator:a5d3df563ef8111da713fdcc5c59caf8c inherit pub_methods_structXped_1_1TwoSiteObservable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c05162dc83391506011ec176f22177a inherit pub_methods_structXped_1_1TwoSiteObservable"><td class="memItemLeft" align="right" valign="top">virtual std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TwoSiteObservable.html#a3c05162dc83391506011ec176f22177a">getResString</a> (const std::string &amp;offset) const override</td></tr>
+<tr class="separator:a3c05162dc83391506011ec176f22177a inherit pub_methods_structXped_1_1TwoSiteObservable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeec4898d7703f898dbfdcf4a108d6372 inherit pub_methods_structXped_1_1TwoSiteObservable"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TwoSiteObservable.html#aeec4898d7703f898dbfdcf4a108d6372">toFile</a> (HighFive::File &amp;file, const std::string &amp;root=&quot;/&quot;) const override</td></tr>
+<tr class="separator:aeec4898d7703f898dbfdcf4a108d6372 inherit pub_methods_structXped_1_1TwoSiteObservable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abb5a836943909e0216bcfc6bc6647110 inherit pub_methods_structXped_1_1TwoSiteObservable"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TwoSiteObservable.html#abb5a836943909e0216bcfc6bc6647110">setDefaultObs</a> ()</td></tr>
+<tr class="separator:abb5a836943909e0216bcfc6bc6647110 inherit pub_methods_structXped_1_1TwoSiteObservable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa37d1886553415b7fceac2ba4a4d78ae inherit pub_methods_structXped_1_1TwoSiteObservable"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TwoSiteObservable.html#aa37d1886553415b7fceac2ba4a4d78ae">computeObs</a> (XPED_CONST <a class="el" href="classXped_1_1CTM.html">CTM</a>&lt; double, Symmetry, 2, false, <a class="el" href="structXped_1_1Opts_1_1CTMCheckpoint.html">Opts::CTMCheckpoint</a>{}&gt; &amp;env)</td></tr>
+<tr class="separator:aa37d1886553415b7fceac2ba4a4d78ae inherit pub_methods_structXped_1_1TwoSiteObservable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c553d6da1a3d43a48cee772471528d1 inherit pub_methods_structXped_1_1TwoSiteObservable"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TwoSiteObservable.html#a3c553d6da1a3d43a48cee772471528d1">computeObs</a> (XPED_CONST <a class="el" href="classXped_1_1CTM.html">CTM</a>&lt; std::complex&lt; double &gt;, Symmetry, 2, false, <a class="el" href="structXped_1_1Opts_1_1CTMCheckpoint.html">Opts::CTMCheckpoint</a>{}&gt; &amp;env)</td></tr>
+<tr class="separator:a3c553d6da1a3d43a48cee772471528d1 inherit pub_methods_structXped_1_1TwoSiteObservable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f99256ed92a1e10e8ac5e54cdc3050f inherit pub_methods_structXped_1_1TwoSiteObservable"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TwoSiteObservable.html#a0f99256ed92a1e10e8ac5e54cdc3050f">computeObs</a> (XPED_CONST <a class="el" href="classXped_1_1CTM.html">CTM</a>&lt; double, Symmetry, 1, false, <a class="el" href="structXped_1_1Opts_1_1CTMCheckpoint.html">Opts::CTMCheckpoint</a>{}&gt; &amp;env)</td></tr>
+<tr class="separator:a0f99256ed92a1e10e8ac5e54cdc3050f inherit pub_methods_structXped_1_1TwoSiteObservable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4278d1ef7054fe64ee0a3a1e511673fe inherit pub_methods_structXped_1_1TwoSiteObservable"><td class="memItemLeft" align="right" valign="top">virtual std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TwoSiteObservable.html#a4278d1ef7054fe64ee0a3a1e511673fe">getObsString</a> (const std::string &amp;) const</td></tr>
+<tr class="separator:a4278d1ef7054fe64ee0a3a1e511673fe inherit pub_methods_structXped_1_1TwoSiteObservable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2d5041c93be6f752e5be727186cd892 inherit pub_methods_structXped_1_1TwoSiteObservable"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TwoSiteObservable.html#af2d5041c93be6f752e5be727186cd892">obsToFile</a> (HighFive::File &amp;, const std::string &amp;=&quot;/&quot;) const</td></tr>
+<tr class="separator:af2d5041c93be6f752e5be727186cd892 inherit pub_methods_structXped_1_1TwoSiteObservable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a45d478e4a2893f6e1c47346fd77cff4b inherit pub_methods_structXped_1_1TwoSiteObservable"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TwoSiteObservable.html#a45d478e4a2893f6e1c47346fd77cff4b">serialize</a> (Ar &amp;ar)</td></tr>
+<tr class="separator:a45d478e4a2893f6e1c47346fd77cff4b inherit pub_methods_structXped_1_1TwoSiteObservable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_structXped_1_1ObservableBase"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_structXped_1_1ObservableBase')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="structXped_1_1ObservableBase.html">Xped::ObservableBase</a></td></tr>
+<tr class="memitem:a9c08efff4292624f86b468bc67501b4e inherit pub_methods_structXped_1_1ObservableBase"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1ObservableBase.html#a9c08efff4292624f86b468bc67501b4e">ObservableBase</a> (const std::string &amp;name_in=&quot;&quot;, bool MEASURE_IN=true)</td></tr>
+<tr class="separator:a9c08efff4292624f86b468bc67501b4e inherit pub_methods_structXped_1_1ObservableBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a16f7e330449ee2bddf0f4aee6b674477 inherit pub_methods_structXped_1_1ObservableBase"><td class="memItemLeft" align="right" valign="top">virtual std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1ObservableBase.html#a16f7e330449ee2bddf0f4aee6b674477">file_name</a> () const</td></tr>
+<tr class="separator:a16f7e330449ee2bddf0f4aee6b674477 inherit pub_methods_structXped_1_1ObservableBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa140c8ed2d7715d213a808ca100b3e18 inherit pub_methods_structXped_1_1ObservableBase"><td class="memItemLeft" align="right" valign="top">virtual std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1ObservableBase.html#aa140c8ed2d7715d213a808ca100b3e18">format</a> () const</td></tr>
+<tr class="separator:aa140c8ed2d7715d213a808ca100b3e18 inherit pub_methods_structXped_1_1ObservableBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab12fbc05d1e34f904254d1691bb2e625 inherit pub_methods_structXped_1_1ObservableBase"><td class="memItemLeft" align="right" valign="top">virtual std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1ObservableBase.html#ab12fbc05d1e34f904254d1691bb2e625">getResString</a> (const std::string &amp;offset) const =0</td></tr>
+<tr class="separator:ab12fbc05d1e34f904254d1691bb2e625 inherit pub_methods_structXped_1_1ObservableBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a44e59b089d73d3a873e075177b00721e inherit pub_methods_structXped_1_1ObservableBase"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1ObservableBase.html#a44e59b089d73d3a873e075177b00721e">toFile</a> (HighFive::File &amp;file, const std::string &amp;) const =0</td></tr>
+<tr class="separator:a44e59b089d73d3a873e075177b00721e inherit pub_methods_structXped_1_1ObservableBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acaa82588d8711b0e852eb8cf3bc5566b inherit pub_methods_structXped_1_1ObservableBase"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1ObservableBase.html#acaa82588d8711b0e852eb8cf3bc5566b">~ObservableBase</a> ()=default</td></tr>
+<tr class="separator:acaa82588d8711b0e852eb8cf3bc5566b inherit pub_methods_structXped_1_1ObservableBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:a840106ce8805e92946d6fcb6d4889c92"><td class="memItemLeft" align="right" valign="top">std::map&lt; std::string, <a class="el" href="structXped_1_1Param.html">Param</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Kondo.html#a840106ce8805e92946d6fcb6d4889c92">params</a></td></tr>
+<tr class="separator:a840106ce8805e92946d6fcb6d4889c92"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a886f403e986a3ab9cbc505f5d7042f04"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1Pattern.html">Pattern</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Kondo.html#a886f403e986a3ab9cbc505f5d7042f04">pat</a></td></tr>
+<tr class="separator:a886f403e986a3ab9cbc505f5d7042f04"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac41b0344feb760e85410396a1466b674"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Kondo.html#ac41b0344feb760e85410396a1466b674">used_params</a></td></tr>
+<tr class="separator:ac41b0344feb760e85410396a1466b674"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a273ae643d42ad551e6757c2464ebbc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classXped_1_1SpinBase.html">SpinBase</a>&lt; Symmetry &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Kondo.html#a4a273ae643d42ad551e6757c2464ebbc">B</a></td></tr>
+<tr class="separator:a4a273ae643d42ad551e6757c2464ebbc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac74b4774e97ffb68d418d8d912a55436"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classXped_1_1FermionBase.html">FermionBase</a>&lt; Symmetry &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Kondo.html#ac74b4774e97ffb68d418d8d912a55436">F</a></td></tr>
+<tr class="separator:ac74b4774e97ffb68d418d8d912a55436"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adcf6bb9a38cf7160dcf0e2d3133b68e8"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::unique_ptr&lt; <a class="el" href="structXped_1_1ObservableBase.html">ObservableBase</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Kondo.html#adcf6bb9a38cf7160dcf0e2d3133b68e8">obs</a></td></tr>
+<tr class="separator:adcf6bb9a38cf7160dcf0e2d3133b68e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_attribs_structXped_1_1TwoSiteObservable"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_structXped_1_1TwoSiteObservable')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="structXped_1_1TwoSiteObservable.html">Xped::TwoSiteObservable&lt; double, Symmetry &gt;</a></td></tr>
+<tr class="memitem:a3132f28f27c7994cf79f2698ce5e15c9 inherit pub_attribs_structXped_1_1TwoSiteObservable"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1TMatrix.html">TMatrix</a>&lt; <a class="el" href="classXped_1_1Tensor.html">Tensor</a>&lt; double, 2, 2, Symmetry, false &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TwoSiteObservable.html#a3132f28f27c7994cf79f2698ce5e15c9">data_h</a></td></tr>
+<tr class="separator:a3132f28f27c7994cf79f2698ce5e15c9 inherit pub_attribs_structXped_1_1TwoSiteObservable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a696a97e920d7b3e52d47eb3b827b0a44 inherit pub_attribs_structXped_1_1TwoSiteObservable"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1TMatrix.html">TMatrix</a>&lt; <a class="el" href="classXped_1_1Tensor.html">Tensor</a>&lt; double, 2, 2, Symmetry, false &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TwoSiteObservable.html#a696a97e920d7b3e52d47eb3b827b0a44">data_v</a></td></tr>
+<tr class="separator:a696a97e920d7b3e52d47eb3b827b0a44 inherit pub_attribs_structXped_1_1TwoSiteObservable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b0ab0e8c89056938a05841d4ed14c46 inherit pub_attribs_structXped_1_1TwoSiteObservable"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1TMatrix.html">TMatrix</a>&lt; <a class="el" href="classXped_1_1Tensor.html">Tensor</a>&lt; double, 2, 2, Symmetry, false &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TwoSiteObservable.html#a6b0ab0e8c89056938a05841d4ed14c46">data_d1</a></td></tr>
+<tr class="separator:a6b0ab0e8c89056938a05841d4ed14c46 inherit pub_attribs_structXped_1_1TwoSiteObservable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd2b441621d3a9ecaab4c09b01f1f228 inherit pub_attribs_structXped_1_1TwoSiteObservable"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1TMatrix.html">TMatrix</a>&lt; <a class="el" href="classXped_1_1Tensor.html">Tensor</a>&lt; double, 2, 2, Symmetry, false &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TwoSiteObservable.html#afd2b441621d3a9ecaab4c09b01f1f228">data_d2</a></td></tr>
+<tr class="separator:afd2b441621d3a9ecaab4c09b01f1f228 inherit pub_attribs_structXped_1_1TwoSiteObservable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a952e643e4660069ab8280d31f0111270 inherit pub_attribs_structXped_1_1TwoSiteObservable"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1TMatrix.html">TMatrix</a>&lt; <a class="el" href="structXped_1_1TwoSiteObservable.html#a985df92ebe366da0f2eac40056c9fb66">ObsScalar</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TwoSiteObservable.html#a952e643e4660069ab8280d31f0111270">obs_h</a></td></tr>
+<tr class="separator:a952e643e4660069ab8280d31f0111270 inherit pub_attribs_structXped_1_1TwoSiteObservable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73834a3565d7d913c181cfd9d2e3fe9a inherit pub_attribs_structXped_1_1TwoSiteObservable"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1TMatrix.html">TMatrix</a>&lt; <a class="el" href="structXped_1_1TwoSiteObservable.html#a985df92ebe366da0f2eac40056c9fb66">ObsScalar</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TwoSiteObservable.html#a73834a3565d7d913c181cfd9d2e3fe9a">obs_v</a></td></tr>
+<tr class="separator:a73834a3565d7d913c181cfd9d2e3fe9a inherit pub_attribs_structXped_1_1TwoSiteObservable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a297fa8647f3c910bedf61149492f2f1a inherit pub_attribs_structXped_1_1TwoSiteObservable"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1TMatrix.html">TMatrix</a>&lt; <a class="el" href="structXped_1_1TwoSiteObservable.html#a985df92ebe366da0f2eac40056c9fb66">ObsScalar</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TwoSiteObservable.html#a297fa8647f3c910bedf61149492f2f1a">obs_d1</a></td></tr>
+<tr class="separator:a297fa8647f3c910bedf61149492f2f1a inherit pub_attribs_structXped_1_1TwoSiteObservable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8d02f4ca54956d530745913ebbc311f inherit pub_attribs_structXped_1_1TwoSiteObservable"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1TMatrix.html">TMatrix</a>&lt; <a class="el" href="structXped_1_1TwoSiteObservable.html#a985df92ebe366da0f2eac40056c9fb66">ObsScalar</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TwoSiteObservable.html#ac8d02f4ca54956d530745913ebbc311f">obs_d2</a></td></tr>
+<tr class="separator:ac8d02f4ca54956d530745913ebbc311f inherit pub_attribs_structXped_1_1TwoSiteObservable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75509a2d6970aab695d5f7668827c461 inherit pub_attribs_structXped_1_1TwoSiteObservable"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceXped_1_1Opts.html#ae4a8447de96e9ccd51e29d758366ac11">Opts::Bond</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TwoSiteObservable.html#a75509a2d6970aab695d5f7668827c461">bond</a></td></tr>
+<tr class="separator:a75509a2d6970aab695d5f7668827c461 inherit pub_attribs_structXped_1_1TwoSiteObservable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_attribs_structXped_1_1ObservableBase"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_structXped_1_1ObservableBase')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="structXped_1_1ObservableBase.html">Xped::ObservableBase</a></td></tr>
+<tr class="memitem:a865c9d11bbf6b6af7c37282f5dcce167 inherit pub_attribs_structXped_1_1ObservableBase"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1ObservableBase.html#a865c9d11bbf6b6af7c37282f5dcce167">name</a> = &quot;Op&quot;</td></tr>
+<tr class="separator:a865c9d11bbf6b6af7c37282f5dcce167 inherit pub_attribs_structXped_1_1ObservableBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af545b538ac4424df10dd948c8477e647 inherit pub_attribs_structXped_1_1ObservableBase"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1ObservableBase.html#af545b538ac4424df10dd948c8477e647">MEASURE</a> = true</td></tr>
+<tr class="separator:af545b538ac4424df10dd948c8477e647 inherit pub_attribs_structXped_1_1ObservableBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
+<tr class="inherit_header pub_types_structXped_1_1TwoSiteObservable"><td colspan="2" onclick="javascript:toggleInherit('pub_types_structXped_1_1TwoSiteObservable')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="structXped_1_1TwoSiteObservable.html">Xped::TwoSiteObservable&lt; double, Symmetry &gt;</a></td></tr>
+<tr class="memitem:a985df92ebe366da0f2eac40056c9fb66 inherit pub_types_structXped_1_1TwoSiteObservable"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TwoSiteObservable.html#a985df92ebe366da0f2eac40056c9fb66">ObsScalar</a> = std::conditional_t&lt; true, typename <a class="el" href="structXped_1_1ScalarTraits.html">ScalarTraits</a>&lt; double &gt;::Real, typename <a class="el" href="structXped_1_1ScalarTraits.html">ScalarTraits</a>&lt; double &gt;::Comp &gt;</td></tr>
+<tr class="separator:a985df92ebe366da0f2eac40056c9fb66 inherit pub_types_structXped_1_1TwoSiteObservable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a9eb8c0e21b36ac95806bd123c4496149" name="a9eb8c0e21b36ac95806bd123c4496149"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9eb8c0e21b36ac95806bd123c4496149">&#9670;&#160;</a></span>Kondo()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classXped_1_1Kondo.html">Xped::Kondo</a>&lt; Symmetry &gt;::Kondo </td>
+          <td>(</td>
+          <td class="paramtype">std::map&lt; std::string, <a class="el" href="structXped_1_1Param.html">Param</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>params_in</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Pattern.html">Pattern</a> &amp;&#160;</td>
+          <td class="paramname"><em>pat_in</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespaceXped_1_1Opts.html#ae4a8447de96e9ccd51e29d758366ac11">Opts::Bond</a>&#160;</td>
+          <td class="paramname"><em>bond</em> = <code><a class="el" href="namespaceXped_1_1Opts.html#ae4a8447de96e9ccd51e29d758366ac11ac1d9f50f86825a1a2302ec2449c17196">Opts::Bond::H</a>&#160;|&#160;<a class="el" href="namespaceXped_1_1Opts.html#ae4a8447de96e9ccd51e29d758366ac11a5206560a306a2e085a437fd258eb57ce">Opts::Bond::V</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1Kondo_a9eb8c0e21b36ac95806bd123c4496149_cgraph.png" border="0" usemap="#aclassXped_1_1Kondo_a9eb8c0e21b36ac95806bd123c4496149_cgraph" alt=""/></div>
+<map name="aclassXped_1_1Kondo_a9eb8c0e21b36ac95806bd123c4496149_cgraph" id="aclassXped_1_1Kondo_a9eb8c0e21b36ac95806bd123c4496149_cgraph">
+<area shape="rect" title=" " alt="" coords="5,232,156,257"/>
+<area shape="rect" href="classXped_1_1FermionBase.html#a9af250b34aee8bb3f18ed82392939856" title=" " alt="" coords="217,5,379,31"/>
+<area shape="rect" href="classXped_1_1FermionBase.html#a6ff1d726d5c0ffea5380c023a6be8edd" title=" " alt="" coords="205,55,391,80"/>
+<area shape="rect" href="classXped_1_1FermionBase.html#a4d356fef516b594a28eeaa363e1e9ea6" title=" " alt="" coords="214,104,382,129"/>
+<area shape="rect" href="structXped_1_1SiteOperator.html#a720627ab88a190cac75e3eb00960b96a" title=" " alt="" coords="212,153,384,208"/>
+<area shape="rect" href="classXped_1_1FermionBase.html#a1f98237d9fe3c3713a6ec905e5ccd8c3" title=" " alt="" coords="204,232,392,257"/>
+<area shape="rect" href="classXped_1_1FermionBase.html#af568177472e22913ab92056a02afecf0" title=" " alt="" coords="209,281,387,307"/>
+<area shape="rect" href="classXped_1_1FermionBase.html#aacf81644c9046767521a90c73043113b" title=" " alt="" coords="212,331,384,356"/>
+<area shape="rect" href="classXped_1_1FermionBase.html#a5396e3f08109eb8b740065f575d4058e" title=" " alt="" coords="213,380,383,405"/>
+<area shape="rect" href="namespaceXped.html#a598efa5f2fbcd5d3eeee6ee640b4162f" title=" " alt="" coords="249,429,347,455"/>
+<area shape="rect" href="classXped_1_1Qbasis.html#a34418f2e9ce5c917d3f3b65688c52249" title=" " alt="" coords="440,429,624,455"/>
+</map>
+</div>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a2d3ed4bce61438598bc88c91ddbcc528" name="a2d3ed4bce61438598bc88c91ddbcc528"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d3ed4bce61438598bc88c91ddbcc528">&#9670;&#160;</a></span>computeObs() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void <a class="el" href="classXped_1_1Kondo.html">Xped::Kondo</a>&lt; Symmetry &gt;::computeObs </td>
+          <td>(</td>
+          <td class="paramtype">XPED_CONST <a class="el" href="classXped_1_1CTM.html">CTM</a>&lt; double, Symmetry, 1, false, <a class="el" href="structXped_1_1Opts_1_1CTMCheckpoint.html">Opts::CTMCheckpoint</a>{}&gt; &amp;&#160;</td>
+          <td class="paramname"><em>env</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented from <a class="el" href="structXped_1_1TwoSiteObservable.html#a0f99256ed92a1e10e8ac5e54cdc3050f">Xped::TwoSiteObservable&lt; double, Symmetry &gt;</a>.</p>
+
+</div>
+</div>
+<a id="a0188b2fd5211edf6e822dbbcd0212b14" name="a0188b2fd5211edf6e822dbbcd0212b14"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0188b2fd5211edf6e822dbbcd0212b14">&#9670;&#160;</a></span>computeObs() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void <a class="el" href="classXped_1_1Kondo.html">Xped::Kondo</a>&lt; Symmetry &gt;::computeObs </td>
+          <td>(</td>
+          <td class="paramtype">XPED_CONST <a class="el" href="classXped_1_1CTM.html">CTM</a>&lt; double, Symmetry, 2, false, <a class="el" href="structXped_1_1Opts_1_1CTMCheckpoint.html">Opts::CTMCheckpoint</a>{}&gt; &amp;&#160;</td>
+          <td class="paramname"><em>env</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented from <a class="el" href="structXped_1_1TwoSiteObservable.html#aa37d1886553415b7fceac2ba4a4d78ae">Xped::TwoSiteObservable&lt; double, Symmetry &gt;</a>.</p>
+
+</div>
+</div>
+<a id="ac5ee87b597115b02bc999354afcecbc0" name="ac5ee87b597115b02bc999354afcecbc0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac5ee87b597115b02bc999354afcecbc0">&#9670;&#160;</a></span>computeObs() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void <a class="el" href="classXped_1_1Kondo.html">Xped::Kondo</a>&lt; Symmetry &gt;::computeObs </td>
+          <td>(</td>
+          <td class="paramtype">XPED_CONST <a class="el" href="classXped_1_1CTM.html">CTM</a>&lt; std::complex&lt; double &gt;, Symmetry, 2, false, <a class="el" href="structXped_1_1Opts_1_1CTMCheckpoint.html">Opts::CTMCheckpoint</a>{}&gt; &amp;&#160;</td>
+          <td class="paramname"><em>env</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented from <a class="el" href="structXped_1_1TwoSiteObservable.html#a3c553d6da1a3d43a48cee772471528d1">Xped::TwoSiteObservable&lt; double, Symmetry &gt;</a>.</p>
+
+</div>
+</div>
+<a id="a6c0ee74401ea4d0bdda00a61124fa71d" name="a6c0ee74401ea4d0bdda00a61124fa71d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6c0ee74401ea4d0bdda00a61124fa71d">&#9670;&#160;</a></span>file_name()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual std::string <a class="el" href="classXped_1_1Kondo.html">Xped::Kondo</a>&lt; Symmetry &gt;::file_name </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented from <a class="el" href="structXped_1_1ObservableBase.html#a16f7e330449ee2bddf0f4aee6b674477">Xped::ObservableBase</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1Kondo_a6c0ee74401ea4d0bdda00a61124fa71d_cgraph.png" border="0" usemap="#aclassXped_1_1Kondo_a6c0ee74401ea4d0bdda00a61124fa71d_cgraph" alt=""/></div>
+<map name="aclassXped_1_1Kondo_a6c0ee74401ea4d0bdda00a61124fa71d_cgraph" id="aclassXped_1_1Kondo_a6c0ee74401ea4d0bdda00a61124fa71d_cgraph">
+<area shape="rect" title=" " alt="" coords="5,13,180,38"/>
+<area shape="rect" href="namespaceXped_1_1internal.html#ae929b0ff8f3b21d0074656f29d122e7e" title=" " alt="" coords="228,5,391,45"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a3c07bb4b37f8eaf3288ffb39cc761c33" name="a3c07bb4b37f8eaf3288ffb39cc761c33"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3c07bb4b37f8eaf3288ffb39cc761c33">&#9670;&#160;</a></span>format()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual std::string <a class="el" href="classXped_1_1Kondo.html">Xped::Kondo</a>&lt; Symmetry &gt;::format </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented from <a class="el" href="structXped_1_1ObservableBase.html#aa140c8ed2d7715d213a808ca100b3e18">Xped::ObservableBase</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1Kondo_a3c07bb4b37f8eaf3288ffb39cc761c33_cgraph.png" border="0" usemap="#aclassXped_1_1Kondo_a3c07bb4b37f8eaf3288ffb39cc761c33_cgraph" alt=""/></div>
+<map name="aclassXped_1_1Kondo_a3c07bb4b37f8eaf3288ffb39cc761c33_cgraph" id="aclassXped_1_1Kondo_a3c07bb4b37f8eaf3288ffb39cc761c33_cgraph">
+<area shape="rect" title=" " alt="" coords="5,13,160,38"/>
+<area shape="rect" href="namespaceXped_1_1internal.html#a227df21e9077fbd137e8ce3423b342dc" title=" " alt="" coords="208,5,373,45"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="afe2fc2a0451160d03846383e812abdb6" name="afe2fc2a0451160d03846383e812abdb6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afe2fc2a0451160d03846383e812abdb6">&#9670;&#160;</a></span>getObsString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual std::string <a class="el" href="classXped_1_1Kondo.html">Xped::Kondo</a>&lt; Symmetry &gt;::getObsString </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>offset</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented from <a class="el" href="structXped_1_1TwoSiteObservable.html#a4278d1ef7054fe64ee0a3a1e511673fe">Xped::TwoSiteObservable&lt; double, Symmetry &gt;</a>.</p>
+
+</div>
+</div>
+<a id="afb8ad7200a785a9bf34f1ce68dd4df5c" name="afb8ad7200a785a9bf34f1ce68dd4df5c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afb8ad7200a785a9bf34f1ce68dd4df5c">&#9670;&#160;</a></span>obsToFile()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void <a class="el" href="classXped_1_1Kondo.html">Xped::Kondo</a>&lt; Symmetry &gt;::obsToFile </td>
+          <td>(</td>
+          <td class="paramtype">HighFive::File &amp;&#160;</td>
+          <td class="paramname"><em>file</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>root</em> = <code>&quot;/&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented from <a class="el" href="structXped_1_1TwoSiteObservable.html#af2d5041c93be6f752e5be727186cd892">Xped::TwoSiteObservable&lt; double, Symmetry &gt;</a>.</p>
+
+</div>
+</div>
+<a id="af934c9007909ce312e534cd94dc1761f" name="af934c9007909ce312e534cd94dc1761f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af934c9007909ce312e534cd94dc1761f">&#9670;&#160;</a></span>setDefaultObs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void <a class="el" href="classXped_1_1Kondo.html">Xped::Kondo</a>&lt; Symmetry &gt;::setDefaultObs </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented from <a class="el" href="structXped_1_1TwoSiteObservable.html#abb5a836943909e0216bcfc6bc6647110">Xped::TwoSiteObservable&lt; double, Symmetry &gt;</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1Kondo_af934c9007909ce312e534cd94dc1761f_cgraph.png" border="0" usemap="#aclassXped_1_1Kondo_af934c9007909ce312e534cd94dc1761f_cgraph" alt=""/></div>
+<map name="aclassXped_1_1Kondo_af934c9007909ce312e534cd94dc1761f_cgraph" id="aclassXped_1_1Kondo_af934c9007909ce312e534cd94dc1761f_cgraph">
+<area shape="rect" title=" " alt="" coords="5,235,209,260"/>
+<area shape="rect" href="classXped_1_1FermionBase.html#a9af250b34aee8bb3f18ed82392939856" title=" " alt="" coords="270,5,433,31"/>
+<area shape="rect" href="classXped_1_1FermionBase.html#a6ff1d726d5c0ffea5380c023a6be8edd" title=" " alt="" coords="258,55,445,80"/>
+<area shape="rect" href="classXped_1_1FermionBase.html#ac9a9cf6f36612caef69a549074ebe569" title=" " alt="" coords="269,104,433,129"/>
+<area shape="rect" href="classXped_1_1FermionBase.html#a4d356fef516b594a28eeaa363e1e9ea6" title=" " alt="" coords="267,153,435,179"/>
+<area shape="rect" href="classXped_1_1FermionBase.html#a792ff48a39a843145e1d6282d09df0b8" title=" " alt="" coords="269,203,433,228"/>
+<area shape="rect" href="structXped_1_1SiteOperator.html#a720627ab88a190cac75e3eb00960b96a" title=" " alt="" coords="265,252,437,307"/>
+<area shape="rect" href="classXped_1_1FermionBase.html#a1f98237d9fe3c3713a6ec905e5ccd8c3" title=" " alt="" coords="257,331,445,356"/>
+<area shape="rect" href="classXped_1_1FermionBase.html#ad0e1ebc2ac101561dce8e7feacd190fd" title=" " alt="" coords="265,380,437,405"/>
+<area shape="rect" href="classXped_1_1FermionBase.html#a5396e3f08109eb8b740065f575d4058e" title=" " alt="" coords="266,429,437,455"/>
+<area shape="rect" href="namespaceXped.html#a598efa5f2fbcd5d3eeee6ee640b4162f" title=" " alt="" coords="303,479,400,504"/>
+<area shape="rect" href="structXped_1_1SiteOperator.html#a74f66fcc1dde90722fce9c478edb9c5c" title=" " alt="" coords="513,373,658,413"/>
+<area shape="rect" href="classXped_1_1Qbasis.html#a34418f2e9ce5c917d3f3b65688c52249" title=" " alt="" coords="493,479,677,504"/>
+</map>
+</div>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a4a273ae643d42ad551e6757c2464ebbc" name="a4a273ae643d42ad551e6757c2464ebbc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4a273ae643d42ad551e6757c2464ebbc">&#9670;&#160;</a></span>B</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classXped_1_1SpinBase.html">SpinBase</a>&lt;Symmetry&gt; <a class="el" href="classXped_1_1Kondo.html">Xped::Kondo</a>&lt; Symmetry &gt;<a class="el" href="classB.html">::B</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac74b4774e97ffb68d418d8d912a55436" name="ac74b4774e97ffb68d418d8d912a55436"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac74b4774e97ffb68d418d8d912a55436">&#9670;&#160;</a></span>F</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classXped_1_1FermionBase.html">FermionBase</a>&lt;Symmetry&gt; <a class="el" href="classXped_1_1Kondo.html">Xped::Kondo</a>&lt; Symmetry &gt;::F</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="adcf6bb9a38cf7160dcf0e2d3133b68e8" name="adcf6bb9a38cf7160dcf0e2d3133b68e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adcf6bb9a38cf7160dcf0e2d3133b68e8">&#9670;&#160;</a></span>obs</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::unique_ptr&lt;<a class="el" href="structXped_1_1ObservableBase.html">ObservableBase</a>&gt; &gt; <a class="el" href="classXped_1_1Kondo.html">Xped::Kondo</a>&lt; Symmetry &gt;::obs</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a840106ce8805e92946d6fcb6d4889c92" name="a840106ce8805e92946d6fcb6d4889c92"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a840106ce8805e92946d6fcb6d4889c92">&#9670;&#160;</a></span>params</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::map&lt;std::string, <a class="el" href="structXped_1_1Param.html">Param</a>&gt; <a class="el" href="classXped_1_1Kondo.html">Xped::Kondo</a>&lt; Symmetry &gt;::params</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a886f403e986a3ab9cbc505f5d7042f04" name="a886f403e986a3ab9cbc505f5d7042f04"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a886f403e986a3ab9cbc505f5d7042f04">&#9670;&#160;</a></span>pat</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structXped_1_1Pattern.html">Pattern</a> <a class="el" href="classXped_1_1Kondo.html">Xped::Kondo</a>&lt; Symmetry &gt;::pat</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac41b0344feb760e85410396a1466b674" name="ac41b0344feb760e85410396a1466b674"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac41b0344feb760e85410396a1466b674">&#9670;&#160;</a></span>used_params</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::string&gt; <a class="el" href="classXped_1_1Kondo.html">Xped::Kondo</a>&lt; Symmetry &gt;::used_params</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>include/Xped/PEPS/Models/<a class="el" href="Kondo_8hpp_source.html">Kondo.hpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- HTML footer for doxygen 1.9.2-->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="namespaceXped.html">Xped</a></li><li class="navelem"><a class="el" href="classXped_1_1Kondo.html">Kondo</a></li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.6 </li>
+  </ul>
+</div>
+<script type="text/javascript">
+  // script for doxygen 1.9.2
+  $(function() {
+      toggleButton = document.createElement('doxygen-awesome-dark-mode-toggle')
+      toggleButton.title = "Toggle Light/Dark Mode"
+      $(document).ready(function(){
+          document.getElementById("MSearchBox").parentNode.appendChild(toggleButton)
+      })
+      $(window).resize(function(){
+          document.getElementById("MSearchBox").parentNode.appendChild(toggleButton)
+      })
+  })
+</script>
+</body>
+</html>

@@ -1,0 +1,972 @@
+<!-- HTML header for doxygen 1.9.6-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.6"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Xped: Xped::CoeffBinaryOp&lt; XprTypeLeft, XprTypeRight &gt; Class Template Reference</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+});
+</script>
+<script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript">
+  DoxygenAwesomeDarkModeToggle.lightModeIcon = '🌞'
+// icon from https://fonts.google.com/icons
+  DoxygenAwesomeDarkModeToggle.darkModeIcon = `<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px" viewBox="0 0 24 24" width="24px" fill="#009793"><g><rect fill="none" height="24" width="24"/></g><g><g><path d="M8.1,14.15C9.77,14.63,11,16.17,11,18c0,0.68-0.19,1.31-0.48,1.87c0.48,0.09,0.97,0.14,1.48,0.14 c1.48,0,2.9-0.41,4.13-1.15c-2.62-0.92-5.23-2.82-6.8-5.86C7.74,9.94,7.78,7.09,8.29,4.9c-2.57,1.33-4.3,4.01-4.3,7.1c0,0,0,0,0,0 c0.01,0,0.01,0,0.02,0C5.66,12,7.18,12.83,8.1,14.15z" opacity=".3"/><path d="M19.78,17.51c-2.47,0-6.57-1.33-8.68-5.43C8.77,7.57,10.6,3.6,11.63,2.01C6.27,2.2,1.98,6.59,1.98,12 c0,0.14,0.02,0.28,0.02,0.42C2.61,12.16,3.28,12,3.98,12c0,0,0,0,0,0c0-3.09,1.73-5.77,4.3-7.1C7.78,7.09,7.74,9.94,9.32,13 c1.57,3.04,4.18,4.95,6.8,5.86c-1.23,0.74-2.65,1.15-4.13,1.15c-0.5,0-1-0.05-1.48-0.14c-0.37,0.7-0.94,1.27-1.64,1.64 c0.98,0.32,2.03,0.5,3.11,0.5c3.5,0,6.58-1.8,8.37-4.52C20.18,17.5,19.98,17.51,19.78,17.51z"/><path d="M7,16l-0.18,0C6.4,14.84,5.3,14,4,14c-1.66,0-3,1.34-3,3s1.34,3,3,3c0.62,0,2.49,0,3,0c1.1,0,2-0.9,2-2 C9,16.9,8.1,16,7,16z"/></g></g></svg>`
+  DoxygenAwesomeDarkModeToggle.init()
+</script>
+</head>
+<body>
+  <!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/cpp977/Xped" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">Xped
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.9.6 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('classXped_1_1CoeffBinaryOp.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="classXped_1_1CoeffBinaryOp-members.html">List of all members</a>  </div>
+  <div class="headertitle"><div class="title">Xped::CoeffBinaryOp&lt; XprTypeLeft, XprTypeRight &gt; Class Template Reference</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p><code>#include &lt;<a class="el" href="CoeffBinaryOp_8hpp_source.html">CoeffBinaryOp.hpp</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Xped::CoeffBinaryOp&lt; XprTypeLeft, XprTypeRight &gt;:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1CoeffBinaryOp__inherit__graph.png" border="0" usemap="#aXped_1_1CoeffBinaryOp_3_01XprTypeLeft_00_01XprTypeRight_01_4_inherit__map" alt="Inheritance graph"/></div>
+<map name="aXped_1_1CoeffBinaryOp_3_01XprTypeLeft_00_01XprTypeRight_01_4_inherit__map" id="aXped_1_1CoeffBinaryOp_3_01XprTypeLeft_00_01XprTypeRight_01_4_inherit__map">
+<area shape="rect" title=" " alt="" coords="21,93,244,133"/>
+<area shape="rect" href="classXped_1_1TensorBase.html" title=" " alt="" coords="5,5,260,45"/>
+</map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+<div class="dynheader">
+Collaboration diagram for Xped::CoeffBinaryOp&lt; XprTypeLeft, XprTypeRight &gt;:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1CoeffBinaryOp__coll__graph.png" border="0" usemap="#aXped_1_1CoeffBinaryOp_3_01XprTypeLeft_00_01XprTypeRight_01_4_coll__map" alt="Collaboration graph"/></div>
+<map name="aXped_1_1CoeffBinaryOp_3_01XprTypeLeft_00_01XprTypeRight_01_4_coll__map" id="aXped_1_1CoeffBinaryOp_3_01XprTypeLeft_00_01XprTypeRight_01_4_coll__map">
+<area shape="rect" title=" " alt="" coords="21,93,244,133"/>
+<area shape="rect" href="classXped_1_1TensorBase.html" title=" " alt="" coords="5,5,260,45"/>
+</map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a6b91382c8571e88361fba316213b5951"><td class="memItemLeft" align="right" valign="top">typedef XprTypeLeft::Scalar&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1CoeffBinaryOp.html#a6b91382c8571e88361fba316213b5951">Scalar</a></td></tr>
+<tr class="separator:a6b91382c8571e88361fba316213b5951"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae3dba1de37cf547d07355113152e506d"><td class="memItemLeft" align="right" valign="top">typedef XprTypeLeft::Symmetry&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1CoeffBinaryOp.html#ae3dba1de37cf547d07355113152e506d">Symmetry</a></td></tr>
+<tr class="separator:ae3dba1de37cf547d07355113152e506d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac88802b02ffa99274946b86dc9197b7f"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1CoeffBinaryOp.html#ac88802b02ffa99274946b86dc9197b7f">AllocationPolicy</a> = typename XprTypeLeft::AllocationPolicy</td></tr>
+<tr class="separator:ac88802b02ffa99274946b86dc9197b7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a48709239aae1d651ee0a212bc91efdd9"><td class="memItemLeft" align="right" valign="top">typedef Symmetry::qType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1CoeffBinaryOp.html#a48709239aae1d651ee0a212bc91efdd9">qType</a></td></tr>
+<tr class="separator:a48709239aae1d651ee0a212bc91efdd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_types_classXped_1_1TensorBase"><td colspan="2" onclick="javascript:toggleInherit('pub_types_classXped_1_1TensorBase')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="classXped_1_1TensorBase.html">Xped::TensorBase&lt; CoeffBinaryOp&lt; XprTypeLeft, XprTypeRight &gt; &gt;</a></td></tr>
+<tr class="memitem:a81ff3f81d56a632b47667e3415e2b611 inherit pub_types_classXped_1_1TensorBase"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="structXped_1_1TensorTraits.html">TensorTraits</a>&lt; <a class="el" href="classXped_1_1CoeffBinaryOp.html">CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt; &gt;::Scalar&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1TensorBase.html#a81ff3f81d56a632b47667e3415e2b611">Scalar</a></td></tr>
+<tr class="separator:a81ff3f81d56a632b47667e3415e2b611 inherit pub_types_classXped_1_1TensorBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b14984c803e2e7b649081ebae37f358 inherit pub_types_classXped_1_1TensorBase"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="structXped_1_1TensorTraits.html">TensorTraits</a>&lt; <a class="el" href="classXped_1_1CoeffBinaryOp.html">CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt; &gt;::Symmetry&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1TensorBase.html#a9b14984c803e2e7b649081ebae37f358">Symmetry</a></td></tr>
+<tr class="separator:a9b14984c803e2e7b649081ebae37f358 inherit pub_types_classXped_1_1TensorBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d0426dcd74ce9281925383e2f678968 inherit pub_types_classXped_1_1TensorBase"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1TensorBase.html#a8d0426dcd74ce9281925383e2f678968">AllocationPolicy</a> = typename <a class="el" href="structXped_1_1TensorTraits.html">TensorTraits</a>&lt; <a class="el" href="classXped_1_1CoeffBinaryOp.html">CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt; &gt;::AllocationPolicy</td></tr>
+<tr class="separator:a8d0426dcd74ce9281925383e2f678968 inherit pub_types_classXped_1_1TensorBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5410335e35983d7d023b857cd2699f5c inherit pub_types_classXped_1_1TensorBase"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1TensorBase.html#a5410335e35983d7d023b857cd2699f5c">MatrixType</a> = <a class="el" href="structXped_1_1MatrixInterface.html#af3f987c824b2afbb0123390f8c0afff7">PlainInterface::MType</a>&lt; <a class="el" href="classXped_1_1TensorBase.html#a81ff3f81d56a632b47667e3415e2b611">Scalar</a> &gt;</td></tr>
+<tr class="separator:a5410335e35983d7d023b857cd2699f5c inherit pub_types_classXped_1_1TensorBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a7fdd4faaf4a6fc0ab74d5a3effa699ef"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1CoeffBinaryOp.html#a7fdd4faaf4a6fc0ab74d5a3effa699ef">CoeffBinaryOp</a> (XPED_CONST XprTypeLeft &amp;xpr_l, XPED_CONST XprTypeRight &amp;xpr_r, const std::function&lt; <a class="el" href="classXped_1_1CoeffBinaryOp.html#a6b91382c8571e88361fba316213b5951">Scalar</a>(<a class="el" href="classXped_1_1CoeffBinaryOp.html#a6b91382c8571e88361fba316213b5951">Scalar</a>, <a class="el" href="classXped_1_1CoeffBinaryOp.html#a6b91382c8571e88361fba316213b5951">Scalar</a>)&gt; &amp;coeff_func)</td></tr>
+<tr class="separator:a7fdd4faaf4a6fc0ab74d5a3effa699ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a81cb4c3c486d8fe90e3302482e9aa775"><td class="memItemLeft" align="right" valign="top">const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1CoeffBinaryOp.html#a81cb4c3c486d8fe90e3302482e9aa775">name</a> () const</td></tr>
+<tr class="separator:a81cb4c3c486d8fe90e3302482e9aa775"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4374c744144ac709d5f6411ca6de0474"><td class="memItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1CoeffBinaryOp.html#a4374c744144ac709d5f6411ca6de0474">rank</a> () const</td></tr>
+<tr class="separator:a4374c744144ac709d5f6411ca6de0474"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a85d2dc39741993d251f927f63e75cc0b"><td class="memItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1CoeffBinaryOp.html#a85d2dc39741993d251f927f63e75cc0b">corank</a> () const</td></tr>
+<tr class="separator:a85d2dc39741993d251f927f63e75cc0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa0b6aa972ae1f01b99568d167ff94f9c"><td class="memItemLeft" align="right" valign="top">const auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1CoeffBinaryOp.html#aa0b6aa972ae1f01b99568d167ff94f9c">sector</a> () const</td></tr>
+<tr class="separator:aa0b6aa972ae1f01b99568d167ff94f9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a09e0a89087ed08cadff3679a74fce861"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classXped_1_1CoeffBinaryOp.html#a48709239aae1d651ee0a212bc91efdd9">qType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1CoeffBinaryOp.html#a09e0a89087ed08cadff3679a74fce861">sector</a> (std::size_t i) const</td></tr>
+<tr class="separator:a09e0a89087ed08cadff3679a74fce861"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e26dbddd85f3aeb8fb7fc272bdcade3"><td class="memItemLeft" align="right" valign="top">const auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1CoeffBinaryOp.html#a2e26dbddd85f3aeb8fb7fc272bdcade3">block</a> (std::size_t i) const</td></tr>
+<tr class="separator:a2e26dbddd85f3aeb8fb7fc272bdcade3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adb6874074b19e6eb273bf22f72c626ea"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1CoeffBinaryOp.html#adb6874074b19e6eb273bf22f72c626ea">block</a> (std::size_t i)</td></tr>
+<tr class="separator:adb6874074b19e6eb273bf22f72c626ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b955a26c89a5b1bef3f181fe894e61b"><td class="memItemLeft" align="right" valign="top">const auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1CoeffBinaryOp.html#a8b955a26c89a5b1bef3f181fe894e61b">dict</a> () const</td></tr>
+<tr class="separator:a8b955a26c89a5b1bef3f181fe894e61b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6c74edf4f6dc007e2b27d40520d119e"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="structXped_1_1mpi_1_1XpedWorld.html">mpi::XpedWorld</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1CoeffBinaryOp.html#ab6c74edf4f6dc007e2b27d40520d119e">world</a> () const</td></tr>
+<tr class="separator:ab6c74edf4f6dc007e2b27d40520d119e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08a1a3fb31692197446349bf1cd75321"><td class="memItemLeft" align="right" valign="top">const auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1CoeffBinaryOp.html#a08a1a3fb31692197446349bf1cd75321">uncoupledDomain</a> () const</td></tr>
+<tr class="separator:a08a1a3fb31692197446349bf1cd75321"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af163c0ebfb2ddf604963db245b181bdc"><td class="memItemLeft" align="right" valign="top">const auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1CoeffBinaryOp.html#af163c0ebfb2ddf604963db245b181bdc">uncoupledCodomain</a> () const</td></tr>
+<tr class="separator:af163c0ebfb2ddf604963db245b181bdc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a353bf6fe8556a1035dbfc9d70b857253"><td class="memItemLeft" align="right" valign="top">const auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1CoeffBinaryOp.html#a353bf6fe8556a1035dbfc9d70b857253">coupledDomain</a> () const</td></tr>
+<tr class="separator:a353bf6fe8556a1035dbfc9d70b857253"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa19743ddafab77bdd89e73f270221221"><td class="memItemLeft" align="right" valign="top">const auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1CoeffBinaryOp.html#aa19743ddafab77bdd89e73f270221221">coupledCodomain</a> () const</td></tr>
+<tr class="separator:aa19743ddafab77bdd89e73f270221221"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a825cbd3929a149907596f160e703f95a"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1CoeffBinaryOp.html#a825cbd3929a149907596f160e703f95a">domainTrees</a> (const <a class="el" href="classXped_1_1CoeffBinaryOp.html#a48709239aae1d651ee0a212bc91efdd9">qType</a> &amp;q) const</td></tr>
+<tr class="separator:a825cbd3929a149907596f160e703f95a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e7276cf814fae5d8d4971be3ada35ff"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1CoeffBinaryOp.html#a7e7276cf814fae5d8d4971be3ada35ff">codomainTrees</a> (const <a class="el" href="classXped_1_1CoeffBinaryOp.html#a48709239aae1d651ee0a212bc91efdd9">qType</a> &amp;q) const</td></tr>
+<tr class="separator:a7e7276cf814fae5d8d4971be3ada35ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classXped_1_1TensorBase"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classXped_1_1TensorBase')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classXped_1_1TensorBase.html">Xped::TensorBase&lt; CoeffBinaryOp&lt; XprTypeLeft, XprTypeRight &gt; &gt;</a></td></tr>
+<tr class="memitem:ae4fd81865ee7b9163d0612aa6ea4d638 inherit pub_methods_classXped_1_1TensorBase"><td class="memItemLeft" align="right" valign="top">XPED_CONST <a class="el" href="classXped_1_1AdjointOp.html">AdjointOp</a>&lt; <a class="el" href="classXped_1_1CoeffBinaryOp.html">CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1TensorBase.html#ae4fd81865ee7b9163d0612aa6ea4d638">adjoint</a> () XPED_CONST</td></tr>
+<tr class="separator:ae4fd81865ee7b9163d0612aa6ea4d638 inherit pub_methods_classXped_1_1TensorBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5eaa0311cfe4b7df4b5e7cfe90fac7b8 inherit pub_methods_classXped_1_1TensorBase"><td class="memItemLeft" align="right" valign="top">XPED_CONST <a class="el" href="classXped_1_1CoeffUnaryOp.html">CoeffUnaryOp</a>&lt; <a class="el" href="classXped_1_1CoeffBinaryOp.html">CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt;, ReturnScalar &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1TensorBase.html#a5eaa0311cfe4b7df4b5e7cfe90fac7b8">unaryExpr</a> (const std::function&lt; ReturnScalar(<a class="el" href="classXped_1_1TensorBase.html#a81ff3f81d56a632b47667e3415e2b611">Scalar</a>)&gt; &amp;coeff_func) XPED_CONST</td></tr>
+<tr class="separator:a5eaa0311cfe4b7df4b5e7cfe90fac7b8 inherit pub_methods_classXped_1_1TensorBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab9d17558dc36759dfb4a43b3f3d58361 inherit pub_methods_classXped_1_1TensorBase"><td class="memItemLeft" align="right" valign="top">XPED_CONST <a class="el" href="classXped_1_1BlockUnaryOp.html">BlockUnaryOp</a>&lt; <a class="el" href="classXped_1_1CoeffBinaryOp.html">CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1TensorBase.html#ab9d17558dc36759dfb4a43b3f3d58361">unaryExpr</a> (const std::function&lt; <a class="el" href="classXped_1_1TensorBase.html#a5410335e35983d7d023b857cd2699f5c">MatrixType</a>(const <a class="el" href="classXped_1_1TensorBase.html#a5410335e35983d7d023b857cd2699f5c">MatrixType</a> &amp;)&gt; &amp;coeff_func) XPED_CONST</td></tr>
+<tr class="separator:ab9d17558dc36759dfb4a43b3f3d58361 inherit pub_methods_classXped_1_1TensorBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa741eb47646f85078586b21f0c7e695e inherit pub_methods_classXped_1_1TensorBase"><td class="memItemLeft" align="right" valign="top">XPED_CONST <a class="el" href="classXped_1_1CoeffUnaryOp.html">CoeffUnaryOp</a>&lt; <a class="el" href="classXped_1_1CoeffBinaryOp.html">CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt;, <a class="el" href="classXped_1_1TensorBase.html#a81ff3f81d56a632b47667e3415e2b611">Scalar</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1TensorBase.html#aa741eb47646f85078586b21f0c7e695e">sqrt</a> () XPED_CONST</td></tr>
+<tr class="separator:aa741eb47646f85078586b21f0c7e695e inherit pub_methods_classXped_1_1TensorBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad7b0050faffd7cf96e5d83bd739af94 inherit pub_methods_classXped_1_1TensorBase"><td class="memItemLeft" align="right" valign="top">XPED_CONST <a class="el" href="classXped_1_1CoeffUnaryOp.html">CoeffUnaryOp</a>&lt; <a class="el" href="classXped_1_1CoeffBinaryOp.html">CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt;, <a class="el" href="classXped_1_1TensorBase.html#a81ff3f81d56a632b47667e3415e2b611">Scalar</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1TensorBase.html#aad7b0050faffd7cf96e5d83bd739af94">inv</a> () XPED_CONST</td></tr>
+<tr class="separator:aad7b0050faffd7cf96e5d83bd739af94 inherit pub_methods_classXped_1_1TensorBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a447ece05724d97aaecc7abfe193939ed inherit pub_methods_classXped_1_1TensorBase"><td class="memItemLeft" align="right" valign="top">XPED_CONST <a class="el" href="classXped_1_1CoeffUnaryOp.html">CoeffUnaryOp</a>&lt; <a class="el" href="classXped_1_1CoeffBinaryOp.html">CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt;, <a class="el" href="classXped_1_1TensorBase.html#a81ff3f81d56a632b47667e3415e2b611">Scalar</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1TensorBase.html#a447ece05724d97aaecc7abfe193939ed">square</a> () XPED_CONST</td></tr>
+<tr class="separator:a447ece05724d97aaecc7abfe193939ed inherit pub_methods_classXped_1_1TensorBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad30cedac1ae3443b5fe330ba0c7edc32 inherit pub_methods_classXped_1_1TensorBase"><td class="memItemLeft" align="right" valign="top">XPED_CONST <a class="el" href="classXped_1_1CoeffUnaryOp.html">CoeffUnaryOp</a>&lt; <a class="el" href="classXped_1_1CoeffBinaryOp.html">CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt;, typename <a class="el" href="structXped_1_1ScalarTraits.html">ScalarTraits</a>&lt; <a class="el" href="classXped_1_1TensorBase.html#a81ff3f81d56a632b47667e3415e2b611">Scalar</a> &gt;::Real &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1TensorBase.html#ad30cedac1ae3443b5fe330ba0c7edc32">abs</a> () XPED_CONST</td></tr>
+<tr class="separator:ad30cedac1ae3443b5fe330ba0c7edc32 inherit pub_methods_classXped_1_1TensorBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab192ba988bab28be97022095867b857e inherit pub_methods_classXped_1_1TensorBase"><td class="memItemLeft" align="right" valign="top">XPED_CONST <a class="el" href="classXped_1_1CoeffUnaryOp.html">CoeffUnaryOp</a>&lt; <a class="el" href="classXped_1_1CoeffBinaryOp.html">CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt;, OtherScalar &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1TensorBase.html#ab192ba988bab28be97022095867b857e">cast</a> () XPED_CONST</td></tr>
+<tr class="separator:ab192ba988bab28be97022095867b857e inherit pub_methods_classXped_1_1TensorBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a433027b0b893389b22f31976110abf95 inherit pub_methods_classXped_1_1TensorBase"><td class="memItemLeft" align="right" valign="top">XPED_CONST <a class="el" href="classXped_1_1BlockUnaryOp.html">BlockUnaryOp</a>&lt; <a class="el" href="classXped_1_1CoeffBinaryOp.html">CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1TensorBase.html#a433027b0b893389b22f31976110abf95">msqrt</a> () XPED_CONST</td></tr>
+<tr class="separator:a433027b0b893389b22f31976110abf95 inherit pub_methods_classXped_1_1TensorBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5dd4628c3ba8d0e8082c270ce48908c9 inherit pub_methods_classXped_1_1TensorBase"><td class="memItemLeft" align="right" valign="top">XPED_CONST <a class="el" href="classXped_1_1BlockUnaryOp.html">BlockUnaryOp</a>&lt; <a class="el" href="classXped_1_1CoeffBinaryOp.html">CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1TensorBase.html#a5dd4628c3ba8d0e8082c270ce48908c9">mexp</a> (<a class="el" href="classXped_1_1TensorBase.html#a81ff3f81d56a632b47667e3415e2b611">Scalar</a> factor) XPED_CONST</td></tr>
+<tr class="separator:a5dd4628c3ba8d0e8082c270ce48908c9 inherit pub_methods_classXped_1_1TensorBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a405c285e635642b3436991047f25d4ec inherit pub_methods_classXped_1_1TensorBase"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classXped_1_1CoeffBinaryOp.html">CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1TensorBase.html#a405c285e635642b3436991047f25d4ec">operator+=</a> (const <a class="el" href="classXped_1_1TensorBase.html#a81ff3f81d56a632b47667e3415e2b611">Scalar</a> offset)</td></tr>
+<tr class="separator:a405c285e635642b3436991047f25d4ec inherit pub_methods_classXped_1_1TensorBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a83c142ad4657711dc41babe96d1a1b3e inherit pub_methods_classXped_1_1TensorBase"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classXped_1_1CoeffBinaryOp.html">CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1TensorBase.html#a83c142ad4657711dc41babe96d1a1b3e">operator+=</a> (XPED_CONST <a class="el" href="classXped_1_1TensorBase.html">TensorBase</a>&lt; OtherDerived &gt; &amp;other)</td></tr>
+<tr class="separator:a83c142ad4657711dc41babe96d1a1b3e inherit pub_methods_classXped_1_1TensorBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0779b6471140f98913acf24e740bc985 inherit pub_methods_classXped_1_1TensorBase"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classXped_1_1CoeffBinaryOp.html">CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1TensorBase.html#a0779b6471140f98913acf24e740bc985">operator-=</a> (const <a class="el" href="classXped_1_1TensorBase.html#a81ff3f81d56a632b47667e3415e2b611">Scalar</a> offset)</td></tr>
+<tr class="separator:a0779b6471140f98913acf24e740bc985 inherit pub_methods_classXped_1_1TensorBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ac567a827eea3e9e1b5b33e4cd7baac inherit pub_methods_classXped_1_1TensorBase"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classXped_1_1CoeffBinaryOp.html">CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1TensorBase.html#a3ac567a827eea3e9e1b5b33e4cd7baac">operator-=</a> (XPED_CONST <a class="el" href="classXped_1_1TensorBase.html">TensorBase</a>&lt; OtherDerived &gt; &amp;other)</td></tr>
+<tr class="separator:a3ac567a827eea3e9e1b5b33e4cd7baac inherit pub_methods_classXped_1_1TensorBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae236d92da7c0886671dd3e2d2b318e1d inherit pub_methods_classXped_1_1TensorBase"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classXped_1_1CoeffBinaryOp.html">CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1TensorBase.html#ae236d92da7c0886671dd3e2d2b318e1d">operator*=</a> (const <a class="el" href="classXped_1_1TensorBase.html#a81ff3f81d56a632b47667e3415e2b611">Scalar</a> factor)</td></tr>
+<tr class="separator:ae236d92da7c0886671dd3e2d2b318e1d inherit pub_methods_classXped_1_1TensorBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad1a7e53d7747c181c34a50f5f29fb95 inherit pub_methods_classXped_1_1TensorBase"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classXped_1_1CoeffBinaryOp.html">CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1TensorBase.html#aad1a7e53d7747c181c34a50f5f29fb95">operator/=</a> (const <a class="el" href="classXped_1_1TensorBase.html#a81ff3f81d56a632b47667e3415e2b611">Scalar</a> divisor)</td></tr>
+<tr class="separator:aad1a7e53d7747c181c34a50f5f29fb95 inherit pub_methods_classXped_1_1TensorBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb344b6200989bb7faa2e9412d96b1fb inherit pub_methods_classXped_1_1TensorBase"><td class="memItemLeft" align="right" valign="top">XPED_CONST <a class="el" href="classXped_1_1DiagCoeffUnaryOp.html">DiagCoeffUnaryOp</a>&lt; <a class="el" href="classXped_1_1CoeffBinaryOp.html">CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1TensorBase.html#afb344b6200989bb7faa2e9412d96b1fb">diagUnaryExpr</a> (const std::function&lt; <a class="el" href="classXped_1_1TensorBase.html#a81ff3f81d56a632b47667e3415e2b611">Scalar</a>(<a class="el" href="classXped_1_1TensorBase.html#a81ff3f81d56a632b47667e3415e2b611">Scalar</a>)&gt; &amp;coeff_func) XPED_CONST</td></tr>
+<tr class="separator:afb344b6200989bb7faa2e9412d96b1fb inherit pub_methods_classXped_1_1TensorBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab71d49c1feaa59c244e8f5ffe65e8d56 inherit pub_methods_classXped_1_1TensorBase"><td class="memItemLeft" align="right" valign="top">XPED_CONST <a class="el" href="classXped_1_1DiagCoeffUnaryOp.html">DiagCoeffUnaryOp</a>&lt; <a class="el" href="classXped_1_1CoeffBinaryOp.html">CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1TensorBase.html#ab71d49c1feaa59c244e8f5ffe65e8d56">diag_inv</a> () XPED_CONST</td></tr>
+<tr class="separator:ab71d49c1feaa59c244e8f5ffe65e8d56 inherit pub_methods_classXped_1_1TensorBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada3421342b158d63881affe5ab77df04 inherit pub_methods_classXped_1_1TensorBase"><td class="memItemLeft" align="right" valign="top">XPED_CONST <a class="el" href="classXped_1_1DiagCoeffUnaryOp.html">DiagCoeffUnaryOp</a>&lt; <a class="el" href="classXped_1_1CoeffBinaryOp.html">CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1TensorBase.html#ada3421342b158d63881affe5ab77df04">diag_sqrt</a> () XPED_CONST</td></tr>
+<tr class="separator:ada3421342b158d63881affe5ab77df04 inherit pub_methods_classXped_1_1TensorBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d07f445e2073b69a2d582c5b9f64c01 inherit pub_methods_classXped_1_1TensorBase"><td class="memItemLeft" align="right" valign="top">XPED_CONST <a class="el" href="classXped_1_1DiagCoeffBinaryOp.html">DiagCoeffBinaryOp</a>&lt; <a class="el" href="classXped_1_1CoeffBinaryOp.html">CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt;, OtherDerived &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1TensorBase.html#a8d07f445e2073b69a2d582c5b9f64c01">diagBinaryExpr</a> (XPED_CONST <a class="el" href="classXped_1_1TensorBase.html">TensorBase</a>&lt; OtherDerived &gt; &amp;other, const std::function&lt; <a class="el" href="classXped_1_1TensorBase.html#a81ff3f81d56a632b47667e3415e2b611">Scalar</a>(<a class="el" href="classXped_1_1TensorBase.html#a81ff3f81d56a632b47667e3415e2b611">Scalar</a>, <a class="el" href="classXped_1_1TensorBase.html#a81ff3f81d56a632b47667e3415e2b611">Scalar</a>)&gt; &amp;coeff_func) XPED_CONST</td></tr>
+<tr class="separator:a8d07f445e2073b69a2d582c5b9f64c01 inherit pub_methods_classXped_1_1TensorBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc7275f44f3fa4aff2330f7119865d77 inherit pub_methods_classXped_1_1TensorBase"><td class="memItemLeft" align="right" valign="top">XPED_CONST <a class="el" href="classXped_1_1CoeffBinaryOp.html">CoeffBinaryOp</a>&lt; <a class="el" href="classXped_1_1CoeffBinaryOp.html">CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt;, OtherDerived &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1TensorBase.html#acc7275f44f3fa4aff2330f7119865d77">binaryExpr</a> (XPED_CONST <a class="el" href="classXped_1_1TensorBase.html">TensorBase</a>&lt; OtherDerived &gt; &amp;other, const std::function&lt; <a class="el" href="classXped_1_1TensorBase.html#a81ff3f81d56a632b47667e3415e2b611">Scalar</a>(<a class="el" href="classXped_1_1TensorBase.html#a81ff3f81d56a632b47667e3415e2b611">Scalar</a>, <a class="el" href="classXped_1_1TensorBase.html#a81ff3f81d56a632b47667e3415e2b611">Scalar</a>)&gt; &amp;coeff_func) XPED_CONST</td></tr>
+<tr class="separator:acc7275f44f3fa4aff2330f7119865d77 inherit pub_methods_classXped_1_1TensorBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5da402f5b5fa22b89ec9839e439771e5 inherit pub_methods_classXped_1_1TensorBase"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classXped_1_1Tensor.html">Tensor</a>&lt; std::common_type_t&lt; <a class="el" href="classXped_1_1TensorBase.html#a81ff3f81d56a632b47667e3415e2b611">Scalar</a>, typename <a class="el" href="structXped_1_1TensorTraits.html">TensorTraits</a>&lt; OtherDerived &gt;::Scalar &gt;, <a class="el" href="structXped_1_1TensorTraits.html">TensorTraits</a>&lt; <a class="el" href="classXped_1_1CoeffBinaryOp.html">CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt; &gt;::Rank, <a class="el" href="structXped_1_1TensorTraits.html">TensorTraits</a>&lt; typename std::remove_const&lt; std::remove_reference_t&lt; OtherDerived &gt; &gt;::type &gt;::CoRank, <a class="el" href="classXped_1_1TensorBase.html#a9b14984c803e2e7b649081ebae37f358">Symmetry</a>, false, <a class="el" href="classXped_1_1TensorBase.html#a8d0426dcd74ce9281925383e2f678968">AllocationPolicy</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1TensorBase.html#a5da402f5b5fa22b89ec9839e439771e5">operator*</a> (XPED_CONST <a class="el" href="classXped_1_1TensorBase.html">TensorBase</a>&lt; OtherDerived &gt; &amp;other) XPED_CONST</td></tr>
+<tr class="separator:a5da402f5b5fa22b89ec9839e439771e5 inherit pub_methods_classXped_1_1TensorBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a0c9cb93e0f42a7688f2a6b0d5c7db7 inherit pub_methods_classXped_1_1TensorBase"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classXped_1_1Tensor.html">Tensor</a>&lt; std::common_type_t&lt; <a class="el" href="classXped_1_1TensorBase.html#a81ff3f81d56a632b47667e3415e2b611">Scalar</a>, typename <a class="el" href="structXped_1_1TensorTraits.html">TensorTraits</a>&lt; OtherDerived &gt;::Scalar &gt;, Rank, <a class="el" href="structXped_1_1TensorTraits.html">TensorTraits</a>&lt; typename std::remove_const&lt; std::remove_reference_t&lt; OtherDerived &gt; &gt;::type &gt;::CoRank, <a class="el" href="classXped_1_1TensorBase.html#a9b14984c803e2e7b649081ebae37f358">Symmetry</a>, false, <a class="el" href="classXped_1_1TensorBase.html#a8d0426dcd74ce9281925383e2f678968">AllocationPolicy</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1TensorBase.html#a4a0c9cb93e0f42a7688f2a6b0d5c7db7">operator*</a> (<a class="el" href="classXped_1_1TensorBase.html">TensorBase</a>&lt; OtherDerived &gt; &amp;&amp;other) XPED_CONST</td></tr>
+<tr class="separator:a4a0c9cb93e0f42a7688f2a6b0d5c7db7 inherit pub_methods_classXped_1_1TensorBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab62fda21079220c04e6a1d053cc48e44 inherit pub_methods_classXped_1_1TensorBase"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classXped_1_1Tensor.html">Tensor</a>&lt; std::common_type_t&lt; typename <a class="el" href="structXped_1_1TensorTraits.html">TensorTraits</a>&lt; <a class="el" href="classXped_1_1CoeffBinaryOp.html">CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt; &gt;::Scalar, typename <a class="el" href="structXped_1_1TensorTraits.html">TensorTraits</a>&lt; OtherDerived &gt;::Scalar &gt;, <a class="el" href="structXped_1_1TensorTraits.html">TensorTraits</a>&lt; <a class="el" href="classXped_1_1CoeffBinaryOp.html">CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt; &gt;::Rank, <a class="el" href="structXped_1_1TensorTraits.html">TensorTraits</a>&lt; typename std::remove_const&lt; std::remove_reference_t&lt; OtherDerived &gt; &gt;::type &gt;::CoRank, typename <a class="el" href="structXped_1_1TensorTraits.html">TensorTraits</a>&lt; <a class="el" href="classXped_1_1CoeffBinaryOp.html">CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt; &gt;::Symmetry, false, typename <a class="el" href="structXped_1_1TensorTraits.html">TensorTraits</a>&lt; <a class="el" href="classXped_1_1CoeffBinaryOp.html">CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt; &gt;::AllocationPolicy &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1TensorBase.html#ab62fda21079220c04e6a1d053cc48e44">operator*</a> (XPED_CONST <a class="el" href="classXped_1_1TensorBase.html">TensorBase</a>&lt; OtherDerived &gt; &amp;other) XPED_CONST</td></tr>
+<tr class="separator:ab62fda21079220c04e6a1d053cc48e44 inherit pub_methods_classXped_1_1TensorBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b37a1e8a9d73977ee7ee995ec558735 inherit pub_methods_classXped_1_1TensorBase"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classXped_1_1TensorBase.html#a81ff3f81d56a632b47667e3415e2b611">Scalar</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1TensorBase.html#a7b37a1e8a9d73977ee7ee995ec558735">trace</a> () XPED_CONST</td></tr>
+<tr class="separator:a7b37a1e8a9d73977ee7ee995ec558735 inherit pub_methods_classXped_1_1TensorBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c11f67b4c23adab795a79d44b89aa6b inherit pub_methods_classXped_1_1TensorBase"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1TensorTraits.html">TensorTraits</a>&lt; <a class="el" href="classXped_1_1CoeffBinaryOp.html">CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt; &gt;::Scalar&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1TensorBase.html#a5c11f67b4c23adab795a79d44b89aa6b">trace</a> () XPED_CONST</td></tr>
+<tr class="separator:a5c11f67b4c23adab795a79d44b89aa6b inherit pub_methods_classXped_1_1TensorBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0fe5983bdc4a3d4b8bcbc5f3baa967c8 inherit pub_methods_classXped_1_1TensorBase"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1ScalarTraits.html">ScalarTraits</a>&lt; <a class="el" href="classXped_1_1TensorBase.html#a81ff3f81d56a632b47667e3415e2b611">Scalar</a> &gt;::Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1TensorBase.html#a0fe5983bdc4a3d4b8bcbc5f3baa967c8">maxNorm</a> () XPED_CONST</td></tr>
+<tr class="separator:a0fe5983bdc4a3d4b8bcbc5f3baa967c8 inherit pub_methods_classXped_1_1TensorBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adde63a928ead3982e4ed014c38577045 inherit pub_methods_classXped_1_1TensorBase"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1ScalarTraits.html">ScalarTraits</a>&lt; <a class="el" href="classXped_1_1TensorBase.html#a81ff3f81d56a632b47667e3415e2b611">Scalar</a> &gt;::Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1TensorBase.html#adde63a928ead3982e4ed014c38577045">squaredNorm</a> () XPED_CONST</td></tr>
+<tr class="separator:adde63a928ead3982e4ed014c38577045 inherit pub_methods_classXped_1_1TensorBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a046cb49660b0102c5501fd6708d74575 inherit pub_methods_classXped_1_1TensorBase"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1ScalarTraits.html">ScalarTraits</a>&lt; <a class="el" href="classXped_1_1TensorBase.html#a81ff3f81d56a632b47667e3415e2b611">Scalar</a> &gt;::Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1TensorBase.html#a046cb49660b0102c5501fd6708d74575">norm</a> () XPED_CONST</td></tr>
+<tr class="separator:a046cb49660b0102c5501fd6708d74575 inherit pub_methods_classXped_1_1TensorBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa74ac46063bfdb213b4b559b43b5b329 inherit pub_methods_classXped_1_1TensorBase"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1ScalarTraits.html">ScalarTraits</a>&lt; <a class="el" href="classXped_1_1TensorBase.html#a81ff3f81d56a632b47667e3415e2b611">Scalar</a> &gt;::Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1TensorBase.html#aa74ac46063bfdb213b4b559b43b5b329">maxCoeff</a> (std::size_t &amp;max_block, <a class="el" href="structXped_1_1MatrixInterface.html#abaf5db6206f66f6fa7b56f5dda31a708">PlainInterface::MIndextype</a> &amp;max_row, <a class="el" href="structXped_1_1MatrixInterface.html#abaf5db6206f66f6fa7b56f5dda31a708">PlainInterface::MIndextype</a> &amp;max_col) XPED_CONST</td></tr>
+<tr class="separator:aa74ac46063bfdb213b4b559b43b5b329 inherit pub_methods_classXped_1_1TensorBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac2feff0b56bd85c2ddc5e6bf17c4faac inherit pub_methods_classXped_1_1TensorBase"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classXped_1_1Tensor.html">Tensor</a>&lt; <a class="el" href="classXped_1_1TensorBase.html#a81ff3f81d56a632b47667e3415e2b611">Scalar</a>, Rank, CoRank, <a class="el" href="classXped_1_1TensorBase.html#a9b14984c803e2e7b649081ebae37f358">Symmetry</a>, false, <a class="el" href="classXped_1_1TensorBase.html#a8d0426dcd74ce9281925383e2f678968">AllocationPolicy</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1TensorBase.html#ac2feff0b56bd85c2ddc5e6bf17c4faac">eval</a> () const</td></tr>
+<tr class="separator:ac2feff0b56bd85c2ddc5e6bf17c4faac inherit pub_methods_classXped_1_1TensorBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0be12c47ef4c94fc0a98c6aa30213db4 inherit pub_methods_classXped_1_1TensorBase"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classXped_1_1CoeffBinaryOp.html">CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1TensorBase.html#a0be12c47ef4c94fc0a98c6aa30213db4">derived</a> () const</td></tr>
+<tr class="separator:a0be12c47ef4c94fc0a98c6aa30213db4 inherit pub_methods_classXped_1_1TensorBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a53df808d9f11cc5219ff9aaacb31596c inherit pub_methods_classXped_1_1TensorBase"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classXped_1_1CoeffBinaryOp.html">CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1TensorBase.html#a53df808d9f11cc5219ff9aaacb31596c">derived</a> ()</td></tr>
+<tr class="separator:a53df808d9f11cc5219ff9aaacb31596c inherit pub_methods_classXped_1_1TensorBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
+<tr class="memitem:ae19a4bfe9e955f146a049ae4938d5f7d"><td class="memItemLeft" align="right" valign="top">static constexpr std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1CoeffBinaryOp.html#ae19a4bfe9e955f146a049ae4938d5f7d">Rank</a> = XprTypeLeft::Rank</td></tr>
+<tr class="separator:ae19a4bfe9e955f146a049ae4938d5f7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a084afc0116999bcb380a18c82055add5"><td class="memItemLeft" align="right" valign="top">static constexpr std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1CoeffBinaryOp.html#a084afc0116999bcb380a18c82055add5">CoRank</a> = XprTypeLeft::CoRank</td></tr>
+<tr class="separator:a084afc0116999bcb380a18c82055add5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_static_attribs_classXped_1_1TensorBase"><td colspan="2" onclick="javascript:toggleInherit('pub_static_attribs_classXped_1_1TensorBase')"><img src="closed.png" alt="-"/>&#160;Static Public Attributes inherited from <a class="el" href="classXped_1_1TensorBase.html">Xped::TensorBase&lt; CoeffBinaryOp&lt; XprTypeLeft, XprTypeRight &gt; &gt;</a></td></tr>
+<tr class="memitem:ada48be7303d83848dad20a6859c230ae inherit pub_static_attribs_classXped_1_1TensorBase"><td class="memItemLeft" align="right" valign="top">static constexpr std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1TensorBase.html#ada48be7303d83848dad20a6859c230ae">Rank</a></td></tr>
+<tr class="separator:ada48be7303d83848dad20a6859c230ae inherit pub_static_attribs_classXped_1_1TensorBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a290abd48877eb649d749f892291965c3 inherit pub_static_attribs_classXped_1_1TensorBase"><td class="memItemLeft" align="right" valign="top">static constexpr std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1TensorBase.html#a290abd48877eb649d749f892291965c3">CoRank</a></td></tr>
+<tr class="separator:a290abd48877eb649d749f892291965c3 inherit pub_static_attribs_classXped_1_1TensorBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:a7d18b056494e5f1a21e4dbc6f237574d"><td class="memItemLeft" align="right" valign="top">XPED_CONST XprTypeLeft &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1CoeffBinaryOp.html#a7d18b056494e5f1a21e4dbc6f237574d">refxpr_l_</a></td></tr>
+<tr class="separator:a7d18b056494e5f1a21e4dbc6f237574d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed69c9c1813c0eda6edb72051335997c"><td class="memItemLeft" align="right" valign="top">XPED_CONST XprTypeRight &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1CoeffBinaryOp.html#aed69c9c1813c0eda6edb72051335997c">refxpr_r_</a></td></tr>
+<tr class="separator:aed69c9c1813c0eda6edb72051335997c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aadd7dac70e70a2bfd21a586196e71749"><td class="memItemLeft" align="right" valign="top">const std::function&lt; <a class="el" href="classXped_1_1CoeffBinaryOp.html#a6b91382c8571e88361fba316213b5951">Scalar</a>(<a class="el" href="classXped_1_1CoeffBinaryOp.html#a6b91382c8571e88361fba316213b5951">Scalar</a>, <a class="el" href="classXped_1_1CoeffBinaryOp.html#a6b91382c8571e88361fba316213b5951">Scalar</a>)&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1CoeffBinaryOp.html#aadd7dac70e70a2bfd21a586196e71749">coeff_func_</a></td></tr>
+<tr class="separator:aadd7dac70e70a2bfd21a586196e71749"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="ac88802b02ffa99274946b86dc9197b7f" name="ac88802b02ffa99274946b86dc9197b7f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac88802b02ffa99274946b86dc9197b7f">&#9670;&#160;</a></span>AllocationPolicy</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename XprTypeLeft , typename XprTypeRight &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classXped_1_1CoeffBinaryOp.html">Xped::CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt;::AllocationPolicy =  typename XprTypeLeft::AllocationPolicy</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a48709239aae1d651ee0a212bc91efdd9" name="a48709239aae1d651ee0a212bc91efdd9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a48709239aae1d651ee0a212bc91efdd9">&#9670;&#160;</a></span>qType</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename XprTypeLeft , typename XprTypeRight &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef Symmetry::qType <a class="el" href="classXped_1_1CoeffBinaryOp.html">Xped::CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt;::qType</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6b91382c8571e88361fba316213b5951" name="a6b91382c8571e88361fba316213b5951"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b91382c8571e88361fba316213b5951">&#9670;&#160;</a></span>Scalar</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename XprTypeLeft , typename XprTypeRight &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef XprTypeLeft::Scalar <a class="el" href="classXped_1_1CoeffBinaryOp.html">Xped::CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt;::Scalar</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae3dba1de37cf547d07355113152e506d" name="ae3dba1de37cf547d07355113152e506d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae3dba1de37cf547d07355113152e506d">&#9670;&#160;</a></span>Symmetry</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename XprTypeLeft , typename XprTypeRight &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef XprTypeLeft::Symmetry <a class="el" href="classXped_1_1CoeffBinaryOp.html">Xped::CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt;::Symmetry</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a7fdd4faaf4a6fc0ab74d5a3effa699ef" name="a7fdd4faaf4a6fc0ab74d5a3effa699ef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7fdd4faaf4a6fc0ab74d5a3effa699ef">&#9670;&#160;</a></span>CoeffBinaryOp()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename XprTypeLeft , typename XprTypeRight &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classXped_1_1CoeffBinaryOp.html">Xped::CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt;::CoeffBinaryOp </td>
+          <td>(</td>
+          <td class="paramtype">XPED_CONST XprTypeLeft &amp;&#160;</td>
+          <td class="paramname"><em>xpr_l</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">XPED_CONST XprTypeRight &amp;&#160;</td>
+          <td class="paramname"><em>xpr_r</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::function&lt; <a class="el" href="classXped_1_1CoeffBinaryOp.html#a6b91382c8571e88361fba316213b5951">Scalar</a>(<a class="el" href="classXped_1_1CoeffBinaryOp.html#a6b91382c8571e88361fba316213b5951">Scalar</a>, <a class="el" href="classXped_1_1CoeffBinaryOp.html#a6b91382c8571e88361fba316213b5951">Scalar</a>)&gt; &amp;&#160;</td>
+          <td class="paramname"><em>coeff_func</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="adb6874074b19e6eb273bf22f72c626ea" name="adb6874074b19e6eb273bf22f72c626ea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adb6874074b19e6eb273bf22f72c626ea">&#9670;&#160;</a></span>block() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename XprTypeLeft , typename XprTypeRight &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto <a class="el" href="classXped_1_1CoeffBinaryOp.html">Xped::CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt;::block </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>i</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1CoeffBinaryOp_adb6874074b19e6eb273bf22f72c626ea_cgraph.png" border="0" usemap="#aclassXped_1_1CoeffBinaryOp_adb6874074b19e6eb273bf22f72c626ea_cgraph" alt=""/></div>
+<map name="aclassXped_1_1CoeffBinaryOp_adb6874074b19e6eb273bf22f72c626ea_cgraph" id="aclassXped_1_1CoeffBinaryOp_adb6874074b19e6eb273bf22f72c626ea_cgraph">
+<area shape="rect" title=" " alt="" coords="5,5,163,45"/>
+<area shape="rect" href="structXped_1_1MatrixInterface.html#a172acf1ed646d2f75527f67a82f43924" title=" " alt="" coords="211,5,373,45"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a2e26dbddd85f3aeb8fb7fc272bdcade3" name="a2e26dbddd85f3aeb8fb7fc272bdcade3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2e26dbddd85f3aeb8fb7fc272bdcade3">&#9670;&#160;</a></span>block() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename XprTypeLeft , typename XprTypeRight &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const auto <a class="el" href="classXped_1_1CoeffBinaryOp.html">Xped::CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt;::block </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>i</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1CoeffBinaryOp_a2e26dbddd85f3aeb8fb7fc272bdcade3_cgraph.png" border="0" usemap="#aclassXped_1_1CoeffBinaryOp_a2e26dbddd85f3aeb8fb7fc272bdcade3_cgraph" alt=""/></div>
+<map name="aclassXped_1_1CoeffBinaryOp_a2e26dbddd85f3aeb8fb7fc272bdcade3_cgraph" id="aclassXped_1_1CoeffBinaryOp_a2e26dbddd85f3aeb8fb7fc272bdcade3_cgraph">
+<area shape="rect" title=" " alt="" coords="5,5,163,45"/>
+<area shape="rect" href="structXped_1_1MatrixInterface.html#a172acf1ed646d2f75527f67a82f43924" title=" " alt="" coords="211,5,373,45"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a7e7276cf814fae5d8d4971be3ada35ff" name="a7e7276cf814fae5d8d4971be3ada35ff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7e7276cf814fae5d8d4971be3ada35ff">&#9670;&#160;</a></span>codomainTrees()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename XprTypeLeft , typename XprTypeRight &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto <a class="el" href="classXped_1_1CoeffBinaryOp.html">Xped::CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt;::codomainTrees </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classXped_1_1CoeffBinaryOp.html#a48709239aae1d651ee0a212bc91efdd9">qType</a> &amp;&#160;</td>
+          <td class="paramname"><em>q</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a85d2dc39741993d251f927f63e75cc0b" name="a85d2dc39741993d251f927f63e75cc0b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a85d2dc39741993d251f927f63e75cc0b">&#9670;&#160;</a></span>corank()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename XprTypeLeft , typename XprTypeRight &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr std::size_t <a class="el" href="classXped_1_1CoeffBinaryOp.html">Xped::CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt;::corank </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa19743ddafab77bdd89e73f270221221" name="aa19743ddafab77bdd89e73f270221221"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa19743ddafab77bdd89e73f270221221">&#9670;&#160;</a></span>coupledCodomain()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename XprTypeLeft , typename XprTypeRight &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const auto <a class="el" href="classXped_1_1CoeffBinaryOp.html">Xped::CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt;::coupledCodomain </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a353bf6fe8556a1035dbfc9d70b857253" name="a353bf6fe8556a1035dbfc9d70b857253"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a353bf6fe8556a1035dbfc9d70b857253">&#9670;&#160;</a></span>coupledDomain()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename XprTypeLeft , typename XprTypeRight &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const auto <a class="el" href="classXped_1_1CoeffBinaryOp.html">Xped::CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt;::coupledDomain </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8b955a26c89a5b1bef3f181fe894e61b" name="a8b955a26c89a5b1bef3f181fe894e61b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8b955a26c89a5b1bef3f181fe894e61b">&#9670;&#160;</a></span>dict()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename XprTypeLeft , typename XprTypeRight &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const auto <a class="el" href="classXped_1_1CoeffBinaryOp.html">Xped::CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt;::dict </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a825cbd3929a149907596f160e703f95a" name="a825cbd3929a149907596f160e703f95a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a825cbd3929a149907596f160e703f95a">&#9670;&#160;</a></span>domainTrees()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename XprTypeLeft , typename XprTypeRight &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto <a class="el" href="classXped_1_1CoeffBinaryOp.html">Xped::CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt;::domainTrees </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classXped_1_1CoeffBinaryOp.html#a48709239aae1d651ee0a212bc91efdd9">qType</a> &amp;&#160;</td>
+          <td class="paramname"><em>q</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a81cb4c3c486d8fe90e3302482e9aa775" name="a81cb4c3c486d8fe90e3302482e9aa775"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a81cb4c3c486d8fe90e3302482e9aa775">&#9670;&#160;</a></span>name()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename XprTypeLeft , typename XprTypeRight &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::string <a class="el" href="classXped_1_1CoeffBinaryOp.html">Xped::CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt;::name </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4374c744144ac709d5f6411ca6de0474" name="a4374c744144ac709d5f6411ca6de0474"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4374c744144ac709d5f6411ca6de0474">&#9670;&#160;</a></span>rank()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename XprTypeLeft , typename XprTypeRight &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr std::size_t <a class="el" href="classXped_1_1CoeffBinaryOp.html">Xped::CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt;::rank </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa0b6aa972ae1f01b99568d167ff94f9c" name="aa0b6aa972ae1f01b99568d167ff94f9c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa0b6aa972ae1f01b99568d167ff94f9c">&#9670;&#160;</a></span>sector() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename XprTypeLeft , typename XprTypeRight &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const auto <a class="el" href="classXped_1_1CoeffBinaryOp.html">Xped::CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt;::sector </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a09e0a89087ed08cadff3679a74fce861" name="a09e0a89087ed08cadff3679a74fce861"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a09e0a89087ed08cadff3679a74fce861">&#9670;&#160;</a></span>sector() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename XprTypeLeft , typename XprTypeRight &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="classXped_1_1CoeffBinaryOp.html#a48709239aae1d651ee0a212bc91efdd9">qType</a> <a class="el" href="classXped_1_1CoeffBinaryOp.html">Xped::CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt;::sector </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>i</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af163c0ebfb2ddf604963db245b181bdc" name="af163c0ebfb2ddf604963db245b181bdc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af163c0ebfb2ddf604963db245b181bdc">&#9670;&#160;</a></span>uncoupledCodomain()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename XprTypeLeft , typename XprTypeRight &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const auto <a class="el" href="classXped_1_1CoeffBinaryOp.html">Xped::CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt;::uncoupledCodomain </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a08a1a3fb31692197446349bf1cd75321" name="a08a1a3fb31692197446349bf1cd75321"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a08a1a3fb31692197446349bf1cd75321">&#9670;&#160;</a></span>uncoupledDomain()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename XprTypeLeft , typename XprTypeRight &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const auto <a class="el" href="classXped_1_1CoeffBinaryOp.html">Xped::CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt;::uncoupledDomain </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab6c74edf4f6dc007e2b27d40520d119e" name="ab6c74edf4f6dc007e2b27d40520d119e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab6c74edf4f6dc007e2b27d40520d119e">&#9670;&#160;</a></span>world()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename XprTypeLeft , typename XprTypeRight &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="structXped_1_1mpi_1_1XpedWorld.html">mpi::XpedWorld</a> &amp; <a class="el" href="classXped_1_1CoeffBinaryOp.html">Xped::CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt;::world </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="aadd7dac70e70a2bfd21a586196e71749" name="aadd7dac70e70a2bfd21a586196e71749"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aadd7dac70e70a2bfd21a586196e71749">&#9670;&#160;</a></span>coeff_func_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename XprTypeLeft , typename XprTypeRight &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::function&lt;<a class="el" href="classXped_1_1CoeffBinaryOp.html#a6b91382c8571e88361fba316213b5951">Scalar</a>(<a class="el" href="classXped_1_1CoeffBinaryOp.html#a6b91382c8571e88361fba316213b5951">Scalar</a>, <a class="el" href="classXped_1_1CoeffBinaryOp.html#a6b91382c8571e88361fba316213b5951">Scalar</a>)&gt; <a class="el" href="classXped_1_1CoeffBinaryOp.html">Xped::CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt;::coeff_func_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a084afc0116999bcb380a18c82055add5" name="a084afc0116999bcb380a18c82055add5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a084afc0116999bcb380a18c82055add5">&#9670;&#160;</a></span>CoRank</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename XprTypeLeft , typename XprTypeRight &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr std::size_t <a class="el" href="classXped_1_1CoeffBinaryOp.html">Xped::CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt;::CoRank = XprTypeLeft::CoRank</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae19a4bfe9e955f146a049ae4938d5f7d" name="ae19a4bfe9e955f146a049ae4938d5f7d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae19a4bfe9e955f146a049ae4938d5f7d">&#9670;&#160;</a></span>Rank</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename XprTypeLeft , typename XprTypeRight &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr std::size_t <a class="el" href="classXped_1_1CoeffBinaryOp.html">Xped::CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt;::Rank = XprTypeLeft::Rank</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7d18b056494e5f1a21e4dbc6f237574d" name="a7d18b056494e5f1a21e4dbc6f237574d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d18b056494e5f1a21e4dbc6f237574d">&#9670;&#160;</a></span>refxpr_l_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename XprTypeLeft , typename XprTypeRight &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">XPED_CONST XprTypeLeft&amp; <a class="el" href="classXped_1_1CoeffBinaryOp.html">Xped::CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt;::refxpr_l_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aed69c9c1813c0eda6edb72051335997c" name="aed69c9c1813c0eda6edb72051335997c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed69c9c1813c0eda6edb72051335997c">&#9670;&#160;</a></span>refxpr_r_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename XprTypeLeft , typename XprTypeRight &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">XPED_CONST XprTypeRight&amp; <a class="el" href="classXped_1_1CoeffBinaryOp.html">Xped::CoeffBinaryOp</a>&lt; XprTypeLeft, XprTypeRight &gt;::refxpr_r_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>include/Xped/Core/<a class="el" href="CoeffBinaryOp_8hpp_source.html">CoeffBinaryOp.hpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- HTML footer for doxygen 1.9.2-->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="namespaceXped.html">Xped</a></li><li class="navelem"><a class="el" href="classXped_1_1CoeffBinaryOp.html">CoeffBinaryOp</a></li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.6 </li>
+  </ul>
+</div>
+<script type="text/javascript">
+  // script for doxygen 1.9.2
+  $(function() {
+      toggleButton = document.createElement('doxygen-awesome-dark-mode-toggle')
+      toggleButton.title = "Toggle Light/Dark Mode"
+      $(document).ready(function(){
+          document.getElementById("MSearchBox").parentNode.appendChild(toggleButton)
+      })
+      $(window).resize(function(){
+          document.getElementById("MSearchBox").parentNode.appendChild(toggleButton)
+      })
+  })
+</script>
+</body>
+</html>

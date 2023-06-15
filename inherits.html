@@ -1,0 +1,1309 @@
+<!-- HTML header for doxygen 1.9.6-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.6"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Xped: Class Hierarchy</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+});
+</script>
+<script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript">
+  DoxygenAwesomeDarkModeToggle.lightModeIcon = '🌞'
+// icon from https://fonts.google.com/icons
+  DoxygenAwesomeDarkModeToggle.darkModeIcon = `<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px" viewBox="0 0 24 24" width="24px" fill="#009793"><g><rect fill="none" height="24" width="24"/></g><g><g><path d="M8.1,14.15C9.77,14.63,11,16.17,11,18c0,0.68-0.19,1.31-0.48,1.87c0.48,0.09,0.97,0.14,1.48,0.14 c1.48,0,2.9-0.41,4.13-1.15c-2.62-0.92-5.23-2.82-6.8-5.86C7.74,9.94,7.78,7.09,8.29,4.9c-2.57,1.33-4.3,4.01-4.3,7.1c0,0,0,0,0,0 c0.01,0,0.01,0,0.02,0C5.66,12,7.18,12.83,8.1,14.15z" opacity=".3"/><path d="M19.78,17.51c-2.47,0-6.57-1.33-8.68-5.43C8.77,7.57,10.6,3.6,11.63,2.01C6.27,2.2,1.98,6.59,1.98,12 c0,0.14,0.02,0.28,0.02,0.42C2.61,12.16,3.28,12,3.98,12c0,0,0,0,0,0c0-3.09,1.73-5.77,4.3-7.1C7.78,7.09,7.74,9.94,9.32,13 c1.57,3.04,4.18,4.95,6.8,5.86c-1.23,0.74-2.65,1.15-4.13,1.15c-0.5,0-1-0.05-1.48-0.14c-0.37,0.7-0.94,1.27-1.64,1.64 c0.98,0.32,2.03,0.5,3.11,0.5c3.5,0,6.58-1.8,8.37-4.52C20.18,17.5,19.98,17.51,19.78,17.51z"/><path d="M7,16l-0.18,0C6.4,14.84,5.3,14,4,14c-1.66,0-3,1.34-3,3s1.34,3,3,3c0.62,0,2.49,0,3,0c1.1,0,2-0.9,2-2 C9,16.9,8.1,16,7,16z"/></g></g></svg>`
+  DoxygenAwesomeDarkModeToggle.init()
+</script>
+</head>
+<body>
+  <!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/cpp977/Xped" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">Xped
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.9.6 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('hierarchy.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Class Hierarchy</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock">
+<p><a href="hierarchy.html">Go to the textual class hierarchy</a></p>
+</div><table border="0" cellspacing="10" cellpadding="0">
+<tr><td><img src="inherit_graph_0.png" border="0" usemap="#aA" alt=""/>
+<map name="aA" id="aA">
+<area shape="rect" href="classA.html" title=" " alt="" coords="5,5,44,31"/>
+<area shape="rect" href="classC.html" title=" " alt="" coords="92,5,131,31"/>
+<area shape="rect" href="classD.html" title=" " alt="" coords="92,55,131,80"/>
+<area shape="rect" href="classE.html" title=" " alt="" coords="179,55,217,80"/>
+<area shape="rect" href="classB.html" title=" " alt="" coords="5,55,44,80"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_1.png" border="0" usemap="#aAfterdoc__Test" alt=""/>
+<map name="aAfterdoc__Test" id="aAfterdoc__Test">
+<area shape="rect" href="classAfterdoc__Test.html" title=" " alt="" coords="5,5,115,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_2.png" border="0" usemap="#aArgParser" alt=""/>
+<map name="aArgParser" id="aArgParser">
+<area shape="rect" href="classArgParser.html" title=" " alt="" coords="5,5,89,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_3.png" border="0" usemap="#aAutolink__Test" alt=""/>
+<map name="aAutolink__Test" id="aAutolink__Test">
+<area shape="rect" href="classAutolink__Test.html" title=" " alt="" coords="5,5,115,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_4.png" border="0" usemap="#aBetheAnsatz_1_1Integrals" alt=""/>
+<map name="aBetheAnsatz_1_1Integrals" id="aBetheAnsatz_1_1Integrals">
+<area shape="rect" href="structBetheAnsatz_1_1Integrals.html" title=" " alt="" coords="5,5,175,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_5.png" border="0" usemap="#aboost_1_1iterator__facade" alt=""/>
+<map name="aboost_1_1iterator__facade" id="aboost_1_1iterator__facade">
+<area shape="rect" title=" " alt="" coords="5,56,171,81"/>
+<area shape="rect" href="classXped_1_1iPEPSIterator.html" title=" " alt="" coords="232,5,389,60"/>
+<area shape="rect" href="classXped_1_1internal_1_1VecOfMatIterator.html" title=" " alt="" coords="219,85,403,125"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_6.png" border="0" usemap="#aC1" alt=""/>
+<map name="aC1" id="aC1">
+<area shape="rect" href="classC1.html" title="class C1 in group 1" alt="" coords="5,5,44,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_7.png" border="0" usemap="#aC2" alt=""/>
+<map name="aC2" id="aC2">
+<area shape="rect" href="classC2.html" title="class C2 in group 1" alt="" coords="5,5,44,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_8.png" border="0" usemap="#aC3" alt=""/>
+<map name="aC3" id="aC3">
+<area shape="rect" href="classC3.html" title="class C3 in group 2" alt="" coords="5,5,44,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_9.png" border="0" usemap="#aC4" alt=""/>
+<map name="aC4" id="aC4">
+<area shape="rect" href="classC4.html" title="class C4 in group 2" alt="" coords="5,5,44,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_10.png" border="0" usemap="#aC5" alt=""/>
+<map name="aC5" id="aC5">
+<area shape="rect" href="classC5.html" title="class C5 in the third group." alt="" coords="5,5,44,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_11.png" border="0" usemap="#aceres_1_1FirstOrderFunction" alt=""/>
+<map name="aceres_1_1FirstOrderFunction" id="aceres_1_1FirstOrderFunction">
+<area shape="rect" title=" " alt="" coords="5,13,189,38"/>
+<area shape="rect" href="classXped_1_1Energy.html" title=" " alt="" coords="237,5,451,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_12.png" border="0" usemap="#aceres_1_1IterationCallback" alt=""/>
+<map name="aceres_1_1IterationCallback" id="aceres_1_1IterationCallback">
+<area shape="rect" title=" " alt="" coords="5,177,181,203"/>
+<area shape="rect" href="structXped_1_1iPEPSSolverAD_1_1CustomCallback.html" title=" " alt="" coords="233,5,484,60"/>
+<area shape="rect" href="structXped_1_1iPEPSSolverAD_1_1GetStateCallback.html" title=" " alt="" coords="229,84,488,139"/>
+<area shape="rect" href="structXped_1_1iPEPSSolverAD_1_1LoggingCallback.html" title=" " alt="" coords="233,163,485,217"/>
+<area shape="rect" href="structXped_1_1iPEPSSolverAD_1_1ObsCallback.html" title=" " alt="" coords="245,241,472,296"/>
+<area shape="rect" href="structXped_1_1iPEPSSolverAD_1_1SaveCallback.html" title=" " alt="" coords="242,320,475,375"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_13.png" border="0" usemap="#aCoordStruct" alt=""/>
+<map name="aCoordStruct" id="aCoordStruct">
+<area shape="rect" href="structCoordStruct.html" title=" " alt="" coords="5,5,104,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_14.png" border="0" usemap="#adetail_1_1appender_3_01Prepend_00_01num__tuple_3_01Sizes_8_8_8_01_4_01_4" alt=""/>
+<map name="adetail_1_1appender_3_01Prepend_00_01num__tuple_3_01Sizes_8_8_8_01_4_01_4" id="adetail_1_1appender_3_01Prepend_00_01num__tuple_3_01Sizes_8_8_8_01_4_01_4">
+<area shape="rect" href="structdetail_1_1appender_3_01Prepend_00_01num__tuple_3_01Sizes_8_8_8_01_4_01_4.html" title=" " alt="" coords="5,5,205,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_15.png" border="0" usemap="#adetail_1_1appender_3_01Prepend_00_01T_01_4" alt=""/>
+<map name="adetail_1_1appender_3_01Prepend_00_01T_01_4" id="adetail_1_1appender_3_01Prepend_00_01T_01_4">
+<area shape="rect" href="structdetail_1_1appender.html" title=" " alt="" coords="5,5,232,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_16.png" border="0" usemap="#adetail_1_1counter__tuple_3_01Size_00_01Counter_01_4" alt=""/>
+<map name="adetail_1_1counter__tuple_3_01Size_00_01Counter_01_4" id="adetail_1_1counter__tuple_3_01Size_00_01Counter_01_4">
+<area shape="rect" href="structdetail_1_1counter__tuple.html" title=" " alt="" coords="5,5,161,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_17.png" border="0" usemap="#adetail_1_1counter__tuple_3_01Size_00_01Size_01_4" alt=""/>
+<map name="adetail_1_1counter__tuple_3_01Size_00_01Size_01_4" id="adetail_1_1counter__tuple_3_01Size_00_01Size_01_4">
+<area shape="rect" href="structdetail_1_1counter__tuple_3_01Size_00_01Size_01_4.html" title=" " alt="" coords="5,5,161,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_18.png" border="0" usemap="#adetail_1_1num__tuple_3_01Size_01_4" alt=""/>
+<map name="adetail_1_1num__tuple_3_01Size_01_4" id="adetail_1_1num__tuple_3_01Size_01_4">
+<area shape="rect" href="structdetail_1_1num__tuple.html" title=" " alt="" coords="5,5,152,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_19.png" border="0" usemap="#adocstring_8PyClass" alt=""/>
+<map name="adocstring_8PyClass" id="adocstring_8PyClass">
+<area shape="rect" href="classdocstring_1_1PyClass.html" title=" " alt="" coords="5,5,143,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_20.png" border="0" usemap="#aDummy" alt=""/>
+<map name="aDummy" id="aDummy">
+<area shape="rect" href="structDummy.html" title=" " alt="" coords="5,5,80,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_21.png" border="0" usemap="#aEigenDevice_3_01device__type_01_4" alt=""/>
+<map name="aEigenDevice_3_01device__type_01_4" id="aEigenDevice_3_01device__type_01_4">
+<area shape="rect" href="classEigenDevice.html" title=" " alt="" coords="5,5,167,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_22.png" border="0" usemap="#aEmpty" alt=""/>
+<map name="aEmpty" id="aEmpty">
+<area shape="rect" href="classEmpty.html" title=" " alt="" coords="5,5,69,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_23.png" border="0" usemap="#aEnum__Test" alt=""/>
+<map name="aEnum__Test" id="aEnum__Test">
+<area shape="rect" href="classEnum__Test.html" title=" " alt="" coords="5,5,97,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_24.png" border="0" usemap="#aExample__Test" alt=""/>
+<map name="aExample__Test" id="aExample__Test">
+<area shape="rect" href="classExample__Test.html" title=" " alt="" coords="5,5,117,31"/>
+<area shape="rect" href="classTag.html" title=" " alt="" coords="165,5,209,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_25.png" border="0" usemap="#aFiler" alt=""/>
+<map name="aFiler" id="aFiler">
+<area shape="rect" href="classFiler.html" title=" " alt="" coords="5,5,56,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_26.png" border="0" usemap="#aFn__Test" alt=""/>
+<map name="aFn__Test" id="aFn__Test">
+<area shape="rect" href="classFn__Test.html" title="Fn_Test class." alt="" coords="5,5,76,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_27.png" border="0" usemap="#aGauss_3_01Scalar_00_01TimeScalar_01_4" alt=""/>
+<map name="aGauss_3_01Scalar_00_01TimeScalar_01_4" id="aGauss_3_01Scalar_00_01TimeScalar_01_4">
+<area shape="rect" href="classGauss.html" title=" " alt="" coords="5,5,219,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_28.png" border="0" usemap="#aGeometry2D" alt=""/>
+<map name="aGeometry2D" id="aGeometry2D">
+<area shape="rect" href="classGeometry2D.html" title=" " alt="" coords="5,5,111,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_29.png" border="0" usemap="#aGSL__COMPLEX__wrapper" alt=""/>
+<map name="aGSL__COMPLEX__wrapper" id="aGSL__COMPLEX__wrapper">
+<area shape="rect" href="classGSL__COMPLEX__wrapper.html" title=" " alt="" coords="5,5,183,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_30.png" border="0" usemap="#agsl__function" alt=""/>
+<map name="agsl__function" id="agsl__function">
+<area shape="rect" title=" " alt="" coords="5,5,107,31"/>
+<area shape="rect" href="classgsl__function__pp.html" title=" " alt="" coords="155,5,317,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_31.png" border="0" usemap="#aHDF5Interface" alt=""/>
+<map name="aHDF5Interface" id="aHDF5Interface">
+<area shape="rect" href="classHDF5Interface.html" title=" " alt="" coords="5,5,121,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_32.png" border="0" usemap="#aInclude__Test" alt=""/>
+<map name="aInclude__Test" id="aInclude__Test">
+<area shape="rect" href="classInclude__Test.html" title=" " alt="" coords="5,5,108,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_33.png" border="0" usemap="#aintegration__params" alt=""/>
+<map name="aintegration__params" id="aintegration__params">
+<area shape="rect" href="structintegration__params.html" title=" " alt="" coords="5,5,155,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_34.png" border="0" usemap="#aIntervalIntWrapper" alt=""/>
+<map name="aIntervalIntWrapper" id="aIntervalIntWrapper">
+<area shape="rect" href="classIntervalIntWrapper.html" title=" " alt="" coords="5,5,149,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_35.png" border="0" usemap="#aIntervalIterator" alt=""/>
+<map name="aIntervalIterator" id="aIntervalIterator">
+<area shape="rect" href="classIntervalIterator.html" title=" " alt="" coords="5,5,125,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_36.png" border="0" usemap="#ais__arena__tensor_3_01T_01_4" alt=""/>
+<map name="ais__arena__tensor_3_01T_01_4" id="ais__arena__tensor_3_01T_01_4">
+<area shape="rect" href="structis__arena__tensor.html" title=" " alt="" coords="5,5,168,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_37.png" border="0" usemap="#ais__arena__tensor_3_01Xped_1_1ArenaTensor_3_01Scalar_00_01Rank_00_01CoRank_00_01Symmetry_00_01false_01_4_01_4" alt=""/>
+<map name="ais__arena__tensor_3_01Xped_1_1ArenaTensor_3_01Scalar_00_01Rank_00_01CoRank_00_01Symmetry_00_01false_01_4_01_4" id="ais__arena__tensor_3_01Xped_1_1ArenaTensor_3_01Scalar_00_01Rank_00_01CoRank_00_01Symmetry_00_01false_01_4_01_4">
+<area shape="rect" href="structis__arena__tensor_3_01Xped_1_1ArenaTensor_3_01Scalar_00_01Rank_00_01CoRank_00_01Symmetry_00_01false_01_4_01_4.html" title=" " alt="" coords="5,5,203,75"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_38.png" border="0" usemap="#ais__arena__tensor__var_3_01T_01_4" alt=""/>
+<map name="ais__arena__tensor__var_3_01T_01_4" id="ais__arena__tensor__var_3_01T_01_4">
+<area shape="rect" href="structis__arena__tensor__var.html" title=" " alt="" coords="5,5,196,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_39.png" border="0" usemap="#ais__arena__tensor__var_3_01Xped_1_1ArenaTensor_3_01Scalar_00_01Rank_00_01CoRank_00_01Symmetry_00_01true_01_4_01_4" alt=""/>
+<map name="ais__arena__tensor__var_3_01Xped_1_1ArenaTensor_3_01Scalar_00_01Rank_00_01CoRank_00_01Symmetry_00_01true_01_4_01_4" id="ais__arena__tensor__var_3_01Xped_1_1ArenaTensor_3_01Scalar_00_01Rank_00_01CoRank_00_01Symmetry_00_01true_01_4_01_4">
+<area shape="rect" href="structis__arena__tensor__var_3_01Xped_1_1ArenaTensor_3_01Scalar_00_01Rank_00_01CoRank_00_01Symmetry_00_01true_01_4_01_4.html" title=" " alt="" coords="5,5,185,75"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_40.png" border="0" usemap="#ais__tensor_3_01T_01_4" alt=""/>
+<map name="ais__tensor_3_01T_01_4" id="ais__tensor_3_01T_01_4">
+<area shape="rect" href="structis__tensor.html" title=" " alt="" coords="5,5,124,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_41.png" border="0" usemap="#ais__tensor_3_01Xped_1_1Tensor_3_01Scalar_00_01Rank_00_01CoRank_00_01Symmetry_00_01false_00_01AllocationPolicy_01_4_01_4" alt=""/>
+<map name="ais__tensor_3_01Xped_1_1Tensor_3_01Scalar_00_01Rank_00_01CoRank_00_01Symmetry_00_01false_00_01AllocationPolicy_01_4_01_4" id="ais__tensor_3_01Xped_1_1Tensor_3_01Scalar_00_01Rank_00_01CoRank_00_01Symmetry_00_01false_00_01AllocationPolicy_01_4_01_4">
+<area shape="rect" href="structis__tensor_3_01Xped_1_1Tensor_3_01Scalar_00_01Rank_00_01CoRank_00_01Symmetry_00_01false_00_01AllocationPolicy_01_4_01_4.html" title=" " alt="" coords="5,5,281,60"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_42.png" border="0" usemap="#ais__tensor__var_3_01T_01_4" alt=""/>
+<map name="ais__tensor__var_3_01T_01_4" id="ais__tensor__var_3_01T_01_4">
+<area shape="rect" href="structis__tensor__var.html" title=" " alt="" coords="5,5,152,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_43.png" border="0" usemap="#ais__tensor__var_3_01Xped_1_1Tensor_3_01Scalar_00_01Rank_00_01CoRank_00_01Symmetry_00_01true_01_4_01_4" alt=""/>
+<map name="ais__tensor__var_3_01Xped_1_1Tensor_3_01Scalar_00_01Rank_00_01CoRank_00_01Symmetry_00_01true_01_4_01_4" id="ais__tensor__var_3_01Xped_1_1Tensor_3_01Scalar_00_01Rank_00_01CoRank_00_01Symmetry_00_01true_01_4_01_4">
+<area shape="rect" href="structis__tensor__var_3_01Xped_1_1Tensor_3_01Scalar_00_01Rank_00_01CoRank_00_01Symmetry_00_01true_01_4_01_4.html" title=" " alt="" coords="5,5,221,60"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_44.png" border="0" usemap="#aJavadoc__Test" alt=""/>
+<map name="aJavadoc__Test" id="aJavadoc__Test">
+<area shape="rect" href="classJavadoc__Test.html" title=" " alt="" coords="5,5,112,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_45.png" border="0" usemap="#aLattice2D" alt=""/>
+<map name="aLattice2D" id="aLattice2D">
+<area shape="rect" href="classLattice2D.html" title=" " alt="" coords="5,5,89,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_46.png" border="0" usemap="#aLattice2D_1_1IndexSite" alt=""/>
+<map name="aLattice2D_1_1IndexSite" id="aLattice2D_1_1IndexSite">
+<area shape="rect" href="structLattice2D_1_1IndexSite.html" title=" " alt="" coords="5,5,159,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_47.png" border="0" usemap="#aLogger" alt=""/>
+<map name="aLogger" id="aLogger">
+<area shape="rect" href="classLogger.html" title=" " alt="" coords="5,5,72,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_48.png" border="0" usemap="#aMemgrp__Test" alt=""/>
+<map name="aMemgrp__Test" id="aMemgrp__Test">
+<area shape="rect" href="classMemgrp__Test.html" title=" " alt="" coords="5,5,115,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_49.png" border="0" usemap="#aModels_1_1Heisenberg" alt=""/>
+<map name="aModels_1_1Heisenberg" id="aModels_1_1Heisenberg">
+<area shape="rect" href="classModels_1_1Heisenberg.html" title=" " alt="" coords="5,5,156,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_50.png" border="0" usemap="#amux__using__with" alt=""/>
+<map name="amux__using__with" id="amux__using__with">
+<area shape="rect" href="classmux__using__with.html" title="Mux entity brief description Detailed description of this mux design element." alt="" coords="5,5,133,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_51.png" border="0" usemap="#amynumeric__limits_3_01Scalar_01_4" alt=""/>
+<map name="amynumeric__limits_3_01Scalar_01_4" id="amynumeric__limits_3_01Scalar_01_4">
+<area shape="rect" href="structmynumeric__limits.html" title=" " alt="" coords="5,5,216,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_52.png" border="0" usemap="#aNestedLoopIterator" alt=""/>
+<map name="aNestedLoopIterator" id="aNestedLoopIterator">
+<area shape="rect" href="classNestedLoopIterator.html" title=" " alt="" coords="5,5,152,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_53.png" border="0" usemap="#aNuclear_1_1Eigenstate" alt=""/>
+<map name="aNuclear_1_1Eigenstate" id="aNuclear_1_1Eigenstate">
+<area shape="rect" href="structNuclear_1_1Eigenstate.html" title=" " alt="" coords="5,5,155,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_54.png" border="0" usemap="#aNuclear_1_1less__than__energy" alt=""/>
+<map name="aNuclear_1_1less__than__energy" id="aNuclear_1_1less__than__energy">
+<area shape="rect" href="structNuclear_1_1less__than__energy.html" title=" " alt="" coords="5,5,148,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_55.png" border="0" usemap="#aObject" alt=""/>
+<map name="aObject" id="aObject">
+<area shape="rect" href="structObject.html" title=" " alt="" coords="5,31,69,56"/>
+<area shape="rect" href="structVehicle.html" title=" " alt="" coords="117,31,187,56"/>
+<area shape="rect" href="structCar.html" title=" " alt="" coords="241,5,285,31"/>
+<area shape="rect" href="structTruck.html" title=" " alt="" coords="235,55,291,80"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_56.png" border="0" usemap="#aOverload__Test" alt=""/>
+<map name="aOverload__Test" id="aOverload__Test">
+<area shape="rect" href="classOverload__Test.html" title="A short description." alt="" coords="5,5,120,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_57.png" border="0" usemap="#aPar__Test" alt=""/>
+<map name="aPar__Test" id="aPar__Test">
+<area shape="rect" href="classPar__Test.html" title=" " alt="" coords="5,5,80,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_58.png" border="0" usemap="#aParam" alt=""/>
+<map name="aParam" id="aParam">
+<area shape="rect" href="structParam.html" title=" " alt="" coords="5,5,68,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_59.png" border="0" usemap="#aparam0d_3_01Scalar_01_4" alt=""/>
+<map name="aparam0d_3_01Scalar_01_4" id="aparam0d_3_01Scalar_01_4">
+<area shape="rect" href="structparam0d.html" title=" " alt="" coords="5,5,156,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_60.png" border="0" usemap="#aparam1d_3_01Scalar_01_4" alt=""/>
+<map name="aparam1d_3_01Scalar_01_4" id="aparam1d_3_01Scalar_01_4">
+<area shape="rect" href="structparam1d.html" title=" " alt="" coords="5,5,156,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_61.png" border="0" usemap="#aparam2d_3_01Scalar_01_4" alt=""/>
+<map name="aparam2d_3_01Scalar_01_4" id="aparam2d_3_01Scalar_01_4">
+<area shape="rect" href="structparam2d.html" title=" " alt="" coords="5,5,156,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_62.png" border="0" usemap="#aparam__y" alt=""/>
+<map name="aparam__y" id="aparam__y">
+<area shape="rect" href="structparam__y.html" title=" " alt="" coords="5,5,84,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_63.png" border="0" usemap="#aparam__yz" alt=""/>
+<map name="aparam__yz" id="aparam__yz">
+<area shape="rect" href="structparam__yz.html" title=" " alt="" coords="5,5,92,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_64.png" border="0" usemap="#aparam__z" alt=""/>
+<map name="aparam__z" id="aparam__z">
+<area shape="rect" href="structparam__z.html" title=" " alt="" coords="5,5,84,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_65.png" border="0" usemap="#aParamHandler" alt=""/>
+<map name="aParamHandler" id="aParamHandler">
+<area shape="rect" href="classParamHandler.html" title=" " alt="" coords="5,5,120,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_66.png" border="0" usemap="#aPermutation" alt=""/>
+<map name="aPermutation" id="aPermutation">
+<area shape="rect" href="structPermutation.html" title=" " alt="" coords="5,5,108,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_67.png" border="0" usemap="#aPlotParams" alt=""/>
+<map name="aPlotParams" id="aPlotParams">
+<area shape="rect" href="structPlotParams.html" title=" " alt="" coords="5,5,100,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_68.png" border="0" usemap="#aPulse_3_01Scalar_00_01TimeScalar_00_01Envelope_01_4" alt=""/>
+<map name="aPulse_3_01Scalar_00_01TimeScalar_00_01Envelope_01_4" id="aPulse_3_01Scalar_00_01TimeScalar_00_01Envelope_01_4">
+<area shape="rect" href="classPulse.html" title=" " alt="" coords="5,5,203,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_69.png" border="0" usemap="#apyexample_8PyClass" alt=""/>
+<map name="apyexample_8PyClass" id="apyexample_8PyClass">
+<area shape="rect" href="classpyexample_1_1PyClass.html" title="Documentation for a class." alt="" coords="5,5,156,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_70.png" border="0" usemap="#aQTstyle__Test" alt=""/>
+<map name="aQTstyle__Test" id="aQTstyle__Test">
+<area shape="rect" href="classQTstyle__Test.html" title="A test class." alt="" coords="5,5,108,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_71.png" border="0" usemap="#aS1" alt=""/>
+<map name="aS1" id="aS1">
+<area shape="rect" title=" " alt="" coords="5,13,44,38"/>
+<area shape="rect" href="structXped_1_1Sym_1_1Combined_3_01S1_01_4.html" title=" " alt="" coords="92,5,259,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_72.png" border="0" usemap="#aSaveData" alt=""/>
+<map name="aSaveData" id="aSaveData">
+<area shape="rect" href="structSaveData.html" title=" " alt="" coords="5,5,91,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_73.png" border="0" usemap="#aSimpleListInitializer" alt=""/>
+<map name="aSimpleListInitializer" id="aSimpleListInitializer">
+<area shape="rect" href="classSimpleListInitializer.html" title=" " alt="" coords="5,5,156,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_74.png" border="0" usemap="#aSomeNiceClass" alt=""/>
+<map name="aSomeNiceClass" id="aSomeNiceClass">
+<area shape="rect" href="classSomeNiceClass.html" title="Pretty nice class." alt="" coords="5,5,128,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_75.png" border="0" usemap="#astan_1_1math_1_1chainable__alloc" alt=""/>
+<map name="astan_1_1math_1_1chainable__alloc" id="astan_1_1math_1_1chainable__alloc">
+<area shape="rect" title=" " alt="" coords="5,5,168,45"/>
+<area shape="rect" href="structXped_1_1internal_1_1reverse__pass__callback__alloc__vari.html" title=" " alt="" coords="216,35,444,75"/>
+<area shape="rect" title=" " alt="" coords="5,70,168,95"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_76.png" border="0" usemap="#astd_1_1runtime__error" alt=""/>
+<map name="astd_1_1runtime__error" id="astd_1_1runtime__error">
+<area shape="rect" title=" " alt="" coords="5,5,144,31"/>
+<area shape="rect" href="classBadConversion.html" title=" " alt="" coords="192,5,312,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_77.png" border="0" usemap="#aStopwatch_3_01ClockClass_01_4" alt=""/>
+<map name="aStopwatch_3_01ClockClass_01_4" id="aStopwatch_3_01ClockClass_01_4">
+<area shape="rect" href="classStopwatch.html" title=" " alt="" coords="5,5,196,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_78.png" border="0" usemap="#aString" alt=""/>
+<map name="aString" id="aString">
+<area shape="rect" href="classString.html" title=" " alt="" coords="5,5,65,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_79.png" border="0" usemap="#aTerminalPlot_1_1Ticker_3_01Scalar_01_4" alt=""/>
+<map name="aTerminalPlot_1_1Ticker_3_01Scalar_01_4" id="aTerminalPlot_1_1Ticker_3_01Scalar_01_4">
+<area shape="rect" href="classTerminalPlot_1_1Ticker.html" title=" " alt="" coords="5,5,156,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_80.png" border="0" usemap="#aTest_3_01T_00_01i_01_4" alt=""/>
+<map name="aTest_3_01T_00_01i_01_4" id="aTest_3_01T_00_01i_01_4">
+<area shape="rect" href="classTest.html" title="This is a test class." alt="" coords="5,5,104,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_81.png" border="0" usemap="#aTest_3_01void_01_5_00_01200_01_4" alt=""/>
+<map name="aTest_3_01void_01_5_00_01200_01_4" id="aTest_3_01void_01_5_00_01200_01_4">
+<area shape="rect" href="classTest_3_01void_01_5_00_01200_01_4.html" title=" " alt="" coords="5,5,155,31"/>
+<area shape="rect" href="classTest_3_01T_01_5_01_4.html" title=" " alt="" coords="203,5,300,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_82.png" border="0" usemap="#aTimeStepper" alt=""/>
+<map name="aTimeStepper" id="aTimeStepper">
+<area shape="rect" href="classTimeStepper.html" title=" " alt="" coords="5,5,111,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_83.png" border="0" usemap="#aTransposition" alt=""/>
+<map name="aTransposition" id="aTransposition">
+<area shape="rect" href="structTransposition.html" title=" " alt="" coords="5,5,113,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_84.png" border="0" usemap="#aTuples_3_01R_00_01N_00_01Index_01_4" alt=""/>
+<map name="aTuples_3_01R_00_01N_00_01Index_01_4" id="aTuples_3_01R_00_01N_00_01Index_01_4">
+<area shape="rect" href="classTuples.html" title=" " alt="" coords="5,5,169,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_85.png" border="0" usemap="#aXped_1_1ArrayMatrixLib" alt=""/>
+<map name="aXped_1_1ArrayMatrixLib" id="aXped_1_1ArrayMatrixLib">
+<area shape="rect" href="structXped_1_1ArrayMatrixLib.html" title=" " alt="" coords="5,5,164,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_86.png" border="0" usemap="#aXped_1_1ArrayTensorLib" alt=""/>
+<map name="aXped_1_1ArrayTensorLib" id="aXped_1_1ArrayTensorLib">
+<area shape="rect" href="structXped_1_1ArrayTensorLib.html" title=" " alt="" coords="5,5,164,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_87.png" border="0" usemap="#aXped_1_1ArrayVectorLib" alt=""/>
+<map name="aXped_1_1ArrayVectorLib" id="aXped_1_1ArrayVectorLib">
+<area shape="rect" href="structXped_1_1ArrayVectorLib.html" title=" " alt="" coords="5,5,164,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_88.png" border="0" usemap="#aXped_1_1Basis" alt=""/>
+<map name="aXped_1_1Basis" id="aXped_1_1Basis">
+<area shape="rect" href="classXped_1_1Basis.html" title=" " alt="" coords="5,5,104,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_89.png" border="0" usemap="#aXped_1_1Bool_3_01b_01_4" alt=""/>
+<map name="aXped_1_1Bool_3_01b_01_4" id="aXped_1_1Bool_3_01b_01_4">
+<area shape="rect" href="structXped_1_1Bool.html" title=" " alt="" coords="5,5,136,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_90.png" border="0" usemap="#aXped_1_1ctf__traits_3_01CTF_1_1Matrix_3_01Scalar___01_4_01_6_01_4" alt=""/>
+<map name="aXped_1_1ctf__traits_3_01CTF_1_1Matrix_3_01Scalar___01_4_01_6_01_4" id="aXped_1_1ctf__traits_3_01CTF_1_1Matrix_3_01Scalar___01_4_01_6_01_4">
+<area shape="rect" href="structXped_1_1ctf__traits_3_01CTF_1_1Matrix_3_01Scalar___01_4_01_6_01_4.html" title=" " alt="" coords="5,5,184,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_91.png" border="0" usemap="#aXped_1_1ctf__traits_3_01CTF_1_1Matrix_3_01Scalar___01_4_01_4" alt=""/>
+<map name="aXped_1_1ctf__traits_3_01CTF_1_1Matrix_3_01Scalar___01_4_01_4" id="aXped_1_1ctf__traits_3_01CTF_1_1Matrix_3_01Scalar___01_4_01_4">
+<area shape="rect" href="structXped_1_1ctf__traits_3_01CTF_1_1Matrix_3_01Scalar___01_4_01_4.html" title=" " alt="" coords="5,5,169,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_92.png" border="0" usemap="#aXped_1_1ctf__traits_3_01CTF_1_1Tensor_3_01Scalar___01_4_01_6_01_4" alt=""/>
+<map name="aXped_1_1ctf__traits_3_01CTF_1_1Tensor_3_01Scalar___01_4_01_6_01_4" id="aXped_1_1ctf__traits_3_01CTF_1_1Tensor_3_01Scalar___01_4_01_6_01_4">
+<area shape="rect" href="structXped_1_1ctf__traits_3_01CTF_1_1Tensor_3_01Scalar___01_4_01_6_01_4.html" title=" " alt="" coords="5,5,184,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_93.png" border="0" usemap="#aXped_1_1ctf__traits_3_01CTF_1_1Tensor_3_01Scalar___01_4_01_4" alt=""/>
+<map name="aXped_1_1ctf__traits_3_01CTF_1_1Tensor_3_01Scalar___01_4_01_4" id="aXped_1_1ctf__traits_3_01CTF_1_1Tensor_3_01Scalar___01_4_01_4">
+<area shape="rect" href="structXped_1_1ctf__traits_3_01CTF_1_1Tensor_3_01Scalar___01_4_01_4.html" title=" " alt="" coords="5,5,169,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_94.png" border="0" usemap="#aXped_1_1ctf__traits_3_01T_01_4" alt=""/>
+<map name="aXped_1_1ctf__traits_3_01T_01_4" id="aXped_1_1ctf__traits_3_01T_01_4">
+<area shape="rect" href="structXped_1_1ctf__traits.html" title=" " alt="" coords="5,5,164,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_95.png" border="0" usemap="#aXped_1_1CTM_3_01Scalar_00_01Symmetry_00_012_01_4" alt=""/>
+<map name="aXped_1_1CTM_3_01Scalar_00_01Symmetry_00_012_01_4" id="aXped_1_1CTM_3_01Scalar_00_01Symmetry_00_012_01_4">
+<area shape="rect" href="classXped_1_1CTM.html" title=" " alt="" coords="5,5,156,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_96.png" border="0" usemap="#aXped_1_1CTM_3_01Scalar_00_01Symmetry_00_01TRank_01_4" alt=""/>
+<map name="aXped_1_1CTM_3_01Scalar_00_01Symmetry_00_01TRank_01_4" id="aXped_1_1CTM_3_01Scalar_00_01Symmetry_00_01TRank_01_4">
+<area shape="rect" href="classXped_1_1CTM.html" title=" " alt="" coords="5,5,164,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_97.png" border="0" usemap="#aXped_1_1CTM_3_01Scalar___00_01Symmetry___00_01TRank_00_01ENABLE__AD_00_01CPOpts_01_4" alt=""/>
+<map name="aXped_1_1CTM_3_01Scalar___00_01Symmetry___00_01TRank_00_01ENABLE__AD_00_01CPOpts_01_4" id="aXped_1_1CTM_3_01Scalar___00_01Symmetry___00_01TRank_00_01ENABLE__AD_00_01CPOpts_01_4">
+<area shape="rect" href="classXped_1_1CTM.html" title=" " alt="" coords="5,5,215,60"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_98.png" border="0" usemap="#aXped_1_1CTMSolver_3_01Scalar_00_01Symmetry_01_4" alt=""/>
+<map name="aXped_1_1CTMSolver_3_01Scalar_00_01Symmetry_01_4" id="aXped_1_1CTMSolver_3_01Scalar_00_01Symmetry_01_4">
+<area shape="rect" href="classXped_1_1CTMSolver.html" title=" " alt="" coords="5,5,197,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_99.png" border="0" usemap="#aXped_1_1CTMSolver_3_01Scalar___00_01Symmetry___00_01CPOpts_00_01TRank_01_4" alt=""/>
+<map name="aXped_1_1CTMSolver_3_01Scalar___00_01Symmetry___00_01CPOpts_00_01TRank_01_4" id="aXped_1_1CTMSolver_3_01Scalar___00_01Symmetry___00_01CPOpts_00_01TRank_01_4">
+<area shape="rect" href="classXped_1_1CTMSolver.html" title=" " alt="" coords="5,5,193,60"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_100.png" border="0" usemap="#aXped_1_1CyclopsMatrixLib" alt=""/>
+<map name="aXped_1_1CyclopsMatrixLib" id="aXped_1_1CyclopsMatrixLib">
+<area shape="rect" href="structXped_1_1CyclopsMatrixLib.html" title=" " alt="" coords="5,5,180,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_101.png" border="0" usemap="#aXped_1_1CyclopsTensorLib" alt=""/>
+<map name="aXped_1_1CyclopsTensorLib" id="aXped_1_1CyclopsTensorLib">
+<area shape="rect" href="structXped_1_1CyclopsTensorLib.html" title=" " alt="" coords="5,5,180,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_102.png" border="0" usemap="#aXped_1_1CyclopsVectorLib" alt=""/>
+<map name="aXped_1_1CyclopsVectorLib" id="aXped_1_1CyclopsVectorLib">
+<area shape="rect" href="structXped_1_1CyclopsVectorLib.html" title=" " alt="" coords="5,5,180,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_103.png" border="0" usemap="#aXped_1_1detail_1_1appender_3_01Prepend_00_01num__tuple_3_01Sizes_8_8_8_01_4_01_4" alt=""/>
+<map name="aXped_1_1detail_1_1appender_3_01Prepend_00_01num__tuple_3_01Sizes_8_8_8_01_4_01_4" id="aXped_1_1detail_1_1appender_3_01Prepend_00_01num__tuple_3_01Sizes_8_8_8_01_4_01_4">
+<area shape="rect" href="structXped_1_1detail_1_1appender_3_01Prepend_00_01num__tuple_3_01Sizes_8_8_8_01_4_01_4.html" title=" " alt="" coords="5,5,184,60"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_104.png" border="0" usemap="#aXped_1_1detail_1_1appender_3_01Prepend_00_01T_01_4" alt=""/>
+<map name="aXped_1_1detail_1_1appender_3_01Prepend_00_01T_01_4" id="aXped_1_1detail_1_1appender_3_01Prepend_00_01T_01_4">
+<area shape="rect" href="structXped_1_1detail_1_1appender.html" title=" " alt="" coords="5,5,175,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_105.png" border="0" usemap="#aXped_1_1detail_1_1counter__tuple_3_01Size_00_01Counter_01_4" alt=""/>
+<map name="aXped_1_1detail_1_1counter__tuple_3_01Size_00_01Counter_01_4" id="aXped_1_1detail_1_1counter__tuple_3_01Size_00_01Counter_01_4">
+<area shape="rect" href="structXped_1_1detail_1_1counter__tuple.html" title=" " alt="" coords="5,5,184,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_106.png" border="0" usemap="#aXped_1_1detail_1_1counter__tuple_3_01Size_00_01Size_01_4" alt=""/>
+<map name="aXped_1_1detail_1_1counter__tuple_3_01Size_00_01Size_01_4" id="aXped_1_1detail_1_1counter__tuple_3_01Size_00_01Size_01_4">
+<area shape="rect" href="structXped_1_1detail_1_1counter__tuple_3_01Size_00_01Size_01_4.html" title=" " alt="" coords="5,5,163,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_107.png" border="0" usemap="#aXped_1_1detail_1_1num__tuple_3_01Size_01_4" alt=""/>
+<map name="aXped_1_1detail_1_1num__tuple_3_01Size_01_4" id="aXped_1_1detail_1_1num__tuple_3_01Size_01_4">
+<area shape="rect" href="structXped_1_1detail_1_1num__tuple.html" title=" " alt="" coords="5,5,183,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_108.png" border="0" usemap="#aXped_1_1EigenMatrixLib" alt=""/>
+<map name="aXped_1_1EigenMatrixLib" id="aXped_1_1EigenMatrixLib">
+<area shape="rect" href="structXped_1_1EigenMatrixLib.html" title=" " alt="" coords="5,5,165,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_109.png" border="0" usemap="#aXped_1_1EigenTensorLib" alt=""/>
+<map name="aXped_1_1EigenTensorLib" id="aXped_1_1EigenTensorLib">
+<area shape="rect" href="structXped_1_1EigenTensorLib.html" title=" " alt="" coords="5,5,165,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_110.png" border="0" usemap="#aXped_1_1EigenVectorLib" alt=""/>
+<map name="aXped_1_1EigenVectorLib" id="aXped_1_1EigenVectorLib">
+<area shape="rect" href="structXped_1_1EigenVectorLib.html" title=" " alt="" coords="5,5,164,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_111.png" border="0" usemap="#aXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4" alt=""/>
+<map name="aXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4" id="aXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4">
+<area shape="rect" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Sym_1_1SU2_fa9e0b6b268804d350c573819f69b97e.html" title=" " alt="" coords="5,5,187,89"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_112.png" border="0" usemap="#aXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4" alt=""/>
+<map name="aXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4" id="aXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4">
+<area shape="rect" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html" title=" " alt="" coords="5,5,261,60"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_113.png" border="0" usemap="#aXped_1_1Fermion_3_01Symmetry_01_4" alt=""/>
+<map name="aXped_1_1Fermion_3_01Symmetry_01_4" id="aXped_1_1Fermion_3_01Symmetry_01_4">
+<area shape="rect" href="classXped_1_1Fermion.html" title=" " alt="" coords="5,5,220,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_114.png" border="0" usemap="#aXped_1_1Fermion_3_01Symmetry___01_4" alt=""/>
+<map name="aXped_1_1Fermion_3_01Symmetry___01_4" id="aXped_1_1Fermion_3_01Symmetry___01_4">
+<area shape="rect" href="classXped_1_1Fermion.html" title=" " alt="" coords="5,45,227,70"/>
+<area shape="rect" href="classXped_1_1FermionBase.html" title=" " alt="" coords="275,5,433,45"/>
+<area shape="rect" href="classXped_1_1FermionBase.html" title=" " alt="" coords="275,69,433,109"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_115.png" border="0" usemap="#aXped_1_1FusionTree_3_01Rank_00_01Symmetry_01_4" alt=""/>
+<map name="aXped_1_1FusionTree_3_01Rank_00_01Symmetry_01_4" id="aXped_1_1FusionTree_3_01Rank_00_01Symmetry_01_4">
+<area shape="rect" href="structXped_1_1FusionTree.html" title=" " alt="" coords="5,5,189,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_116.png" border="0" usemap="#aXped_1_1GaugeTriple_3_01TL_00_01TR_00_01TC_01_4" alt=""/>
+<map name="aXped_1_1GaugeTriple_3_01TL_00_01TR_00_01TC_01_4" id="aXped_1_1GaugeTriple_3_01TL_00_01TR_00_01TC_01_4">
+<area shape="rect" href="structXped_1_1GaugeTriple.html" title=" " alt="" coords="5,5,156,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_117.png" border="0" usemap="#aXped_1_1HeapPolicy" alt=""/>
+<map name="aXped_1_1HeapPolicy" id="aXped_1_1HeapPolicy">
+<area shape="rect" href="structXped_1_1HeapPolicy.html" title=" " alt="" coords="5,5,141,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_118.png" border="0" usemap="#aXped_1_1iPEPS_3_01Scalar___00_01Symmetry___00_01ENABLE__AD___01_4" alt=""/>
+<map name="aXped_1_1iPEPS_3_01Scalar___00_01Symmetry___00_01ENABLE__AD___01_4" id="aXped_1_1iPEPS_3_01Scalar___00_01Symmetry___00_01ENABLE__AD___01_4">
+<area shape="rect" href="classXped_1_1iPEPS.html" title=" " alt="" coords="5,5,224,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_119.png" border="0" usemap="#aXped_1_1iPEPSSolverAD_3_01Scalar_00_01Symmetry_00_01CPOpts_00_01TRank_01_4" alt=""/>
+<map name="aXped_1_1iPEPSSolverAD_3_01Scalar_00_01Symmetry_00_01CPOpts_00_01TRank_01_4" id="aXped_1_1iPEPSSolverAD_3_01Scalar_00_01Symmetry_00_01CPOpts_00_01TRank_01_4">
+<area shape="rect" href="structXped_1_1iPEPSSolverAD.html" title=" " alt="" coords="5,5,164,60"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_120.png" border="0" usemap="#aXped_1_1iPEPSSolverAD_3_01Scalar_00_01Symmetry_00_01CPOpts_00_01TRank_01_4_1_1SolverState" alt=""/>
+<map name="aXped_1_1iPEPSSolverAD_3_01Scalar_00_01Symmetry_00_01CPOpts_00_01TRank_01_4_1_1SolverState" id="aXped_1_1iPEPSSolverAD_3_01Scalar_00_01Symmetry_00_01CPOpts_00_01TRank_01_4_1_1SolverState">
+<area shape="rect" href="structXped_1_1iPEPSSolverAD_1_1SolverState.html" title=" " alt="" coords="5,5,225,60"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_121.png" border="0" usemap="#aXped_1_1iPEPSSolverImag_3_01Scalar_00_01Symmetry_01_4" alt=""/>
+<map name="aXped_1_1iPEPSSolverImag_3_01Scalar_00_01Symmetry_01_4" id="aXped_1_1iPEPSSolverImag_3_01Scalar_00_01Symmetry_01_4">
+<area shape="rect" href="structXped_1_1iPEPSSolverImag.html" title=" " alt="" coords="5,5,179,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_122.png" border="0" usemap="#aXped_1_1MatrixInterface" alt=""/>
+<map name="aXped_1_1MatrixInterface" id="aXped_1_1MatrixInterface">
+<area shape="rect" href="structXped_1_1MatrixInterface.html" title=" " alt="" coords="5,5,168,31"/>
+<area shape="rect" href="structXped_1_1PlainInterface.html" title=" " alt="" coords="216,55,369,80"/>
+<area shape="rect" href="structXped_1_1TensorInterface.html" title=" " alt="" coords="5,55,168,80"/>
+<area shape="rect" href="structXped_1_1VectorInterface.html" title=" " alt="" coords="5,104,168,129"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_123.png" border="0" usemap="#aXped_1_1mpi_1_1TrivialDeleter_3_01T_01_4" alt=""/>
+<map name="aXped_1_1mpi_1_1TrivialDeleter_3_01T_01_4" id="aXped_1_1mpi_1_1TrivialDeleter_3_01T_01_4">
+<area shape="rect" href="structXped_1_1mpi_1_1TrivialDeleter.html" title=" " alt="" coords="5,5,227,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_124.png" border="0" usemap="#aXped_1_1mpi_1_1XpedWorld" alt=""/>
+<map name="aXped_1_1mpi_1_1XpedWorld" id="aXped_1_1mpi_1_1XpedWorld">
+<area shape="rect" href="structXped_1_1mpi_1_1XpedWorld.html" title=" " alt="" coords="5,5,172,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_125.png" border="0" usemap="#aXped_1_1Mps_3_01Scalar___00_01Symmetry___01_4" alt=""/>
+<map name="aXped_1_1Mps_3_01Scalar___00_01Symmetry___01_4" id="aXped_1_1Mps_3_01Scalar___00_01Symmetry___01_4">
+<area shape="rect" href="classXped_1_1Mps.html" title=" " alt="" coords="5,5,161,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_126.png" border="0" usemap="#aXped_1_1ObservableBase" alt=""/>
+<map name="aXped_1_1ObservableBase" id="aXped_1_1ObservableBase">
+<area shape="rect" href="structXped_1_1ObservableBase.html" title=" " alt="" coords="5,176,175,201"/>
+<area shape="rect" href="structXped_1_1TwoSiteObservable.html" title=" " alt="" coords="255,73,441,113"/>
+<area shape="rect" href="structXped_1_1TwoSiteObservable.html" title=" " alt="" coords="255,137,441,177"/>
+<area shape="rect" href="structXped_1_1OneSiteObservable.html" title=" " alt="" coords="223,201,473,241"/>
+<area shape="rect" href="structXped_1_1TwoSiteObservable.html" title=" " alt="" coords="223,265,473,305"/>
+<area shape="rect" href="classXped_1_1Heisenberg.html" title=" " alt="" coords="521,5,756,31"/>
+<area shape="rect" href="classXped_1_1Hubbard.html" title=" " alt="" coords="531,55,747,80"/>
+<area shape="rect" href="classXped_1_1Kondo.html" title=" " alt="" coords="538,104,739,129"/>
+<area shape="rect" href="classXped_1_1KondoNecklace.html" title=" " alt="" coords="557,154,720,194"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_127.png" border="0" usemap="#aXped_1_1Opts_1_1CTM" alt=""/>
+<map name="aXped_1_1Opts_1_1CTM" id="aXped_1_1Opts_1_1CTM">
+<area shape="rect" href="structXped_1_1Opts_1_1CTM.html" title=" " alt="" coords="5,5,136,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_128.png" border="0" usemap="#aXped_1_1Opts_1_1CTMCheckpoint" alt=""/>
+<map name="aXped_1_1Opts_1_1CTMCheckpoint" id="aXped_1_1Opts_1_1CTMCheckpoint">
+<area shape="rect" href="structXped_1_1Opts_1_1CTMCheckpoint.html" title=" " alt="" coords="5,5,208,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_129.png" border="0" usemap="#aXped_1_1Opts_1_1Imag" alt=""/>
+<map name="aXped_1_1Opts_1_1Imag" id="aXped_1_1Opts_1_1Imag">
+<area shape="rect" href="structXped_1_1Opts_1_1Imag.html" title=" " alt="" coords="5,5,140,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_130.png" border="0" usemap="#aXped_1_1Opts_1_1Optim" alt=""/>
+<map name="aXped_1_1Opts_1_1Optim" id="aXped_1_1Opts_1_1Optim">
+<area shape="rect" href="structXped_1_1Opts_1_1Optim.html" title=" " alt="" coords="5,5,147,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_131.png" border="0" usemap="#aXped_1_1Param" alt=""/>
+<map name="aXped_1_1Param" id="aXped_1_1Param">
+<area shape="rect" href="structXped_1_1Param.html" title=" " alt="" coords="5,5,109,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_132.png" border="0" usemap="#aXped_1_1Pattern" alt=""/>
+<map name="aXped_1_1Pattern" id="aXped_1_1Pattern">
+<area shape="rect" href="structXped_1_1Pattern.html" title=" " alt="" coords="5,5,115,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_133.png" border="0" usemap="#aXped_1_1qarray_3_01Nq_01_4" alt=""/>
+<map name="aXped_1_1qarray_3_01Nq_01_4" id="aXped_1_1qarray_3_01Nq_01_4">
+<area shape="rect" href="structXped_1_1qarray.html" title=" " alt="" coords="5,5,159,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_134.png" border="0" usemap="#aXped_1_1Qbasis_3_01Symmetry_00_011_01_4" alt=""/>
+<map name="aXped_1_1Qbasis_3_01Symmetry_00_011_01_4" id="aXped_1_1Qbasis_3_01Symmetry_00_011_01_4">
+<area shape="rect" href="classXped_1_1Qbasis.html" title=" " alt="" coords="5,5,227,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_135.png" border="0" usemap="#aXped_1_1Qbasis_3_01Symmetry_00_01CoRank_00_01AllocationPolicy_01_4" alt=""/>
+<map name="aXped_1_1Qbasis_3_01Symmetry_00_01CoRank_00_01AllocationPolicy_01_4" id="aXped_1_1Qbasis_3_01Symmetry_00_01CoRank_00_01AllocationPolicy_01_4">
+<area shape="rect" href="classXped_1_1Qbasis.html" title=" " alt="" coords="5,5,208,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_136.png" border="0" usemap="#aXped_1_1Qbasis_3_01Symmetry_00_01depth_00_01AllocationPolicy_01_4" alt=""/>
+<map name="aXped_1_1Qbasis_3_01Symmetry_00_01depth_00_01AllocationPolicy_01_4" id="aXped_1_1Qbasis_3_01Symmetry_00_01depth_00_01AllocationPolicy_01_4">
+<area shape="rect" href="classXped_1_1Qbasis.html" title=" " alt="" coords="5,5,200,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_137.png" border="0" usemap="#aXped_1_1Qbasis_3_01Symmetry_00_01Rank_00_01AllocationPolicy_01_4" alt=""/>
+<map name="aXped_1_1Qbasis_3_01Symmetry_00_01Rank_00_01AllocationPolicy_01_4" id="aXped_1_1Qbasis_3_01Symmetry_00_01Rank_00_01AllocationPolicy_01_4">
+<area shape="rect" href="classXped_1_1Qbasis.html" title=" " alt="" coords="5,5,200,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_138.png" border="0" usemap="#aXped_1_1Qbasis_3_01Xped_1_1Sym_1_1Combined_00_011_01_4" alt=""/>
+<map name="aXped_1_1Qbasis_3_01Xped_1_1Sym_1_1Combined_00_011_01_4" id="aXped_1_1Qbasis_3_01Xped_1_1Sym_1_1Combined_00_011_01_4">
+<area shape="rect" href="classXped_1_1Qbasis.html" title=" " alt="" coords="5,5,169,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_139.png" border="0" usemap="#aXped_1_1Qbasis_3_01Xped_1_1Sym_1_1SU2_00_011_01_4" alt=""/>
+<map name="aXped_1_1Qbasis_3_01Xped_1_1Sym_1_1SU2_00_011_01_4" id="aXped_1_1Qbasis_3_01Xped_1_1Sym_1_1SU2_00_011_01_4">
+<area shape="rect" href="classXped_1_1Qbasis.html" title=" " alt="" coords="5,5,160,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_140.png" border="0" usemap="#aXped_1_1ScalarTraits_3_01double_01_4" alt=""/>
+<map name="aXped_1_1ScalarTraits_3_01double_01_4" id="aXped_1_1ScalarTraits_3_01double_01_4">
+<area shape="rect" href="structXped_1_1ScalarTraits_3_01double_01_4.html" title=" " alt="" coords="5,5,144,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_141.png" border="0" usemap="#aXped_1_1ScalarTraits_3_01Scalar_01_4" alt=""/>
+<map name="aXped_1_1ScalarTraits_3_01Scalar_01_4" id="aXped_1_1ScalarTraits_3_01Scalar_01_4">
+<area shape="rect" href="structXped_1_1ScalarTraits.html" title=" " alt="" coords="5,5,144,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_142.png" border="0" usemap="#aXped_1_1SimpleUpdate_3_01Scalar___00_01Symmetry___01_4" alt=""/>
+<map name="aXped_1_1SimpleUpdate_3_01Scalar___00_01Symmetry___01_4" id="aXped_1_1SimpleUpdate_3_01Scalar___00_01Symmetry___01_4">
+<area shape="rect" href="classXped_1_1SimpleUpdate.html" title=" " alt="" coords="5,5,188,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_143.png" border="0" usemap="#aXped_1_1SiteOperator_3_01double_00_01Symmetry_01_4" alt=""/>
+<map name="aXped_1_1SiteOperator_3_01double_00_01Symmetry_01_4" id="aXped_1_1SiteOperator_3_01double_00_01Symmetry_01_4">
+<area shape="rect" href="structXped_1_1SiteOperator.html" title=" " alt="" coords="5,5,177,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_144.png" border="0" usemap="#aXped_1_1SiteOperator_3_01Scalar_00_01Symmetry_01_4" alt=""/>
+<map name="aXped_1_1SiteOperator_3_01Scalar_00_01Symmetry_01_4" id="aXped_1_1SiteOperator_3_01Scalar_00_01Symmetry_01_4">
+<area shape="rect" href="structXped_1_1SiteOperator.html" title=" " alt="" coords="5,5,173,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_145.png" border="0" usemap="#aXped_1_1SiteOperator_3_01Scalar___00_01Symmetry___01_4" alt=""/>
+<map name="aXped_1_1SiteOperator_3_01Scalar___00_01Symmetry___01_4" id="aXped_1_1SiteOperator_3_01Scalar___00_01Symmetry___01_4">
+<area shape="rect" href="structXped_1_1SiteOperator.html" title=" " alt="" coords="5,5,188,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_146.png" border="0" usemap="#aXped_1_1Spin_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4" alt=""/>
+<map name="aXped_1_1Spin_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4" id="aXped_1_1Spin_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4">
+<area shape="rect" href="classXped_1_1Spin_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html" title=" " alt="" coords="5,5,215,60"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_147.png" border="0" usemap="#aXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4" alt=""/>
+<map name="aXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4" id="aXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4">
+<area shape="rect" href="classXped_1_1Spin_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_010ul_01_4.html" title=" " alt="" coords="5,5,192,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_148.png" border="0" usemap="#aXped_1_1Spin_3_01Symmetry_00_010_01_4" alt=""/>
+<map name="aXped_1_1Spin_3_01Symmetry_00_010_01_4" id="aXped_1_1Spin_3_01Symmetry_00_010_01_4">
+<area shape="rect" href="classXped_1_1Spin.html" title=" " alt="" coords="5,5,211,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_149.png" border="0" usemap="#aXped_1_1Spin_3_01Symmetry___00_010_01_4" alt=""/>
+<map name="aXped_1_1Spin_3_01Symmetry___00_010_01_4" id="aXped_1_1Spin_3_01Symmetry___00_010_01_4">
+<area shape="rect" href="classXped_1_1Spin.html" title=" " alt="" coords="5,5,180,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_150.png" border="0" usemap="#aXped_1_1Spin_3_01Symmetry___00_01spin__index_01_4" alt=""/>
+<map name="aXped_1_1Spin_3_01Symmetry___00_01spin__index_01_4" id="aXped_1_1Spin_3_01Symmetry___00_01spin__index_01_4">
+<area shape="rect" href="classXped_1_1Spin.html" title=" " alt="" coords="5,27,180,67"/>
+<area shape="rect" href="classXped_1_1SpinBase.html" title=" " alt="" coords="228,5,449,31"/>
+<area shape="rect" href="classXped_1_1SpinBase.html" title=" " alt="" coords="235,55,442,95"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_151.png" border="0" usemap="#aXped_1_1StanArenaPolicy" alt=""/>
+<map name="aXped_1_1StanArenaPolicy" id="aXped_1_1StanArenaPolicy">
+<area shape="rect" href="structXped_1_1StanArenaPolicy.html" title=" " alt="" coords="5,5,175,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_152.png" border="0" usemap="#aXped_1_1StorageType_3_01Scalar_00_01Rank_00_01CoRank_00_01Symmetry_00_01AllocationPolicy_01_4" alt=""/>
+<map name="aXped_1_1StorageType_3_01Scalar_00_01Rank_00_01CoRank_00_01Symmetry_00_01AllocationPolicy_01_4" id="aXped_1_1StorageType_3_01Scalar_00_01Rank_00_01CoRank_00_01Symmetry_00_01AllocationPolicy_01_4">
+<area shape="rect" href="structXped_1_1StorageType.html" title=" " alt="" coords="5,5,227,60"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_153.png" border="0" usemap="#aXped_1_1Sym_1_1AltSpinSU2" alt=""/>
+<map name="aXped_1_1Sym_1_1AltSpinSU2" id="aXped_1_1Sym_1_1AltSpinSU2">
+<area shape="rect" href="structXped_1_1Sym_1_1AltSpinSU2.html" title=" " alt="" coords="5,5,177,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_154.png" border="0" usemap="#aXped_1_1Sym_1_1ChargeDn" alt=""/>
+<map name="aXped_1_1Sym_1_1ChargeDn" id="aXped_1_1Sym_1_1ChargeDn">
+<area shape="rect" href="structXped_1_1Sym_1_1ChargeDn.html" title=" " alt="" coords="5,5,169,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_155.png" border="0" usemap="#aXped_1_1Sym_1_1ChargeSU2" alt=""/>
+<map name="aXped_1_1Sym_1_1ChargeSU2" id="aXped_1_1Sym_1_1ChargeSU2">
+<area shape="rect" href="structXped_1_1Sym_1_1ChargeSU2.html" title=" " alt="" coords="5,5,177,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_156.png" border="0" usemap="#aXped_1_1Sym_1_1ChargeU1" alt=""/>
+<map name="aXped_1_1Sym_1_1ChargeU1" id="aXped_1_1Sym_1_1ChargeU1">
+<area shape="rect" href="structXped_1_1Sym_1_1ChargeU1.html" title=" " alt="" coords="5,5,169,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_157.png" border="0" usemap="#aXped_1_1Sym_1_1ChargeUp" alt=""/>
+<map name="aXped_1_1Sym_1_1ChargeUp" id="aXped_1_1Sym_1_1ChargeUp">
+<area shape="rect" href="structXped_1_1Sym_1_1ChargeUp.html" title=" " alt="" coords="5,5,169,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_158.png" border="0" usemap="#aXped_1_1Sym_1_1ChargeZ2" alt=""/>
+<map name="aXped_1_1Sym_1_1ChargeZ2" id="aXped_1_1Sym_1_1ChargeZ2">
+<area shape="rect" href="structXped_1_1Sym_1_1ChargeZ2.html" title=" " alt="" coords="5,5,168,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_159.png" border="0" usemap="#aXped_1_1Sym_1_1Combined_3_01Syms_01_4" alt=""/>
+<map name="aXped_1_1Sym_1_1Combined_3_01Syms_01_4" id="aXped_1_1Sym_1_1Combined_3_01Syms_01_4">
+<area shape="rect" href="structXped_1_1Sym_1_1Combined.html" title=" " alt="" coords="5,5,172,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_160.png" border="0" usemap="#aXped_1_1Sym_1_1FChargeSU2" alt=""/>
+<map name="aXped_1_1Sym_1_1FChargeSU2" id="aXped_1_1Sym_1_1FChargeSU2">
+<area shape="rect" href="structXped_1_1Sym_1_1FChargeSU2.html" title=" " alt="" coords="5,5,185,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_161.png" border="0" usemap="#aXped_1_1Sym_1_1FChargeU1" alt=""/>
+<map name="aXped_1_1Sym_1_1FChargeU1" id="aXped_1_1Sym_1_1FChargeU1">
+<area shape="rect" href="structXped_1_1Sym_1_1FChargeU1.html" title=" " alt="" coords="5,5,177,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_162.png" border="0" usemap="#aXped_1_1Sym_1_1SpinSU2" alt=""/>
+<map name="aXped_1_1Sym_1_1SpinSU2" id="aXped_1_1Sym_1_1SpinSU2">
+<area shape="rect" href="structXped_1_1Sym_1_1SpinSU2.html" title=" " alt="" coords="5,5,160,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_163.png" border="0" usemap="#aXped_1_1Sym_1_1SpinU1" alt=""/>
+<map name="aXped_1_1Sym_1_1SpinU1" id="aXped_1_1Sym_1_1SpinU1">
+<area shape="rect" href="structXped_1_1Sym_1_1SpinU1.html" title=" " alt="" coords="5,5,152,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_164.png" border="0" usemap="#aXped_1_1Sym_1_1SymBase_3_01Derived_01_4" alt=""/>
+<map name="aXped_1_1Sym_1_1SymBase_3_01Derived_01_4" id="aXped_1_1Sym_1_1SymBase_3_01Derived_01_4">
+<area shape="rect" href="structXped_1_1Sym_1_1SymBase.html" title=" " alt="" coords="5,163,167,203"/>
+<area shape="rect" href="structXped_1_1Sym_1_1S1xS2.html" title=" " alt="" coords="225,5,399,45"/>
+<area shape="rect" href="structXped_1_1Sym_1_1SU2.html" title=" " alt="" coords="225,69,399,109"/>
+<area shape="rect" href="structXped_1_1Sym_1_1SUN.html" title=" " alt="" coords="230,133,394,173"/>
+<area shape="rect" href="structXped_1_1Sym_1_1U0.html" title=" " alt="" coords="215,198,409,223"/>
+<area shape="rect" href="structXped_1_1Sym_1_1U1.html" title=" " alt="" coords="229,248,395,288"/>
+<area shape="rect" href="structXped_1_1Sym_1_1ZN.html" title=" " alt="" coords="229,312,395,352"/>
+<area shape="rect" href="structXped_1_1Sym_1_1Combined_3_01S1_00_01S2_01_4.html" title=" " alt="" coords="457,5,624,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_165.png" border="0" usemap="#aXped_1_1Sym_1_1SymBase_3_01S1xS2_3_01S1_00_01S2_01_4_01_4" alt=""/>
+<map name="aXped_1_1Sym_1_1SymBase_3_01S1xS2_3_01S1_00_01S2_01_4_01_4" id="aXped_1_1Sym_1_1SymBase_3_01S1xS2_3_01S1_00_01S2_01_4_01_4">
+<area shape="rect" href="structXped_1_1Sym_1_1SymBase.html" title=" " alt="" coords="5,5,168,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_166.png" border="0" usemap="#aXped_1_1Sym_1_1SymBase_3_01S1xS2_3_01S1___00_01S2___01_4_01_4" alt=""/>
+<map name="aXped_1_1Sym_1_1SymBase_3_01S1xS2_3_01S1___00_01S2___01_4_01_4" id="aXped_1_1Sym_1_1SymBase_3_01S1xS2_3_01S1___00_01S2___01_4_01_4">
+<area shape="rect" href="structXped_1_1Sym_1_1SymBase.html" title=" " alt="" coords="5,5,181,45"/>
+<area shape="rect" href="structXped_1_1Sym_1_1S1xS2.html" title=" " alt="" coords="229,5,400,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_167.png" border="0" usemap="#aXped_1_1Sym_1_1SymBase_3_01SU2_3_01Kind_00_01double_01_4_01_4" alt=""/>
+<map name="aXped_1_1Sym_1_1SymBase_3_01SU2_3_01Kind_00_01double_01_4_01_4" id="aXped_1_1Sym_1_1SymBase_3_01SU2_3_01Kind_00_01double_01_4_01_4">
+<area shape="rect" href="structXped_1_1Sym_1_1SymBase.html" title=" " alt="" coords="5,5,195,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_168.png" border="0" usemap="#aXped_1_1Sym_1_1SymBase_3_01SUN_3_01N___00_01Kind_00_01double_01_4_01_4" alt=""/>
+<map name="aXped_1_1Sym_1_1SymBase_3_01SUN_3_01N___00_01Kind_00_01double_01_4_01_4" id="aXped_1_1Sym_1_1SymBase_3_01SUN_3_01N___00_01Kind_00_01double_01_4_01_4">
+<area shape="rect" href="structXped_1_1Sym_1_1SymBase.html" title=" " alt="" coords="5,5,221,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_169.png" border="0" usemap="#aXped_1_1Sym_1_1SymBase_3_01U0_3_01double_01_4_01_4" alt=""/>
+<map name="aXped_1_1Sym_1_1SymBase_3_01U0_3_01double_01_4_01_4" id="aXped_1_1Sym_1_1SymBase_3_01U0_3_01double_01_4_01_4">
+<area shape="rect" href="structXped_1_1Sym_1_1SymBase.html" title=" " alt="" coords="5,5,167,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_170.png" border="0" usemap="#aXped_1_1Sym_1_1SymBase_3_01U1_3_01Kind_00_01double_01_4_01_4" alt=""/>
+<map name="aXped_1_1Sym_1_1SymBase_3_01U1_3_01Kind_00_01double_01_4_01_4" id="aXped_1_1Sym_1_1SymBase_3_01U1_3_01Kind_00_01double_01_4_01_4">
+<area shape="rect" href="structXped_1_1Sym_1_1SymBase.html" title=" " alt="" coords="5,5,187,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_171.png" border="0" usemap="#aXped_1_1Sym_1_1SymBase_3_01ZN_3_01Kind_00_01N_00_01double_01_4_01_4" alt=""/>
+<map name="aXped_1_1Sym_1_1SymBase_3_01ZN_3_01Kind_00_01N_00_01double_01_4_01_4" id="aXped_1_1Sym_1_1SymBase_3_01ZN_3_01Kind_00_01N_00_01double_01_4_01_4">
+<area shape="rect" href="structXped_1_1Sym_1_1SymBase.html" title=" " alt="" coords="5,5,205,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_172.png" border="0" usemap="#aXped_1_1Sym_1_1SymTraits_3_01Derived_01_4" alt=""/>
+<map name="aXped_1_1Sym_1_1SymTraits_3_01Derived_01_4" id="aXped_1_1Sym_1_1SymTraits_3_01Derived_01_4">
+<area shape="rect" href="structXped_1_1Sym_1_1SymTraits.html" title=" " alt="" coords="5,5,169,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_173.png" border="0" usemap="#aXped_1_1Sym_1_1SymTraits_3_01S1xS2_3_01S1_00_01S2_01_4_01_4" alt=""/>
+<map name="aXped_1_1Sym_1_1SymTraits_3_01S1xS2_3_01S1_00_01S2_01_4_01_4" id="aXped_1_1Sym_1_1SymTraits_3_01S1xS2_3_01S1_00_01S2_01_4_01_4">
+<area shape="rect" href="structXped_1_1Sym_1_1SymTraits_3_01S1xS2_3_01S1_00_01S2_01_4_01_4.html" title=" " alt="" coords="5,5,169,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_174.png" border="0" usemap="#aXped_1_1Sym_1_1SymTraits_3_01SU2_3_01Kind___00_01Scalar_____01_4_01_4" alt=""/>
+<map name="aXped_1_1Sym_1_1SymTraits_3_01SU2_3_01Kind___00_01Scalar_____01_4_01_4" id="aXped_1_1Sym_1_1SymTraits_3_01SU2_3_01Kind___00_01Scalar_____01_4_01_4">
+<area shape="rect" href="structXped_1_1Sym_1_1SymTraits_3_01SU2_3_01Kind___00_01Scalar_____01_4_01_4.html" title=" " alt="" coords="5,5,212,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_175.png" border="0" usemap="#aXped_1_1Sym_1_1SymTraits_3_01SUN_3_01N_00_01Kind___00_01Scalar_____01_4_01_4" alt=""/>
+<map name="aXped_1_1Sym_1_1SymTraits_3_01SUN_3_01N_00_01Kind___00_01Scalar_____01_4_01_4" id="aXped_1_1Sym_1_1SymTraits_3_01SUN_3_01N_00_01Kind___00_01Scalar_____01_4_01_4">
+<area shape="rect" href="structXped_1_1Sym_1_1SymTraits_3_01SUN_3_01N_00_01Kind___00_01Scalar_____01_4_01_4.html" title=" " alt="" coords="5,5,232,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_176.png" border="0" usemap="#aXped_1_1Sym_1_1SymTraits_3_01U0_3_01Scalar_____01_4_01_4" alt=""/>
+<map name="aXped_1_1Sym_1_1SymTraits_3_01U0_3_01Scalar_____01_4_01_4" id="aXped_1_1Sym_1_1SymTraits_3_01U0_3_01Scalar_____01_4_01_4">
+<area shape="rect" href="structXped_1_1Sym_1_1SymTraits_3_01U0_3_01Scalar_____01_4_01_4.html" title=" " alt="" coords="5,5,169,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_177.png" border="0" usemap="#aXped_1_1Sym_1_1SymTraits_3_01U1_3_01Kind___00_01Scalar_____01_4_01_4" alt=""/>
+<map name="aXped_1_1Sym_1_1SymTraits_3_01U1_3_01Kind___00_01Scalar_____01_4_01_4" id="aXped_1_1Sym_1_1SymTraits_3_01U1_3_01Kind___00_01Scalar_____01_4_01_4">
+<area shape="rect" href="structXped_1_1Sym_1_1SymTraits_3_01U1_3_01Kind___00_01Scalar_____01_4_01_4.html" title=" " alt="" coords="5,5,204,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_178.png" border="0" usemap="#aXped_1_1Sym_1_1SymTraits_3_01ZN_3_01Kind___00_01N___00_01Scalar_____01_4_01_4" alt=""/>
+<map name="aXped_1_1Sym_1_1SymTraits_3_01ZN_3_01Kind___00_01N___00_01Scalar_____01_4_01_4" id="aXped_1_1Sym_1_1SymTraits_3_01ZN_3_01Kind___00_01N___00_01Scalar_____01_4_01_4">
+<area shape="rect" href="structXped_1_1Sym_1_1SymTraits_3_01ZN_3_01Kind___00_01N___00_01Scalar_____01_4_01_4.html" title=" " alt="" coords="5,5,229,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_179.png" border="0" usemap="#aXped_1_1Tensor_3_01Scalar_00_011_00_012_00_01Symmetry_00_01false_01_4" alt=""/>
+<map name="aXped_1_1Tensor_3_01Scalar_00_011_00_012_00_01Symmetry_00_01false_01_4" id="aXped_1_1Tensor_3_01Scalar_00_011_00_012_00_01Symmetry_00_01false_01_4">
+<area shape="rect" href="classXped_1_1Tensor.html" title=" " alt="" coords="5,5,187,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_180.png" border="0" usemap="#aXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4" alt=""/>
+<map name="aXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4" id="aXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4">
+<area shape="rect" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html" title=" " alt="" coords="5,5,209,60"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_181.png" border="0" usemap="#aXped_1_1Tensor_3_01typename_00_01size__t_00_01size__t_00_01typename_00_01bool_00_01typename_01_4" alt=""/>
+<map name="aXped_1_1Tensor_3_01typename_00_01size__t_00_01size__t_00_01typename_00_01bool_00_01typename_01_4" id="aXped_1_1Tensor_3_01typename_00_01size__t_00_01size__t_00_01typename_00_01bool_00_01typename_01_4">
+<area shape="rect" href="classXped_1_1Tensor.html" title=" " alt="" coords="5,5,196,60"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_182.png" border="0" usemap="#aXped_1_1TensorBase_3_01AdjointOp_3_01XprType_01_4_01_4" alt=""/>
+<map name="aXped_1_1TensorBase_3_01AdjointOp_3_01XprType_01_4_01_4" id="aXped_1_1TensorBase_3_01AdjointOp_3_01XprType_01_4_01_4">
+<area shape="rect" href="classXped_1_1TensorBase.html" title=" " alt="" coords="5,5,204,45"/>
+<area shape="rect" href="classXped_1_1AdjointOp.html" title=" " alt="" coords="252,13,461,38"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_183.png" border="0" usemap="#aXped_1_1TensorBase_3_01BlockUnaryOp_3_01XprType_01_4_01_4" alt=""/>
+<map name="aXped_1_1TensorBase_3_01BlockUnaryOp_3_01XprType_01_4_01_4" id="aXped_1_1TensorBase_3_01BlockUnaryOp_3_01XprType_01_4_01_4">
+<area shape="rect" href="classXped_1_1TensorBase.html" title=" " alt="" coords="5,5,232,45"/>
+<area shape="rect" href="classXped_1_1BlockUnaryOp.html" title=" " alt="" coords="280,5,436,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_184.png" border="0" usemap="#aXped_1_1TensorBase_3_01CoeffBinaryOp_3_01XprTypeLeft_00_01XprTypeRight_01_4_01_4" alt=""/>
+<map name="aXped_1_1TensorBase_3_01CoeffBinaryOp_3_01XprTypeLeft_00_01XprTypeRight_01_4_01_4" id="aXped_1_1TensorBase_3_01CoeffBinaryOp_3_01XprTypeLeft_00_01XprTypeRight_01_4_01_4">
+<area shape="rect" href="classXped_1_1TensorBase.html" title=" " alt="" coords="5,5,260,45"/>
+<area shape="rect" href="classXped_1_1CoeffBinaryOp.html" title=" " alt="" coords="308,5,531,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_185.png" border="0" usemap="#aXped_1_1TensorBase_3_01CoeffUnaryOp_3_01XprType_00_01ReturnScalar_01_4_01_4" alt=""/>
+<map name="aXped_1_1TensorBase_3_01CoeffUnaryOp_3_01XprType_00_01ReturnScalar_01_4_01_4" id="aXped_1_1TensorBase_3_01CoeffUnaryOp_3_01XprType_00_01ReturnScalar_01_4_01_4">
+<area shape="rect" href="classXped_1_1TensorBase.html" title=" " alt="" coords="5,5,233,45"/>
+<area shape="rect" href="classXped_1_1CoeffUnaryOp.html" title=" " alt="" coords="281,5,476,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_186.png" border="0" usemap="#aXped_1_1TensorBase_3_01Derived_01_4" alt=""/>
+<map name="aXped_1_1TensorBase_3_01Derived_01_4" id="aXped_1_1TensorBase_3_01Derived_01_4">
+<area shape="rect" href="classXped_1_1TensorBase.html" title=" " alt="" coords="5,5,224,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_187.png" border="0" usemap="#aXped_1_1TensorBase_3_01DiagCoeffBinaryOp_3_01XprTypeLeft_00_01XprTypeRight_01_4_01_4" alt=""/>
+<map name="aXped_1_1TensorBase_3_01DiagCoeffBinaryOp_3_01XprTypeLeft_00_01XprTypeRight_01_4_01_4" id="aXped_1_1TensorBase_3_01DiagCoeffBinaryOp_3_01XprTypeLeft_00_01XprTypeRight_01_4_01_4">
+<area shape="rect" href="classXped_1_1TensorBase.html" title=" " alt="" coords="5,5,303,45"/>
+<area shape="rect" href="classXped_1_1DiagCoeffBinaryOp.html" title=" " alt="" coords="351,5,573,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_188.png" border="0" usemap="#aXped_1_1TensorBase_3_01DiagCoeffUnaryOp_3_01XprType_01_4_01_4" alt=""/>
+<map name="aXped_1_1TensorBase_3_01DiagCoeffUnaryOp_3_01XprType_01_4_01_4" id="aXped_1_1TensorBase_3_01DiagCoeffUnaryOp_3_01XprType_01_4_01_4">
+<area shape="rect" href="classXped_1_1TensorBase.html" title=" " alt="" coords="5,5,221,45"/>
+<area shape="rect" href="classXped_1_1DiagCoeffUnaryOp.html" title=" " alt="" coords="269,5,453,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_189.png" border="0" usemap="#aXped_1_1TensorBase_3_01Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01false_00_01AllocationPolicy___01_4_01_4" alt=""/>
+<map name="aXped_1_1TensorBase_3_01Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01false_00_01AllocationPolicy___01_4_01_4" id="aXped_1_1TensorBase_3_01Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01false_00_01AllocationPolicy___01_4_01_4">
+<area shape="rect" href="classXped_1_1TensorBase.html" title=" " alt="" coords="5,5,296,60"/>
+<area shape="rect" href="classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01false_00_01AllocationPolicy___01_4.html" title=" " alt="" coords="344,5,548,60"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_190.png" border="0" usemap="#aXped_1_1TensorTraits_3_01AdjointOp_3_01XprType_01_4_01_4" alt=""/>
+<map name="aXped_1_1TensorTraits_3_01AdjointOp_3_01XprType_01_4_01_4" id="aXped_1_1TensorTraits_3_01AdjointOp_3_01XprType_01_4_01_4">
+<area shape="rect" href="structXped_1_1TensorTraits_3_01AdjointOp_3_01XprType_01_4_01_4.html" title=" " alt="" coords="5,5,204,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_191.png" border="0" usemap="#aXped_1_1TensorTraits_3_01BlockUnaryOp_3_01XprType_01_4_01_4" alt=""/>
+<map name="aXped_1_1TensorTraits_3_01BlockUnaryOp_3_01XprType_01_4_01_4" id="aXped_1_1TensorTraits_3_01BlockUnaryOp_3_01XprType_01_4_01_4">
+<area shape="rect" href="structXped_1_1TensorTraits_3_01BlockUnaryOp_3_01XprType_01_4_01_4.html" title=" " alt="" coords="5,5,232,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_192.png" border="0" usemap="#aXped_1_1TensorTraits_3_01CoeffBinaryOp_3_01XprTypeLeft_00_01XprTypeRight_01_4_01_4" alt=""/>
+<map name="aXped_1_1TensorTraits_3_01CoeffBinaryOp_3_01XprTypeLeft_00_01XprTypeRight_01_4_01_4" id="aXped_1_1TensorTraits_3_01CoeffBinaryOp_3_01XprTypeLeft_00_01XprTypeRight_01_4_01_4">
+<area shape="rect" href="structXped_1_1TensorTraits_3_01CoeffBinaryOp_3_01XprTypeLeft_00_01XprTypeRight_01_4_01_4.html" title=" " alt="" coords="5,5,232,60"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_193.png" border="0" usemap="#aXped_1_1TensorTraits_3_01CoeffUnaryOp_3_01XprType_00_01ReturnScalar_01_4_01_4" alt=""/>
+<map name="aXped_1_1TensorTraits_3_01CoeffUnaryOp_3_01XprType_00_01ReturnScalar_01_4_01_4" id="aXped_1_1TensorTraits_3_01CoeffUnaryOp_3_01XprType_00_01ReturnScalar_01_4_01_4">
+<area shape="rect" href="structXped_1_1TensorTraits_3_01CoeffUnaryOp_3_01XprType_00_01ReturnScalar_01_4_01_4.html" title=" " alt="" coords="5,5,204,60"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_194.png" border="0" usemap="#aXped_1_1TensorTraits_3_01Derived_01_4" alt=""/>
+<map name="aXped_1_1TensorTraits_3_01Derived_01_4" id="aXped_1_1TensorTraits_3_01Derived_01_4">
+<area shape="rect" href="structXped_1_1TensorTraits.html" title=" " alt="" coords="5,5,145,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_195.png" border="0" usemap="#aXped_1_1TensorTraits_3_01DiagCoeffBinaryOp_3_01XprTypeLeft_00_01XprTypeRight_01_4_01_4" alt=""/>
+<map name="aXped_1_1TensorTraits_3_01DiagCoeffBinaryOp_3_01XprTypeLeft_00_01XprTypeRight_01_4_01_4" id="aXped_1_1TensorTraits_3_01DiagCoeffBinaryOp_3_01XprTypeLeft_00_01XprTypeRight_01_4_01_4">
+<area shape="rect" href="structXped_1_1TensorTraits_3_01DiagCoeffBinaryOp_3_01XprTypeLeft_00_01XprTypeRight_01_4_01_4.html" title=" " alt="" coords="5,5,243,60"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_196.png" border="0" usemap="#aXped_1_1TensorTraits_3_01DiagCoeffUnaryOp_3_01XprType_01_4_01_4" alt=""/>
+<map name="aXped_1_1TensorTraits_3_01DiagCoeffUnaryOp_3_01XprType_01_4_01_4" id="aXped_1_1TensorTraits_3_01DiagCoeffUnaryOp_3_01XprType_01_4_01_4">
+<area shape="rect" href="structXped_1_1TensorTraits_3_01DiagCoeffUnaryOp_3_01XprType_01_4_01_4.html" title=" " alt="" coords="5,5,175,60"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_197.png" border="0" usemap="#aXped_1_1TensorTraits_3_01Tensor_3_01Scalar___00_01Rank___00_01CoRank___00_01Symmetry___00_01false_00_01AllocationPolicy___01_4_01_4" alt=""/>
+<map name="aXped_1_1TensorTraits_3_01Tensor_3_01Scalar___00_01Rank___00_01CoRank___00_01Symmetry___00_01false_00_01AllocationPolicy___01_4_01_4" id="aXped_1_1TensorTraits_3_01Tensor_3_01Scalar___00_01Rank___00_01CoRank___00_01Symmetry___00_01false_00_01AllocationPolicy___01_4_01_4">
+<area shape="rect" href="structXped_1_1TensorTraits_3_01Tensor_3_01Scalar___00_01Rank___00_01CoRank___00_01Symmetry___00_d3ca618e02c4592af64dcf90f2c6f8d0.html" title=" " alt="" coords="5,5,212,75"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_198.png" border="0" usemap="#aXped_1_1TimePropagator_3_01Scalar___00_01TimeScalar___00_01Symmetry___01_4" alt=""/>
+<map name="aXped_1_1TimePropagator_3_01Scalar___00_01TimeScalar___00_01Symmetry___01_4" id="aXped_1_1TimePropagator_3_01Scalar___00_01TimeScalar___00_01Symmetry___01_4">
+<area shape="rect" href="classXped_1_1TimePropagator.html" title=" " alt="" coords="5,5,172,60"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_199.png" border="0" usemap="#aXped_1_1TimeProtocol" alt=""/>
+<map name="aXped_1_1TimeProtocol" id="aXped_1_1TimeProtocol">
+<area shape="rect" href="structXped_1_1TimeProtocol.html" title=" " alt="" coords="5,5,155,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_200.png" border="0" usemap="#aXped_1_1TMatrix_3_01double_01_4" alt=""/>
+<map name="aXped_1_1TMatrix_3_01double_01_4" id="aXped_1_1TMatrix_3_01double_01_4">
+<area shape="rect" href="structXped_1_1TMatrix.html" title=" " alt="" coords="5,5,192,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_201.png" border="0" usemap="#aXped_1_1TMatrix_3_01ObsScalar_01_4" alt=""/>
+<map name="aXped_1_1TMatrix_3_01ObsScalar_01_4" id="aXped_1_1TMatrix_3_01ObsScalar_01_4">
+<area shape="rect" href="structXped_1_1TMatrix.html" title=" " alt="" coords="5,5,213,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_202.png" border="0" usemap="#aXped_1_1TMatrix_3_01qType_01_4" alt=""/>
+<map name="aXped_1_1TMatrix_3_01qType_01_4" id="aXped_1_1TMatrix_3_01qType_01_4">
+<area shape="rect" href="structXped_1_1TMatrix.html" title=" " alt="" coords="5,5,187,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_203.png" border="0" usemap="#aXped_1_1TMatrix_3_01Ttype_01_4" alt=""/>
+<map name="aXped_1_1TMatrix_3_01Ttype_01_4" id="aXped_1_1TMatrix_3_01Ttype_01_4">
+<area shape="rect" href="structXped_1_1TMatrix.html" title=" " alt="" coords="5,5,185,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_204.png" border="0" usemap="#aXped_1_1TMatrix_3_01typename_01Symmetry_1_1qType_01_4" alt=""/>
+<map name="aXped_1_1TMatrix_3_01typename_01Symmetry_1_1qType_01_4" id="aXped_1_1TMatrix_3_01typename_01Symmetry_1_1qType_01_4">
+<area shape="rect" href="structXped_1_1TMatrix.html" title=" " alt="" coords="5,5,200,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_205.png" border="0" usemap="#aXped_1_1TMatrix_3_01Xped_1_1Tensor_3_01double_00_012_00_012_00_01Symmetry_00_01false_01_4_01_4" alt=""/>
+<map name="aXped_1_1TMatrix_3_01Xped_1_1Tensor_3_01double_00_012_00_012_00_01Symmetry_00_01false_01_4_01_4" id="aXped_1_1TMatrix_3_01Xped_1_1Tensor_3_01double_00_012_00_012_00_01Symmetry_00_01false_01_4_01_4">
+<area shape="rect" href="structXped_1_1TMatrix.html" title=" " alt="" coords="5,5,185,60"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_206.png" border="0" usemap="#aXped_1_1TMatrix_3_01Xped_1_1Tensor_3_01Scalar_00_010_00_012_00_01Symmetry_00_01false_01_4_01_4" alt=""/>
+<map name="aXped_1_1TMatrix_3_01Xped_1_1Tensor_3_01Scalar_00_010_00_012_00_01Symmetry_00_01false_01_4_01_4" id="aXped_1_1TMatrix_3_01Xped_1_1Tensor_3_01Scalar_00_010_00_012_00_01Symmetry_00_01false_01_4_01_4">
+<area shape="rect" href="structXped_1_1TMatrix.html" title=" " alt="" coords="5,5,185,60"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_207.png" border="0" usemap="#aXped_1_1TMatrix_3_01Xped_1_1Tensor_3_01Scalar_00_011_00_011_00_01Symmetry_01_4_01_4" alt=""/>
+<map name="aXped_1_1TMatrix_3_01Xped_1_1Tensor_3_01Scalar_00_011_00_011_00_01Symmetry_01_4_01_4" id="aXped_1_1TMatrix_3_01Xped_1_1Tensor_3_01Scalar_00_011_00_011_00_01Symmetry_01_4_01_4">
+<area shape="rect" href="structXped_1_1TMatrix.html" title=" " alt="" coords="5,5,167,60"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_208.png" border="0" usemap="#aXped_1_1TMatrix_3_01Xped_1_1Tensor_3_01Scalar_00_011_00_011_00_01Symmetry_00_01ENABLE__AD_01_4_01_4" alt=""/>
+<map name="aXped_1_1TMatrix_3_01Xped_1_1Tensor_3_01Scalar_00_011_00_011_00_01Symmetry_00_01ENABLE__AD_01_4_01_4" id="aXped_1_1TMatrix_3_01Xped_1_1Tensor_3_01Scalar_00_011_00_011_00_01Symmetry_00_01ENABLE__AD_01_4_01_4">
+<area shape="rect" href="structXped_1_1TMatrix.html" title=" " alt="" coords="5,5,175,75"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_209.png" border="0" usemap="#aXped_1_1TMatrix_3_01Xped_1_1Tensor_3_01Scalar_00_011_00_011_00_01Symmetry_00_01false_01_4_01_4" alt=""/>
+<map name="aXped_1_1TMatrix_3_01Xped_1_1Tensor_3_01Scalar_00_011_00_011_00_01Symmetry_00_01false_01_4_01_4" id="aXped_1_1TMatrix_3_01Xped_1_1Tensor_3_01Scalar_00_011_00_011_00_01Symmetry_00_01false_01_4_01_4">
+<area shape="rect" href="structXped_1_1TMatrix.html" title=" " alt="" coords="5,5,185,60"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_210.png" border="0" usemap="#aXped_1_1TMatrix_3_01Xped_1_1Tensor_3_01Scalar_00_011_00_012_091_00_01Symmetry_00_01false_01_4_01_4" alt=""/>
+<map name="aXped_1_1TMatrix_3_01Xped_1_1Tensor_3_01Scalar_00_011_00_012_091_00_01Symmetry_00_01false_01_4_01_4" id="aXped_1_1TMatrix_3_01Xped_1_1Tensor_3_01Scalar_00_011_00_012_091_00_01Symmetry_00_01false_01_4_01_4">
+<area shape="rect" href="structXped_1_1TMatrix.html" title=" " alt="" coords="5,5,204,60"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_211.png" border="0" usemap="#aXped_1_1TMatrix_3_01Xped_1_1Tensor_3_01Scalar_00_011_00_01TRank_091_00_01Symmetry_00_01false_01_4_01_4" alt=""/>
+<map name="aXped_1_1TMatrix_3_01Xped_1_1Tensor_3_01Scalar_00_011_00_01TRank_091_00_01Symmetry_00_01false_01_4_01_4" id="aXped_1_1TMatrix_3_01Xped_1_1Tensor_3_01Scalar_00_011_00_01TRank_091_00_01Symmetry_00_01false_01_4_01_4">
+<area shape="rect" href="structXped_1_1TMatrix.html" title=" " alt="" coords="5,5,237,60"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_212.png" border="0" usemap="#aXped_1_1TMatrix_3_01Xped_1_1Tensor_3_01Scalar_00_012_091_00_011_00_01Symmetry_00_01false_01_4_01_4" alt=""/>
+<map name="aXped_1_1TMatrix_3_01Xped_1_1Tensor_3_01Scalar_00_012_091_00_011_00_01Symmetry_00_01false_01_4_01_4" id="aXped_1_1TMatrix_3_01Xped_1_1Tensor_3_01Scalar_00_012_091_00_011_00_01Symmetry_00_01false_01_4_01_4">
+<area shape="rect" href="structXped_1_1TMatrix.html" title=" " alt="" coords="5,5,208,60"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_213.png" border="0" usemap="#aXped_1_1TMatrix_3_01Xped_1_1Tensor_3_01Scalar_00_012_00_010_00_01Symmetry_00_01false_01_4_01_4" alt=""/>
+<map name="aXped_1_1TMatrix_3_01Xped_1_1Tensor_3_01Scalar_00_012_00_010_00_01Symmetry_00_01false_01_4_01_4" id="aXped_1_1TMatrix_3_01Xped_1_1Tensor_3_01Scalar_00_012_00_010_00_01Symmetry_00_01false_01_4_01_4">
+<area shape="rect" href="structXped_1_1TMatrix.html" title=" " alt="" coords="5,5,185,60"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_214.png" border="0" usemap="#aXped_1_1TMatrix_3_01Xped_1_1Tensor_3_01Scalar_00_012_00_012_00_01Symmetry_00_01false_01_4_01_4" alt=""/>
+<map name="aXped_1_1TMatrix_3_01Xped_1_1Tensor_3_01Scalar_00_012_00_012_00_01Symmetry_00_01false_01_4_01_4" id="aXped_1_1TMatrix_3_01Xped_1_1Tensor_3_01Scalar_00_012_00_012_00_01Symmetry_00_01false_01_4_01_4">
+<area shape="rect" href="structXped_1_1TMatrix.html" title=" " alt="" coords="5,5,185,60"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_215.png" border="0" usemap="#aXped_1_1TMatrix_3_01Xped_1_1Tensor_3_01Scalar_00_012_00_013_00_01Symmetry_00_01ENABLE__AD_01_4_01_4" alt=""/>
+<map name="aXped_1_1TMatrix_3_01Xped_1_1Tensor_3_01Scalar_00_012_00_013_00_01Symmetry_00_01ENABLE__AD_01_4_01_4" id="aXped_1_1TMatrix_3_01Xped_1_1Tensor_3_01Scalar_00_012_00_013_00_01Symmetry_00_01ENABLE__AD_01_4_01_4">
+<area shape="rect" href="structXped_1_1TMatrix.html" title=" " alt="" coords="5,5,175,75"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_216.png" border="0" usemap="#aXped_1_1TMatrix_3_01Xped_1_1Tensor_3_01Scalar_00_013_00_012_00_01Symmetry_00_01ENABLE__AD_01_4_01_4" alt=""/>
+<map name="aXped_1_1TMatrix_3_01Xped_1_1Tensor_3_01Scalar_00_013_00_012_00_01Symmetry_00_01ENABLE__AD_01_4_01_4" id="aXped_1_1TMatrix_3_01Xped_1_1Tensor_3_01Scalar_00_013_00_012_00_01Symmetry_00_01ENABLE__AD_01_4_01_4">
+<area shape="rect" href="structXped_1_1TMatrix.html" title=" " alt="" coords="5,5,175,75"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_217.png" border="0" usemap="#aXped_1_1TMatrix_3_01Xped_1_1Tensor_3_01Scalar_00_01TRank_091_00_011_00_01Symmetry_00_01false_01_4_01_4" alt=""/>
+<map name="aXped_1_1TMatrix_3_01Xped_1_1Tensor_3_01Scalar_00_01TRank_091_00_011_00_01Symmetry_00_01false_01_4_01_4" id="aXped_1_1TMatrix_3_01Xped_1_1Tensor_3_01Scalar_00_01TRank_091_00_011_00_01Symmetry_00_01false_01_4_01_4">
+<area shape="rect" href="structXped_1_1TMatrix.html" title=" " alt="" coords="5,5,208,60"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_218.png" border="0" usemap="#aXped_1_1TMatrix_3_01Xped_1_1Tensor_3_01Symmetry_00_012_00_012_00_01Symmetry_00_01false_01_4_01_4" alt=""/>
+<map name="aXped_1_1TMatrix_3_01Xped_1_1Tensor_3_01Symmetry_00_012_00_012_00_01Symmetry_00_01false_01_4_01_4" id="aXped_1_1TMatrix_3_01Xped_1_1Tensor_3_01Symmetry_00_012_00_012_00_01Symmetry_00_01false_01_4_01_4">
+<area shape="rect" href="structXped_1_1TMatrix.html" title=" " alt="" coords="5,5,201,60"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_219.png" border="0" usemap="#aXped_1_1UnitCell" alt=""/>
+<map name="aXped_1_1UnitCell" id="aXped_1_1UnitCell">
+<area shape="rect" href="structXped_1_1UnitCell.html" title=" " alt="" coords="5,5,120,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_220.png" border="0" usemap="#aXped_1_1util_1_1Permutation" alt=""/>
+<map name="aXped_1_1util_1_1Permutation" id="aXped_1_1util_1_1Permutation">
+<area shape="rect" href="structXped_1_1util_1_1Permutation.html" title=" " alt="" coords="5,5,177,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_221.png" border="0" usemap="#aXped_1_1util_1_1Stopwatch_3_01ClockClass_01_4" alt=""/>
+<map name="aXped_1_1util_1_1Stopwatch_3_01ClockClass_01_4" id="aXped_1_1util_1_1Stopwatch_3_01ClockClass_01_4">
+<area shape="rect" href="classXped_1_1util_1_1Stopwatch.html" title=" " alt="" coords="5,5,165,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_222.png" border="0" usemap="#aXped_1_1util_1_1Transposition" alt=""/>
+<map name="aXped_1_1util_1_1Transposition" id="aXped_1_1util_1_1Transposition">
+<area shape="rect" href="structXped_1_1util_1_1Transposition.html" title=" " alt="" coords="5,5,184,31"/>
+</map>
+</td></tr>
+</table>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- HTML footer for doxygen 1.9.2-->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.6 </li>
+  </ul>
+</div>
+<script type="text/javascript">
+  // script for doxygen 1.9.2
+  $(function() {
+      toggleButton = document.createElement('doxygen-awesome-dark-mode-toggle')
+      toggleButton.title = "Toggle Light/Dark Mode"
+      $(document).ready(function(){
+          document.getElementById("MSearchBox").parentNode.appendChild(toggleButton)
+      })
+      $(window).resize(function(){
+          document.getElementById("MSearchBox").parentNode.appendChild(toggleButton)
+      })
+  })
+</script>
+</body>
+</html>

@@ -1,0 +1,1085 @@
+<!-- HTML header for doxygen 1.9.6-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.6"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Xped: Xped::TMatrix&lt; Ttype &gt; Struct Template Reference</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+});
+</script>
+<script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript">
+  DoxygenAwesomeDarkModeToggle.lightModeIcon = '🌞'
+// icon from https://fonts.google.com/icons
+  DoxygenAwesomeDarkModeToggle.darkModeIcon = `<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px" viewBox="0 0 24 24" width="24px" fill="#009793"><g><rect fill="none" height="24" width="24"/></g><g><g><path d="M8.1,14.15C9.77,14.63,11,16.17,11,18c0,0.68-0.19,1.31-0.48,1.87c0.48,0.09,0.97,0.14,1.48,0.14 c1.48,0,2.9-0.41,4.13-1.15c-2.62-0.92-5.23-2.82-6.8-5.86C7.74,9.94,7.78,7.09,8.29,4.9c-2.57,1.33-4.3,4.01-4.3,7.1c0,0,0,0,0,0 c0.01,0,0.01,0,0.02,0C5.66,12,7.18,12.83,8.1,14.15z" opacity=".3"/><path d="M19.78,17.51c-2.47,0-6.57-1.33-8.68-5.43C8.77,7.57,10.6,3.6,11.63,2.01C6.27,2.2,1.98,6.59,1.98,12 c0,0.14,0.02,0.28,0.02,0.42C2.61,12.16,3.28,12,3.98,12c0,0,0,0,0,0c0-3.09,1.73-5.77,4.3-7.1C7.78,7.09,7.74,9.94,9.32,13 c1.57,3.04,4.18,4.95,6.8,5.86c-1.23,0.74-2.65,1.15-4.13,1.15c-0.5,0-1-0.05-1.48-0.14c-0.37,0.7-0.94,1.27-1.64,1.64 c0.98,0.32,2.03,0.5,3.11,0.5c3.5,0,6.58-1.8,8.37-4.52C20.18,17.5,19.98,17.51,19.78,17.51z"/><path d="M7,16l-0.18,0C6.4,14.84,5.3,14,4,14c-1.66,0-3,1.34-3,3s1.34,3,3,3c0.62,0,2.49,0,3,0c1.1,0,2-0.9,2-2 C9,16.9,8.1,16,7,16z"/></g></g></svg>`
+  DoxygenAwesomeDarkModeToggle.init()
+</script>
+</head>
+<body>
+  <!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/cpp977/Xped" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">Xped
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.9.6 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('structXped_1_1TMatrix.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="structXped_1_1TMatrix-members.html">List of all members</a>  </div>
+  <div class="headertitle"><div class="title">Xped::TMatrix&lt; Ttype &gt; Struct Template Reference</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p><code>#include &lt;<a class="el" href="TMatrix_8hpp_source.html">TMatrix.hpp</a>&gt;</code></p>
+<div class="dynheader">
+Collaboration diagram for Xped::TMatrix&lt; Ttype &gt;:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1TMatrix__coll__graph.png" border="0" usemap="#aXped_1_1TMatrix_3_01Ttype_01_4_coll__map" alt="Collaboration graph"/></div>
+<map name="aXped_1_1TMatrix_3_01Ttype_01_4_coll__map" id="aXped_1_1TMatrix_3_01Ttype_01_4_coll__map">
+<area shape="rect" title=" " alt="" coords="5,196,185,221"/>
+<area shape="rect" href="structXped_1_1Pattern.html" title=" " alt="" coords="41,108,150,133"/>
+<area shape="rect" title=" " alt="" coords="65,5,125,31"/>
+</map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a7d5eed7988897e3ceb33e975fe93a0c7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TMatrix.html#a7d5eed7988897e3ceb33e975fe93a0c7">TMatrix</a> ()=default</td></tr>
+<tr class="separator:a7d5eed7988897e3ceb33e975fe93a0c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a268264b118d421cbed108e42c593c961"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TMatrix.html#a268264b118d421cbed108e42c593c961">TMatrix</a> (const <a class="el" href="structXped_1_1Pattern.html">Pattern</a> &amp;<a class="el" href="structXped_1_1TMatrix.html#ab272f727dfc3c166504ad838a9912a8b">pat</a>, const std::string name=&quot;&quot;)</td></tr>
+<tr class="separator:a268264b118d421cbed108e42c593c961"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6dd4754459181b6a0eaf0621b34c97c3"><td class="memTemplParams" colspan="2">template&lt;typename OtherTtype &gt; </td></tr>
+<tr class="memitem:a6dd4754459181b6a0eaf0621b34c97c3"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structXped_1_1TMatrix.html#a6dd4754459181b6a0eaf0621b34c97c3">TMatrix</a> (const <a class="el" href="structXped_1_1TMatrix.html">TMatrix</a>&lt; OtherTtype &gt; &amp;other)</td></tr>
+<tr class="separator:a6dd4754459181b6a0eaf0621b34c97c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acf05ed4e2dce67fe4d8c9fa30a17bbc1"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TMatrix.html#acf05ed4e2dce67fe4d8c9fa30a17bbc1">rows</a> () const</td></tr>
+<tr class="separator:acf05ed4e2dce67fe4d8c9fa30a17bbc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95add4ebda23942b5a172d967cccfeba"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TMatrix.html#a95add4ebda23942b5a172d967cccfeba">cols</a> () const</td></tr>
+<tr class="separator:a95add4ebda23942b5a172d967cccfeba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a06f6fe3101087a0bd57c6f8ab5e961aa"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TMatrix.html#a06f6fe3101087a0bd57c6f8ab5e961aa">size</a> () const</td></tr>
+<tr class="separator:a06f6fe3101087a0bd57c6f8ab5e961aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa3dff8874c749934b4b0938b94473c9c"><td class="memItemLeft" align="right" valign="top">Ttype &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TMatrix.html#aa3dff8874c749934b4b0938b94473c9c">operator()</a> (const int row, const int col)</td></tr>
+<tr class="separator:aa3dff8874c749934b4b0938b94473c9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a60ef66a8297fd9782af6adb7e018ba23"><td class="memItemLeft" align="right" valign="top">const Ttype &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TMatrix.html#a60ef66a8297fd9782af6adb7e018ba23">operator()</a> (const int row, const int col) const</td></tr>
+<tr class="separator:a60ef66a8297fd9782af6adb7e018ba23"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f39a66203d30d0727ffc31796cce821"><td class="memItemLeft" align="right" valign="top">Ttype &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TMatrix.html#a7f39a66203d30d0727ffc31796cce821">operator[]</a> (const std::size_t index)</td></tr>
+<tr class="separator:a7f39a66203d30d0727ffc31796cce821"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af0aec4f3589a3f25ff907f68c49e7c7f"><td class="memItemLeft" align="right" valign="top">const Ttype &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TMatrix.html#af0aec4f3589a3f25ff907f68c49e7c7f">operator[]</a> (const std::size_t index) const</td></tr>
+<tr class="separator:af0aec4f3589a3f25ff907f68c49e7c7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a28fb4fa8e4b73a520845d0d26794f932"><td class="memItemLeft" align="right" valign="top">const Ttype &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TMatrix.html#a28fb4fa8e4b73a520845d0d26794f932">at</a> (const std::size_t index) const</td></tr>
+<tr class="separator:a28fb4fa8e4b73a520845d0d26794f932"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba20de928894437b91d7863a858fedb3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TMatrix.html#aba20de928894437b91d7863a858fedb3">isChanged</a> (const int row, const int col) const</td></tr>
+<tr class="separator:aba20de928894437b91d7863a858fedb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa85dd40f718e0bffcf9c92c1129cff32"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TMatrix.html#aa85dd40f718e0bffcf9c92c1129cff32">resetChange</a> ()</td></tr>
+<tr class="separator:aa85dd40f718e0bffcf9c92c1129cff32"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76c0c198cbf56c42defef75ad14e766f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TMatrix.html#a76c0c198cbf56c42defef75ad14e766f">resize</a> (const <a class="el" href="structXped_1_1Pattern.html">Pattern</a> &amp;pattern)</td></tr>
+<tr class="separator:a76c0c198cbf56c42defef75ad14e766f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ad9628fcc2751fd5161151df96635f6"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TMatrix.html#a8ad9628fcc2751fd5161151df96635f6">begin</a> ()</td></tr>
+<tr class="separator:a8ad9628fcc2751fd5161151df96635f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5058585a51677b909fac2e7a0c0d5afd"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TMatrix.html#a5058585a51677b909fac2e7a0c0d5afd">end</a> ()</td></tr>
+<tr class="separator:a5058585a51677b909fac2e7a0c0d5afd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a061679f71e6be84b63c58b7fe11ef4f1"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TMatrix.html#a061679f71e6be84b63c58b7fe11ef4f1">cbegin</a> () const</td></tr>
+<tr class="separator:a061679f71e6be84b63c58b7fe11ef4f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae3adf649449a729dfbf3ad3df4756a07"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TMatrix.html#ae3adf649449a729dfbf3ad3df4756a07">cend</a> () const</td></tr>
+<tr class="separator:ae3adf649449a729dfbf3ad3df4756a07"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adefb83a7b887728f388eecd2254a4b46"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TMatrix.html#adefb83a7b887728f388eecd2254a4b46">fill</a> (const std::vector&lt; Ttype &gt; &amp;tensors_in)</td></tr>
+<tr class="separator:adefb83a7b887728f388eecd2254a4b46"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aabfd8e56a6000457230304561564315c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TMatrix.html#aabfd8e56a6000457230304561564315c">setConstant</a> (const Ttype &amp;val)</td></tr>
+<tr class="separator:aabfd8e56a6000457230304561564315c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a003fd3c2113b68b49d22f2943b5dd9b1"><td class="memItemLeft" align="right" valign="top">Ttype&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TMatrix.html#a003fd3c2113b68b49d22f2943b5dd9b1">sum</a> () const</td></tr>
+<tr class="separator:a003fd3c2113b68b49d22f2943b5dd9b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5f0ed39da3773f9ebbe30ec45fd5ecf7"><td class="memTemplParams" colspan="2">template&lt;typename Ar &gt; </td></tr>
+<tr class="memitem:a5f0ed39da3773f9ebbe30ec45fd5ecf7"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structXped_1_1TMatrix.html#a5f0ed39da3773f9ebbe30ec45fd5ecf7">serialize</a> (Ar &amp;ar)</td></tr>
+<tr class="separator:a5f0ed39da3773f9ebbe30ec45fd5ecf7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7109de5a3ee56bc260b4701614568b47"><td class="memItemLeft" align="right" valign="top">std::vector&lt; Ttype &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TMatrix.html#a7109de5a3ee56bc260b4701614568b47">uncompressedVector</a> () const</td></tr>
+<tr class="separator:a7109de5a3ee56bc260b4701614568b47"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:ab272f727dfc3c166504ad838a9912a8b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1Pattern.html">Pattern</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TMatrix.html#ab272f727dfc3c166504ad838a9912a8b">pat</a></td></tr>
+<tr class="separator:ab272f727dfc3c166504ad838a9912a8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a7d5eed7988897e3ceb33e975fe93a0c7" name="a7d5eed7988897e3ceb33e975fe93a0c7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d5eed7988897e3ceb33e975fe93a0c7">&#9670;&#160;</a></span>TMatrix() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Ttype &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structXped_1_1TMatrix.html">Xped::TMatrix</a>&lt; Ttype &gt;::TMatrix </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">default</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a268264b118d421cbed108e42c593c961" name="a268264b118d421cbed108e42c593c961"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a268264b118d421cbed108e42c593c961">&#9670;&#160;</a></span>TMatrix() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Ttype &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structXped_1_1TMatrix.html">Xped::TMatrix</a>&lt; Ttype &gt;::TMatrix </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Pattern.html">Pattern</a> &amp;&#160;</td>
+          <td class="paramname"><em>pat</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string&#160;</td>
+          <td class="paramname"><em>name</em> = <code>&quot;&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1TMatrix_a268264b118d421cbed108e42c593c961_cgraph.png" border="0" usemap="#astructXped_1_1TMatrix_a268264b118d421cbed108e42c593c961_cgraph" alt=""/></div>
+<map name="astructXped_1_1TMatrix_a268264b118d421cbed108e42c593c961_cgraph" id="astructXped_1_1TMatrix_a268264b118d421cbed108e42c593c961_cgraph">
+<area shape="rect" title=" " alt="" coords="5,5,176,31"/>
+<area shape="rect" href="structXped_1_1Pattern.html#a6ad8cdc3670f06e99beb19e587c00207" title=" " alt="" coords="224,5,412,31"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a6dd4754459181b6a0eaf0621b34c97c3" name="a6dd4754459181b6a0eaf0621b34c97c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6dd4754459181b6a0eaf0621b34c97c3">&#9670;&#160;</a></span>TMatrix() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Ttype &gt; </div>
+<div class="memtemplate">
+template&lt;typename OtherTtype &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structXped_1_1TMatrix.html">Xped::TMatrix</a>&lt; Ttype &gt;::TMatrix </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1TMatrix.html">TMatrix</a>&lt; OtherTtype &gt; &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1TMatrix_a6dd4754459181b6a0eaf0621b34c97c3_cgraph.png" border="0" usemap="#astructXped_1_1TMatrix_a6dd4754459181b6a0eaf0621b34c97c3_cgraph" alt=""/></div>
+<map name="astructXped_1_1TMatrix_a6dd4754459181b6a0eaf0621b34c97c3_cgraph" id="astructXped_1_1TMatrix_a6dd4754459181b6a0eaf0621b34c97c3_cgraph">
+<area shape="rect" title=" " alt="" coords="5,80,176,105"/>
+<area shape="rect" href="structXped_1_1TMatrix.html#a061679f71e6be84b63c58b7fe11ef4f1" title=" " alt="" coords="236,5,400,31"/>
+<area shape="rect" href="structXped_1_1TMatrix.html#ae3adf649449a729dfbf3ad3df4756a07" title=" " alt="" coords="242,55,394,80"/>
+<area shape="rect" href="structXped_1_1TMatrix.html#a06f6fe3101087a0bd57c6f8ab5e961aa" title=" " alt="" coords="245,104,391,129"/>
+<area shape="rect" href="structXped_1_1Pattern.html#a6ad8cdc3670f06e99beb19e587c00207" title=" " alt="" coords="224,153,412,179"/>
+</map>
+</div>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a28fb4fa8e4b73a520845d0d26794f932" name="a28fb4fa8e4b73a520845d0d26794f932"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a28fb4fa8e4b73a520845d0d26794f932">&#9670;&#160;</a></span>at()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Ttype &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const Ttype &amp; <a class="el" href="structXped_1_1TMatrix.html">Xped::TMatrix</a>&lt; Ttype &gt;::at </td>
+          <td>(</td>
+          <td class="paramtype">const std::size_t&#160;</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8ad9628fcc2751fd5161151df96635f6" name="a8ad9628fcc2751fd5161151df96635f6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8ad9628fcc2751fd5161151df96635f6">&#9670;&#160;</a></span>begin()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Ttype &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto <a class="el" href="structXped_1_1TMatrix.html">Xped::TMatrix</a>&lt; Ttype &gt;::begin </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1TMatrix_a8ad9628fcc2751fd5161151df96635f6_icgraph.png" border="0" usemap="#astructXped_1_1TMatrix_a8ad9628fcc2751fd5161151df96635f6_icgraph" alt=""/></div>
+<map name="astructXped_1_1TMatrix_a8ad9628fcc2751fd5161151df96635f6_icgraph" id="astructXped_1_1TMatrix_a8ad9628fcc2751fd5161151df96635f6_icgraph">
+<area shape="rect" title=" " alt="" coords="329,13,487,38"/>
+<area shape="rect" href="structXped_1_1iPEPSSolverImag.html#a820364bdb216b655c2857fbb56443cf0" title=" " alt="" coords="108,5,281,45"/>
+<area shape="rect" href="ad__ramp_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,13,60,38"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a061679f71e6be84b63c58b7fe11ef4f1" name="a061679f71e6be84b63c58b7fe11ef4f1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a061679f71e6be84b63c58b7fe11ef4f1">&#9670;&#160;</a></span>cbegin()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Ttype &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto <a class="el" href="structXped_1_1TMatrix.html">Xped::TMatrix</a>&lt; Ttype &gt;::cbegin </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1TMatrix_a061679f71e6be84b63c58b7fe11ef4f1_icgraph.png" border="0" usemap="#astructXped_1_1TMatrix_a061679f71e6be84b63c58b7fe11ef4f1_icgraph" alt=""/></div>
+<map name="astructXped_1_1TMatrix_a061679f71e6be84b63c58b7fe11ef4f1_icgraph" id="astructXped_1_1TMatrix_a061679f71e6be84b63c58b7fe11ef4f1_icgraph">
+<area shape="rect" title=" " alt="" coords="376,77,540,102"/>
+<area shape="rect" href="structXped_1_1OneSiteObservable.html#a3cd09c87e832857bab159354d43f42bd" title=" " alt="" coords="140,5,328,45"/>
+<area shape="rect" href="structXped_1_1TwoSiteObservable.html#a22bc65d54f8c571975eeb9c82d7c796d" title=" " alt="" coords="141,69,327,109"/>
+<area shape="rect" href="structXped_1_1TMatrix.html#a6dd4754459181b6a0eaf0621b34c97c3" title=" " alt="" coords="149,134,319,159"/>
+<area shape="rect" href="namespaceXped.html#a337f30a81eba4c6d336140d4f0f58f5d" title=" " alt="" coords="5,13,92,38"/>
+<area shape="rect" href="namespaceXped.html#ae03882f7c88965f20aef2f811acd3440" title=" " alt="" coords="5,77,92,102"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ae3adf649449a729dfbf3ad3df4756a07" name="ae3adf649449a729dfbf3ad3df4756a07"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae3adf649449a729dfbf3ad3df4756a07">&#9670;&#160;</a></span>cend()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Ttype &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto <a class="el" href="structXped_1_1TMatrix.html">Xped::TMatrix</a>&lt; Ttype &gt;::cend </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1TMatrix_ae3adf649449a729dfbf3ad3df4756a07_icgraph.png" border="0" usemap="#astructXped_1_1TMatrix_ae3adf649449a729dfbf3ad3df4756a07_icgraph" alt=""/></div>
+<map name="astructXped_1_1TMatrix_ae3adf649449a729dfbf3ad3df4756a07_icgraph" id="astructXped_1_1TMatrix_ae3adf649449a729dfbf3ad3df4756a07_icgraph">
+<area shape="rect" title=" " alt="" coords="376,77,528,102"/>
+<area shape="rect" href="structXped_1_1OneSiteObservable.html#a3cd09c87e832857bab159354d43f42bd" title=" " alt="" coords="140,5,328,45"/>
+<area shape="rect" href="structXped_1_1TwoSiteObservable.html#a22bc65d54f8c571975eeb9c82d7c796d" title=" " alt="" coords="141,69,327,109"/>
+<area shape="rect" href="structXped_1_1TMatrix.html#a6dd4754459181b6a0eaf0621b34c97c3" title=" " alt="" coords="149,134,319,159"/>
+<area shape="rect" href="namespaceXped.html#a337f30a81eba4c6d336140d4f0f58f5d" title=" " alt="" coords="5,13,92,38"/>
+<area shape="rect" href="namespaceXped.html#ae03882f7c88965f20aef2f811acd3440" title=" " alt="" coords="5,77,92,102"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a95add4ebda23942b5a172d967cccfeba" name="a95add4ebda23942b5a172d967cccfeba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a95add4ebda23942b5a172d967cccfeba">&#9670;&#160;</a></span>cols()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Ttype &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t <a class="el" href="structXped_1_1TMatrix.html">Xped::TMatrix</a>&lt; Ttype &gt;::cols </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5058585a51677b909fac2e7a0c0d5afd" name="a5058585a51677b909fac2e7a0c0d5afd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5058585a51677b909fac2e7a0c0d5afd">&#9670;&#160;</a></span>end()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Ttype &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto <a class="el" href="structXped_1_1TMatrix.html">Xped::TMatrix</a>&lt; Ttype &gt;::end </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1TMatrix_a5058585a51677b909fac2e7a0c0d5afd_icgraph.png" border="0" usemap="#astructXped_1_1TMatrix_a5058585a51677b909fac2e7a0c0d5afd_icgraph" alt=""/></div>
+<map name="astructXped_1_1TMatrix_a5058585a51677b909fac2e7a0c0d5afd_icgraph" id="astructXped_1_1TMatrix_a5058585a51677b909fac2e7a0c0d5afd_icgraph">
+<area shape="rect" title=" " alt="" coords="329,13,475,38"/>
+<area shape="rect" href="structXped_1_1iPEPSSolverImag.html#a820364bdb216b655c2857fbb56443cf0" title=" " alt="" coords="108,5,281,45"/>
+<area shape="rect" href="ad__ramp_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,13,60,38"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="adefb83a7b887728f388eecd2254a4b46" name="adefb83a7b887728f388eecd2254a4b46"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adefb83a7b887728f388eecd2254a4b46">&#9670;&#160;</a></span>fill()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Ttype &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="structXped_1_1TMatrix.html">Xped::TMatrix</a>&lt; Ttype &gt;::fill </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; Ttype &gt; &amp;&#160;</td>
+          <td class="paramname"><em>tensors_in</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aba20de928894437b91d7863a858fedb3" name="aba20de928894437b91d7863a858fedb3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aba20de928894437b91d7863a858fedb3">&#9670;&#160;</a></span>isChanged()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Ttype &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="structXped_1_1TMatrix.html">Xped::TMatrix</a>&lt; Ttype &gt;::isChanged </td>
+          <td>(</td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>row</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>col</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1TMatrix_aba20de928894437b91d7863a858fedb3_cgraph.png" border="0" usemap="#astructXped_1_1TMatrix_aba20de928894437b91d7863a858fedb3_cgraph" alt=""/></div>
+<map name="astructXped_1_1TMatrix_aba20de928894437b91d7863a858fedb3_cgraph" id="astructXped_1_1TMatrix_aba20de928894437b91d7863a858fedb3_cgraph">
+<area shape="rect" title=" " alt="" coords="5,29,195,55"/>
+<area shape="rect" href="structXped_1_1Pattern.html#ab0d81d5406b7e376e5989f849ee70eb8" title=" " alt="" coords="243,29,440,55"/>
+<area shape="rect" href="structXped_1_1Pattern.html#a0c4bad3f4e541d6884540022e8b9aaf4" title=" " alt="" coords="488,29,641,55"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1TMatrix_aba20de928894437b91d7863a858fedb3_icgraph.png" border="0" usemap="#astructXped_1_1TMatrix_aba20de928894437b91d7863a858fedb3_icgraph" alt=""/></div>
+<map name="astructXped_1_1TMatrix_aba20de928894437b91d7863a858fedb3_icgraph" id="astructXped_1_1TMatrix_aba20de928894437b91d7863a858fedb3_icgraph">
+<area shape="rect" title=" " alt="" coords="244,80,433,105"/>
+<area shape="rect" href="classXped_1_1CTM.html#ac68ba3f141918703ae9a2ee715e3dafb" title=" " alt="" coords="5,5,196,31"/>
+<area shape="rect" href="classXped_1_1CTM.html#a150e6cedafe13573e6e6451c9e337a21" title=" " alt="" coords="18,55,183,80"/>
+<area shape="rect" href="classXped_1_1CTM.html#a36207fdc45daec305b93b5ddb2592554" title=" " alt="" coords="13,104,188,129"/>
+<area shape="rect" href="classXped_1_1CTM.html#a7e6b5e02459f28405745ca3db4b5a7ee" title=" " alt="" coords="18,153,183,179"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="aa3dff8874c749934b4b0938b94473c9c" name="aa3dff8874c749934b4b0938b94473c9c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa3dff8874c749934b4b0938b94473c9c">&#9670;&#160;</a></span>operator()() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Ttype &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Ttype &amp; <a class="el" href="structXped_1_1TMatrix.html">Xped::TMatrix</a>&lt; Ttype &gt;::operator() </td>
+          <td>(</td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>row</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>col</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1TMatrix_aa3dff8874c749934b4b0938b94473c9c_cgraph.png" border="0" usemap="#astructXped_1_1TMatrix_aa3dff8874c749934b4b0938b94473c9c_cgraph" alt=""/></div>
+<map name="astructXped_1_1TMatrix_aa3dff8874c749934b4b0938b94473c9c_cgraph" id="astructXped_1_1TMatrix_aa3dff8874c749934b4b0938b94473c9c_cgraph">
+<area shape="rect" title=" " alt="" coords="5,29,192,55"/>
+<area shape="rect" href="structXped_1_1Pattern.html#ab0d81d5406b7e376e5989f849ee70eb8" title=" " alt="" coords="240,29,437,55"/>
+<area shape="rect" href="structXped_1_1Pattern.html#a0c4bad3f4e541d6884540022e8b9aaf4" title=" " alt="" coords="485,29,639,55"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a60ef66a8297fd9782af6adb7e018ba23" name="a60ef66a8297fd9782af6adb7e018ba23"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a60ef66a8297fd9782af6adb7e018ba23">&#9670;&#160;</a></span>operator()() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Ttype &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const Ttype &amp; <a class="el" href="structXped_1_1TMatrix.html">Xped::TMatrix</a>&lt; Ttype &gt;::operator() </td>
+          <td>(</td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>row</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>col</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1TMatrix_a60ef66a8297fd9782af6adb7e018ba23_cgraph.png" border="0" usemap="#astructXped_1_1TMatrix_a60ef66a8297fd9782af6adb7e018ba23_cgraph" alt=""/></div>
+<map name="astructXped_1_1TMatrix_a60ef66a8297fd9782af6adb7e018ba23_cgraph" id="astructXped_1_1TMatrix_a60ef66a8297fd9782af6adb7e018ba23_cgraph">
+<area shape="rect" title=" " alt="" coords="5,29,192,55"/>
+<area shape="rect" href="structXped_1_1Pattern.html#ab0d81d5406b7e376e5989f849ee70eb8" title=" " alt="" coords="240,29,437,55"/>
+<area shape="rect" href="structXped_1_1Pattern.html#a0c4bad3f4e541d6884540022e8b9aaf4" title=" " alt="" coords="485,29,639,55"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a7f39a66203d30d0727ffc31796cce821" name="a7f39a66203d30d0727ffc31796cce821"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7f39a66203d30d0727ffc31796cce821">&#9670;&#160;</a></span>operator[]() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Ttype &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Ttype &amp; <a class="el" href="structXped_1_1TMatrix.html">Xped::TMatrix</a>&lt; Ttype &gt;::operator[] </td>
+          <td>(</td>
+          <td class="paramtype">const std::size_t&#160;</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af0aec4f3589a3f25ff907f68c49e7c7f" name="af0aec4f3589a3f25ff907f68c49e7c7f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af0aec4f3589a3f25ff907f68c49e7c7f">&#9670;&#160;</a></span>operator[]() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Ttype &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const Ttype &amp; <a class="el" href="structXped_1_1TMatrix.html">Xped::TMatrix</a>&lt; Ttype &gt;::operator[] </td>
+          <td>(</td>
+          <td class="paramtype">const std::size_t&#160;</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa85dd40f718e0bffcf9c92c1129cff32" name="aa85dd40f718e0bffcf9c92c1129cff32"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa85dd40f718e0bffcf9c92c1129cff32">&#9670;&#160;</a></span>resetChange()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Ttype &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="structXped_1_1TMatrix.html">Xped::TMatrix</a>&lt; Ttype &gt;::resetChange </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a76c0c198cbf56c42defef75ad14e766f" name="a76c0c198cbf56c42defef75ad14e766f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a76c0c198cbf56c42defef75ad14e766f">&#9670;&#160;</a></span>resize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Ttype &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="structXped_1_1TMatrix.html">Xped::TMatrix</a>&lt; Ttype &gt;::resize </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Pattern.html">Pattern</a> &amp;&#160;</td>
+          <td class="paramname"><em>pattern</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1TMatrix_a76c0c198cbf56c42defef75ad14e766f_cgraph.png" border="0" usemap="#astructXped_1_1TMatrix_a76c0c198cbf56c42defef75ad14e766f_cgraph" alt=""/></div>
+<map name="astructXped_1_1TMatrix_a76c0c198cbf56c42defef75ad14e766f_cgraph" id="astructXped_1_1TMatrix_a76c0c198cbf56c42defef75ad14e766f_cgraph">
+<area shape="rect" title=" " alt="" coords="5,5,165,31"/>
+<area shape="rect" href="structXped_1_1Pattern.html#a6ad8cdc3670f06e99beb19e587c00207" title=" " alt="" coords="213,5,401,31"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="acf05ed4e2dce67fe4d8c9fa30a17bbc1" name="acf05ed4e2dce67fe4d8c9fa30a17bbc1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acf05ed4e2dce67fe4d8c9fa30a17bbc1">&#9670;&#160;</a></span>rows()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Ttype &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t <a class="el" href="structXped_1_1TMatrix.html">Xped::TMatrix</a>&lt; Ttype &gt;::rows </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5f0ed39da3773f9ebbe30ec45fd5ecf7" name="a5f0ed39da3773f9ebbe30ec45fd5ecf7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5f0ed39da3773f9ebbe30ec45fd5ecf7">&#9670;&#160;</a></span>serialize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Ttype &gt; </div>
+<div class="memtemplate">
+template&lt;typename Ar &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="structXped_1_1TMatrix.html">Xped::TMatrix</a>&lt; Ttype &gt;::serialize </td>
+          <td>(</td>
+          <td class="paramtype">Ar &amp;&#160;</td>
+          <td class="paramname"><em>ar</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aabfd8e56a6000457230304561564315c" name="aabfd8e56a6000457230304561564315c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aabfd8e56a6000457230304561564315c">&#9670;&#160;</a></span>setConstant()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Ttype &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="structXped_1_1TMatrix.html">Xped::TMatrix</a>&lt; Ttype &gt;::setConstant </td>
+          <td>(</td>
+          <td class="paramtype">const Ttype &amp;&#160;</td>
+          <td class="paramname"><em>val</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1TMatrix_aabfd8e56a6000457230304561564315c_icgraph.png" border="0" usemap="#astructXped_1_1TMatrix_aabfd8e56a6000457230304561564315c_icgraph" alt=""/></div>
+<map name="astructXped_1_1TMatrix_aabfd8e56a6000457230304561564315c_icgraph" id="astructXped_1_1TMatrix_aabfd8e56a6000457230304561564315c_icgraph">
+<area shape="rect" title=" " alt="" coords="196,55,395,80"/>
+<area shape="rect" href="namespaceXped.html#a337f30a81eba4c6d336140d4f0f58f5d" title=" " alt="" coords="33,5,120,31"/>
+<area shape="rect" href="classXped_1_1iPEPS.html#ab2fa45cfadcdd0f1c23e5856d88fe379" title=" " alt="" coords="5,55,148,80"/>
+<area shape="rect" href="ad__ramp_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="49,104,104,129"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a06f6fe3101087a0bd57c6f8ab5e961aa" name="a06f6fe3101087a0bd57c6f8ab5e961aa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a06f6fe3101087a0bd57c6f8ab5e961aa">&#9670;&#160;</a></span>size()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Ttype &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t <a class="el" href="structXped_1_1TMatrix.html">Xped::TMatrix</a>&lt; Ttype &gt;::size </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1TMatrix_a06f6fe3101087a0bd57c6f8ab5e961aa_icgraph.png" border="0" usemap="#astructXped_1_1TMatrix_a06f6fe3101087a0bd57c6f8ab5e961aa_icgraph" alt=""/></div>
+<map name="astructXped_1_1TMatrix_a06f6fe3101087a0bd57c6f8ab5e961aa_icgraph" id="astructXped_1_1TMatrix_a06f6fe3101087a0bd57c6f8ab5e961aa_icgraph">
+<area shape="rect" title=" " alt="" coords="344,109,491,134"/>
+<area shape="rect" href="structXped_1_1OneSiteObservable.html#a1b5a80f21ed4883f55d8a749c9addaba" title=" " alt="" coords="108,5,296,45"/>
+<area shape="rect" href="structXped_1_1TwoSiteObservable.html#a3c05162dc83391506011ec176f22177a" title=" " alt="" coords="109,69,295,109"/>
+<area shape="rect" href="structXped_1_1iPEPSSolverImag.html#a820364bdb216b655c2857fbb56443cf0" title=" " alt="" coords="115,133,289,173"/>
+<area shape="rect" href="structXped_1_1TMatrix.html#a6dd4754459181b6a0eaf0621b34c97c3" title=" " alt="" coords="117,198,287,223"/>
+<area shape="rect" href="ad__ramp_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,141,60,166"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a003fd3c2113b68b49d22f2943b5dd9b1" name="a003fd3c2113b68b49d22f2943b5dd9b1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a003fd3c2113b68b49d22f2943b5dd9b1">&#9670;&#160;</a></span>sum()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Ttype &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Ttype <a class="el" href="structXped_1_1TMatrix.html">Xped::TMatrix</a>&lt; Ttype &gt;::sum </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1TMatrix_a003fd3c2113b68b49d22f2943b5dd9b1_icgraph.png" border="0" usemap="#astructXped_1_1TMatrix_a003fd3c2113b68b49d22f2943b5dd9b1_icgraph" alt=""/></div>
+<map name="astructXped_1_1TMatrix_a003fd3c2113b68b49d22f2943b5dd9b1_icgraph" id="astructXped_1_1TMatrix_a003fd3c2113b68b49d22f2943b5dd9b1_icgraph">
+<area shape="rect" title=" " alt="" coords="241,45,391,70"/>
+<area shape="rect" href="structXped_1_1OneSiteObservable.html#a1b5a80f21ed4883f55d8a749c9addaba" title=" " alt="" coords="5,5,193,45"/>
+<area shape="rect" href="structXped_1_1TwoSiteObservable.html#a3c05162dc83391506011ec176f22177a" title=" " alt="" coords="6,69,193,109"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a7109de5a3ee56bc260b4701614568b47" name="a7109de5a3ee56bc260b4701614568b47"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7109de5a3ee56bc260b4701614568b47">&#9670;&#160;</a></span>uncompressedVector()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Ttype &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; Ttype &gt; <a class="el" href="structXped_1_1TMatrix.html">Xped::TMatrix</a>&lt; Ttype &gt;::uncompressedVector </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1TMatrix_a7109de5a3ee56bc260b4701614568b47_cgraph.png" border="0" usemap="#astructXped_1_1TMatrix_a7109de5a3ee56bc260b4701614568b47_cgraph" alt=""/></div>
+<map name="astructXped_1_1TMatrix_a7109de5a3ee56bc260b4701614568b47_cgraph" id="astructXped_1_1TMatrix_a7109de5a3ee56bc260b4701614568b47_cgraph">
+<area shape="rect" title=" " alt="" coords="5,35,221,75"/>
+<area shape="rect" href="structXped_1_1Pattern.html#aa4972132b5e98496d7446a3a4929cbd8" title=" " alt="" coords="297,5,439,31"/>
+<area shape="rect" href="structXped_1_1Pattern.html#ab0d81d5406b7e376e5989f849ee70eb8" title=" " alt="" coords="269,79,467,104"/>
+<area shape="rect" href="structXped_1_1Pattern.html#a0c4bad3f4e541d6884540022e8b9aaf4" title=" " alt="" coords="515,79,668,104"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1TMatrix_a7109de5a3ee56bc260b4701614568b47_icgraph.png" border="0" usemap="#astructXped_1_1TMatrix_a7109de5a3ee56bc260b4701614568b47_icgraph" alt=""/></div>
+<map name="astructXped_1_1TMatrix_a7109de5a3ee56bc260b4701614568b47_icgraph" id="astructXped_1_1TMatrix_a7109de5a3ee56bc260b4701614568b47_icgraph">
+<area shape="rect" title=" " alt="" coords="241,69,457,109"/>
+<area shape="rect" href="structXped_1_1OneSiteObservable.html#a1b5a80f21ed4883f55d8a749c9addaba" title=" " alt="" coords="5,5,193,45"/>
+<area shape="rect" href="structXped_1_1TwoSiteObservable.html#a3c05162dc83391506011ec176f22177a" title=" " alt="" coords="6,69,193,109"/>
+<area shape="rect" href="structXped_1_1OneSiteObservable.html#ac7988cb20acb9ac772321b64d30f1635" title=" " alt="" coords="5,133,193,173"/>
+</map>
+</div>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="ab272f727dfc3c166504ad838a9912a8b" name="ab272f727dfc3c166504ad838a9912a8b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab272f727dfc3c166504ad838a9912a8b">&#9670;&#160;</a></span>pat</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Ttype &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structXped_1_1Pattern.html">Pattern</a> <a class="el" href="structXped_1_1TMatrix.html">Xped::TMatrix</a>&lt; Ttype &gt;::pat</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<hr/>The documentation for this struct was generated from the following file:<ul>
+<li>include/Xped/PEPS/<a class="el" href="TMatrix_8hpp_source.html">TMatrix.hpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- HTML footer for doxygen 1.9.2-->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="namespaceXped.html">Xped</a></li><li class="navelem"><a class="el" href="structXped_1_1TMatrix.html">TMatrix</a></li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.6 </li>
+  </ul>
+</div>
+<script type="text/javascript">
+  // script for doxygen 1.9.2
+  $(function() {
+      toggleButton = document.createElement('doxygen-awesome-dark-mode-toggle')
+      toggleButton.title = "Toggle Light/Dark Mode"
+      $(document).ready(function(){
+          document.getElementById("MSearchBox").parentNode.appendChild(toggleButton)
+      })
+      $(window).resize(function(){
+          document.getElementById("MSearchBox").parentNode.appendChild(toggleButton)
+      })
+  })
+</script>
+</body>
+</html>

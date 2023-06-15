@@ -1,0 +1,341 @@
+<!-- HTML header for doxygen 1.9.6-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.6"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Xped: include/Xped/Physics/sites/FermionSU2xX.hpp Source File</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+});
+</script>
+<script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript">
+  DoxygenAwesomeDarkModeToggle.lightModeIcon = '🌞'
+// icon from https://fonts.google.com/icons
+  DoxygenAwesomeDarkModeToggle.darkModeIcon = `<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px" viewBox="0 0 24 24" width="24px" fill="#009793"><g><rect fill="none" height="24" width="24"/></g><g><g><path d="M8.1,14.15C9.77,14.63,11,16.17,11,18c0,0.68-0.19,1.31-0.48,1.87c0.48,0.09,0.97,0.14,1.48,0.14 c1.48,0,2.9-0.41,4.13-1.15c-2.62-0.92-5.23-2.82-6.8-5.86C7.74,9.94,7.78,7.09,8.29,4.9c-2.57,1.33-4.3,4.01-4.3,7.1c0,0,0,0,0,0 c0.01,0,0.01,0,0.02,0C5.66,12,7.18,12.83,8.1,14.15z" opacity=".3"/><path d="M19.78,17.51c-2.47,0-6.57-1.33-8.68-5.43C8.77,7.57,10.6,3.6,11.63,2.01C6.27,2.2,1.98,6.59,1.98,12 c0,0.14,0.02,0.28,0.02,0.42C2.61,12.16,3.28,12,3.98,12c0,0,0,0,0,0c0-3.09,1.73-5.77,4.3-7.1C7.78,7.09,7.74,9.94,9.32,13 c1.57,3.04,4.18,4.95,6.8,5.86c-1.23,0.74-2.65,1.15-4.13,1.15c-0.5,0-1-0.05-1.48-0.14c-0.37,0.7-0.94,1.27-1.64,1.64 c0.98,0.32,2.03,0.5,3.11,0.5c3.5,0,6.58-1.8,8.37-4.52C20.18,17.5,19.98,17.51,19.78,17.51z"/><path d="M7,16l-0.18,0C6.4,14.84,5.3,14,4,14c-1.66,0-3,1.34-3,3s1.34,3,3,3c0.62,0,2.49,0,3,0c1.1,0,2-0.9,2-2 C9,16.9,8.1,16,7,16z"/></g></g></svg>`
+  DoxygenAwesomeDarkModeToggle.init()
+</script>
+</head>
+<body>
+  <!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/cpp977/Xped" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">Xped
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.9.6 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('FermionSU2xX_8hpp_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">FermionSU2xX.hpp</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="FermionSU2xX_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#ifndef XPED_FERMIONSSU2xU1_H_</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#define XPED_FERMIONSSU2xU1_H_</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span> </div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &quot;<a class="code" href="SiteOperator_8hpp.html">Xped/Physics/SiteOperator.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &quot;<a class="code" href="CombSym_8hpp.html">Xped/Symmetry/CombSym.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &quot;<a class="code" href="SU2_8hpp.html">Xped/Symmetry/SU2.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &quot;<a class="code" href="U1_8hpp.html">Xped/Symmetry/U1.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &quot;<a class="code" href="kind__dummies_8hpp.html">Xped/Symmetry/kind_dummies.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceXped.html">Xped</a> {</div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Symmetry&gt;</div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="keyword">class </span><a class="code hl_enumvalue" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607ba845ce7423e64db8dde79f10d772c57a7">Fermion</a>;</div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Symmetry_&gt;</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno"><a class="line" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html">   15</a></span><span class="keyword">class </span><a class="code hl_class" href="classXped_1_1Fermion.html">Fermion</a>&lt;Sym::Combined&lt;Sym::SU2&lt;Sym::SpinSU2&gt;, Symmetry_&gt;&gt;</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>{</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    <span class="keyword">typedef</span> <span class="keywordtype">double</span> Scalar;</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    <span class="keyword">typedef</span> <a class="code hl_struct" href="structXped_1_1Sym_1_1Combined.html">Sym::Combined&lt;Sym::SU2&lt;Sym::SpinSU2&gt;</a>, Symmetry_&gt; <a class="code hl_struct" href="structXped_1_1Sym_1_1Combined.html">Symmetry</a>;</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    <span class="keyword">typedef</span> <a class="code hl_struct" href="structXped_1_1SiteOperator.html">SiteOperator&lt;double, Symmetry&gt;</a> <a class="code hl_class" href="structXped_1_1SiteOperator.html">OperatorType</a>;</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    <span class="keyword">using </span>qType = <span class="keyword">typename</span> Symmetry::qType;</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno"><a class="line" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#aa7b8deebec771e66c34e1d48a9affd84">   23</a></span>    <a class="code hl_function" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#aa7b8deebec771e66c34e1d48a9affd84">Fermion</a>(){};</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    <a class="code hl_function" href="classXped_1_1Fermion.html#a382d9c0f61da1952d60000d820ecb215">Fermion</a>(<span class="keywordtype">bool</span> REMOVE_DOUBLE, <span class="keywordtype">bool</span> REMOVE_EMPTY, <span class="keywordtype">bool</span> REMOVE_SINGLE, <span class="keywordtype">bool</span> = <span class="keyword">true</span>, <span class="keywordtype">bool</span> CONSIDER_CHARGE = <span class="keyword">true</span>);</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno"><a class="line" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#abc64b7c56721ef8adcb236db8b450564">   26</a></span>    <a class="code hl_class" href="structXped_1_1SiteOperator.html">OperatorType</a> <a class="code hl_function" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#abc64b7c56721ef8adcb236db8b450564">Id_1s</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code hl_variable" href="classXped_1_1Fermion.html#a736c504e39194c6199571803c43ac168">Id_1s_</a>; }</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno"><a class="line" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#ab4e91f46fa807cc686647793d8f36ce5">   27</a></span>    <a class="code hl_class" href="structXped_1_1SiteOperator.html">OperatorType</a> <a class="code hl_function" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#ab4e91f46fa807cc686647793d8f36ce5">F_1s</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code hl_variable" href="classXped_1_1Fermion.html#ac7ade4136d05ba4a1a26f3849a9ec4b2">F_1s_</a>; }</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno"><a class="line" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#adaeee172ca057c9d744b0e8088ceafb7">   29</a></span>    <a class="code hl_class" href="structXped_1_1SiteOperator.html">OperatorType</a> <a class="code hl_function" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#adaeee172ca057c9d744b0e8088ceafb7">c_1s</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> c_1s_; }</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#a97989fb73aaca8c6527bb710aa305b74">   30</a></span>    <a class="code hl_class" href="structXped_1_1SiteOperator.html">OperatorType</a> <a class="code hl_function" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#a97989fb73aaca8c6527bb710aa305b74">cdag_1s</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> cdag_1s_; }</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span> </div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno"><a class="line" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#a82f38f037615696436dcc2a9e1968f80">   32</a></span>    <a class="code hl_class" href="structXped_1_1SiteOperator.html">OperatorType</a> <a class="code hl_function" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#a82f38f037615696436dcc2a9e1968f80">n_1s</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code hl_variable" href="classXped_1_1Fermion.html#a27f38e7dcfb84b649ce3196dcb64a6d0">n_1s_</a>; }</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno"><a class="line" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#a0c9516e8cee8cb4b808665f55256e3ea">   33</a></span>    <a class="code hl_class" href="structXped_1_1SiteOperator.html">OperatorType</a> <a class="code hl_function" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#a0c9516e8cee8cb4b808665f55256e3ea">ns_1s</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code hl_function" href="classXped_1_1Fermion.html#a8bd9292de5d1103d7b13cb7db9ef9d51">n_1s</a>() - 2. * <a class="code hl_function" href="classXped_1_1Fermion.html#a8a59f171f3e9b0b3d765fef779e57953">d_1s</a>(); }</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno"><a class="line" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#a07e9191f2396ceffadb321b5fa5e01b7">   34</a></span>    <a class="code hl_class" href="structXped_1_1SiteOperator.html">OperatorType</a> <a class="code hl_function" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#a07e9191f2396ceffadb321b5fa5e01b7">nh_1s</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> 2. * <a class="code hl_function" href="classXped_1_1Fermion.html#a8a59f171f3e9b0b3d765fef779e57953">d_1s</a>() - <a class="code hl_function" href="classXped_1_1Fermion.html#a8bd9292de5d1103d7b13cb7db9ef9d51">n_1s</a>() + <a class="code hl_function" href="classXped_1_1Fermion.html#a31b595832c0288e94311b35c802f4084">Id_1s</a>(); }</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno"><a class="line" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#ad68479b9595a4a964f57a87707f8d916">   35</a></span>    <a class="code hl_class" href="structXped_1_1SiteOperator.html">OperatorType</a> <a class="code hl_function" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#ad68479b9595a4a964f57a87707f8d916">d_1s</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code hl_variable" href="classXped_1_1Fermion.html#a13872f995b8ea38bd193c299543bbe9b">d_1s_</a>; }</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno"><a class="line" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#aa77f0371b81f9c4284118fb896670782">   37</a></span>    <a class="code hl_class" href="structXped_1_1SiteOperator.html">OperatorType</a> <a class="code hl_function" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#aa77f0371b81f9c4284118fb896670782">S_1s</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> S_1s_; }</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno"><a class="line" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#adf7358cae17a761869255284ea2f4314">   39</a></span>    <a class="code hl_class" href="structXped_1_1SiteOperator.html">OperatorType</a> <a class="code hl_function" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#adf7358cae17a761869255284ea2f4314">Tz_1s</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> 0.5 * (<a class="code hl_function" href="classXped_1_1Fermion.html#a8bd9292de5d1103d7b13cb7db9ef9d51">n_1s</a>() - <a class="code hl_function" href="classXped_1_1Fermion.html#a31b595832c0288e94311b35c802f4084">Id_1s</a>()); }</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno"><a class="line" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#a710ac45572d9e404801e84115b58cc07">   40</a></span>    <a class="code hl_class" href="structXped_1_1SiteOperator.html">OperatorType</a> <a class="code hl_function" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#a710ac45572d9e404801e84115b58cc07">cc_1s</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> p_1s_; }</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno"><a class="line" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#aaf8ef87dc4e12e267ba9912b27ddaa9e">   41</a></span>    <a class="code hl_class" href="structXped_1_1SiteOperator.html">OperatorType</a> <a class="code hl_function" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#aaf8ef87dc4e12e267ba9912b27ddaa9e">cdagcdag_1s</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> pdag_1s_; }</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span> </div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno"><a class="line" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#a8a47600b304ab874b8414234225902aa">   43</a></span>    <a class="code hl_class" href="classXped_1_1Qbasis.html">Qbasis&lt;Symmetry, 1&gt;</a> <a class="code hl_function" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#a8a47600b304ab874b8414234225902aa">basis_1s</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code hl_variable" href="classXped_1_1Fermion.html#a91b5a44473868f4fb346db773a6ad1b1">basis_1s_</a>; }</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="keyword">protected</span>:</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classXped_1_1Fermion.html#ab63e1ae9788cb3d7f829042856270e31">fill_basis</a>(<span class="keywordtype">bool</span> REMOVE_DOUBLE, <span class="keywordtype">bool</span> REMOVE_EMPTY, <span class="keywordtype">bool</span> REMOVE_SINGLE);</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno"><a class="line" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#abddae9b9fea1b4b504c6ca329f5261a5">   47</a></span>    <a class="code hl_class" href="classXped_1_1Qbasis.html">Qbasis&lt;Symmetry, 1&gt;</a> <a class="code hl_variable" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#abddae9b9fea1b4b504c6ca329f5261a5">basis_1s_</a>;</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span> </div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno"><a class="line" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#a635dbf9eba78058d57e3c627d76c760d">   49</a></span>    std::unordered_map&lt;std::string, std::pair&lt;qType, std::size_t&gt;&gt; <a class="code hl_variable" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#a635dbf9eba78058d57e3c627d76c760d">labels</a>;</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno"><a class="line" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#aec3f57ae36b7bcea057b5ae7af5a19a9">   50</a></span>    std::size_t <a class="code hl_variable" href="classXped_1_1Fermion.html#a122402b866c4c9848580d63ef4648b4e">ch_index</a> = 0;</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno"><a class="line" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#a244679a65f8ad3a033cb93dea30929d6">   51</a></span>    <span class="keywordtype">bool</span> <a class="code hl_variable" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#a244679a65f8ad3a033cb93dea30929d6">HAS_CHARGE</a>;</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span> </div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno"><a class="line" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#a57610611039a1d7d3dd00c4395fd02bd">   53</a></span>    <a class="code hl_class" href="structXped_1_1SiteOperator.html">OperatorType</a> <a class="code hl_variable" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#a57610611039a1d7d3dd00c4395fd02bd">Id_1s_</a>; <span class="comment">// identity</span></div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno"><a class="line" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#a5dd641cdc9583bce60dff77ceb1ec70e">   54</a></span>    <a class="code hl_class" href="structXped_1_1SiteOperator.html">OperatorType</a> <a class="code hl_variable" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#a5dd641cdc9583bce60dff77ceb1ec70e">F_1s_</a>; <span class="comment">// Fermionic sign</span></div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno"><a class="line" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#a6e8fcd28d4d2f10a84475f8a7ba356c2">   55</a></span>    <a class="code hl_class" href="structXped_1_1SiteOperator.html">OperatorType</a> <a class="code hl_variable" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#a6e8fcd28d4d2f10a84475f8a7ba356c2">c_1s_</a>; <span class="comment">// annihilation</span></div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno"><a class="line" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#ae7e1c157ae9f15ca2c178e16d02482ba">   56</a></span>    <a class="code hl_class" href="structXped_1_1SiteOperator.html">OperatorType</a> <a class="code hl_variable" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#ae7e1c157ae9f15ca2c178e16d02482ba">cdag_1s_</a>; <span class="comment">// creation</span></div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno"><a class="line" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#af94677c77a1f60008658159dfad9db0d">   57</a></span>    <a class="code hl_class" href="structXped_1_1SiteOperator.html">OperatorType</a> <a class="code hl_variable" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#af94677c77a1f60008658159dfad9db0d">n_1s_</a>; <span class="comment">// particle number</span></div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno"><a class="line" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#a756c1873fa61d41e1e9a1042ea2fc37f">   58</a></span>    <a class="code hl_class" href="structXped_1_1SiteOperator.html">OperatorType</a> <a class="code hl_variable" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#a756c1873fa61d41e1e9a1042ea2fc37f">d_1s_</a>; <span class="comment">// double occupancy</span></div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno"><a class="line" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#a04bd6201222db6d47c73d27b7f60366f">   59</a></span>    <a class="code hl_class" href="structXped_1_1SiteOperator.html">OperatorType</a> <a class="code hl_variable" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#a04bd6201222db6d47c73d27b7f60366f">S_1s_</a>; <span class="comment">// orbital spin</span></div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno"><a class="line" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#a03c353c522d402025f2d8da724e4638c">   60</a></span>    <a class="code hl_class" href="structXped_1_1SiteOperator.html">OperatorType</a> <a class="code hl_variable" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#a03c353c522d402025f2d8da724e4638c">p_1s_</a>; <span class="comment">// pairing</span></div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno"><a class="line" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#adc3e30709593fff79606cbcc6787b6fd">   61</a></span>    <a class="code hl_class" href="structXped_1_1SiteOperator.html">OperatorType</a> <a class="code hl_variable" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#adc3e30709593fff79606cbcc6787b6fd">pdag_1s_</a>; <span class="comment">// pairing adjoint</span></div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>};</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span> </div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Symmetry_&gt;</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno"><a class="line" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#ac7a6c07d6d11c8dfc28dd019b56c3743">   65</a></span><a class="code hl_class" href="classXped_1_1Fermion.html">Fermion&lt;Sym::Combined&lt;Sym::SU2&lt;Sym::SpinSU2&gt;</a>, Symmetry_&gt;&gt;::Fermion(<span class="keywordtype">bool</span> REMOVE_DOUBLE,</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>                                                                   <span class="keywordtype">bool</span> REMOVE_EMPTY,</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>                                                                   <span class="keywordtype">bool</span> REMOVE_SINGLE,</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>                                                                   <span class="keywordtype">bool</span>,</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>                                                                   <span class="keywordtype">bool</span> CONSIDER_CHARGE)</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>{</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    <span class="keywordflow">if</span>(CONSIDER_CHARGE) {</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>        <span class="keywordflow">for</span>(std::size_t q = 0; q &lt; Symmetry::Nq; ++q) {</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>            <span class="keywordflow">if</span>(Symmetry::IS_FERMIONIC[q] or Symmetry::IS_BOSONIC[q]) {</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>                ch_index = q;</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>                HAS_CHARGE = <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>                <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>            }</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>        }</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>        HAS_CHARGE = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>    }</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span> </div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>    fill_basis(REMOVE_DOUBLE, REMOVE_EMPTY, REMOVE_SINGLE);</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span> </div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>    qType Q_c = Symmetry::qvacuum();</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>    Q_c[0] = 2;</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>    <span class="keywordflow">if</span> <span class="keyword">constexpr</span>(Symmetry::Nq &gt; 1) { Q_c[1] = Symmetry::IS_MODULAR[1] ? <a class="code hl_function" href="namespaceXped_1_1util_1_1constFct.html#afa76d30e3f41278877a86e254c6efb6d">util::constFct::posmod</a>(-1, Symmetry::MOD_N[1]) : -1; }</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>    qType Q_S = Symmetry::qvacuum();</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>    Q_S[0] = 3;</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>    Id_1s_ = <a class="code hl_class" href="structXped_1_1SiteOperator.html">OperatorType</a>(Symmetry::qvacuum(), basis_1s_, labels);</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>    Id_1s_.setIdentity();</div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>    F_1s_ = <a class="code hl_class" href="structXped_1_1SiteOperator.html">OperatorType</a>(Symmetry::qvacuum(), basis_1s_, labels);</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>    F_1s_.setIdentity();</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>    c_1s_ = <a class="code hl_class" href="structXped_1_1SiteOperator.html">OperatorType</a>(Q_c, basis_1s_, labels);</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>    c_1s_.setZero();</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>    d_1s_ = <a class="code hl_class" href="structXped_1_1SiteOperator.html">OperatorType</a>(Symmetry::qvacuum(), basis_1s_, labels);</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>    d_1s_.setZero();</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>    S_1s_ = <a class="code hl_class" href="structXped_1_1SiteOperator.html">OperatorType</a>(Q_S, basis_1s_, labels);</div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>    S_1s_.setZero();</div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span> </div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>    <span class="comment">// create operators one orbitals</span></div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span> </div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>    <span class="keywordflow">if</span>(not REMOVE_SINGLE) { F_1s_(<span class="stringliteral">&quot;single&quot;</span>, <span class="stringliteral">&quot;single&quot;</span>) = -1.; }</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span> </div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>    <span class="keywordflow">if</span>(not REMOVE_EMPTY and not REMOVE_SINGLE) { c_1s_(<span class="stringliteral">&quot;empty&quot;</span>, <span class="stringliteral">&quot;single&quot;</span>) = std::sqrt(2.); }</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>    <span class="keywordflow">if</span>(not REMOVE_DOUBLE and not REMOVE_SINGLE) { c_1s_(<span class="stringliteral">&quot;single&quot;</span>, <span class="stringliteral">&quot;double&quot;</span>) = 1.; }</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>    cdag_1s_ = c_1s_.adjoint();</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>    n_1s_ = std::sqrt(2.) * OperatorType::prod(cdag_1s_, c_1s_, Symmetry::qvacuum());</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>    <span class="keywordflow">if</span>(not REMOVE_DOUBLE) { d_1s_(<span class="stringliteral">&quot;double&quot;</span>, <span class="stringliteral">&quot;double&quot;</span>) = 1.; }</div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>    <span class="keywordflow">if</span>(not REMOVE_SINGLE) { S_1s_(<span class="stringliteral">&quot;single&quot;</span>, <span class="stringliteral">&quot;single&quot;</span>) = std::sqrt(0.75); }</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>    qType Q_p = Symmetry::qvacuum();</div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>    <span class="keywordflow">if</span> <span class="keyword">constexpr</span>(Symmetry::Nq &gt; 1) { Q_p[1] = Symmetry::IS_MODULAR[1] ? <a class="code hl_function" href="namespaceXped_1_1util_1_1constFct.html#afa76d30e3f41278877a86e254c6efb6d">util::constFct::posmod</a>(-2, Symmetry::MOD_N[1]) : -2; }</div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>    p_1s_ = -std::sqrt(0.5) * OperatorType::prod(c_1s_, c_1s_, Q_p); <span class="comment">// The sign convention corresponds to c_DN c_UP</span></div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>    pdag_1s_ = p_1s_.adjoint(); <span class="comment">// The sign convention corresponds to (c_DN c_UP)†=c_UP† c_DN†</span></div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>}</div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span> </div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Symmetry_&gt;</div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno"><a class="line" href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#ace3062e718d27ac35388d2423db874cf">  118</a></span><span class="keywordtype">void</span> <a class="code hl_class" href="classXped_1_1Fermion.html">Fermion&lt;Sym::Combined&lt;Sym::SU2&lt;Sym::SpinSU2&gt;</a>, Symmetry_&gt;&gt;::fill_basis(<span class="keywordtype">bool</span> REMOVE_DOUBLE, <span class="keywordtype">bool</span> REMOVE_EMPTY, <span class="keywordtype">bool</span> REMOVE_SINGLE)</div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>{</div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>    <span class="keywordflow">if</span>(not HAS_CHARGE) {</div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>        qType Q = Symmetry::qvacuum();</div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>        std::size_t dim = 0;</div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>        <span class="keywordflow">if</span>(not REMOVE_EMPTY) { labels.insert(std::make_pair(<span class="stringliteral">&quot;empty&quot;</span>, std::make_pair(Q, dim++))); }</div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>        <span class="keywordflow">if</span>(not REMOVE_DOUBLE) { labels.insert(std::make_pair(<span class="stringliteral">&quot;double&quot;</span>, std::make_pair(Q, dim++))); }</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>        this-&gt;basis_1s_.push_back(Q, dim);</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>        <span class="keywordflow">if</span>(not REMOVE_SINGLE) {</div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>            Q[0] = 2;</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>            this-&gt;basis_1s_.push_back(Q, 1);</div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>            labels.insert(std::make_pair(<span class="stringliteral">&quot;single&quot;</span>, std::make_pair(Q, 0)));</div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>        }</div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>        qType Q = Symmetry::qvacuum();</div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>        <span class="keywordflow">if</span>(not REMOVE_EMPTY) {</div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>            this-&gt;basis_1s_.push_back(Q, 1);</div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>            labels.insert(std::make_pair(<span class="stringliteral">&quot;empty&quot;</span>, std::make_pair(Q, 0)));</div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>        }</div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>        <span class="keywordflow">if</span>(not REMOVE_DOUBLE) {</div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>            std::size_t dim = (Symmetry::MOD_N[ch_index] == 2) ? 1 : 0;</div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>            Q[ch_index] = Symmetry::IS_MODULAR[ch_index] ? <a class="code hl_function" href="namespaceXped_1_1util_1_1constFct.html#afa76d30e3f41278877a86e254c6efb6d">util::constFct::posmod</a>(2, Symmetry::MOD_N[ch_index]) : 2;</div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>            this-&gt;basis_1s_.push_back(Q, 1);</div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>            labels.insert(std::make_pair(<span class="stringliteral">&quot;double&quot;</span>, std::make_pair(Q, dim)));</div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>        }</div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>        <span class="keywordflow">if</span>(not REMOVE_SINGLE) {</div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>            Q[ch_index] = 1;</div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>            Q[0] = 2;</div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>            this-&gt;basis_1s_.push_back(Q, 1);</div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>            labels.insert(std::make_pair(<span class="stringliteral">&quot;single&quot;</span>, std::make_pair(Q, 0)));</div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>        }</div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>    }</div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>}</div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span> </div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>} <span class="comment">// namespace Xped</span></div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span><span class="preprocessor">#endif </span><span class="comment">// XPED_FERMIONSU2xU1_H_</span></div>
+<div class="ttc" id="aCombSym_8hpp_html"><div class="ttname"><a href="CombSym_8hpp.html">CombSym.hpp</a></div></div>
+<div class="ttc" id="aSU2_8hpp_html"><div class="ttname"><a href="SU2_8hpp.html">SU2.hpp</a></div></div>
+<div class="ttc" id="aSiteOperator_8hpp_html"><div class="ttname"><a href="SiteOperator_8hpp.html">SiteOperator.hpp</a></div></div>
+<div class="ttc" id="aU1_8hpp_html"><div class="ttname"><a href="U1_8hpp.html">U1.hpp</a></div></div>
+<div class="ttc" id="aclassXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4_html_a03c353c522d402025f2d8da724e4638c"><div class="ttname"><a href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#a03c353c522d402025f2d8da724e4638c">Xped::Fermion&lt; Sym::Combined&lt; Sym::SU2&lt; Sym::SpinSU2 &gt;, Symmetry_ &gt; &gt;::p_1s_</a></div><div class="ttdeci">OperatorType p_1s_</div><div class="ttdef"><b>Definition:</b> FermionSU2xX.hpp:60</div></div>
+<div class="ttc" id="aclassXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4_html_a04bd6201222db6d47c73d27b7f60366f"><div class="ttname"><a href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#a04bd6201222db6d47c73d27b7f60366f">Xped::Fermion&lt; Sym::Combined&lt; Sym::SU2&lt; Sym::SpinSU2 &gt;, Symmetry_ &gt; &gt;::S_1s_</a></div><div class="ttdeci">OperatorType S_1s_</div><div class="ttdef"><b>Definition:</b> FermionSU2xX.hpp:59</div></div>
+<div class="ttc" id="aclassXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4_html_a07e9191f2396ceffadb321b5fa5e01b7"><div class="ttname"><a href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#a07e9191f2396ceffadb321b5fa5e01b7">Xped::Fermion&lt; Sym::Combined&lt; Sym::SU2&lt; Sym::SpinSU2 &gt;, Symmetry_ &gt; &gt;::nh_1s</a></div><div class="ttdeci">OperatorType nh_1s() const</div><div class="ttdef"><b>Definition:</b> FermionSU2xX.hpp:34</div></div>
+<div class="ttc" id="aclassXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4_html_a0c9516e8cee8cb4b808665f55256e3ea"><div class="ttname"><a href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#a0c9516e8cee8cb4b808665f55256e3ea">Xped::Fermion&lt; Sym::Combined&lt; Sym::SU2&lt; Sym::SpinSU2 &gt;, Symmetry_ &gt; &gt;::ns_1s</a></div><div class="ttdeci">OperatorType ns_1s() const</div><div class="ttdef"><b>Definition:</b> FermionSU2xX.hpp:33</div></div>
+<div class="ttc" id="aclassXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4_html_a244679a65f8ad3a033cb93dea30929d6"><div class="ttname"><a href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#a244679a65f8ad3a033cb93dea30929d6">Xped::Fermion&lt; Sym::Combined&lt; Sym::SU2&lt; Sym::SpinSU2 &gt;, Symmetry_ &gt; &gt;::HAS_CHARGE</a></div><div class="ttdeci">bool HAS_CHARGE</div><div class="ttdef"><b>Definition:</b> FermionSU2xX.hpp:51</div></div>
+<div class="ttc" id="aclassXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4_html_a57610611039a1d7d3dd00c4395fd02bd"><div class="ttname"><a href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#a57610611039a1d7d3dd00c4395fd02bd">Xped::Fermion&lt; Sym::Combined&lt; Sym::SU2&lt; Sym::SpinSU2 &gt;, Symmetry_ &gt; &gt;::Id_1s_</a></div><div class="ttdeci">OperatorType Id_1s_</div><div class="ttdef"><b>Definition:</b> FermionSU2xX.hpp:53</div></div>
+<div class="ttc" id="aclassXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4_html_a5dd641cdc9583bce60dff77ceb1ec70e"><div class="ttname"><a href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#a5dd641cdc9583bce60dff77ceb1ec70e">Xped::Fermion&lt; Sym::Combined&lt; Sym::SU2&lt; Sym::SpinSU2 &gt;, Symmetry_ &gt; &gt;::F_1s_</a></div><div class="ttdeci">OperatorType F_1s_</div><div class="ttdef"><b>Definition:</b> FermionSU2xX.hpp:54</div></div>
+<div class="ttc" id="aclassXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4_html_a635dbf9eba78058d57e3c627d76c760d"><div class="ttname"><a href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#a635dbf9eba78058d57e3c627d76c760d">Xped::Fermion&lt; Sym::Combined&lt; Sym::SU2&lt; Sym::SpinSU2 &gt;, Symmetry_ &gt; &gt;::labels</a></div><div class="ttdeci">std::unordered_map&lt; std::string, std::pair&lt; qType, std::size_t &gt; &gt; labels</div><div class="ttdef"><b>Definition:</b> FermionSU2xX.hpp:49</div></div>
+<div class="ttc" id="aclassXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4_html_a6e8fcd28d4d2f10a84475f8a7ba356c2"><div class="ttname"><a href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#a6e8fcd28d4d2f10a84475f8a7ba356c2">Xped::Fermion&lt; Sym::Combined&lt; Sym::SU2&lt; Sym::SpinSU2 &gt;, Symmetry_ &gt; &gt;::c_1s_</a></div><div class="ttdeci">OperatorType c_1s_</div><div class="ttdef"><b>Definition:</b> FermionSU2xX.hpp:55</div></div>
+<div class="ttc" id="aclassXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4_html_a710ac45572d9e404801e84115b58cc07"><div class="ttname"><a href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#a710ac45572d9e404801e84115b58cc07">Xped::Fermion&lt; Sym::Combined&lt; Sym::SU2&lt; Sym::SpinSU2 &gt;, Symmetry_ &gt; &gt;::cc_1s</a></div><div class="ttdeci">OperatorType cc_1s() const</div><div class="ttdef"><b>Definition:</b> FermionSU2xX.hpp:40</div></div>
+<div class="ttc" id="aclassXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4_html_a756c1873fa61d41e1e9a1042ea2fc37f"><div class="ttname"><a href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#a756c1873fa61d41e1e9a1042ea2fc37f">Xped::Fermion&lt; Sym::Combined&lt; Sym::SU2&lt; Sym::SpinSU2 &gt;, Symmetry_ &gt; &gt;::d_1s_</a></div><div class="ttdeci">OperatorType d_1s_</div><div class="ttdef"><b>Definition:</b> FermionSU2xX.hpp:58</div></div>
+<div class="ttc" id="aclassXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4_html_a82f38f037615696436dcc2a9e1968f80"><div class="ttname"><a href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#a82f38f037615696436dcc2a9e1968f80">Xped::Fermion&lt; Sym::Combined&lt; Sym::SU2&lt; Sym::SpinSU2 &gt;, Symmetry_ &gt; &gt;::n_1s</a></div><div class="ttdeci">OperatorType n_1s() const</div><div class="ttdef"><b>Definition:</b> FermionSU2xX.hpp:32</div></div>
+<div class="ttc" id="aclassXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4_html_a8a47600b304ab874b8414234225902aa"><div class="ttname"><a href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#a8a47600b304ab874b8414234225902aa">Xped::Fermion&lt; Sym::Combined&lt; Sym::SU2&lt; Sym::SpinSU2 &gt;, Symmetry_ &gt; &gt;::basis_1s</a></div><div class="ttdeci">Qbasis&lt; Symmetry, 1 &gt; basis_1s() const</div><div class="ttdef"><b>Definition:</b> FermionSU2xX.hpp:43</div></div>
+<div class="ttc" id="aclassXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4_html_a97989fb73aaca8c6527bb710aa305b74"><div class="ttname"><a href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#a97989fb73aaca8c6527bb710aa305b74">Xped::Fermion&lt; Sym::Combined&lt; Sym::SU2&lt; Sym::SpinSU2 &gt;, Symmetry_ &gt; &gt;::cdag_1s</a></div><div class="ttdeci">OperatorType cdag_1s() const</div><div class="ttdef"><b>Definition:</b> FermionSU2xX.hpp:30</div></div>
+<div class="ttc" id="aclassXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4_html_aa77f0371b81f9c4284118fb896670782"><div class="ttname"><a href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#aa77f0371b81f9c4284118fb896670782">Xped::Fermion&lt; Sym::Combined&lt; Sym::SU2&lt; Sym::SpinSU2 &gt;, Symmetry_ &gt; &gt;::S_1s</a></div><div class="ttdeci">OperatorType S_1s() const</div><div class="ttdef"><b>Definition:</b> FermionSU2xX.hpp:37</div></div>
+<div class="ttc" id="aclassXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4_html_aa7b8deebec771e66c34e1d48a9affd84"><div class="ttname"><a href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#aa7b8deebec771e66c34e1d48a9affd84">Xped::Fermion&lt; Sym::Combined&lt; Sym::SU2&lt; Sym::SpinSU2 &gt;, Symmetry_ &gt; &gt;::Fermion</a></div><div class="ttdeci">Fermion()</div><div class="ttdef"><b>Definition:</b> FermionSU2xX.hpp:23</div></div>
+<div class="ttc" id="aclassXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4_html_aaf8ef87dc4e12e267ba9912b27ddaa9e"><div class="ttname"><a href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#aaf8ef87dc4e12e267ba9912b27ddaa9e">Xped::Fermion&lt; Sym::Combined&lt; Sym::SU2&lt; Sym::SpinSU2 &gt;, Symmetry_ &gt; &gt;::cdagcdag_1s</a></div><div class="ttdeci">OperatorType cdagcdag_1s() const</div><div class="ttdef"><b>Definition:</b> FermionSU2xX.hpp:41</div></div>
+<div class="ttc" id="aclassXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4_html_ab4e91f46fa807cc686647793d8f36ce5"><div class="ttname"><a href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#ab4e91f46fa807cc686647793d8f36ce5">Xped::Fermion&lt; Sym::Combined&lt; Sym::SU2&lt; Sym::SpinSU2 &gt;, Symmetry_ &gt; &gt;::F_1s</a></div><div class="ttdeci">OperatorType F_1s() const</div><div class="ttdef"><b>Definition:</b> FermionSU2xX.hpp:27</div></div>
+<div class="ttc" id="aclassXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4_html_abc64b7c56721ef8adcb236db8b450564"><div class="ttname"><a href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#abc64b7c56721ef8adcb236db8b450564">Xped::Fermion&lt; Sym::Combined&lt; Sym::SU2&lt; Sym::SpinSU2 &gt;, Symmetry_ &gt; &gt;::Id_1s</a></div><div class="ttdeci">OperatorType Id_1s() const</div><div class="ttdef"><b>Definition:</b> FermionSU2xX.hpp:26</div></div>
+<div class="ttc" id="aclassXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4_html_abddae9b9fea1b4b504c6ca329f5261a5"><div class="ttname"><a href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#abddae9b9fea1b4b504c6ca329f5261a5">Xped::Fermion&lt; Sym::Combined&lt; Sym::SU2&lt; Sym::SpinSU2 &gt;, Symmetry_ &gt; &gt;::basis_1s_</a></div><div class="ttdeci">Qbasis&lt; Symmetry, 1 &gt; basis_1s_</div><div class="ttdef"><b>Definition:</b> FermionSU2xX.hpp:47</div></div>
+<div class="ttc" id="aclassXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4_html_ad68479b9595a4a964f57a87707f8d916"><div class="ttname"><a href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#ad68479b9595a4a964f57a87707f8d916">Xped::Fermion&lt; Sym::Combined&lt; Sym::SU2&lt; Sym::SpinSU2 &gt;, Symmetry_ &gt; &gt;::d_1s</a></div><div class="ttdeci">OperatorType d_1s() const</div><div class="ttdef"><b>Definition:</b> FermionSU2xX.hpp:35</div></div>
+<div class="ttc" id="aclassXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4_html_adaeee172ca057c9d744b0e8088ceafb7"><div class="ttname"><a href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#adaeee172ca057c9d744b0e8088ceafb7">Xped::Fermion&lt; Sym::Combined&lt; Sym::SU2&lt; Sym::SpinSU2 &gt;, Symmetry_ &gt; &gt;::c_1s</a></div><div class="ttdeci">OperatorType c_1s() const</div><div class="ttdef"><b>Definition:</b> FermionSU2xX.hpp:29</div></div>
+<div class="ttc" id="aclassXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4_html_adc3e30709593fff79606cbcc6787b6fd"><div class="ttname"><a href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#adc3e30709593fff79606cbcc6787b6fd">Xped::Fermion&lt; Sym::Combined&lt; Sym::SU2&lt; Sym::SpinSU2 &gt;, Symmetry_ &gt; &gt;::pdag_1s_</a></div><div class="ttdeci">OperatorType pdag_1s_</div><div class="ttdef"><b>Definition:</b> FermionSU2xX.hpp:61</div></div>
+<div class="ttc" id="aclassXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4_html_adf7358cae17a761869255284ea2f4314"><div class="ttname"><a href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#adf7358cae17a761869255284ea2f4314">Xped::Fermion&lt; Sym::Combined&lt; Sym::SU2&lt; Sym::SpinSU2 &gt;, Symmetry_ &gt; &gt;::Tz_1s</a></div><div class="ttdeci">OperatorType Tz_1s() const</div><div class="ttdef"><b>Definition:</b> FermionSU2xX.hpp:39</div></div>
+<div class="ttc" id="aclassXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4_html_ae7e1c157ae9f15ca2c178e16d02482ba"><div class="ttname"><a href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#ae7e1c157ae9f15ca2c178e16d02482ba">Xped::Fermion&lt; Sym::Combined&lt; Sym::SU2&lt; Sym::SpinSU2 &gt;, Symmetry_ &gt; &gt;::cdag_1s_</a></div><div class="ttdeci">OperatorType cdag_1s_</div><div class="ttdef"><b>Definition:</b> FermionSU2xX.hpp:56</div></div>
+<div class="ttc" id="aclassXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4_html_af94677c77a1f60008658159dfad9db0d"><div class="ttname"><a href="classXped_1_1Fermion_3_01Sym_1_1Combined_3_01Sym_1_1SU2_3_01Sym_1_1SpinSU2_01_4_00_01Symmetry___01_4_01_4.html#af94677c77a1f60008658159dfad9db0d">Xped::Fermion&lt; Sym::Combined&lt; Sym::SU2&lt; Sym::SpinSU2 &gt;, Symmetry_ &gt; &gt;::n_1s_</a></div><div class="ttdeci">OperatorType n_1s_</div><div class="ttdef"><b>Definition:</b> FermionSU2xX.hpp:57</div></div>
+<div class="ttc" id="aclassXped_1_1Fermion_html"><div class="ttname"><a href="classXped_1_1Fermion.html">Xped::Fermion</a></div><div class="ttdef"><b>Definition:</b> Fermion.hpp:21</div></div>
+<div class="ttc" id="aclassXped_1_1Fermion_html_a122402b866c4c9848580d63ef4648b4e"><div class="ttname"><a href="classXped_1_1Fermion.html#a122402b866c4c9848580d63ef4648b4e">Xped::Fermion::ch_index</a></div><div class="ttdeci">std::size_t ch_index</div><div class="ttdef"><b>Definition:</b> Fermion.hpp:76</div></div>
+<div class="ttc" id="aclassXped_1_1Fermion_html_a13872f995b8ea38bd193c299543bbe9b"><div class="ttname"><a href="classXped_1_1Fermion.html#a13872f995b8ea38bd193c299543bbe9b">Xped::Fermion::d_1s_</a></div><div class="ttdeci">OperatorType d_1s_</div><div class="ttdef"><b>Definition:</b> Fermion.hpp:93</div></div>
+<div class="ttc" id="aclassXped_1_1Fermion_html_a27f38e7dcfb84b649ce3196dcb64a6d0"><div class="ttname"><a href="classXped_1_1Fermion.html#a27f38e7dcfb84b649ce3196dcb64a6d0">Xped::Fermion::n_1s_</a></div><div class="ttdeci">OperatorType n_1s_</div><div class="ttdef"><b>Definition:</b> Fermion.hpp:90</div></div>
+<div class="ttc" id="aclassXped_1_1Fermion_html_a31b595832c0288e94311b35c802f4084"><div class="ttname"><a href="classXped_1_1Fermion.html#a31b595832c0288e94311b35c802f4084">Xped::Fermion::Id_1s</a></div><div class="ttdeci">OperatorType Id_1s() const</div><div class="ttdef"><b>Definition:</b> Fermion.hpp:31</div></div>
+<div class="ttc" id="aclassXped_1_1Fermion_html_a382d9c0f61da1952d60000d820ecb215"><div class="ttname"><a href="classXped_1_1Fermion.html#a382d9c0f61da1952d60000d820ecb215">Xped::Fermion::Fermion</a></div><div class="ttdeci">Fermion()</div><div class="ttdef"><b>Definition:</b> Fermion.hpp:28</div></div>
+<div class="ttc" id="aclassXped_1_1Fermion_html_a736c504e39194c6199571803c43ac168"><div class="ttname"><a href="classXped_1_1Fermion.html#a736c504e39194c6199571803c43ac168">Xped::Fermion::Id_1s_</a></div><div class="ttdeci">OperatorType Id_1s_</div><div class="ttdef"><b>Definition:</b> Fermion.hpp:81</div></div>
+<div class="ttc" id="aclassXped_1_1Fermion_html_a8a59f171f3e9b0b3d765fef779e57953"><div class="ttname"><a href="classXped_1_1Fermion.html#a8a59f171f3e9b0b3d765fef779e57953">Xped::Fermion::d_1s</a></div><div class="ttdeci">OperatorType d_1s() const</div><div class="ttdef"><b>Definition:</b> Fermion.hpp:53</div></div>
+<div class="ttc" id="aclassXped_1_1Fermion_html_a8bd9292de5d1103d7b13cb7db9ef9d51"><div class="ttname"><a href="classXped_1_1Fermion.html#a8bd9292de5d1103d7b13cb7db9ef9d51">Xped::Fermion::n_1s</a></div><div class="ttdeci">OperatorType n_1s() const</div><div class="ttdef"><b>Definition:</b> Fermion.hpp:45</div></div>
+<div class="ttc" id="aclassXped_1_1Fermion_html_a91b5a44473868f4fb346db773a6ad1b1"><div class="ttname"><a href="classXped_1_1Fermion.html#a91b5a44473868f4fb346db773a6ad1b1">Xped::Fermion::basis_1s_</a></div><div class="ttdeci">Qbasis&lt; Symmetry, 1 &gt; basis_1s_</div><div class="ttdef"><b>Definition:</b> Fermion.hpp:72</div></div>
+<div class="ttc" id="aclassXped_1_1Fermion_html_ab63e1ae9788cb3d7f829042856270e31"><div class="ttname"><a href="classXped_1_1Fermion.html#ab63e1ae9788cb3d7f829042856270e31">Xped::Fermion::fill_basis</a></div><div class="ttdeci">void fill_basis(bool REMOVE_DOUBLE, bool REMOVE_EMPTY, bool REMOVE_SINGLE)</div><div class="ttdef"><b>Definition:</b> Fermion.hpp:208</div></div>
+<div class="ttc" id="aclassXped_1_1Fermion_html_ac7ade4136d05ba4a1a26f3849a9ec4b2"><div class="ttname"><a href="classXped_1_1Fermion.html#ac7ade4136d05ba4a1a26f3849a9ec4b2">Xped::Fermion::F_1s_</a></div><div class="ttdeci">OperatorType F_1s_</div><div class="ttdef"><b>Definition:</b> Fermion.hpp:82</div></div>
+<div class="ttc" id="aclassXped_1_1Qbasis_html"><div class="ttname"><a href="classXped_1_1Qbasis.html">Xped::Qbasis</a></div><div class="ttdef"><b>Definition:</b> Qbasis.hpp:39</div></div>
+<div class="ttc" id="akind__dummies_8hpp_html"><div class="ttname"><a href="kind__dummies_8hpp.html">kind_dummies.hpp</a></div></div>
+<div class="ttc" id="anamespaceXped_1_1util_1_1constFct_html_afa76d30e3f41278877a86e254c6efb6d"><div class="ttname"><a href="namespaceXped_1_1util_1_1constFct.html#afa76d30e3f41278877a86e254c6efb6d">Xped::util::constFct::posmod</a></div><div class="ttdeci">constexpr int posmod(int x)</div><div class="ttdef"><b>Definition:</b> Constfct.hpp:46</div></div>
+<div class="ttc" id="anamespaceXped_html"><div class="ttname"><a href="namespaceXped.html">Xped</a></div><div class="ttdef"><b>Definition:</b> ADTensor.hpp:17</div></div>
+<div class="ttc" id="anamespaceXped_html_a6f053cb8ab1a1f82ecd1e8bd8fd4607ba845ce7423e64db8dde79f10d772c57a7"><div class="ttname"><a href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607ba845ce7423e64db8dde79f10d772c57a7">Xped::Kind::Fermion</a></div><div class="ttdeci">@ Fermion</div></div>
+<div class="ttc" id="astructXped_1_1SiteOperator_html"><div class="ttname"><a href="structXped_1_1SiteOperator.html">Xped::SiteOperator</a></div><div class="ttdef"><b>Definition:</b> SiteOperator.hpp:10</div></div>
+<div class="ttc" id="astructXped_1_1Sym_1_1Combined_html"><div class="ttname"><a href="structXped_1_1Sym_1_1Combined.html">Xped::Sym::Combined</a></div><div class="ttdef"><b>Definition:</b> CombSym.hpp:12</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+<!-- HTML footer for doxygen 1.9.2-->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_4b24e72d7fcd206265f2d42a075103f3.html">Xped</a></li><li class="navelem"><a class="el" href="dir_ba68c186f2d21e121016dccd5f3226a6.html">Physics</a></li><li class="navelem"><a class="el" href="dir_7f2113579a4a1a13db0df96dea928ffe.html">sites</a></li><li class="navelem"><a class="el" href="FermionSU2xX_8hpp.html">FermionSU2xX.hpp</a></li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.6 </li>
+  </ul>
+</div>
+<script type="text/javascript">
+  // script for doxygen 1.9.2
+  $(function() {
+      toggleButton = document.createElement('doxygen-awesome-dark-mode-toggle')
+      toggleButton.title = "Toggle Light/Dark Mode"
+      $(document).ready(function(){
+          document.getElementById("MSearchBox").parentNode.appendChild(toggleButton)
+      })
+      $(window).resize(function(){
+          document.getElementById("MSearchBox").parentNode.appendChild(toggleButton)
+      })
+  })
+</script>
+</body>
+</html>

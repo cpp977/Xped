@@ -1,0 +1,2129 @@
+<!-- HTML header for doxygen 1.9.6-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.6"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Xped: Xped::Sym::ZN&lt; Kind, N, Scalar_ &gt; Class Template Reference</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+});
+</script>
+<script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript">
+  DoxygenAwesomeDarkModeToggle.lightModeIcon = '🌞'
+// icon from https://fonts.google.com/icons
+  DoxygenAwesomeDarkModeToggle.darkModeIcon = `<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px" viewBox="0 0 24 24" width="24px" fill="#009793"><g><rect fill="none" height="24" width="24"/></g><g><g><path d="M8.1,14.15C9.77,14.63,11,16.17,11,18c0,0.68-0.19,1.31-0.48,1.87c0.48,0.09,0.97,0.14,1.48,0.14 c1.48,0,2.9-0.41,4.13-1.15c-2.62-0.92-5.23-2.82-6.8-5.86C7.74,9.94,7.78,7.09,8.29,4.9c-2.57,1.33-4.3,4.01-4.3,7.1c0,0,0,0,0,0 c0.01,0,0.01,0,0.02,0C5.66,12,7.18,12.83,8.1,14.15z" opacity=".3"/><path d="M19.78,17.51c-2.47,0-6.57-1.33-8.68-5.43C8.77,7.57,10.6,3.6,11.63,2.01C6.27,2.2,1.98,6.59,1.98,12 c0,0.14,0.02,0.28,0.02,0.42C2.61,12.16,3.28,12,3.98,12c0,0,0,0,0,0c0-3.09,1.73-5.77,4.3-7.1C7.78,7.09,7.74,9.94,9.32,13 c1.57,3.04,4.18,4.95,6.8,5.86c-1.23,0.74-2.65,1.15-4.13,1.15c-0.5,0-1-0.05-1.48-0.14c-0.37,0.7-0.94,1.27-1.64,1.64 c0.98,0.32,2.03,0.5,3.11,0.5c3.5,0,6.58-1.8,8.37-4.52C20.18,17.5,19.98,17.51,19.78,17.51z"/><path d="M7,16l-0.18,0C6.4,14.84,5.3,14,4,14c-1.66,0-3,1.34-3,3s1.34,3,3,3c0.62,0,2.49,0,3,0c1.1,0,2-0.9,2-2 C9,16.9,8.1,16,7,16z"/></g></g></svg>`
+  DoxygenAwesomeDarkModeToggle.init()
+</script>
+</head>
+<body>
+  <!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/cpp977/Xped" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">Xped
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.9.6 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('structXped_1_1Sym_1_1ZN.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
+<a href="structXped_1_1Sym_1_1ZN-members.html">List of all members</a>  </div>
+  <div class="headertitle"><div class="title">Xped::Sym::ZN&lt; Kind, N, Scalar_ &gt; Class Template Reference</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p><code>#include &lt;<a class="el" href="ZN_8hpp_source.html">ZN.hpp</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Xped::Sym::ZN&lt; Kind, N, Scalar_ &gt;:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1Sym_1_1ZN__inherit__graph.png" border="0" usemap="#aXped_1_1Sym_1_1ZN_3_01Kind_00_01N_00_01Scalar___01_4_inherit__map" alt="Inheritance graph"/></div>
+<map name="aXped_1_1Sym_1_1ZN_3_01Kind_00_01N_00_01Scalar___01_4_inherit__map" id="aXped_1_1Sym_1_1ZN_3_01Kind_00_01N_00_01Scalar___01_4_inherit__map">
+<area shape="rect" title=" " alt="" coords="5,93,172,133"/>
+<area shape="rect" href="structXped_1_1Sym_1_1SymBase.html" title=" " alt="" coords="8,5,169,45"/>
+</map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+<div class="dynheader">
+Collaboration diagram for Xped::Sym::ZN&lt; Kind, N, Scalar_ &gt;:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1Sym_1_1ZN__coll__graph.png" border="0" usemap="#aXped_1_1Sym_1_1ZN_3_01Kind_00_01N_00_01Scalar___01_4_coll__map" alt="Collaboration graph"/></div>
+<map name="aXped_1_1Sym_1_1ZN_3_01Kind_00_01N_00_01Scalar___01_4_coll__map" id="aXped_1_1Sym_1_1ZN_3_01Kind_00_01N_00_01Scalar___01_4_coll__map">
+<area shape="rect" title=" " alt="" coords="5,93,172,133"/>
+<area shape="rect" href="structXped_1_1Sym_1_1SymBase.html" title=" " alt="" coords="8,5,169,45"/>
+</map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a1d530fa5d6d7f51dc2aa99d2af99bf33"><td class="memItemLeft" align="right" valign="top">typedef Scalar_&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#a1d530fa5d6d7f51dc2aa99d2af99bf33">Scalar</a></td></tr>
+<tr class="separator:a1d530fa5d6d7f51dc2aa99d2af99bf33"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a25de9a7e49db73220683f8822d1adf4d"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="structXped_1_1qarray.html">qarray</a>&lt; <a class="el" href="structXped_1_1Sym_1_1ZN.html#a20694c2d90da7e9f5040e291b5fe9ad5">Nq</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a></td></tr>
+<tr class="separator:a25de9a7e49db73220683f8822d1adf4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_types_structXped_1_1Sym_1_1SymBase"><td colspan="2" onclick="javascript:toggleInherit('pub_types_structXped_1_1Sym_1_1SymBase')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="structXped_1_1Sym_1_1SymBase.html">Xped::Sym::SymBase&lt; Derived &gt;</a></td></tr>
+<tr class="memitem:a8342c167b199b7fc14403f52a3d163dc inherit pub_types_structXped_1_1Sym_1_1SymBase"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="structXped_1_1Sym_1_1SymTraits.html">SymTraits</a>&lt; Derived &gt;::qType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1SymBase.html#a8342c167b199b7fc14403f52a3d163dc">qType</a></td></tr>
+<tr class="separator:a8342c167b199b7fc14403f52a3d163dc inherit pub_types_structXped_1_1Sym_1_1SymBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8d5384347a32e349f46b0570e04e192 inherit pub_types_structXped_1_1Sym_1_1SymBase"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="structXped_1_1Sym_1_1SymTraits.html">SymTraits</a>&lt; Derived &gt;::Scalar&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1SymBase.html#ad8d5384347a32e349f46b0570e04e192">Scalar</a></td></tr>
+<tr class="separator:ad8d5384347a32e349f46b0570e04e192 inherit pub_types_structXped_1_1Sym_1_1SymBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a41ed810e4554bc89d591f1103ce87a3b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#a41ed810e4554bc89d591f1103ce87a3b">ZN</a> ()</td></tr>
+<tr class="separator:a41ed810e4554bc89d591f1103ce87a3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:ad570767f7e895af4f29343c44cb74079"><td class="memItemLeft" align="right" valign="top">static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#ad570767f7e895af4f29343c44cb74079">IS_CHARGE_SU2</a> ()</td></tr>
+<tr class="separator:ad570767f7e895af4f29343c44cb74079"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0961b2f66388678473f9a107b87c620"><td class="memItemLeft" align="right" valign="top">static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#ac0961b2f66388678473f9a107b87c620">IS_SPIN_SU2</a> ()</td></tr>
+<tr class="separator:ac0961b2f66388678473f9a107b87c620"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a029e5aa54c31ce72aaf89cf8c3da9e3f"><td class="memItemLeft" align="right" valign="top">static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#a029e5aa54c31ce72aaf89cf8c3da9e3f">IS_SPIN_U1</a> ()</td></tr>
+<tr class="separator:a029e5aa54c31ce72aaf89cf8c3da9e3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad0711d89357f1d2f0b656bc7f4bb886"><td class="memItemLeft" align="right" valign="top">static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#aad0711d89357f1d2f0b656bc7f4bb886">NO_SPIN_SYM</a> ()</td></tr>
+<tr class="separator:aad0711d89357f1d2f0b656bc7f4bb886"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5cf4c3f83d70aa43ad07645bef137b8e"><td class="memItemLeft" align="right" valign="top">static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#a5cf4c3f83d70aa43ad07645bef137b8e">NO_CHARGE_SYM</a> ()</td></tr>
+<tr class="separator:a5cf4c3f83d70aa43ad07645bef137b8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d7e2e7b0106a6f51d2fc3334d537dc6"><td class="memItemLeft" align="right" valign="top">static constexpr <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#a7d7e2e7b0106a6f51d2fc3334d537dc6">qvacuum</a> ()</td></tr>
+<tr class="separator:a7d7e2e7b0106a6f51d2fc3334d537dc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a0296234c0f003756dbc064253fd261"><td class="memItemLeft" align="right" valign="top">static constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#a0a0296234c0f003756dbc064253fd261">lowest_qs</a> ()</td></tr>
+<tr class="separator:a0a0296234c0f003756dbc064253fd261"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ced7a277a60fe802d8e64c679bb3c6b"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#a1ced7a277a60fe802d8e64c679bb3c6b">name</a> ()</td></tr>
+<tr class="separator:a1ced7a277a60fe802d8e64c679bb3c6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3bdea3496ff540be9a32cdf02cdf037d"><td class="memItemLeft" align="right" valign="top">static constexpr std::array&lt; <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84ab">KIND</a>, <a class="el" href="structXped_1_1Sym_1_1ZN.html#a20694c2d90da7e9f5040e291b5fe9ad5">Nq</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#a3bdea3496ff540be9a32cdf02cdf037d">kind</a> ()</td></tr>
+<tr class="separator:a3bdea3496ff540be9a32cdf02cdf037d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b33e500736d4b6a2984befcf63431e8"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#a4b33e500736d4b6a2984befcf63431e8">conj</a> (const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;q)</td></tr>
+<tr class="separator:a4b33e500736d4b6a2984befcf63431e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc51788418cf94e00f2557356dec7c40"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#acc51788418cf94e00f2557356dec7c40">degeneracy</a> (const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;)</td></tr>
+<tr class="separator:acc51788418cf94e00f2557356dec7c40"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56b9985675e920ae2419a0021a208b19"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#a56b9985675e920ae2419a0021a208b19">random_q</a> ()</td></tr>
+<tr class="separator:a56b9985675e920ae2419a0021a208b19"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac28a86aab3999dac57b949e21e5e92a5"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#ac28a86aab3999dac57b949e21e5e92a5">basis_combine</a> (const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;ql, const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;qr)</td></tr>
+<tr class="separator:ac28a86aab3999dac57b949e21e5e92a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2f7887797c3123dc42be796d0d141d34"><td class="memItemLeft" align="right" valign="top">static std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#a2f7887797c3123dc42be796d0d141d34">multiplicity</a> (const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;q1, const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;q2, const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;q3)</td></tr>
+<tr class="separator:a2f7887797c3123dc42be796d0d141d34"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ddcc423e7d87f20e14d6f1563bc3841"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#a3ddcc423e7d87f20e14d6f1563bc3841">triangle</a> (const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;q1, const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;q2, const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;q3)</td></tr>
+<tr class="separator:a3ddcc423e7d87f20e14d6f1563bc3841"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader"></div></td></tr>
+<tr class="memitem:a6032a263bdaa5865bf7ef715d83efd3e"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structXped_1_1Sym_1_1ZN.html#a1d530fa5d6d7f51dc2aa99d2af99bf33">Scalar</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#a6032a263bdaa5865bf7ef715d83efd3e">coeff_dot</a> (const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;)</td></tr>
+<tr class="separator:a6032a263bdaa5865bf7ef715d83efd3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa065b2e1d435e643f411245a366e3f5b"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structXped_1_1Sym_1_1ZN.html#a1d530fa5d6d7f51dc2aa99d2af99bf33">Scalar</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#aa065b2e1d435e643f411245a366e3f5b">coeff_twist</a> (const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;q)</td></tr>
+<tr class="separator:aa065b2e1d435e643f411245a366e3f5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a217e9672568a908ed95f2706ae9e5597"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structXped_1_1Sym_1_1ZN.html#a1d530fa5d6d7f51dc2aa99d2af99bf33">Scalar</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#a217e9672568a908ed95f2706ae9e5597">coeff_FS</a> (const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;)</td></tr>
+<tr class="separator:a217e9672568a908ed95f2706ae9e5597"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51e417788ab681046c9320acd757b5a7"><td class="memTemplParams" colspan="2">template&lt;typename PlainLib &gt; </td></tr>
+<tr class="memitem:a51e417788ab681046c9320acd757b5a7"><td class="memTemplItemLeft" align="right" valign="top">static PlainLib::template <a class="el" href="namespaceXped.html#a09b355b0ba27f6524a73e29a74cf0096">TType</a>&lt; Scalar_, 2 &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#a51e417788ab681046c9320acd757b5a7">one_j_tensor</a> (const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;, const <a class="el" href="structXped_1_1mpi_1_1XpedWorld.html">mpi::XpedWorld</a> &amp;world=<a class="el" href="namespaceXped_1_1mpi.html#a92c3bbdeab79e718b7d013a16ee5a0c9">mpi::getUniverse</a>())</td></tr>
+<tr class="separator:a51e417788ab681046c9320acd757b5a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b446efc919c8d05c150aee26992c75b"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structXped_1_1Sym_1_1ZN.html#a1d530fa5d6d7f51dc2aa99d2af99bf33">Scalar</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#a5b446efc919c8d05c150aee26992c75b">coeff_rightOrtho</a> (const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;, const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;)</td></tr>
+<tr class="separator:a5b446efc919c8d05c150aee26992c75b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ffeac8d6676a2f7eebea8e164cae651"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structXped_1_1Sym_1_1ZN.html#a1d530fa5d6d7f51dc2aa99d2af99bf33">Scalar</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#a9ffeac8d6676a2f7eebea8e164cae651">coeff_3j</a> (const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;q1, const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;q2, const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;q3, int, int, int)</td></tr>
+<tr class="separator:a9ffeac8d6676a2f7eebea8e164cae651"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac5da3332f6941b330ff1af71b98794e5"><td class="memTemplParams" colspan="2">template&lt;typename PlainLib &gt; </td></tr>
+<tr class="memitem:ac5da3332f6941b330ff1af71b98794e5"><td class="memTemplItemLeft" align="right" valign="top">static PlainLib::template <a class="el" href="namespaceXped.html#a09b355b0ba27f6524a73e29a74cf0096">TType</a>&lt; Scalar_, 3 &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#ac5da3332f6941b330ff1af71b98794e5">CGC</a> (const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;q1, const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;q2, const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;q3, const std::size_t, const <a class="el" href="structXped_1_1mpi_1_1XpedWorld.html">mpi::XpedWorld</a> &amp;world=<a class="el" href="namespaceXped_1_1mpi.html#a92c3bbdeab79e718b7d013a16ee5a0c9">mpi::getUniverse</a>())</td></tr>
+<tr class="separator:ac5da3332f6941b330ff1af71b98794e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e9c64c13ff786e62c60421167534556"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structXped_1_1Sym_1_1ZN.html#a1d530fa5d6d7f51dc2aa99d2af99bf33">Scalar</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#a7e9c64c13ff786e62c60421167534556">coeff_turn</a> (const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;ql, const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;qr, const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;qf)</td></tr>
+<tr class="separator:a7e9c64c13ff786e62c60421167534556"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af66009065ece057a4407134a78444944"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structXped_1_1Sym_1_1ZN.html#a1d530fa5d6d7f51dc2aa99d2af99bf33">Scalar</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#af66009065ece057a4407134a78444944">coeff_6j</a> (const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;q1, const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;q2, const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;q3, const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;q4, const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;q5, const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;q6)</td></tr>
+<tr class="separator:af66009065ece057a4407134a78444944"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9760540169679cf3124e4a2433cb1b76"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structXped_1_1Sym_1_1ZN.html#a1d530fa5d6d7f51dc2aa99d2af99bf33">Scalar</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#a9760540169679cf3124e4a2433cb1b76">coeff_recouple</a> (const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;q1, const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;q2, const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;q3, const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;Q, const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;Q12, const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;Q23)</td></tr>
+<tr class="separator:a9760540169679cf3124e4a2433cb1b76"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab4b2e28294ee37cab6e29a75dc5cb9ec"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structXped_1_1Sym_1_1ZN.html#a1d530fa5d6d7f51dc2aa99d2af99bf33">Scalar</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#ab4b2e28294ee37cab6e29a75dc5cb9ec">coeff_9j</a> (const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;, const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;, const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;, const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;, const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;, const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;, const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;, const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;, const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;)</td></tr>
+<tr class="separator:ab4b2e28294ee37cab6e29a75dc5cb9ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a20a1274cd9439f84b46ea4763ba118"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structXped_1_1Sym_1_1ZN.html#a1d530fa5d6d7f51dc2aa99d2af99bf33">Scalar</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#a1a20a1274cd9439f84b46ea4763ba118">coeff_swap</a> (const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;ql, const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;qr, const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;qf)</td></tr>
+<tr class="separator:a1a20a1274cd9439f84b46ea4763ba118"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_static_methods_structXped_1_1Sym_1_1SymBase"><td colspan="2" onclick="javascript:toggleInherit('pub_static_methods_structXped_1_1Sym_1_1SymBase')"><img src="closed.png" alt="-"/>&#160;Static Public Member Functions inherited from <a class="el" href="structXped_1_1Sym_1_1SymBase.html">Xped::Sym::SymBase&lt; Derived &gt;</a></td></tr>
+<tr class="memitem:a048f7ea2453d7c1e5a22c1d55bf787fe inherit pub_static_methods_structXped_1_1Sym_1_1SymBase"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; <a class="el" href="structXped_1_1Sym_1_1SymBase.html#a8342c167b199b7fc14403f52a3d163dc">qType</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1SymBase.html#a048f7ea2453d7c1e5a22c1d55bf787fe">reduceSilent</a> (const <a class="el" href="structXped_1_1Sym_1_1SymBase.html#a8342c167b199b7fc14403f52a3d163dc">qType</a> &amp;ql, const <a class="el" href="structXped_1_1Sym_1_1SymBase.html#a8342c167b199b7fc14403f52a3d163dc">qType</a> &amp;qr)</td></tr>
+<tr class="separator:a048f7ea2453d7c1e5a22c1d55bf787fe inherit pub_static_methods_structXped_1_1Sym_1_1SymBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8a9744eece09cfc5647a563df916bbd inherit pub_static_methods_structXped_1_1Sym_1_1SymBase"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; <a class="el" href="structXped_1_1Sym_1_1SymBase.html#a8342c167b199b7fc14403f52a3d163dc">qType</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1SymBase.html#ac8a9744eece09cfc5647a563df916bbd">reduceSilent</a> (const std::vector&lt; <a class="el" href="structXped_1_1Sym_1_1SymBase.html#a8342c167b199b7fc14403f52a3d163dc">qType</a> &gt; &amp;ql, const <a class="el" href="structXped_1_1Sym_1_1SymBase.html#a8342c167b199b7fc14403f52a3d163dc">qType</a> &amp;qr)</td></tr>
+<tr class="separator:ac8a9744eece09cfc5647a563df916bbd inherit pub_static_methods_structXped_1_1Sym_1_1SymBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1b2af4f64a7dedf9bcde831a4b38b3a inherit pub_static_methods_structXped_1_1Sym_1_1SymBase"><td class="memItemLeft" align="right" valign="top">static std::set&lt; <a class="el" href="structXped_1_1Sym_1_1SymBase.html#a8342c167b199b7fc14403f52a3d163dc">qType</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1SymBase.html#ab1b2af4f64a7dedf9bcde831a4b38b3a">reduceSilent</a> (const std::vector&lt; <a class="el" href="structXped_1_1Sym_1_1SymBase.html#a8342c167b199b7fc14403f52a3d163dc">qType</a> &gt; &amp;ql, const std::vector&lt; <a class="el" href="structXped_1_1Sym_1_1SymBase.html#a8342c167b199b7fc14403f52a3d163dc">qType</a> &gt; &amp;qr)</td></tr>
+<tr class="separator:ab1b2af4f64a7dedf9bcde831a4b38b3a inherit pub_static_methods_structXped_1_1Sym_1_1SymBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a06b436914e3becdc4436b3975e4d014f inherit pub_static_methods_structXped_1_1Sym_1_1SymBase"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; <a class="el" href="structXped_1_1Sym_1_1SymBase.html#a8342c167b199b7fc14403f52a3d163dc">qType</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1SymBase.html#a06b436914e3becdc4436b3975e4d014f">reduceSilent</a> (const <a class="el" href="structXped_1_1Sym_1_1SymBase.html#a8342c167b199b7fc14403f52a3d163dc">qType</a> &amp;ql, const <a class="el" href="structXped_1_1Sym_1_1SymBase.html#a8342c167b199b7fc14403f52a3d163dc">qType</a> &amp;qm, const <a class="el" href="structXped_1_1Sym_1_1SymBase.html#a8342c167b199b7fc14403f52a3d163dc">qType</a> &amp;qr)</td></tr>
+<tr class="separator:a06b436914e3becdc4436b3975e4d014f inherit pub_static_methods_structXped_1_1Sym_1_1SymBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a951d2e9f2cbfab09c44e1f945591314d inherit pub_static_methods_structXped_1_1Sym_1_1SymBase"><td class="memItemLeft" align="right" valign="top">static std::set&lt; <a class="el" href="structXped_1_1Sym_1_1SymBase.html#a8342c167b199b7fc14403f52a3d163dc">qType</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1SymBase.html#a951d2e9f2cbfab09c44e1f945591314d">reduceSilent</a> (const std::set&lt; <a class="el" href="structXped_1_1Sym_1_1SymBase.html#a8342c167b199b7fc14403f52a3d163dc">qType</a> &gt; &amp;ql, const std::vector&lt; <a class="el" href="structXped_1_1Sym_1_1SymBase.html#a8342c167b199b7fc14403f52a3d163dc">qType</a> &gt; &amp;qr)</td></tr>
+<tr class="separator:a951d2e9f2cbfab09c44e1f945591314d inherit pub_static_methods_structXped_1_1Sym_1_1SymBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3f0883edcd02032ef00d41f9213039f inherit pub_static_methods_structXped_1_1Sym_1_1SymBase"><td class="memItemLeft" align="right" valign="top">static std::set&lt; <a class="el" href="structXped_1_1Sym_1_1SymBase.html#a8342c167b199b7fc14403f52a3d163dc">qType</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1SymBase.html#af3f0883edcd02032ef00d41f9213039f">reduceSilent</a> (const std::unordered_set&lt; <a class="el" href="structXped_1_1Sym_1_1SymBase.html#a8342c167b199b7fc14403f52a3d163dc">qType</a> &gt; &amp;ql, const std::vector&lt; <a class="el" href="structXped_1_1Sym_1_1SymBase.html#a8342c167b199b7fc14403f52a3d163dc">qType</a> &gt; &amp;qr)</td></tr>
+<tr class="separator:af3f0883edcd02032ef00d41f9213039f inherit pub_static_methods_structXped_1_1Sym_1_1SymBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a361f9948e7bdbb13f7f8a90566dd1192 inherit pub_static_methods_structXped_1_1Sym_1_1SymBase"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structXped_1_1Sym_1_1SymBase.html#ad8d5384347a32e349f46b0570e04e192">Scalar</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1SymBase.html#a361f9948e7bdbb13f7f8a90566dd1192">coeff_FS</a> (const <a class="el" href="structXped_1_1Sym_1_1SymBase.html#a8342c167b199b7fc14403f52a3d163dc">qType</a> &amp;q)</td></tr>
+<tr class="separator:a361f9948e7bdbb13f7f8a90566dd1192 inherit pub_static_methods_structXped_1_1Sym_1_1SymBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf25767e71761ab4fa05629a245ce969 inherit pub_static_methods_structXped_1_1Sym_1_1SymBase"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structXped_1_1Sym_1_1SymBase.html#ad8d5384347a32e349f46b0570e04e192">Scalar</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1SymBase.html#adf25767e71761ab4fa05629a245ce969">coeff_turn</a> (const <a class="el" href="structXped_1_1Sym_1_1SymBase.html#a8342c167b199b7fc14403f52a3d163dc">qType</a> &amp;ql, const <a class="el" href="structXped_1_1Sym_1_1SymBase.html#a8342c167b199b7fc14403f52a3d163dc">qType</a> &amp;qr, const <a class="el" href="structXped_1_1Sym_1_1SymBase.html#a8342c167b199b7fc14403f52a3d163dc">qType</a> &amp;qf)</td></tr>
+<tr class="separator:adf25767e71761ab4fa05629a245ce969 inherit pub_static_methods_structXped_1_1Sym_1_1SymBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae5e80a0b9419ade6eb882af215fcdfd8 inherit pub_static_methods_structXped_1_1Sym_1_1SymBase"><td class="memTemplParams" colspan="2">template&lt;std::size_t M&gt; </td></tr>
+<tr class="memitem:ae5e80a0b9419ade6eb882af215fcdfd8 inherit pub_static_methods_structXped_1_1Sym_1_1SymBase"><td class="memTemplItemLeft" align="right" valign="top">static bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1SymBase.html#ae5e80a0b9419ade6eb882af215fcdfd8">compare</a> (const std::array&lt; <a class="el" href="structXped_1_1Sym_1_1SymBase.html#a8342c167b199b7fc14403f52a3d163dc">qType</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84aba446e45ea94e737ea4c9d919275d1dcbe">M</a> &gt; &amp;q1, const std::array&lt; <a class="el" href="structXped_1_1Sym_1_1SymBase.html#a8342c167b199b7fc14403f52a3d163dc">qType</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84aba446e45ea94e737ea4c9d919275d1dcbe">M</a> &gt; &amp;q2)</td></tr>
+<tr class="separator:ae5e80a0b9419ade6eb882af215fcdfd8 inherit pub_static_methods_structXped_1_1Sym_1_1SymBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab285a790e9d9e9ca290331824566f623 inherit pub_static_methods_structXped_1_1Sym_1_1SymBase"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1SymBase.html#ab285a790e9d9e9ca290331824566f623">compare</a> (const <a class="el" href="structXped_1_1Sym_1_1SymBase.html#a8342c167b199b7fc14403f52a3d163dc">qType</a> &amp;q1, const <a class="el" href="structXped_1_1Sym_1_1SymBase.html#a8342c167b199b7fc14403f52a3d163dc">qType</a> &amp;q2)</td></tr>
+<tr class="separator:ab285a790e9d9e9ca290331824566f623 inherit pub_static_methods_structXped_1_1Sym_1_1SymBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a933cebdd37eb0a792fcbe26b0ceff407 inherit pub_static_methods_structXped_1_1Sym_1_1SymBase"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1SymBase.html#a933cebdd37eb0a792fcbe26b0ceff407">triangle</a> (const <a class="el" href="structXped_1_1Sym_1_1SymBase.html#a8342c167b199b7fc14403f52a3d163dc">qType</a> &amp;q1, const <a class="el" href="structXped_1_1Sym_1_1SymBase.html#a8342c167b199b7fc14403f52a3d163dc">qType</a> &amp;q2, const <a class="el" href="structXped_1_1Sym_1_1SymBase.html#a8342c167b199b7fc14403f52a3d163dc">qType</a> &amp;q3)</td></tr>
+<tr class="separator:a933cebdd37eb0a792fcbe26b0ceff407 inherit pub_static_methods_structXped_1_1Sym_1_1SymBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
+<tr class="memitem:a20694c2d90da7e9f5040e291b5fe9ad5"><td class="memItemLeft" align="right" valign="top">static constexpr size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#a20694c2d90da7e9f5040e291b5fe9ad5">Nq</a> = 1</td></tr>
+<tr class="separator:a20694c2d90da7e9f5040e291b5fe9ad5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af754652ed9f13cfdccdff625aef737e9"><td class="memItemLeft" align="right" valign="top">static constexpr std::array&lt; bool, <a class="el" href="structXped_1_1Sym_1_1ZN.html#a20694c2d90da7e9f5040e291b5fe9ad5">Nq</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#af754652ed9f13cfdccdff625aef737e9">HAS_MULTIPLICITIES</a> = {false}</td></tr>
+<tr class="separator:af754652ed9f13cfdccdff625aef737e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aedba42303ec4ecd6fe0d527f45312ae6"><td class="memItemLeft" align="right" valign="top">static constexpr std::array&lt; bool, <a class="el" href="structXped_1_1Sym_1_1ZN.html#a20694c2d90da7e9f5040e291b5fe9ad5">Nq</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#aedba42303ec4ecd6fe0d527f45312ae6">NON_ABELIAN</a> = {false}</td></tr>
+<tr class="separator:aedba42303ec4ecd6fe0d527f45312ae6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a39d0c5e97a45a2ccace63227a76d5b60"><td class="memItemLeft" align="right" valign="top">static constexpr std::array&lt; bool, <a class="el" href="structXped_1_1Sym_1_1ZN.html#a20694c2d90da7e9f5040e291b5fe9ad5">Nq</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#a39d0c5e97a45a2ccace63227a76d5b60">ABELIAN</a> = {true}</td></tr>
+<tr class="separator:a39d0c5e97a45a2ccace63227a76d5b60"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6271c8b6e322876b6f93ed91472be0bd"><td class="memItemLeft" align="right" valign="top">static constexpr std::array&lt; bool, <a class="el" href="structXped_1_1Sym_1_1ZN.html#a20694c2d90da7e9f5040e291b5fe9ad5">Nq</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#a6271c8b6e322876b6f93ed91472be0bd">IS_TRIVIAL</a> = {false}</td></tr>
+<tr class="separator:a6271c8b6e322876b6f93ed91472be0bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a98a4d1bd3a22163be6623ebc7e650f2b"><td class="memItemLeft" align="right" valign="top">static constexpr std::array&lt; bool, <a class="el" href="structXped_1_1Sym_1_1ZN.html#a20694c2d90da7e9f5040e291b5fe9ad5">Nq</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#a98a4d1bd3a22163be6623ebc7e650f2b">IS_MODULAR</a> = {true}</td></tr>
+<tr class="separator:a98a4d1bd3a22163be6623ebc7e650f2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7994226a6f6a09106872d5107ae5c178"><td class="memItemLeft" align="right" valign="top">static constexpr std::array&lt; bool, <a class="el" href="structXped_1_1Sym_1_1ZN.html#a20694c2d90da7e9f5040e291b5fe9ad5">Nq</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#a7994226a6f6a09106872d5107ae5c178">IS_FERMIONIC</a> = {(Kind::name == <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84aba2149ee1e05891f54a563184b03039b2c">KIND::FN</a>)}</td></tr>
+<tr class="separator:a7994226a6f6a09106872d5107ae5c178"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aefbc9e134b2e390e7121dddc8d622185"><td class="memItemLeft" align="right" valign="top">static constexpr std::array&lt; bool, <a class="el" href="structXped_1_1Sym_1_1ZN.html#a20694c2d90da7e9f5040e291b5fe9ad5">Nq</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#aefbc9e134b2e390e7121dddc8d622185">IS_BOSONIC</a> = {(Kind::name == <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">KIND::N</a>)}</td></tr>
+<tr class="separator:aefbc9e134b2e390e7121dddc8d622185"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a55d2d84279ca291c3918bad668bfc64c"><td class="memItemLeft" align="right" valign="top">static constexpr std::array&lt; bool, <a class="el" href="structXped_1_1Sym_1_1ZN.html#a20694c2d90da7e9f5040e291b5fe9ad5">Nq</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#a55d2d84279ca291c3918bad668bfc64c">IS_SPIN</a> = {(Kind::name == <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84aba446e45ea94e737ea4c9d919275d1dcbe">KIND::M</a>)}</td></tr>
+<tr class="separator:a55d2d84279ca291c3918bad668bfc64c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64790f8ed14376b8b5d15671cdbc131c"><td class="memItemLeft" align="right" valign="top">static constexpr std::array&lt; int, <a class="el" href="structXped_1_1Sym_1_1ZN.html#a20694c2d90da7e9f5040e291b5fe9ad5">Nq</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#a64790f8ed14376b8b5d15671cdbc131c">MOD_N</a> = {<a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>}</td></tr>
+<tr class="separator:a64790f8ed14376b8b5d15671cdbc131c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ea4bb5356c16f3d487ee34c4b95aaeb"><td class="memItemLeft" align="right" valign="top">static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#a4ea4bb5356c16f3d487ee34c4b95aaeb">ANY_HAS_MULTIPLICITIES</a> = <a class="el" href="structXped_1_1Sym_1_1ZN.html#af754652ed9f13cfdccdff625aef737e9">HAS_MULTIPLICITIES</a>[0]</td></tr>
+<tr class="separator:a4ea4bb5356c16f3d487ee34c4b95aaeb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a244eb770ffb73207211ce97b15e266ba"><td class="memItemLeft" align="right" valign="top">static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#a244eb770ffb73207211ce97b15e266ba">ANY_NON_ABELIAN</a> = <a class="el" href="structXped_1_1Sym_1_1ZN.html#aedba42303ec4ecd6fe0d527f45312ae6">NON_ABELIAN</a>[0]</td></tr>
+<tr class="separator:a244eb770ffb73207211ce97b15e266ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f798b122e6a691230881bc5ce90e07f"><td class="memItemLeft" align="right" valign="top">static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#a9f798b122e6a691230881bc5ce90e07f">ANY_ABELIAN</a> = <a class="el" href="structXped_1_1Sym_1_1ZN.html#a39d0c5e97a45a2ccace63227a76d5b60">ABELIAN</a>[0]</td></tr>
+<tr class="separator:a9f798b122e6a691230881bc5ce90e07f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96166b08974d8ab0b6b27fdb43ac62e0"><td class="memItemLeft" align="right" valign="top">static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#a96166b08974d8ab0b6b27fdb43ac62e0">ANY_IS_TRIVIAL</a> = <a class="el" href="structXped_1_1Sym_1_1ZN.html#a6271c8b6e322876b6f93ed91472be0bd">IS_TRIVIAL</a>[0]</td></tr>
+<tr class="separator:a96166b08974d8ab0b6b27fdb43ac62e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab5b4e5f575472ba28023d2d3634cfac7"><td class="memItemLeft" align="right" valign="top">static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#ab5b4e5f575472ba28023d2d3634cfac7">ANY_IS_MODULAR</a> = <a class="el" href="structXped_1_1Sym_1_1ZN.html#a98a4d1bd3a22163be6623ebc7e650f2b">IS_MODULAR</a>[0]</td></tr>
+<tr class="separator:ab5b4e5f575472ba28023d2d3634cfac7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a82d3010e04b448ccc02008490090930c"><td class="memItemLeft" align="right" valign="top">static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#a82d3010e04b448ccc02008490090930c">ANY_IS_FERMIONIC</a> = <a class="el" href="structXped_1_1Sym_1_1ZN.html#a7994226a6f6a09106872d5107ae5c178">IS_FERMIONIC</a>[0]</td></tr>
+<tr class="separator:a82d3010e04b448ccc02008490090930c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a44023f7629988c2e4d131f5c986632e9"><td class="memItemLeft" align="right" valign="top">static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#a44023f7629988c2e4d131f5c986632e9">ANY_IS_BOSONIC</a> = <a class="el" href="structXped_1_1Sym_1_1ZN.html#aefbc9e134b2e390e7121dddc8d622185">IS_BOSONIC</a>[0]</td></tr>
+<tr class="separator:a44023f7629988c2e4d131f5c986632e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5a539c46f852173310b2aec113eb4c9"><td class="memItemLeft" align="right" valign="top">static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#af5a539c46f852173310b2aec113eb4c9">ANY_IS_SPIN</a> = <a class="el" href="structXped_1_1Sym_1_1ZN.html#a55d2d84279ca291c3918bad668bfc64c">IS_SPIN</a>[0]</td></tr>
+<tr class="separator:af5a539c46f852173310b2aec113eb4c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b5e7243d206e729f47dca7288030290"><td class="memItemLeft" align="right" valign="top">static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#a0b5e7243d206e729f47dca7288030290">ALL_HAS_MULTIPLICITIES</a> = <a class="el" href="structXped_1_1Sym_1_1ZN.html#af754652ed9f13cfdccdff625aef737e9">HAS_MULTIPLICITIES</a>[0]</td></tr>
+<tr class="separator:a0b5e7243d206e729f47dca7288030290"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a06ff70219724eb1c7aa998f50fbcbe25"><td class="memItemLeft" align="right" valign="top">static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#a06ff70219724eb1c7aa998f50fbcbe25">ALL_NON_ABELIAN</a> = <a class="el" href="structXped_1_1Sym_1_1ZN.html#aedba42303ec4ecd6fe0d527f45312ae6">NON_ABELIAN</a>[0]</td></tr>
+<tr class="separator:a06ff70219724eb1c7aa998f50fbcbe25"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa0242a8b3035e6a75f0caeb553282e3d"><td class="memItemLeft" align="right" valign="top">static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#aa0242a8b3035e6a75f0caeb553282e3d">ALL_ABELIAN</a> = <a class="el" href="structXped_1_1Sym_1_1ZN.html#a39d0c5e97a45a2ccace63227a76d5b60">ABELIAN</a>[0]</td></tr>
+<tr class="separator:aa0242a8b3035e6a75f0caeb553282e3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af810b3b0a5067c31e53194877fab345b"><td class="memItemLeft" align="right" valign="top">static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#af810b3b0a5067c31e53194877fab345b">ALL_IS_TRIVIAL</a> = <a class="el" href="structXped_1_1Sym_1_1ZN.html#a6271c8b6e322876b6f93ed91472be0bd">IS_TRIVIAL</a>[0]</td></tr>
+<tr class="separator:af810b3b0a5067c31e53194877fab345b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a58ba01d95491b70e731a8e82798de335"><td class="memItemLeft" align="right" valign="top">static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#a58ba01d95491b70e731a8e82798de335">ALL_IS_MODULAR</a> = <a class="el" href="structXped_1_1Sym_1_1ZN.html#a98a4d1bd3a22163be6623ebc7e650f2b">IS_MODULAR</a>[0]</td></tr>
+<tr class="separator:a58ba01d95491b70e731a8e82798de335"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aab0e4300376ef41807d1396ac5fd817d"><td class="memItemLeft" align="right" valign="top">static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#aab0e4300376ef41807d1396ac5fd817d">ALL_IS_FERMIONIC</a> = <a class="el" href="structXped_1_1Sym_1_1ZN.html#a7994226a6f6a09106872d5107ae5c178">IS_FERMIONIC</a>[0]</td></tr>
+<tr class="separator:aab0e4300376ef41807d1396ac5fd817d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acaf292fd1dac6d65e615c3e02b038737"><td class="memItemLeft" align="right" valign="top">static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#acaf292fd1dac6d65e615c3e02b038737">ALL_IS_BOSONIC</a> = <a class="el" href="structXped_1_1Sym_1_1ZN.html#aefbc9e134b2e390e7121dddc8d622185">IS_BOSONIC</a>[0]</td></tr>
+<tr class="separator:acaf292fd1dac6d65e615c3e02b038737"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b861242fa341eb4bc63ae4e169912d6"><td class="memItemLeft" align="right" valign="top">static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1Sym_1_1ZN.html#a9b861242fa341eb4bc63ae4e169912d6">ALL_IS_SPIN</a> = <a class="el" href="structXped_1_1Sym_1_1ZN.html#a55d2d84279ca291c3918bad668bfc64c">IS_SPIN</a>[0]</td></tr>
+<tr class="separator:a9b861242fa341eb4bc63ae4e169912d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><div class="compoundTemplParams">template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, std::size_t N, typename Scalar_ = double&gt;<br />
+class Xped::Sym::ZN&lt; Kind, N, Scalar_ &gt;</div><p>Class for handling a Z(N) symmetry of a Hamiltonian.</p>
+<p>\describe_Scalar </p>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="a25de9a7e49db73220683f8822d1adf4d" name="a25de9a7e49db73220683f8822d1adf4d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a25de9a7e49db73220683f8822d1adf4d">&#9670;&#160;</a></span>qType</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="structXped_1_1qarray.html">qarray</a>&lt;<a class="el" href="structXped_1_1Sym_1_1ZN.html#a20694c2d90da7e9f5040e291b5fe9ad5">Nq</a>&gt; <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::qType</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1d530fa5d6d7f51dc2aa99d2af99bf33" name="a1d530fa5d6d7f51dc2aa99d2af99bf33"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d530fa5d6d7f51dc2aa99d2af99bf33">&#9670;&#160;</a></span>Scalar</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef Scalar_ <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::Scalar</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a41ed810e4554bc89d591f1103ce87a3b" name="a41ed810e4554bc89d591f1103ce87a3b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a41ed810e4554bc89d591f1103ce87a3b">&#9670;&#160;</a></span>ZN()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::ZN </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="ac28a86aab3999dac57b949e21e5e92a5" name="ac28a86aab3999dac57b949e21e5e92a5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac28a86aab3999dac57b949e21e5e92a5">&#9670;&#160;</a></span>basis_combine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; typename <a class="el" href="structXped_1_1Sym_1_1ZN.html">ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;<a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">::qType</a> &gt; <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::basis_combine </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;&#160;</td>
+          <td class="paramname"><em>ql</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;&#160;</td>
+          <td class="paramname"><em>qr</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Calculate the irreps of the tensor product of <code>ql</code> and <code>qr</code>. </p>
+
+</div>
+</div>
+<a id="ac5da3332f6941b330ff1af71b98794e5" name="ac5da3332f6941b330ff1af71b98794e5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac5da3332f6941b330ff1af71b98794e5">&#9670;&#160;</a></span>CGC()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_ &gt; </div>
+<div class="memtemplate">
+template&lt;typename PlainLib &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">PlainLib::template <a class="el" href="namespaceXped.html#a09b355b0ba27f6524a73e29a74cf0096">TType</a>&lt; Scalar_, 3 &gt; <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::CGC </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;&#160;</td>
+          <td class="paramname"><em>q1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;&#160;</td>
+          <td class="paramname"><em>q2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;&#160;</td>
+          <td class="paramname"><em>q3</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::size_t&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1mpi_1_1XpedWorld.html">mpi::XpedWorld</a> &amp;&#160;</td>
+          <td class="paramname"><em>world</em> = <code><a class="el" href="namespaceXped_1_1mpi.html#a92c3bbdeab79e718b7d013a16ee5a0c9">mpi::getUniverse</a>()</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9ffeac8d6676a2f7eebea8e164cae651" name="a9ffeac8d6676a2f7eebea8e164cae651"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ffeac8d6676a2f7eebea8e164cae651">&#9670;&#160;</a></span>coeff_3j()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="structXped_1_1Sym_1_1ZN.html#a1d530fa5d6d7f51dc2aa99d2af99bf33">Scalar</a> <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::coeff_3j </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;&#160;</td>
+          <td class="paramname"><em>q1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;&#160;</td>
+          <td class="paramname"><em>q2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;&#160;</td>
+          <td class="paramname"><em>q3</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1Sym_1_1ZN_a9ffeac8d6676a2f7eebea8e164cae651_cgraph.png" border="0" usemap="#astructXped_1_1Sym_1_1ZN_a9ffeac8d6676a2f7eebea8e164cae651_cgraph" alt=""/></div>
+<map name="astructXped_1_1Sym_1_1ZN_a9ffeac8d6676a2f7eebea8e164cae651_cgraph" id="astructXped_1_1Sym_1_1ZN_a9ffeac8d6676a2f7eebea8e164cae651_cgraph">
+<area shape="rect" title=" " alt="" coords="5,31,184,56"/>
+<area shape="rect" href="structXped_1_1Sym_1_1ZN.html#a4b33e500736d4b6a2984befcf63431e8" title=" " alt="" coords="243,5,398,31"/>
+<area shape="rect" href="structXped_1_1Sym_1_1ZN.html#a3ddcc423e7d87f20e14d6f1563bc3841" title=" " alt="" coords="232,55,409,80"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="af66009065ece057a4407134a78444944" name="af66009065ece057a4407134a78444944"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af66009065ece057a4407134a78444944">&#9670;&#160;</a></span>coeff_6j()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Scalar_ <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::coeff_6j </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;&#160;</td>
+          <td class="paramname"><em>q1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;&#160;</td>
+          <td class="paramname"><em>q2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;&#160;</td>
+          <td class="paramname"><em>q3</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;&#160;</td>
+          <td class="paramname"><em>q4</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;&#160;</td>
+          <td class="paramname"><em>q5</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;&#160;</td>
+          <td class="paramname"><em>q6</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1Sym_1_1ZN_af66009065ece057a4407134a78444944_icgraph.png" border="0" usemap="#astructXped_1_1Sym_1_1ZN_af66009065ece057a4407134a78444944_icgraph" alt=""/></div>
+<map name="astructXped_1_1Sym_1_1ZN_af66009065ece057a4407134a78444944_icgraph" id="astructXped_1_1Sym_1_1ZN_af66009065ece057a4407134a78444944_icgraph">
+<area shape="rect" title=" " alt="" coords="212,13,391,38"/>
+<area shape="rect" href="structXped_1_1Sym_1_1ZN.html#a9760540169679cf3124e4a2433cb1b76" title=" " alt="" coords="5,5,164,45"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ab4b2e28294ee37cab6e29a75dc5cb9ec" name="ab4b2e28294ee37cab6e29a75dc5cb9ec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab4b2e28294ee37cab6e29a75dc5cb9ec">&#9670;&#160;</a></span>coeff_9j()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="structXped_1_1Sym_1_1ZN.html#a1d530fa5d6d7f51dc2aa99d2af99bf33">Scalar</a> <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::coeff_9j </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6032a263bdaa5865bf7ef715d83efd3e" name="a6032a263bdaa5865bf7ef715d83efd3e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6032a263bdaa5865bf7ef715d83efd3e">&#9670;&#160;</a></span>coeff_dot()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="structXped_1_1Sym_1_1ZN.html#a1d530fa5d6d7f51dc2aa99d2af99bf33">Scalar</a> <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::coeff_dot </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Various coeffecients, all resulting from contractions or traces of the Clebsch-Gordon coefficients. </p><dl class="section note"><dt>Note</dt><dd>All coefficients are trivial for U(1) and could be represented by a bunch of Kronecker deltas. Here we return simply 1, because the algorithm only allows valid combinations of quantumnumbers, for which the Kronecker deltas are not necessary. </dd></dl>
+
+</div>
+</div>
+<a id="a217e9672568a908ed95f2706ae9e5597" name="a217e9672568a908ed95f2706ae9e5597"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a217e9672568a908ed95f2706ae9e5597">&#9670;&#160;</a></span>coeff_FS()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="structXped_1_1Sym_1_1ZN.html#a1d530fa5d6d7f51dc2aa99d2af99bf33">Scalar</a> <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::coeff_FS </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9760540169679cf3124e4a2433cb1b76" name="a9760540169679cf3124e4a2433cb1b76"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9760540169679cf3124e4a2433cb1b76">&#9670;&#160;</a></span>coeff_recouple()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="structXped_1_1Sym_1_1ZN.html#a1d530fa5d6d7f51dc2aa99d2af99bf33">Scalar</a> <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::coeff_recouple </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;&#160;</td>
+          <td class="paramname"><em>q1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;&#160;</td>
+          <td class="paramname"><em>q2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;&#160;</td>
+          <td class="paramname"><em>q3</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;&#160;</td>
+          <td class="paramname"><em>Q</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;&#160;</td>
+          <td class="paramname"><em>Q12</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;&#160;</td>
+          <td class="paramname"><em>Q23</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1Sym_1_1ZN_a9760540169679cf3124e4a2433cb1b76_cgraph.png" border="0" usemap="#astructXped_1_1Sym_1_1ZN_a9760540169679cf3124e4a2433cb1b76_cgraph" alt=""/></div>
+<map name="astructXped_1_1Sym_1_1ZN_a9760540169679cf3124e4a2433cb1b76_cgraph" id="astructXped_1_1Sym_1_1ZN_a9760540169679cf3124e4a2433cb1b76_cgraph">
+<area shape="rect" title=" " alt="" coords="5,5,164,45"/>
+<area shape="rect" href="structXped_1_1Sym_1_1ZN.html#af66009065ece057a4407134a78444944" title=" " alt="" coords="212,13,391,38"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a5b446efc919c8d05c150aee26992c75b" name="a5b446efc919c8d05c150aee26992c75b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5b446efc919c8d05c150aee26992c75b">&#9670;&#160;</a></span>coeff_rightOrtho()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="structXped_1_1Sym_1_1ZN.html#a1d530fa5d6d7f51dc2aa99d2af99bf33">Scalar</a> <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::coeff_rightOrtho </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1a20a1274cd9439f84b46ea4763ba118" name="a1a20a1274cd9439f84b46ea4763ba118"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a20a1274cd9439f84b46ea4763ba118">&#9670;&#160;</a></span>coeff_swap()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="structXped_1_1Sym_1_1ZN.html#a1d530fa5d6d7f51dc2aa99d2af99bf33">Scalar</a> <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::coeff_swap </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;&#160;</td>
+          <td class="paramname"><em>ql</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;&#160;</td>
+          <td class="paramname"><em>qr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;&#160;</td>
+          <td class="paramname"><em>qf</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1Sym_1_1ZN_a1a20a1274cd9439f84b46ea4763ba118_cgraph.png" border="0" usemap="#astructXped_1_1Sym_1_1ZN_a1a20a1274cd9439f84b46ea4763ba118_cgraph" alt=""/></div>
+<map name="astructXped_1_1Sym_1_1ZN_a1a20a1274cd9439f84b46ea4763ba118_cgraph" id="astructXped_1_1Sym_1_1ZN_a1a20a1274cd9439f84b46ea4763ba118_cgraph">
+<area shape="rect" title=" " alt="" coords="5,5,205,31"/>
+<area shape="rect" href="structXped_1_1Sym_1_1ZN.html#a3ddcc423e7d87f20e14d6f1563bc3841" title=" " alt="" coords="253,5,431,31"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a7e9c64c13ff786e62c60421167534556" name="a7e9c64c13ff786e62c60421167534556"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7e9c64c13ff786e62c60421167534556">&#9670;&#160;</a></span>coeff_turn()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="structXped_1_1Sym_1_1ZN.html#a1d530fa5d6d7f51dc2aa99d2af99bf33">Scalar</a> <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::coeff_turn </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;&#160;</td>
+          <td class="paramname"><em>ql</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;&#160;</td>
+          <td class="paramname"><em>qr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;&#160;</td>
+          <td class="paramname"><em>qf</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1Sym_1_1ZN_a7e9c64c13ff786e62c60421167534556_cgraph.png" border="0" usemap="#astructXped_1_1Sym_1_1ZN_a7e9c64c13ff786e62c60421167534556_cgraph" alt=""/></div>
+<map name="astructXped_1_1Sym_1_1ZN_a7e9c64c13ff786e62c60421167534556_cgraph" id="astructXped_1_1Sym_1_1ZN_a7e9c64c13ff786e62c60421167534556_cgraph">
+<area shape="rect" title=" " alt="" coords="5,5,197,31"/>
+<area shape="rect" href="structXped_1_1Sym_1_1ZN.html#a3ddcc423e7d87f20e14d6f1563bc3841" title=" " alt="" coords="245,5,423,31"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="aa065b2e1d435e643f411245a366e3f5b" name="aa065b2e1d435e643f411245a366e3f5b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa065b2e1d435e643f411245a366e3f5b">&#9670;&#160;</a></span>coeff_twist()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="structXped_1_1Sym_1_1ZN.html#a1d530fa5d6d7f51dc2aa99d2af99bf33">Scalar</a> <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::coeff_twist </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;&#160;</td>
+          <td class="paramname"><em>q</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4b33e500736d4b6a2984befcf63431e8" name="a4b33e500736d4b6a2984befcf63431e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b33e500736d4b6a2984befcf63431e8">&#9670;&#160;</a></span>conj()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::conj </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;&#160;</td>
+          <td class="paramname"><em>q</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1Sym_1_1ZN_a4b33e500736d4b6a2984befcf63431e8_icgraph.png" border="0" usemap="#astructXped_1_1Sym_1_1ZN_a4b33e500736d4b6a2984befcf63431e8_icgraph" alt=""/></div>
+<map name="astructXped_1_1Sym_1_1ZN_a4b33e500736d4b6a2984befcf63431e8_icgraph" id="astructXped_1_1Sym_1_1ZN_a4b33e500736d4b6a2984befcf63431e8_icgraph">
+<area shape="rect" title=" " alt="" coords="232,5,387,31"/>
+<area shape="rect" href="structXped_1_1Sym_1_1ZN.html#a9ffeac8d6676a2f7eebea8e164cae651" title=" " alt="" coords="5,5,184,31"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="acc51788418cf94e00f2557356dec7c40" name="acc51788418cf94e00f2557356dec7c40"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc51788418cf94e00f2557356dec7c40">&#9670;&#160;</a></span>degeneracy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::degeneracy </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad570767f7e895af4f29343c44cb74079" name="ad570767f7e895af4f29343c44cb74079"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad570767f7e895af4f29343c44cb74079">&#9670;&#160;</a></span>IS_CHARGE_SU2()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static constexpr bool <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::IS_CHARGE_SU2 </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac0961b2f66388678473f9a107b87c620" name="ac0961b2f66388678473f9a107b87c620"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac0961b2f66388678473f9a107b87c620">&#9670;&#160;</a></span>IS_SPIN_SU2()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static constexpr bool <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::IS_SPIN_SU2 </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a029e5aa54c31ce72aaf89cf8c3da9e3f" name="a029e5aa54c31ce72aaf89cf8c3da9e3f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a029e5aa54c31ce72aaf89cf8c3da9e3f">&#9670;&#160;</a></span>IS_SPIN_U1()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static constexpr bool <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::IS_SPIN_U1 </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3bdea3496ff540be9a32cdf02cdf037d" name="a3bdea3496ff540be9a32cdf02cdf037d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3bdea3496ff540be9a32cdf02cdf037d">&#9670;&#160;</a></span>kind()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static constexpr std::array&lt; <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84ab">KIND</a>, <a class="el" href="structXped_1_1Sym_1_1ZN.html#a20694c2d90da7e9f5040e291b5fe9ad5">Nq</a> &gt; <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::kind </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0a0296234c0f003756dbc064253fd261" name="a0a0296234c0f003756dbc064253fd261"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0a0296234c0f003756dbc064253fd261">&#9670;&#160;</a></span>lowest_qs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static constexpr auto <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::lowest_qs </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2f7887797c3123dc42be796d0d141d34" name="a2f7887797c3123dc42be796d0d141d34"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2f7887797c3123dc42be796d0d141d34">&#9670;&#160;</a></span>multiplicity()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::size_t <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::multiplicity </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;&#160;</td>
+          <td class="paramname"><em>q1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;&#160;</td>
+          <td class="paramname"><em>q2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;&#160;</td>
+          <td class="paramname"><em>q3</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1Sym_1_1ZN_a2f7887797c3123dc42be796d0d141d34_cgraph.png" border="0" usemap="#astructXped_1_1Sym_1_1ZN_a2f7887797c3123dc42be796d0d141d34_cgraph" alt=""/></div>
+<map name="astructXped_1_1Sym_1_1ZN_a2f7887797c3123dc42be796d0d141d34_cgraph" id="astructXped_1_1Sym_1_1ZN_a2f7887797c3123dc42be796d0d141d34_cgraph">
+<area shape="rect" title=" " alt="" coords="5,5,207,31"/>
+<area shape="rect" href="structXped_1_1Sym_1_1ZN.html#a3ddcc423e7d87f20e14d6f1563bc3841" title=" " alt="" coords="255,5,432,31"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a1ced7a277a60fe802d8e64c679bb3c6b" name="a1ced7a277a60fe802d8e64c679bb3c6b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1ced7a277a60fe802d8e64c679bb3c6b">&#9670;&#160;</a></span>name()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::string <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::name </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5cf4c3f83d70aa43ad07645bef137b8e" name="a5cf4c3f83d70aa43ad07645bef137b8e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5cf4c3f83d70aa43ad07645bef137b8e">&#9670;&#160;</a></span>NO_CHARGE_SYM()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static constexpr bool <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::NO_CHARGE_SYM </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aad0711d89357f1d2f0b656bc7f4bb886" name="aad0711d89357f1d2f0b656bc7f4bb886"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad0711d89357f1d2f0b656bc7f4bb886">&#9670;&#160;</a></span>NO_SPIN_SYM()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static constexpr bool <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::NO_SPIN_SYM </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a51e417788ab681046c9320acd757b5a7" name="a51e417788ab681046c9320acd757b5a7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a51e417788ab681046c9320acd757b5a7">&#9670;&#160;</a></span>one_j_tensor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+<div class="memtemplate">
+template&lt;typename PlainLib &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static PlainLib::template <a class="el" href="namespaceXped.html#a09b355b0ba27f6524a73e29a74cf0096">TType</a>&lt; Scalar_, 2 &gt; <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::one_j_tensor </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1mpi_1_1XpedWorld.html">mpi::XpedWorld</a> &amp;&#160;</td>
+          <td class="paramname"><em>world</em> = <code><a class="el" href="namespaceXped_1_1mpi.html#a92c3bbdeab79e718b7d013a16ee5a0c9">mpi::getUniverse</a>()</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7d7e2e7b0106a6f51d2fc3334d537dc6" name="a7d7e2e7b0106a6f51d2fc3334d537dc6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d7e2e7b0106a6f51d2fc3334d537dc6">&#9670;&#160;</a></span>qvacuum()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static constexpr <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::qvacuum </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a56b9985675e920ae2419a0021a208b19" name="a56b9985675e920ae2419a0021a208b19"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a56b9985675e920ae2419a0021a208b19">&#9670;&#160;</a></span>random_q()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::random_q </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1Sym_1_1ZN_a56b9985675e920ae2419a0021a208b19_cgraph.png" border="0" usemap="#astructXped_1_1Sym_1_1ZN_a56b9985675e920ae2419a0021a208b19_cgraph" alt=""/></div>
+<map name="astructXped_1_1Sym_1_1ZN_a56b9985675e920ae2419a0021a208b19_cgraph" id="astructXped_1_1Sym_1_1ZN_a56b9985675e920ae2419a0021a208b19_cgraph">
+<area shape="rect" title=" " alt="" coords="5,13,197,38"/>
+<area shape="rect" href="namespaceXped_1_1random.html#abd334d5ad9535aed7840a87fef29e0fa" title=" " alt="" coords="245,5,437,45"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a3ddcc423e7d87f20e14d6f1563bc3841" name="a3ddcc423e7d87f20e14d6f1563bc3841"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3ddcc423e7d87f20e14d6f1563bc3841">&#9670;&#160;</a></span>triangle()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::triangle </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;&#160;</td>
+          <td class="paramname"><em>q1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;&#160;</td>
+          <td class="paramname"><em>q2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Sym_1_1ZN.html#a25de9a7e49db73220683f8822d1adf4d">qType</a> &amp;&#160;</td>
+          <td class="paramname"><em>q3</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1Sym_1_1ZN_a3ddcc423e7d87f20e14d6f1563bc3841_icgraph.png" border="0" usemap="#astructXped_1_1Sym_1_1ZN_a3ddcc423e7d87f20e14d6f1563bc3841_icgraph" alt=""/></div>
+<map name="astructXped_1_1Sym_1_1ZN_a3ddcc423e7d87f20e14d6f1563bc3841_icgraph" id="astructXped_1_1Sym_1_1ZN_a3ddcc423e7d87f20e14d6f1563bc3841_icgraph">
+<area shape="rect" title=" " alt="" coords="255,80,432,105"/>
+<area shape="rect" href="structXped_1_1Sym_1_1ZN.html#a9ffeac8d6676a2f7eebea8e164cae651" title=" " alt="" coords="17,5,195,31"/>
+<area shape="rect" href="structXped_1_1Sym_1_1ZN.html#a1a20a1274cd9439f84b46ea4763ba118" title=" " alt="" coords="6,55,206,80"/>
+<area shape="rect" href="structXped_1_1Sym_1_1ZN.html#a7e9c64c13ff786e62c60421167534556" title=" " alt="" coords="10,104,202,129"/>
+<area shape="rect" href="structXped_1_1Sym_1_1ZN.html#a2f7887797c3123dc42be796d0d141d34" title=" " alt="" coords="5,153,207,179"/>
+</map>
+</div>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a39d0c5e97a45a2ccace63227a76d5b60" name="a39d0c5e97a45a2ccace63227a76d5b60"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a39d0c5e97a45a2ccace63227a76d5b60">&#9670;&#160;</a></span>ABELIAN</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr std::array&lt;bool, <a class="el" href="structXped_1_1Sym_1_1ZN.html#a20694c2d90da7e9f5040e291b5fe9ad5">Nq</a>&gt; <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::ABELIAN = {true}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa0242a8b3035e6a75f0caeb553282e3d" name="aa0242a8b3035e6a75f0caeb553282e3d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa0242a8b3035e6a75f0caeb553282e3d">&#9670;&#160;</a></span>ALL_ABELIAN</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::ALL_ABELIAN = <a class="el" href="structXped_1_1Sym_1_1ZN.html#a39d0c5e97a45a2ccace63227a76d5b60">ABELIAN</a>[0]</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0b5e7243d206e729f47dca7288030290" name="a0b5e7243d206e729f47dca7288030290"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b5e7243d206e729f47dca7288030290">&#9670;&#160;</a></span>ALL_HAS_MULTIPLICITIES</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::ALL_HAS_MULTIPLICITIES = <a class="el" href="structXped_1_1Sym_1_1ZN.html#af754652ed9f13cfdccdff625aef737e9">HAS_MULTIPLICITIES</a>[0]</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="acaf292fd1dac6d65e615c3e02b038737" name="acaf292fd1dac6d65e615c3e02b038737"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acaf292fd1dac6d65e615c3e02b038737">&#9670;&#160;</a></span>ALL_IS_BOSONIC</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::ALL_IS_BOSONIC = <a class="el" href="structXped_1_1Sym_1_1ZN.html#aefbc9e134b2e390e7121dddc8d622185">IS_BOSONIC</a>[0]</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aab0e4300376ef41807d1396ac5fd817d" name="aab0e4300376ef41807d1396ac5fd817d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aab0e4300376ef41807d1396ac5fd817d">&#9670;&#160;</a></span>ALL_IS_FERMIONIC</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::ALL_IS_FERMIONIC = <a class="el" href="structXped_1_1Sym_1_1ZN.html#a7994226a6f6a09106872d5107ae5c178">IS_FERMIONIC</a>[0]</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a58ba01d95491b70e731a8e82798de335" name="a58ba01d95491b70e731a8e82798de335"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a58ba01d95491b70e731a8e82798de335">&#9670;&#160;</a></span>ALL_IS_MODULAR</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::ALL_IS_MODULAR = <a class="el" href="structXped_1_1Sym_1_1ZN.html#a98a4d1bd3a22163be6623ebc7e650f2b">IS_MODULAR</a>[0]</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9b861242fa341eb4bc63ae4e169912d6" name="a9b861242fa341eb4bc63ae4e169912d6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9b861242fa341eb4bc63ae4e169912d6">&#9670;&#160;</a></span>ALL_IS_SPIN</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::ALL_IS_SPIN = <a class="el" href="structXped_1_1Sym_1_1ZN.html#a55d2d84279ca291c3918bad668bfc64c">IS_SPIN</a>[0]</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af810b3b0a5067c31e53194877fab345b" name="af810b3b0a5067c31e53194877fab345b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af810b3b0a5067c31e53194877fab345b">&#9670;&#160;</a></span>ALL_IS_TRIVIAL</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::ALL_IS_TRIVIAL = <a class="el" href="structXped_1_1Sym_1_1ZN.html#a6271c8b6e322876b6f93ed91472be0bd">IS_TRIVIAL</a>[0]</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a06ff70219724eb1c7aa998f50fbcbe25" name="a06ff70219724eb1c7aa998f50fbcbe25"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a06ff70219724eb1c7aa998f50fbcbe25">&#9670;&#160;</a></span>ALL_NON_ABELIAN</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::ALL_NON_ABELIAN = <a class="el" href="structXped_1_1Sym_1_1ZN.html#aedba42303ec4ecd6fe0d527f45312ae6">NON_ABELIAN</a>[0]</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9f798b122e6a691230881bc5ce90e07f" name="a9f798b122e6a691230881bc5ce90e07f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9f798b122e6a691230881bc5ce90e07f">&#9670;&#160;</a></span>ANY_ABELIAN</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::ANY_ABELIAN = <a class="el" href="structXped_1_1Sym_1_1ZN.html#a39d0c5e97a45a2ccace63227a76d5b60">ABELIAN</a>[0]</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4ea4bb5356c16f3d487ee34c4b95aaeb" name="a4ea4bb5356c16f3d487ee34c4b95aaeb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4ea4bb5356c16f3d487ee34c4b95aaeb">&#9670;&#160;</a></span>ANY_HAS_MULTIPLICITIES</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::ANY_HAS_MULTIPLICITIES = <a class="el" href="structXped_1_1Sym_1_1ZN.html#af754652ed9f13cfdccdff625aef737e9">HAS_MULTIPLICITIES</a>[0]</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a44023f7629988c2e4d131f5c986632e9" name="a44023f7629988c2e4d131f5c986632e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a44023f7629988c2e4d131f5c986632e9">&#9670;&#160;</a></span>ANY_IS_BOSONIC</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::ANY_IS_BOSONIC = <a class="el" href="structXped_1_1Sym_1_1ZN.html#aefbc9e134b2e390e7121dddc8d622185">IS_BOSONIC</a>[0]</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a82d3010e04b448ccc02008490090930c" name="a82d3010e04b448ccc02008490090930c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a82d3010e04b448ccc02008490090930c">&#9670;&#160;</a></span>ANY_IS_FERMIONIC</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::ANY_IS_FERMIONIC = <a class="el" href="structXped_1_1Sym_1_1ZN.html#a7994226a6f6a09106872d5107ae5c178">IS_FERMIONIC</a>[0]</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab5b4e5f575472ba28023d2d3634cfac7" name="ab5b4e5f575472ba28023d2d3634cfac7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab5b4e5f575472ba28023d2d3634cfac7">&#9670;&#160;</a></span>ANY_IS_MODULAR</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::ANY_IS_MODULAR = <a class="el" href="structXped_1_1Sym_1_1ZN.html#a98a4d1bd3a22163be6623ebc7e650f2b">IS_MODULAR</a>[0]</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af5a539c46f852173310b2aec113eb4c9" name="af5a539c46f852173310b2aec113eb4c9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af5a539c46f852173310b2aec113eb4c9">&#9670;&#160;</a></span>ANY_IS_SPIN</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::ANY_IS_SPIN = <a class="el" href="structXped_1_1Sym_1_1ZN.html#a55d2d84279ca291c3918bad668bfc64c">IS_SPIN</a>[0]</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a96166b08974d8ab0b6b27fdb43ac62e0" name="a96166b08974d8ab0b6b27fdb43ac62e0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a96166b08974d8ab0b6b27fdb43ac62e0">&#9670;&#160;</a></span>ANY_IS_TRIVIAL</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::ANY_IS_TRIVIAL = <a class="el" href="structXped_1_1Sym_1_1ZN.html#a6271c8b6e322876b6f93ed91472be0bd">IS_TRIVIAL</a>[0]</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a244eb770ffb73207211ce97b15e266ba" name="a244eb770ffb73207211ce97b15e266ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a244eb770ffb73207211ce97b15e266ba">&#9670;&#160;</a></span>ANY_NON_ABELIAN</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::ANY_NON_ABELIAN = <a class="el" href="structXped_1_1Sym_1_1ZN.html#aedba42303ec4ecd6fe0d527f45312ae6">NON_ABELIAN</a>[0]</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af754652ed9f13cfdccdff625aef737e9" name="af754652ed9f13cfdccdff625aef737e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af754652ed9f13cfdccdff625aef737e9">&#9670;&#160;</a></span>HAS_MULTIPLICITIES</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr std::array&lt;bool, <a class="el" href="structXped_1_1Sym_1_1ZN.html#a20694c2d90da7e9f5040e291b5fe9ad5">Nq</a>&gt; <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::HAS_MULTIPLICITIES = {false}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aefbc9e134b2e390e7121dddc8d622185" name="aefbc9e134b2e390e7121dddc8d622185"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aefbc9e134b2e390e7121dddc8d622185">&#9670;&#160;</a></span>IS_BOSONIC</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr std::array&lt;bool, <a class="el" href="structXped_1_1Sym_1_1ZN.html#a20694c2d90da7e9f5040e291b5fe9ad5">Nq</a>&gt; <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::IS_BOSONIC = {(Kind::name == <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">KIND::N</a>)}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7994226a6f6a09106872d5107ae5c178" name="a7994226a6f6a09106872d5107ae5c178"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7994226a6f6a09106872d5107ae5c178">&#9670;&#160;</a></span>IS_FERMIONIC</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr std::array&lt;bool, <a class="el" href="structXped_1_1Sym_1_1ZN.html#a20694c2d90da7e9f5040e291b5fe9ad5">Nq</a>&gt; <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::IS_FERMIONIC = {(Kind::name == <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84aba2149ee1e05891f54a563184b03039b2c">KIND::FN</a>)}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a98a4d1bd3a22163be6623ebc7e650f2b" name="a98a4d1bd3a22163be6623ebc7e650f2b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a98a4d1bd3a22163be6623ebc7e650f2b">&#9670;&#160;</a></span>IS_MODULAR</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr std::array&lt;bool, <a class="el" href="structXped_1_1Sym_1_1ZN.html#a20694c2d90da7e9f5040e291b5fe9ad5">Nq</a>&gt; <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::IS_MODULAR = {true}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a55d2d84279ca291c3918bad668bfc64c" name="a55d2d84279ca291c3918bad668bfc64c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a55d2d84279ca291c3918bad668bfc64c">&#9670;&#160;</a></span>IS_SPIN</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr std::array&lt;bool, <a class="el" href="structXped_1_1Sym_1_1ZN.html#a20694c2d90da7e9f5040e291b5fe9ad5">Nq</a>&gt; <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::IS_SPIN = {(Kind::name == <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84aba446e45ea94e737ea4c9d919275d1dcbe">KIND::M</a>)}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6271c8b6e322876b6f93ed91472be0bd" name="a6271c8b6e322876b6f93ed91472be0bd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6271c8b6e322876b6f93ed91472be0bd">&#9670;&#160;</a></span>IS_TRIVIAL</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr std::array&lt;bool, <a class="el" href="structXped_1_1Sym_1_1ZN.html#a20694c2d90da7e9f5040e291b5fe9ad5">Nq</a>&gt; <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::IS_TRIVIAL = {false}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a64790f8ed14376b8b5d15671cdbc131c" name="a64790f8ed14376b8b5d15671cdbc131c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a64790f8ed14376b8b5d15671cdbc131c">&#9670;&#160;</a></span>MOD_N</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr std::array&lt;int, <a class="el" href="structXped_1_1Sym_1_1ZN.html#a20694c2d90da7e9f5040e291b5fe9ad5">Nq</a>&gt; <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::MOD_N = {<a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aedba42303ec4ecd6fe0d527f45312ae6" name="aedba42303ec4ecd6fe0d527f45312ae6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aedba42303ec4ecd6fe0d527f45312ae6">&#9670;&#160;</a></span>NON_ABELIAN</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr std::array&lt;bool, <a class="el" href="structXped_1_1Sym_1_1ZN.html#a20694c2d90da7e9f5040e291b5fe9ad5">Nq</a>&gt; <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::NON_ABELIAN = {false}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a20694c2d90da7e9f5040e291b5fe9ad5" name="a20694c2d90da7e9f5040e291b5fe9ad5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a20694c2d90da7e9f5040e291b5fe9ad5">&#9670;&#160;</a></span>Nq</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a> , std::size_t N, typename Scalar_  = double&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr size_t <a class="el" href="structXped_1_1Sym_1_1ZN.html">Xped::Sym::ZN</a>&lt; <a class="el" href="namespaceXped.html#a6f053cb8ab1a1f82ecd1e8bd8fd4607b">Kind</a>, <a class="el" href="namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84abaad42310f5656662ac804cb2535d1ad3a">N</a>, Scalar_ &gt;::Nq = 1</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>include/Xped/Symmetry/<a class="el" href="ZN_8hpp_source.html">ZN.hpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- HTML footer for doxygen 1.9.2-->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="namespaceXped.html">Xped</a></li><li class="navelem"><a class="el" href="namespaceXped_1_1Sym.html">Sym</a></li><li class="navelem"><a class="el" href="structXped_1_1Sym_1_1ZN.html">ZN</a></li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.6 </li>
+  </ul>
+</div>
+<script type="text/javascript">
+  // script for doxygen 1.9.2
+  $(function() {
+      toggleButton = document.createElement('doxygen-awesome-dark-mode-toggle')
+      toggleButton.title = "Toggle Light/Dark Mode"
+      $(document).ready(function(){
+          document.getElementById("MSearchBox").parentNode.appendChild(toggleButton)
+      })
+      $(window).resize(function(){
+          document.getElementById("MSearchBox").parentNode.appendChild(toggleButton)
+      })
+  })
+</script>
+</body>
+</html>

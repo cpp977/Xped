@@ -1,0 +1,1336 @@
+<!-- HTML header for doxygen 1.9.6-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.6"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Xped: Xped::SpinBase&lt; Symmetry_, order &gt; Class Template Reference</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+});
+</script>
+<script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript">
+  DoxygenAwesomeDarkModeToggle.lightModeIcon = '🌞'
+// icon from https://fonts.google.com/icons
+  DoxygenAwesomeDarkModeToggle.darkModeIcon = `<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px" viewBox="0 0 24 24" width="24px" fill="#009793"><g><rect fill="none" height="24" width="24"/></g><g><g><path d="M8.1,14.15C9.77,14.63,11,16.17,11,18c0,0.68-0.19,1.31-0.48,1.87c0.48,0.09,0.97,0.14,1.48,0.14 c1.48,0,2.9-0.41,4.13-1.15c-2.62-0.92-5.23-2.82-6.8-5.86C7.74,9.94,7.78,7.09,8.29,4.9c-2.57,1.33-4.3,4.01-4.3,7.1c0,0,0,0,0,0 c0.01,0,0.01,0,0.02,0C5.66,12,7.18,12.83,8.1,14.15z" opacity=".3"/><path d="M19.78,17.51c-2.47,0-6.57-1.33-8.68-5.43C8.77,7.57,10.6,3.6,11.63,2.01C6.27,2.2,1.98,6.59,1.98,12 c0,0.14,0.02,0.28,0.02,0.42C2.61,12.16,3.28,12,3.98,12c0,0,0,0,0,0c0-3.09,1.73-5.77,4.3-7.1C7.78,7.09,7.74,9.94,9.32,13 c1.57,3.04,4.18,4.95,6.8,5.86c-1.23,0.74-2.65,1.15-4.13,1.15c-0.5,0-1-0.05-1.48-0.14c-0.37,0.7-0.94,1.27-1.64,1.64 c0.98,0.32,2.03,0.5,3.11,0.5c3.5,0,6.58-1.8,8.37-4.52C20.18,17.5,19.98,17.51,19.78,17.51z"/><path d="M7,16l-0.18,0C6.4,14.84,5.3,14,4,14c-1.66,0-3,1.34-3,3s1.34,3,3,3c0.62,0,2.49,0,3,0c1.1,0,2-0.9,2-2 C9,16.9,8.1,16,7,16z"/></g></g></svg>`
+  DoxygenAwesomeDarkModeToggle.init()
+</script>
+</head>
+<body>
+  <!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/cpp977/Xped" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">Xped
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.9.6 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('classXped_1_1SpinBase.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="classXped_1_1SpinBase-members.html">List of all members</a>  </div>
+  <div class="headertitle"><div class="title">Xped::SpinBase&lt; Symmetry_, order &gt; Class Template Reference</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p><code>#include &lt;<a class="el" href="SpinBase_8hpp_source.html">SpinBase.hpp</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Xped::SpinBase&lt; Symmetry_, order &gt;:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1SpinBase__inherit__graph.png" border="0" usemap="#aXped_1_1SpinBase_3_01Symmetry___00_01order_01_4_inherit__map" alt="Inheritance graph"/></div>
+<map name="aXped_1_1SpinBase_3_01Symmetry___00_01order_01_4_inherit__map" id="aXped_1_1SpinBase_3_01Symmetry___00_01order_01_4_inherit__map">
+<area shape="rect" title=" " alt="" coords="5,93,212,133"/>
+<area shape="rect" href="classXped_1_1Spin.html" title=" " alt="" coords="21,5,196,45"/>
+</map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+<div class="dynheader">
+Collaboration diagram for Xped::SpinBase&lt; Symmetry_, order &gt;:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1SpinBase__coll__graph.png" border="0" usemap="#aXped_1_1SpinBase_3_01Symmetry___00_01order_01_4_coll__map" alt="Collaboration graph"/></div>
+<map name="aXped_1_1SpinBase_3_01Symmetry___00_01order_01_4_coll__map" id="aXped_1_1SpinBase_3_01Symmetry___00_01order_01_4_coll__map">
+<area shape="rect" title=" " alt="" coords="97,447,304,487"/>
+<area shape="rect" href="classXped_1_1Spin.html" title=" " alt="" coords="113,357,288,397"/>
+<area shape="rect" title=" " alt="" coords="5,115,65,141"/>
+<area shape="rect" href="classXped_1_1Qbasis.html" title=" " alt="" coords="90,115,311,141"/>
+<area shape="rect" href="structXped_1_1SiteOperator.html" title=" " alt="" coords="335,108,503,148"/>
+<area shape="rect" href="classXped_1_1Tensor.html" title=" " alt="" coords="257,5,438,45"/>
+<area shape="rect" title=" " alt="" coords="462,13,521,38"/>
+</map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a61edfd55a5fd0cb512cc20b0e8f23a53"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1SpinBase.html#a61edfd55a5fd0cb512cc20b0e8f23a53">Symmetry</a> = Symmetry_</td></tr>
+<tr class="separator:a61edfd55a5fd0cb512cc20b0e8f23a53"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac3b8986460a10b13d3c89fa0ab822aa7"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1SpinBase.html#ac3b8986460a10b13d3c89fa0ab822aa7">OperatorType</a> = <a class="el" href="structXped_1_1SiteOperator.html">SiteOperator</a>&lt; Scalar, <a class="el" href="classXped_1_1SpinBase.html#a61edfd55a5fd0cb512cc20b0e8f23a53">Symmetry</a> &gt;</td></tr>
+<tr class="separator:ac3b8986460a10b13d3c89fa0ab822aa7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a113b59a6708285fa2d98cfa90eacaab8"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1SpinBase.html#a113b59a6708285fa2d98cfa90eacaab8">OperatorTypeC</a> = <a class="el" href="structXped_1_1SiteOperator.html">SiteOperator</a>&lt; std::complex&lt; Scalar &gt;, <a class="el" href="classXped_1_1SpinBase.html#a61edfd55a5fd0cb512cc20b0e8f23a53">Symmetry</a> &gt;</td></tr>
+<tr class="separator:a113b59a6708285fa2d98cfa90eacaab8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78568be30f058af3e6aef7533f2496bf"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1SpinBase.html#a78568be30f058af3e6aef7533f2496bf">qType</a> = typename Symmetry::qType</td></tr>
+<tr class="separator:a78568be30f058af3e6aef7533f2496bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a0a6f466d611759526e7825a77da90174"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1SpinBase.html#a0a6f466d611759526e7825a77da90174">SpinBase</a> ()=default</td></tr>
+<tr class="separator:a0a6f466d611759526e7825a77da90174"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac92bbbe756f8a2bfaeb7998863abc632"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1SpinBase.html#ac92bbbe756f8a2bfaeb7998863abc632">SpinBase</a> (std::size_t L_input, std::size_t D_input)</td></tr>
+<tr class="separator:ac92bbbe756f8a2bfaeb7998863abc632"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a09adf383d124f8e9c4f01578854b20"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1SpinBase.html#a4a09adf383d124f8e9c4f01578854b20">dim</a> () const</td></tr>
+<tr class="separator:a4a09adf383d124f8e9c4f01578854b20"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f01b06bdbb5ee60f6c802ff6ae8f040"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1SpinBase.html#a4f01b06bdbb5ee60f6c802ff6ae8f040">orbitals</a> () const</td></tr>
+<tr class="separator:a4f01b06bdbb5ee60f6c802ff6ae8f040"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a54b963e43659c50eed8a435d15082c7e"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1SpinBase.html#a54b963e43659c50eed8a435d15082c7e">get_D</a> () const</td></tr>
+<tr class="separator:a54b963e43659c50eed8a435d15082c7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa3e32fc1fca0742c8c71888548ef5bed"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classXped_1_1SpinBase.html#ac3b8986460a10b13d3c89fa0ab822aa7">OperatorType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1SpinBase.html#aa3e32fc1fca0742c8c71888548ef5bed">sign</a> (std::size_t orb1=0, std::size_t orb2=0) const</td></tr>
+<tr class="separator:aa3e32fc1fca0742c8c71888548ef5bed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae0217958dfb0b7cabaca94e7e23fb04e"><td class="memTemplParams" colspan="2">template&lt;class <a class="el" href="structDummy.html">Dummy</a>  = Symmetry&gt; </td></tr>
+<tr class="memitem:ae0217958dfb0b7cabaca94e7e23fb04e"><td class="memTemplItemLeft" align="right" valign="top">std::enable_if&lt;!Dummy::IS_SPIN_SU2(), <a class="el" href="classXped_1_1SpinBase.html#ac3b8986460a10b13d3c89fa0ab822aa7">OperatorType</a> &gt;::type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classXped_1_1SpinBase.html#ae0217958dfb0b7cabaca94e7e23fb04e">n</a> (std::size_t orbital=0) const</td></tr>
+<tr class="separator:ae0217958dfb0b7cabaca94e7e23fb04e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a88c5a9f4ece2fff8b1ed52fd854a60f1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classXped_1_1SpinBase.html#ac3b8986460a10b13d3c89fa0ab822aa7">OperatorType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1SpinBase.html#a88c5a9f4ece2fff8b1ed52fd854a60f1">Id</a> (std::size_t orbital=0) const</td></tr>
+<tr class="separator:a88c5a9f4ece2fff8b1ed52fd854a60f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1c5768e97646c726ca2740dc9ad84569"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classXped_1_1SpinBase.html#ac3b8986460a10b13d3c89fa0ab822aa7">OperatorType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1SpinBase.html#a1c5768e97646c726ca2740dc9ad84569">Zero</a> (std::size_t orbital=0) const</td></tr>
+<tr class="separator:a1c5768e97646c726ca2740dc9ad84569"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad922997a5475a6e0d95ffc21985ef931"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; <a class="el" href="classXped_1_1SpinBase.html#a61edfd55a5fd0cb512cc20b0e8f23a53">Symmetry</a>, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1SpinBase.html#ad922997a5475a6e0d95ffc21985ef931">get_basis</a> () const</td></tr>
+<tr class="separator:ad922997a5475a6e0d95ffc21985ef931"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader"></div></td></tr>
+<tr class="memitem:a4582ab811bac0fb0b98016553101bf02"><td class="memTemplParams" colspan="2">template&lt;class <a class="el" href="structDummy.html">Dummy</a>  = Symmetry&gt; </td></tr>
+<tr class="memitem:a4582ab811bac0fb0b98016553101bf02"><td class="memTemplItemLeft" align="right" valign="top">std::enable_if&lt; Dummy::IS_SPIN_SU2(), <a class="el" href="classXped_1_1SpinBase.html#ac3b8986460a10b13d3c89fa0ab822aa7">OperatorType</a> &gt;::type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classXped_1_1SpinBase.html#a4582ab811bac0fb0b98016553101bf02">S</a> (std::size_t orbital=0) const</td></tr>
+<tr class="separator:a4582ab811bac0fb0b98016553101bf02"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae9ef4b645404cb40c9043e3029cc076f"><td class="memTemplParams" colspan="2">template&lt;class <a class="el" href="structDummy.html">Dummy</a>  = Symmetry&gt; </td></tr>
+<tr class="memitem:ae9ef4b645404cb40c9043e3029cc076f"><td class="memTemplItemLeft" align="right" valign="top">std::enable_if&lt; Dummy::IS_SPIN_SU2(), <a class="el" href="classXped_1_1SpinBase.html#ac3b8986460a10b13d3c89fa0ab822aa7">OperatorType</a> &gt;::type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classXped_1_1SpinBase.html#ae9ef4b645404cb40c9043e3029cc076f">Sdag</a> (std::size_t orbital=0) const</td></tr>
+<tr class="separator:ae9ef4b645404cb40c9043e3029cc076f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c7d3e76bb3a5c2d3f86d068e31efa9f"><td class="memTemplParams" colspan="2">template&lt;class <a class="el" href="structDummy.html">Dummy</a>  = Symmetry&gt; </td></tr>
+<tr class="memitem:a0c7d3e76bb3a5c2d3f86d068e31efa9f"><td class="memTemplItemLeft" align="right" valign="top">std::enable_if&lt; Dummy::IS_SPIN_SU2(), <a class="el" href="classXped_1_1SpinBase.html#ac3b8986460a10b13d3c89fa0ab822aa7">OperatorType</a> &gt;::type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classXped_1_1SpinBase.html#a0c7d3e76bb3a5c2d3f86d068e31efa9f">Q</a> (std::size_t orbital=0) const</td></tr>
+<tr class="separator:a0c7d3e76bb3a5c2d3f86d068e31efa9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a663ce597d291957cde463a74f121a8f0"><td class="memTemplParams" colspan="2">template&lt;class <a class="el" href="structDummy.html">Dummy</a>  = Symmetry&gt; </td></tr>
+<tr class="memitem:a663ce597d291957cde463a74f121a8f0"><td class="memTemplItemLeft" align="right" valign="top">std::enable_if&lt; Dummy::IS_SPIN_SU2(), <a class="el" href="classXped_1_1SpinBase.html#ac3b8986460a10b13d3c89fa0ab822aa7">OperatorType</a> &gt;::type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classXped_1_1SpinBase.html#a663ce597d291957cde463a74f121a8f0">Qdag</a> (std::size_t orbital=0) const</td></tr>
+<tr class="separator:a663ce597d291957cde463a74f121a8f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a196252398287a4ed822d3a98b7895a80"><td class="memTemplParams" colspan="2">template&lt;class <a class="el" href="structDummy.html">Dummy</a>  = Symmetry&gt; </td></tr>
+<tr class="memitem:a196252398287a4ed822d3a98b7895a80"><td class="memTemplItemLeft" align="right" valign="top">std::enable_if&lt;!Dummy::IS_SPIN_SU2(), <a class="el" href="classXped_1_1SpinBase.html#ac3b8986460a10b13d3c89fa0ab822aa7">OperatorType</a> &gt;::type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classXped_1_1SpinBase.html#a196252398287a4ed822d3a98b7895a80">Qz</a> (std::size_t orbital=0) const</td></tr>
+<tr class="separator:a196252398287a4ed822d3a98b7895a80"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0204bbac595192cbfe77e1bc216c98fd"><td class="memTemplParams" colspan="2">template&lt;class <a class="el" href="structDummy.html">Dummy</a>  = Symmetry&gt; </td></tr>
+<tr class="memitem:a0204bbac595192cbfe77e1bc216c98fd"><td class="memTemplItemLeft" align="right" valign="top">std::enable_if&lt;!Dummy::IS_SPIN_SU2(), <a class="el" href="classXped_1_1SpinBase.html#ac3b8986460a10b13d3c89fa0ab822aa7">OperatorType</a> &gt;::type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classXped_1_1SpinBase.html#a0204bbac595192cbfe77e1bc216c98fd">Qp</a> (std::size_t orbital=0) const</td></tr>
+<tr class="separator:a0204bbac595192cbfe77e1bc216c98fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a064dd25857f9d1075144bb4ff3784075"><td class="memTemplParams" colspan="2">template&lt;class <a class="el" href="structDummy.html">Dummy</a>  = Symmetry&gt; </td></tr>
+<tr class="memitem:a064dd25857f9d1075144bb4ff3784075"><td class="memTemplItemLeft" align="right" valign="top">std::enable_if&lt;!Dummy::IS_SPIN_SU2(), <a class="el" href="classXped_1_1SpinBase.html#ac3b8986460a10b13d3c89fa0ab822aa7">OperatorType</a> &gt;::type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classXped_1_1SpinBase.html#a064dd25857f9d1075144bb4ff3784075">Qm</a> (std::size_t orbital=0) const</td></tr>
+<tr class="separator:a064dd25857f9d1075144bb4ff3784075"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95908975485cbf6d071d4d344a3fb461"><td class="memTemplParams" colspan="2">template&lt;class <a class="el" href="structDummy.html">Dummy</a>  = Symmetry&gt; </td></tr>
+<tr class="memitem:a95908975485cbf6d071d4d344a3fb461"><td class="memTemplItemLeft" align="right" valign="top">std::enable_if&lt;!Dummy::IS_SPIN_SU2(), <a class="el" href="classXped_1_1SpinBase.html#ac3b8986460a10b13d3c89fa0ab822aa7">OperatorType</a> &gt;::type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classXped_1_1SpinBase.html#a95908975485cbf6d071d4d344a3fb461">Qpz</a> (std::size_t orbital=0) const</td></tr>
+<tr class="separator:a95908975485cbf6d071d4d344a3fb461"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66ed938f5e47e42177cf0ec770fe4bcc"><td class="memTemplParams" colspan="2">template&lt;class <a class="el" href="structDummy.html">Dummy</a>  = Symmetry&gt; </td></tr>
+<tr class="memitem:a66ed938f5e47e42177cf0ec770fe4bcc"><td class="memTemplItemLeft" align="right" valign="top">std::enable_if&lt;!Dummy::IS_SPIN_SU2(), <a class="el" href="classXped_1_1SpinBase.html#ac3b8986460a10b13d3c89fa0ab822aa7">OperatorType</a> &gt;::type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classXped_1_1SpinBase.html#a66ed938f5e47e42177cf0ec770fe4bcc">Qmz</a> (std::size_t orbital=0) const</td></tr>
+<tr class="separator:a66ed938f5e47e42177cf0ec770fe4bcc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4823fa99799c0fac68007a9f62332adf"><td class="memTemplParams" colspan="2">template&lt;class <a class="el" href="structDummy.html">Dummy</a>  = Symmetry&gt; </td></tr>
+<tr class="memitem:a4823fa99799c0fac68007a9f62332adf"><td class="memTemplItemLeft" align="right" valign="top">std::enable_if&lt;!Dummy::IS_SPIN_SU2(), <a class="el" href="classXped_1_1SpinBase.html#ac3b8986460a10b13d3c89fa0ab822aa7">OperatorType</a> &gt;::type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classXped_1_1SpinBase.html#a4823fa99799c0fac68007a9f62332adf">Sz</a> (std::size_t orbital=0) const</td></tr>
+<tr class="separator:a4823fa99799c0fac68007a9f62332adf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab9782771ffc67c1f854e5ff379dce422"><td class="memTemplParams" colspan="2">template&lt;class <a class="el" href="structDummy.html">Dummy</a>  = Symmetry&gt; </td></tr>
+<tr class="memitem:ab9782771ffc67c1f854e5ff379dce422"><td class="memTemplItemLeft" align="right" valign="top">std::enable_if&lt;!Dummy::IS_SPIN_SU2(), <a class="el" href="classXped_1_1SpinBase.html#ac3b8986460a10b13d3c89fa0ab822aa7">OperatorType</a> &gt;::type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classXped_1_1SpinBase.html#ab9782771ffc67c1f854e5ff379dce422">Sp</a> (std::size_t orbital=0) const</td></tr>
+<tr class="separator:ab9782771ffc67c1f854e5ff379dce422"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afefe0094e4f8c6b294bbd2c49d4c26cf"><td class="memTemplParams" colspan="2">template&lt;class <a class="el" href="structDummy.html">Dummy</a>  = Symmetry&gt; </td></tr>
+<tr class="memitem:afefe0094e4f8c6b294bbd2c49d4c26cf"><td class="memTemplItemLeft" align="right" valign="top">std::enable_if&lt;!Dummy::IS_SPIN_SU2(), <a class="el" href="classXped_1_1SpinBase.html#ac3b8986460a10b13d3c89fa0ab822aa7">OperatorType</a> &gt;::type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classXped_1_1SpinBase.html#afefe0094e4f8c6b294bbd2c49d4c26cf">Sm</a> (std::size_t orbital=0) const</td></tr>
+<tr class="separator:afefe0094e4f8c6b294bbd2c49d4c26cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9c33519ccdda646bfa325fd3d0638949"><td class="memTemplParams" colspan="2">template&lt;class <a class="el" href="structDummy.html">Dummy</a>  = Symmetry&gt; </td></tr>
+<tr class="memitem:a9c33519ccdda646bfa325fd3d0638949"><td class="memTemplItemLeft" align="right" valign="top">std::enable_if&lt; Dummy::NO_SPIN_SYM(), <a class="el" href="classXped_1_1SpinBase.html#ac3b8986460a10b13d3c89fa0ab822aa7">OperatorType</a> &gt;::type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classXped_1_1SpinBase.html#a9c33519ccdda646bfa325fd3d0638949">Sx</a> (std::size_t orbital=0) const</td></tr>
+<tr class="separator:a9c33519ccdda646bfa325fd3d0638949"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7346562fdb5d687089d9ca38ff1d9918"><td class="memTemplParams" colspan="2">template&lt;class <a class="el" href="structDummy.html">Dummy</a>  = Symmetry&gt; </td></tr>
+<tr class="memitem:a7346562fdb5d687089d9ca38ff1d9918"><td class="memTemplItemLeft" align="right" valign="top">std::enable_if&lt; Dummy::NO_SPIN_SYM(), <a class="el" href="classXped_1_1SpinBase.html#a113b59a6708285fa2d98cfa90eacaab8">OperatorTypeC</a> &gt;::type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classXped_1_1SpinBase.html#a7346562fdb5d687089d9ca38ff1d9918">Sy</a> (std::size_t orbital=0) const</td></tr>
+<tr class="separator:a7346562fdb5d687089d9ca38ff1d9918"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a83df1b24e34eb6388bf334d1fe858744"><td class="memTemplParams" colspan="2">template&lt;class <a class="el" href="structDummy.html">Dummy</a>  = Symmetry&gt; </td></tr>
+<tr class="memitem:a83df1b24e34eb6388bf334d1fe858744"><td class="memTemplItemLeft" align="right" valign="top">std::enable_if&lt; Dummy::NO_SPIN_SYM(), <a class="el" href="classXped_1_1SpinBase.html#ac3b8986460a10b13d3c89fa0ab822aa7">OperatorType</a> &gt;::type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classXped_1_1SpinBase.html#a83df1b24e34eb6388bf334d1fe858744">iSy</a> (std::size_t orbital=0) const</td></tr>
+<tr class="separator:a83df1b24e34eb6388bf334d1fe858744"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3f21d6ed84f5163959c4edd5786419cd"><td class="memTemplParams" colspan="2">template&lt;class <a class="el" href="structDummy.html">Dummy</a>  = Symmetry&gt; </td></tr>
+<tr class="memitem:a3f21d6ed84f5163959c4edd5786419cd"><td class="memTemplItemLeft" align="right" valign="top">std::enable_if&lt;!Dummy::IS_SPIN_SU2(), <a class="el" href="classXped_1_1SpinBase.html#ac3b8986460a10b13d3c89fa0ab822aa7">OperatorType</a> &gt;::type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classXped_1_1SpinBase.html#a3f21d6ed84f5163959c4edd5786419cd">Scomp</a> (SPINOP_LABEL Sa, int orbital=0) const</td></tr>
+<tr class="separator:a3f21d6ed84f5163959c4edd5786419cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a17487c58c0ebf8b6e83d1861d00d971d"><td class="memTemplParams" colspan="2">template&lt;class <a class="el" href="structDummy.html">Dummy</a>  = Symmetry&gt; </td></tr>
+<tr class="memitem:a17487c58c0ebf8b6e83d1861d00d971d"><td class="memTemplItemLeft" align="right" valign="top">std::enable_if&lt;!Dummy::IS_SPIN_SU2(), <a class="el" href="classXped_1_1SpinBase.html#ac3b8986460a10b13d3c89fa0ab822aa7">OperatorType</a> &gt;::type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classXped_1_1SpinBase.html#a17487c58c0ebf8b6e83d1861d00d971d">Qcomp</a> (SPINOP_LABEL Sa, int orbital=0) const</td></tr>
+<tr class="separator:a17487c58c0ebf8b6e83d1861d00d971d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classXped_1_1Spin"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classXped_1_1Spin')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classXped_1_1Spin.html">Xped::Spin&lt; Symmetry_, spin_index &gt;</a></td></tr>
+<tr class="memitem:ad5c8eda996ab48a1993c12491ace000c inherit pub_methods_classXped_1_1Spin"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Spin.html#ad5c8eda996ab48a1993c12491ace000c">Spin</a> ()</td></tr>
+<tr class="separator:ad5c8eda996ab48a1993c12491ace000c inherit pub_methods_classXped_1_1Spin"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeded56d76ae86d9f4341046beef004e2 inherit pub_methods_classXped_1_1Spin"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Spin.html#aeded56d76ae86d9f4341046beef004e2">Spin</a> (std::size_t D_input)</td></tr>
+<tr class="separator:aeded56d76ae86d9f4341046beef004e2 inherit pub_methods_classXped_1_1Spin"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac18bbe2d664fe3cfddf9f9c8a4e26fb7 inherit pub_methods_classXped_1_1Spin"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1SiteOperator.html">OperatorType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Spin.html#ac18bbe2d664fe3cfddf9f9c8a4e26fb7">Id_1s</a> () const</td></tr>
+<tr class="separator:ac18bbe2d664fe3cfddf9f9c8a4e26fb7 inherit pub_methods_classXped_1_1Spin"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a60dc779d5336fd0c29b4706ef3e98340 inherit pub_methods_classXped_1_1Spin"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1SiteOperator.html">OperatorType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Spin.html#a60dc779d5336fd0c29b4706ef3e98340">Zero_1s</a> () const</td></tr>
+<tr class="separator:a60dc779d5336fd0c29b4706ef3e98340 inherit pub_methods_classXped_1_1Spin"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b7d5128acfa9e425c04c6c4e135fe89 inherit pub_methods_classXped_1_1Spin"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1SiteOperator.html">OperatorType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Spin.html#a0b7d5128acfa9e425c04c6c4e135fe89">F_1s</a> () const</td></tr>
+<tr class="separator:a0b7d5128acfa9e425c04c6c4e135fe89 inherit pub_methods_classXped_1_1Spin"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa293d8d5763a2f37fde3241f4074a08 inherit pub_methods_classXped_1_1Spin"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1SiteOperator.html">OperatorType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Spin.html#afa293d8d5763a2f37fde3241f4074a08">Sz_1s</a> () const</td></tr>
+<tr class="separator:afa293d8d5763a2f37fde3241f4074a08 inherit pub_methods_classXped_1_1Spin"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ecc11a439871b14626434a71acee428 inherit pub_methods_classXped_1_1Spin"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1SiteOperator.html">OperatorType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Spin.html#a2ecc11a439871b14626434a71acee428">Sp_1s</a> () const</td></tr>
+<tr class="separator:a2ecc11a439871b14626434a71acee428 inherit pub_methods_classXped_1_1Spin"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abffda3f3ceccec6d5abc1b5f8c38475c inherit pub_methods_classXped_1_1Spin"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1SiteOperator.html">OperatorType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Spin.html#abffda3f3ceccec6d5abc1b5f8c38475c">Sm_1s</a> () const</td></tr>
+<tr class="separator:abffda3f3ceccec6d5abc1b5f8c38475c inherit pub_methods_classXped_1_1Spin"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49d4793e1c095be9c4fda9ffb7365d90 inherit pub_methods_classXped_1_1Spin"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1SiteOperator.html">OperatorType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Spin.html#a49d4793e1c095be9c4fda9ffb7365d90">Qz_1s</a> () const</td></tr>
+<tr class="separator:a49d4793e1c095be9c4fda9ffb7365d90 inherit pub_methods_classXped_1_1Spin"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a37767f1a487c7fdcbdb57616b73645a9 inherit pub_methods_classXped_1_1Spin"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1SiteOperator.html">OperatorType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Spin.html#a37767f1a487c7fdcbdb57616b73645a9">Qp_1s</a> () const</td></tr>
+<tr class="separator:a37767f1a487c7fdcbdb57616b73645a9 inherit pub_methods_classXped_1_1Spin"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2642dd2ea6cf7d38ebad733ae269a4f9 inherit pub_methods_classXped_1_1Spin"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1SiteOperator.html">OperatorType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Spin.html#a2642dd2ea6cf7d38ebad733ae269a4f9">Qm_1s</a> () const</td></tr>
+<tr class="separator:a2642dd2ea6cf7d38ebad733ae269a4f9 inherit pub_methods_classXped_1_1Spin"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a81e57816d884b303050ef549bd66f5a9 inherit pub_methods_classXped_1_1Spin"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1SiteOperator.html">OperatorType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Spin.html#a81e57816d884b303050ef549bd66f5a9">Qpz_1s</a> () const</td></tr>
+<tr class="separator:a81e57816d884b303050ef549bd66f5a9 inherit pub_methods_classXped_1_1Spin"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae73fe162b37797a2fea4484dca7317c5 inherit pub_methods_classXped_1_1Spin"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1SiteOperator.html">OperatorType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Spin.html#ae73fe162b37797a2fea4484dca7317c5">Qmz_1s</a> () const</td></tr>
+<tr class="separator:ae73fe162b37797a2fea4484dca7317c5 inherit pub_methods_classXped_1_1Spin"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc5e14ed12957397f35379717cc8fbbc inherit pub_methods_classXped_1_1Spin"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1SiteOperator.html">OperatorType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Spin.html#afc5e14ed12957397f35379717cc8fbbc">exp_i_pi_Sx</a> () const</td></tr>
+<tr class="separator:afc5e14ed12957397f35379717cc8fbbc inherit pub_methods_classXped_1_1Spin"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5f27ff8626512a35e120b931b652608b inherit pub_methods_classXped_1_1Spin"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1SiteOperator.html">OperatorType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Spin.html#a5f27ff8626512a35e120b931b652608b">exp_i_pi_Sy</a> () const</td></tr>
+<tr class="separator:a5f27ff8626512a35e120b931b652608b inherit pub_methods_classXped_1_1Spin"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ba8b2ad490996d848ec1e967f247aa6 inherit pub_methods_classXped_1_1Spin"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1SiteOperator.html">OperatorType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Spin.html#a5ba8b2ad490996d848ec1e967f247aa6">exp_i_pi_Sz</a> () const</td></tr>
+<tr class="separator:a5ba8b2ad490996d848ec1e967f247aa6 inherit pub_methods_classXped_1_1Spin"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a703f37f38c59509e6d6b12f9929122d6 inherit pub_methods_classXped_1_1Spin"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; Symmetry, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Spin.html#a703f37f38c59509e6d6b12f9929122d6">basis_1s</a> () const</td></tr>
+<tr class="separator:a703f37f38c59509e6d6b12f9929122d6 inherit pub_methods_classXped_1_1Spin"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
+<tr class="inherit_header pro_methods_classXped_1_1Spin"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classXped_1_1Spin')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classXped_1_1Spin.html">Xped::Spin&lt; Symmetry_, spin_index &gt;</a></td></tr>
+<tr class="memitem:a7f4cc230694991b64dca474a75117e96 inherit pro_methods_classXped_1_1Spin"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Spin.html#a7f4cc230694991b64dca474a75117e96">fill_basis</a> ()</td></tr>
+<tr class="separator:a7f4cc230694991b64dca474a75117e96 inherit pro_methods_classXped_1_1Spin"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a531e4c3b63de3f66124b2faee523ec0e inherit pro_methods_classXped_1_1Spin"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Spin.html#a531e4c3b63de3f66124b2faee523ec0e">fill_SiteOps</a> ()</td></tr>
+<tr class="separator:a531e4c3b63de3f66124b2faee523ec0e inherit pro_methods_classXped_1_1Spin"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23fae151e8719312aa925f1ad36cac90 inherit pro_methods_classXped_1_1Spin"><td class="memItemLeft" align="right" valign="top">qType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Spin.html#a23fae151e8719312aa925f1ad36cac90">getQ</a> (SPINOP_LABEL Sa) const</td></tr>
+<tr class="separator:a23fae151e8719312aa925f1ad36cac90 inherit pro_methods_classXped_1_1Spin"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_attribs_classXped_1_1Spin"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classXped_1_1Spin')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classXped_1_1Spin.html">Xped::Spin&lt; Symmetry_, spin_index &gt;</a></td></tr>
+<tr class="memitem:abc143400845a1124161209207182721b inherit pro_attribs_classXped_1_1Spin"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Spin.html#abc143400845a1124161209207182721b">D</a></td></tr>
+<tr class="separator:abc143400845a1124161209207182721b inherit pro_attribs_classXped_1_1Spin"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89f8ac4154a20d4bf4697e82ba07ce60 inherit pro_attribs_classXped_1_1Spin"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; Symmetry, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Spin.html#a89f8ac4154a20d4bf4697e82ba07ce60">basis_1s_</a></td></tr>
+<tr class="separator:a89f8ac4154a20d4bf4697e82ba07ce60 inherit pro_attribs_classXped_1_1Spin"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada6e4d4532f7eef86dfb3b82d9e99cdd inherit pro_attribs_classXped_1_1Spin"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, std::pair&lt; qType, std::size_t &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Spin.html#ada6e4d4532f7eef86dfb3b82d9e99cdd">labels</a></td></tr>
+<tr class="separator:ada6e4d4532f7eef86dfb3b82d9e99cdd inherit pro_attribs_classXped_1_1Spin"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6947679566ca7fb272a52c2c95711e22 inherit pro_attribs_classXped_1_1Spin"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1SiteOperator.html">OperatorType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Spin.html#a6947679566ca7fb272a52c2c95711e22">Id_1s_</a></td></tr>
+<tr class="separator:a6947679566ca7fb272a52c2c95711e22 inherit pro_attribs_classXped_1_1Spin"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae3d3b5279f5626d9b3cea5a43a1aba94 inherit pro_attribs_classXped_1_1Spin"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1SiteOperator.html">OperatorType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Spin.html#ae3d3b5279f5626d9b3cea5a43a1aba94">Zero_1s_</a></td></tr>
+<tr class="separator:ae3d3b5279f5626d9b3cea5a43a1aba94 inherit pro_attribs_classXped_1_1Spin"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7bf6417e4b215145cc4b6e90e1ebd78c inherit pro_attribs_classXped_1_1Spin"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1SiteOperator.html">OperatorType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Spin.html#a7bf6417e4b215145cc4b6e90e1ebd78c">F_1s_</a></td></tr>
+<tr class="separator:a7bf6417e4b215145cc4b6e90e1ebd78c inherit pro_attribs_classXped_1_1Spin"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad17fbdbe77fb6bf6ccce287ae5104a0 inherit pro_attribs_classXped_1_1Spin"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1SiteOperator.html">OperatorType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Spin.html#aad17fbdbe77fb6bf6ccce287ae5104a0">n_1s_</a></td></tr>
+<tr class="separator:aad17fbdbe77fb6bf6ccce287ae5104a0 inherit pro_attribs_classXped_1_1Spin"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76a18779a955a6ac4686d558f20b872b inherit pro_attribs_classXped_1_1Spin"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1SiteOperator.html">OperatorType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Spin.html#a76a18779a955a6ac4686d558f20b872b">Sz_1s_</a></td></tr>
+<tr class="separator:a76a18779a955a6ac4686d558f20b872b inherit pro_attribs_classXped_1_1Spin"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6cc8284dc33a79863ef0294627bf5efd inherit pro_attribs_classXped_1_1Spin"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1SiteOperator.html">OperatorType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Spin.html#a6cc8284dc33a79863ef0294627bf5efd">Sp_1s_</a></td></tr>
+<tr class="separator:a6cc8284dc33a79863ef0294627bf5efd inherit pro_attribs_classXped_1_1Spin"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7aee7e28d53628cc0ec14536b57f5783 inherit pro_attribs_classXped_1_1Spin"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1SiteOperator.html">OperatorType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Spin.html#a7aee7e28d53628cc0ec14536b57f5783">Sm_1s_</a></td></tr>
+<tr class="separator:a7aee7e28d53628cc0ec14536b57f5783 inherit pro_attribs_classXped_1_1Spin"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46996e388657a15f79c6e951bba833dc inherit pro_attribs_classXped_1_1Spin"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1SiteOperator.html">OperatorType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Spin.html#a46996e388657a15f79c6e951bba833dc">Qz_1s_</a></td></tr>
+<tr class="separator:a46996e388657a15f79c6e951bba833dc inherit pro_attribs_classXped_1_1Spin"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab99f448594c66740b753866cd031d0e9 inherit pro_attribs_classXped_1_1Spin"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1SiteOperator.html">OperatorType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Spin.html#ab99f448594c66740b753866cd031d0e9">Qp_1s_</a></td></tr>
+<tr class="separator:ab99f448594c66740b753866cd031d0e9 inherit pro_attribs_classXped_1_1Spin"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef3a1986c192414141330dff0cf82e67 inherit pro_attribs_classXped_1_1Spin"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1SiteOperator.html">OperatorType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Spin.html#aef3a1986c192414141330dff0cf82e67">Qm_1s_</a></td></tr>
+<tr class="separator:aef3a1986c192414141330dff0cf82e67 inherit pro_attribs_classXped_1_1Spin"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa70a98e224d6ab94c2fe4131027100e7 inherit pro_attribs_classXped_1_1Spin"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1SiteOperator.html">OperatorType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Spin.html#aa70a98e224d6ab94c2fe4131027100e7">Qpz_1s_</a></td></tr>
+<tr class="separator:aa70a98e224d6ab94c2fe4131027100e7 inherit pro_attribs_classXped_1_1Spin"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3f0bb6a7a05b4252d0f154d3b65e9fe3 inherit pro_attribs_classXped_1_1Spin"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1SiteOperator.html">OperatorType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Spin.html#a3f0bb6a7a05b4252d0f154d3b65e9fe3">Qmz_1s_</a></td></tr>
+<tr class="separator:a3f0bb6a7a05b4252d0f154d3b65e9fe3 inherit pro_attribs_classXped_1_1Spin"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4c425a2830ea9325cacec91c9a1b406 inherit pro_attribs_classXped_1_1Spin"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1SiteOperator.html">OperatorType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Spin.html#aa4c425a2830ea9325cacec91c9a1b406">exp_i_pi_Sx_1s_</a></td></tr>
+<tr class="separator:aa4c425a2830ea9325cacec91c9a1b406 inherit pro_attribs_classXped_1_1Spin"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3b9f0e935a770b22239ffd93ce2d1294 inherit pro_attribs_classXped_1_1Spin"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1SiteOperator.html">OperatorType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Spin.html#a3b9f0e935a770b22239ffd93ce2d1294">exp_i_pi_Sy_1s_</a></td></tr>
+<tr class="separator:a3b9f0e935a770b22239ffd93ce2d1294 inherit pro_attribs_classXped_1_1Spin"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac441d6e598da2eecc1d3a9d6a4ce2f0f inherit pro_attribs_classXped_1_1Spin"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1SiteOperator.html">OperatorType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Spin.html#ac441d6e598da2eecc1d3a9d6a4ce2f0f">exp_i_pi_Sz_1s_</a></td></tr>
+<tr class="separator:ac441d6e598da2eecc1d3a9d6a4ce2f0f inherit pro_attribs_classXped_1_1Spin"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><div class="compoundTemplParams">template&lt;typename Symmetry_, std::size_t order = 0&gt;<br />
+class Xped::SpinBase&lt; Symmetry_, order &gt;</div><p>This class provides the local operators for general spins with quantum number S. </p>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="ac3b8986460a10b13d3c89fa0ab822aa7" name="ac3b8986460a10b13d3c89fa0ab822aa7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac3b8986460a10b13d3c89fa0ab822aa7">&#9670;&#160;</a></span>OperatorType</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry_ , std::size_t order = 0&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classXped_1_1SpinBase.html">Xped::SpinBase</a>&lt; Symmetry_, order &gt;::OperatorType =  <a class="el" href="structXped_1_1SiteOperator.html">SiteOperator</a>&lt;Scalar, <a class="el" href="classXped_1_1SpinBase.html#a61edfd55a5fd0cb512cc20b0e8f23a53">Symmetry</a>&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a113b59a6708285fa2d98cfa90eacaab8" name="a113b59a6708285fa2d98cfa90eacaab8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a113b59a6708285fa2d98cfa90eacaab8">&#9670;&#160;</a></span>OperatorTypeC</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry_ , std::size_t order = 0&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classXped_1_1SpinBase.html">Xped::SpinBase</a>&lt; Symmetry_, order &gt;::OperatorTypeC =  <a class="el" href="structXped_1_1SiteOperator.html">SiteOperator</a>&lt;std::complex&lt;Scalar&gt;, <a class="el" href="classXped_1_1SpinBase.html#a61edfd55a5fd0cb512cc20b0e8f23a53">Symmetry</a>&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a78568be30f058af3e6aef7533f2496bf" name="a78568be30f058af3e6aef7533f2496bf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a78568be30f058af3e6aef7533f2496bf">&#9670;&#160;</a></span>qType</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry_ , std::size_t order = 0&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classXped_1_1SpinBase.html">Xped::SpinBase</a>&lt; Symmetry_, order &gt;::qType =  typename Symmetry::qType</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a61edfd55a5fd0cb512cc20b0e8f23a53" name="a61edfd55a5fd0cb512cc20b0e8f23a53"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a61edfd55a5fd0cb512cc20b0e8f23a53">&#9670;&#160;</a></span>Symmetry</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry_ , std::size_t order = 0&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classXped_1_1SpinBase.html">Xped::SpinBase</a>&lt; Symmetry_, order &gt;::Symmetry =  Symmetry_</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a0a6f466d611759526e7825a77da90174" name="a0a6f466d611759526e7825a77da90174"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0a6f466d611759526e7825a77da90174">&#9670;&#160;</a></span>SpinBase() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry_ , std::size_t order = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classXped_1_1SpinBase.html">Xped::SpinBase</a>&lt; Symmetry_, order &gt;::SpinBase </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">default</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac92bbbe756f8a2bfaeb7998863abc632" name="ac92bbbe756f8a2bfaeb7998863abc632"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac92bbbe756f8a2bfaeb7998863abc632">&#9670;&#160;</a></span>SpinBase() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry_ , std::size_t order&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classXped_1_1SpinBase.html">Xped::SpinBase</a>&lt; Symmetry_, order &gt;::SpinBase </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>L_input</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>D_input</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">L_input</td><td>: the amount of orbitals </td></tr>
+    <tr><td class="paramname">D_input</td><td>: \(D = 2S+1\) </td></tr>
+  </table>
+  </dd>
+</dl>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1SpinBase_ac92bbbe756f8a2bfaeb7998863abc632_cgraph.png" border="0" usemap="#aclassXped_1_1SpinBase_ac92bbbe756f8a2bfaeb7998863abc632_cgraph" alt=""/></div>
+<map name="aclassXped_1_1SpinBase_ac92bbbe756f8a2bfaeb7998863abc632_cgraph" id="aclassXped_1_1SpinBase_ac92bbbe756f8a2bfaeb7998863abc632_cgraph">
+<area shape="rect" title=" " alt="" coords="5,107,196,132"/>
+<area shape="rect" href="classXped_1_1Spin.html#a703f37f38c59509e6d6b12f9929122d6" title=" " alt="" coords="252,5,407,31"/>
+<area shape="rect" href="classXped_1_1Qbasis.html#aae178998f636f909aba92a11323582f7" title=" " alt="" coords="244,107,415,132"/>
+<area shape="rect" href="classXped_1_1Qbasis.html#a34418f2e9ce5c917d3f3b65688c52249" title=" " alt="" coords="463,57,647,83"/>
+<area shape="rect" href="classXped_1_1Qbasis.html#ae185c83191aa1e7e75bbef4e28b3f5e7" title=" " alt="" coords="259,156,399,181"/>
+<area shape="rect" href="classXped_1_1SpinBase.html#a0c7d3e76bb3a5c2d3f86d068e31efa9f" title=" " alt="" coords="259,205,400,231"/>
+<area shape="rect" href="classXped_1_1Qbasis.html#a17b1d80c09fcd2114d01369b329dfec7" title=" " alt="" coords="485,107,625,132"/>
+<area shape="rect" href="classXped_1_1Qbasis.html#a96f8b91e4b29cc52df12b1117cef8827" title=" " alt="" coords="484,156,625,181"/>
+</map>
+</div>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a4a09adf383d124f8e9c4f01578854b20" name="a4a09adf383d124f8e9c4f01578854b20"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4a09adf383d124f8e9c4f01578854b20">&#9670;&#160;</a></span>dim()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry_ , std::size_t order = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t <a class="el" href="classXped_1_1SpinBase.html">Xped::SpinBase</a>&lt; Symmetry_, order &gt;::dim </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>amount of states </p>
+
+</div>
+</div>
+<a id="ad922997a5475a6e0d95ffc21985ef931" name="ad922997a5475a6e0d95ffc21985ef931"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad922997a5475a6e0d95ffc21985ef931">&#9670;&#160;</a></span>get_basis()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry_ , std::size_t order = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; <a class="el" href="classXped_1_1SpinBase.html#a61edfd55a5fd0cb512cc20b0e8f23a53">Symmetry</a>, 1 &gt; <a class="el" href="classXped_1_1SpinBase.html">Xped::SpinBase</a>&lt; Symmetry_, order &gt;::get_basis </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Creates the full <a class="el" href="classXped_1_1Hubbard.html">Hubbard</a> Hamiltonian on the supersite with orbital-dependent U. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">U</td><td>: \(U\) for each orbital </td></tr>
+    <tr><td class="paramname">Uph</td><td>: particle-hole symmetric \(U\) for each orbital (times \((n_{\uparrow}-1/2)(n_{\downarrow}-1/2)+1/4\)) </td></tr>
+    <tr><td class="paramname">Eorb</td><td>: \(\varepsilon\) onsite energy for each orbital </td></tr>
+    <tr><td class="paramname">t</td><td>: \(t\) </td></tr>
+    <tr><td class="paramname">V</td><td>: \(V\) </td></tr>
+    <tr><td class="paramname">Vz</td><td>: \(V_z\) </td></tr>
+    <tr><td class="paramname">Vxy</td><td>: \(V_{xy}\) </td></tr>
+    <tr><td class="paramname">J</td><td>: \(J\) Creates the full <a class="el" href="classXped_1_1Heisenberg.html">Heisenberg</a> (XXZ) Hamiltonian on the supersite. </td></tr>
+    <tr><td class="paramname">Jxy</td><td>: \(J^{xy}\) </td></tr>
+    <tr><td class="paramname">Jz</td><td>: \(J^{z}\) </td></tr>
+    <tr><td class="paramname">Bz</td><td>: \(B^{z}_i\) </td></tr>
+    <tr><td class="paramname">Bx</td><td>: \(B^{x}_i\) </td></tr>
+    <tr><td class="paramname">mu</td><td>: \(\mu\) (for spinless fermions, couples to n=1/2-Sz) </td></tr>
+    <tr><td class="paramname">Kz</td><td>: \(K^{z}_i\) </td></tr>
+    <tr><td class="paramname">Kx</td><td>: \(K^{x}_i\) </td></tr>
+    <tr><td class="paramname">Dy</td><td>: \(D^{y}\) Creates the full <a class="el" href="classXped_1_1Heisenberg.html">Heisenberg</a> (XYZ) Hamiltonian on the supersite. </td></tr>
+    <tr><td class="paramname">J</td><td>: \(J^{\alpha}\), \(\alpha \in \{x,y,z\} \) </td></tr>
+    <tr><td class="paramname"><a class="el" href="classB.html">B</a></td><td>: \(B^{\alpha}_i\), \(\alpha \in \{x,y,z\} \) </td></tr>
+    <tr><td class="paramname">K</td><td>: \(K^{\alpha}_i\), \(\alpha \in \{x,y,z\} \) </td></tr>
+    <tr><td class="paramname"><a class="el" href="classD.html">D</a></td><td>: \(D^{\alpha}\), \(\alpha \in \{x,y,z\} \) Returns the basis. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a54b963e43659c50eed8a435d15082c7e" name="a54b963e43659c50eed8a435d15082c7e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a54b963e43659c50eed8a435d15082c7e">&#9670;&#160;</a></span>get_D()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry_ , std::size_t order = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t <a class="el" href="classXped_1_1SpinBase.html">Xped::SpinBase</a>&lt; Symmetry_, order &gt;::get_D </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>\(D=2S+1\) </p>
+
+</div>
+</div>
+<a id="a88c5a9f4ece2fff8b1ed52fd854a60f1" name="a88c5a9f4ece2fff8b1ed52fd854a60f1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a88c5a9f4ece2fff8b1ed52fd854a60f1">&#9670;&#160;</a></span>Id()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry_ , std::size_t order&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structXped_1_1SiteOperator.html">SiteOperator</a>&lt; double, Symmetry_ &gt; <a class="el" href="classXped_1_1SpinBase.html">Xped::SpinBase</a>&lt; Symmetry_, order &gt;::Id </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>orbital</em> = <code>0</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Identity </p>
+
+</div>
+</div>
+<a id="a83df1b24e34eb6388bf334d1fe858744" name="a83df1b24e34eb6388bf334d1fe858744"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a83df1b24e34eb6388bf334d1fe858744">&#9670;&#160;</a></span>iSy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry_ , std::size_t order&gt; </div>
+<div class="memtemplate">
+template&lt;typename <a class="el" href="structDummy.html">Dummy</a> &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::enable_if&lt; Dummy::NO_SPIN_SYM(), <a class="el" href="structXped_1_1SiteOperator.html">SiteOperator</a>&lt; double, Symmetry_ &gt; &gt;::type <a class="el" href="classXped_1_1SpinBase.html">Xped::SpinBase</a>&lt; Symmetry_, order &gt;::iSy </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>orbital</em> = <code>0</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1SpinBase_a83df1b24e34eb6388bf334d1fe858744_cgraph.png" border="0" usemap="#aclassXped_1_1SpinBase_a83df1b24e34eb6388bf334d1fe858744_cgraph" alt=""/></div>
+<map name="aclassXped_1_1SpinBase_a83df1b24e34eb6388bf334d1fe858744_cgraph" id="aclassXped_1_1SpinBase_a83df1b24e34eb6388bf334d1fe858744_cgraph">
+<area shape="rect" title=" " alt="" coords="5,13,156,38"/>
+<area shape="rect" href="structXped_1_1SiteOperator.html#a74f66fcc1dde90722fce9c478edb9c5c" title=" " alt="" coords="204,5,349,45"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1SpinBase_a83df1b24e34eb6388bf334d1fe858744_icgraph.png" border="0" usemap="#aclassXped_1_1SpinBase_a83df1b24e34eb6388bf334d1fe858744_icgraph" alt=""/></div>
+<map name="aclassXped_1_1SpinBase_a83df1b24e34eb6388bf334d1fe858744_icgraph" id="aclassXped_1_1SpinBase_a83df1b24e34eb6388bf334d1fe858744_icgraph">
+<area shape="rect" title=" " alt="" coords="228,5,379,31"/>
+<area shape="rect" href="classXped_1_1SpinBase.html#a3f21d6ed84f5163959c4edd5786419cd" title=" " alt="" coords="5,5,180,31"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ae0217958dfb0b7cabaca94e7e23fb04e" name="ae0217958dfb0b7cabaca94e7e23fb04e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae0217958dfb0b7cabaca94e7e23fb04e">&#9670;&#160;</a></span>n()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry_ , std::size_t order&gt; </div>
+<div class="memtemplate">
+template&lt;typename <a class="el" href="structDummy.html">Dummy</a> &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::enable_if&lt;!Dummy::IS_SPIN_SU2(), <a class="el" href="structXped_1_1SiteOperator.html">SiteOperator</a>&lt; double, Symmetry_ &gt; &gt;::type <a class="el" href="classXped_1_1SpinBase.html">Xped::SpinBase</a>&lt; Symmetry_, order &gt;::n </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>orbital</em> = <code>0</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Occupation number operator </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">orbital</td><td>: orbital index </td></tr>
+  </table>
+  </dd>
+</dl>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1SpinBase_ae0217958dfb0b7cabaca94e7e23fb04e_cgraph.png" border="0" usemap="#aclassXped_1_1SpinBase_ae0217958dfb0b7cabaca94e7e23fb04e_cgraph" alt=""/></div>
+<map name="aclassXped_1_1SpinBase_ae0217958dfb0b7cabaca94e7e23fb04e_cgraph" id="aclassXped_1_1SpinBase_ae0217958dfb0b7cabaca94e7e23fb04e_cgraph">
+<area shape="rect" title=" " alt="" coords="5,13,144,38"/>
+<area shape="rect" href="structXped_1_1SiteOperator.html#a74f66fcc1dde90722fce9c478edb9c5c" title=" " alt="" coords="192,5,337,45"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a4f01b06bdbb5ee60f6c802ff6ae8f040" name="a4f01b06bdbb5ee60f6c802ff6ae8f040"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4f01b06bdbb5ee60f6c802ff6ae8f040">&#9670;&#160;</a></span>orbitals()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry_ , std::size_t order = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t <a class="el" href="classXped_1_1SpinBase.html">Xped::SpinBase</a>&lt; Symmetry_, order &gt;::orbitals </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>amount of orbitals </p>
+
+</div>
+</div>
+<a id="a0c7d3e76bb3a5c2d3f86d068e31efa9f" name="a0c7d3e76bb3a5c2d3f86d068e31efa9f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c7d3e76bb3a5c2d3f86d068e31efa9f">&#9670;&#160;</a></span>Q()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry_ , std::size_t order&gt; </div>
+<div class="memtemplate">
+template&lt;typename <a class="el" href="structDummy.html">Dummy</a> &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::enable_if&lt; Dummy::IS_SPIN_SU2(), <a class="el" href="structXped_1_1SiteOperator.html">SiteOperator</a>&lt; double, Symmetry_ &gt; &gt;::type <a class="el" href="classXped_1_1SpinBase.html">Xped::SpinBase</a>&lt; Symmetry_, order &gt;::Q </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>orbital</em> = <code>0</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1SpinBase_a0c7d3e76bb3a5c2d3f86d068e31efa9f_icgraph.png" border="0" usemap="#aclassXped_1_1SpinBase_a0c7d3e76bb3a5c2d3f86d068e31efa9f_icgraph" alt=""/></div>
+<map name="aclassXped_1_1SpinBase_a0c7d3e76bb3a5c2d3f86d068e31efa9f_icgraph" id="aclassXped_1_1SpinBase_a0c7d3e76bb3a5c2d3f86d068e31efa9f_icgraph">
+<area shape="rect" title=" " alt="" coords="244,5,385,31"/>
+<area shape="rect" href="classXped_1_1SpinBase.html#ac92bbbe756f8a2bfaeb7998863abc632" title=" " alt="" coords="5,5,196,31"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a17487c58c0ebf8b6e83d1861d00d971d" name="a17487c58c0ebf8b6e83d1861d00d971d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a17487c58c0ebf8b6e83d1861d00d971d">&#9670;&#160;</a></span>Qcomp()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry_ , std::size_t order = 0&gt; </div>
+<div class="memtemplate">
+template&lt;class <a class="el" href="structDummy.html">Dummy</a>  = Symmetry&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::enable_if&lt;!Dummy::IS_SPIN_SU2(), <a class="el" href="classXped_1_1SpinBase.html#ac3b8986460a10b13d3c89fa0ab822aa7">OperatorType</a> &gt;::type <a class="el" href="classXped_1_1SpinBase.html">Xped::SpinBase</a>&lt; Symmetry_, order &gt;::Qcomp </td>
+          <td>(</td>
+          <td class="paramtype">SPINOP_LABEL&#160;</td>
+          <td class="paramname"><em>Sa</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>orbital</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1SpinBase_a17487c58c0ebf8b6e83d1861d00d971d_cgraph.png" border="0" usemap="#aclassXped_1_1SpinBase_a17487c58c0ebf8b6e83d1861d00d971d_cgraph" alt=""/></div>
+<map name="aclassXped_1_1SpinBase_a17487c58c0ebf8b6e83d1861d00d971d_cgraph" id="aclassXped_1_1SpinBase_a17487c58c0ebf8b6e83d1861d00d971d_cgraph">
+<area shape="rect" title=" " alt="" coords="5,104,183,129"/>
+<area shape="rect" href="classXped_1_1SpinBase.html#a064dd25857f9d1075144bb4ff3784075" title=" " alt="" coords="234,5,389,31"/>
+<area shape="rect" href="classXped_1_1SpinBase.html#a66ed938f5e47e42177cf0ec770fe4bcc" title=" " alt="" coords="231,55,392,80"/>
+<area shape="rect" href="classXped_1_1SpinBase.html#a0204bbac595192cbfe77e1bc216c98fd" title=" " alt="" coords="237,104,386,129"/>
+<area shape="rect" href="classXped_1_1SpinBase.html#a95908975485cbf6d071d4d344a3fb461" title=" " alt="" coords="233,153,389,179"/>
+<area shape="rect" href="classXped_1_1SpinBase.html#a196252398287a4ed822d3a98b7895a80" title=" " alt="" coords="237,203,385,228"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a663ce597d291957cde463a74f121a8f0" name="a663ce597d291957cde463a74f121a8f0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a663ce597d291957cde463a74f121a8f0">&#9670;&#160;</a></span>Qdag()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry_ , std::size_t order&gt; </div>
+<div class="memtemplate">
+template&lt;typename <a class="el" href="structDummy.html">Dummy</a> &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::enable_if&lt; Dummy::IS_SPIN_SU2(), <a class="el" href="structXped_1_1SiteOperator.html">SiteOperator</a>&lt; double, Symmetry_ &gt; &gt;::type <a class="el" href="classXped_1_1SpinBase.html">Xped::SpinBase</a>&lt; Symmetry_, order &gt;::Qdag </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>orbital</em> = <code>0</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a064dd25857f9d1075144bb4ff3784075" name="a064dd25857f9d1075144bb4ff3784075"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a064dd25857f9d1075144bb4ff3784075">&#9670;&#160;</a></span>Qm()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry_ , std::size_t order&gt; </div>
+<div class="memtemplate">
+template&lt;typename <a class="el" href="structDummy.html">Dummy</a> &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::enable_if&lt;!Dummy::IS_SPIN_SU2(), <a class="el" href="structXped_1_1SiteOperator.html">SiteOperator</a>&lt; double, Symmetry_ &gt; &gt;::type <a class="el" href="classXped_1_1SpinBase.html">Xped::SpinBase</a>&lt; Symmetry_, order &gt;::Qm </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>orbital</em> = <code>0</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1SpinBase_a064dd25857f9d1075144bb4ff3784075_icgraph.png" border="0" usemap="#aclassXped_1_1SpinBase_a064dd25857f9d1075144bb4ff3784075_icgraph" alt=""/></div>
+<map name="aclassXped_1_1SpinBase_a064dd25857f9d1075144bb4ff3784075_icgraph" id="aclassXped_1_1SpinBase_a064dd25857f9d1075144bb4ff3784075_icgraph">
+<area shape="rect" title=" " alt="" coords="231,5,385,31"/>
+<area shape="rect" href="classXped_1_1SpinBase.html#a17487c58c0ebf8b6e83d1861d00d971d" title=" " alt="" coords="5,5,183,31"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a66ed938f5e47e42177cf0ec770fe4bcc" name="a66ed938f5e47e42177cf0ec770fe4bcc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a66ed938f5e47e42177cf0ec770fe4bcc">&#9670;&#160;</a></span>Qmz()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry_ , std::size_t order&gt; </div>
+<div class="memtemplate">
+template&lt;typename <a class="el" href="structDummy.html">Dummy</a> &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::enable_if&lt;!Dummy::IS_SPIN_SU2(), <a class="el" href="structXped_1_1SiteOperator.html">SiteOperator</a>&lt; double, Symmetry_ &gt; &gt;::type <a class="el" href="classXped_1_1SpinBase.html">Xped::SpinBase</a>&lt; Symmetry_, order &gt;::Qmz </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>orbital</em> = <code>0</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1SpinBase_a66ed938f5e47e42177cf0ec770fe4bcc_icgraph.png" border="0" usemap="#aclassXped_1_1SpinBase_a66ed938f5e47e42177cf0ec770fe4bcc_icgraph" alt=""/></div>
+<map name="aclassXped_1_1SpinBase_a66ed938f5e47e42177cf0ec770fe4bcc_icgraph" id="aclassXped_1_1SpinBase_a66ed938f5e47e42177cf0ec770fe4bcc_icgraph">
+<area shape="rect" title=" " alt="" coords="231,5,392,31"/>
+<area shape="rect" href="classXped_1_1SpinBase.html#a17487c58c0ebf8b6e83d1861d00d971d" title=" " alt="" coords="5,5,183,31"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a0204bbac595192cbfe77e1bc216c98fd" name="a0204bbac595192cbfe77e1bc216c98fd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0204bbac595192cbfe77e1bc216c98fd">&#9670;&#160;</a></span>Qp()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry_ , std::size_t order&gt; </div>
+<div class="memtemplate">
+template&lt;typename <a class="el" href="structDummy.html">Dummy</a> &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::enable_if&lt;!Dummy::IS_SPIN_SU2(), <a class="el" href="structXped_1_1SiteOperator.html">SiteOperator</a>&lt; double, Symmetry_ &gt; &gt;::type <a class="el" href="classXped_1_1SpinBase.html">Xped::SpinBase</a>&lt; Symmetry_, order &gt;::Qp </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>orbital</em> = <code>0</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1SpinBase_a0204bbac595192cbfe77e1bc216c98fd_icgraph.png" border="0" usemap="#aclassXped_1_1SpinBase_a0204bbac595192cbfe77e1bc216c98fd_icgraph" alt=""/></div>
+<map name="aclassXped_1_1SpinBase_a0204bbac595192cbfe77e1bc216c98fd_icgraph" id="aclassXped_1_1SpinBase_a0204bbac595192cbfe77e1bc216c98fd_icgraph">
+<area shape="rect" title=" " alt="" coords="231,5,380,31"/>
+<area shape="rect" href="classXped_1_1SpinBase.html#a17487c58c0ebf8b6e83d1861d00d971d" title=" " alt="" coords="5,5,183,31"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a95908975485cbf6d071d4d344a3fb461" name="a95908975485cbf6d071d4d344a3fb461"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a95908975485cbf6d071d4d344a3fb461">&#9670;&#160;</a></span>Qpz()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry_ , std::size_t order&gt; </div>
+<div class="memtemplate">
+template&lt;typename <a class="el" href="structDummy.html">Dummy</a> &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::enable_if&lt;!Dummy::IS_SPIN_SU2(), <a class="el" href="structXped_1_1SiteOperator.html">SiteOperator</a>&lt; double, Symmetry_ &gt; &gt;::type <a class="el" href="classXped_1_1SpinBase.html">Xped::SpinBase</a>&lt; Symmetry_, order &gt;::Qpz </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>orbital</em> = <code>0</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1SpinBase_a95908975485cbf6d071d4d344a3fb461_icgraph.png" border="0" usemap="#aclassXped_1_1SpinBase_a95908975485cbf6d071d4d344a3fb461_icgraph" alt=""/></div>
+<map name="aclassXped_1_1SpinBase_a95908975485cbf6d071d4d344a3fb461_icgraph" id="aclassXped_1_1SpinBase_a95908975485cbf6d071d4d344a3fb461_icgraph">
+<area shape="rect" title=" " alt="" coords="231,5,387,31"/>
+<area shape="rect" href="classXped_1_1SpinBase.html#a17487c58c0ebf8b6e83d1861d00d971d" title=" " alt="" coords="5,5,183,31"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a196252398287a4ed822d3a98b7895a80" name="a196252398287a4ed822d3a98b7895a80"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a196252398287a4ed822d3a98b7895a80">&#9670;&#160;</a></span>Qz()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry_ , std::size_t order&gt; </div>
+<div class="memtemplate">
+template&lt;typename <a class="el" href="structDummy.html">Dummy</a> &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::enable_if&lt;!Dummy::IS_SPIN_SU2(), <a class="el" href="structXped_1_1SiteOperator.html">SiteOperator</a>&lt; double, Symmetry_ &gt; &gt;::type <a class="el" href="classXped_1_1SpinBase.html">Xped::SpinBase</a>&lt; Symmetry_, order &gt;::Qz </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>orbital</em> = <code>0</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1SpinBase_a196252398287a4ed822d3a98b7895a80_icgraph.png" border="0" usemap="#aclassXped_1_1SpinBase_a196252398287a4ed822d3a98b7895a80_icgraph" alt=""/></div>
+<map name="aclassXped_1_1SpinBase_a196252398287a4ed822d3a98b7895a80_icgraph" id="aclassXped_1_1SpinBase_a196252398287a4ed822d3a98b7895a80_icgraph">
+<area shape="rect" title=" " alt="" coords="231,5,379,31"/>
+<area shape="rect" href="classXped_1_1SpinBase.html#a17487c58c0ebf8b6e83d1861d00d971d" title=" " alt="" coords="5,5,183,31"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a4582ab811bac0fb0b98016553101bf02" name="a4582ab811bac0fb0b98016553101bf02"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4582ab811bac0fb0b98016553101bf02">&#9670;&#160;</a></span>S()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry_ , std::size_t order&gt; </div>
+<div class="memtemplate">
+template&lt;typename <a class="el" href="structDummy.html">Dummy</a> &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::enable_if&lt; Dummy::IS_SPIN_SU2(), <a class="el" href="structXped_1_1SiteOperator.html">SiteOperator</a>&lt; double, Symmetry_ &gt; &gt;::type <a class="el" href="classXped_1_1SpinBase.html">Xped::SpinBase</a>&lt; Symmetry_, order &gt;::S </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>orbital</em> = <code>0</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Orbital spin </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">orbital</td><td>: orbital index </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a3f21d6ed84f5163959c4edd5786419cd" name="a3f21d6ed84f5163959c4edd5786419cd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3f21d6ed84f5163959c4edd5786419cd">&#9670;&#160;</a></span>Scomp()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry_ , std::size_t order = 0&gt; </div>
+<div class="memtemplate">
+template&lt;class <a class="el" href="structDummy.html">Dummy</a>  = Symmetry&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::enable_if&lt;!Dummy::IS_SPIN_SU2(), <a class="el" href="classXped_1_1SpinBase.html#ac3b8986460a10b13d3c89fa0ab822aa7">OperatorType</a> &gt;::type <a class="el" href="classXped_1_1SpinBase.html">Xped::SpinBase</a>&lt; Symmetry_, order &gt;::Scomp </td>
+          <td>(</td>
+          <td class="paramtype">SPINOP_LABEL&#160;</td>
+          <td class="paramname"><em>Sa</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>orbital</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1SpinBase_a3f21d6ed84f5163959c4edd5786419cd_cgraph.png" border="0" usemap="#aclassXped_1_1SpinBase_a3f21d6ed84f5163959c4edd5786419cd_cgraph" alt=""/></div>
+<map name="aclassXped_1_1SpinBase_a3f21d6ed84f5163959c4edd5786419cd_cgraph" id="aclassXped_1_1SpinBase_a3f21d6ed84f5163959c4edd5786419cd_cgraph">
+<area shape="rect" title=" " alt="" coords="5,129,180,155"/>
+<area shape="rect" href="classXped_1_1SpinBase.html#a83df1b24e34eb6388bf334d1fe858744" title=" " alt="" coords="233,5,384,31"/>
+<area shape="rect" href="classXped_1_1SpinBase.html#afefe0094e4f8c6b294bbd2c49d4c26cf" title=" " alt="" coords="233,55,385,80"/>
+<area shape="rect" href="classXped_1_1SpinBase.html#ab9782771ffc67c1f854e5ff379dce422" title=" " alt="" coords="235,104,382,129"/>
+<area shape="rect" href="classXped_1_1SpinBase.html#a9c33519ccdda646bfa325fd3d0638949" title=" " alt="" coords="235,153,382,179"/>
+<area shape="rect" href="classXped_1_1SpinBase.html#a4823fa99799c0fac68007a9f62332adf" title=" " alt="" coords="235,203,382,228"/>
+<area shape="rect" href="classXped_1_1SpinBase.html#a1c5768e97646c726ca2740dc9ad84569" title=" " alt="" coords="228,252,389,277"/>
+<area shape="rect" href="structXped_1_1SiteOperator.html#a74f66fcc1dde90722fce9c478edb9c5c" title=" " alt="" coords="437,73,583,113"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ae9ef4b645404cb40c9043e3029cc076f" name="ae9ef4b645404cb40c9043e3029cc076f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae9ef4b645404cb40c9043e3029cc076f">&#9670;&#160;</a></span>Sdag()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry_ , std::size_t order&gt; </div>
+<div class="memtemplate">
+template&lt;typename <a class="el" href="structDummy.html">Dummy</a> &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::enable_if&lt; Dummy::IS_SPIN_SU2(), <a class="el" href="structXped_1_1SiteOperator.html">SiteOperator</a>&lt; double, Symmetry_ &gt; &gt;::type <a class="el" href="classXped_1_1SpinBase.html">Xped::SpinBase</a>&lt; Symmetry_, order &gt;::Sdag </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>orbital</em> = <code>0</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Orbital spin† </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">orbital</td><td>: orbital index </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aa3e32fc1fca0742c8c71888548ef5bed" name="aa3e32fc1fca0742c8c71888548ef5bed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa3e32fc1fca0742c8c71888548ef5bed">&#9670;&#160;</a></span>sign()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry_ , std::size_t order&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structXped_1_1SiteOperator.html">SiteOperator</a>&lt; double, Symmetry_ &gt; <a class="el" href="classXped_1_1SpinBase.html">Xped::SpinBase</a>&lt; Symmetry_, order &gt;::sign </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>orb1</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>orb2</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Fermionic sign for the hopping between two orbitals of nearest-neighbour supersites of a ladder. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">orb1</td><td>: orbital on supersite i </td></tr>
+    <tr><td class="paramname">orb2</td><td>: orbital on supersite i+1 </td></tr>
+  </table>
+  </dd>
+</dl>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1SpinBase_aa3e32fc1fca0742c8c71888548ef5bed_cgraph.png" border="0" usemap="#aclassXped_1_1SpinBase_aa3e32fc1fca0742c8c71888548ef5bed_cgraph" alt=""/></div>
+<map name="aclassXped_1_1SpinBase_aa3e32fc1fca0742c8c71888548ef5bed_cgraph" id="aclassXped_1_1SpinBase_aa3e32fc1fca0742c8c71888548ef5bed_cgraph">
+<area shape="rect" title=" " alt="" coords="5,13,164,38"/>
+<area shape="rect" href="structXped_1_1SiteOperator.html#a74f66fcc1dde90722fce9c478edb9c5c" title=" " alt="" coords="212,5,357,45"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="afefe0094e4f8c6b294bbd2c49d4c26cf" name="afefe0094e4f8c6b294bbd2c49d4c26cf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afefe0094e4f8c6b294bbd2c49d4c26cf">&#9670;&#160;</a></span>Sm()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry_ , std::size_t order&gt; </div>
+<div class="memtemplate">
+template&lt;typename <a class="el" href="structDummy.html">Dummy</a> &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::enable_if&lt;!Dummy::IS_SPIN_SU2(), <a class="el" href="structXped_1_1SiteOperator.html">SiteOperator</a>&lt; double, Symmetry_ &gt; &gt;::type <a class="el" href="classXped_1_1SpinBase.html">Xped::SpinBase</a>&lt; Symmetry_, order &gt;::Sm </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>orbital</em> = <code>0</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1SpinBase_afefe0094e4f8c6b294bbd2c49d4c26cf_icgraph.png" border="0" usemap="#aclassXped_1_1SpinBase_afefe0094e4f8c6b294bbd2c49d4c26cf_icgraph" alt=""/></div>
+<map name="aclassXped_1_1SpinBase_afefe0094e4f8c6b294bbd2c49d4c26cf_icgraph" id="aclassXped_1_1SpinBase_afefe0094e4f8c6b294bbd2c49d4c26cf_icgraph">
+<area shape="rect" title=" " alt="" coords="228,5,380,31"/>
+<area shape="rect" href="classXped_1_1SpinBase.html#a3f21d6ed84f5163959c4edd5786419cd" title=" " alt="" coords="5,5,180,31"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ab9782771ffc67c1f854e5ff379dce422" name="ab9782771ffc67c1f854e5ff379dce422"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab9782771ffc67c1f854e5ff379dce422">&#9670;&#160;</a></span>Sp()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry_ , std::size_t order&gt; </div>
+<div class="memtemplate">
+template&lt;typename <a class="el" href="structDummy.html">Dummy</a> &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::enable_if&lt;!Dummy::IS_SPIN_SU2(), <a class="el" href="structXped_1_1SiteOperator.html">SiteOperator</a>&lt; double, Symmetry_ &gt; &gt;::type <a class="el" href="classXped_1_1SpinBase.html">Xped::SpinBase</a>&lt; Symmetry_, order &gt;::Sp </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>orbital</em> = <code>0</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1SpinBase_ab9782771ffc67c1f854e5ff379dce422_icgraph.png" border="0" usemap="#aclassXped_1_1SpinBase_ab9782771ffc67c1f854e5ff379dce422_icgraph" alt=""/></div>
+<map name="aclassXped_1_1SpinBase_ab9782771ffc67c1f854e5ff379dce422_icgraph" id="aclassXped_1_1SpinBase_ab9782771ffc67c1f854e5ff379dce422_icgraph">
+<area shape="rect" title=" " alt="" coords="228,5,375,31"/>
+<area shape="rect" href="classXped_1_1SpinBase.html#a3f21d6ed84f5163959c4edd5786419cd" title=" " alt="" coords="5,5,180,31"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a9c33519ccdda646bfa325fd3d0638949" name="a9c33519ccdda646bfa325fd3d0638949"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9c33519ccdda646bfa325fd3d0638949">&#9670;&#160;</a></span>Sx()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry_ , std::size_t order&gt; </div>
+<div class="memtemplate">
+template&lt;typename <a class="el" href="structDummy.html">Dummy</a> &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::enable_if&lt; Dummy::NO_SPIN_SYM(), <a class="el" href="structXped_1_1SiteOperator.html">SiteOperator</a>&lt; double, Symmetry_ &gt; &gt;::type <a class="el" href="classXped_1_1SpinBase.html">Xped::SpinBase</a>&lt; Symmetry_, order &gt;::Sx </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>orbital</em> = <code>0</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1SpinBase_a9c33519ccdda646bfa325fd3d0638949_cgraph.png" border="0" usemap="#aclassXped_1_1SpinBase_a9c33519ccdda646bfa325fd3d0638949_cgraph" alt=""/></div>
+<map name="aclassXped_1_1SpinBase_a9c33519ccdda646bfa325fd3d0638949_cgraph" id="aclassXped_1_1SpinBase_a9c33519ccdda646bfa325fd3d0638949_cgraph">
+<area shape="rect" title=" " alt="" coords="5,13,152,38"/>
+<area shape="rect" href="structXped_1_1SiteOperator.html#a74f66fcc1dde90722fce9c478edb9c5c" title=" " alt="" coords="200,5,345,45"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1SpinBase_a9c33519ccdda646bfa325fd3d0638949_icgraph.png" border="0" usemap="#aclassXped_1_1SpinBase_a9c33519ccdda646bfa325fd3d0638949_icgraph" alt=""/></div>
+<map name="aclassXped_1_1SpinBase_a9c33519ccdda646bfa325fd3d0638949_icgraph" id="aclassXped_1_1SpinBase_a9c33519ccdda646bfa325fd3d0638949_icgraph">
+<area shape="rect" title=" " alt="" coords="228,5,375,31"/>
+<area shape="rect" href="classXped_1_1SpinBase.html#a3f21d6ed84f5163959c4edd5786419cd" title=" " alt="" coords="5,5,180,31"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a7346562fdb5d687089d9ca38ff1d9918" name="a7346562fdb5d687089d9ca38ff1d9918"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7346562fdb5d687089d9ca38ff1d9918">&#9670;&#160;</a></span>Sy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename <a class="el" href="classXped_1_1SpinBase.html#a61edfd55a5fd0cb512cc20b0e8f23a53">Symmetry</a> , std::size_t order&gt; </div>
+<div class="memtemplate">
+template&lt;typename <a class="el" href="structDummy.html">Dummy</a> &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::enable_if&lt; Dummy::NO_SPIN_SYM(), <a class="el" href="structXped_1_1SiteOperator.html">SiteOperator</a>&lt; std::complex&lt; double &gt;, <a class="el" href="classXped_1_1SpinBase.html#a61edfd55a5fd0cb512cc20b0e8f23a53">Symmetry</a> &gt; &gt;::type <a class="el" href="classXped_1_1SpinBase.html">Xped::SpinBase</a>&lt; <a class="el" href="classXped_1_1SpinBase.html#a61edfd55a5fd0cb512cc20b0e8f23a53">Symmetry</a>, order &gt;::Sy </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>orbital</em> = <code>0</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1SpinBase_a7346562fdb5d687089d9ca38ff1d9918_cgraph.png" border="0" usemap="#aclassXped_1_1SpinBase_a7346562fdb5d687089d9ca38ff1d9918_cgraph" alt=""/></div>
+<map name="aclassXped_1_1SpinBase_a7346562fdb5d687089d9ca38ff1d9918_cgraph" id="aclassXped_1_1SpinBase_a7346562fdb5d687089d9ca38ff1d9918_cgraph">
+<area shape="rect" title=" " alt="" coords="5,13,152,38"/>
+<area shape="rect" href="structXped_1_1SiteOperator.html#a74f66fcc1dde90722fce9c478edb9c5c" title=" " alt="" coords="200,5,345,45"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a4823fa99799c0fac68007a9f62332adf" name="a4823fa99799c0fac68007a9f62332adf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4823fa99799c0fac68007a9f62332adf">&#9670;&#160;</a></span>Sz()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry_ , std::size_t order&gt; </div>
+<div class="memtemplate">
+template&lt;typename <a class="el" href="structDummy.html">Dummy</a> &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::enable_if&lt;!Dummy::IS_SPIN_SU2(), <a class="el" href="structXped_1_1SiteOperator.html">SiteOperator</a>&lt; double, Symmetry_ &gt; &gt;::type <a class="el" href="classXped_1_1SpinBase.html">Xped::SpinBase</a>&lt; Symmetry_, order &gt;::Sz </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>orbital</em> = <code>0</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1SpinBase_a4823fa99799c0fac68007a9f62332adf_icgraph.png" border="0" usemap="#aclassXped_1_1SpinBase_a4823fa99799c0fac68007a9f62332adf_icgraph" alt=""/></div>
+<map name="aclassXped_1_1SpinBase_a4823fa99799c0fac68007a9f62332adf_icgraph" id="aclassXped_1_1SpinBase_a4823fa99799c0fac68007a9f62332adf_icgraph">
+<area shape="rect" title=" " alt="" coords="228,5,375,31"/>
+<area shape="rect" href="classXped_1_1SpinBase.html#a3f21d6ed84f5163959c4edd5786419cd" title=" " alt="" coords="5,5,180,31"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a1c5768e97646c726ca2740dc9ad84569" name="a1c5768e97646c726ca2740dc9ad84569"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1c5768e97646c726ca2740dc9ad84569">&#9670;&#160;</a></span>Zero()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symmetry_ , std::size_t order&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structXped_1_1SiteOperator.html">SiteOperator</a>&lt; double, Symmetry_ &gt; <a class="el" href="classXped_1_1SpinBase.html">Xped::SpinBase</a>&lt; Symmetry_, order &gt;::Zero </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>orbital</em> = <code>0</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Identity </p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1SpinBase_a1c5768e97646c726ca2740dc9ad84569_icgraph.png" border="0" usemap="#aclassXped_1_1SpinBase_a1c5768e97646c726ca2740dc9ad84569_icgraph" alt=""/></div>
+<map name="aclassXped_1_1SpinBase_a1c5768e97646c726ca2740dc9ad84569_icgraph" id="aclassXped_1_1SpinBase_a1c5768e97646c726ca2740dc9ad84569_icgraph">
+<area shape="rect" title=" " alt="" coords="228,5,389,31"/>
+<area shape="rect" href="classXped_1_1SpinBase.html#a3f21d6ed84f5163959c4edd5786419cd" title=" " alt="" coords="5,5,180,31"/>
+</map>
+</div>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>include/Xped/Physics/<a class="el" href="SpinBase_8hpp_source.html">SpinBase.hpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- HTML footer for doxygen 1.9.2-->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="namespaceXped.html">Xped</a></li><li class="navelem"><a class="el" href="classXped_1_1SpinBase.html">SpinBase</a></li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.6 </li>
+  </ul>
+</div>
+<script type="text/javascript">
+  // script for doxygen 1.9.2
+  $(function() {
+      toggleButton = document.createElement('doxygen-awesome-dark-mode-toggle')
+      toggleButton.title = "Toggle Light/Dark Mode"
+      $(document).ready(function(){
+          document.getElementById("MSearchBox").parentNode.appendChild(toggleButton)
+      })
+      $(window).resize(function(){
+          document.getElementById("MSearchBox").parentNode.appendChild(toggleButton)
+      })
+  })
+</script>
+</body>
+</html>

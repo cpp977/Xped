@@ -1,0 +1,1088 @@
+<!-- HTML header for doxygen 1.9.6-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.6"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Xped: Xped::Mps&lt; Scalar_, Symmetry_ &gt; Class Template Reference</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+});
+</script>
+<script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript">
+  DoxygenAwesomeDarkModeToggle.lightModeIcon = '🌞'
+// icon from https://fonts.google.com/icons
+  DoxygenAwesomeDarkModeToggle.darkModeIcon = `<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px" viewBox="0 0 24 24" width="24px" fill="#009793"><g><rect fill="none" height="24" width="24"/></g><g><g><path d="M8.1,14.15C9.77,14.63,11,16.17,11,18c0,0.68-0.19,1.31-0.48,1.87c0.48,0.09,0.97,0.14,1.48,0.14 c1.48,0,2.9-0.41,4.13-1.15c-2.62-0.92-5.23-2.82-6.8-5.86C7.74,9.94,7.78,7.09,8.29,4.9c-2.57,1.33-4.3,4.01-4.3,7.1c0,0,0,0,0,0 c0.01,0,0.01,0,0.02,0C5.66,12,7.18,12.83,8.1,14.15z" opacity=".3"/><path d="M19.78,17.51c-2.47,0-6.57-1.33-8.68-5.43C8.77,7.57,10.6,3.6,11.63,2.01C6.27,2.2,1.98,6.59,1.98,12 c0,0.14,0.02,0.28,0.02,0.42C2.61,12.16,3.28,12,3.98,12c0,0,0,0,0,0c0-3.09,1.73-5.77,4.3-7.1C7.78,7.09,7.74,9.94,9.32,13 c1.57,3.04,4.18,4.95,6.8,5.86c-1.23,0.74-2.65,1.15-4.13,1.15c-0.5,0-1-0.05-1.48-0.14c-0.37,0.7-0.94,1.27-1.64,1.64 c0.98,0.32,2.03,0.5,3.11,0.5c3.5,0,6.58-1.8,8.37-4.52C20.18,17.5,19.98,17.51,19.78,17.51z"/><path d="M7,16l-0.18,0C6.4,14.84,5.3,14,4,14c-1.66,0-3,1.34-3,3s1.34,3,3,3c0.62,0,2.49,0,3,0c1.1,0,2-0.9,2-2 C9,16.9,8.1,16,7,16z"/></g></g></svg>`
+  DoxygenAwesomeDarkModeToggle.init()
+</script>
+</head>
+<body>
+  <!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/cpp977/Xped" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">Xped
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.9.6 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('classXped_1_1Mps.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
+<a href="classXped_1_1Mps-members.html">List of all members</a>  </div>
+  <div class="headertitle"><div class="title">Xped::Mps&lt; Scalar_, Symmetry_ &gt; Class Template Reference</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p><code>#include &lt;<a class="el" href="Mps_8hpp_source.html">Mps.hpp</a>&gt;</code></p>
+<div class="dynheader">
+Collaboration diagram for Xped::Mps&lt; Scalar_, Symmetry_ &gt;:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1Mps__coll__graph.png" border="0" usemap="#aXped_1_1Mps_3_01Scalar___00_01Symmetry___01_4_coll__map" alt="Collaboration graph"/></div>
+<map name="aXped_1_1Mps_3_01Scalar___00_01Symmetry___01_4_coll__map" id="aXped_1_1Mps_3_01Scalar___00_01Symmetry___01_4_coll__map">
+<area shape="rect" title=" " alt="" coords="313,51,469,91"/>
+<area shape="rect" title=" " alt="" coords="75,18,135,43"/>
+<area shape="rect" title=" " alt="" coords="5,67,204,151"/>
+</map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a47ae9786818a8e707e4e4a59c17c8bbe"><td class="memItemLeft" align="right" valign="top">typedef Symmetry_&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Mps.html#a47ae9786818a8e707e4e4a59c17c8bbe">Symmetry</a></td></tr>
+<tr class="separator:a47ae9786818a8e707e4e4a59c17c8bbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca0b4c444654f11f9cf4e81346e4d35b"><td class="memItemLeft" align="right" valign="top">typedef Scalar_&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Mps.html#aca0b4c444654f11f9cf4e81346e4d35b">Scalar</a></td></tr>
+<tr class="separator:aca0b4c444654f11f9cf4e81346e4d35b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a886da99334cf10ae41253a56ecfbc2b4"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="structXped_1_1ScalarTraits.html">ScalarTraits</a>&lt; <a class="el" href="classXped_1_1Mps.html#aca0b4c444654f11f9cf4e81346e4d35b">Scalar</a> &gt;::Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Mps.html#a886da99334cf10ae41253a56ecfbc2b4">RealScalar</a></td></tr>
+<tr class="separator:a886da99334cf10ae41253a56ecfbc2b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2dfc7ee87e368a66671ce5baf177c14c"><td class="memItemLeft" align="right" valign="top">typedef Symmetry::qType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Mps.html#a2dfc7ee87e368a66671ce5baf177c14c">qType</a></td></tr>
+<tr class="separator:a2dfc7ee87e368a66671ce5baf177c14c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab0c1d0db83a7a43a03921b172ca0e4ed"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classXped_1_1Tensor.html">Tensor</a>&lt; <a class="el" href="classXped_1_1Mps.html#aca0b4c444654f11f9cf4e81346e4d35b">Scalar</a>, 2, 1, <a class="el" href="classXped_1_1Mps.html#a47ae9786818a8e707e4e4a59c17c8bbe">Symmetry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Mps.html#ab0c1d0db83a7a43a03921b172ca0e4ed">ALType</a></td></tr>
+<tr class="separator:ab0c1d0db83a7a43a03921b172ca0e4ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab02ca482a631f3847ac8c8399de93aae"><td class="memItemLeft" align="right" valign="top">typedef ALType::TensorType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Mps.html#ab02ca482a631f3847ac8c8399de93aae">TensorType</a></td></tr>
+<tr class="separator:ab02ca482a631f3847ac8c8399de93aae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a91c0e15a622d9dd708f722195542a6e1"><td class="memItemLeft" align="right" valign="top">typedef ALType::MatrixType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Mps.html#a91c0e15a622d9dd708f722195542a6e1">MatrixType</a></td></tr>
+<tr class="separator:a91c0e15a622d9dd708f722195542a6e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae5c93db9d2e9a48342703b3d5704ae2"><td class="memItemLeft" align="right" valign="top">typedef ALType::VectorType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Mps.html#aae5c93db9d2e9a48342703b3d5704ae2">VectorType</a></td></tr>
+<tr class="separator:aae5c93db9d2e9a48342703b3d5704ae2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a856bb69e87a8db7bacfa40c0b8ca1b50"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classXped_1_1Tensor.html">Tensor</a>&lt; <a class="el" href="classXped_1_1Mps.html#aca0b4c444654f11f9cf4e81346e4d35b">Scalar</a>, 1, 2, <a class="el" href="classXped_1_1Mps.html#a47ae9786818a8e707e4e4a59c17c8bbe">Symmetry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Mps.html#a856bb69e87a8db7bacfa40c0b8ca1b50">ARType</a></td></tr>
+<tr class="separator:a856bb69e87a8db7bacfa40c0b8ca1b50"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a5284b3097f74ce5c8304c12b2cc52750"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Mps.html#a5284b3097f74ce5c8304c12b2cc52750">Mps</a> ()</td></tr>
+<tr class="separator:a5284b3097f74ce5c8304c12b2cc52750"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb356cff5e47c201714348db636ed9a7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Mps.html#afb356cff5e47c201714348db636ed9a7">Mps</a> (std::size_t L)</td></tr>
+<tr class="separator:afb356cff5e47c201714348db636ed9a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a18a22882623f4adc4373176a2faf0818"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Mps.html#a18a22882623f4adc4373176a2faf0818">Mps</a> (std::size_t L, const std::vector&lt; <a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; <a class="el" href="classXped_1_1Mps.html#a47ae9786818a8e707e4e4a59c17c8bbe">Symmetry</a>, 1 &gt; &gt; &amp;qloc_in, const <a class="el" href="classXped_1_1Mps.html#a2dfc7ee87e368a66671ce5baf177c14c">qType</a> &amp;Qtarget_in=Symmetry::qvacuum(), std::size_t Mmax_in=10, std::size_t Nqmax_in=10, std::size_t seed=0ul)</td></tr>
+<tr class="separator:a18a22882623f4adc4373176a2faf0818"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd25f3f420f2ec9016ba229ef15d0cda"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Mps.html#abd25f3f420f2ec9016ba229ef15d0cda">length</a> () const</td></tr>
+<tr class="separator:abd25f3f420f2ec9016ba229ef15d0cda"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac582b3ef5a4b17b0636fe153dfd48c25"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; <a class="el" href="classXped_1_1Mps.html#a47ae9786818a8e707e4e4a59c17c8bbe">Symmetry</a>, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Mps.html#ac582b3ef5a4b17b0636fe153dfd48c25">inBasis</a> (std::size_t l) const</td></tr>
+<tr class="separator:ac582b3ef5a4b17b0636fe153dfd48c25"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac013848b19002f650fa01f015ecf1615"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; <a class="el" href="classXped_1_1Mps.html#a47ae9786818a8e707e4e4a59c17c8bbe">Symmetry</a>, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Mps.html#ac013848b19002f650fa01f015ecf1615">outBasis</a> (std::size_t l) const</td></tr>
+<tr class="separator:ac013848b19002f650fa01f015ecf1615"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a39deb90d3c93b26728ebe841b784bc41"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; <a class="el" href="classXped_1_1Mps.html#a47ae9786818a8e707e4e4a59c17c8bbe">Symmetry</a>, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Mps.html#a39deb90d3c93b26728ebe841b784bc41">locBasis</a> (std::size_t l) const</td></tr>
+<tr class="separator:a39deb90d3c93b26728ebe841b784bc41"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1f28a7d0e7870b9040593170c34f6b1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; <a class="el" href="classXped_1_1Mps.html#a47ae9786818a8e707e4e4a59c17c8bbe">Symmetry</a>, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Mps.html#ae1f28a7d0e7870b9040593170c34f6b1">auxBasis</a> (std::size_t l) const</td></tr>
+<tr class="separator:ae1f28a7d0e7870b9040593170c34f6b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b81658c20ccdd58d4fac2c46ea85ea2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Mps.html#a5b81658c20ccdd58d4fac2c46ea85ea2">leftSweepStep</a> (const std::size_t loc, const <a class="el" href="namespaceXped_1_1DMRG.html#ac8f38d99798200c2df341e7bed9576ae">DMRG::BROOM</a> &amp;broom, const bool DISCARD_U=false)</td></tr>
+<tr class="separator:a5b81658c20ccdd58d4fac2c46ea85ea2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe4ee35d96361843878198557a88f50c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Mps.html#afe4ee35d96361843878198557a88f50c">rightSweepStep</a> (const std::size_t loc, const <a class="el" href="namespaceXped_1_1DMRG.html#ac8f38d99798200c2df341e7bed9576ae">DMRG::BROOM</a> &amp;broom, const bool DISCARD_V=false)</td></tr>
+<tr class="separator:afe4ee35d96361843878198557a88f50c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96ee6a528604b59a5781665d642150ea"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Mps.html#a96ee6a528604b59a5781665d642150ea">gen_maxBasis</a> ()</td></tr>
+<tr class="separator:a96ee6a528604b59a5781665d642150ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae5bb83a1b10192c784475e1a4987b883"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Mps.html#ae5bb83a1b10192c784475e1a4987b883">gen_auxBasis</a> (const std::size_t Mmax, const std::size_t Nqmax)</td></tr>
+<tr class="separator:ae5bb83a1b10192c784475e1a4987b883"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b77c3f0269ddeabc320a7f6a2813f05"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Mps.html#a0b77c3f0269ddeabc320a7f6a2813f05">resizeArrays</a> ()</td></tr>
+<tr class="separator:a0b77c3f0269ddeabc320a7f6a2813f05"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:a0a7bd4c2aeb421f8f81f8bc46041d318"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Mps.html#a0a7bd4c2aeb421f8f81f8bc46041d318">N_sites</a></td></tr>
+<tr class="separator:a0a7bd4c2aeb421f8f81f8bc46041d318"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e271f122ceb9de7fc6abb3e9f338f1d"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classXped_1_1Mps.html#a2dfc7ee87e368a66671ce5baf177c14c">qType</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Mps.html#a0e271f122ceb9de7fc6abb3e9f338f1d">Qtarget</a></td></tr>
+<tr class="separator:a0e271f122ceb9de7fc6abb3e9f338f1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2606532e757fca6597a28649498fd2cc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1GaugeTriple.html">GaugeTriple</a>&lt; std::vector&lt; <a class="el" href="classXped_1_1Mps.html#ab0c1d0db83a7a43a03921b172ca0e4ed">ALType</a> &gt;, std::vector&lt; <a class="el" href="classXped_1_1Mps.html#a856bb69e87a8db7bacfa40c0b8ca1b50">ARType</a> &gt;, std::vector&lt; <a class="el" href="classXped_1_1Mps.html#ab0c1d0db83a7a43a03921b172ca0e4ed">ALType</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Mps.html#a2606532e757fca6597a28649498fd2cc">A</a></td></tr>
+<tr class="separator:a2606532e757fca6597a28649498fd2cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a24d4c949ac5c8a9393a8bf58ea5a142e"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; <a class="el" href="classXped_1_1Mps.html#a47ae9786818a8e707e4e4a59c17c8bbe">Symmetry</a>, 1 &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Mps.html#a24d4c949ac5c8a9393a8bf58ea5a142e">qaux</a></td></tr>
+<tr class="separator:a24d4c949ac5c8a9393a8bf58ea5a142e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a40e7d6532c14ec3ec3f31ebdf8f679"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; <a class="el" href="classXped_1_1Mps.html#a47ae9786818a8e707e4e4a59c17c8bbe">Symmetry</a>, 1 &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Mps.html#a2a40e7d6532c14ec3ec3f31ebdf8f679">qloc</a></td></tr>
+<tr class="separator:a2a40e7d6532c14ec3ec3f31ebdf8f679"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9cd414ad785c5b2a5f58ddebc94dc251"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; <a class="el" href="classXped_1_1Mps.html#a47ae9786818a8e707e4e4a59c17c8bbe">Symmetry</a>, 1 &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Mps.html#a9cd414ad785c5b2a5f58ddebc94dc251">maxBasis</a></td></tr>
+<tr class="separator:a9cd414ad785c5b2a5f58ddebc94dc251"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea56e028058794118844241be57c8577"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Mps.html#aea56e028058794118844241be57c8577">max_Nsv</a> = 10000</td></tr>
+<tr class="separator:aea56e028058794118844241be57c8577"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae86e2fb02f31ad53dd6afe0ed5af3bbb"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Mps.html#ae86e2fb02f31ad53dd6afe0ed5af3bbb">min_Nsv</a> = 0</td></tr>
+<tr class="separator:ae86e2fb02f31ad53dd6afe0ed5af3bbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a65a14277154e22b016ebd4fde4f53805"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classXped_1_1Mps.html#a886da99334cf10ae41253a56ecfbc2b4">RealScalar</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Mps.html#a65a14277154e22b016ebd4fde4f53805">eps_svd</a> = 1.e-10</td></tr>
+<tr class="separator:a65a14277154e22b016ebd4fde4f53805"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a148c1591a140499c119afe008dd36aa0"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::map&lt; <a class="el" href="classXped_1_1Mps.html#a2dfc7ee87e368a66671ce5baf177c14c">qType</a>, <a class="el" href="classXped_1_1Mps.html#aae5c93db9d2e9a48342703b3d5704ae2">VectorType</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Mps.html#a148c1591a140499c119afe008dd36aa0">SVspec</a></td></tr>
+<tr class="separator:a148c1591a140499c119afe008dd36aa0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa717ec90ef416a53c4bcc76b32344f5c"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classXped_1_1Mps.html#a886da99334cf10ae41253a56ecfbc2b4">RealScalar</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Mps.html#aa717ec90ef416a53c4bcc76b32344f5c">truncWeight</a></td></tr>
+<tr class="separator:aa717ec90ef416a53c4bcc76b32344f5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae52ad56c028d28ef7c72dc2f64417977"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classXped_1_1Mps.html#a886da99334cf10ae41253a56ecfbc2b4">RealScalar</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Mps.html#ae52ad56c028d28ef7c72dc2f64417977">S</a></td></tr>
+<tr class="separator:ae52ad56c028d28ef7c72dc2f64417977"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
+<tr class="memitem:a24f98e30a169c77e12be3e6c8fa3e7a9"><td class="memItemLeft" align="right" valign="top">static constexpr std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classXped_1_1Mps.html#a24f98e30a169c77e12be3e6c8fa3e7a9">Nq</a> = Symmetry::Nq</td></tr>
+<tr class="separator:a24f98e30a169c77e12be3e6c8fa3e7a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="ab0c1d0db83a7a43a03921b172ca0e4ed" name="ab0c1d0db83a7a43a03921b172ca0e4ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab0c1d0db83a7a43a03921b172ca0e4ed">&#9670;&#160;</a></span>ALType</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="classXped_1_1Tensor.html">Tensor</a>&lt;<a class="el" href="classXped_1_1Mps.html#aca0b4c444654f11f9cf4e81346e4d35b">Scalar</a>, 2, 1, <a class="el" href="classXped_1_1Mps.html#a47ae9786818a8e707e4e4a59c17c8bbe">Symmetry</a>&gt; <a class="el" href="classXped_1_1Mps.html">Xped::Mps</a>&lt; Scalar_, Symmetry_ &gt;::ALType</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a856bb69e87a8db7bacfa40c0b8ca1b50" name="a856bb69e87a8db7bacfa40c0b8ca1b50"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a856bb69e87a8db7bacfa40c0b8ca1b50">&#9670;&#160;</a></span>ARType</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="classXped_1_1Tensor.html">Tensor</a>&lt;<a class="el" href="classXped_1_1Mps.html#aca0b4c444654f11f9cf4e81346e4d35b">Scalar</a>, 1, 2, <a class="el" href="classXped_1_1Mps.html#a47ae9786818a8e707e4e4a59c17c8bbe">Symmetry</a>&gt; <a class="el" href="classXped_1_1Mps.html">Xped::Mps</a>&lt; Scalar_, Symmetry_ &gt;::ARType</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a91c0e15a622d9dd708f722195542a6e1" name="a91c0e15a622d9dd708f722195542a6e1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a91c0e15a622d9dd708f722195542a6e1">&#9670;&#160;</a></span>MatrixType</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef ALType::MatrixType <a class="el" href="classXped_1_1Mps.html">Xped::Mps</a>&lt; Scalar_, Symmetry_ &gt;::MatrixType</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2dfc7ee87e368a66671ce5baf177c14c" name="a2dfc7ee87e368a66671ce5baf177c14c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2dfc7ee87e368a66671ce5baf177c14c">&#9670;&#160;</a></span>qType</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef Symmetry::qType <a class="el" href="classXped_1_1Mps.html">Xped::Mps</a>&lt; Scalar_, Symmetry_ &gt;::qType</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a886da99334cf10ae41253a56ecfbc2b4" name="a886da99334cf10ae41253a56ecfbc2b4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a886da99334cf10ae41253a56ecfbc2b4">&#9670;&#160;</a></span>RealScalar</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="structXped_1_1ScalarTraits.html">ScalarTraits</a>&lt;<a class="el" href="classXped_1_1Mps.html#aca0b4c444654f11f9cf4e81346e4d35b">Scalar</a>&gt;::Real <a class="el" href="classXped_1_1Mps.html">Xped::Mps</a>&lt; Scalar_, Symmetry_ &gt;::RealScalar</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aca0b4c444654f11f9cf4e81346e4d35b" name="aca0b4c444654f11f9cf4e81346e4d35b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aca0b4c444654f11f9cf4e81346e4d35b">&#9670;&#160;</a></span>Scalar</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef Scalar_ <a class="el" href="classXped_1_1Mps.html">Xped::Mps</a>&lt; Scalar_, Symmetry_ &gt;::Scalar</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a47ae9786818a8e707e4e4a59c17c8bbe" name="a47ae9786818a8e707e4e4a59c17c8bbe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a47ae9786818a8e707e4e4a59c17c8bbe">&#9670;&#160;</a></span>Symmetry</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef Symmetry_ <a class="el" href="classXped_1_1Mps.html">Xped::Mps</a>&lt; Scalar_, Symmetry_ &gt;::Symmetry</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab02ca482a631f3847ac8c8399de93aae" name="ab02ca482a631f3847ac8c8399de93aae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab02ca482a631f3847ac8c8399de93aae">&#9670;&#160;</a></span>TensorType</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef ALType::TensorType <a class="el" href="classXped_1_1Mps.html">Xped::Mps</a>&lt; Scalar_, Symmetry_ &gt;::TensorType</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aae5c93db9d2e9a48342703b3d5704ae2" name="aae5c93db9d2e9a48342703b3d5704ae2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aae5c93db9d2e9a48342703b3d5704ae2">&#9670;&#160;</a></span>VectorType</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef ALType::VectorType <a class="el" href="classXped_1_1Mps.html">Xped::Mps</a>&lt; Scalar_, Symmetry_ &gt;::VectorType</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a5284b3097f74ce5c8304c12b2cc52750" name="a5284b3097f74ce5c8304c12b2cc52750"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5284b3097f74ce5c8304c12b2cc52750">&#9670;&#160;</a></span>Mps() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classXped_1_1Mps.html">Xped::Mps</a>&lt; Scalar_, Symmetry_ &gt;::Mps </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="afb356cff5e47c201714348db636ed9a7" name="afb356cff5e47c201714348db636ed9a7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afb356cff5e47c201714348db636ed9a7">&#9670;&#160;</a></span>Mps() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classXped_1_1Mps.html">Xped::Mps</a>&lt; Scalar_, Symmetry_ &gt;::Mps </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>L</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1Mps_afb356cff5e47c201714348db636ed9a7_cgraph.png" border="0" usemap="#aclassXped_1_1Mps_afb356cff5e47c201714348db636ed9a7_cgraph" alt=""/></div>
+<map name="aclassXped_1_1Mps_afb356cff5e47c201714348db636ed9a7_cgraph" id="aclassXped_1_1Mps_afb356cff5e47c201714348db636ed9a7_cgraph">
+<area shape="rect" title=" " alt="" coords="5,5,131,31"/>
+<area shape="rect" href="classXped_1_1Mps.html#a0b77c3f0269ddeabc320a7f6a2813f05" title=" " alt="" coords="179,5,357,31"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a18a22882623f4adc4373176a2faf0818" name="a18a22882623f4adc4373176a2faf0818"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a18a22882623f4adc4373176a2faf0818">&#9670;&#160;</a></span>Mps() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classXped_1_1Mps.html">Xped::Mps</a>&lt; Scalar_, Symmetry_ &gt;::Mps </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>L</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; <a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; <a class="el" href="classXped_1_1Mps.html#a47ae9786818a8e707e4e4a59c17c8bbe">Symmetry</a>, 1 &gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>qloc_in</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classXped_1_1Mps.html#a2dfc7ee87e368a66671ce5baf177c14c">qType</a> &amp;&#160;</td>
+          <td class="paramname"><em>Qtarget_in</em> = <code>Symmetry::qvacuum()</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>Mmax_in</em> = <code>10</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>Nqmax_in</em> = <code>10</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>seed</em> = <code>0ul</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1Mps_a18a22882623f4adc4373176a2faf0818_cgraph.png" border="0" usemap="#aclassXped_1_1Mps_a18a22882623f4adc4373176a2faf0818_cgraph" alt=""/></div>
+<map name="aclassXped_1_1Mps_a18a22882623f4adc4373176a2faf0818_cgraph" id="aclassXped_1_1Mps_a18a22882623f4adc4373176a2faf0818_cgraph">
+<area shape="rect" title=" " alt="" coords="5,129,131,155"/>
+<area shape="rect" href="classXped_1_1Mps.html#ae5bb83a1b10192c784475e1a4987b883" title=" " alt="" coords="181,5,369,31"/>
+<area shape="rect" href="classXped_1_1Mps.html#a96ee6a528604b59a5781665d642150ea" title=" " alt="" coords="179,55,372,80"/>
+<area shape="rect" href="classXped_1_1Mps.html#ac582b3ef5a4b17b0636fe153dfd48c25" title=" " alt="" coords="203,104,348,129"/>
+<area shape="rect" href="classXped_1_1Mps.html#a39deb90d3c93b26728ebe841b784bc41" title=" " alt="" coords="199,153,351,179"/>
+<area shape="rect" href="classXped_1_1Mps.html#ac013848b19002f650fa01f015ecf1615" title=" " alt="" coords="198,203,353,228"/>
+<area shape="rect" href="classXped_1_1Mps.html#a0b77c3f0269ddeabc320a7f6a2813f05" title=" " alt="" coords="186,252,365,277"/>
+</map>
+</div>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="ae1f28a7d0e7870b9040593170c34f6b1" name="ae1f28a7d0e7870b9040593170c34f6b1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae1f28a7d0e7870b9040593170c34f6b1">&#9670;&#160;</a></span>auxBasis()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; <a class="el" href="classXped_1_1Mps.html#a47ae9786818a8e707e4e4a59c17c8bbe">Symmetry</a>, 1 &gt; <a class="el" href="classXped_1_1Mps.html">Xped::Mps</a>&lt; Scalar_, Symmetry_ &gt;::auxBasis </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>l</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1Mps_ae1f28a7d0e7870b9040593170c34f6b1_icgraph.png" border="0" usemap="#aclassXped_1_1Mps_ae1f28a7d0e7870b9040593170c34f6b1_icgraph" alt=""/></div>
+<map name="aclassXped_1_1Mps_ae1f28a7d0e7870b9040593170c34f6b1_icgraph" id="aclassXped_1_1Mps_ae1f28a7d0e7870b9040593170c34f6b1_icgraph">
+<area shape="rect" title=" " alt="" coords="108,5,265,31"/>
+<area shape="rect" href="bench_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,5,60,31"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ae5bb83a1b10192c784475e1a4987b883" name="ae5bb83a1b10192c784475e1a4987b883"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae5bb83a1b10192c784475e1a4987b883">&#9670;&#160;</a></span>gen_auxBasis()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classXped_1_1Mps.html">Xped::Mps</a>&lt; Scalar_, Symmetry_ &gt;::gen_auxBasis </td>
+          <td>(</td>
+          <td class="paramtype">const std::size_t&#160;</td>
+          <td class="paramname"><em>Mmax</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::size_t&#160;</td>
+          <td class="paramname"><em>Nqmax</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1Mps_ae5bb83a1b10192c784475e1a4987b883_icgraph.png" border="0" usemap="#aclassXped_1_1Mps_ae5bb83a1b10192c784475e1a4987b883_icgraph" alt=""/></div>
+<map name="aclassXped_1_1Mps_ae5bb83a1b10192c784475e1a4987b883_icgraph" id="aclassXped_1_1Mps_ae5bb83a1b10192c784475e1a4987b883_icgraph">
+<area shape="rect" title=" " alt="" coords="179,5,367,31"/>
+<area shape="rect" href="classXped_1_1Mps.html#a18a22882623f4adc4373176a2faf0818" title=" " alt="" coords="5,5,131,31"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a96ee6a528604b59a5781665d642150ea" name="a96ee6a528604b59a5781665d642150ea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a96ee6a528604b59a5781665d642150ea">&#9670;&#160;</a></span>gen_maxBasis()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classXped_1_1Mps.html">Xped::Mps</a>&lt; Scalar_, Symmetry_ &gt;::gen_maxBasis</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1Mps_a96ee6a528604b59a5781665d642150ea_icgraph.png" border="0" usemap="#aclassXped_1_1Mps_a96ee6a528604b59a5781665d642150ea_icgraph" alt=""/></div>
+<map name="aclassXped_1_1Mps_a96ee6a528604b59a5781665d642150ea_icgraph" id="aclassXped_1_1Mps_a96ee6a528604b59a5781665d642150ea_icgraph">
+<area shape="rect" title=" " alt="" coords="179,5,372,31"/>
+<area shape="rect" href="classXped_1_1Mps.html#a18a22882623f4adc4373176a2faf0818" title=" " alt="" coords="5,5,131,31"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ac582b3ef5a4b17b0636fe153dfd48c25" name="ac582b3ef5a4b17b0636fe153dfd48c25"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac582b3ef5a4b17b0636fe153dfd48c25">&#9670;&#160;</a></span>inBasis()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; <a class="el" href="classXped_1_1Mps.html#a47ae9786818a8e707e4e4a59c17c8bbe">Symmetry</a>, 1 &gt; <a class="el" href="classXped_1_1Mps.html">Xped::Mps</a>&lt; Scalar_, Symmetry_ &gt;::inBasis </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>l</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1Mps_ac582b3ef5a4b17b0636fe153dfd48c25_icgraph.png" border="0" usemap="#aclassXped_1_1Mps_ac582b3ef5a4b17b0636fe153dfd48c25_icgraph" alt=""/></div>
+<map name="aclassXped_1_1Mps_ac582b3ef5a4b17b0636fe153dfd48c25_icgraph" id="aclassXped_1_1Mps_ac582b3ef5a4b17b0636fe153dfd48c25_icgraph">
+<area shape="rect" title=" " alt="" coords="179,5,324,31"/>
+<area shape="rect" href="classXped_1_1Mps.html#a18a22882623f4adc4373176a2faf0818" title=" " alt="" coords="5,5,131,31"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a5b81658c20ccdd58d4fac2c46ea85ea2" name="a5b81658c20ccdd58d4fac2c46ea85ea2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5b81658c20ccdd58d4fac2c46ea85ea2">&#9670;&#160;</a></span>leftSweepStep()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classXped_1_1Mps.html">Xped::Mps</a>&lt; Scalar_, Symmetry_ &gt;::leftSweepStep </td>
+          <td>(</td>
+          <td class="paramtype">const std::size_t&#160;</td>
+          <td class="paramname"><em>loc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="namespaceXped_1_1DMRG.html#ac8f38d99798200c2df341e7bed9576ae">DMRG::BROOM</a> &amp;&#160;</td>
+          <td class="paramname"><em>broom</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>DISCARD_U</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1Mps_a5b81658c20ccdd58d4fac2c46ea85ea2_icgraph.png" border="0" usemap="#aclassXped_1_1Mps_a5b81658c20ccdd58d4fac2c46ea85ea2_icgraph" alt=""/></div>
+<map name="aclassXped_1_1Mps_a5b81658c20ccdd58d4fac2c46ea85ea2_icgraph" id="aclassXped_1_1Mps_a5b81658c20ccdd58d4fac2c46ea85ea2_icgraph">
+<area shape="rect" title=" " alt="" coords="108,5,299,31"/>
+<area shape="rect" href="bench_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,5,60,31"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="abd25f3f420f2ec9016ba229ef15d0cda" name="abd25f3f420f2ec9016ba229ef15d0cda"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abd25f3f420f2ec9016ba229ef15d0cda">&#9670;&#160;</a></span>length()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t <a class="el" href="classXped_1_1Mps.html">Xped::Mps</a>&lt; Scalar_, Symmetry_ &gt;::length </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a39deb90d3c93b26728ebe841b784bc41" name="a39deb90d3c93b26728ebe841b784bc41"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a39deb90d3c93b26728ebe841b784bc41">&#9670;&#160;</a></span>locBasis()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; <a class="el" href="classXped_1_1Mps.html#a47ae9786818a8e707e4e4a59c17c8bbe">Symmetry</a>, 1 &gt; <a class="el" href="classXped_1_1Mps.html">Xped::Mps</a>&lt; Scalar_, Symmetry_ &gt;::locBasis </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>l</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1Mps_a39deb90d3c93b26728ebe841b784bc41_icgraph.png" border="0" usemap="#aclassXped_1_1Mps_a39deb90d3c93b26728ebe841b784bc41_icgraph" alt=""/></div>
+<map name="aclassXped_1_1Mps_a39deb90d3c93b26728ebe841b784bc41_icgraph" id="aclassXped_1_1Mps_a39deb90d3c93b26728ebe841b784bc41_icgraph">
+<area shape="rect" title=" " alt="" coords="179,5,331,31"/>
+<area shape="rect" href="classXped_1_1Mps.html#a18a22882623f4adc4373176a2faf0818" title=" " alt="" coords="5,5,131,31"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ac013848b19002f650fa01f015ecf1615" name="ac013848b19002f650fa01f015ecf1615"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac013848b19002f650fa01f015ecf1615">&#9670;&#160;</a></span>outBasis()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt; <a class="el" href="classXped_1_1Mps.html#a47ae9786818a8e707e4e4a59c17c8bbe">Symmetry</a>, 1 &gt; <a class="el" href="classXped_1_1Mps.html">Xped::Mps</a>&lt; Scalar_, Symmetry_ &gt;::outBasis </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>l</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1Mps_ac013848b19002f650fa01f015ecf1615_icgraph.png" border="0" usemap="#aclassXped_1_1Mps_ac013848b19002f650fa01f015ecf1615_icgraph" alt=""/></div>
+<map name="aclassXped_1_1Mps_ac013848b19002f650fa01f015ecf1615_icgraph" id="aclassXped_1_1Mps_ac013848b19002f650fa01f015ecf1615_icgraph">
+<area shape="rect" title=" " alt="" coords="179,5,333,31"/>
+<area shape="rect" href="classXped_1_1Mps.html#a18a22882623f4adc4373176a2faf0818" title=" " alt="" coords="5,5,131,31"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a0b77c3f0269ddeabc320a7f6a2813f05" name="a0b77c3f0269ddeabc320a7f6a2813f05"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b77c3f0269ddeabc320a7f6a2813f05">&#9670;&#160;</a></span>resizeArrays()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classXped_1_1Mps.html">Xped::Mps</a>&lt; Scalar_, Symmetry_ &gt;::resizeArrays</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1Mps_a0b77c3f0269ddeabc320a7f6a2813f05_icgraph.png" border="0" usemap="#aclassXped_1_1Mps_a0b77c3f0269ddeabc320a7f6a2813f05_icgraph" alt=""/></div>
+<map name="aclassXped_1_1Mps_a0b77c3f0269ddeabc320a7f6a2813f05_icgraph" id="aclassXped_1_1Mps_a0b77c3f0269ddeabc320a7f6a2813f05_icgraph">
+<area shape="rect" title=" " alt="" coords="179,5,357,31"/>
+<area shape="rect" href="classXped_1_1Mps.html#afb356cff5e47c201714348db636ed9a7" title=" " alt="" coords="5,5,131,31"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="afe4ee35d96361843878198557a88f50c" name="afe4ee35d96361843878198557a88f50c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afe4ee35d96361843878198557a88f50c">&#9670;&#160;</a></span>rightSweepStep()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classXped_1_1Mps.html">Xped::Mps</a>&lt; Scalar_, Symmetry_ &gt;::rightSweepStep </td>
+          <td>(</td>
+          <td class="paramtype">const std::size_t&#160;</td>
+          <td class="paramname"><em>loc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="namespaceXped_1_1DMRG.html#ac8f38d99798200c2df341e7bed9576ae">DMRG::BROOM</a> &amp;&#160;</td>
+          <td class="paramname"><em>broom</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>DISCARD_V</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classXped_1_1Mps_afe4ee35d96361843878198557a88f50c_icgraph.png" border="0" usemap="#aclassXped_1_1Mps_afe4ee35d96361843878198557a88f50c_icgraph" alt=""/></div>
+<map name="aclassXped_1_1Mps_afe4ee35d96361843878198557a88f50c_icgraph" id="aclassXped_1_1Mps_afe4ee35d96361843878198557a88f50c_icgraph">
+<area shape="rect" title=" " alt="" coords="108,5,308,31"/>
+<area shape="rect" href="bench_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,5,60,31"/>
+</map>
+</div>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a2606532e757fca6597a28649498fd2cc" name="a2606532e757fca6597a28649498fd2cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2606532e757fca6597a28649498fd2cc">&#9670;&#160;</a></span>A</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structXped_1_1GaugeTriple.html">GaugeTriple</a>&lt;std::vector&lt;<a class="el" href="classXped_1_1Mps.html#ab0c1d0db83a7a43a03921b172ca0e4ed">ALType</a>&gt;, std::vector&lt;<a class="el" href="classXped_1_1Mps.html#a856bb69e87a8db7bacfa40c0b8ca1b50">ARType</a>&gt;, std::vector&lt;<a class="el" href="classXped_1_1Mps.html#ab0c1d0db83a7a43a03921b172ca0e4ed">ALType</a>&gt; &gt; <a class="el" href="classXped_1_1Mps.html">Xped::Mps</a>&lt; Scalar_, Symmetry_ &gt;<a class="el" href="classA.html">::A</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a65a14277154e22b016ebd4fde4f53805" name="a65a14277154e22b016ebd4fde4f53805"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a65a14277154e22b016ebd4fde4f53805">&#9670;&#160;</a></span>eps_svd</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classXped_1_1Mps.html#a886da99334cf10ae41253a56ecfbc2b4">RealScalar</a> <a class="el" href="classXped_1_1Mps.html">Xped::Mps</a>&lt; Scalar_, Symmetry_ &gt;::eps_svd = 1.e-10</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aea56e028058794118844241be57c8577" name="aea56e028058794118844241be57c8577"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aea56e028058794118844241be57c8577">&#9670;&#160;</a></span>max_Nsv</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t <a class="el" href="classXped_1_1Mps.html">Xped::Mps</a>&lt; Scalar_, Symmetry_ &gt;::max_Nsv = 10000</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9cd414ad785c5b2a5f58ddebc94dc251" name="a9cd414ad785c5b2a5f58ddebc94dc251"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9cd414ad785c5b2a5f58ddebc94dc251">&#9670;&#160;</a></span>maxBasis</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt;<a class="el" href="classXped_1_1Mps.html#a47ae9786818a8e707e4e4a59c17c8bbe">Symmetry</a>, 1&gt; &gt; <a class="el" href="classXped_1_1Mps.html">Xped::Mps</a>&lt; Scalar_, Symmetry_ &gt;::maxBasis</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae86e2fb02f31ad53dd6afe0ed5af3bbb" name="ae86e2fb02f31ad53dd6afe0ed5af3bbb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae86e2fb02f31ad53dd6afe0ed5af3bbb">&#9670;&#160;</a></span>min_Nsv</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t <a class="el" href="classXped_1_1Mps.html">Xped::Mps</a>&lt; Scalar_, Symmetry_ &gt;::min_Nsv = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0a7bd4c2aeb421f8f81f8bc46041d318" name="a0a7bd4c2aeb421f8f81f8bc46041d318"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0a7bd4c2aeb421f8f81f8bc46041d318">&#9670;&#160;</a></span>N_sites</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t <a class="el" href="classXped_1_1Mps.html">Xped::Mps</a>&lt; Scalar_, Symmetry_ &gt;::N_sites</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a24f98e30a169c77e12be3e6c8fa3e7a9" name="a24f98e30a169c77e12be3e6c8fa3e7a9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a24f98e30a169c77e12be3e6c8fa3e7a9">&#9670;&#160;</a></span>Nq</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr std::size_t <a class="el" href="classXped_1_1Mps.html">Xped::Mps</a>&lt; Scalar_, Symmetry_ &gt;::Nq = Symmetry::Nq</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a24d4c949ac5c8a9393a8bf58ea5a142e" name="a24d4c949ac5c8a9393a8bf58ea5a142e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a24d4c949ac5c8a9393a8bf58ea5a142e">&#9670;&#160;</a></span>qaux</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt;<a class="el" href="classXped_1_1Mps.html#a47ae9786818a8e707e4e4a59c17c8bbe">Symmetry</a>, 1&gt; &gt; <a class="el" href="classXped_1_1Mps.html">Xped::Mps</a>&lt; Scalar_, Symmetry_ &gt;::qaux</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2a40e7d6532c14ec3ec3f31ebdf8f679" name="a2a40e7d6532c14ec3ec3f31ebdf8f679"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2a40e7d6532c14ec3ec3f31ebdf8f679">&#9670;&#160;</a></span>qloc</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="classXped_1_1Qbasis.html">Qbasis</a>&lt;<a class="el" href="classXped_1_1Mps.html#a47ae9786818a8e707e4e4a59c17c8bbe">Symmetry</a>, 1&gt; &gt; <a class="el" href="classXped_1_1Mps.html">Xped::Mps</a>&lt; Scalar_, Symmetry_ &gt;::qloc</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0e271f122ceb9de7fc6abb3e9f338f1d" name="a0e271f122ceb9de7fc6abb3e9f338f1d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0e271f122ceb9de7fc6abb3e9f338f1d">&#9670;&#160;</a></span>Qtarget</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="classXped_1_1Mps.html#a2dfc7ee87e368a66671ce5baf177c14c">qType</a>&gt; <a class="el" href="classXped_1_1Mps.html">Xped::Mps</a>&lt; Scalar_, Symmetry_ &gt;::Qtarget</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae52ad56c028d28ef7c72dc2f64417977" name="ae52ad56c028d28ef7c72dc2f64417977"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae52ad56c028d28ef7c72dc2f64417977">&#9670;&#160;</a></span>S</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="classXped_1_1Mps.html#a886da99334cf10ae41253a56ecfbc2b4">RealScalar</a>&gt; <a class="el" href="classXped_1_1Mps.html">Xped::Mps</a>&lt; Scalar_, Symmetry_ &gt;::S</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>entropy </p>
+
+</div>
+</div>
+<a id="a148c1591a140499c119afe008dd36aa0" name="a148c1591a140499c119afe008dd36aa0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a148c1591a140499c119afe008dd36aa0">&#9670;&#160;</a></span>SVspec</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::map&lt;<a class="el" href="classXped_1_1Mps.html#a2dfc7ee87e368a66671ce5baf177c14c">qType</a>, <a class="el" href="classXped_1_1Mps.html#aae5c93db9d2e9a48342703b3d5704ae2">VectorType</a>&gt; &gt; <a class="el" href="classXped_1_1Mps.html">Xped::Mps</a>&lt; Scalar_, Symmetry_ &gt;::SVspec</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa717ec90ef416a53c4bcc76b32344f5c" name="aa717ec90ef416a53c4bcc76b32344f5c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa717ec90ef416a53c4bcc76b32344f5c">&#9670;&#160;</a></span>truncWeight</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar_ , typename Symmetry_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="classXped_1_1Mps.html#a886da99334cf10ae41253a56ecfbc2b4">RealScalar</a>&gt; <a class="el" href="classXped_1_1Mps.html">Xped::Mps</a>&lt; Scalar_, Symmetry_ &gt;::truncWeight</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>truncated weight </p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>include/Xped/MPS/<a class="el" href="Mps_8hpp_source.html">Mps.hpp</a></li>
+<li>src/MPS/<a class="el" href="Mps_8cpp.html">Mps.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- HTML footer for doxygen 1.9.2-->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="namespaceXped.html">Xped</a></li><li class="navelem"><a class="el" href="classXped_1_1Mps.html">Mps</a></li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.6 </li>
+  </ul>
+</div>
+<script type="text/javascript">
+  // script for doxygen 1.9.2
+  $(function() {
+      toggleButton = document.createElement('doxygen-awesome-dark-mode-toggle')
+      toggleButton.title = "Toggle Light/Dark Mode"
+      $(document).ready(function(){
+          document.getElementById("MSearchBox").parentNode.appendChild(toggleButton)
+      })
+      $(window).resize(function(){
+          document.getElementById("MSearchBox").parentNode.appendChild(toggleButton)
+      })
+  })
+</script>
+</body>
+</html>

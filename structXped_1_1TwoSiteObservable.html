@@ -1,0 +1,898 @@
+<!-- HTML header for doxygen 1.9.6-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.6"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Xped: Xped::TwoSiteObservable&lt; Scalar, Symmetry, HERMITIAN &gt; Struct Template Reference</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+});
+</script>
+<script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript">
+  DoxygenAwesomeDarkModeToggle.lightModeIcon = '🌞'
+// icon from https://fonts.google.com/icons
+  DoxygenAwesomeDarkModeToggle.darkModeIcon = `<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px" viewBox="0 0 24 24" width="24px" fill="#009793"><g><rect fill="none" height="24" width="24"/></g><g><g><path d="M8.1,14.15C9.77,14.63,11,16.17,11,18c0,0.68-0.19,1.31-0.48,1.87c0.48,0.09,0.97,0.14,1.48,0.14 c1.48,0,2.9-0.41,4.13-1.15c-2.62-0.92-5.23-2.82-6.8-5.86C7.74,9.94,7.78,7.09,8.29,4.9c-2.57,1.33-4.3,4.01-4.3,7.1c0,0,0,0,0,0 c0.01,0,0.01,0,0.02,0C5.66,12,7.18,12.83,8.1,14.15z" opacity=".3"/><path d="M19.78,17.51c-2.47,0-6.57-1.33-8.68-5.43C8.77,7.57,10.6,3.6,11.63,2.01C6.27,2.2,1.98,6.59,1.98,12 c0,0.14,0.02,0.28,0.02,0.42C2.61,12.16,3.28,12,3.98,12c0,0,0,0,0,0c0-3.09,1.73-5.77,4.3-7.1C7.78,7.09,7.74,9.94,9.32,13 c1.57,3.04,4.18,4.95,6.8,5.86c-1.23,0.74-2.65,1.15-4.13,1.15c-0.5,0-1-0.05-1.48-0.14c-0.37,0.7-0.94,1.27-1.64,1.64 c0.98,0.32,2.03,0.5,3.11,0.5c3.5,0,6.58-1.8,8.37-4.52C20.18,17.5,19.98,17.51,19.78,17.51z"/><path d="M7,16l-0.18,0C6.4,14.84,5.3,14,4,14c-1.66,0-3,1.34-3,3s1.34,3,3,3c0.62,0,2.49,0,3,0c1.1,0,2-0.9,2-2 C9,16.9,8.1,16,7,16z"/></g></g></svg>`
+  DoxygenAwesomeDarkModeToggle.init()
+</script>
+</head>
+<body>
+  <!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/cpp977/Xped" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">Xped
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.9.6 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('structXped_1_1TwoSiteObservable.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="structXped_1_1TwoSiteObservable-members.html">List of all members</a>  </div>
+  <div class="headertitle"><div class="title">Xped::TwoSiteObservable&lt; Scalar, Symmetry, HERMITIAN &gt; Struct Template Reference</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p><code>#include &lt;<a class="el" href="TwoSiteObservable_8hpp_source.html">TwoSiteObservable.hpp</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Xped::TwoSiteObservable&lt; Scalar, Symmetry, HERMITIAN &gt;:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1TwoSiteObservable__inherit__graph.png" border="0" usemap="#aXped_1_1TwoSiteObservable_3_01Scalar_00_01Symmetry_00_01HERMITIAN_01_4_inherit__map" alt="Inheritance graph"/></div>
+<map name="aXped_1_1TwoSiteObservable_3_01Scalar_00_01Symmetry_00_01HERMITIAN_01_4_inherit__map" id="aXped_1_1TwoSiteObservable_3_01Scalar_00_01Symmetry_00_01HERMITIAN_01_4_inherit__map">
+<area shape="rect" title=" " alt="" coords="5,79,256,119"/>
+<area shape="rect" href="structXped_1_1ObservableBase.html" title=" " alt="" coords="46,5,215,31"/>
+</map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+<div class="dynheader">
+Collaboration diagram for Xped::TwoSiteObservable&lt; Scalar, Symmetry, HERMITIAN &gt;:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1TwoSiteObservable__coll__graph.png" border="0" usemap="#aXped_1_1TwoSiteObservable_3_01Scalar_00_01Symmetry_00_01HERMITIAN_01_4_coll__map" alt="Collaboration graph"/></div>
+<map name="aXped_1_1TwoSiteObservable_3_01Scalar_00_01Symmetry_00_01HERMITIAN_01_4_coll__map" id="aXped_1_1TwoSiteObservable_3_01Scalar_00_01Symmetry_00_01HERMITIAN_01_4_coll__map">
+<area shape="rect" title=" " alt="" coords="645,79,896,119"/>
+<area shape="rect" href="structXped_1_1ObservableBase.html" title=" " alt="" coords="351,7,521,33"/>
+<area shape="rect" title=" " alt="" coords="159,7,217,33"/>
+<area shape="rect" href="structXped_1_1TMatrix.html" title=" " alt="" coords="346,83,526,138"/>
+<area shape="rect" href="structXped_1_1Pattern.html" title=" " alt="" coords="133,134,243,159"/>
+<area shape="rect" href="structXped_1_1TMatrix.html" title=" " alt="" coords="332,169,540,194"/>
+<area shape="rect" title=" " alt="" coords="5,134,65,159"/>
+</map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a985df92ebe366da0f2eac40056c9fb66"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TwoSiteObservable.html#a985df92ebe366da0f2eac40056c9fb66">ObsScalar</a> = std::conditional_t&lt; HERMITIAN, typename <a class="el" href="structXped_1_1ScalarTraits.html">ScalarTraits</a>&lt; Scalar &gt;::Real, typename <a class="el" href="structXped_1_1ScalarTraits.html">ScalarTraits</a>&lt; Scalar &gt;::Comp &gt;</td></tr>
+<tr class="separator:a985df92ebe366da0f2eac40056c9fb66"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:ac9aa5dab891a1fec39f1ff0f7bf648d3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TwoSiteObservable.html#ac9aa5dab891a1fec39f1ff0f7bf648d3">TwoSiteObservable</a> ()=default</td></tr>
+<tr class="separator:ac9aa5dab891a1fec39f1ff0f7bf648d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a39c521320df2e0e53f3e46e08799b5ca"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TwoSiteObservable.html#a39c521320df2e0e53f3e46e08799b5ca">TwoSiteObservable</a> (const <a class="el" href="structXped_1_1Pattern.html">Pattern</a> &amp;pat, <a class="el" href="namespaceXped_1_1Opts.html#ae4a8447de96e9ccd51e29d758366ac11">Opts::Bond</a> <a class="el" href="structXped_1_1TwoSiteObservable.html#a75509a2d6970aab695d5f7668827c461">bond</a>, const std::string &amp;name_in=&quot;&quot;)</td></tr>
+<tr class="separator:a39c521320df2e0e53f3e46e08799b5ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22bc65d54f8c571975eeb9c82d7c796d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1TwoSiteObservable.html">TwoSiteObservable</a>&lt; Scalar, Symmetry, HERMITIAN &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TwoSiteObservable.html#a22bc65d54f8c571975eeb9c82d7c796d">shiftQN</a> (const <a class="el" href="structXped_1_1TMatrix.html">TMatrix</a>&lt; typename Symmetry::qType &gt; &amp;charges) const</td></tr>
+<tr class="separator:a22bc65d54f8c571975eeb9c82d7c796d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d3df563ef8111da713fdcc5c59caf8c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TwoSiteObservable.html#a5d3df563ef8111da713fdcc5c59caf8c">loadFromMatlab</a> (const std::filesystem::path &amp;p, const std::string &amp;root_name, int qn_scale=1)</td></tr>
+<tr class="separator:a5d3df563ef8111da713fdcc5c59caf8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c05162dc83391506011ec176f22177a"><td class="memItemLeft" align="right" valign="top">virtual std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TwoSiteObservable.html#a3c05162dc83391506011ec176f22177a">getResString</a> (const std::string &amp;offset) const override</td></tr>
+<tr class="separator:a3c05162dc83391506011ec176f22177a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeec4898d7703f898dbfdcf4a108d6372"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TwoSiteObservable.html#aeec4898d7703f898dbfdcf4a108d6372">toFile</a> (HighFive::File &amp;file, const std::string &amp;root=&quot;/&quot;) const override</td></tr>
+<tr class="separator:aeec4898d7703f898dbfdcf4a108d6372"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abb5a836943909e0216bcfc6bc6647110"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TwoSiteObservable.html#abb5a836943909e0216bcfc6bc6647110">setDefaultObs</a> ()</td></tr>
+<tr class="separator:abb5a836943909e0216bcfc6bc6647110"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa37d1886553415b7fceac2ba4a4d78ae"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TwoSiteObservable.html#aa37d1886553415b7fceac2ba4a4d78ae">computeObs</a> (XPED_CONST <a class="el" href="classXped_1_1CTM.html">CTM</a>&lt; double, Symmetry, 2, false, <a class="el" href="structXped_1_1Opts_1_1CTMCheckpoint.html">Opts::CTMCheckpoint</a>{}&gt; &amp;env)</td></tr>
+<tr class="separator:aa37d1886553415b7fceac2ba4a4d78ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c553d6da1a3d43a48cee772471528d1"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TwoSiteObservable.html#a3c553d6da1a3d43a48cee772471528d1">computeObs</a> (XPED_CONST <a class="el" href="classXped_1_1CTM.html">CTM</a>&lt; std::complex&lt; double &gt;, Symmetry, 2, false, <a class="el" href="structXped_1_1Opts_1_1CTMCheckpoint.html">Opts::CTMCheckpoint</a>{}&gt; &amp;env)</td></tr>
+<tr class="separator:a3c553d6da1a3d43a48cee772471528d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f99256ed92a1e10e8ac5e54cdc3050f"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TwoSiteObservable.html#a0f99256ed92a1e10e8ac5e54cdc3050f">computeObs</a> (XPED_CONST <a class="el" href="classXped_1_1CTM.html">CTM</a>&lt; double, Symmetry, 1, false, <a class="el" href="structXped_1_1Opts_1_1CTMCheckpoint.html">Opts::CTMCheckpoint</a>{}&gt; &amp;env)</td></tr>
+<tr class="separator:a0f99256ed92a1e10e8ac5e54cdc3050f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4278d1ef7054fe64ee0a3a1e511673fe"><td class="memItemLeft" align="right" valign="top">virtual std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TwoSiteObservable.html#a4278d1ef7054fe64ee0a3a1e511673fe">getObsString</a> (const std::string &amp;) const</td></tr>
+<tr class="separator:a4278d1ef7054fe64ee0a3a1e511673fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2d5041c93be6f752e5be727186cd892"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TwoSiteObservable.html#af2d5041c93be6f752e5be727186cd892">obsToFile</a> (HighFive::File &amp;, const std::string &amp;=&quot;/&quot;) const</td></tr>
+<tr class="separator:af2d5041c93be6f752e5be727186cd892"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a45d478e4a2893f6e1c47346fd77cff4b"><td class="memTemplParams" colspan="2">template&lt;typename Ar &gt; </td></tr>
+<tr class="memitem:a45d478e4a2893f6e1c47346fd77cff4b"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structXped_1_1TwoSiteObservable.html#a45d478e4a2893f6e1c47346fd77cff4b">serialize</a> (Ar &amp;ar)</td></tr>
+<tr class="separator:a45d478e4a2893f6e1c47346fd77cff4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_structXped_1_1ObservableBase"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_structXped_1_1ObservableBase')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="structXped_1_1ObservableBase.html">Xped::ObservableBase</a></td></tr>
+<tr class="memitem:a9c08efff4292624f86b468bc67501b4e inherit pub_methods_structXped_1_1ObservableBase"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1ObservableBase.html#a9c08efff4292624f86b468bc67501b4e">ObservableBase</a> (const std::string &amp;name_in=&quot;&quot;, bool MEASURE_IN=true)</td></tr>
+<tr class="separator:a9c08efff4292624f86b468bc67501b4e inherit pub_methods_structXped_1_1ObservableBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a16f7e330449ee2bddf0f4aee6b674477 inherit pub_methods_structXped_1_1ObservableBase"><td class="memItemLeft" align="right" valign="top">virtual std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1ObservableBase.html#a16f7e330449ee2bddf0f4aee6b674477">file_name</a> () const</td></tr>
+<tr class="separator:a16f7e330449ee2bddf0f4aee6b674477 inherit pub_methods_structXped_1_1ObservableBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa140c8ed2d7715d213a808ca100b3e18 inherit pub_methods_structXped_1_1ObservableBase"><td class="memItemLeft" align="right" valign="top">virtual std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1ObservableBase.html#aa140c8ed2d7715d213a808ca100b3e18">format</a> () const</td></tr>
+<tr class="separator:aa140c8ed2d7715d213a808ca100b3e18 inherit pub_methods_structXped_1_1ObservableBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab12fbc05d1e34f904254d1691bb2e625 inherit pub_methods_structXped_1_1ObservableBase"><td class="memItemLeft" align="right" valign="top">virtual std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1ObservableBase.html#ab12fbc05d1e34f904254d1691bb2e625">getResString</a> (const std::string &amp;offset) const =0</td></tr>
+<tr class="separator:ab12fbc05d1e34f904254d1691bb2e625 inherit pub_methods_structXped_1_1ObservableBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a44e59b089d73d3a873e075177b00721e inherit pub_methods_structXped_1_1ObservableBase"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1ObservableBase.html#a44e59b089d73d3a873e075177b00721e">toFile</a> (HighFive::File &amp;file, const std::string &amp;) const =0</td></tr>
+<tr class="separator:a44e59b089d73d3a873e075177b00721e inherit pub_methods_structXped_1_1ObservableBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acaa82588d8711b0e852eb8cf3bc5566b inherit pub_methods_structXped_1_1ObservableBase"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1ObservableBase.html#acaa82588d8711b0e852eb8cf3bc5566b">~ObservableBase</a> ()=default</td></tr>
+<tr class="separator:acaa82588d8711b0e852eb8cf3bc5566b inherit pub_methods_structXped_1_1ObservableBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:a3132f28f27c7994cf79f2698ce5e15c9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1TMatrix.html">TMatrix</a>&lt; <a class="el" href="classXped_1_1Tensor.html">Tensor</a>&lt; Scalar, 2, 2, Symmetry, false &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TwoSiteObservable.html#a3132f28f27c7994cf79f2698ce5e15c9">data_h</a></td></tr>
+<tr class="separator:a3132f28f27c7994cf79f2698ce5e15c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a696a97e920d7b3e52d47eb3b827b0a44"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1TMatrix.html">TMatrix</a>&lt; <a class="el" href="classXped_1_1Tensor.html">Tensor</a>&lt; Scalar, 2, 2, Symmetry, false &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TwoSiteObservable.html#a696a97e920d7b3e52d47eb3b827b0a44">data_v</a></td></tr>
+<tr class="separator:a696a97e920d7b3e52d47eb3b827b0a44"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b0ab0e8c89056938a05841d4ed14c46"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1TMatrix.html">TMatrix</a>&lt; <a class="el" href="classXped_1_1Tensor.html">Tensor</a>&lt; Scalar, 2, 2, Symmetry, false &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TwoSiteObservable.html#a6b0ab0e8c89056938a05841d4ed14c46">data_d1</a></td></tr>
+<tr class="separator:a6b0ab0e8c89056938a05841d4ed14c46"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd2b441621d3a9ecaab4c09b01f1f228"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1TMatrix.html">TMatrix</a>&lt; <a class="el" href="classXped_1_1Tensor.html">Tensor</a>&lt; Scalar, 2, 2, Symmetry, false &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TwoSiteObservable.html#afd2b441621d3a9ecaab4c09b01f1f228">data_d2</a></td></tr>
+<tr class="separator:afd2b441621d3a9ecaab4c09b01f1f228"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a952e643e4660069ab8280d31f0111270"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1TMatrix.html">TMatrix</a>&lt; <a class="el" href="structXped_1_1TwoSiteObservable.html#a985df92ebe366da0f2eac40056c9fb66">ObsScalar</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TwoSiteObservable.html#a952e643e4660069ab8280d31f0111270">obs_h</a></td></tr>
+<tr class="separator:a952e643e4660069ab8280d31f0111270"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73834a3565d7d913c181cfd9d2e3fe9a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1TMatrix.html">TMatrix</a>&lt; <a class="el" href="structXped_1_1TwoSiteObservable.html#a985df92ebe366da0f2eac40056c9fb66">ObsScalar</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TwoSiteObservable.html#a73834a3565d7d913c181cfd9d2e3fe9a">obs_v</a></td></tr>
+<tr class="separator:a73834a3565d7d913c181cfd9d2e3fe9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a297fa8647f3c910bedf61149492f2f1a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1TMatrix.html">TMatrix</a>&lt; <a class="el" href="structXped_1_1TwoSiteObservable.html#a985df92ebe366da0f2eac40056c9fb66">ObsScalar</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TwoSiteObservable.html#a297fa8647f3c910bedf61149492f2f1a">obs_d1</a></td></tr>
+<tr class="separator:a297fa8647f3c910bedf61149492f2f1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8d02f4ca54956d530745913ebbc311f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structXped_1_1TMatrix.html">TMatrix</a>&lt; <a class="el" href="structXped_1_1TwoSiteObservable.html#a985df92ebe366da0f2eac40056c9fb66">ObsScalar</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TwoSiteObservable.html#ac8d02f4ca54956d530745913ebbc311f">obs_d2</a></td></tr>
+<tr class="separator:ac8d02f4ca54956d530745913ebbc311f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75509a2d6970aab695d5f7668827c461"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceXped_1_1Opts.html#ae4a8447de96e9ccd51e29d758366ac11">Opts::Bond</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1TwoSiteObservable.html#a75509a2d6970aab695d5f7668827c461">bond</a></td></tr>
+<tr class="separator:a75509a2d6970aab695d5f7668827c461"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_attribs_structXped_1_1ObservableBase"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_structXped_1_1ObservableBase')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="structXped_1_1ObservableBase.html">Xped::ObservableBase</a></td></tr>
+<tr class="memitem:a865c9d11bbf6b6af7c37282f5dcce167 inherit pub_attribs_structXped_1_1ObservableBase"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1ObservableBase.html#a865c9d11bbf6b6af7c37282f5dcce167">name</a> = &quot;Op&quot;</td></tr>
+<tr class="separator:a865c9d11bbf6b6af7c37282f5dcce167 inherit pub_attribs_structXped_1_1ObservableBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af545b538ac4424df10dd948c8477e647 inherit pub_attribs_structXped_1_1ObservableBase"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structXped_1_1ObservableBase.html#af545b538ac4424df10dd948c8477e647">MEASURE</a> = true</td></tr>
+<tr class="separator:af545b538ac4424df10dd948c8477e647 inherit pub_attribs_structXped_1_1ObservableBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="a985df92ebe366da0f2eac40056c9fb66" name="a985df92ebe366da0f2eac40056c9fb66"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a985df92ebe366da0f2eac40056c9fb66">&#9670;&#160;</a></span>ObsScalar</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar , typename Symmetry , bool HERMITIAN = true&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="structXped_1_1TwoSiteObservable.html">Xped::TwoSiteObservable</a>&lt; Scalar, Symmetry, HERMITIAN &gt;::ObsScalar =  std::conditional_t&lt;HERMITIAN, typename <a class="el" href="structXped_1_1ScalarTraits.html">ScalarTraits</a>&lt;Scalar&gt;::Real, typename <a class="el" href="structXped_1_1ScalarTraits.html">ScalarTraits</a>&lt;Scalar&gt;::Comp&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="ac9aa5dab891a1fec39f1ff0f7bf648d3" name="ac9aa5dab891a1fec39f1ff0f7bf648d3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac9aa5dab891a1fec39f1ff0f7bf648d3">&#9670;&#160;</a></span>TwoSiteObservable() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar , typename Symmetry , bool HERMITIAN = true&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structXped_1_1TwoSiteObservable.html">Xped::TwoSiteObservable</a>&lt; Scalar, Symmetry, HERMITIAN &gt;::TwoSiteObservable </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">default</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a39c521320df2e0e53f3e46e08799b5ca" name="a39c521320df2e0e53f3e46e08799b5ca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a39c521320df2e0e53f3e46e08799b5ca">&#9670;&#160;</a></span>TwoSiteObservable() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar , typename Symmetry , bool HERMITIAN = true&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structXped_1_1TwoSiteObservable.html">Xped::TwoSiteObservable</a>&lt; Scalar, Symmetry, HERMITIAN &gt;::TwoSiteObservable </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1Pattern.html">Pattern</a> &amp;&#160;</td>
+          <td class="paramname"><em>pat</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespaceXped_1_1Opts.html#ae4a8447de96e9ccd51e29d758366ac11">Opts::Bond</a>&#160;</td>
+          <td class="paramname"><em>bond</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>name_in</em> = <code>&quot;&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a0f99256ed92a1e10e8ac5e54cdc3050f" name="a0f99256ed92a1e10e8ac5e54cdc3050f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0f99256ed92a1e10e8ac5e54cdc3050f">&#9670;&#160;</a></span>computeObs() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar , typename Symmetry , bool HERMITIAN = true&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void <a class="el" href="structXped_1_1TwoSiteObservable.html">Xped::TwoSiteObservable</a>&lt; Scalar, Symmetry, HERMITIAN &gt;::computeObs </td>
+          <td>(</td>
+          <td class="paramtype">XPED_CONST <a class="el" href="classXped_1_1CTM.html">CTM</a>&lt; double, Symmetry, 1, false, <a class="el" href="structXped_1_1Opts_1_1CTMCheckpoint.html">Opts::CTMCheckpoint</a>{}&gt; &amp;&#160;</td>
+          <td class="paramname"><em>env</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented in <a class="el" href="classXped_1_1Heisenberg.html#a15598d22f0322ce669ca91a5315a38d1">Xped::Heisenberg&lt; Symmetry &gt;</a>, <a class="el" href="classXped_1_1Hubbard.html#a00b7195fd6a359505689fafcdc7d2d67">Xped::Hubbard&lt; Symmetry &gt;</a>, <a class="el" href="classXped_1_1Kondo.html#a2d3ed4bce61438598bc88c91ddbcc528">Xped::Kondo&lt; Symmetry &gt;</a>, and <a class="el" href="classXped_1_1KondoNecklace.html#a08c15493e2a43fb76f282973b99d9667">Xped::KondoNecklace&lt; Symmetry &gt;</a>.</p>
+
+</div>
+</div>
+<a id="aa37d1886553415b7fceac2ba4a4d78ae" name="aa37d1886553415b7fceac2ba4a4d78ae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa37d1886553415b7fceac2ba4a4d78ae">&#9670;&#160;</a></span>computeObs() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar , typename Symmetry , bool HERMITIAN = true&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void <a class="el" href="structXped_1_1TwoSiteObservable.html">Xped::TwoSiteObservable</a>&lt; Scalar, Symmetry, HERMITIAN &gt;::computeObs </td>
+          <td>(</td>
+          <td class="paramtype">XPED_CONST <a class="el" href="classXped_1_1CTM.html">CTM</a>&lt; double, Symmetry, 2, false, <a class="el" href="structXped_1_1Opts_1_1CTMCheckpoint.html">Opts::CTMCheckpoint</a>{}&gt; &amp;&#160;</td>
+          <td class="paramname"><em>env</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented in <a class="el" href="classXped_1_1Heisenberg.html#a4155a620800af9e617194b2badd3cdaa">Xped::Heisenberg&lt; Symmetry &gt;</a>, <a class="el" href="classXped_1_1Hubbard.html#a8e3e7fec4fc513e506bfb92502ed0934">Xped::Hubbard&lt; Symmetry &gt;</a>, <a class="el" href="classXped_1_1Kondo.html#a0188b2fd5211edf6e822dbbcd0212b14">Xped::Kondo&lt; Symmetry &gt;</a>, and <a class="el" href="classXped_1_1KondoNecklace.html#a4613a0dd37e254bdb9e0723fd6ba1b07">Xped::KondoNecklace&lt; Symmetry &gt;</a>.</p>
+
+</div>
+</div>
+<a id="a3c553d6da1a3d43a48cee772471528d1" name="a3c553d6da1a3d43a48cee772471528d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3c553d6da1a3d43a48cee772471528d1">&#9670;&#160;</a></span>computeObs() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar , typename Symmetry , bool HERMITIAN = true&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void <a class="el" href="structXped_1_1TwoSiteObservable.html">Xped::TwoSiteObservable</a>&lt; Scalar, Symmetry, HERMITIAN &gt;::computeObs </td>
+          <td>(</td>
+          <td class="paramtype">XPED_CONST <a class="el" href="classXped_1_1CTM.html">CTM</a>&lt; std::complex&lt; double &gt;, Symmetry, 2, false, <a class="el" href="structXped_1_1Opts_1_1CTMCheckpoint.html">Opts::CTMCheckpoint</a>{}&gt; &amp;&#160;</td>
+          <td class="paramname"><em>env</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented in <a class="el" href="classXped_1_1Heisenberg.html#ad1647a211dff709e7bb85a6d5b603e80">Xped::Heisenberg&lt; Symmetry &gt;</a>, <a class="el" href="classXped_1_1Hubbard.html#a755b6b900237d324942585c48e54175b">Xped::Hubbard&lt; Symmetry &gt;</a>, <a class="el" href="classXped_1_1Kondo.html#ac5ee87b597115b02bc999354afcecbc0">Xped::Kondo&lt; Symmetry &gt;</a>, and <a class="el" href="classXped_1_1KondoNecklace.html#a976bc8837deb47254daafe64af68d8dd">Xped::KondoNecklace&lt; Symmetry &gt;</a>.</p>
+
+</div>
+</div>
+<a id="a4278d1ef7054fe64ee0a3a1e511673fe" name="a4278d1ef7054fe64ee0a3a1e511673fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4278d1ef7054fe64ee0a3a1e511673fe">&#9670;&#160;</a></span>getObsString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar , typename Symmetry , bool HERMITIAN = true&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual std::string <a class="el" href="structXped_1_1TwoSiteObservable.html">Xped::TwoSiteObservable</a>&lt; Scalar, Symmetry, HERMITIAN &gt;::getObsString </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented in <a class="el" href="classXped_1_1Heisenberg.html#a86487da3a7e721117433a30d79d35d16">Xped::Heisenberg&lt; Symmetry &gt;</a>, <a class="el" href="classXped_1_1Hubbard.html#afdc4c99ab04ade500094fbe4639c3d00">Xped::Hubbard&lt; Symmetry &gt;</a>, <a class="el" href="classXped_1_1Kondo.html#afe2fc2a0451160d03846383e812abdb6">Xped::Kondo&lt; Symmetry &gt;</a>, and <a class="el" href="classXped_1_1KondoNecklace.html#a6ee18539deb394ca2d8bc8494255bb67">Xped::KondoNecklace&lt; Symmetry &gt;</a>.</p>
+
+</div>
+</div>
+<a id="a3c05162dc83391506011ec176f22177a" name="a3c05162dc83391506011ec176f22177a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3c05162dc83391506011ec176f22177a">&#9670;&#160;</a></span>getResString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar , typename Symmetry , bool HERMITIAN = true&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual std::string <a class="el" href="structXped_1_1TwoSiteObservable.html">Xped::TwoSiteObservable</a>&lt; Scalar, Symmetry, HERMITIAN &gt;::getResString </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>offset</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="structXped_1_1ObservableBase.html#ab12fbc05d1e34f904254d1691bb2e625">Xped::ObservableBase</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1TwoSiteObservable_a3c05162dc83391506011ec176f22177a_cgraph.png" border="0" usemap="#astructXped_1_1TwoSiteObservable_a3c05162dc83391506011ec176f22177a_cgraph" alt=""/></div>
+<map name="astructXped_1_1TwoSiteObservable_a3c05162dc83391506011ec176f22177a_cgraph" id="astructXped_1_1TwoSiteObservable_a3c05162dc83391506011ec176f22177a_cgraph">
+<area shape="rect" title=" " alt="" coords="5,47,192,87"/>
+<area shape="rect" href="structXped_1_1TMatrix.html#a06f6fe3101087a0bd57c6f8ab5e961aa" title=" " alt="" coords="275,5,421,31"/>
+<area shape="rect" href="structXped_1_1TMatrix.html#a003fd3c2113b68b49d22f2943b5dd9b1" title=" " alt="" coords="273,55,423,80"/>
+<area shape="rect" href="structXped_1_1TMatrix.html#a7109de5a3ee56bc260b4701614568b47" title=" " alt="" coords="240,105,456,145"/>
+<area shape="rect" href="structXped_1_1Pattern.html#aa4972132b5e98496d7446a3a4929cbd8" title=" " alt="" coords="531,75,674,100"/>
+<area shape="rect" href="structXped_1_1Pattern.html#ab0d81d5406b7e376e5989f849ee70eb8" title=" " alt="" coords="504,148,701,173"/>
+<area shape="rect" href="structXped_1_1Pattern.html#a0c4bad3f4e541d6884540022e8b9aaf4" title=" " alt="" coords="749,148,903,173"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a5d3df563ef8111da713fdcc5c59caf8c" name="a5d3df563ef8111da713fdcc5c59caf8c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5d3df563ef8111da713fdcc5c59caf8c">&#9670;&#160;</a></span>loadFromMatlab()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar , typename Symmetry , bool HERMITIAN = true&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="structXped_1_1TwoSiteObservable.html">Xped::TwoSiteObservable</a>&lt; Scalar, Symmetry, HERMITIAN &gt;::loadFromMatlab </td>
+          <td>(</td>
+          <td class="paramtype">const std::filesystem::path &amp;&#160;</td>
+          <td class="paramname"><em>p</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>root_name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>qn_scale</em> = <code>1</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1TwoSiteObservable_a5d3df563ef8111da713fdcc5c59caf8c_cgraph.png" border="0" usemap="#astructXped_1_1TwoSiteObservable_a5d3df563ef8111da713fdcc5c59caf8c_cgraph" alt=""/></div>
+<map name="astructXped_1_1TwoSiteObservable_a5d3df563ef8111da713fdcc5c59caf8c_cgraph" id="astructXped_1_1TwoSiteObservable_a5d3df563ef8111da713fdcc5c59caf8c_cgraph">
+<area shape="rect" title=" " alt="" coords="5,35,192,75"/>
+<area shape="rect" href="structXped_1_1UnitCell.html#af1220dce27ce1bea7cbd024c2a0150ab" title=" " alt="" coords="242,5,426,45"/>
+<area shape="rect" href="structXped_1_1Pattern.html#a6ad8cdc3670f06e99beb19e587c00207" title=" " alt="" coords="240,70,428,95"/>
+<area shape="rect" href="structXped_1_1UnitCell.html#a77abb2ccd31f9d9f5cb99d188decf423" title=" " alt="" coords="476,13,625,38"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="af2d5041c93be6f752e5be727186cd892" name="af2d5041c93be6f752e5be727186cd892"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af2d5041c93be6f752e5be727186cd892">&#9670;&#160;</a></span>obsToFile()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar , typename Symmetry , bool HERMITIAN = true&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void <a class="el" href="structXped_1_1TwoSiteObservable.html">Xped::TwoSiteObservable</a>&lt; Scalar, Symmetry, HERMITIAN &gt;::obsToFile </td>
+          <td>(</td>
+          <td class="paramtype">HighFive::File &amp;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"> = <code>&quot;/&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented in <a class="el" href="classXped_1_1Heisenberg.html#a94261c98dc385e1f632505165e8bf71f">Xped::Heisenberg&lt; Symmetry &gt;</a>, <a class="el" href="classXped_1_1Hubbard.html#adcac387418a4e1bf470a7d9b930d66ff">Xped::Hubbard&lt; Symmetry &gt;</a>, <a class="el" href="classXped_1_1Kondo.html#afb8ad7200a785a9bf34f1ce68dd4df5c">Xped::Kondo&lt; Symmetry &gt;</a>, and <a class="el" href="classXped_1_1KondoNecklace.html#a2200b4cd8144f2282a9b0dc5a0c4fb25">Xped::KondoNecklace&lt; Symmetry &gt;</a>.</p>
+
+</div>
+</div>
+<a id="a45d478e4a2893f6e1c47346fd77cff4b" name="a45d478e4a2893f6e1c47346fd77cff4b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a45d478e4a2893f6e1c47346fd77cff4b">&#9670;&#160;</a></span>serialize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar , typename Symmetry , bool HERMITIAN = true&gt; </div>
+<div class="memtemplate">
+template&lt;typename Ar &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="structXped_1_1TwoSiteObservable.html">Xped::TwoSiteObservable</a>&lt; Scalar, Symmetry, HERMITIAN &gt;::serialize </td>
+          <td>(</td>
+          <td class="paramtype">Ar &amp;&#160;</td>
+          <td class="paramname"><em>ar</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abb5a836943909e0216bcfc6bc6647110" name="abb5a836943909e0216bcfc6bc6647110"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abb5a836943909e0216bcfc6bc6647110">&#9670;&#160;</a></span>setDefaultObs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar , typename Symmetry , bool HERMITIAN = true&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void <a class="el" href="structXped_1_1TwoSiteObservable.html">Xped::TwoSiteObservable</a>&lt; Scalar, Symmetry, HERMITIAN &gt;::setDefaultObs </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented in <a class="el" href="classXped_1_1Heisenberg.html#ac1aacd931b318c81d00d68fa2e26d579">Xped::Heisenberg&lt; Symmetry &gt;</a>, <a class="el" href="classXped_1_1Hubbard.html#a78332db0beee19fa4d489c30469d4949">Xped::Hubbard&lt; Symmetry &gt;</a>, <a class="el" href="classXped_1_1Kondo.html#af934c9007909ce312e534cd94dc1761f">Xped::Kondo&lt; Symmetry &gt;</a>, and <a class="el" href="classXped_1_1KondoNecklace.html#a54a8c5efef1681936ed3ff7fd9ef5333">Xped::KondoNecklace&lt; Symmetry &gt;</a>.</p>
+
+</div>
+</div>
+<a id="a22bc65d54f8c571975eeb9c82d7c796d" name="a22bc65d54f8c571975eeb9c82d7c796d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a22bc65d54f8c571975eeb9c82d7c796d">&#9670;&#160;</a></span>shiftQN()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar , typename Symmetry , bool HERMITIAN = true&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structXped_1_1TwoSiteObservable.html">TwoSiteObservable</a>&lt; Scalar, Symmetry, HERMITIAN &gt; <a class="el" href="structXped_1_1TwoSiteObservable.html">Xped::TwoSiteObservable</a>&lt; Scalar, Symmetry, HERMITIAN &gt;::shiftQN </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structXped_1_1TMatrix.html">TMatrix</a>&lt; typename Symmetry::qType &gt; &amp;&#160;</td>
+          <td class="paramname"><em>charges</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1TwoSiteObservable_a22bc65d54f8c571975eeb9c82d7c796d_cgraph.png" border="0" usemap="#astructXped_1_1TwoSiteObservable_a22bc65d54f8c571975eeb9c82d7c796d_cgraph" alt=""/></div>
+<map name="astructXped_1_1TwoSiteObservable_a22bc65d54f8c571975eeb9c82d7c796d_cgraph" id="astructXped_1_1TwoSiteObservable_a22bc65d54f8c571975eeb9c82d7c796d_cgraph">
+<area shape="rect" title=" " alt="" coords="5,47,192,87"/>
+<area shape="rect" href="structXped_1_1TMatrix.html#a061679f71e6be84b63c58b7fe11ef4f1" title=" " alt="" coords="250,5,414,31"/>
+<area shape="rect" href="structXped_1_1TMatrix.html#ae3adf649449a729dfbf3ad3df4756a07" title=" " alt="" coords="256,55,408,80"/>
+<area shape="rect" href="classXped_1_1Qbasis.html#a34418f2e9ce5c917d3f3b65688c52249" title=" " alt="" coords="240,104,424,129"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1TwoSiteObservable_a22bc65d54f8c571975eeb9c82d7c796d_icgraph.png" border="0" usemap="#astructXped_1_1TwoSiteObservable_a22bc65d54f8c571975eeb9c82d7c796d_icgraph" alt=""/></div>
+<map name="astructXped_1_1TwoSiteObservable_a22bc65d54f8c571975eeb9c82d7c796d_icgraph" id="astructXped_1_1TwoSiteObservable_a22bc65d54f8c571975eeb9c82d7c796d_icgraph">
+<area shape="rect" title=" " alt="" coords="140,5,327,45"/>
+<area shape="rect" href="namespaceXped.html#ae03882f7c88965f20aef2f811acd3440" title=" " alt="" coords="5,13,92,38"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="aeec4898d7703f898dbfdcf4a108d6372" name="aeec4898d7703f898dbfdcf4a108d6372"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeec4898d7703f898dbfdcf4a108d6372">&#9670;&#160;</a></span>toFile()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar , typename Symmetry , bool HERMITIAN = true&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void <a class="el" href="structXped_1_1TwoSiteObservable.html">Xped::TwoSiteObservable</a>&lt; Scalar, Symmetry, HERMITIAN &gt;::toFile </td>
+          <td>(</td>
+          <td class="paramtype">HighFive::File &amp;&#160;</td>
+          <td class="paramname"><em>file</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>root</em> = <code>&quot;/&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="structXped_1_1ObservableBase.html#a44e59b089d73d3a873e075177b00721e">Xped::ObservableBase</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="structXped_1_1TwoSiteObservable_aeec4898d7703f898dbfdcf4a108d6372_cgraph.png" border="0" usemap="#astructXped_1_1TwoSiteObservable_aeec4898d7703f898dbfdcf4a108d6372_cgraph" alt=""/></div>
+<map name="astructXped_1_1TwoSiteObservable_aeec4898d7703f898dbfdcf4a108d6372_cgraph" id="astructXped_1_1TwoSiteObservable_aeec4898d7703f898dbfdcf4a108d6372_cgraph">
+<area shape="rect" title=" " alt="" coords="5,5,192,45"/>
+<area shape="rect" href="structcmd_8h.html#af2a3ea719b83f672637febdd87c36c36" title="Writes count bytes from buf to the filedescriptor fd." alt="" coords="240,13,295,38"/>
+</map>
+</div>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a75509a2d6970aab695d5f7668827c461" name="a75509a2d6970aab695d5f7668827c461"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a75509a2d6970aab695d5f7668827c461">&#9670;&#160;</a></span>bond</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar , typename Symmetry , bool HERMITIAN = true&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespaceXped_1_1Opts.html#ae4a8447de96e9ccd51e29d758366ac11">Opts::Bond</a> <a class="el" href="structXped_1_1TwoSiteObservable.html">Xped::TwoSiteObservable</a>&lt; Scalar, Symmetry, HERMITIAN &gt;::bond</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6b0ab0e8c89056938a05841d4ed14c46" name="a6b0ab0e8c89056938a05841d4ed14c46"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b0ab0e8c89056938a05841d4ed14c46">&#9670;&#160;</a></span>data_d1</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar , typename Symmetry , bool HERMITIAN = true&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structXped_1_1TMatrix.html">TMatrix</a>&lt;<a class="el" href="classXped_1_1Tensor.html">Tensor</a>&lt;Scalar, 2, 2, Symmetry, false&gt; &gt; <a class="el" href="structXped_1_1TwoSiteObservable.html">Xped::TwoSiteObservable</a>&lt; Scalar, Symmetry, HERMITIAN &gt;::data_d1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="afd2b441621d3a9ecaab4c09b01f1f228" name="afd2b441621d3a9ecaab4c09b01f1f228"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afd2b441621d3a9ecaab4c09b01f1f228">&#9670;&#160;</a></span>data_d2</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar , typename Symmetry , bool HERMITIAN = true&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structXped_1_1TMatrix.html">TMatrix</a>&lt;<a class="el" href="classXped_1_1Tensor.html">Tensor</a>&lt;Scalar, 2, 2, Symmetry, false&gt; &gt; <a class="el" href="structXped_1_1TwoSiteObservable.html">Xped::TwoSiteObservable</a>&lt; Scalar, Symmetry, HERMITIAN &gt;::data_d2</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3132f28f27c7994cf79f2698ce5e15c9" name="a3132f28f27c7994cf79f2698ce5e15c9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3132f28f27c7994cf79f2698ce5e15c9">&#9670;&#160;</a></span>data_h</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar , typename Symmetry , bool HERMITIAN = true&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structXped_1_1TMatrix.html">TMatrix</a>&lt;<a class="el" href="classXped_1_1Tensor.html">Tensor</a>&lt;Scalar, 2, 2, Symmetry, false&gt; &gt; <a class="el" href="structXped_1_1TwoSiteObservable.html">Xped::TwoSiteObservable</a>&lt; Scalar, Symmetry, HERMITIAN &gt;::data_h</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a696a97e920d7b3e52d47eb3b827b0a44" name="a696a97e920d7b3e52d47eb3b827b0a44"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a696a97e920d7b3e52d47eb3b827b0a44">&#9670;&#160;</a></span>data_v</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar , typename Symmetry , bool HERMITIAN = true&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structXped_1_1TMatrix.html">TMatrix</a>&lt;<a class="el" href="classXped_1_1Tensor.html">Tensor</a>&lt;Scalar, 2, 2, Symmetry, false&gt; &gt; <a class="el" href="structXped_1_1TwoSiteObservable.html">Xped::TwoSiteObservable</a>&lt; Scalar, Symmetry, HERMITIAN &gt;::data_v</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a297fa8647f3c910bedf61149492f2f1a" name="a297fa8647f3c910bedf61149492f2f1a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a297fa8647f3c910bedf61149492f2f1a">&#9670;&#160;</a></span>obs_d1</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar , typename Symmetry , bool HERMITIAN = true&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structXped_1_1TMatrix.html">TMatrix</a>&lt;<a class="el" href="structXped_1_1TwoSiteObservable.html#a985df92ebe366da0f2eac40056c9fb66">ObsScalar</a>&gt; <a class="el" href="structXped_1_1TwoSiteObservable.html">Xped::TwoSiteObservable</a>&lt; Scalar, Symmetry, HERMITIAN &gt;::obs_d1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac8d02f4ca54956d530745913ebbc311f" name="ac8d02f4ca54956d530745913ebbc311f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac8d02f4ca54956d530745913ebbc311f">&#9670;&#160;</a></span>obs_d2</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar , typename Symmetry , bool HERMITIAN = true&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structXped_1_1TMatrix.html">TMatrix</a>&lt;<a class="el" href="structXped_1_1TwoSiteObservable.html#a985df92ebe366da0f2eac40056c9fb66">ObsScalar</a>&gt; <a class="el" href="structXped_1_1TwoSiteObservable.html">Xped::TwoSiteObservable</a>&lt; Scalar, Symmetry, HERMITIAN &gt;::obs_d2</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a952e643e4660069ab8280d31f0111270" name="a952e643e4660069ab8280d31f0111270"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a952e643e4660069ab8280d31f0111270">&#9670;&#160;</a></span>obs_h</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar , typename Symmetry , bool HERMITIAN = true&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structXped_1_1TMatrix.html">TMatrix</a>&lt;<a class="el" href="structXped_1_1TwoSiteObservable.html#a985df92ebe366da0f2eac40056c9fb66">ObsScalar</a>&gt; <a class="el" href="structXped_1_1TwoSiteObservable.html">Xped::TwoSiteObservable</a>&lt; Scalar, Symmetry, HERMITIAN &gt;::obs_h</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a73834a3565d7d913c181cfd9d2e3fe9a" name="a73834a3565d7d913c181cfd9d2e3fe9a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a73834a3565d7d913c181cfd9d2e3fe9a">&#9670;&#160;</a></span>obs_v</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Scalar , typename Symmetry , bool HERMITIAN = true&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structXped_1_1TMatrix.html">TMatrix</a>&lt;<a class="el" href="structXped_1_1TwoSiteObservable.html#a985df92ebe366da0f2eac40056c9fb66">ObsScalar</a>&gt; <a class="el" href="structXped_1_1TwoSiteObservable.html">Xped::TwoSiteObservable</a>&lt; Scalar, Symmetry, HERMITIAN &gt;::obs_v</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<hr/>The documentation for this struct was generated from the following files:<ul>
+<li>include/Xped/PEPS/<a class="el" href="CTM_8hpp_source.html">CTM.hpp</a></li>
+<li>include/Xped/PEPS/<a class="el" href="TwoSiteObservable_8hpp_source.html">TwoSiteObservable.hpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- HTML footer for doxygen 1.9.2-->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="namespaceXped.html">Xped</a></li><li class="navelem"><a class="el" href="structXped_1_1TwoSiteObservable.html">TwoSiteObservable</a></li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.6 </li>
+  </ul>
+</div>
+<script type="text/javascript">
+  // script for doxygen 1.9.2
+  $(function() {
+      toggleButton = document.createElement('doxygen-awesome-dark-mode-toggle')
+      toggleButton.title = "Toggle Light/Dark Mode"
+      $(document).ready(function(){
+          document.getElementById("MSearchBox").parentNode.appendChild(toggleButton)
+      })
+      $(window).resize(function(){
+          document.getElementById("MSearchBox").parentNode.appendChild(toggleButton)
+      })
+  })
+</script>
+</body>
+</html>

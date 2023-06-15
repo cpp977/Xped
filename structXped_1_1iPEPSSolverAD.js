@@ -1,0 +1,25 @@
+var structXped_1_1iPEPSSolverAD =
+[
+    [ "CustomCallback", "structXped_1_1iPEPSSolverAD_1_1CustomCallback.html", "structXped_1_1iPEPSSolverAD_1_1CustomCallback" ],
+    [ "GetStateCallback", "structXped_1_1iPEPSSolverAD_1_1GetStateCallback.html", "structXped_1_1iPEPSSolverAD_1_1GetStateCallback" ],
+    [ "LoggingCallback", "structXped_1_1iPEPSSolverAD_1_1LoggingCallback.html", "structXped_1_1iPEPSSolverAD_1_1LoggingCallback" ],
+    [ "ObsCallback", "structXped_1_1iPEPSSolverAD_1_1ObsCallback.html", "structXped_1_1iPEPSSolverAD_1_1ObsCallback" ],
+    [ "SaveCallback", "structXped_1_1iPEPSSolverAD_1_1SaveCallback.html", "structXped_1_1iPEPSSolverAD_1_1SaveCallback" ],
+    [ "SolverState", "structXped_1_1iPEPSSolverAD_1_1SolverState.html", "structXped_1_1iPEPSSolverAD_1_1SolverState" ],
+    [ "EnergyFunctor", "structXped_1_1iPEPSSolverAD.html#af67128a9f6817e0f736c60e17b973818", null ],
+    [ "Hamiltonian", "structXped_1_1iPEPSSolverAD.html#a512e1d6a083fa932dde98fb579685117", null ],
+    [ "iPEPSSolverAD", "structXped_1_1iPEPSSolverAD.html#a4c52aa9a76a458202143e3e1d2679238", null ],
+    [ "iPEPSSolverAD", "structXped_1_1iPEPSSolverAD.html#abdf1655ae8f231cfa871d10379431c82", null ],
+    [ "getCTMSolver", "structXped_1_1iPEPSSolverAD.html#a432528edd4b9d8480b4713e0950200cb", null ],
+    [ "getCTMSolver", "structXped_1_1iPEPSSolverAD.html#af823581c549469b6eab17d213dba9bdc", null ],
+    [ "serialize", "structXped_1_1iPEPSSolverAD.html#af0c0b645942790037c648175998c2c2b", null ],
+    [ "serialize", "structXped_1_1iPEPSSolverAD.html#a5363336a924584bd38e88eae715abf65", null ],
+    [ "solve", "structXped_1_1iPEPSSolverAD.html#aadd7138633f535ef5de06e80099ea413", null ],
+    [ "callback", "structXped_1_1iPEPSSolverAD.html#adf01d02f591ee4a774d8f6906b3e0e58", null ],
+    [ "H", "structXped_1_1iPEPSSolverAD.html#a1f2d374236a829542390bf998d11c230", null ],
+    [ "optim_opts", "structXped_1_1iPEPSSolverAD.html#ae5442ba866b3abf02139d66910773a0a", null ],
+    [ "options", "structXped_1_1iPEPSSolverAD.html#a8404233a5fc35a75c300a5c87e90e372", null ],
+    [ "problem", "structXped_1_1iPEPSSolverAD.html#a7f43cc5189853aec6ce5fac39219cd07", null ],
+    [ "Psi", "structXped_1_1iPEPSSolverAD.html#ac442b60fa8ab462e048d2a4a97b36f62", null ],
+    [ "state", "structXped_1_1iPEPSSolverAD.html#a4a9ba6917cb57dd23320ef58c0fae3fe", null ]
+];

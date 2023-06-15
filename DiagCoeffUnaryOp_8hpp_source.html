@@ -1,0 +1,247 @@
+<!-- HTML header for doxygen 1.9.6-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.6"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Xped: include/Xped/Core/DiagCoeffUnaryOp.hpp Source File</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+});
+</script>
+<script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript">
+  DoxygenAwesomeDarkModeToggle.lightModeIcon = '🌞'
+// icon from https://fonts.google.com/icons
+  DoxygenAwesomeDarkModeToggle.darkModeIcon = `<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px" viewBox="0 0 24 24" width="24px" fill="#009793"><g><rect fill="none" height="24" width="24"/></g><g><g><path d="M8.1,14.15C9.77,14.63,11,16.17,11,18c0,0.68-0.19,1.31-0.48,1.87c0.48,0.09,0.97,0.14,1.48,0.14 c1.48,0,2.9-0.41,4.13-1.15c-2.62-0.92-5.23-2.82-6.8-5.86C7.74,9.94,7.78,7.09,8.29,4.9c-2.57,1.33-4.3,4.01-4.3,7.1c0,0,0,0,0,0 c0.01,0,0.01,0,0.02,0C5.66,12,7.18,12.83,8.1,14.15z" opacity=".3"/><path d="M19.78,17.51c-2.47,0-6.57-1.33-8.68-5.43C8.77,7.57,10.6,3.6,11.63,2.01C6.27,2.2,1.98,6.59,1.98,12 c0,0.14,0.02,0.28,0.02,0.42C2.61,12.16,3.28,12,3.98,12c0,0,0,0,0,0c0-3.09,1.73-5.77,4.3-7.1C7.78,7.09,7.74,9.94,9.32,13 c1.57,3.04,4.18,4.95,6.8,5.86c-1.23,0.74-2.65,1.15-4.13,1.15c-0.5,0-1-0.05-1.48-0.14c-0.37,0.7-0.94,1.27-1.64,1.64 c0.98,0.32,2.03,0.5,3.11,0.5c3.5,0,6.58-1.8,8.37-4.52C20.18,17.5,19.98,17.51,19.78,17.51z"/><path d="M7,16l-0.18,0C6.4,14.84,5.3,14,4,14c-1.66,0-3,1.34-3,3s1.34,3,3,3c0.62,0,2.49,0,3,0c1.1,0,2-0.9,2-2 C9,16.9,8.1,16,7,16z"/></g></g></svg>`
+  DoxygenAwesomeDarkModeToggle.init()
+</script>
+</head>
+<body>
+  <!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/cpp977/Xped" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">Xped
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.9.6 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('DiagCoeffUnaryOp_8hpp_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">DiagCoeffUnaryOp.hpp</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="DiagCoeffUnaryOp_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#ifndef SCALED_OP_H_</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#define SCALED_OP_H_</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span> </div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &quot;<a class="code" href="Qbasis_8hpp.html">Xped/Core/Qbasis.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span> </div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &quot;<a class="code" href="TensorBase_8hpp.html">TensorBase.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span> </div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceXped.html">Xped</a> {</div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> XprType&gt;</div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="keyword">class </span>DiagCoeffUnaryOp;</div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> XprType&gt;</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno"><a class="line" href="structXped_1_1TensorTraits_3_01DiagCoeffUnaryOp_3_01XprType_01_4_01_4.html">   14</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structXped_1_1TensorTraits.html">TensorTraits</a>&lt;<a class="code hl_class" href="classXped_1_1DiagCoeffUnaryOp.html">DiagCoeffUnaryOp</a>&lt;XprType&gt;&gt;</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>{</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno"><a class="line" href="structXped_1_1TensorTraits_3_01DiagCoeffUnaryOp_3_01XprType_01_4_01_4.html#af7246a4c8c73e3e5b5eb380e6adeedb0">   16</a></span>    <span class="keyword">static</span> <span class="keyword">constexpr</span> std::size_t Rank = XprType::Rank;</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno"><a class="line" href="structXped_1_1TensorTraits_3_01DiagCoeffUnaryOp_3_01XprType_01_4_01_4.html#a480edf9eb564c4f97545bf76806df325">   17</a></span>    <span class="keyword">static</span> <span class="keyword">constexpr</span> std::size_t CoRank = XprType::CoRank;</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno"><a class="line" href="structXped_1_1TensorTraits_3_01DiagCoeffUnaryOp_3_01XprType_01_4_01_4.html#a439c07c30d54f95429652dfa3b54d81c">   18</a></span>    <span class="keyword">typedef</span> <span class="keyword">typename</span> XprType::Scalar <a class="code hl_typedef" href="structXped_1_1TensorTraits_3_01DiagCoeffUnaryOp_3_01XprType_01_4_01_4.html#a439c07c30d54f95429652dfa3b54d81c">Scalar</a>;</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno"><a class="line" href="structXped_1_1TensorTraits_3_01DiagCoeffUnaryOp_3_01XprType_01_4_01_4.html#a8e889ac400fd899b179e17fc5bda290f">   19</a></span>    <span class="keyword">typedef</span> <span class="keyword">typename</span> XprType::Symmetry <a class="code hl_typedef" href="structXped_1_1TensorTraits_3_01DiagCoeffUnaryOp_3_01XprType_01_4_01_4.html#a8e889ac400fd899b179e17fc5bda290f">Symmetry</a>;</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno"><a class="line" href="structXped_1_1TensorTraits_3_01DiagCoeffUnaryOp_3_01XprType_01_4_01_4.html#a70e60f3b2a2300b603433235d6991c1b">   20</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="structXped_1_1TensorTraits_3_01DiagCoeffUnaryOp_3_01XprType_01_4_01_4.html#a70e60f3b2a2300b603433235d6991c1b">AllocationPolicy</a> = <span class="keyword">typename</span> XprType::AllocationPolicy;</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>};</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> XprType&gt;</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno"><a class="line" href="classXped_1_1DiagCoeffUnaryOp.html">   24</a></span><span class="keyword">class </span><a class="code hl_class" href="classXped_1_1DiagCoeffUnaryOp.html">DiagCoeffUnaryOp</a> : <span class="keyword">public</span> <a class="code hl_class" href="classXped_1_1TensorBase.html">TensorBase</a>&lt;DiagCoeffUnaryOp&lt;XprType&gt;&gt;</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>{</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno"><a class="line" href="classXped_1_1DiagCoeffUnaryOp.html#a40b33fb561b5351b1c93b62cbf17b804">   27</a></span>    <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">constexpr</span> std::size_t <a class="code hl_variable" href="classXped_1_1DiagCoeffUnaryOp.html#a40b33fb561b5351b1c93b62cbf17b804">Rank</a> = XprType::Rank;</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno"><a class="line" href="classXped_1_1DiagCoeffUnaryOp.html#a22dafa5c4164f9a2c8bc32501da37058">   28</a></span>    <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">constexpr</span> std::size_t <a class="code hl_variable" href="classXped_1_1DiagCoeffUnaryOp.html#a22dafa5c4164f9a2c8bc32501da37058">CoRank</a> = XprType::CoRank;</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno"><a class="line" href="classXped_1_1DiagCoeffUnaryOp.html#a99dced5640973afd768155f8dae11014">   29</a></span>    <span class="keyword">typedef</span> <span class="keyword">typename</span> XprType::Scalar <a class="code hl_typedef" href="classXped_1_1DiagCoeffUnaryOp.html#a99dced5640973afd768155f8dae11014">Scalar</a>;</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="classXped_1_1DiagCoeffUnaryOp.html#ac5a1b784384e7d9e9c3f04cb0c6cbc8b">   30</a></span>    <span class="keyword">typedef</span> <span class="keyword">typename</span> XprType::Symmetry <a class="code hl_typedef" href="classXped_1_1DiagCoeffUnaryOp.html#ac5a1b784384e7d9e9c3f04cb0c6cbc8b">Symmetry</a>;</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno"><a class="line" href="classXped_1_1DiagCoeffUnaryOp.html#ac12addf5cd9f2d446edea0ae7f63d75f">   31</a></span>    <span class="keyword">typedef</span> <span class="keyword">typename</span> Symmetry::qType <a class="code hl_typedef" href="classXped_1_1DiagCoeffUnaryOp.html#ac12addf5cd9f2d446edea0ae7f63d75f">qType</a>;</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno"><a class="line" href="classXped_1_1DiagCoeffUnaryOp.html#ad0953c5f2dedea6b27834b4d5f34625f">   32</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="classXped_1_1DiagCoeffUnaryOp.html#ad0953c5f2dedea6b27834b4d5f34625f">AllocationPolicy</a> = <span class="keyword">typename</span> XprType::AllocationPolicy;</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno"><a class="line" href="classXped_1_1DiagCoeffUnaryOp.html#a06e3b13ead8de880b321db159f1c8e9f">   34</a></span>    <a class="code hl_function" href="classXped_1_1DiagCoeffUnaryOp.html#a06e3b13ead8de880b321db159f1c8e9f">DiagCoeffUnaryOp</a>(XPED_CONST XprType&amp; xpr, <span class="keyword">const</span> std::function&lt;<a class="code hl_typedef" href="classXped_1_1DiagCoeffUnaryOp.html#a99dced5640973afd768155f8dae11014">Scalar</a>(<a class="code hl_typedef" href="classXped_1_1DiagCoeffUnaryOp.html#a99dced5640973afd768155f8dae11014">Scalar</a>)&gt;&amp; coeff_func)</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>        : <a class="code hl_variable" href="classXped_1_1DiagCoeffUnaryOp.html#a3bdf1e656c1eb83d159ae97e69342813">refxpr_</a>(xpr)</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>        , <a class="code hl_variable" href="classXped_1_1DiagCoeffUnaryOp.html#aeb6063539d776816a550708eee4991ef">coeff_func_</a>(coeff_func)</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    {}</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno"><a class="line" href="classXped_1_1DiagCoeffUnaryOp.html#a288e728c00819e7ae83c7c534e7b8a2b">   39</a></span>    <span class="keyword">inline</span> <span class="keyword">const</span> std::string <a class="code hl_function" href="classXped_1_1DiagCoeffUnaryOp.html#a288e728c00819e7ae83c7c534e7b8a2b">name</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <span class="stringliteral">&quot;DiagCoeffUnaryOp&quot;</span>; }</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno"><a class="line" href="classXped_1_1DiagCoeffUnaryOp.html#a12170988b8ff7a6da5fd4e9fa4636ee7">   40</a></span>    <span class="keyword">constexpr</span> std::size_t <a class="code hl_function" href="classXped_1_1DiagCoeffUnaryOp.html#a12170988b8ff7a6da5fd4e9fa4636ee7">rank</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code hl_variable" href="classXped_1_1DiagCoeffUnaryOp.html#a3bdf1e656c1eb83d159ae97e69342813">refxpr_</a>.rank(); }</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno"><a class="line" href="classXped_1_1DiagCoeffUnaryOp.html#a51f771cab22b0962f00cff222442e737">   41</a></span>    <span class="keyword">constexpr</span> std::size_t <a class="code hl_function" href="classXped_1_1DiagCoeffUnaryOp.html#a51f771cab22b0962f00cff222442e737">corank</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code hl_variable" href="classXped_1_1DiagCoeffUnaryOp.html#a3bdf1e656c1eb83d159ae97e69342813">refxpr_</a>.rank(); }</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span> </div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno"><a class="line" href="classXped_1_1DiagCoeffUnaryOp.html#a18fda060e0a5a889c0bddaa6309536f6">   43</a></span>    <span class="keyword">inline</span> <span class="keyword">const</span> std::vector&lt;qType&gt; <a class="code hl_function" href="classXped_1_1DiagCoeffUnaryOp.html#a18fda060e0a5a889c0bddaa6309536f6">sector</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code hl_variable" href="classXped_1_1DiagCoeffUnaryOp.html#a3bdf1e656c1eb83d159ae97e69342813">refxpr_</a>.sector(); }</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno"><a class="line" href="classXped_1_1DiagCoeffUnaryOp.html#a20d5cdca5e77a92ab4acfc782121eb44">   44</a></span>    <span class="keyword">inline</span> <span class="keyword">const</span> <a class="code hl_typedef" href="classXped_1_1DiagCoeffUnaryOp.html#ac12addf5cd9f2d446edea0ae7f63d75f">qType</a> <a class="code hl_function" href="classXped_1_1DiagCoeffUnaryOp.html#a20d5cdca5e77a92ab4acfc782121eb44">sector</a>(std::size_t i)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code hl_variable" href="classXped_1_1DiagCoeffUnaryOp.html#a3bdf1e656c1eb83d159ae97e69342813">refxpr_</a>.sector(i); }</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    <span class="comment">// const std::vector&lt;MatrixType&gt; block() const { return refxpr_block(); }</span></div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno"><a class="line" href="classXped_1_1DiagCoeffUnaryOp.html#a145679f09347abd497727eb1aa9ca9c3">   48</a></span>    <span class="keyword">inline</span> <span class="keyword">const</span> <span class="keyword">auto</span> <a class="code hl_function" href="classXped_1_1DiagCoeffUnaryOp.html#a145679f09347abd497727eb1aa9ca9c3">block</a>(std::size_t i)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code hl_function" href="structXped_1_1MatrixInterface.html#a3bbe3943c497ee3de924f9f438e7c3dc">PlainInterface::diagUnaryFunc</a>(<a class="code hl_variable" href="classXped_1_1DiagCoeffUnaryOp.html#a3bdf1e656c1eb83d159ae97e69342813">refxpr_</a>.block(i), <a class="code hl_variable" href="classXped_1_1DiagCoeffUnaryOp.html#aeb6063539d776816a550708eee4991ef">coeff_func_</a>); }</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    <span class="comment">// inline const auto block(std::size_t i) const { return refxpr_.block(i).diagonal().unaryExpr(coeff_func_).asDiagonal(); }</span></div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno"><a class="line" href="classXped_1_1DiagCoeffUnaryOp.html#a201f8fdf007cac98816e43465713955d">   51</a></span>    <span class="keyword">inline</span> <span class="keyword">auto</span> <a class="code hl_function" href="classXped_1_1DiagCoeffUnaryOp.html#a201f8fdf007cac98816e43465713955d">block</a>(std::size_t i) { <span class="keywordflow">return</span> <a class="code hl_function" href="structXped_1_1MatrixInterface.html#a3bbe3943c497ee3de924f9f438e7c3dc">PlainInterface::diagUnaryFunc</a>(<a class="code hl_variable" href="classXped_1_1DiagCoeffUnaryOp.html#a3bdf1e656c1eb83d159ae97e69342813">refxpr_</a>.block(i), <a class="code hl_variable" href="classXped_1_1DiagCoeffUnaryOp.html#aeb6063539d776816a550708eee4991ef">coeff_func_</a>); }</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    <span class="comment">// inline auto block(std::size_t i) { return refxpr_.block(i).diagonal().unaryExpr(coeff_func_).asDiagonal(); }</span></div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno"><a class="line" href="classXped_1_1DiagCoeffUnaryOp.html#a3f019d5b8620a2b8638cc88f280e5a7a">   54</a></span>    <span class="keyword">inline</span> <span class="keyword">const</span> std::unordered_map&lt;qType, std::size_t&gt; <a class="code hl_function" href="classXped_1_1DiagCoeffUnaryOp.html#a3f019d5b8620a2b8638cc88f280e5a7a">dict</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code hl_variable" href="classXped_1_1DiagCoeffUnaryOp.html#a3bdf1e656c1eb83d159ae97e69342813">refxpr_</a>.dict(); }</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno"><a class="line" href="classXped_1_1DiagCoeffUnaryOp.html#ae94244620bf28bcbf4abb5a77076ea1a">   56</a></span>    <span class="keyword">inline</span> <span class="keyword">const</span> <a class="code hl_struct" href="structXped_1_1mpi_1_1XpedWorld.html">mpi::XpedWorld</a>&amp; <a class="code hl_function" href="classXped_1_1DiagCoeffUnaryOp.html#ae94244620bf28bcbf4abb5a77076ea1a">world</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code hl_variable" href="classXped_1_1DiagCoeffUnaryOp.html#a3bdf1e656c1eb83d159ae97e69342813">refxpr_</a>.world(); }</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span> </div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno"><a class="line" href="classXped_1_1DiagCoeffUnaryOp.html#a7dc0cfbaa4e755d26d442f82437cd055">   58</a></span>    <span class="keyword">inline</span> <span class="keyword">const</span> <span class="keyword">auto</span> <a class="code hl_function" href="classXped_1_1DiagCoeffUnaryOp.html#a7dc0cfbaa4e755d26d442f82437cd055">uncoupledDomain</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code hl_variable" href="classXped_1_1DiagCoeffUnaryOp.html#a3bdf1e656c1eb83d159ae97e69342813">refxpr_</a>.uncoupledDomain(); }</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno"><a class="line" href="classXped_1_1DiagCoeffUnaryOp.html#abb1e89716648d7d8206d616824dfbf07">   59</a></span>    <span class="keyword">inline</span> <span class="keyword">const</span> <span class="keyword">auto</span> <a class="code hl_function" href="classXped_1_1DiagCoeffUnaryOp.html#abb1e89716648d7d8206d616824dfbf07">uncoupledCodomain</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code hl_variable" href="classXped_1_1DiagCoeffUnaryOp.html#a3bdf1e656c1eb83d159ae97e69342813">refxpr_</a>.uncoupledCodomain(); }</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span> </div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno"><a class="line" href="classXped_1_1DiagCoeffUnaryOp.html#a84fdcca17832213ef90cbf10e03a2a62">   61</a></span>    <span class="keyword">inline</span> <span class="keyword">const</span> <span class="keyword">auto</span> <a class="code hl_function" href="classXped_1_1DiagCoeffUnaryOp.html#a84fdcca17832213ef90cbf10e03a2a62">coupledDomain</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code hl_variable" href="classXped_1_1DiagCoeffUnaryOp.html#a3bdf1e656c1eb83d159ae97e69342813">refxpr_</a>.coupledDomain(); }</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno"><a class="line" href="classXped_1_1DiagCoeffUnaryOp.html#aad7d16d7ea1608d49941115155705b12">   62</a></span>    <span class="keyword">inline</span> <span class="keyword">const</span> <span class="keyword">auto</span> <a class="code hl_function" href="classXped_1_1DiagCoeffUnaryOp.html#aad7d16d7ea1608d49941115155705b12">coupledCodomain</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code hl_variable" href="classXped_1_1DiagCoeffUnaryOp.html#a3bdf1e656c1eb83d159ae97e69342813">refxpr_</a>.coupledCodomain(); }</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span> </div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno"><a class="line" href="classXped_1_1DiagCoeffUnaryOp.html#a7ef43e0594190b57930f4828278d35f3">   64</a></span>    <span class="keyword">inline</span> std::vector&lt;FusionTree&lt;Rank, Symmetry&gt;&gt; <a class="code hl_function" href="classXped_1_1DiagCoeffUnaryOp.html#a7ef43e0594190b57930f4828278d35f3">domainTrees</a>(<span class="keyword">const</span> <a class="code hl_typedef" href="classXped_1_1DiagCoeffUnaryOp.html#ac12addf5cd9f2d446edea0ae7f63d75f">qType</a>&amp; q)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code hl_variable" href="classXped_1_1DiagCoeffUnaryOp.html#a3bdf1e656c1eb83d159ae97e69342813">refxpr_</a>.cdomainTrees(q); }</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno"><a class="line" href="classXped_1_1DiagCoeffUnaryOp.html#a4985b2e84cca73f547edd79925acadb2">   65</a></span>    <span class="keyword">inline</span> std::vector&lt;FusionTree&lt;CoRank, Symmetry&gt;&gt; <a class="code hl_function" href="classXped_1_1DiagCoeffUnaryOp.html#a4985b2e84cca73f547edd79925acadb2">codomainTrees</a>(<span class="keyword">const</span> <a class="code hl_typedef" href="classXped_1_1DiagCoeffUnaryOp.html#ac12addf5cd9f2d446edea0ae7f63d75f">qType</a>&amp; q)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code hl_variable" href="classXped_1_1DiagCoeffUnaryOp.html#a3bdf1e656c1eb83d159ae97e69342813">refxpr_</a>.codomainTrees(q); }</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span> </div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span><span class="keyword">protected</span>:</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno"><a class="line" href="classXped_1_1DiagCoeffUnaryOp.html#a3bdf1e656c1eb83d159ae97e69342813">   68</a></span>    XPED_CONST XprType&amp; <a class="code hl_variable" href="classXped_1_1DiagCoeffUnaryOp.html#a3bdf1e656c1eb83d159ae97e69342813">refxpr_</a>;</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno"><a class="line" href="classXped_1_1DiagCoeffUnaryOp.html#aeb6063539d776816a550708eee4991ef">   69</a></span>    <span class="keyword">const</span> std::function&lt;<a class="code hl_typedef" href="classXped_1_1DiagCoeffUnaryOp.html#a99dced5640973afd768155f8dae11014">Scalar</a>(<a class="code hl_typedef" href="classXped_1_1DiagCoeffUnaryOp.html#a99dced5640973afd768155f8dae11014">Scalar</a>)&gt; <a class="code hl_variable" href="classXped_1_1DiagCoeffUnaryOp.html#aeb6063539d776816a550708eee4991ef">coeff_func_</a>;</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>};</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span> </div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>} <span class="comment">// namespace Xped</span></div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span><span class="preprocessor">#endif</span></div>
+<div class="ttc" id="aQbasis_8hpp_html"><div class="ttname"><a href="Qbasis_8hpp.html">Qbasis.hpp</a></div></div>
+<div class="ttc" id="aTensorBase_8hpp_html"><div class="ttname"><a href="TensorBase_8hpp.html">TensorBase.hpp</a></div></div>
+<div class="ttc" id="aclassXped_1_1DiagCoeffUnaryOp_html"><div class="ttname"><a href="classXped_1_1DiagCoeffUnaryOp.html">Xped::DiagCoeffUnaryOp</a></div><div class="ttdef"><b>Definition:</b> DiagCoeffUnaryOp.hpp:25</div></div>
+<div class="ttc" id="aclassXped_1_1DiagCoeffUnaryOp_html_a06e3b13ead8de880b321db159f1c8e9f"><div class="ttname"><a href="classXped_1_1DiagCoeffUnaryOp.html#a06e3b13ead8de880b321db159f1c8e9f">Xped::DiagCoeffUnaryOp::DiagCoeffUnaryOp</a></div><div class="ttdeci">DiagCoeffUnaryOp(XPED_CONST XprType &amp;xpr, const std::function&lt; Scalar(Scalar)&gt; &amp;coeff_func)</div><div class="ttdef"><b>Definition:</b> DiagCoeffUnaryOp.hpp:34</div></div>
+<div class="ttc" id="aclassXped_1_1DiagCoeffUnaryOp_html_a12170988b8ff7a6da5fd4e9fa4636ee7"><div class="ttname"><a href="classXped_1_1DiagCoeffUnaryOp.html#a12170988b8ff7a6da5fd4e9fa4636ee7">Xped::DiagCoeffUnaryOp::rank</a></div><div class="ttdeci">constexpr std::size_t rank() const</div><div class="ttdef"><b>Definition:</b> DiagCoeffUnaryOp.hpp:40</div></div>
+<div class="ttc" id="aclassXped_1_1DiagCoeffUnaryOp_html_a145679f09347abd497727eb1aa9ca9c3"><div class="ttname"><a href="classXped_1_1DiagCoeffUnaryOp.html#a145679f09347abd497727eb1aa9ca9c3">Xped::DiagCoeffUnaryOp::block</a></div><div class="ttdeci">const auto block(std::size_t i) const</div><div class="ttdef"><b>Definition:</b> DiagCoeffUnaryOp.hpp:48</div></div>
+<div class="ttc" id="aclassXped_1_1DiagCoeffUnaryOp_html_a18fda060e0a5a889c0bddaa6309536f6"><div class="ttname"><a href="classXped_1_1DiagCoeffUnaryOp.html#a18fda060e0a5a889c0bddaa6309536f6">Xped::DiagCoeffUnaryOp::sector</a></div><div class="ttdeci">const std::vector&lt; qType &gt; sector() const</div><div class="ttdef"><b>Definition:</b> DiagCoeffUnaryOp.hpp:43</div></div>
+<div class="ttc" id="aclassXped_1_1DiagCoeffUnaryOp_html_a201f8fdf007cac98816e43465713955d"><div class="ttname"><a href="classXped_1_1DiagCoeffUnaryOp.html#a201f8fdf007cac98816e43465713955d">Xped::DiagCoeffUnaryOp::block</a></div><div class="ttdeci">auto block(std::size_t i)</div><div class="ttdef"><b>Definition:</b> DiagCoeffUnaryOp.hpp:51</div></div>
+<div class="ttc" id="aclassXped_1_1DiagCoeffUnaryOp_html_a20d5cdca5e77a92ab4acfc782121eb44"><div class="ttname"><a href="classXped_1_1DiagCoeffUnaryOp.html#a20d5cdca5e77a92ab4acfc782121eb44">Xped::DiagCoeffUnaryOp::sector</a></div><div class="ttdeci">const qType sector(std::size_t i) const</div><div class="ttdef"><b>Definition:</b> DiagCoeffUnaryOp.hpp:44</div></div>
+<div class="ttc" id="aclassXped_1_1DiagCoeffUnaryOp_html_a22dafa5c4164f9a2c8bc32501da37058"><div class="ttname"><a href="classXped_1_1DiagCoeffUnaryOp.html#a22dafa5c4164f9a2c8bc32501da37058">Xped::DiagCoeffUnaryOp::CoRank</a></div><div class="ttdeci">static constexpr std::size_t CoRank</div><div class="ttdef"><b>Definition:</b> DiagCoeffUnaryOp.hpp:28</div></div>
+<div class="ttc" id="aclassXped_1_1DiagCoeffUnaryOp_html_a288e728c00819e7ae83c7c534e7b8a2b"><div class="ttname"><a href="classXped_1_1DiagCoeffUnaryOp.html#a288e728c00819e7ae83c7c534e7b8a2b">Xped::DiagCoeffUnaryOp::name</a></div><div class="ttdeci">const std::string name() const</div><div class="ttdef"><b>Definition:</b> DiagCoeffUnaryOp.hpp:39</div></div>
+<div class="ttc" id="aclassXped_1_1DiagCoeffUnaryOp_html_a3bdf1e656c1eb83d159ae97e69342813"><div class="ttname"><a href="classXped_1_1DiagCoeffUnaryOp.html#a3bdf1e656c1eb83d159ae97e69342813">Xped::DiagCoeffUnaryOp::refxpr_</a></div><div class="ttdeci">XPED_CONST XprType &amp; refxpr_</div><div class="ttdef"><b>Definition:</b> DiagCoeffUnaryOp.hpp:68</div></div>
+<div class="ttc" id="aclassXped_1_1DiagCoeffUnaryOp_html_a3f019d5b8620a2b8638cc88f280e5a7a"><div class="ttname"><a href="classXped_1_1DiagCoeffUnaryOp.html#a3f019d5b8620a2b8638cc88f280e5a7a">Xped::DiagCoeffUnaryOp::dict</a></div><div class="ttdeci">const std::unordered_map&lt; qType, std::size_t &gt; dict() const</div><div class="ttdef"><b>Definition:</b> DiagCoeffUnaryOp.hpp:54</div></div>
+<div class="ttc" id="aclassXped_1_1DiagCoeffUnaryOp_html_a40b33fb561b5351b1c93b62cbf17b804"><div class="ttname"><a href="classXped_1_1DiagCoeffUnaryOp.html#a40b33fb561b5351b1c93b62cbf17b804">Xped::DiagCoeffUnaryOp::Rank</a></div><div class="ttdeci">static constexpr std::size_t Rank</div><div class="ttdef"><b>Definition:</b> DiagCoeffUnaryOp.hpp:27</div></div>
+<div class="ttc" id="aclassXped_1_1DiagCoeffUnaryOp_html_a4985b2e84cca73f547edd79925acadb2"><div class="ttname"><a href="classXped_1_1DiagCoeffUnaryOp.html#a4985b2e84cca73f547edd79925acadb2">Xped::DiagCoeffUnaryOp::codomainTrees</a></div><div class="ttdeci">std::vector&lt; FusionTree&lt; CoRank, Symmetry &gt; &gt; codomainTrees(const qType &amp;q) const</div><div class="ttdef"><b>Definition:</b> DiagCoeffUnaryOp.hpp:65</div></div>
+<div class="ttc" id="aclassXped_1_1DiagCoeffUnaryOp_html_a51f771cab22b0962f00cff222442e737"><div class="ttname"><a href="classXped_1_1DiagCoeffUnaryOp.html#a51f771cab22b0962f00cff222442e737">Xped::DiagCoeffUnaryOp::corank</a></div><div class="ttdeci">constexpr std::size_t corank() const</div><div class="ttdef"><b>Definition:</b> DiagCoeffUnaryOp.hpp:41</div></div>
+<div class="ttc" id="aclassXped_1_1DiagCoeffUnaryOp_html_a7dc0cfbaa4e755d26d442f82437cd055"><div class="ttname"><a href="classXped_1_1DiagCoeffUnaryOp.html#a7dc0cfbaa4e755d26d442f82437cd055">Xped::DiagCoeffUnaryOp::uncoupledDomain</a></div><div class="ttdeci">const auto uncoupledDomain() const</div><div class="ttdef"><b>Definition:</b> DiagCoeffUnaryOp.hpp:58</div></div>
+<div class="ttc" id="aclassXped_1_1DiagCoeffUnaryOp_html_a7ef43e0594190b57930f4828278d35f3"><div class="ttname"><a href="classXped_1_1DiagCoeffUnaryOp.html#a7ef43e0594190b57930f4828278d35f3">Xped::DiagCoeffUnaryOp::domainTrees</a></div><div class="ttdeci">std::vector&lt; FusionTree&lt; Rank, Symmetry &gt; &gt; domainTrees(const qType &amp;q) const</div><div class="ttdef"><b>Definition:</b> DiagCoeffUnaryOp.hpp:64</div></div>
+<div class="ttc" id="aclassXped_1_1DiagCoeffUnaryOp_html_a84fdcca17832213ef90cbf10e03a2a62"><div class="ttname"><a href="classXped_1_1DiagCoeffUnaryOp.html#a84fdcca17832213ef90cbf10e03a2a62">Xped::DiagCoeffUnaryOp::coupledDomain</a></div><div class="ttdeci">const auto coupledDomain() const</div><div class="ttdef"><b>Definition:</b> DiagCoeffUnaryOp.hpp:61</div></div>
+<div class="ttc" id="aclassXped_1_1DiagCoeffUnaryOp_html_a99dced5640973afd768155f8dae11014"><div class="ttname"><a href="classXped_1_1DiagCoeffUnaryOp.html#a99dced5640973afd768155f8dae11014">Xped::DiagCoeffUnaryOp::Scalar</a></div><div class="ttdeci">XprType::Scalar Scalar</div><div class="ttdef"><b>Definition:</b> DiagCoeffUnaryOp.hpp:29</div></div>
+<div class="ttc" id="aclassXped_1_1DiagCoeffUnaryOp_html_aad7d16d7ea1608d49941115155705b12"><div class="ttname"><a href="classXped_1_1DiagCoeffUnaryOp.html#aad7d16d7ea1608d49941115155705b12">Xped::DiagCoeffUnaryOp::coupledCodomain</a></div><div class="ttdeci">const auto coupledCodomain() const</div><div class="ttdef"><b>Definition:</b> DiagCoeffUnaryOp.hpp:62</div></div>
+<div class="ttc" id="aclassXped_1_1DiagCoeffUnaryOp_html_abb1e89716648d7d8206d616824dfbf07"><div class="ttname"><a href="classXped_1_1DiagCoeffUnaryOp.html#abb1e89716648d7d8206d616824dfbf07">Xped::DiagCoeffUnaryOp::uncoupledCodomain</a></div><div class="ttdeci">const auto uncoupledCodomain() const</div><div class="ttdef"><b>Definition:</b> DiagCoeffUnaryOp.hpp:59</div></div>
+<div class="ttc" id="aclassXped_1_1DiagCoeffUnaryOp_html_ac12addf5cd9f2d446edea0ae7f63d75f"><div class="ttname"><a href="classXped_1_1DiagCoeffUnaryOp.html#ac12addf5cd9f2d446edea0ae7f63d75f">Xped::DiagCoeffUnaryOp::qType</a></div><div class="ttdeci">Symmetry::qType qType</div><div class="ttdef"><b>Definition:</b> DiagCoeffUnaryOp.hpp:31</div></div>
+<div class="ttc" id="aclassXped_1_1DiagCoeffUnaryOp_html_ac5a1b784384e7d9e9c3f04cb0c6cbc8b"><div class="ttname"><a href="classXped_1_1DiagCoeffUnaryOp.html#ac5a1b784384e7d9e9c3f04cb0c6cbc8b">Xped::DiagCoeffUnaryOp::Symmetry</a></div><div class="ttdeci">XprType::Symmetry Symmetry</div><div class="ttdef"><b>Definition:</b> DiagCoeffUnaryOp.hpp:30</div></div>
+<div class="ttc" id="aclassXped_1_1DiagCoeffUnaryOp_html_ad0953c5f2dedea6b27834b4d5f34625f"><div class="ttname"><a href="classXped_1_1DiagCoeffUnaryOp.html#ad0953c5f2dedea6b27834b4d5f34625f">Xped::DiagCoeffUnaryOp::AllocationPolicy</a></div><div class="ttdeci">typename XprType::AllocationPolicy AllocationPolicy</div><div class="ttdef"><b>Definition:</b> DiagCoeffUnaryOp.hpp:32</div></div>
+<div class="ttc" id="aclassXped_1_1DiagCoeffUnaryOp_html_ae94244620bf28bcbf4abb5a77076ea1a"><div class="ttname"><a href="classXped_1_1DiagCoeffUnaryOp.html#ae94244620bf28bcbf4abb5a77076ea1a">Xped::DiagCoeffUnaryOp::world</a></div><div class="ttdeci">const mpi::XpedWorld &amp; world() const</div><div class="ttdef"><b>Definition:</b> DiagCoeffUnaryOp.hpp:56</div></div>
+<div class="ttc" id="aclassXped_1_1DiagCoeffUnaryOp_html_aeb6063539d776816a550708eee4991ef"><div class="ttname"><a href="classXped_1_1DiagCoeffUnaryOp.html#aeb6063539d776816a550708eee4991ef">Xped::DiagCoeffUnaryOp::coeff_func_</a></div><div class="ttdeci">const std::function&lt; Scalar(Scalar)&gt; coeff_func_</div><div class="ttdef"><b>Definition:</b> DiagCoeffUnaryOp.hpp:69</div></div>
+<div class="ttc" id="aclassXped_1_1TensorBase_html"><div class="ttname"><a href="classXped_1_1TensorBase.html">Xped::TensorBase</a></div><div class="ttdef"><b>Definition:</b> TensorBase.hpp:36</div></div>
+<div class="ttc" id="anamespaceXped_html"><div class="ttname"><a href="namespaceXped.html">Xped</a></div><div class="ttdef"><b>Definition:</b> ADTensor.hpp:17</div></div>
+<div class="ttc" id="astructXped_1_1MatrixInterface_html_a3bbe3943c497ee3de924f9f438e7c3dc"><div class="ttname"><a href="structXped_1_1MatrixInterface.html#a3bbe3943c497ee3de924f9f438e7c3dc">Xped::MatrixInterface::diagUnaryFunc</a></div><div class="ttdeci">static MType&lt; Scalar &gt; diagUnaryFunc(MT &amp;&amp;M, const std::function&lt; Scalar(Scalar)&gt; &amp;func)</div><div class="ttdef"><b>Definition:</b> MatrixInterface_Cyclops_impl.cpp:243</div></div>
+<div class="ttc" id="astructXped_1_1TensorTraits_3_01DiagCoeffUnaryOp_3_01XprType_01_4_01_4_html_a439c07c30d54f95429652dfa3b54d81c"><div class="ttname"><a href="structXped_1_1TensorTraits_3_01DiagCoeffUnaryOp_3_01XprType_01_4_01_4.html#a439c07c30d54f95429652dfa3b54d81c">Xped::TensorTraits&lt; DiagCoeffUnaryOp&lt; XprType &gt; &gt;::Scalar</a></div><div class="ttdeci">XprType::Scalar Scalar</div><div class="ttdef"><b>Definition:</b> DiagCoeffUnaryOp.hpp:18</div></div>
+<div class="ttc" id="astructXped_1_1TensorTraits_3_01DiagCoeffUnaryOp_3_01XprType_01_4_01_4_html_a70e60f3b2a2300b603433235d6991c1b"><div class="ttname"><a href="structXped_1_1TensorTraits_3_01DiagCoeffUnaryOp_3_01XprType_01_4_01_4.html#a70e60f3b2a2300b603433235d6991c1b">Xped::TensorTraits&lt; DiagCoeffUnaryOp&lt; XprType &gt; &gt;::AllocationPolicy</a></div><div class="ttdeci">typename XprType::AllocationPolicy AllocationPolicy</div><div class="ttdef"><b>Definition:</b> DiagCoeffUnaryOp.hpp:20</div></div>
+<div class="ttc" id="astructXped_1_1TensorTraits_3_01DiagCoeffUnaryOp_3_01XprType_01_4_01_4_html_a8e889ac400fd899b179e17fc5bda290f"><div class="ttname"><a href="structXped_1_1TensorTraits_3_01DiagCoeffUnaryOp_3_01XprType_01_4_01_4.html#a8e889ac400fd899b179e17fc5bda290f">Xped::TensorTraits&lt; DiagCoeffUnaryOp&lt; XprType &gt; &gt;::Symmetry</a></div><div class="ttdeci">XprType::Symmetry Symmetry</div><div class="ttdef"><b>Definition:</b> DiagCoeffUnaryOp.hpp:19</div></div>
+<div class="ttc" id="astructXped_1_1TensorTraits_html"><div class="ttname"><a href="structXped_1_1TensorTraits.html">Xped::TensorTraits</a></div><div class="ttdef"><b>Definition:</b> TensorBase.hpp:10</div></div>
+<div class="ttc" id="astructXped_1_1mpi_1_1XpedWorld_html"><div class="ttname"><a href="structXped_1_1mpi_1_1XpedWorld.html">Xped::mpi::XpedWorld</a></div><div class="ttdef"><b>Definition:</b> Mpi.hpp:34</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+<!-- HTML footer for doxygen 1.9.2-->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_4b24e72d7fcd206265f2d42a075103f3.html">Xped</a></li><li class="navelem"><a class="el" href="dir_00d5d3255bcb29db218783dde4224536.html">Core</a></li><li class="navelem"><a class="el" href="DiagCoeffUnaryOp_8hpp.html">DiagCoeffUnaryOp.hpp</a></li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.6 </li>
+  </ul>
+</div>
+<script type="text/javascript">
+  // script for doxygen 1.9.2
+  $(function() {
+      toggleButton = document.createElement('doxygen-awesome-dark-mode-toggle')
+      toggleButton.title = "Toggle Light/Dark Mode"
+      $(document).ready(function(){
+          document.getElementById("MSearchBox").parentNode.appendChild(toggleButton)
+      })
+      $(window).resize(function(){
+          document.getElementById("MSearchBox").parentNode.appendChild(toggleButton)
+      })
+  })
+</script>
+</body>
+</html>

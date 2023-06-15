@@ -1,7 +1,7 @@
 [![License](https://img.shields.io/static/v1?label=LICENSE&message=GPL&color=green&style=for-the-badge)](./LICENSE)
-[![Documentation](https://img.shields.io/static/v1?label=DOCS&message=click&color=blue&style=for-the-badge)](https://cpp977.github.io/Xped/)
-https://img.shields.io/static/v1?label=OS&message=LINUX&color=orange&style=for-the-badge
-https://img.shields.io/static/v1?label=OS&message=WINDOWS&color=orange&style=for-the-badge
+[![Documentation](https://img.shields.io/static/v1?label=DOCS&message=dev&color=blue&style=for-the-badge)](https://cpp977.github.io/Xped/)
+[![Linux](https://img.shields.io/static/v1?label=OS&message=LINUX&color=orange&style=for-the-badge)]
+[![Windows](https://img.shields.io/static/v1?label=OS&message=WINDOWS&color=orange&style=for-the-badge)]
 
 ## Xped
 Library for the manipulation of symmetric (block-sparse) tensors with arbitrary (**X**) amount of indices (**ped**).

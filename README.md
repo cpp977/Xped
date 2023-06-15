@@ -1,7 +1,10 @@
-## Xped
-Library for the manipulation of symmetric (block-sparse) tensors with arbitrary (**X**) amount of indices (**ped**).
 [![License](https://img.shields.io/static/v1?label=LICENSE&message=GPL&color=green&style=for-the-badge)](./LICENSE)
 [![Documentation](https://img.shields.io/static/v1?label=DOCS&message=click&color=blue&style=for-the-badge)](https://cpp977.github.io/Xped/)
+https://img.shields.io/static/v1?label=OS&message=LINUX&color=orange&style=for-the-badge
+https://img.shields.io/static/v1?label=OS&message=WINDOWS&color=orange&style=for-the-badge
+
+## Xped
+Library for the manipulation of symmetric (block-sparse) tensors with arbitrary (**X**) amount of indices (**ped**).
 
 ## Status
 
@@ -14,7 +17,7 @@ Library for the manipulation of symmetric (block-sparse) tensors with arbitrary 
 
 ## Quickstart
 
-https://github.com/cpp977/Xped/blob/ca22aae8ab1e113ec17cc1903e4a76764557406d/docs/snippets/quickstart.cpp
+https://github.com/cpp977/Xped/blob/1eab6bf97de1fb84b3992361436996391a4f0292/docs/snippets/quickstart.cpp#L1-L47
 
 ## Build
 
@@ -30,7 +33,7 @@ The build directory is specified in the presets: `/path/to/source/Xped/../<prese
 `ctest --preset=<preset>`
 
 To control the build, it is recomennded to choose a CMake preset so that several options are already set automatically.
-The following follow the scheme `<compiler>-<backend>-<build-type>`. E.g. `gcc-eigen-release` uses the gnu c++ compiler and the Eigen backend.
+The following follow the scheme `<compiler>-<backend>-<build-type>`. E.g. `gcc-eigen-release` uses the gnu c++ compiler and the Eigen backend and performs a release build.
 Supported compilers are gcc, clang and msvc.
 
 All build options can be seen in the following table.

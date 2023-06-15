@@ -490,10 +490,15 @@ The unit cell and PEPS bond dimension are specified in the section `[ipeps]`:
 [ipeps]
 D                       = 2
 # The cell can have a nontrivial pattern if numbers appear several times
-cell                    = [[1,2],
-                           [3,4]] # 2x2 unit cell without pattern
+pattern                    = [[1,2],
+                              [2,1]] # 2x2 unit cell with pattern
+#
+# Alternative: specify cell as [Lx, Ly] without pattern
+# cell                     = [3, 6]
+#
 # Charges can be used to force the total filling or total magnetization
 # This is only possible for Abelian symmetries
+# The charges must be consistent with the pattern of the cell!
 charges                 = [[[+1], [-1]],
                            [[-1], [+1]]] # This charge pattern forces a Neel state with zero total magnetization
 ```

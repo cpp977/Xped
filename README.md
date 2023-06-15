@@ -12,7 +12,7 @@ Library for the manipulation of symmetric (block-sparse) tensors with arbitrary 
 |:-: | :-: | :-: |
 | [![Builds](https://github.com/cpp977/Xped/workflows/Builds/badge.svg)](https://github.com/cpp977/Xped/actions)|[![Tests](https://github.com/cpp977/Xped/workflows/Tests/badge.svg)](https://github.com/cpp977/Xped/actions)|[![codecov](https://codecov.io/gh/cpp977/Xped/branch/master/graph/badge.svg?token=MRQLD834VO)](https://codecov.io/gh/cpp977/Xped)|
 
-## Quickstart
+## Getting started
 
 https://github.com/cpp977/Xped/blob/1eab6bf97de1fb84b3992361436996391a4f0292/docs/snippets/quickstart.cpp#L1-L47
 
@@ -79,3 +79,6 @@ All build options can be seen in the following table.
 | `XPED_USE_SCALAPACK` | `OFF` | Enable scalapack linking (only useful for MPI programs). |
 | `XPED_VECTOR_LIB` | `Eigen` | Used matrix library for plain tensor operations. |
 
+## Documentation
+
+Browse the [documenation](https://cpp977.github.io/Xped "docs") to learn about the capabilities of the library.

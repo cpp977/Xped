@@ -1,11 +1,9 @@
 name: Generate documentation
 
 on:
-  workflow_run:
-    workflows:
-      - Builds
-    types:
-      - completed
+  push:
+    paths:
+      - 'docs/**'
 
 jobs:
   gen_options:

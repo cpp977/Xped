@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['betheansatz_0',['BetheAnsatz',['../namespaceBetheAnsatz.html',1,'']]]
+  ['docstring_0',['docstring',['../namespacedocstring.html',1,'']]]
 ];

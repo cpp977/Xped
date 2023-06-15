@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['qbasis_0',['Qbasis',['../classXped_1_1Basis.html#afdcd2d2142ef5ab2bd37551d191489b8',1,'Xped::Basis::Qbasis()'],['../classXped_1_1Qbasis.html#afdcd2d2142ef5ab2bd37551d191489b8',1,'Xped::Qbasis::Qbasis()']]]
+  ['strcmp_0',['strcmp',['../classString.html#ae3c243f0bc797b9e4b15d2ef5e5aaa7c',1,'String']]]
 ];

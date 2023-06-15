@@ -176,7 +176,7 @@ $(document).ready(function(){initNavTree('complex__var_8hpp_source.html',''); in
 <div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span> </div>
 <div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>    <span class="keyword">inline</span> var_value&lt;value_type&gt;&amp; operator/=(value_type b);</div>
 <div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span> </div>
-<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>    <span class="keyword">friend</span> std::ostream&amp; <a class="code hl_function" href="Lattice2D_8h.html#a0203a0c4f72668210374de4fa7e4625d">operator&lt;&lt;</a>(std::ostream&amp; os, <span class="keyword">const</span> var_value&lt;value_type&gt;&amp; v)</div>
+<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>    <span class="keyword">friend</span> std::ostream&amp; <a class="code hl_function" href="namespaceXped.html#ab37fe9f98d74f492093b58177142dd8c">operator&lt;&lt;</a>(std::ostream&amp; os, <span class="keyword">const</span> var_value&lt;value_type&gt;&amp; v)</div>
 <div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>    {</div>
 <div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>        <span class="keywordflow">if</span>(v.vi_ == <span class="keyword">nullptr</span>) { <span class="keywordflow">return</span> os &lt;&lt; <span class="stringliteral">&quot;uninitialized&quot;</span>; }</div>
 <div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>        <span class="keywordflow">return</span> os &lt;&lt; v.val();</div>
@@ -203,9 +203,9 @@ $(document).ready(function(){initNavTree('complex__var_8hpp_source.html',''); in
 <div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span>} <span class="comment">// namespace std</span></div>
 <div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span> </div>
 <div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span><span class="preprocessor">#endif</span></div>
-<div class="ttc" id="aLattice2D_8h_html_a0203a0c4f72668210374de4fa7e4625d"><div class="ttname"><a href="Lattice2D_8h.html#a0203a0c4f72668210374de4fa7e4625d">operator&lt;&lt;</a></div><div class="ttdeci">std::ostream &amp; operator&lt;&lt;(std::ostream &amp;s, LatticeType lattice)</div><div class="ttdef"><b>Definition:</b> Lattice2D.h:17</div></div>
 <div class="ttc" id="acomplex__vari_8hpp_html"><div class="ttname"><a href="complex__vari_8hpp.html">complex_vari.hpp</a></div></div>
 <div class="ttc" id="anamespaceXped_html_a6b31d619dcca6878f7fd47c5469d9c52"><div class="ttname"><a href="namespaceXped.html#a6b31d619dcca6878f7fd47c5469d9c52">Xped::operator*</a></div><div class="ttdeci">XTensor&lt; TRACK, Scalar, Rank, CoRank, Symmetry &gt; operator*(const Tensor&lt; Scalar, Rank, CoRank, Symmetry, true &gt; &amp;t, Scalar s)</div><div class="ttdef"><b>Definition:</b> ADTensor.hpp:452</div></div>
+<div class="ttc" id="anamespaceXped_html_ab37fe9f98d74f492093b58177142dd8c"><div class="ttname"><a href="namespaceXped.html#ab37fe9f98d74f492093b58177142dd8c">Xped::operator&lt;&lt;</a></div><div class="ttdeci">std::ostream &amp; operator&lt;&lt;(std::ostream &amp;os, const FusionTree&lt; depth, Symmetry &gt; &amp;tree)</div><div class="ttdef"><b>Definition:</b> FusionTree.hpp:93</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.9.2-->

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['eigen_5fstan_5fmatrixbase_5fplugin_0',['EIGEN_STAN_MATRIXBASE_PLUGIN',['../EigenPlugins_8hpp.html#a8efcbbac160e8b0a0d7a1c2fc5562f67',1,'EigenPlugins.hpp']]]
+  ['kind_5fenum_0',['KIND_ENUM',['../functions_8hpp.html#a18488a109be42a1b19294aeb44a5d3d6',1,'functions.hpp']]]
 ];

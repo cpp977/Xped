@@ -5,10 +5,6 @@ var namespaceXped =
       [ "BROOM", "namespaceXped_1_1DMRG.html#ac8f38d99798200c2df341e7bed9576ae", [
         [ "SVD", "namespaceXped_1_1DMRG.html#ac8f38d99798200c2df341e7bed9576aea595e2d2f1a68ede96e96f849a85370bc", null ],
         [ "QR", "namespaceXped_1_1DMRG.html#ac8f38d99798200c2df341e7bed9576aea66c35cd8077f7e1db5faefbc048a646a", null ]
-      ] ],
-      [ "DIRECTION", "namespaceXped_1_1DMRG.html#ac3b1864f991dc763fa1bbb1d6c4f8bae", [
-        [ "LEFT", "namespaceXped_1_1DMRG.html#ac3b1864f991dc763fa1bbb1d6c4f8baea684d325a7303f52e64011467ff5c5758", null ],
-        [ "RIGHT", "namespaceXped_1_1DMRG.html#ac3b1864f991dc763fa1bbb1d6c4f8baea21507b40c80068eda19865706fdc2403", null ]
       ] ]
     ] ],
     [ "internal", "namespaceXped_1_1internal.html", "namespaceXped_1_1internal" ],

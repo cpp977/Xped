@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['kind_5fenum_0',['KIND_ENUM',['../functions_8hpp.html#a18488a109be42a1b19294aeb44a5d3d6',1,'functions.hpp']]]
+  ['spdlog_5factive_5flevel_0',['SPDLOG_ACTIVE_LEVEL',['../Macros_8hpp.html#ae4fda6f71f35120e2ff48157fca961b5',1,'Macros.hpp']]]
 ];

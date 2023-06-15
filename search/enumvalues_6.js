@@ -1,8 +1,6 @@
 var searchData=
 [
-  ['gb_0',['GB',['../MemCalc_8h.html#a3f22cf4ac7b4c602761527e4db687193a3f489f3d57683ecbc81859b175ca08fc',1,'MemCalc.h']]],
-  ['gray_1',['GRAY',['../PolychromaticConsole_8h.html#ac66168151adb1a3f0e8035113e061bb0a3fb6c4ad00f4ad98553e01229d1803ac',1,'PolychromaticConsole.h']]],
-  ['green_2',['GREEN',['../PolychromaticConsole_8h.html#ac66168151adb1a3f0e8035113e061bb0aa60bd322f93178d68184e30e162571ca',1,'PolychromaticConsole.h']]],
-  ['gval1_3',['GVal1',['../autolink_8cpp.html#a656d63cf384d2a6f23c2c18523a7bc5ea0f016f49e4f3bcd072319b9d68bc927d',1,'autolink.cpp']]],
-  ['gval2_4',['GVal2',['../autolink_8cpp.html#a656d63cf384d2a6f23c2c18523a7bc5ea811876e2eea5c16ae0594a95d98fbd55',1,'autolink.cpp']]]
+  ['h_0',['H',['../namespaceXped_1_1Opts.html#ae4a8447de96e9ccd51e29d758366ac11ac1d9f50f86825a1a2302ec2449c17196',1,'Xped::Opts']]],
+  ['hdv_1',['HDV',['../namespaceXped_1_1Opts.html#a7d9782094b259a62772a5b25f5eff6b5a37ae9326fc3a404d642f0e75a7164428',1,'Xped::Opts']]],
+  ['hours_2',['HOURS',['../namespaceXped_1_1util.html#a55184b868e1a0631372bd734c0610700a5ab9376a7869a83e84e94bcb25aa8cbd',1,'Xped::util']]]
 ];

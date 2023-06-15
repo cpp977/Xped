@@ -8,7 +8,7 @@ var searchData=
   ['refxpr_5fr_5f_5',['refxpr_r_',['../classXped_1_1CoeffBinaryOp.html#aed69c9c1813c0eda6edb72051335997c',1,'Xped::CoeffBinaryOp::refxpr_r_()'],['../classXped_1_1DiagCoeffBinaryOp.html#ad6e03c344240d7369cb56dff93eb81ba',1,'Xped::DiagCoeffBinaryOp::refxpr_r_()']]],
   ['reinit_5fenv_5ftol_6',['reinit_env_tol',['../structXped_1_1Opts_1_1CTM.html#a86b97130fce450e1370af0e8e99feaac',1,'Xped::Opts::CTM']]],
   ['renormalize_7',['RENORMALIZE',['../structXped_1_1Opts_1_1CTMCheckpoint.html#a5a4ac860f8cb922306e47c7d0fbc0981',1,'Xped::Opts::CTMCheckpoint']]],
-  ['resume_8',['resume',['../structXped_1_1Opts_1_1Optim.html#a20a391f0a3664f9efd509f2f0f690110',1,'Xped::Opts::Optim::resume()'],['../structXped_1_1Opts_1_1Imag.html#a76f98cd60eb6425b199fc0df7937669a',1,'Xped::Opts::Imag::resume()']]],
-  ['rev_5ffunctor_5f_9',['rev_functor_',['../structXped_1_1internal_1_1reverse__pass__callback__alloc__vari.html#aca87e8b31d8e6f34aa9a247f6622dbf9',1,'Xped::internal::reverse_pass_callback_alloc_vari']]],
-  ['row_10',['row',['../classSimpleListInitializer.html#ae1c5d29eaf86602218c735e1f114f37f',1,'SimpleListInitializer']]]
+  ['reps_8',['reps',['../structXped_1_1Opts_1_1Bench.html#ad182d3b5baaaa5825cab1e55c062e408',1,'Xped::Opts::Bench']]],
+  ['resume_9',['resume',['../structXped_1_1Opts_1_1Optim.html#a20a391f0a3664f9efd509f2f0f690110',1,'Xped::Opts::Optim::resume()'],['../structXped_1_1Opts_1_1Imag.html#a76f98cd60eb6425b199fc0df7937669a',1,'Xped::Opts::Imag::resume()']]],
+  ['rev_5ffunctor_5f_10',['rev_functor_',['../structXped_1_1internal_1_1reverse__pass__callback__alloc__vari.html#aca87e8b31d8e6f34aa9a247f6622dbf9',1,'Xped::internal::reverse_pass_callback_alloc_vari']]]
 ];

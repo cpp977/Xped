@@ -1,5 +1,6 @@
 var namespaceXped_1_1Opts =
 [
+    [ "Bench", "structXped_1_1Opts_1_1Bench.html", "structXped_1_1Opts_1_1Bench" ],
     [ "CTM", "structXped_1_1Opts_1_1CTM.html", "structXped_1_1Opts_1_1CTM" ],
     [ "CTMCheckpoint", "structXped_1_1Opts_1_1CTMCheckpoint.html", "structXped_1_1Opts_1_1CTMCheckpoint" ],
     [ "Imag", "structXped_1_1Opts_1_1Imag.html", "structXped_1_1Opts_1_1Imag" ],
@@ -14,6 +15,7 @@ var namespaceXped_1_1Opts =
       [ "HDV", "namespaceXped_1_1Opts.html#a7d9782094b259a62772a5b25f5eff6b5a37ae9326fc3a404d642f0e75a7164428", null ],
       [ "VDH", "namespaceXped_1_1Opts.html#a7d9782094b259a62772a5b25f5eff6b5a94ddde84e21b351d505cd46b4d46204f", null ]
     ] ],
+    [ "bench_from_toml", "namespaceXped_1_1Opts.html#ab277ff51515eb842dea4717b5c7c0d5c", null ],
     [ "ctm_from_toml", "namespaceXped_1_1Opts.html#adb33e265ca01794279c05f9a0200a14a", null ],
     [ "imag_from_toml", "namespaceXped_1_1Opts.html#a7383ca7db663aea00354cbb8d7291ec5", null ],
     [ "operator&", "namespaceXped_1_1Opts.html#aa06bbeb5f74cb6733b7d31afe9b9b7af", null ],

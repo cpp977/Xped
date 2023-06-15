@@ -50,7 +50,7 @@ var NAVTREE =
     ] ],
     [ "Backends", "index.html#autotoc_md19", [
       [ "Eigen", "index.html#autotoc_md20", null ],
-      [ "Cyclops tensor framework", "index.html#autotoc_md21", null ],
+      [ "Cyclops tensor framework (ctf)", "index.html#autotoc_md21", null ],
       [ "array", "index.html#autotoc_md22", null ]
     ] ],
     [ "Algorithms", "index.html#autotoc_md23", [
@@ -61,13 +61,12 @@ var NAVTREE =
       ] ]
     ] ],
     [ "pag_example", "pag_example.html", null ],
-    [ "Todo List", "todo.html", null ],
     [ "Bug List", "bug.html", null ],
     [ "Modules", "modules.html", "modules" ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
       [ "Namespace Members", "namespacemembers.html", [
-        [ "All", "namespacemembers.html", "namespacemembers_dup" ],
+        [ "All", "namespacemembers.html", null ],
         [ "Functions", "namespacemembers_func.html", null ],
         [ "Variables", "namespacemembers_vars.html", null ],
         [ "Typedefs", "namespacemembers_type.html", null ],
@@ -108,24 +107,22 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "ADTensor_8hpp.html",
-"MatrixInterface__Eigen__impl_8hpp.html",
-"TensorBase_8hpp.html#a2b479683883ffd1d8626428456250b28",
-"classIntervalIterator.html#abfa03540427d82f864fa724ed7d1b5c3",
-"classXped_1_1AdjointOp.html#afadda2b28e891150d41710306f23c102",
-"classXped_1_1CoeffUnaryOp.html#af96caffef2a0f08623bc5e5cdc0c5b8d",
-"classXped_1_1FermionBase.html#a84da3ba17884b6a2da6e1d3d041ec7f6",
-"classXped_1_1Kondo.html#afe2fc2a0451160d03846383e812abdb6",
-"classXped_1_1Spin.html#a76a18779a955a6ac4686d558f20b872b",
-"classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01false_00_01AllocationPolicy___01_4.html#a0cd31d02aa340fd026868bc9384fbfca",
-"classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#ac8f3cab1e0ed5e0886256be964c0b104",
-"example_test_8cpp-example.html",
-"memgrp_8cpp.html#a955f504eccf76b4eb2489c0adab03121",
-"namespacedocstring.html",
-"structXped_1_1FusionTree.html#abbf717b465c9c756b92134abc06ea306",
-"structXped_1_1Pattern.html#a3673f9afabbb9d5ed95dc0cf279bba69",
-"structXped_1_1Sym_1_1Combined_3_01S1_01_4.html",
-"structXped_1_1TensorTraits_3_01DiagCoeffBinaryOp_3_01XprTypeLeft_00_01XprTypeRight_01_4_01_4.html#a563c983a7a5aef553e5d19dbf702df45",
-"structXped_1_1iPEPSSolverImag.html#ade44887d91eefd81facb5def812c8cf3"
+"Random_8hpp.html#a1972e8e97df4fce5faed35ff807dbe77",
+"classModels_1_1Heisenberg.html#a6cdf7aaf301cabdf5f0a9ef3a518ee44",
+"classXped_1_1CoeffBinaryOp.html#a09e0a89087ed08cadff3679a74fce861",
+"classXped_1_1Fermion.html#a8a59f171f3e9b0b3d765fef779e57953",
+"classXped_1_1Heisenberg.html#a10ed9c0c74fe02b3d03afddbafa4b39b",
+"classXped_1_1Qbasis.html#a87ec886c93de9df96eb0aa76deeed225",
+"classXped_1_1TensorBase.html",
+"classXped_1_1Tensor_3_01Scalar___00_01Rank_00_01CoRank_00_01Symmetry___00_01true_00_01AllocationPolicy___01_4.html#a30a80217af1616b2ad2816a622a8d7c1",
+"classXped_1_1util_1_1Stopwatch.html#ae998b5e0108fa0f57d4475ac2456ec80",
+"include_8cpp.html",
+"namespaceXped_1_1util.html#a55184b868e1a0631372bd734c0610700aa9126caa6ef3db9cf3c35ac627ad22b5",
+"structXped_1_1Opts_1_1Bench.html#acf696c59ced421258148805cc08e4ad5",
+"structXped_1_1SiteOperator.html#a99aac46d53fdb4d1d13a007705d9b6e2",
+"structXped_1_1Sym_1_1SymTraits_3_01SUN_3_01N_00_01Kind___00_01Scalar_____01_4_01_4.html#aeee45aa536fe49b6b3c79b97f129621e",
+"structXped_1_1UnitCell.html",
+"structXped_1_1util_1_1Permutation.html#a86e0c4a88e7134f58c6812a528b72082"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

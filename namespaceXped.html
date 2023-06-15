@@ -449,7 +449,7 @@ Functions</h2></td></tr>
 <tr class="memitem:abf8a3179d7831f48b59b01edcd050e26"><td class="memTemplItemLeft" align="right" valign="top">XPED_CONST <a class="el" href="classXped_1_1CoeffUnaryOp.html">CoeffUnaryOp</a>&lt; Derived, std::common_type_t&lt; typename Derived::Scalar, Scalar &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceXped.html#abf8a3179d7831f48b59b01edcd050e26">operator/</a> (XPED_CONST <a class="el" href="classXped_1_1TensorBase.html">TensorBase</a>&lt; Derived &gt; &amp;left, Scalar divisor)</td></tr>
 <tr class="separator:abf8a3179d7831f48b59b01edcd050e26"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9836742145802d6aff24f02e0803bd99"><td class="memTemplParams" colspan="2">template&lt;typename Scalar , typename Symmetry &gt; </td></tr>
-<tr class="memitem:a9836742145802d6aff24f02e0803bd99"><td class="memTemplItemLeft" align="right" valign="top">Symmetry::Scalar&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceXped.html#a9836742145802d6aff24f02e0803bd99">dot</a> (XPED_CONST <a class="el" href="classXped_1_1Mps.html">Mps</a>&lt; Scalar, Symmetry &gt; &amp;Bra, XPED_CONST <a class="el" href="classXped_1_1Mps.html">Mps</a>&lt; Scalar, Symmetry &gt; &amp;Ket, const <a class="el" href="namespaceXped_1_1DMRG.html#ac3b1864f991dc763fa1bbb1d6c4f8bae">DMRG::DIRECTION</a> DIR=<a class="el" href="namespaceXped_1_1DMRG.html#ac3b1864f991dc763fa1bbb1d6c4f8baea21507b40c80068eda19865706fdc2403">DMRG::DIRECTION::RIGHT</a>)</td></tr>
+<tr class="memitem:a9836742145802d6aff24f02e0803bd99"><td class="memTemplItemLeft" align="right" valign="top">Symmetry::Scalar&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceXped.html#a9836742145802d6aff24f02e0803bd99">dot</a> (XPED_CONST <a class="el" href="classXped_1_1Mps.html">Mps</a>&lt; Scalar, Symmetry &gt; &amp;Bra, XPED_CONST <a class="el" href="classXped_1_1Mps.html">Mps</a>&lt; Scalar, Symmetry &gt; &amp;Ket, const DMRG::DIRECTION DIR=DMRG::DIRECTION::RIGHT)</td></tr>
 <tr class="separator:a9836742145802d6aff24f02e0803bd99"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a02a68d4614270192b51a669feb04667d"><td class="memTemplParams" colspan="2">template&lt;typename Scalar , typename Symmetry , typename AllocationPolicy &gt; </td></tr>
 <tr class="memitem:a02a68d4614270192b51a669feb04667d"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceXped.html#a02a68d4614270192b51a669feb04667d">contract_L</a> (XPED_CONST <a class="el" href="classXped_1_1Tensor.html">Tensor</a>&lt; Scalar, 1, 1, Symmetry, false, AllocationPolicy &gt; &amp;Bold, XPED_CONST <a class="el" href="classXped_1_1Tensor.html">Tensor</a>&lt; Scalar, 2, 1, Symmetry, false, AllocationPolicy &gt; &amp;Bra, XPED_CONST <a class="el" href="classXped_1_1Tensor.html">Tensor</a>&lt; Scalar, 2, 1, Symmetry, false, AllocationPolicy &gt; &amp;Ket, <a class="el" href="classXped_1_1Tensor.html">Tensor</a>&lt; Scalar, 1, 1, Symmetry, false, AllocationPolicy &gt; &amp;Bnew)</td></tr>
@@ -1529,8 +1529,8 @@ template&lt;typename Scalar , typename Symmetry &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceXped_1_1DMRG.html#ac3b1864f991dc763fa1bbb1d6c4f8bae">DMRG::DIRECTION</a>&#160;</td>
-          <td class="paramname"><em>DIR</em> = <code><a class="el" href="namespaceXped_1_1DMRG.html#ac3b1864f991dc763fa1bbb1d6c4f8baea21507b40c80068eda19865706fdc2403">DMRG::DIRECTION::RIGHT</a></code>&#160;</td>
+          <td class="paramtype">const DMRG::DIRECTION&#160;</td>
+          <td class="paramname"><em>DIR</em> = <code>DMRG::DIRECTION::RIGHT</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -2674,6 +2674,15 @@ Here is the call graph for this function:</div>
 <area shape="rect" href="structXped_1_1FusionTree.html#abbf717b465c9c756b92134abc06ea306" title=" " alt="" coords="193,5,364,31"/>
 </map>
 </div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="namespaceXped_ab37fe9f98d74f492093b58177142dd8c_icgraph.png" border="0" usemap="#anamespaceXped_ab37fe9f98d74f492093b58177142dd8c_icgraph" alt=""/></div>
+<map name="anamespaceXped_ab37fe9f98d74f492093b58177142dd8c_icgraph" id="anamespaceXped_ab37fe9f98d74f492093b58177142dd8c_icgraph">
+<area shape="rect" title=" " alt="" coords="193,5,333,31"/>
+<area shape="rect" href="namespaceXped.html#a39a80c60bceccb5806c77a3c303a437f" title=" " alt="" coords="5,5,145,31"/>
+</map>
+</div>
 
 </div>
 </div>
@@ -2817,8 +2826,10 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="namespaceXped_a39a80c60bceccb5806c77a3c303a437f_cgraph.png" border="0" usemap="#anamespaceXped_a39a80c60bceccb5806c77a3c303a437f_cgraph" alt=""/></div>
 <map name="anamespaceXped_a39a80c60bceccb5806c77a3c303a437f_cgraph" id="anamespaceXped_a39a80c60bceccb5806c77a3c303a437f_cgraph">
-<area shape="rect" title=" " alt="" coords="5,13,145,38"/>
-<area shape="rect" href="structXped_1_1SiteOperator.html#a297092530a441587c143ebac71ac8223" title=" " alt="" coords="193,5,339,45"/>
+<area shape="rect" title=" " alt="" coords="5,35,145,60"/>
+<area shape="rect" href="namespaceXped.html#ab37fe9f98d74f492093b58177142dd8c" title=" " alt="" coords="196,5,336,31"/>
+<area shape="rect" href="structXped_1_1SiteOperator.html#a297092530a441587c143ebac71ac8223" title=" " alt="" coords="193,55,339,95"/>
+<area shape="rect" href="structXped_1_1FusionTree.html#abbf717b465c9c756b92134abc06ea306" title=" " alt="" coords="387,5,557,31"/>
 </map>
 </div>
 

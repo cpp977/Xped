@@ -10,5 +10,5 @@ var searchData=
   ['optim_5fopts_7',['optim_opts',['../structXped_1_1iPEPSSolverAD.html#ae5442ba866b3abf02139d66910773a0a',1,'Xped::iPEPSSolverAD']]],
   ['options_8',['options',['../structXped_1_1iPEPSSolverAD.html#a8404233a5fc35a75c300a5c87e90e372',1,'Xped::iPEPSSolverAD']]],
   ['opts_9',['opts',['../classXped_1_1CTMSolver.html#aacab4c9d1d1d3e22056d23c1860ce44d',1,'Xped::CTMSolver']]],
-  ['origin_10',['origin',['../classLattice2D.html#a0fe8dbd68f6693a0f44b483ae8d18820',1,'Lattice2D']]]
+  ['outfile_10',['outfile',['../structXped_1_1Opts_1_1Bench.html#a43531a0481a910b1a7184d27a0a9a541',1,'Xped::Opts::Bench']]]
 ];

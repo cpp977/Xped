@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['h_0',['H',['../namespaceXped_1_1Opts.html#ae4a8447de96e9ccd51e29d758366ac11ac1d9f50f86825a1a2302ec2449c17196',1,'Xped::Opts']]],
-  ['hdv_1',['HDV',['../namespaceXped_1_1Opts.html#a7d9782094b259a62772a5b25f5eff6b5a37ae9326fc3a404d642f0e75a7164428',1,'Xped::Opts']]],
-  ['hours_2',['HOURS',['../Stopwatch_8h.html#a5da573f3c060cef19a23b3604b18143ea4071f24c62fa1c9c6c34b8d2dd0f2b4e',1,'HOURS():&#160;Stopwatch.h'],['../namespaceXped_1_1util.html#a55184b868e1a0631372bd734c0610700a5ab9376a7869a83e84e94bcb25aa8cbd',1,'Xped::util::HOURS()']]]
+  ['m_0',['M',['../namespaceXped_1_1Sym.html#a1272055ec37ad506c47b5e25781d84aba446e45ea94e737ea4c9d919275d1dcbe',1,'Xped::Sym']]],
+  ['memory_1',['MEMORY',['../namespaceXped.html#aeb1445c4c5939d26931adb92aef6e718a7014705458ee3cf0192f6aa52cfddea5',1,'Xped']]],
+  ['milliseconds_2',['MILLISECONDS',['../namespaceXped_1_1util.html#a55184b868e1a0631372bd734c0610700ab4fd5e5c06e72437a57379576df36936',1,'Xped::util']]],
+  ['minutes_3',['MINUTES',['../namespaceXped_1_1util.html#a55184b868e1a0631372bd734c0610700a7ffb9cea885bcba59e55574d54f819c2',1,'Xped::util']]]
 ];

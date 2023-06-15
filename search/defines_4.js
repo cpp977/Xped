@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['gsl_5fworkspace_5fsize_0',['GSL_WORKSPACE_SIZE',['../gsl__integration_8h.html#a4d5968c98cfbf9da23e5417fd1d8c149',1,'gsl_integration.h']]]
+  ['max_0',['MAX',['../define_8h.html#aacc3ee1a7f283f8ef65cea31f4436a95',1,'MAX():&#160;define.h'],['../structcmd_8h.html#afa99ec4acc4ecb2dc3c2d05da15d0e3f',1,'MAX():&#160;structcmd.h']]],
+  ['min_1',['MIN',['../define_8h.html#a74e75242132eaabbc1c512488a135926',1,'define.h']]]
 ];

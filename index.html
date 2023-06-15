@@ -460,20 +460,38 @@ Automatic differentiation</h3>
 </div><!-- fragment --><hr  />
 <h1><a class="anchor" id="autotoc_md19"></a>
 Backends</h1>
+<p>The <a class="el" href="namespaceXped.html">Xped</a> library is designed to be a high-level library for symmetric tensors. All operations for plain nonsymmetric tensors are reimplemented. Instead, one can choose between different backends that deliver the functionality for plain tensors (or matrices). It is also possible to add a backend by implementing the required interface.</p>
+<p>Currently, three backends are available. The Eigen backend is tested most thoroughly.</p>
 <h2><a class="anchor" id="autotoc_md20"></a>
 Eigen</h2>
+<p><a href="https://eigen.tuxfamily.org/index.php?title=Main_Page">Eigen</a> is a famous c++ library for linear algebra. It is designed with an elegant API and highly optimized matrix operations. Additionally, it has a tensor module which is the basis for the TensorFlow framework by google. This part supports arbitrary ranked tensors and a wealth of operations including contractions and reductions.</p>
+<p>The Eigen library also supports the dispatch of fundamental matrix operations to external BLAS and LAPACK implementations. This feature can be used within <a class="el" href="namespaceXped.html">Xped</a> at configuration time using the <code>XPED_USE_BLAS</code> and similar options. If the intel math kernel library should be integrated, one can switch on the parameter <code>XPED_USE_MKL</code>.</p>
 <h2><a class="anchor" id="autotoc_md21"></a>
-Cyclops tensor framework</h2>
+Cyclops tensor framework (ctf)</h2>
+<p><a href="https://ctf.org">ctf</a> is a tensor framework for distributed parallelism. This allows the computations to spread over several different compute cores and allows to use the hardware more efficient. It has an overhead for small tensors but allows to scale the compute power with very large tensors.</p>
+<dl class="section note"><dt>Note</dt><dd>The ctf backend is most useful for tensors without symmetry or with tensors with small internal symmetries.</dd></dl>
 <h2><a class="anchor" id="autotoc_md22"></a>
 array</h2>
 <h1><a class="anchor" id="autotoc_md23"></a>
 Algorithms</h1>
+<p>On top of the core library, <a class="el" href="namespaceXped.html">Xped</a> also provides high-level tensor network algorithms.</p>
 <h2><a class="anchor" id="autotoc_md24"></a>
 Matrix product states (MPS)</h2>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000001">Todo:</a></b></dt><dd>Write documentation</dd></dl>
-<h2><a class="anchor" id="autotoc_md25"></a>
+<p>MPSs represent a one-dimensional tensor network tailored for strongly interacting one-dimensional physical lattice systems. For detailed information, check the following references:</p><ul>
+<li>One ref</li>
+<li>Another reference</li>
+</ul>
+<p>The MPS code is located in the directory <code>Xped/MPS</code> and currently provides a <code>class MPS</code> and basic operations for them. An implementation of matrix product operators (MPO)s and algorithms like the density matrix renormalization-group (DMRG) or the time-dependent variational principle (TDVP) are future development goals.</p>
+<p><a class="el" href="classA.html">A</a> small example demonstrates the current capability: </p><div class="fragment"></div><!-- fragment --><h2><a class="anchor" id="autotoc_md25"></a>
 Projected entangled pair states (PEPS)</h2>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000002">Todo:</a></b></dt><dd>Write documentation</dd></dl>
+<p>PEPS is a generalization of MPS for two-dimensional systems. For detailed information, check the following references:</p><ul>
+<li>One ref</li>
+<li>Another reference</li>
+</ul>
+<p>The PEPS code of <a class="el" href="namespaceXped.html">Xped</a> is located in <code>Xped/PEPS</code> and has the following capabilities:</p><ul>
+<li>CTMRG algorithm for arbitrary unit cells with potentially a custom pattern (AB/BA)</li>
+<li>s</li>
+</ul>
 <h3><a class="anchor" id="autotoc_md26"></a>
 Simple updates</h3>
 <h3><a class="anchor" id="autotoc_md27"></a>

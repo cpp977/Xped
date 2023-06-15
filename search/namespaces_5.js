@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['ooura_0',['Ooura',['../namespaceOoura.html',1,'']]]
+  ['strip_5fexample_0',['strip_example',['../namespacestrip__example.html',1,'']]]
 ];

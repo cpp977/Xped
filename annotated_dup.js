@@ -1,30 +1,13 @@
 var annotated_dup =
 [
-    [ "BetheAnsatz", "namespaceBetheAnsatz.html", [
-      [ "Integrals", "structBetheAnsatz_1_1Integrals.html", null ]
-    ] ],
-    [ "detail", "namespacedetail.html", [
-      [ "appender", "structdetail_1_1appender.html", null ],
-      [ "appender< Prepend, num_tuple< Sizes... > >", "structdetail_1_1appender_3_01Prepend_00_01num__tuple_3_01Sizes_8_8_8_01_4_01_4.html", "structdetail_1_1appender_3_01Prepend_00_01num__tuple_3_01Sizes_8_8_8_01_4_01_4" ],
-      [ "counter_tuple", "structdetail_1_1counter__tuple.html", "structdetail_1_1counter__tuple" ],
-      [ "counter_tuple< Size, Size >", "structdetail_1_1counter__tuple_3_01Size_00_01Size_01_4.html", "structdetail_1_1counter__tuple_3_01Size_00_01Size_01_4" ],
-      [ "num_tuple", "structdetail_1_1num__tuple.html", null ]
-    ] ],
     [ "docstring", "namespacedocstring.html", [
       [ "PyClass", "classdocstring_1_1PyClass.html", "classdocstring_1_1PyClass" ]
     ] ],
     [ "Models", "namespaceModels.html", [
       [ "Heisenberg", "classModels_1_1Heisenberg.html", "classModels_1_1Heisenberg" ]
     ] ],
-    [ "Nuclear", "namespaceNuclear.html", [
-      [ "Eigenstate", "structNuclear_1_1Eigenstate.html", "structNuclear_1_1Eigenstate" ],
-      [ "less_than_energy", "structNuclear_1_1less__than__energy.html", "structNuclear_1_1less__than__energy" ]
-    ] ],
     [ "pyexample", "namespacepyexample.html", [
       [ "PyClass", "classpyexample_1_1PyClass.html", "classpyexample_1_1PyClass" ]
-    ] ],
-    [ "TerminalPlot", "namespaceTerminalPlot.html", [
-      [ "Ticker", "classTerminalPlot_1_1Ticker.html", "classTerminalPlot_1_1Ticker" ]
     ] ],
     [ "Xped", "namespaceXped.html", [
       [ "detail", "namespaceXped_1_1detail.html", [
@@ -43,6 +26,7 @@ var annotated_dup =
         [ "XpedWorld", "structXped_1_1mpi_1_1XpedWorld.html", "structXped_1_1mpi_1_1XpedWorld" ]
       ] ],
       [ "Opts", "namespaceXped_1_1Opts.html", [
+        [ "Bench", "structXped_1_1Opts_1_1Bench.html", "structXped_1_1Opts_1_1Bench" ],
         [ "CTM", "structXped_1_1Opts_1_1CTM.html", "structXped_1_1Opts_1_1CTM" ],
         [ "CTMCheckpoint", "structXped_1_1Opts_1_1CTMCheckpoint.html", "structXped_1_1Opts_1_1CTMCheckpoint" ],
         [ "Imag", "structXped_1_1Opts_1_1Imag.html", "structXped_1_1Opts_1_1Imag" ],
@@ -163,10 +147,8 @@ var annotated_dup =
     ] ],
     [ "A", "classA.html", "classA" ],
     [ "Afterdoc_Test", "classAfterdoc__Test.html", "classAfterdoc__Test" ],
-    [ "ArgParser", "classArgParser.html", "classArgParser" ],
     [ "Autolink_Test", "classAutolink__Test.html", "classAutolink__Test" ],
     [ "B", "classB.html", "classB" ],
-    [ "BadConversion", "classBadConversion.html", "classBadConversion" ],
     [ "C", "classC.html", "classC" ],
     [ "C1", "classC1.html", null ],
     [ "C2", "classC2.html", null ],
@@ -176,23 +158,12 @@ var annotated_dup =
     [ "Car", "structCar.html", "structCar" ],
     [ "CoordStruct", "structCoordStruct.html", "structCoordStruct" ],
     [ "D", "classD.html", "classD" ],
-    [ "Dummy", "structDummy.html", null ],
     [ "E", "classE.html", null ],
-    [ "EigenDevice", "classEigenDevice.html", "classEigenDevice" ],
     [ "Empty", "classEmpty.html", null ],
     [ "Enum_Test", "classEnum__Test.html", "classEnum__Test" ],
     [ "Example_Test", "classExample__Test.html", "classExample__Test" ],
-    [ "Filer", "classFiler.html", "classFiler" ],
     [ "Fn_Test", "classFn__Test.html", "classFn__Test" ],
-    [ "Gauss", "classGauss.html", "classGauss" ],
-    [ "Geometry2D", "classGeometry2D.html", "classGeometry2D" ],
-    [ "GSL_COMPLEX_wrapper", "classGSL__COMPLEX__wrapper.html", null ],
-    [ "gsl_function_pp", "classgsl__function__pp.html", "classgsl__function__pp" ],
-    [ "HDF5Interface", "classHDF5Interface.html", "classHDF5Interface" ],
     [ "Include_Test", "classInclude__Test.html", "classInclude__Test" ],
-    [ "integration_params", "structintegration__params.html", "structintegration__params" ],
-    [ "IntervalIntWrapper", "classIntervalIntWrapper.html", null ],
-    [ "IntervalIterator", "classIntervalIterator.html", "classIntervalIterator" ],
     [ "is_arena_tensor", "structis__arena__tensor.html", null ],
     [ "is_arena_tensor< Xped::ArenaTensor< Scalar, Rank, CoRank, Symmetry, false > >", "structis__arena__tensor_3_01Xped_1_1ArenaTensor_3_01Scalar_00_01Rank_00_01CoRank_00_01Symmetry_00_01false_01_4_01_4.html", null ],
     [ "is_arena_tensor_var", "structis__arena__tensor__var.html", null ],
@@ -202,39 +173,18 @@ var annotated_dup =
     [ "is_tensor_var", "structis__tensor__var.html", null ],
     [ "is_tensor_var< Xped::Tensor< Scalar, Rank, CoRank, Symmetry, true > >", "structis__tensor__var_3_01Xped_1_1Tensor_3_01Scalar_00_01Rank_00_01CoRank_00_01Symmetry_00_01true_01_4_01_4.html", null ],
     [ "Javadoc_Test", "classJavadoc__Test.html", "classJavadoc__Test" ],
-    [ "Lattice2D", "classLattice2D.html", "classLattice2D" ],
-    [ "Logger", "classLogger.html", "classLogger" ],
     [ "Memgrp_Test", "classMemgrp__Test.html", "classMemgrp__Test" ],
     [ "mux_using_with", "classmux__using__with.html", "classmux__using__with" ],
-    [ "mynumeric_limits", "structmynumeric__limits.html", "structmynumeric__limits" ],
-    [ "NestedLoopIterator", "classNestedLoopIterator.html", "classNestedLoopIterator" ],
     [ "Object", "structObject.html", null ],
     [ "Overload_Test", "classOverload__Test.html", "classOverload__Test" ],
     [ "Par_Test", "classPar__Test.html", null ],
-    [ "Param", "structParam.html", "structParam" ],
-    [ "param0d", "structparam0d.html", "structparam0d" ],
-    [ "param1d", "structparam1d.html", "structparam1d" ],
-    [ "param2d", "structparam2d.html", "structparam2d" ],
-    [ "param_y", "structparam__y.html", "structparam__y" ],
-    [ "param_yz", "structparam__yz.html", "structparam__yz" ],
-    [ "param_z", "structparam__z.html", "structparam__z" ],
-    [ "ParamHandler", "classParamHandler.html", "classParamHandler" ],
-    [ "Permutation", "structPermutation.html", "structPermutation" ],
-    [ "PlotParams", "structPlotParams.html", "structPlotParams" ],
-    [ "Pulse", "classPulse.html", "classPulse" ],
     [ "QTstyle_Test", "classQTstyle__Test.html", "classQTstyle__Test" ],
-    [ "SaveData", "structSaveData.html", "structSaveData" ],
-    [ "SimpleListInitializer", "classSimpleListInitializer.html", "classSimpleListInitializer" ],
     [ "SomeNiceClass", "classSomeNiceClass.html", null ],
-    [ "Stopwatch", "classStopwatch.html", "classStopwatch" ],
     [ "String", "classString.html", "classString" ],
     [ "Tag", "classTag.html", "classTag" ],
     [ "Test", "classTest.html", "classTest" ],
     [ "Test< T * >", "classTest_3_01T_01_5_01_4.html", "classTest_3_01T_01_5_01_4" ],
     [ "Test< void *, 200 >", "classTest_3_01void_01_5_00_01200_01_4.html", "classTest_3_01void_01_5_00_01200_01_4" ],
-    [ "TimeStepper", "classTimeStepper.html", "classTimeStepper" ],
-    [ "Transposition", "structTransposition.html", "structTransposition" ],
     [ "Truck", "structTruck.html", "structTruck" ],
-    [ "Tuples", "classTuples.html", null ],
     [ "Vehicle", "structVehicle.html", "structVehicle" ]
 ];

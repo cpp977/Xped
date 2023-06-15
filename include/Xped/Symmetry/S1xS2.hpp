@@ -63,7 +63,7 @@ public:
     static constexpr bool ANY_IS_TRIVIAL = S1::ANY_IS_TRIVIAL or S2::ANY_IS_TRIVIAL;
     static constexpr bool ANY_IS_MODULAR = S1::ANY_IS_MODULAR or S2::ANY_IS_MODULAR;
     static constexpr bool ANY_IS_FERMIONIC = S1::ANY_IS_FERMIONIC or S2::ANY_IS_FERMIONIC;
-    static constexpr bool ANY_IS_BOSONIC = S1::ANY_IS_NOSONIC or S2::ANY_IS_BOSONIC;
+    static constexpr bool ANY_IS_BOSONIC = S1::ANY_IS_BOSONIC or S2::ANY_IS_BOSONIC;
     static constexpr bool ANY_IS_SPIN = S1::ANY_IS_SPIN or S2::ANY_IS_SPIN;
 
     static constexpr bool ALL_HAS_MULTIPLICITIES = S1::ALL_HAS_MULTIPLICITIES and S2::ALL_HAS_MULTIPLICITIES;
@@ -72,7 +72,7 @@ public:
     static constexpr bool ALL_IS_TRIVIAL = S1::ALL_IS_TRIVIAL and S2::ALL_IS_TRIVIAL;
     static constexpr bool ALL_IS_MODULAR = S1::ALL_IS_MODULAR and S2::ALL_IS_MODULAR;
     static constexpr bool ALL_IS_FERMIONIC = S1::ALL_IS_FERMIONIC and S2::ALL_IS_FERMIONIC;
-    static constexpr bool ALL_IS_BOSONIC = S1::ALL_IS_NOSONIC and S2::ALL_IS_BOSONIC;
+    static constexpr bool ALL_IS_BOSONIC = S1::ALL_IS_BOSONIC and S2::ALL_IS_BOSONIC;
     static constexpr bool ALL_IS_SPIN = S1::ALL_IS_SPIN and S2::ALL_IS_SPIN;
 
     static constexpr bool IS_CHARGE_SU2() { return S1_::IS_CHARGE_SU2() or S2_::IS_CHARGE_SU2(); }

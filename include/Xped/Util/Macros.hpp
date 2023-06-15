@@ -13,9 +13,15 @@ const std::string XPED_COMPILER_STR = "icpc";
 const std::string XPED_COMPILER_STR = "g++";
 #elif __INTEL_LLVM_COMPILER
 #    define BOOST_COMP_INTEL_LLVM __INTEL_LLVM_COMPILER
-const std::string XPED_COMPILER_STR = "icx";
+const std::string XPED_COMPILER_STR = "icpx";
+#elif BOOST_COMP_MSVC
+const std::string XPED_COMPILER_STR = "msvc";
 #else
-#    pragma error "Unsupported compiler."
+#    ifdef BOOST_COMP_MSVC
+#        error "Unsupported compiler"
+#    else
+#        pragma error "Unsupported compiler."
+#    endif
 #endif
 
 #if defined(XPED_USE_MKL)
@@ -59,6 +65,12 @@ const std::string XPED_BLAS_STR = "None";
 #    endif
 #elif BOOST_COMP_INTEL
 #    define XPED_HAS_NTTP 0
+#elif BOOST_COMP_MSVC
+#    if _MSC_VER >= 1930
+#        define XPED_HAS_NTTP 1
+#    else
+#        define XPED_HAS_NTTP 0
+#    endif
 #endif
 
 #if __has_include("boost/functional/hash.hpp")

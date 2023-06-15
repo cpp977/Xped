@@ -97,7 +97,7 @@ struct iPEPSSolverAD
                     constexpr std::size_t flags = yas::file /*IO type*/ | yas::binary; /*IO format*/
                     iPEPS<Scalar, Symmetry> tmp_Psi;
                     try {
-                        yas::load<flags>(load_p.c_str(), tmp_Psi);
+                        yas::load<flags>(load_p.string().c_str(), tmp_Psi);
                     } catch(const yas::serialization_exception& se) {
                         fmt::print(
                             "Error while deserializing file ({}) with initial wavefunction.\nThis might be because of incompatible symmetries between this simulation and the loaded wavefunction.",

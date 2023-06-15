@@ -4,10 +4,13 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 function(set_project_options project_name)
   set(MSVC_OPTIONS_RELEASE
+    /bigobj
     )
   set(MSVC_OPTIONS_DEBUG
+    /bigobj
     )
   set(MSVC_OPTIONS_PROFILE
+    /bigobj
     )
 
   set(MSVC_LOPTIONS_RELEASE

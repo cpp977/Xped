@@ -148,8 +148,7 @@ void FusionTree<Rank, Symmetry>::computeIntermediates()
 
 template <std::size_t Rank, typename Symmetry>
 template <typename PlainLib>
-typename PlainLib::template TType<typename FusionTree<Rank, Symmetry>::Scalar, Rank + 1>
-FusionTree<Rank, Symmetry>::asTensor(const mpi::XpedWorld& world) const
+typename PlainLib::template TType<typename Symmetry::Scalar, Rank + 1> FusionTree<Rank, Symmetry>::asTensor(const mpi::XpedWorld& world) const
 {
     typedef typename Symmetry::Scalar Scalar;
 

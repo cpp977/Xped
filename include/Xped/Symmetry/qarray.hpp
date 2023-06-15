@@ -156,10 +156,10 @@ template <std::size_t Nq1, std::size_t Nq2, std::size_t Nql>
 std::pair<qarray<Nq1>, qarray<Nq2>> disjoin(const qarray<Nql>& large_arr)
 {
     qarray<Nq1> lhs;
-    memcpy(lhs.data.begin(), large_arr.data.begin(), Nq1 * sizeof(int));
+    memcpy(lhs.data.data(), large_arr.data.data(), Nq1 * sizeof(int));
     // std::copy(large_arr.data.begin(), large_arr.data.begin() + Nq1, lhs.data.begin());
     qarray<Nq2> rhs;
-    memcpy(rhs.data.begin(), large_arr.data.begin() + Nq1, Nq2 * sizeof(int));
+    memcpy(rhs.data.data(), large_arr.data.data() + Nq1, Nq2 * sizeof(int));
     // std::copy(large_arr.data.begin() + Nq1, large_arr.data.end(), rhs.data.begin());
     return std::make_pair(lhs, rhs);
 }

@@ -1,0 +1,13 @@
+diff --git a/scripts/cmake/doctestAddTests.cmake b/scripts/cmake/doctestAddTests.cmake
+index 3b25485..d64d5c1 100644
+--- a/scripts/cmake/doctestAddTests.cmake
++++ b/scripts/cmake/doctestAddTests.cmake
+@@ -36,7 +36,7 @@ if("${spec}" MATCHES .)
+ endif()
+ 
+ execute_process(
+-  COMMAND ${TEST_EXECUTOR} "${TEST_EXECUTABLE}" ${spec} --list-test-cases
++  COMMAND ${TEST_EXECUTOR} "${TEST_EXECUTABLE}" ${spec} --list-test-cases -nc
+   OUTPUT_VARIABLE output
+   RESULT_VARIABLE result
+   WORKING_DIRECTORY "${TEST_WORKING_DIR}"

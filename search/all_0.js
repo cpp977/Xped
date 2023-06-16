@@ -52,7 +52,7 @@ var searchData=
   ['arrayvectorlib_49',['ArrayVectorLib',['../structXped_1_1ArrayVectorLib.html',1,'Xped']]],
   ['artype_50',['ARType',['../classXped_1_1Mps.html#a856bb69e87a8db7bacfa40c0b8ca1b50',1,'Xped::Mps']]],
   ['as_5ftuple_51',['as_tuple',['../structXped_1_1TensorInterface.html#a8d2ad2c10086a175cb54451c8ce25107',1,'Xped::TensorInterface::as_tuple(std::array&lt; element_t, N &gt; const &amp;arr)'],['../structXped_1_1TensorInterface.html#a6f95f63388208be4bf94983a312a2203',1,'Xped::TensorInterface::as_tuple(std::array&lt; element_t, N &gt; const &amp;arr, std::index_sequence&lt; Is... &gt;)']]],
-  ['astensor_52',['asTensor',['../structXped_1_1FusionTree.html#ab09ebc48d7c8e693b16750aed8bfde61',1,'Xped::FusionTree::asTensor(const mpi::XpedWorld &amp;world=mpi::getUniverse()) const'],['../structXped_1_1FusionTree.html#a0205c887a03a0ec4f03bf54a311f98d9',1,'Xped::FusionTree::asTensor(const mpi::XpedWorld &amp;world) const']]],
+  ['astensor_52',['asTensor',['../structXped_1_1FusionTree.html#ab09ebc48d7c8e693b16750aed8bfde61',1,'Xped::FusionTree::asTensor(const mpi::XpedWorld &amp;world=mpi::getUniverse()) const'],['../structXped_1_1FusionTree.html#ad7dafb3308c78aa59f7e91f8485cfd39',1,'Xped::FusionTree::asTensor(const mpi::XpedWorld &amp;world) const']]],
   ['at_53',['at',['../structXped_1_1TMatrix.html#a28fb4fa8e4b73a520845d0d26794f932',1,'Xped::TMatrix']]],
   ['auto_54',['auto',['../structXped_1_1Sym_1_1S1xS2.html#a18ad3f44d4817d02e403ee9f5b290052',1,'Xped::Sym::S1xS2']]],
   ['auxbasis_55',['auxBasis',['../classXped_1_1Mps.html#ae1f28a7d0e7870b9040593170c34f6b1',1,'Xped::Mps']]],

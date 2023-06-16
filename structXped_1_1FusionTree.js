@@ -2,7 +2,7 @@ var structXped_1_1FusionTree =
 [
     [ "qType", "structXped_1_1FusionTree.html#adc67113bd50055e4995ad431f8a3c4e4", null ],
     [ "Scalar", "structXped_1_1FusionTree.html#a056046ba677cad98f55a238da5598ff6", null ],
-    [ "asTensor", "structXped_1_1FusionTree.html#a0205c887a03a0ec4f03bf54a311f98d9", null ],
+    [ "asTensor", "structXped_1_1FusionTree.html#ad7dafb3308c78aa59f7e91f8485cfd39", null ],
     [ "asTensor", "structXped_1_1FusionTree.html#ab09ebc48d7c8e693b16750aed8bfde61", null ],
     [ "computeDim", "structXped_1_1FusionTree.html#a753ce7e885258862dcd149a71fdb9d2f", null ],
     [ "computeIntermediates", "structXped_1_1FusionTree.html#a03ce774dd26f4485830ff1d9480a3e38", null ],

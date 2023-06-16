@@ -203,9 +203,9 @@ Quick tour</h2>
 <div class="line">    <span class="keyword">using </span>Symmetry = <a class="code hl_class" href="structXped_1_1Sym_1_1U1.html">Xped::Sym::U1&lt;Xped::Sym::Spin&gt;</a>;</div>
 <div class="line"> </div>
 <div class="line">    <span class="comment">// Initialize random basis objects which will be used to initialize tensors</span></div>
-<div class="line">    <a class="code hl_class" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt;Symmetry, <span class="comment">/*depth=*/</span>1&gt; B1;</div>
+<div class="line">    <a class="code hl_class" href="classXped_1_1Qbasis.html">Xped::Qbasis&lt;Symmetry&gt;</a> B1;</div>
 <div class="line">    B1.<a class="code hl_function" href="classXped_1_1Qbasis.html#a519e3bf1621c23e0334d5c4528b43a2d">setRandom</a>(10);</div>
-<div class="line">    <a class="code hl_class" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt;Symmetry, <span class="comment">/*depth=*/</span>1&gt; B2;</div>
+<div class="line">    <a class="code hl_class" href="classXped_1_1Qbasis.html">Xped::Qbasis&lt;Symmetry&gt;</a> B2;</div>
 <div class="line">    B2.<a class="code hl_function" href="classXped_1_1Qbasis.html#a519e3bf1621c23e0334d5c4528b43a2d">setRandom</a>(10);</div>
 <div class="line"> </div>
 <div class="line">    <span class="comment">// Initialize a random rank-3 tensor with two incoming and one outgoing leg with double precision numbers constrained by the symmetry declared</span></div>
@@ -319,7 +319,7 @@ Hilbert bases</h2>
 <div class="line">{</div>
 <div class="line">    <span class="keyword">using </span>Symmetry = <a class="code hl_class" href="structXped_1_1Sym_1_1SU2.html">Xped::Sym::SU2&lt;Xped::Kind::Spin&gt;</a>;</div>
 <div class="line"> </div>
-<div class="line">    <a class="code hl_class" href="classXped_1_1Qbasis.html">Xped::Qbasis&lt;Symmetry, 1&gt;</a> <a class="code hl_enumvalue" href="namespaceXped.html#a1a42291ac6ae035396572192799b58bbaa97b30e7f1891ad7527678439846f88f">B</a>;</div>
+<div class="line">    <a class="code hl_class" href="classXped_1_1Qbasis.html">Xped::Qbasis&lt;Symmetry&gt;</a> <a class="code hl_enumvalue" href="namespaceXped.html#a1a42291ac6ae035396572192799b58bbaa97b30e7f1891ad7527678439846f88f">B</a>;</div>
 <div class="line">    <span class="comment">// Add two states with spin 1/2 and one state with spin 3 into the basis.</span></div>
 <div class="line">    <a class="code hl_enumvalue" href="namespaceXped.html#a1a42291ac6ae035396572192799b58bbaa97b30e7f1891ad7527678439846f88f">B</a>.push_back({2}, 2); <span class="comment">// One has to use D=2s+1</span></div>
 <div class="line">    <a class="code hl_enumvalue" href="namespaceXped.html#a1a42291ac6ae035396572192799b58bbaa97b30e7f1891ad7527678439846f88f">B</a>.push_back({7}, 1);</div>
@@ -505,7 +505,7 @@ Matrix product states (MPS)</h2>
 <div class="line">    Symmetry::qType Qtarget = Symmetry::qvacuum();</div>
 <div class="line"> </div>
 <div class="line">    <span class="comment">// local (physical) basis of the MPS. In this case one spin 1/2</span></div>
-<div class="line">    <a class="code hl_class" href="classXped_1_1Qbasis.html">Xped::Qbasis</a>&lt;Symmetry, <span class="comment">/*depth=*/</span>1&gt; qloc;</div>
+<div class="line">    <a class="code hl_class" href="classXped_1_1Qbasis.html">Xped::Qbasis&lt;Symmetry&gt;</a> qloc;</div>
 <div class="line">    qloc.<a class="code hl_function" href="classXped_1_1Qbasis.html#a34418f2e9ce5c917d3f3b65688c52249">push_back</a>({2}, 1);</div>
 <div class="line"> </div>
 <div class="line">    <span class="comment">// Contruct the MPS (with random entries)</span></div>
@@ -547,10 +547,15 @@ Projected entangled pair states (PEPS)</h2>
 </div><!-- fragment --><p>The unit cell and PEPS bond dimension are specified in the section <code>[ipeps]</code>: </p><div class="fragment"><div class="line">[ipeps]</div>
 <div class="line">D                       = 2</div>
 <div class="line"># The cell can have a nontrivial pattern if numbers appear several times</div>
-<div class="line">cell                    = [[1,2],</div>
-<div class="line">                           [3,4]] # 2x2 unit cell without pattern</div>
+<div class="line">pattern                    = [[1,2],</div>
+<div class="line">                              [2,1]] # 2x2 unit cell with pattern</div>
+<div class="line">#</div>
+<div class="line"># Alternative: specify cell as [Lx, Ly] without pattern</div>
+<div class="line"># cell                     = [3, 6]</div>
+<div class="line">#</div>
 <div class="line"># Charges can be used to force the total filling or total magnetization</div>
 <div class="line"># This is only possible for Abelian symmetries</div>
+<div class="line"># The charges must be consistent with the pattern of the cell!</div>
 <div class="line">charges                 = [[[+1], [-1]],</div>
 <div class="line">                           [[-1], [+1]]] # This charge pattern forces a Neel state with zero total magnetization</div>
 </div><!-- fragment --><h3><a class="anchor" id="autotoc_md26"></a>

@@ -242,7 +242,7 @@ Friends</h2></td></tr>
 <tr class="separator:afdcd2d2142ef5ab2bd37551d191489b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><div class="compoundTemplParams">template&lt;typename Symmetry, std::size_t depth, typename AllocationPolicy = HeapPolicy&gt;<br />
+<div class="textblock"><div class="compoundTemplParams">template&lt;typename Symmetry, std::size_t depth = 1, typename AllocationPolicy = HeapPolicy&gt;<br />
 class Xped::Qbasis&lt; Symmetry, depth, AllocationPolicy &gt;</div><p>\describe_Symmetry</p>
 <p>This class is a container like class for a basis of a Hilbert space in which global symmetries are present. For each irreducible representation (irrep) of the global symmetry (for each quantum number), the states of the Hilbert states that transforms under that irrep are collected together in a plain <a class="el" href="classXped_1_1Basis.html">Basis</a> object.</p>
 <p>One central function is the <a class="el" href="classXped_1_1Qbasis.html#aae178998f636f909aba92a11323582f7">combine()</a> method, which combine two instances of <a class="el" href="classXped_1_1Qbasis.html">Qbasis</a> to the tensor product basis, already proper sorted into irreps. </p>
@@ -253,7 +253,7 @@ class Xped::Qbasis&lt; Symmetry, depth, AllocationPolicy &gt;</div><p>\describe_
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = HeapPolicy&gt; </div>
+template&lt;typename Symmetry , std::size_t depth = 1, typename AllocationPolicy  = HeapPolicy&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -281,7 +281,7 @@ template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = HeapPolicy&gt; </div>
+template&lt;typename Symmetry , std::size_t depth = 1, typename AllocationPolicy  = HeapPolicy&gt; </div>
 <div class="memtemplate">
 template&lt;typename Container &gt; </div>
 <table class="mlabels">
@@ -364,7 +364,7 @@ Here is the call graph for this function:</div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = HeapPolicy&gt; </div>
+template&lt;typename Symmetry , std::size_t depth = 1, typename AllocationPolicy  = HeapPolicy&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -391,7 +391,7 @@ template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = HeapPolicy&gt; </div>
+template&lt;typename Symmetry , std::size_t depth = 1, typename AllocationPolicy  = HeapPolicy&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -418,7 +418,7 @@ template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = HeapPolicy&gt; </div>
+template&lt;typename Symmetry , std::size_t depth = 1, typename AllocationPolicy  = HeapPolicy&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -445,7 +445,7 @@ template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = HeapPolicy&gt; </div>
+template&lt;typename Symmetry , std::size_t depth = 1, typename AllocationPolicy  = HeapPolicy&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -481,7 +481,7 @@ Here is the caller graph for this function:</div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = HeapPolicy&gt; </div>
+template&lt;typename Symmetry , std::size_t depth = 1, typename AllocationPolicy  = HeapPolicy&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -590,7 +590,7 @@ Here is the call graph for this function:</div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = HeapPolicy&gt; </div>
+template&lt;typename Symmetry , std::size_t depth = 1, typename AllocationPolicy  = HeapPolicy&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -630,7 +630,7 @@ Here is the caller graph for this function:</div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = HeapPolicy&gt; </div>
+template&lt;typename Symmetry , std::size_t depth = 1, typename AllocationPolicy  = HeapPolicy&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -666,7 +666,7 @@ Here is the call graph for this function:</div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = HeapPolicy&gt; </div>
+template&lt;typename Symmetry , std::size_t depth = 1, typename AllocationPolicy  = HeapPolicy&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -739,7 +739,7 @@ template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy &gt
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = HeapPolicy&gt; </div>
+template&lt;typename Symmetry , std::size_t depth = 1, typename AllocationPolicy  = HeapPolicy&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -825,7 +825,7 @@ template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy &gt
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Prints rough info. </p>
+<p>Prints rough infob. </p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -950,7 +950,7 @@ Here is the call graph for this function:</div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = HeapPolicy&gt; </div>
+template&lt;typename Symmetry , std::size_t depth = 1, typename AllocationPolicy  = HeapPolicy&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -977,7 +977,7 @@ template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = HeapPolicy&gt; </div>
+template&lt;typename Symmetry , std::size_t depth = 1, typename AllocationPolicy  = HeapPolicy&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -1016,7 +1016,7 @@ Here is the caller graph for this function:</div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = HeapPolicy&gt; </div>
+template&lt;typename Symmetry , std::size_t depth = 1, typename AllocationPolicy  = HeapPolicy&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -1090,7 +1090,7 @@ template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy &gt
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = HeapPolicy&gt; </div>
+template&lt;typename Symmetry , std::size_t depth = 1, typename AllocationPolicy  = HeapPolicy&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -1126,7 +1126,7 @@ Here is the call graph for this function:</div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = HeapPolicy&gt; </div>
+template&lt;typename Symmetry , std::size_t depth = 1, typename AllocationPolicy  = HeapPolicy&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -1162,7 +1162,7 @@ Here is the call graph for this function:</div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = HeapPolicy&gt; </div>
+template&lt;typename Symmetry , std::size_t depth = 1, typename AllocationPolicy  = HeapPolicy&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -1200,7 +1200,7 @@ Here is the call graph for this function:</div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = HeapPolicy&gt; </div>
+template&lt;typename Symmetry , std::size_t depth = 1, typename AllocationPolicy  = HeapPolicy&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -1431,7 +1431,7 @@ template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy &gt
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = HeapPolicy&gt; </div>
+template&lt;typename Symmetry , std::size_t depth = 1, typename AllocationPolicy  = HeapPolicy&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -1469,7 +1469,7 @@ Here is the call graph for this function:</div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = HeapPolicy&gt; </div>
+template&lt;typename Symmetry , std::size_t depth = 1, typename AllocationPolicy  = HeapPolicy&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -1556,7 +1556,7 @@ template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy &gt
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = HeapPolicy&gt; </div>
+template&lt;typename Symmetry , std::size_t depth = 1, typename AllocationPolicy  = HeapPolicy&gt; </div>
 <div class="memtemplate">
 template&lt;typename Ar &gt; </div>
 <table class="mlabels">
@@ -1586,7 +1586,7 @@ template&lt;typename Ar &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = HeapPolicy&gt; </div>
+template&lt;typename Symmetry , std::size_t depth = 1, typename AllocationPolicy  = HeapPolicy&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -1707,7 +1707,7 @@ Here is the caller graph for this function:</div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = HeapPolicy&gt; </div>
+template&lt;typename Symmetry , std::size_t depth = 1, typename AllocationPolicy  = HeapPolicy&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -1821,7 +1821,7 @@ template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy &gt
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = HeapPolicy&gt; </div>
+template&lt;typename Symmetry , std::size_t depth = 1, typename AllocationPolicy  = HeapPolicy&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -1849,7 +1849,7 @@ template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Symmetry , std::size_t depth, typename AllocationPolicy  = HeapPolicy&gt; </div>
+template&lt;typename Symmetry , std::size_t depth = 1, typename AllocationPolicy  = HeapPolicy&gt; </div>
 <div class="memtemplate">
 template&lt;typename Symmetry_ , std::size_t depth_, typename AllocationPolicy_ &gt; </div>
 <table class="mlabels">

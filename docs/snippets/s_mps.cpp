@@ -19,7 +19,7 @@ int main()
     Symmetry::qType Qtarget = Symmetry::qvacuum();
 
     // local (physical) basis of the MPS. In this case one spin 1/2
-    Xped::Qbasis<Symmetry, /*depth=*/1> qloc;
+    Xped::Qbasis<Symmetry> qloc;
     qloc.push_back({2}, 1);
 
     // Contruct the MPS (with random entries)

@@ -8,9 +8,9 @@ int main()
     using Symmetry = Xped::Sym::U1<Xped::Sym::Spin>;
 
     // Initialize random basis objects which will be used to initialize tensors
-    Xped::Qbasis<Symmetry, /*depth=*/1> B1;
+    Xped::Qbasis<Symmetry> B1;
     B1.setRandom(10);
-    Xped::Qbasis<Symmetry, /*depth=*/1> B2;
+    Xped::Qbasis<Symmetry> B2;
     B2.setRandom(10);
 
     // Initialize a random rank-3 tensor with two incoming and one outgoing leg with double precision numbers constrained by the symmetry declared

@@ -6,7 +6,7 @@ int main()
 {
     using Symmetry = Xped::Sym::SU2<Xped::Kind::Spin>;
 
-    Xped::Qbasis<Symmetry, 1> B;
+    Xped::Qbasis<Symmetry> B;
     // Add two states with spin 1/2 and one state with spin 3 into the basis.
     B.push_back({2}, 2); // One has to use D=2s+1
     B.push_back({7}, 1);

@@ -185,6 +185,10 @@ add_feature_info("Log level set to ${XPED_LOG_LEVEL}." XPED_LOG_LEVEL "")
 ##########################################                   end options                  #########################################
 ###################################################################################################################################
 
+if(MSVC)
+  set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+endif()
+
 if(XPED_USE_OPENMP)
   find_package(OpenMP REQUIRED)
   set_package_properties(OpenMP PROPERTIES

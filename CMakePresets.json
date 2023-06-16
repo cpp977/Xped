@@ -74,7 +74,9 @@
       "name": "windows",
       "hidden": true,
       "cacheVariables": {
-        "VCPKG_TARGET_TRIPLET": "x64-windows"
+        "VCPKG_TARGET_TRIPLET": "x64-windows-static",
+        "XPED_USE_BLAS": "OFF",
+        "XPED_USE_LAPACK": "OFF"
       }
     },
     {
@@ -245,6 +247,34 @@
       "cacheVariables": {
         "XPED_USE_MKL": "ON"
       }
+    },
+    {
+      "name": "windows-eigen-debug",
+      "inherits": [
+        "vcpkg",
+        "logging",
+        "windows",
+        "eigen",
+        "debug"
+      ],
+      "binaryDir": "${sourceParentDir}/${presetName}",
+      "cacheVariables": {
+        "XPED_USE_OPENMP": "ON"
+      }
+    },
+    {
+      "name": "windows-eigen-release",
+      "inherits": [
+        "vcpkg",
+        "logging",
+        "windows",
+        "eigen",
+        "release"
+      ],
+      "binaryDir": "${sourceParentDir}/${presetName}",
+      "cacheVariables": {
+        "XPED_USE_OPENMP": "ON"
+      }
     }
   ],
   "buildPresets": [
@@ -303,6 +333,20 @@
       "displayName": "Build (Release)",
       "description": "Build with Ninja/vcpkg (Release)",
       "configuration": "Release"
+    },
+    {
+      "name": "windows-eigen-debug",
+      "configurePreset": "windows-eigen-debug",
+      "displayName": "Build (Debug)",
+      "description": "Build with Ninja/vcpkg (Debug)",
+      "configuration": "Debug"
+    },
+    {
+      "name": "windows-eigen-release",
+      "configurePreset": "windows-eigen-release",
+      "displayName": "Build (Release)",
+      "description": "Build with Ninja/vcpkg (Release)",
+      "configuration": "Release"
     }
   ],
   "testPresets": [
@@ -358,6 +402,20 @@
     {
       "name": "icpx-eigen-release",
       "configurePreset": "icpx-eigen-release",
+      "displayName": "Test (Release)",
+      "description": "Test with Ninja/vcpkg (Release)",
+      "configuration": "Release"
+    },
+    {
+      "name": "windows-eigen-debug",
+      "configurePreset": "windows-eigen-debug",
+      "displayName": "Test (Debug)",
+      "description": "Test with Ninja/vcpkg (Debug)",
+      "configuration": "Debug"
+    },
+    {
+      "name": "windows-eigen-release",
+      "configurePreset": "windows-eigen-release",
       "displayName": "Test (Release)",
       "description": "Test with Ninja/vcpkg (Release)",
       "configuration": "Release"

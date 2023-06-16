@@ -34,7 +34,7 @@ namespace Xped {
  * already proper sorted into irreps.
  *
  */
-template <typename Symmetry, std::size_t depth, typename AllocationPolicy = HeapPolicy>
+template <typename Symmetry, std::size_t depth = 1, typename AllocationPolicy = HeapPolicy>
 class Qbasis
 {
     template <typename Symmetry_, std::size_t depth_, typename AllocationPolicy_>
@@ -213,7 +213,7 @@ public:
     /**Prints the basis.*/
     std::string print() const;
 
-    /**Prints rough info.*/
+    /**Prints rough infob.*/
     std::string info() const;
 
     /**Prints the trees.*/

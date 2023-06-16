@@ -83,7 +83,7 @@ All build options can be seen in the following table.
 
 Browse the [documenation](https://cpp977.github.io/Xped "docs") to learn about the capabilities of the library.
 
-## Acknoledgment
+## Acknowledgment
 
 This library is inspired by a tensor framework for symmetric tensors written in the Julia programming language: [TensorKit](https://github.com/Jutho/TensorKit.jl).
 

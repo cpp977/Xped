@@ -81,7 +81,7 @@ int main(int argc, char* argv[])
         Xped::Pattern pat;
         Xped::UnitCell c;
         if(data.at("ipeps").contains("pattern")) {
-            pat = Xped::Pattern(toml::get<std::vector<std::vector<std::size_t>>>(toml::find(data.at("ipeps"), "cell")));
+            pat = Xped::Pattern(toml::get<std::vector<std::vector<std::size_t>>>(toml::find(data.at("ipeps"), "pattern")));
             c = Xped::UnitCell(pat);
         } else if(data.at("ipeps").contains("cell")) {
             auto [Lx, Ly] = toml::get<std::pair<int, int>>(toml::find(data.at("ipeps"), "cell"));

@@ -109,7 +109,7 @@ struct iPEPSSolverImag
                             }
                             if(conv_v[i].coupledDomain() != Jim.spectrum_v[i].coupledDomain() or
                                conv_v[i].coupledCodomain() != Jim.spectrum_v[i].coupledCodomain()) {
-                                diff_h[i] = std::nan("1");
+                                diff_v[i] = std::nan("1");
                             } else {
                                 diff_v[i] = (conv_v[i] - Jim.spectrum_v[i]).norm();
                             }

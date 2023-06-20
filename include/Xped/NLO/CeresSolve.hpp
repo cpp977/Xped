@@ -74,7 +74,7 @@ struct iPEPSSolverAD
             constexpr std::size_t flags = yas::file /*IO type*/ | yas::binary; /*IO format*/
             try {
                 yas::load<flags>((optim_opts.working_directory.string() + "/" + this->H.file_name() +
-                                  fmt::format("_D={}_chi={}_seed={}_id={}.ad", Psi->D, ctm_opts.chi, optim_opts.seed, optim_opts.id) + ".ad")
+                                  fmt::format("_D={}_chi={}_seed={}_id={}.ad", Psi->D, ctm_opts.chi, optim_opts.seed, optim_opts.id))
                                      .c_str(),
                                  *this);
             } catch(const std::exception& e) {

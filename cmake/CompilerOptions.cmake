@@ -81,6 +81,7 @@ function(set_project_options project_name)
     )
 
   set(INTEL_OPTIONS_RELEASE
+    -xHost
     )
   set(INTEL_OPTIONS_DEBUG
     )
@@ -91,6 +92,7 @@ function(set_project_options project_name)
     )
 
   set(INTEL_LOPTIONS_RELEASE
+    -xHost
     )
   set(INTEL_LOPTIONS_DEBUG
     )
@@ -108,7 +110,7 @@ function(set_project_options project_name)
     elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
       set(PROJECT_OPTIONS ${GCC_OPTIONS_RELEASE})
       set(PROJECT_LOPTIONS ${GCC_LOPTIONS_RELEASE})
-    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
+    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "IntelLLVM")
       set(PROJECT_OPTIONS ${INTEL_OPTIONS_RELEASE})
       set(PROJECT_LOPTIONS ${INTEL_LOPTIONS_RELEASE})
     else()
@@ -124,7 +126,7 @@ function(set_project_options project_name)
     elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
       set(PROJECT_OPTIONS ${GCC_OPTIONS_DEBUG})
       set(PROJECT_LOPTIONS ${GCC_LOPTIONS_DEBUG})
-    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
+    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "IntelLLVM")
       set(PROJECT_OPTIONS ${INTEL_OPTIONS_RELEASE})
       set(PROJECT_LOPTIONS ${INTEL_LOPTIONS_RELEASE})
     else()
@@ -140,7 +142,7 @@ function(set_project_options project_name)
     elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
       set(PROJECT_OPTIONS ${GCC_OPTIONS_PROFILE})
       set(PROJECT_LOPTIONS ${GCC_LOPTIONS_PROFILE})
-    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
+    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "IntelLLVM")
       set(PROJECT_OPTIONS ${INTEL_OPTIONS_RELEASE})
       set(PROJECT_LOPTIONS ${INTEL_LOPTIONS_RELEASE})
     else()

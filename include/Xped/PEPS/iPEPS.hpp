@@ -76,25 +76,32 @@ public:
 
     iPEPS() = default;
 
-    iPEPS(const UnitCell& cell, std::size_t D, const Qbasis<Symmetry, 1>& auxBasis, const Qbasis<Symmetry, 1>& physBasis);
-
     iPEPS(const UnitCell& cell,
           std::size_t D,
-          const TMatrix<Qbasis<Symmetry, 1>>& leftBasis,
-          const TMatrix<Qbasis<Symmetry, 1>>& topBasis,
-          const TMatrix<Qbasis<Symmetry, 1>>& physBasis);
+          const Qbasis<Symmetry, 1>& auxBasis,
+          const Qbasis<Symmetry, 1>& physBasis,
+          Opts::DiscreteSym sym = Opts::DiscreteSym::None);
 
     iPEPS(const UnitCell& cell,
           std::size_t D,
           const TMatrix<Qbasis<Symmetry, 1>>& leftBasis,
           const TMatrix<Qbasis<Symmetry, 1>>& topBasis,
           const TMatrix<Qbasis<Symmetry, 1>>& physBasis,
-          const TMatrix<qType>& charges);
+          Opts::DiscreteSym sym = Opts::DiscreteSym::None);
+
+    iPEPS(const UnitCell& cell,
+          std::size_t D,
+          const TMatrix<Qbasis<Symmetry, 1>>& leftBasis,
+          const TMatrix<Qbasis<Symmetry, 1>>& topBasis,
+          const TMatrix<Qbasis<Symmetry, 1>>& physBasis,
+          const TMatrix<qType>& charges,
+          Opts::DiscreteSym sym = Opts::DiscreteSym::None);
 
     iPEPS(const iPEPS<Scalar, Symmetry, false>& other);
 
     void setRandom(std::size_t seed = 0ul);
     void setZero();
+    void normalize();
 
     void set_As(const std::vector<Tensor<Scalar, 2, 3, Symmetry, ENABLE_AD>>& As_in)
     {
@@ -110,35 +117,39 @@ public:
 
     std::vector<Scalar> data();
 
+    std::vector<Scalar> graddata();
+
     void set_data(const Scalar* data, bool NORMALIZE = true);
 
     std::size_t plainSize() const;
 
-    iPEPSIterator<Scalar, Symmetry, ENABLE_AD> begin()
+    iPEPSIterator<2, 3, Scalar, Symmetry, ENABLE_AD> begin()
     {
-        iPEPSIterator<Scalar, Symmetry, ENABLE_AD> out(&As, /*ITER_GRAD=*/false);
+        iPEPSIterator<2, 3, Scalar, Symmetry, ENABLE_AD> out(&As, /*ITER_GRAD=*/false);
         return out;
     }
-    iPEPSIterator<Scalar, Symmetry, ENABLE_AD> end()
+    iPEPSIterator<2, 3, Scalar, Symmetry, ENABLE_AD> end()
     {
-        iPEPSIterator<Scalar, Symmetry, ENABLE_AD> out(&As, /*ITER_GRAD=*/false, As.size());
+        iPEPSIterator<2, 3, Scalar, Symmetry, ENABLE_AD> out(&As, /*ITER_GRAD=*/false, As.size());
         return out;
     }
 
-    iPEPSIterator<Scalar, Symmetry, ENABLE_AD> gradbegin()
+    iPEPSIterator<2, 3, Scalar, Symmetry, ENABLE_AD> gradbegin()
     {
-        iPEPSIterator<Scalar, Symmetry, ENABLE_AD> out(&As, /*ITER_GRAD=*/true);
+        iPEPSIterator<2, 3, Scalar, Symmetry, ENABLE_AD> out(&As, /*ITER_GRAD=*/true);
         return out;
     }
-    iPEPSIterator<Scalar, Symmetry, ENABLE_AD> gradend()
+    iPEPSIterator<2, 3, Scalar, Symmetry, ENABLE_AD> gradend()
     {
-        iPEPSIterator<Scalar, Symmetry, ENABLE_AD> out(&As, /*ITER_GRAD=*/true, As.size());
+        iPEPSIterator<2, 3, Scalar, Symmetry, ENABLE_AD> out(&As, /*ITER_GRAD=*/true, As.size());
         return out;
     }
 
     const UnitCell& cell() const { return cell_; }
 
     const TMatrix<qType>& charges() const { return charges_; }
+
+    Opts::DiscreteSym sym() const { return sym_; }
 
     template <typename Ar>
     void serialize(Ar& ar)
@@ -148,7 +159,12 @@ public:
 
     void loadFromMatlab(const std::filesystem::path& p, const std::string& root_name, int qn_scale = 1);
 
+    void loadFromJson(const std::filesystem::path& p);
+
     bool checkConsistency() const;
+    bool checkSym() const;
+
+    void computeMs();
 
     void initWeightTensors();
     void updateAtensors();
@@ -160,18 +176,25 @@ public:
 
     std::size_t D;
 
-private:
+    // private:
     void
     init(const TMatrix<Qbasis<Symmetry, 1>>& leftBasis, const TMatrix<Qbasis<Symmetry, 1>>& topBasis, const TMatrix<Qbasis<Symmetry, 1>>& physBasis);
+
+    void initSymMap();
 
     UnitCell cell_;
     TMatrix<Tensor<Scalar, 2, 3, Symmetry, ENABLE_AD>> As;
     TMatrix<Tensor<Scalar, 2, 3, Symmetry, ENABLE_AD>> Gs;
     TMatrix<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>> whs;
     TMatrix<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>> wvs;
+    TMatrix<Tensor<Scalar, 2, 2, Symmetry, ENABLE_AD>> Ms;
 
     TMatrix<Tensor<Scalar, 3, 2, Symmetry, ENABLE_AD>> Adags;
     TMatrix<qType> charges_;
+
+    Opts::DiscreteSym sym_ = Opts::DiscreteSym::None;
+
+    std::pair<std::size_t, std::vector<std::size_t>> sym_map;
 };
 
 } // namespace Xped

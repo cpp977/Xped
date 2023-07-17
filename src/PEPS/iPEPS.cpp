@@ -10,6 +10,7 @@
 
 #include "Xped/Core/AdjointOp.hpp"
 
+#include "Xped/IO/Json.hpp"
 #include "Xped/IO/Matlab.hpp"
 
 #include "Xped/Symmetry/SU2.hpp"
@@ -22,9 +23,11 @@ template <typename Scalar, typename Symmetry, bool ENABLE_AD>
 iPEPS<Scalar, Symmetry, ENABLE_AD>::iPEPS(const UnitCell& cell,
                                           std::size_t D,
                                           const Qbasis<Symmetry, 1>& auxBasis,
-                                          const Qbasis<Symmetry, 1>& physBasis)
+                                          const Qbasis<Symmetry, 1>& physBasis,
+                                          Opts::DiscreteSym sym)
     : D(D)
     , cell_(cell)
+    , sym_(sym)
 
 {
     charges_ = TMatrix<qType>(cell_.pattern);
@@ -44,10 +47,11 @@ iPEPS<Scalar, Symmetry, ENABLE_AD>::iPEPS(const UnitCell& cell,
                                           std::size_t D,
                                           const TMatrix<Qbasis<Symmetry, 1>>& leftBasis,
                                           const TMatrix<Qbasis<Symmetry, 1>>& topBasis,
-                                          const TMatrix<Qbasis<Symmetry, 1>>& physBasis)
+                                          const TMatrix<Qbasis<Symmetry, 1>>& physBasis,
+                                          Opts::DiscreteSym sym)
     : D(D)
     , cell_(cell)
-
+    , sym_(sym)
 {
     charges_ = TMatrix<qType>(cell_.pattern);
     charges_.setConstant(Symmetry::qvacuum());
@@ -60,10 +64,12 @@ iPEPS<Scalar, Symmetry, ENABLE_AD>::iPEPS(const UnitCell& cell,
                                           const TMatrix<Qbasis<Symmetry, 1>>& leftBasis,
                                           const TMatrix<Qbasis<Symmetry, 1>>& topBasis,
                                           const TMatrix<Qbasis<Symmetry, 1>>& physBasis,
-                                          const TMatrix<qType>& charges)
+                                          const TMatrix<qType>& charges,
+                                          Opts::DiscreteSym sym)
     : D(D)
     , cell_(cell)
     , charges_(charges)
+    , sym_(sym)
 {
     init(leftBasis, topBasis, physBasis);
 }
@@ -77,6 +83,10 @@ void iPEPS<Scalar, Symmetry, ENABLE_AD>::init(const TMatrix<Qbasis<Symmetry, 1>>
         Qbasis<Symmetry, 1> out;
         std::size_t dim_per_charge = D < phys_basis.Nq() ? 1ul : D / phys_basis.Nq();
         std::size_t dim_for_vac = D < phys_basis.Nq() ? 1ul : dim_per_charge + D % phys_basis.Nq();
+        if(phys_basis.Nq() == 1) {
+            dim_per_charge = D / 2;
+            dim_for_vac = D / 2 + D % 2;
+        }
         // fmt::print("D={}, dim_p_c={}, dim_p_v={}\n", D, dim_per_charge, dim_for_vac);
         auto inserted_states = 0ul;
         auto phys_qs = phys_basis.unordered_qs();
@@ -97,12 +107,14 @@ void iPEPS<Scalar, Symmetry, ENABLE_AD>::init(const TMatrix<Qbasis<Symmetry, 1>>
             if(inserted_states == D) { break; }
         }
         VERIFY(inserted_states == D, "Failed to initialize quantum numbers for iPEPS A-tensor.");
+
         out.sort();
         return out;
     };
 
     As.resize(cell().pattern);
     Adags.resize(cell().pattern);
+    Ms.resize(cell().pattern);
 
     for(int x = 0; x < cell().Lx; x++) {
         for(int y = 0; y < cell().Ly; y++) {
@@ -122,11 +134,50 @@ void iPEPS<Scalar, Symmetry, ENABLE_AD>::init(const TMatrix<Qbasis<Symmetry, 1>>
             As(x, y) =
                 Tensor<Scalar, 2, 3, Symmetry, ENABLE_AD>({{left_basis_xy, top_basis_xy}}, {{left_basis_xp1y, top_basis_xyp1, shifted_physBasis_xy}});
             // As[pos].setZero();
-            // std::cout << fmt::format("A({},{}): ", x, y) << As[pos].coupledDomain() << std::endl << As[pos].coupledCodomain() << std::endl;
+            // As(x, y).print(std::cout, false);
+            // std::cout << std::endl;
+            // std::cout << fmt::format("A({},{}): ", x, y) << As(x, y).coupledDomain() << std::endl << As(x, y).coupledCodomain() << std::endl;
             // fmt::print("{}\n{}\n", As(x, y).coupledDomain().printTrees(), As(x, y).coupledCodomain().printTrees());
             VERIFY(As(x, y).coupledDomain().forgetHistory().intersection(As(x, y).coupledCodomain().forgetHistory()).dim() > 0 and
                    "Bases of the A tensor have no fused blocks.");
         }
+    }
+    if(sym() == Opts::DiscreteSym::C4v) { VERIFY(cell().Lx == 1 and cell().Ly == 1); }
+}
+
+template <typename Scalar, typename Symmetry, bool ENABLE_AD>
+void iPEPS<Scalar, Symmetry, ENABLE_AD>::initSymMap()
+{
+    switch(sym()) {
+    case Opts::DiscreteSym::None: {
+        return;
+    }
+    case Opts::DiscreteSym::C4v: {
+        VERIFY(cell().Lx == 1 and cell().Ly == 1);
+        VERIFY(checkSym());
+        // auto comp = [](Scalar s1, Scalar s2) {
+        //     if(std::abs(s1 - s2) < 1.e-12) { return false; }
+        //     return s1 < s2;
+        // };
+        // std::map<Scalar, std::size_t, decltype(comp)> unique(comp);
+        std::unordered_map<Scalar, std::size_t> unique;
+        std::size_t count_tot = 0ul;
+        std::size_t count_unique = 0ul;
+        sym_map.second.resize(As[0].plainSize());
+        for(auto it = As[0].begin(); it != As[0].end(); ++it) {
+            if(auto it_unique = unique.find(*it); it_unique == unique.end()) {
+                sym_map.second[count_tot] = count_unique;
+                unique.insert(std::make_pair(*it, count_unique));
+                ++count_unique;
+            } else {
+                sym_map.second[count_tot] = it_unique->second;
+            }
+            ++count_tot;
+        }
+        sym_map.first = count_unique;
+        fmt::print("#unique elements={}, sym_map:\n{}\n", sym_map.first, sym_map.second);
+        return;
+    }
     }
 }
 
@@ -164,13 +215,26 @@ void iPEPS<Scalar, Symmetry, ENABLE_AD>::loadFromMatlab(const std::filesystem::p
 }
 
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>
+void iPEPS<Scalar, Symmetry, ENABLE_AD>::loadFromJson(const std::filesystem::path& p)
+{
+    cell_ = UnitCell(1, 1);
+    As.resize(cell().pattern);
+    Adags.resize(cell().pattern);
+    As[0] = Xped::IO::loadSU2JsonTensor<Symmetry>(p);
+    Adags[0] = As[0].adjoint().eval().template permute<0, 3, 4, 2, 0, 1>(Bool<ENABLE_AD>{});
+}
+
+template <typename Scalar, typename Symmetry, bool ENABLE_AD>
 iPEPS<Scalar, Symmetry, ENABLE_AD>::iPEPS(const iPEPS<Scalar, Symmetry, false>& other)
 {
     D = other.D;
     cell_ = other.cell();
+    sym_ = other.sym();
     charges_ = other.charges();
     As = other.As;
     Adags = other.Adags;
+    Ms = other.Ms;
+    if(sym() == Opts::DiscreteSym::C4v) { sym_map = other.sym_map; }
 }
 
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>
@@ -223,18 +287,67 @@ void iPEPS<Scalar, Symmetry, ENABLE_AD>::setRandom(std::size_t seed)
             if(not cell_.pattern.isUnique(x, y)) { continue; }
             auto pos = cell_.pattern.uniqueIndex(x, y);
             As[pos].setRandom(engine);
+            if(sym() == Opts::DiscreteSym::C4v) {
+                As[pos] = 0.5 * (As[pos] + As[pos].template permute<0, 0, 3, 2, 1, 4>()); // U-D reflection
+                As[pos] = 0.5 * (As[pos] + As[pos].template permute<0, 2, 1, 0, 3, 4>()); // L-R reflection
+                As[pos] = 0.5 * (As[pos] + As[pos].template permute<0, 1, 2, 3, 0, 4>()); // 90deg CCW rotation
+                As[pos] = 0.5 * (As[pos] + As[pos].template permute<0, 3, 0, 1, 2, 4>()); // 90deg CW rotation
+            }
             Adags[pos] = As[pos].adjoint().eval().template permute<0, 3, 4, 2, 0, 1>(Bool<ENABLE_AD>{});
         }
     }
+    initSymMap();
     // debug_info();
+}
+
+template <typename Scalar, typename Symmetry, bool ENABLE_AD>
+bool iPEPS<Scalar, Symmetry, ENABLE_AD>::checkSym() const
+{
+    switch(sym()) {
+    case Opts::DiscreteSym::None: {
+        return true;
+    }
+    case Opts::DiscreteSym::C4v: {
+        if((As[0] - As[0].template permute<0, 0, 3, 2, 1, 4>()).norm() > 1.e-10) { return false; } // U-D reflection
+        if((As[0] - As[0].template permute<0, 2, 1, 0, 3, 4>()).norm() > 1.e-10) { return false; } // L-R reflection
+        if((As[0] - As[0].template permute<0, 1, 2, 3, 0, 4>()).norm() > 1.e-10) { return false; } // 90deg CCW rotation
+        if((As[0] - As[0].template permute<0, 3, 0, 1, 2, 4>()).norm() > 1.e-10) { return false; } // 90deg CW rotation
+        return true;
+    }
+    }
+    return true;
+}
+
+template <typename Scalar, typename Symmetry, bool ENABLE_AD>
+void iPEPS<Scalar, Symmetry, ENABLE_AD>::normalize()
+{
+    for(auto& A : As) {
+        auto tmp = (A * (1. / A.maxNorm())).eval();
+        A = tmp;
+    }
+    for(int x = 0; x < cell_.Lx; x++) {
+        for(int y = 0; y < cell_.Ly; y++) {
+            if(not cell_.pattern.isUnique(x, y)) { continue; }
+            auto pos = cell_.pattern.uniqueIndex(x, y);
+
+            Adags[pos] = As[pos].adjoint().eval().template permute<0, 3, 4, 2, 0, 1>(Bool<ENABLE_AD>{});
+        }
+    }
 }
 
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>
 std::size_t iPEPS<Scalar, Symmetry, ENABLE_AD>::plainSize() const
 {
-    std::size_t res = 0;
-    for(auto it = As.cbegin(); it != As.cend(); ++it) { res += it->plainSize(); }
-    return res;
+    switch(sym()) {
+    case Opts::DiscreteSym::None: {
+        std::size_t res = 0;
+        for(auto it = As.cbegin(); it != As.cend(); ++it) { res += it->plainSize(); }
+        return res;
+    }
+    case Opts::DiscreteSym::C4v: {
+        return sym_map.first;
+    }
+    }
 }
 
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>
@@ -242,7 +355,39 @@ std::vector<Scalar> iPEPS<Scalar, Symmetry, ENABLE_AD>::data()
 {
     std::vector<Scalar> out(plainSize());
     std::size_t count = 0;
-    for(auto it = begin(); it != end(); ++it) { out[count++] = *it; }
+    switch(sym()) {
+    case Opts::DiscreteSym::None: {
+        for(auto it = begin(); it != end(); ++it) { out[count++] = *it; }
+        break;
+    }
+    case Opts::DiscreteSym::C4v: {
+        std::vector<Scalar> full_data(sym_map.second.size());
+        for(auto it = begin(); it != end(); ++it) { full_data[count++] = *it; }
+        for(auto i = 0ul; i < full_data.size(); ++i) { out[sym_map.second[i]] = full_data[i]; }
+        break;
+    }
+    }
+    return out;
+}
+
+template <typename Scalar, typename Symmetry, bool ENABLE_AD>
+std::vector<Scalar> iPEPS<Scalar, Symmetry, ENABLE_AD>::graddata()
+{
+    VERIFY(ENABLE_AD);
+    std::vector<Scalar> out(plainSize());
+    std::size_t count = 0;
+    switch(sym()) {
+    case Opts::DiscreteSym::None: {
+        for(auto it = gradbegin(); it != gradend(); ++it) { out[count++] = *it; }
+        break;
+    }
+    case Opts::DiscreteSym::C4v: {
+        std::vector<Scalar> full_data(sym_map.second.size());
+        for(auto it = gradbegin(); it != gradend(); ++it) { full_data[count++] = *it; }
+        for(auto i = 0ul; i < full_data.size(); ++i) { out[sym_map.second[i]] = full_data[i]; }
+        break;
+    }
+    }
     return out;
 }
 
@@ -250,13 +395,32 @@ template <typename Scalar, typename Symmetry, bool ENABLE_AD>
 void iPEPS<Scalar, Symmetry, ENABLE_AD>::set_data(const Scalar* data, bool NORMALIZE)
 {
     std::size_t count = 0;
-    for(auto& A : As) {
-        A.set_data(data + count, A.plainSize());
-        if(NORMALIZE) {
-            auto tmp = (A * (1. / A.maxNorm())).eval();
-            A = tmp;
+    for(int x = 0; x < cell_.Lx; x++) {
+        for(int y = 0; y < cell_.Ly; y++) {
+            if(not cell_.pattern.isUnique(x, y)) { continue; }
+            switch(sym()) {
+            case Opts::DiscreteSym::None: {
+                As(x, y).set_data(data + count, As(x, y).plainSize());
+                if(NORMALIZE) {
+                    auto tmp = (As(x, y) * (1. / As(x, y).maxNorm())).eval();
+                    As(x, y) = tmp;
+                }
+                count += As(x, y).plainSize();
+                break;
+            }
+            case Opts::DiscreteSym::C4v: {
+                std::vector<Scalar> full_data(sym_map.second.size());
+                for(auto i = 0ul; i < full_data.size(); ++i) { full_data[i] = data[count + sym_map.second[i]]; }
+                As(x, y).set_data(full_data.data(), As(x, y).plainSize());
+                if(NORMALIZE) {
+                    auto tmp = (As(x, y) * (1. / As(x, y).maxNorm())).eval();
+                    As(x, y) = tmp;
+                }
+                count += sym_map.first;
+                break;
+            }
+            }
         }
-        count += A.plainSize();
     }
     for(int x = 0; x < cell_.Lx; x++) {
         for(int y = 0; y < cell_.Ly; y++) {
@@ -320,6 +484,18 @@ Qbasis<Symmetry, 1> iPEPS<Scalar, Symmetry, ENABLE_AD>::braBasis(const int x, co
 }
 
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>
+void iPEPS<Scalar, Symmetry, ENABLE_AD>::computeMs()
+{
+    for(int x = 0; x < cell().Lx; x++) {
+        for(int y = 0; y < cell().Ly; y++) {
+            if(not cell().pattern.isUnique(x, y)) { continue; }
+            auto pos = cell().pattern.uniqueIndex(x, y);
+            Ms[pos] = contractAAdag(As[pos], Adags[pos]);
+        }
+    }
+}
+
+template <typename Scalar, typename Symmetry, bool ENABLE_AD>
 void iPEPS<Scalar, Symmetry, ENABLE_AD>::initWeightTensors()
 {
     Gs.resize(cell().pattern);
@@ -367,10 +543,11 @@ std::string iPEPS<Scalar, Symmetry, ENABLE_AD>::info() const
     std::string res;
     auto [Dmin, Dmax, Davg, Dsigma] = calc_Ds();
     fmt::format_to(std::back_inserter(res),
-                   "iPEPS(D*={}): UnitCell=({}x{}), Dmin={}, Dmax={}, Davg={:.1f}, Dσ={:.1f}",
+                   "iPEPS(D*={}): UnitCell=({}x{}), Sym={}, Dmin={}, Dmax={}, Davg={:.1f}, Dσ={:.1f}",
                    D,
                    cell().Lx,
                    cell().Ly,
+                   fmt::streamed(sym()),
                    Dmin,
                    Dmax,
                    Davg,

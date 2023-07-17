@@ -93,6 +93,16 @@ struct iPEPSSolverAD
                     Psi->loadFromMatlab(load_p, "cpp", optim_opts.qn_scale);
                     break;
                 }
+                case Opts::LoadFormat::JSON: {
+                    Psi->loadFromJson(load_p);
+                    Psi->debug_info();
+                    auto perm1 = Psi->As[0].template permute<0, 1, 2, 3, 0, 4>();
+                    fmt::print("check1={}\n", (Psi->As[0] - perm1).norm());
+                    auto perm2 = Psi->As[0].template permute<0, 0, 3, 2, 1, 4>();
+                    fmt::print("check2={}\n", (Psi->As[0] - perm2).norm());
+                    break;
+                }
+
                 case Opts::LoadFormat::NATIVE: {
                     constexpr std::size_t flags = yas::file /*IO type*/ | yas::binary; /*IO format*/
                     iPEPS<Scalar, Symmetry> tmp_Psi;

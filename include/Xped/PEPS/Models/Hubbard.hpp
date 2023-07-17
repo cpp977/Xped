@@ -21,7 +21,7 @@
 namespace Xped {
 
 template <typename Symmetry>
-class Hubbard : public TwoSiteObservable<double, Symmetry>
+class Hubbard : public TwoSiteObservable<std::complex<double>, Symmetry>
 {
 public:
     Hubbard(std::map<std::string, Param>& params_in, const Pattern& pat_in, Opts::Bond bond = Opts::Bond::H | Opts::Bond::V)
@@ -87,6 +87,9 @@ public:
                 for(auto& t : this->data_d2) { t = -params["tprime"].get<double>() * hopping; }
             }
         } else if constexpr(Symmetry::ALL_ABELIAN) {
+            used_params.push_back("Bx");
+            used_params.push_back("By");
+            used_params.push_back("Bz");
             hopping = (tprod(F.cdag(SPIN_INDEX::UP), F.c(SPIN_INDEX::UP)) + tprod(F.cdag(SPIN_INDEX::DN), F.c(SPIN_INDEX::DN)) -
                        tprod(F.c(SPIN_INDEX::UP), F.cdag(SPIN_INDEX::UP)) - tprod(F.c(SPIN_INDEX::DN), F.cdag(SPIN_INDEX::DN)))
                           .eval();
@@ -97,16 +100,28 @@ public:
             // std::exit(0);
             // Es.print(std::cout, true);
             // std::cout << std::endl;
-
+            auto Bx = params["Bx"].get<TMatrix<double>>();
+            auto By = params["By"].get<TMatrix<double>>();
+            auto Bz = params["Bz"].get<TMatrix<double>>();
             if((bond & Opts::Bond::H) == Opts::Bond::H) {
-                for(auto& t : this->data_h) {
-                    t = -params["t"].get<double>() * hopping + params["U"].get<double>() * hubbard - params["mu"].get<double>() * occ;
+                for(auto pos = 0ul; pos < this->data_h.size(); ++pos) {
+                    auto [x, y] = pat.coord(pos);
+                    this->data_h(x, y) = -params["t"].get<double>() * hopping + params["U"].get<double>() * hubbard -
+                                         params["mu"].get<double>() * occ - Bx(x, y) * 0.25 * (tprod(F.Bx(), F.Id()) + tprod(F.Id(), F.Bx())).eval() -
+                                         By(x, y) * 0.25 * (tprod(F.By(), F.Id()) + tprod(F.Id(), F.By())).eval() -
+                                         Bz(x, y) * 0.25 * (tprod(F.Bz(), F.Id()) + tprod(F.Id(), F.Bz())).eval();
+
                     // t = params["t"].get<double>() * hopping;
                 }
             }
             if((bond & Opts::Bond::V) == Opts::Bond::V) {
-                for(auto& t : this->data_v) {
-                    t = -params["t"].get<double>() * hopping + params["U"].get<double>() * hubbard - params["mu"].get<double>() * occ;
+                for(auto pos = 0ul; pos < this->data_v.size(); ++pos) {
+                    auto [x, y] = pat.coord(pos);
+                    this->data_v(x, y) = -params["t"].get<double>() * hopping + params["U"].get<double>() * hubbard -
+                                         params["mu"].get<double>() * occ - Bx(x, y) * 0.25 * (tprod(F.Bx(), F.Id()) + tprod(F.Id(), F.Bx())).eval() -
+                                         By(x, y) * 0.25 * (tprod(F.By(), F.Id()) + tprod(F.Id(), F.By())).eval() -
+                                         Bz(x, y) * 0.25 * (tprod(F.Bz(), F.Id()) + tprod(F.Id(), F.Bz())).eval();
+
                     // t = params["t"].get<double>() * hopping;
                 }
             }

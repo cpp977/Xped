@@ -41,11 +41,14 @@ struct qarray
     qarray(const std::vector<int>& in)
     {
         assert(in.size() == Nq);
-        std::copy(in.begin(), in.end(), data.begin());
+        if constexpr(Nq > 0) { std::copy(in.begin(), in.end(), data.begin()); }
     };
 
     /**Constructs with an \p initializer_list.*/
-    qarray(std::initializer_list<int> a) { std::copy(a.begin(), a.end(), data.data()); }
+    qarray(std::initializer_list<int> a)
+    {
+        if constexpr(Nq > 0) { std::copy(a.begin(), a.end(), data.data()); }
+    }
 
     std::array<int, Nq> data;
 
@@ -72,7 +75,7 @@ struct qarray
     template <typename Ar>
     void serialize(Ar& ar)
     {
-        ar& YAS_OBJECT_NVP("qarray", ("data", data));
+        if constexpr(Nq > 0) { ar& YAS_OBJECT_NVP("qarray", ("data", data)); }
     }
 };
 

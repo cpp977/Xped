@@ -1,6 +1,8 @@
 #ifndef XPED_CONSTFCT_H_
 #define XPED_CONSTFCT_H_
 
+#include <numeric>
+
 #include "seq/seq.h"
 
 namespace Xped::util::constFct {

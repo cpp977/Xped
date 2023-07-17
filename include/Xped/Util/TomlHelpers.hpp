@@ -10,7 +10,8 @@
 #include "toml.hpp"
 
 #include "Xped/PEPS/Bonds.hpp"
-#include "Xped/PEPS/Unitcell.hpp"
+#include "Xped/PEPS/TMatrix.hpp"
+#include "Xped/PEPS/UnitCell.hpp"
 #include "Xped/Util/Param.hpp"
 
 namespace Xped::util {

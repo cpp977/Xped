@@ -102,4 +102,30 @@ Tensor<Scalar, 2, 3, Symmetry, false, AllocationPolicy> applyWeights(XPED_CONST 
         .template contract<std::array{-1, -2, 1, -4, -5}, std::array{1, -3}, 2>(wR.eval())
         .template contract<std::array{-1, -2, -3, 1, -5}, std::array{1, -4}, 2>(wB.eval());
 }
+
+template <typename Scalar, typename Symmetry, bool ENABLE_AD>
+Tensor<Scalar, 2, 2, Symmetry, ENABLE_AD> contractAAdag(const Tensor<Scalar, 2, 3, Symmetry, ENABLE_AD>& A,
+                                                        const Tensor<Scalar, 3, 2, Symmetry, ENABLE_AD>& Adag)
+{
+    // constexpr bool TRACK = ENABLE_AD;
+    auto fuse_ll = Tensor<Scalar, 1, 2, Symmetry, false>::Identity({{A.uncoupledDomain()[0].combine(Adag.uncoupledDomain()[0]).forgetHistory()}},
+                                                                   {{A.uncoupledDomain()[0], Adag.uncoupledDomain()[0]}},
+                                                                   A.world());
+    auto fuse_tt = Tensor<Scalar, 1, 2, Symmetry, false>::Identity({{A.uncoupledDomain()[1].combine(Adag.uncoupledDomain()[1]).forgetHistory()}},
+                                                                   {{A.uncoupledDomain()[1], Adag.uncoupledDomain()[1]}},
+                                                                   A.world());
+    auto fuse_rr = Tensor<Scalar, 2, 1, Symmetry, false>::Identity({{A.uncoupledCodomain()[0], Adag.uncoupledCodomain()[0]}},
+                                                                   {{A.uncoupledCodomain()[0].combine(Adag.uncoupledCodomain()[0]).forgetHistory()}},
+                                                                   A.world());
+    auto fuse_dd = Tensor<Scalar, 2, 1, Symmetry, false>::Identity({{A.uncoupledCodomain()[1], Adag.uncoupledCodomain()[1]}},
+                                                                   {{A.uncoupledCodomain()[1].combine(Adag.uncoupledCodomain()[1]).forgetHistory()}},
+                                                                   A.world());
+
+    return A.template contract<std::array{-1, -2, -3, -4, 1}, std::array{-5, -6, 1, -7, -8}, 8>(Adag.twist(3).twist(4))
+        .template contract<std::array{1, -1, -2, -3, 2, -4, -5, -6}, std::array{-7, 1, 2}, 6>(fuse_ll.twist(1).twist(2))
+        .template contract<std::array{1, -1, -2, 2, -3, -4, -5}, std::array{-6, 1, 2}, 5>(fuse_tt.twist(1).twist(2))
+        .template contract<std::array{1, -1, 2, -2, -3, -4}, std::array{1, 2, -5}, 4>(fuse_rr)
+        .template contract<std::array{1, 2, -1, -2, -3}, std::array{1, 2, -4}, 2>(fuse_dd);
+}
+
 } // namespace Xped

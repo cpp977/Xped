@@ -31,6 +31,11 @@ Tensor<Scalar, 2, 3, Symmetry, false, AllocationPolicy> applyWeights(XPED_CONST 
                                                                      XPED_CONST TensorBase<DerivedT>& wT,
                                                                      XPED_CONST TensorBase<DerivedR>& wR,
                                                                      XPED_CONST TensorBase<DerivedB>& wB);
+
+template <typename Scalar, typename Symmetry, bool ENABLE_AD>
+Tensor<Scalar, 2, 2, Symmetry, ENABLE_AD> contractAAdag(const Tensor<Scalar, 2, 3, Symmetry, ENABLE_AD>& A,
+                                                        const Tensor<Scalar, 3, 2, Symmetry, ENABLE_AD>& Adag);
+
 } // namespace Xped
 
 #ifndef XPED_COMPILED_LIB

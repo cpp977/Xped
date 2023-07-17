@@ -228,6 +228,9 @@ public:
 
     // Apply the basis transformation of domain and codomain to the block matrices to get a plain array/tensor
     TensorType plainTensor() const;
+
+    typename PlainInterface::TType<Scalar, Rank + 1> unitaryDomain() const;
+    typename PlainInterface::TType<Scalar, CoRank + 1> unitaryCodomain() const;
     // MatrixType plainMatrix() const;
 
     // Tensor<CoRank, Rank, Symmetry, MatrixLib_, TensorLib_> adjoint() const;

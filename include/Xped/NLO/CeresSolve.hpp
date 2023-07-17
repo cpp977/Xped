@@ -18,14 +18,14 @@
 
 namespace Xped {
 
-template <typename Scalar, typename Symmetry, Opts::CTMCheckpoint CPOpts, std::size_t TRank = 2>
+template <typename Scalar, typename HamScalar, typename Symmetry, Opts::CTMCheckpoint CPOpts, std::size_t TRank = 2>
 class Energy final : public ceres::FirstOrderFunction
 {
     template <typename Sym>
-    using Hamiltonian = TwoSiteObservable<double, Sym, true>;
+    using Hamiltonian = TwoSiteObservable<HamScalar, Sym, true>;
 
 public:
-    Energy(std::unique_ptr<CTMSolver<Scalar, Symmetry, CPOpts, TRank>> solver,
+    Energy(std::unique_ptr<CTMSolver<Scalar, Symmetry, HamScalar, CPOpts, TRank>> solver,
            Hamiltonian<Symmetry>& op,
            std::shared_ptr<iPEPS<Scalar, Symmetry, false>> Psi)
         : impl(std::move(solver))
@@ -42,25 +42,25 @@ public:
             const std::complex<double>* params_compl = reinterpret_cast<const std::complex<double>*>(parameters);
             Psi->set_data(params_compl);
             std::complex<double>* gradient_compl = reinterpret_cast<std::complex<double>*>(gradient);
-            cost[0] = impl->template solve<Scalar, true>(Psi, gradient_compl, op);
+            cost[0] = impl->template solve<true>(Psi, gradient_compl, op);
         } else {
             Psi->set_data(parameters);
-            cost[0] = impl->template solve<Scalar, true>(Psi, gradient, op);
+            cost[0] = impl->template solve<true>(Psi, gradient, op);
         }
         return true;
     }
-    std::unique_ptr<CTMSolver<Scalar, Symmetry, CPOpts, TRank>> impl;
+    std::unique_ptr<CTMSolver<Scalar, Symmetry, HamScalar, CPOpts, TRank>> impl;
     Hamiltonian<Symmetry>& op;
     std::shared_ptr<iPEPS<Scalar, Symmetry, false>> Psi;
     int NumParameters() const override { return ScalarTraits<Scalar>::IS_COMPLEX() ? 2 * Psi->plainSize() : Psi->plainSize(); }
 };
 
-template <typename Scalar, typename Symmetry, Opts::CTMCheckpoint CPOpts = Opts::CTMCheckpoint{}, std::size_t TRank = 2>
+template <typename Scalar, typename HamScalar, typename Symmetry, Opts::CTMCheckpoint CPOpts = Opts::CTMCheckpoint{}, std::size_t TRank = 2>
 struct iPEPSSolverAD
 {
     template <typename Sym>
-    using Hamiltonian = TwoSiteObservable<double, Sym, true>;
-    using EnergyFunctor = Energy<Scalar, Symmetry, CPOpts, TRank>;
+    using Hamiltonian = TwoSiteObservable<HamScalar, Sym, true>;
+    using EnergyFunctor = Energy<Scalar, HamScalar, Symmetry, CPOpts, TRank>;
 
     iPEPSSolverAD() = delete;
 
@@ -132,7 +132,7 @@ struct iPEPSSolverAD
                 Psi->setRandom(optim_opts.seed);
             }
             problem = std::make_unique<ceres::GradientProblem>(
-                new EnergyFunctor(std::move(std::make_unique<CTMSolver<Scalar, Symmetry, CPOpts, TRank>>(ctm_opts)), H, Psi));
+                new EnergyFunctor(std::move(std::make_unique<CTMSolver<Scalar, Symmetry, HamScalar, CPOpts, TRank>>(ctm_opts)), H, Psi));
             std::filesystem::create_directories(optim_opts.working_directory / optim_opts.logging_directory);
             if(optim_opts.log_format == ".h5") {
                 try {
@@ -200,7 +200,6 @@ struct iPEPSSolverAD
         }
     }
 
-    template <typename HamScalar>
     void solve()
     {
         Log::on_entry(optim_opts.verbosity,
@@ -276,8 +275,11 @@ struct iPEPSSolverAD
         }
     };
 
-    CTMSolver<Scalar, Symmetry, CPOpts, TRank>* getCTMSolver() { return dynamic_cast<const EnergyFunctor*>(problem->function())->impl.get(); }
-    const CTMSolver<Scalar, Symmetry, CPOpts, TRank>* getCTMSolver() const
+    CTMSolver<Scalar, Symmetry, HamScalar, CPOpts, TRank>* getCTMSolver()
+    {
+        return dynamic_cast<const EnergyFunctor*>(problem->function())->impl.get();
+    }
+    const CTMSolver<Scalar, Symmetry, HamScalar, CPOpts, TRank>* getCTMSolver() const
     {
         return dynamic_cast<const EnergyFunctor*>(problem->function())->impl.get();
     }
@@ -305,12 +307,12 @@ struct iPEPSSolverAD
     template <typename Ar>
     void serialize(Ar& ar)
     {
-        CTMSolver<Scalar, Symmetry, CPOpts, TRank> tmp_CTMSolver;
+        CTMSolver<Scalar, Symmetry, HamScalar, CPOpts, TRank> tmp_CTMSolver;
         iPEPS<Scalar, Symmetry> tmp_Psi;
         ar& YAS_OBJECT_NVP("iPEPSSolverAD", ("CTMSolver", tmp_CTMSolver), ("Psi", tmp_Psi), ("optim_opts", optim_opts), ("state", state));
         // optim_opts.max_steps = optim_opts.max_steps > state.current_iter ? optim_opts.max_steps - state.current_iter : 1;
         Psi = std::make_shared<iPEPS<Scalar, Symmetry>>(std::move(tmp_Psi));
-        auto Dwain = std::make_unique<CTMSolver<Scalar, Symmetry, CPOpts, TRank>>(std::move(tmp_CTMSolver));
+        auto Dwain = std::make_unique<CTMSolver<Scalar, Symmetry, HamScalar, CPOpts, TRank>>(std::move(tmp_CTMSolver));
         problem = std::make_unique<ceres::GradientProblem>(new EnergyFunctor(std::move(Dwain), H, Psi));
     }
 

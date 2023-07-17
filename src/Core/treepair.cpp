@@ -53,8 +53,8 @@ turn_right(const FusionTree<Rank, Symmetry>& t1, const FusionTree<CoRank, Symmet
     t1p.dims.back() = t2.dims.back();
     t1p.computeDim();
     FusionTree<CoRank - 1, Symmetry> t2p;
-    std::copy(t2.q_uncoupled.begin(), t2.q_uncoupled.end() - 1, t2p.q_uncoupled.begin());
-    std::copy(t2.IS_DUAL.begin(), t2.IS_DUAL.end() - 1, t2p.IS_DUAL.begin());
+    if constexpr(CoRank > 1) { std::copy(t2.q_uncoupled.begin(), t2.q_uncoupled.end() - 1, t2p.q_uncoupled.begin()); }
+    if constexpr(CoRank > 1) { std::copy(t2.IS_DUAL.begin(), t2.IS_DUAL.end() - 1, t2p.IS_DUAL.begin()); }
     if constexpr(CoRank > 2) { std::copy(t2.q_intermediates.begin(), t2.q_intermediates.end() - 1, t2p.q_intermediates.begin()); }
     if(CoRank == 1) {
         t2p.q_coupled = Symmetry::qvacuum();

@@ -17,7 +17,7 @@ struct TensorTraits<CoeffBinaryOp<XprTypeLeft, XprTypeRight>>
 {
     static constexpr std::size_t Rank = XprTypeLeft::Rank;
     static constexpr std::size_t CoRank = XprTypeLeft::CoRank;
-    typedef typename XprTypeLeft::Scalar Scalar;
+    using Scalar = std::common_type_t<typename XprTypeLeft::Scalar, typename XprTypeRight::Scalar>;
     typedef typename XprTypeLeft::Symmetry Symmetry;
     using AllocationPolicy = typename XprTypeLeft::AllocationPolicy;
 };
@@ -28,12 +28,15 @@ class CoeffBinaryOp : public TensorBase<CoeffBinaryOp<XprTypeLeft, XprTypeRight>
 public:
     static inline constexpr std::size_t Rank = XprTypeLeft::Rank;
     static inline constexpr std::size_t CoRank = XprTypeLeft::CoRank;
-    typedef typename XprTypeLeft::Scalar Scalar;
+    typedef typename XprTypeLeft::Scalar LeftScalar;
+    typedef typename XprTypeRight::Scalar RightScalar;
     typedef typename XprTypeLeft::Symmetry Symmetry;
     using AllocationPolicy = typename XprTypeLeft::AllocationPolicy;
     typedef typename Symmetry::qType qType;
 
-    CoeffBinaryOp(XPED_CONST XprTypeLeft& xpr_l, XPED_CONST XprTypeRight& xpr_r, const std::function<Scalar(Scalar, Scalar)>& coeff_func)
+    CoeffBinaryOp(XPED_CONST XprTypeLeft& xpr_l,
+                  XPED_CONST XprTypeRight& xpr_r,
+                  const std::function<std::common_type_t<LeftScalar, RightScalar>(LeftScalar, RightScalar)>& coeff_func)
         : refxpr_l_(xpr_l)
         , refxpr_r_(xpr_r)
         , coeff_func_(coeff_func)
@@ -76,7 +79,7 @@ public:
 protected:
     XPED_CONST XprTypeLeft& refxpr_l_;
     XPED_CONST XprTypeRight& refxpr_r_;
-    const std::function<Scalar(Scalar, Scalar)> coeff_func_;
+    const std::function<std::common_type_t<LeftScalar, RightScalar>(LeftScalar, RightScalar)> coeff_func_;
 };
 
 } // namespace Xped

@@ -155,10 +155,12 @@ struct MatrixInterface
         return M_left.diagonal().binaryExpr(M_right.diagonal(), func).asDiagonal();
     }
 
-    template <typename Scalar, typename Derived, typename OtherDerived>
-    static auto binaryFunc(const Eigen::MatrixBase<Derived>& M_left,
-                           const Eigen::MatrixBase<OtherDerived>& M_right,
-                           const std::function<Scalar(Scalar, Scalar)>& func)
+    template <typename Derived, typename OtherDerived>
+    static auto
+    binaryFunc(const Eigen::MatrixBase<Derived>& M_left,
+               const Eigen::MatrixBase<OtherDerived>& M_right,
+               const std::function<std::common_type_t<typename Derived::Scalar, typename OtherDerived::Scalar>(typename Derived::Scalar,
+                                                                                                               typename OtherDerived::Scalar)>& func)
     {
         return M_left.binaryExpr(M_right, func);
     }

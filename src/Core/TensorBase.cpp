@@ -185,8 +185,10 @@ TensorBase<Derived>::diagBinaryExpr(XPED_CONST TensorBase<OtherDerived>& other, 
 
 template <typename Derived>
 template <typename OtherDerived>
-XPED_CONST CoeffBinaryOp<Derived, OtherDerived> TensorBase<Derived>::binaryExpr(XPED_CONST TensorBase<OtherDerived>& other,
-                                                                                const std::function<Scalar(Scalar, Scalar)>& coeff_func) XPED_CONST
+XPED_CONST CoeffBinaryOp<Derived, OtherDerived> TensorBase<Derived>::binaryExpr(
+    XPED_CONST TensorBase<OtherDerived>& other,
+    const std::function<std::common_type_t<Scalar, typename TensorTraits<OtherDerived>::Scalar>(Scalar, typename TensorTraits<OtherDerived>::Scalar)>&
+        coeff_func) XPED_CONST
 {
     return CoeffBinaryOp<Derived, OtherDerived>(derived(), other.derived(), coeff_func);
 }

@@ -14,9 +14,17 @@ std::string format_params(const std::string& name, const std::map<std::string, P
     std::string inner;
     for(const auto& p : used_params) {
         if(p != used_params.back()) {
-            fmt::format_to(std::back_inserter(inner), "{}={:.2f}, ", p, params.at(p).get<double>());
+            if(typeid(double).hash_code() == params.at(p).value.type().hash_code()) {
+                fmt::format_to(std::back_inserter(inner), "{}={:.2f},", p, params.at(p).get<double>());
+            } else if(typeid(TMatrix<double>).hash_code() == params.at(p).value.type().hash_code()) {
+                fmt::format_to(std::back_inserter(inner), "{}={},", p, params.at(p).get<TMatrix<double>>().uncompressedVector());
+            }
         } else {
-            fmt::format_to(std::back_inserter(inner), "{}={:.2f}", p, params.at(p).get<double>());
+            if(typeid(double).hash_code() == params.at(p).value.type().hash_code()) {
+                fmt::format_to(std::back_inserter(inner), "{}={:.2f}", p, params.at(p).get<double>());
+            } else if(typeid(TMatrix<double>).hash_code() == params.at(p).value.type().hash_code()) {
+                fmt::format_to(std::back_inserter(inner), "{}={}", p, params.at(p).get<TMatrix<double>>().uncompressedVector());
+            }
         }
     }
     std::string res = fmt::format("{}({})", name, inner);
@@ -28,9 +36,17 @@ std::string create_filename(const std::string& name, const std::map<std::string,
     std::string res = name + "_";
     for(const auto& p : used_params) {
         if(p != used_params.back()) {
-            fmt::format_to(std::back_inserter(res), "{}={:.2f}_", p, params.at(p).get<double>());
+            if(typeid(double).hash_code() == params.at(p).value.type().hash_code()) {
+                fmt::format_to(std::back_inserter(res), "{}={:.2f}_", p, params.at(p).get<double>());
+            } else if(typeid(TMatrix<double>).hash_code() == params.at(p).value.type().hash_code()) {
+                fmt::format_to(std::back_inserter(res), "{}={}_", p, params.at(p).get<TMatrix<double>>().uncompressedVector());
+            }
         } else {
-            fmt::format_to(std::back_inserter(res), "{}={:.2f}", p, params.at(p).get<double>());
+            if(typeid(double).hash_code() == params.at(p).value.type().hash_code()) {
+                fmt::format_to(std::back_inserter(res), "{}={:.2f}", p, params.at(p).get<double>());
+            } else if(typeid(TMatrix<double>).hash_code() == params.at(p).value.type().hash_code()) {
+                fmt::format_to(std::back_inserter(res), "{}={}", p, params.at(p).get<TMatrix<double>>().uncompressedVector());
+            }
         }
     }
     return res;

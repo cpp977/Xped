@@ -146,11 +146,11 @@ SiteOperator<Scalar, Symmetry> kroneckerProduct(XPED_CONST SiteOperator<Scalar, 
     return SiteOperator<Scalar, Symmetry>::outerprod(O1, O2);
 }
 
-template <typename Scalar, typename Symmetry>
-Tensor<Scalar, 2, 2, Symmetry, false> tprod(XPED_CONST SiteOperator<Scalar, Symmetry>& O1,
-                                            XPED_CONST SiteOperator<Scalar, Symmetry>& O2,
-                                            bool ADD_TWIST = false,
-                                            bool REVERSE_ORDER = false)
+template <typename LeftScalar, typename RightScalar, typename Symmetry>
+Tensor<std::common_type_t<LeftScalar, RightScalar>, 2, 2, Symmetry, false> tprod(XPED_CONST SiteOperator<LeftScalar, Symmetry>& O1,
+                                                                                 XPED_CONST SiteOperator<RightScalar, Symmetry>& O2,
+                                                                                 bool ADD_TWIST = false,
+                                                                                 bool REVERSE_ORDER = false)
 {
     if(not REVERSE_ORDER) {
         Qbasis<Symmetry, 1> Otarget_op;
@@ -173,11 +173,11 @@ Tensor<Scalar, 2, 2, Symmetry, false> tprod(XPED_CONST SiteOperator<Scalar, Symm
     }
 }
 
-template <typename Scalar, typename Symmetry>
-Tensor<Scalar, 2, 2, Symmetry, false> tprod(SiteOperator<Scalar, Symmetry>&& O1, SiteOperator<Scalar, Symmetry>&& O2)
+template <typename LeftScalar, typename RightScalar, typename Symmetry>
+auto tprod(SiteOperator<LeftScalar, Symmetry>&& O1, SiteOperator<RightScalar, Symmetry>&& O2)
 {
-    SiteOperator<Scalar, Symmetry> tmp_O1 = O1;
-    SiteOperator<Scalar, Symmetry> tmp_O2 = O2;
+    SiteOperator<LeftScalar, Symmetry> tmp_O1 = O1;
+    SiteOperator<RightScalar, Symmetry> tmp_O2 = O2;
     return tprod(tmp_O1, tmp_O2);
 }
 

@@ -116,12 +116,13 @@ std::tuple<MType<typename Derived::Scalar>, VType<typename Derived::RealScalar>,
 PlainInterface::svd(const Eigen::MatrixBase<Derived>& M)
 {
 #ifdef XPED_DONT_USE_BDCSVD
-    Eigen::JacobiSVD<MType<typename Derived::Scalar>> Jack; // standard SVD
+    Eigen::JacobiSVD<MType<typename Derived::Scalar>, Eigen::ComputeThinU | Eigen::ComputeThinV> Jack; // standard SVD
 #else
-    Eigen::BDCSVD<MType<typename Derived::Scalar>> Jack; // "Divide and conquer" SVD (only available in Eigen)
+    Eigen::BDCSVD<MType<typename Derived::Scalar>, Eigen::ComputeThinU | Eigen::ComputeThinV>
+        Jack; // "Divide and conquer" SVD (only available in Eigen)
 #endif
 
-    Jack.compute(M, Eigen::ComputeThinU | Eigen::ComputeThinV);
+    Jack.compute(M);
     return std::make_tuple(Jack.matrixU(), Jack.singularValues(), Jack.matrixV().adjoint());
 }
 

@@ -121,7 +121,7 @@ int main(int argc, char* argv[])
         }
 
         std::map<std::string, Xped::Param> params = Xped::util::params_from_toml(data.at("model").at("params"), c);
-        for(auto& [k, v] : params) { fmt::print("key={}\n", k); }
+
         std::vector<Xped::Opts::Bond> bs;
         for(const auto& elem : data.at("model").at("bonds").as_array()) {
             auto b = Xped::util::enum_from_toml<Xped::Opts::Bond>(elem);

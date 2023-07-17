@@ -10,15 +10,16 @@
 
 namespace Xped {
 
-template <typename Scalar, typename Symmetry, bool ENABLE_AD>
-class iPEPSIterator : public boost::iterator_facade<iPEPSIterator<Scalar, Symmetry, ENABLE_AD>, Scalar*, boost::forward_traversal_tag, Scalar>
+template <std::size_t Rank, std::size_t CoRank, typename Scalar, typename Symmetry, bool ENABLE_AD>
+class iPEPSIterator
+    : public boost::iterator_facade<iPEPSIterator<Rank, CoRank, Scalar, Symmetry, ENABLE_AD>, Scalar*, boost::forward_traversal_tag, Scalar>
 {
 public:
     iPEPSIterator()
         : data(nullptr)
     {}
 
-    iPEPSIterator(TMatrix<Tensor<Scalar, 2, 3, Symmetry, ENABLE_AD>>* data_in,
+    iPEPSIterator(TMatrix<Tensor<Scalar, Rank, CoRank, Symmetry, ENABLE_AD>>* data_in,
                   bool ITER_GRAD = false,
                   std::size_t outer_num = 0,
                   std::size_t elem_num = 0)
@@ -48,7 +49,7 @@ private:
         }
     }
 
-    bool equal(iPEPSIterator<Scalar, Symmetry, ENABLE_AD> const& other) const
+    bool equal(iPEPSIterator<Rank, CoRank, Scalar, Symmetry, ENABLE_AD> const& other) const
     {
         return (this->outer_num == other.outer_num and this->elem_num == other.elem_num);
     }
@@ -66,7 +67,7 @@ private:
         }
     }
 
-    TMatrix<Tensor<Scalar, 2, 3, Symmetry, ENABLE_AD>>* data;
+    TMatrix<Tensor<Scalar, Rank, CoRank, Symmetry, ENABLE_AD>>* data;
     bool ITER_GRAD = false;
     std::size_t outer_num = 0;
     std::size_t elem_num = 0;

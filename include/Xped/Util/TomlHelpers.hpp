@@ -40,9 +40,9 @@ std::map<std::string, Param> params_from_toml(const toml::value& t, const UnitCe
                 assert(v.size() == cell.Lx);
                 assert(v[0].size() == cell.Ly);
                 for(int x = 0; x < v.size(); ++x) {
-                    for(int x = 0; x < v.size(); ++x) { p(x, y) = p_vec[x][y]; }
+                    for(int y = 0; y < v.size(); ++y) { p(x, y) = p_vec[x][y]; }
                 }
-                params[k] = Param{.value = p_vec};
+                params[k] = Param{.value = p};
             }
         } else {
             throw std::invalid_argument("Bad model parameters.");

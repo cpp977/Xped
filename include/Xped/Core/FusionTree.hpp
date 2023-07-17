@@ -37,14 +37,29 @@ struct FusionTree
     template <typename Ar>
     inline void serialize(Ar& ar)
     {
-        ar& YAS_OBJECT_NVP("FusionTree",
-                           ("q_uncoupled", q_uncoupled),
-                           ("q_coupled", q_coupled),
-                           ("dim", dim),
-                           ("dims", dims),
-                           ("q_intermediates", q_intermediates),
-                           ("multiplicities", multiplicities),
-                           ("IS_DUAL", IS_DUAL));
+        if constexpr(Rank == 0) {
+            ar& YAS_OBJECT_NVP("FusionTree", ("q_coupled", q_coupled), ("dim", dim));
+        } else if constexpr(Rank == 1) {
+            ar& YAS_OBJECT_NVP(
+                "FusionTree", ("q_uncoupled", q_uncoupled), ("q_coupled", q_coupled), ("dim", dim), ("dims", dims), ("IS_DUAL", IS_DUAL));
+        } else if constexpr(Rank == 2) {
+            ar& YAS_OBJECT_NVP("FusionTree",
+                               ("q_uncoupled", q_uncoupled),
+                               ("q_coupled", q_coupled),
+                               ("dim", dim),
+                               ("dims", dims),
+                               ("multiplicities", multiplicities),
+                               ("IS_DUAL", IS_DUAL));
+        } else {
+            ar& YAS_OBJECT_NVP("FusionTree",
+                               ("q_uncoupled", q_uncoupled),
+                               ("q_coupled", q_coupled),
+                               ("dim", dim),
+                               ("dims", dims),
+                               ("q_intermediates", q_intermediates),
+                               ("multiplicities", multiplicities),
+                               ("IS_DUAL", IS_DUAL));
+        }
     }
 
     inline void computeDim() { dim = std::accumulate(dims.begin(), dims.end(), 1ul, std::multiplies<std::size_t>()); }

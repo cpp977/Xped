@@ -13,14 +13,15 @@
 
 namespace Xped {
 
-template <typename Scalar_, typename Symmetry_, Opts::CTMCheckpoint CPOpts = Opts::CTMCheckpoint{}, std::size_t TRank = 2>
+template <typename Scalar_, typename Symmetry_, typename HamScalar_, Opts::CTMCheckpoint CPOpts = Opts::CTMCheckpoint{}, std::size_t TRank = 2>
 class CTMSolver
 {
 public:
     using Scalar = Scalar_;
+    using HamScalar = HamScalar_;
     using Symmetry = Symmetry_;
     template <typename Sym>
-    using Hamiltonian = TwoSiteObservable<double, Sym, true>;
+    using Hamiltonian = TwoSiteObservable<HamScalar, Sym, true>;
 
     CTMSolver() = default;
 
@@ -35,7 +36,7 @@ public:
         }
     }
 
-    template <typename HamScalar, bool AD>
+    template <bool AD>
     typename ScalarTraits<Scalar>::Real solve(std::shared_ptr<iPEPS<Scalar, Symmetry>> Psi, Scalar* gradient, Hamiltonian<Symmetry>& H);
 
     XPED_CONST CTM<Scalar, Symmetry, TRank, false>& getCTM() XPED_CONST { return Jack; }

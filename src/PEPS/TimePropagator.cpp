@@ -4,8 +4,8 @@
 
 namespace Xped {
 
-template <typename Scalar, typename TimeScalar, typename Symmetry>
-void TimePropagator<Scalar, TimeScalar, Symmetry>::t_step(iPEPS<Scalar, Symmetry>& Psi)
+template <typename Scalar, typename TimeScalar, typename HamScalar, typename Symmetry>
+void TimePropagator<Scalar, TimeScalar, HamScalar, Symmetry>::t_step(iPEPS<Scalar, Symmetry>& Psi)
 {
     if(H.data_d1.size() > 0 and H.data_d2.size() == 0) {
         for(auto i = 0ul; i < cell_.uniqueSize(); ++i) {
@@ -109,8 +109,8 @@ void TimePropagator<Scalar, TimeScalar, Symmetry>::t_step(iPEPS<Scalar, Symmetry
     }
 }
 
-template <typename Scalar, typename TimeScalar, typename Symmetry>
-void TimePropagator<Scalar, TimeScalar, Symmetry>::t_step_h(iPEPS<Scalar, Symmetry>& Psi, int x, int y)
+template <typename Scalar, typename TimeScalar, typename HamScalar, typename Symmetry>
+void TimePropagator<Scalar, TimeScalar, HamScalar, Symmetry>::t_step_h(iPEPS<Scalar, Symmetry>& Psi, int x, int y)
 {
     auto left_full = applyWeights(Psi.Gs(x, y), Psi.whs(x - 1, y), Psi.wvs(x, y), Psi.whs(x, y).diag_sqrt(), Psi.wvs(x, y + 1));
     auto right_full = applyWeights(Psi.Gs(x + 1, y), Psi.whs(x, y).diag_sqrt(), Psi.wvs(x + 1, y), Psi.whs(x + 1, y), Psi.wvs(x + 1, y + 1));
@@ -186,8 +186,8 @@ void TimePropagator<Scalar, TimeScalar, Symmetry>::t_step_h(iPEPS<Scalar, Symmet
     Psi.Gs(x + 1, y) = Gtmp2; // * (1. / Gtmp2.maxNorm());
 }
 
-template <typename Scalar, typename TimeScalar, typename Symmetry>
-void TimePropagator<Scalar, TimeScalar, Symmetry>::t_step_v(iPEPS<Scalar, Symmetry>& Psi, int x, int y)
+template <typename Scalar, typename TimeScalar, typename HamScalar, typename Symmetry>
+void TimePropagator<Scalar, TimeScalar, HamScalar, Symmetry>::t_step_v(iPEPS<Scalar, Symmetry>& Psi, int x, int y)
 {
     auto top_full = applyWeights(Psi.Gs(x, y - 1), Psi.whs(x - 1, y - 1), Psi.wvs(x, y - 1), Psi.whs(x, y - 1), Psi.wvs(x, y).diag_sqrt());
     auto bottom_full = applyWeights(Psi.Gs(x, y), Psi.whs(x - 1, y), Psi.wvs(x, y).diag_sqrt(), Psi.whs(x, y), Psi.wvs(x, y + 1));
@@ -226,12 +226,12 @@ void TimePropagator<Scalar, TimeScalar, Symmetry>::t_step_v(iPEPS<Scalar, Symmet
   |     \
   A------A
 */
-template <typename Scalar, typename TimeScalar, typename Symmetry>
-void TimePropagator<Scalar, TimeScalar, Symmetry>::t_step_d1(iPEPS<Scalar, Symmetry>& Psi,
-                                                             int x,
-                                                             int y,
-                                                             Opts::GATE_ORDER gate_order,
-                                                             bool UPDATE_BOTH_DIAGONALS)
+template <typename Scalar, typename TimeScalar, typename HamScalar, typename Symmetry>
+void TimePropagator<Scalar, TimeScalar, HamScalar, Symmetry>::t_step_d1(iPEPS<Scalar, Symmetry>& Psi,
+                                                                        int x,
+                                                                        int y,
+                                                                        Opts::GATE_ORDER gate_order,
+                                                                        bool UPDATE_BOTH_DIAGONALS)
 {
     auto tl_full = applyWeights(Psi.Gs(x, y), Psi.whs(x - 1, y), Psi.wvs(x, y), Psi.whs(x, y).diag_sqrt(), Psi.wvs(x, y + 1));
     auto br_full =
@@ -247,7 +247,7 @@ void TimePropagator<Scalar, TimeScalar, Symmetry>::t_step_d1(iPEPS<Scalar, Symme
     Tensor<Scalar, 2, 5, Symmetry> enlarged_bond;
     switch(gate_order) {
     case Opts::GATE_ORDER::HDV: {
-        TwoSiteObservable<double, Symmetry> U_used = UPDATE_BOTH_DIAGONALS ? Usq : U;
+        TwoSiteObservable<HamScalar, Symmetry> U_used = UPDATE_BOTH_DIAGONALS ? Usq : U;
         enlarged_bond = U.data_h(x, y).twist(0).twist(1).template contract<std::array{1, 2, -2, -5}, std::array{-1, 1, -3, -4, 2, -6, -7}, 2>(bond);
         enlarged_bond = U_used.data_d1(x, y).twist(0).twist(1).template contract<std::array{1, 2, -2, -6}, std::array{-1, 1, -3, -4, -5, 2, -7}, 2>(
             enlarged_bond);
@@ -256,7 +256,7 @@ void TimePropagator<Scalar, TimeScalar, Symmetry>::t_step_d1(iPEPS<Scalar, Symme
         break;
     }
     case Opts::GATE_ORDER::VDH: {
-        TwoSiteObservable<double, Symmetry> U_used = UPDATE_BOTH_DIAGONALS ? Usq : U;
+        TwoSiteObservable<HamScalar, Symmetry> U_used = UPDATE_BOTH_DIAGONALS ? Usq : U;
         enlarged_bond =
             U.data_v(x + 1, y).twist(0).twist(1).template contract<std::array{1, 2, -5, -6}, std::array{-1, -2, -3, -4, 1, 2, -7}, 2>(bond);
         enlarged_bond = U_used.data_d1(x, y).twist(0).twist(1).template contract<std::array{1, 2, -2, -6}, std::array{-1, 1, -3, -4, -5, 2, -7}, 2>(
@@ -298,12 +298,12 @@ void TimePropagator<Scalar, TimeScalar, Symmetry>::t_step_d1(iPEPS<Scalar, Symme
    / |
   A--A
 */
-template <typename Scalar, typename TimeScalar, typename Symmetry>
-void TimePropagator<Scalar, TimeScalar, Symmetry>::t_step_d2(iPEPS<Scalar, Symmetry>& Psi,
-                                                             int x,
-                                                             int y,
-                                                             Opts::GATE_ORDER gate_order,
-                                                             bool UPDATE_BOTH_DIAGONALS)
+template <typename Scalar, typename TimeScalar, typename HamScalar, typename Symmetry>
+void TimePropagator<Scalar, TimeScalar, HamScalar, Symmetry>::t_step_d2(iPEPS<Scalar, Symmetry>& Psi,
+                                                                        int x,
+                                                                        int y,
+                                                                        Opts::GATE_ORDER gate_order,
+                                                                        bool UPDATE_BOTH_DIAGONALS)
 {
     auto tl_full = applyWeights(Psi.Gs(x, y), Psi.whs(x - 1, y), Psi.wvs(x, y), Psi.whs(x, y).diag_sqrt(), Psi.wvs(x, y + 1).diag_sqrt());
     auto bl_full = applyWeights(Psi.Gs(x, y + 1), Psi.whs(x - 1, y + 1), Psi.wvs(x, y + 1).diag_sqrt(), Psi.whs(x, y + 1), Psi.wvs(x, y + 2));
@@ -319,7 +319,7 @@ void TimePropagator<Scalar, TimeScalar, Symmetry>::t_step_d2(iPEPS<Scalar, Symme
     Tensor<Scalar, 2, 5, Symmetry> enlarged_bond;
     switch(gate_order) {
     case Opts::GATE_ORDER::HDV: {
-        TwoSiteObservable<double, Symmetry> U_used = UPDATE_BOTH_DIAGONALS ? Usq : U;
+        TwoSiteObservable<HamScalar, Symmetry> U_used = UPDATE_BOTH_DIAGONALS ? Usq : U;
         enlarged_bond = U.data_h(x, y).twist(0).twist(1).template contract<std::array{1, 2, -5, -6}, std::array{-1, -2, -3, -4, 1, 2, -7}, 2>(bond);
         enlarged_bond =
             U_used.data_d2(x + 1, y).twist(0).twist(1).template contract<std::array{1, 2, -1, -6}, std::array{1, -2, -3, -4, -5, 2, -7}, 2>(
@@ -329,7 +329,7 @@ void TimePropagator<Scalar, TimeScalar, Symmetry>::t_step_d2(iPEPS<Scalar, Symme
         break;
     }
     case Opts::GATE_ORDER::VDH: {
-        TwoSiteObservable<double, Symmetry> U_used = UPDATE_BOTH_DIAGONALS ? Usq : U;
+        TwoSiteObservable<HamScalar, Symmetry> U_used = UPDATE_BOTH_DIAGONALS ? Usq : U;
         enlarged_bond = U.data_v(x, y).twist(0).twist(1).template contract<std::array{1, 2, -5, -1}, std::array{2, -2, -3, -4, 1, -6, -7}, 2>(bond);
         enlarged_bond =
             U_used.data_d2(x + 1, y).twist(0).twist(1).template contract<std::array{1, 2, -1, -6}, std::array{1, -2, -3, -4, -5, 2, -7}, 2>(
@@ -358,12 +358,12 @@ void TimePropagator<Scalar, TimeScalar, Symmetry>::t_step_d2(iPEPS<Scalar, Symme
     Psi.Gs(x, y) = applyWeights(tlp, Psi.whs(x - 1, y).diag_inv(), Psi.wvs(x, y).diag_inv(), Psi.Id_weight_h(x, y), Psi.wvs(x, y + 1).diag_inv());
 }
 
-template <typename Scalar, typename TimeScalar, typename Symmetry>
+template <typename Scalar, typename TimeScalar, typename HamScalar, typename Symmetry>
 std::tuple<Tensor<Scalar, 2, 1, Symmetry>, Tensor<Scalar, 1, 1, Symmetry>, Tensor<Scalar, 1, 2, Symmetry>>
-TimePropagator<Scalar, TimeScalar, Symmetry>::renormalize(const Tensor<Scalar, 2, 2, Symmetry>& bond,
-                                                          const Tensor<Scalar, 3, 1, Symmetry>& left,
-                                                          const Tensor<Scalar, 1, 3, Symmetry>& right,
-                                                          std::size_t max_keep) const
+TimePropagator<Scalar, TimeScalar, HamScalar, Symmetry>::renormalize(const Tensor<Scalar, 2, 2, Symmetry>& bond,
+                                                                     const Tensor<Scalar, 3, 1, Symmetry>& left,
+                                                                     const Tensor<Scalar, 1, 3, Symmetry>& right,
+                                                                     std::size_t max_keep) const
 {
     std::tuple<Tensor<Scalar, 2, 1, Symmetry>, Tensor<Scalar, 1, 1, Symmetry>, Tensor<Scalar, 1, 2, Symmetry>> res;
     switch(update) {
@@ -382,13 +382,13 @@ TimePropagator<Scalar, TimeScalar, Symmetry>::renormalize(const Tensor<Scalar, 2
     return res;
 }
 
-template <typename Scalar, typename TimeScalar, typename Symmetry>
+template <typename Scalar, typename TimeScalar, typename HamScalar, typename Symmetry>
 std::tuple<Tensor<Scalar, 1, 2, Symmetry>,
            Tensor<Scalar, 1, 1, Symmetry>,
            Tensor<Scalar, 4, 1, Symmetry>,
            Tensor<Scalar, 1, 1, Symmetry>,
            Tensor<Scalar, 1, 2, Symmetry>>
-TimePropagator<Scalar, TimeScalar, Symmetry>::renormalize_d2(const Tensor<Scalar, 2, 5, Symmetry>& bond, std::size_t max_keep) const
+TimePropagator<Scalar, TimeScalar, HamScalar, Symmetry>::renormalize_d2(const Tensor<Scalar, 2, 5, Symmetry>& bond, std::size_t max_keep) const
 {
     std::tuple<Tensor<Scalar, 1, 2, Symmetry>,
                Tensor<Scalar, 1, 1, Symmetry>,
@@ -416,13 +416,13 @@ TimePropagator<Scalar, TimeScalar, Symmetry>::renormalize_d2(const Tensor<Scalar
     return res;
 }
 
-template <typename Scalar, typename TimeScalar, typename Symmetry>
+template <typename Scalar, typename TimeScalar, typename HamScalar, typename Symmetry>
 std::tuple<Tensor<Scalar, 2, 1, Symmetry>,
            Tensor<Scalar, 1, 1, Symmetry>,
            Tensor<Scalar, 4, 1, Symmetry>,
            Tensor<Scalar, 1, 1, Symmetry>,
            Tensor<Scalar, 1, 2, Symmetry>>
-TimePropagator<Scalar, TimeScalar, Symmetry>::renormalize_d1(const Tensor<Scalar, 2, 5, Symmetry>& bond, std::size_t max_keep) const
+TimePropagator<Scalar, TimeScalar, HamScalar, Symmetry>::renormalize_d1(const Tensor<Scalar, 2, 5, Symmetry>& bond, std::size_t max_keep) const
 {
     std::tuple<Tensor<Scalar, 2, 1, Symmetry>,
                Tensor<Scalar, 1, 1, Symmetry>,
@@ -450,13 +450,13 @@ TimePropagator<Scalar, TimeScalar, Symmetry>::renormalize_d1(const Tensor<Scalar
     return res;
 }
 
-template <typename Scalar, typename TimeScalar, typename Symmetry>
-void TimePropagator<Scalar, TimeScalar, Symmetry>::initU()
+template <typename Scalar, typename TimeScalar, typename HamScalar, typename Symmetry>
+void TimePropagator<Scalar, TimeScalar, HamScalar, Symmetry>::initU()
 {
     auto shifted_ham = H.shiftQN(charges);
-    U = TwoSiteObservable<double, Symmetry>(H.data_h.pat, H.bond);
-    Usqrt = TwoSiteObservable<double, Symmetry>(H.data_h.pat, H.bond);
-    Usq = TwoSiteObservable<double, Symmetry>(H.data_h.pat, H.bond);
+    U = TwoSiteObservable<HamScalar, Symmetry>(H.data_h.pat, H.bond);
+    Usqrt = TwoSiteObservable<HamScalar, Symmetry>(H.data_h.pat, H.bond);
+    Usq = TwoSiteObservable<HamScalar, Symmetry>(H.data_h.pat, H.bond);
     if(H.data_h.size() > 0) {
         for(auto i = 0ul; i < cell_.uniqueSize(); ++i) {
             U.data_h[i] = shifted_ham.data_h[i].mexp(-dt).eval();

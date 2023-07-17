@@ -8,11 +8,11 @@
 
 namespace Xped {
 
-template <typename Scalar, typename Symmetry>
+template <typename Scalar, typename Symmetry, typename HamScalar = double>
 struct iPEPSSolverImag
 {
     template <typename Sym>
-    using Hamiltonian = TwoSiteObservable<double, Sym, true>;
+    using Hamiltonian = TwoSiteObservable<HamScalar, Sym, true>;
 
     iPEPSSolverImag() = delete;
 
@@ -22,7 +22,7 @@ struct iPEPSSolverImag
         , H(H_in)
     {
         std::filesystem::create_directories(imag_opts.working_directory / imag_opts.obs_directory);
-        Jack = CTMSolver<Scalar, Symmetry>(ctm_opts);
+        Jack = CTMSolver<Scalar, Symmetry, HamScalar>(ctm_opts);
         if(not imag_opts.obs_directory.empty()) {
             std::filesystem::create_directories(imag_opts.working_directory / imag_opts.obs_directory);
             if(std::filesystem::exists(imag_opts.working_directory / imag_opts.obs_directory /
@@ -90,7 +90,7 @@ struct iPEPSSolverImag
                 TMatrix<Tensor<Scalar, 1, 1, Symmetry>> conv_v;
                 double diff = 0.;
                 std::size_t steps = 0ul;
-                TimePropagator<Scalar, double, Symmetry> Jim(H, imag_opts.dts[i], imag_opts.update, Psi->charges());
+                TimePropagator<Scalar, double, HamScalar, Symmetry> Jim(H, imag_opts.dts[i], imag_opts.update, Psi->charges());
                 for(auto step = 0ul; step < imag_opts.t_steps[i]; ++step) {
                     ++steps;
                     Jim.t_step(*Psi);
@@ -140,7 +140,7 @@ struct iPEPSSolverImag
             util::Stopwatch<> ctm_t;
             for(auto ichi = 0; auto chi : imag_opts.chis[iD]) {
                 Jack.opts.chi = chi;
-                Es[iD][ichi] = Jack.template solve<double, false>(Psi, nullptr, H);
+                Es[iD][ichi] = Jack.template solve<false>(Psi, nullptr, H);
 
                 if(imag_opts.display_obs or not imag_opts.obs_directory.empty()) { H.computeObs(Jack.getCTM()); }
                 if(imag_opts.display_obs) { Log::per_iteration(imag_opts.verbosity, "  Observables:\n{}", H.getObsString("    ")); }
@@ -248,7 +248,8 @@ struct iPEPSSolverImag
                         init_Psis[i]->D = D;
                         for(std::size_t j = 0; j < imag_opts.init_t_steps.size(); ++j) {
                             util::Stopwatch<> step_t;
-                            TimePropagator<Scalar, double, Symmetry> Jim(H, imag_opts.init_dts[j], imag_opts.update, init_Psis[i]->charges());
+                            TimePropagator<Scalar, double, HamScalar, Symmetry> Jim(
+                                H, imag_opts.init_dts[j], imag_opts.update, init_Psis[i]->charges());
                             for(auto step = 0ul; step < imag_opts.init_t_steps[j]; ++step) { Jim.t_step(*init_Psis[i]); }
                             Log::per_iteration(imag_opts.verbosity,
                                                "  MultiInit(D={}, seed={}: Nτ={:^4d}, dτ={:.1e}): runtime={}",
@@ -262,7 +263,7 @@ struct iPEPSSolverImag
                         Log::per_iteration(imag_opts.verbosity, "  {}", init_Psis[i]->info());
                     }
                     Jack.opts.chi = imag_opts.init_chi;
-                    init_Es[i] = Jack.template solve<double, false>(init_Psis[i], nullptr, H);
+                    init_Es[i] = Jack.template solve<false>(init_Psis[i], nullptr, H);
                 }
                 std::size_t min_index = std::distance(init_Es.begin(), std::min_element(init_Es.begin(), init_Es.end()));
                 Log::on_entry(imag_opts.verbosity, "  Initialization with #{} seeds:", imag_opts.init_seeds.size());
@@ -279,7 +280,7 @@ struct iPEPSSolverImag
         }
     }
 
-    CTMSolver<Scalar, Symmetry> Jack;
+    CTMSolver<Scalar, Symmetry, HamScalar> Jack;
     Opts::Imag imag_opts;
     std::shared_ptr<iPEPS<Scalar, Symmetry>> Psi;
     Hamiltonian<Symmetry>& H;

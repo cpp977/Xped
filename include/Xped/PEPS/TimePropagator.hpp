@@ -20,17 +20,18 @@ enum class GATE_ORDER
 
 }
 
-template <typename Scalar_, typename TimeScalar_, typename Symmetry_>
+template <typename Scalar_, typename TimeScalar_, typename HamScalar_, typename Symmetry_>
 class TimePropagator
 {
 public:
     using Scalar = Scalar_;
     using TimeScalar = TimeScalar_;
+    using HamScalar = HamScalar_;
     using Symmetry = Symmetry_;
 
     TimePropagator() = delete;
 
-    explicit TimePropagator(const TwoSiteObservable<double, Symmetry>& H_in,
+    explicit TimePropagator(const TwoSiteObservable<HamScalar, Symmetry>& H_in,
                             TimeScalar dt_in,
                             const Opts::Update& update_in,
                             const TMatrix<typename Symmetry::qType>& charges_in)
@@ -51,15 +52,15 @@ public:
     TMatrix<Tensor<Scalar, 1, 1, Symmetry>> spectrum_v;
 
 private:
-    const TwoSiteObservable<double, Symmetry>& H;
+    const TwoSiteObservable<HamScalar, Symmetry>& H;
     UnitCell cell_;
     TimeScalar dt;
     Opts::Update update;
     TMatrix<typename Symmetry::qType> charges;
 
-    TwoSiteObservable<double, Symmetry> U;
-    TwoSiteObservable<double, Symmetry> Usqrt;
-    TwoSiteObservable<double, Symmetry> Usq;
+    TwoSiteObservable<HamScalar, Symmetry> U;
+    TwoSiteObservable<HamScalar, Symmetry> Usqrt;
+    TwoSiteObservable<HamScalar, Symmetry> Usq;
 
     void t_step_h(iPEPS<Scalar, Symmetry>& Psi, int x, int y);
     void t_step_v(iPEPS<Scalar, Symmetry>& Psi, int x, int y);

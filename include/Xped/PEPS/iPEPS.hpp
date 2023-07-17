@@ -62,7 +62,7 @@ class iPEPS
     template <typename, typename, std::size_t, bool, Opts::CTMCheckpoint>
     friend class CTM;
 
-    template <typename, typename, typename>
+    template <typename, typename, typename, typename>
     friend class TimePropagator;
 
     friend class iPEPS<Scalar_, Symmetry_, true>;

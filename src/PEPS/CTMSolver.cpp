@@ -6,10 +6,10 @@
 
 namespace Xped {
 
-template <typename Scalar, typename Symmetry, Opts::CTMCheckpoint CPOpts, std::size_t TRank>
-template <typename HamScalar, bool AD>
+template <typename Scalar, typename Symmetry, typename HamScalar, Opts::CTMCheckpoint CPOpts, std::size_t TRank>
+template <bool AD>
 typename ScalarTraits<Scalar>::Real
-CTMSolver<Scalar, Symmetry, CPOpts, TRank>::solve(std::shared_ptr<iPEPS<Scalar, Symmetry>> Psi, Scalar* gradient, Hamiltonian<Symmetry>& H)
+CTMSolver<Scalar, Symmetry, HamScalar, CPOpts, TRank>::solve(std::shared_ptr<iPEPS<Scalar, Symmetry>> Psi, Scalar* gradient, Hamiltonian<Symmetry>& H)
 {
     util::Stopwatch<> total_t;
     Jack.set_A(Psi);

@@ -1,5 +1,6 @@
 #ifndef HASH_H_
 #define HASH_H_
+#include <complex>
 
 #include <boost/functional/hash.hpp>
 
@@ -14,6 +15,18 @@ namespace util {
 struct Permutation;
 }
 } // namespace Xped
+
+template <typename RealScalar>
+struct std::hash<std::complex<RealScalar>>
+{
+    inline std::size_t operator()(const std::complex<RealScalar>& ix) const
+    {
+        std::size_t seed = 0;
+        boost::hash_combine(seed, ix.real());
+        boost::hash_combine(seed, ix.imag());
+        return seed;
+    }
+};
 
 template <std::size_t Nq>
 struct std::hash<Xped::qarray<Nq>>

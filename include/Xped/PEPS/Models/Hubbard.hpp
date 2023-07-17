@@ -20,12 +20,12 @@
 
 namespace Xped {
 
-template <typename Symmetry>
-class Hubbard : public TwoSiteObservable<std::complex<double>, Symmetry>
+template <typename Symmetry, typename Scalar = double>
+class Hubbard : public TwoSiteObservable<Scalar, Symmetry>
 {
 public:
     Hubbard(std::map<std::string, Param>& params_in, const Pattern& pat_in, Opts::Bond bond = Opts::Bond::H | Opts::Bond::V)
-        : TwoSiteObservable<double, Symmetry>(pat_in, bond)
+        : TwoSiteObservable<std::complex<double>, Symmetry>(pat_in, bond)
         , params(params_in)
         , pat(pat_in)
     {
@@ -105,23 +105,27 @@ public:
             auto Bz = params["Bz"].get<TMatrix<double>>();
             if((bond & Opts::Bond::H) == Opts::Bond::H) {
                 for(auto pos = 0ul; pos < this->data_h.size(); ++pos) {
-                    auto [x, y] = pat.coord(pos);
-                    this->data_h(x, y) = -params["t"].get<double>() * hopping + params["U"].get<double>() * hubbard -
-                                         params["mu"].get<double>() * occ - Bx(x, y) * 0.25 * (tprod(F.Bx(), F.Id()) + tprod(F.Id(), F.Bx())).eval() -
-                                         By(x, y) * 0.25 * (tprod(F.By(), F.Id()) + tprod(F.Id(), F.By())).eval() -
-                                         Bz(x, y) * 0.25 * (tprod(F.Bz(), F.Id()) + tprod(F.Id(), F.Bz())).eval();
-
+                    auto [x, y] = pat.coords(pos);
+                    this->data_h(x, y) =
+                        -params["t"].get<double>() * hopping + params["U"].get<double>() * hubbard - params["mu"].get<double>() * occ;
+                    if constexpr(std::is_same_v<Scalar, std::complex<double>>) {
+                        this->data_h(x, y) = this->data_h(x, y) - Bx(x, y) * 0.25 * (tprod(F.Sx(), F.Id()) + tprod(F.Id(), F.Sx())).eval() -
+                                             By(x, y) * 0.25 * (tprod(F.Sy(), F.Id()) + tprod(F.Id(), F.Sy())).eval() -
+                                             Bz(x, y) * 0.25 * (tprod(F.Sz(), F.Id()) + tprod(F.Id(), F.Sz())).eval();
+                    }
                     // t = params["t"].get<double>() * hopping;
                 }
             }
             if((bond & Opts::Bond::V) == Opts::Bond::V) {
                 for(auto pos = 0ul; pos < this->data_v.size(); ++pos) {
-                    auto [x, y] = pat.coord(pos);
-                    this->data_v(x, y) = -params["t"].get<double>() * hopping + params["U"].get<double>() * hubbard -
-                                         params["mu"].get<double>() * occ - Bx(x, y) * 0.25 * (tprod(F.Bx(), F.Id()) + tprod(F.Id(), F.Bx())).eval() -
-                                         By(x, y) * 0.25 * (tprod(F.By(), F.Id()) + tprod(F.Id(), F.By())).eval() -
-                                         Bz(x, y) * 0.25 * (tprod(F.Bz(), F.Id()) + tprod(F.Id(), F.Bz())).eval();
-
+                    auto [x, y] = pat.coords(pos);
+                    this->data_v(x, y) =
+                        -params["t"].get<double>() * hopping + params["U"].get<double>() * hubbard - params["mu"].get<double>() * occ;
+                    if constexpr(std::is_same_v<Scalar, std::complex<double>>) {
+                        this->data_v(x, y) = this->data_v(x, y) - Bx(x, y) * 0.25 * (tprod(F.Sx(), F.Id()) + tprod(F.Id(), F.Sx())).eval() -
+                                             By(x, y) * 0.25 * (tprod(F.Sy(), F.Id()) + tprod(F.Id(), F.Sy())).eval() -
+                                             Bz(x, y) * 0.25 * (tprod(F.Sz(), F.Id()) + tprod(F.Id(), F.Sz())).eval();
+                    }
                     // t = params["t"].get<double>() * hopping;
                 }
             }

@@ -164,124 +164,135 @@ void TensorInterface::addScale(const Expr1& src, Expr2& dst, const Scalar& scale
     dst += scale * src;
 }
 
-    // methods rvalue
-    template <typename Scalar, std::size_t Rank1, std::size_t Rank2, Indextype... Is>
-    TType<Scalar, Rank1 + Rank2 - sizeof...(Is)> TensorInterface::contract(const TType<Scalar, Rank1>& T1, const TType<Scalar, Rank2>& T2)
-    {
-        static_assert(sizeof...(Is) % 2 == 0);
-        constexpr Indextype Ncon = sizeof...(Is) / 2;
-        static_assert(Rank1 + Rank2 >= Ncon);
-        static_assert(Ncon <= 4, "Contractions of more than 4 legs is currently not implemented for EigenTensorLib");
+// methods rvalue
+template <typename Scalar, std::size_t Rank1, std::size_t Rank2, Indextype... Is>
+TType<Scalar, Rank1 + Rank2 - sizeof...(Is)> TensorInterface::contract(const TType<Scalar, Rank1>& T1, const TType<Scalar, Rank2>& T2)
+{
+    static_assert(sizeof...(Is) % 2 == 0);
+    constexpr Indextype Ncon = sizeof...(Is) / 2;
+    static_assert(Rank1 + Rank2 >= Ncon);
+    static_assert(Ncon <= 5, "Contractions of more than 5 legs is currently not implemented for EigenTensorLib");
 
-        using seqC = seq::iseq<Indextype, Is...>;
-        if constexpr(Ncon == 1) {
-            // constexpr std::array<Eigen::IndexPair<Indextype >, Ncon> con = {Eigen::IndexPair<Indextype >(seq::at<0, seqC>, seq::at<1, seqC>)};
-            constexpr Eigen::IndexPairList<Eigen::type2indexpair<seq::at<0, seqC>, seq::at<1, seqC>>> con;
-            return T1.contract(T2, con);
-        } else if constexpr(Ncon == 2) {
-            // constexpr std::array<Eigen::IndexPair<Indextype >, Ncon> con = {Eigen::IndexPair<Indextype >(seq::at<0, seqC>, seq::at<1, seqC>),
-            //                                                                               Eigen::IndexPair<Indextype >(seq::at<2, seqC>, seq::at<3,
-            //                                                                               seqC>)};
-            constexpr Eigen::IndexPairList<Eigen::type2indexpair<seq::at<0, seqC>, seq::at<1, seqC>>,
-                                           Eigen::type2indexpair<seq::at<2, seqC>, seq::at<3, seqC>>>
-                con;
-            return T1.contract(T2, con);
-        } else if constexpr(Ncon == 3) {
-            // constexpr std::array<Eigen::IndexPair<Indextype >, Ncon> con = {Eigen::IndexPair<Indextype >(seq::at<0, seqC>, seq::at<1, seqC>),
-            //                                                                               Eigen::IndexPair<Indextype >(seq::at<2, seqC>, seq::at<3,
-            //                                                                               seqC>), Eigen::IndexPair<Indextype >(seq::at<4, seqC>,
-            //                                                                               seq::at<5, seqC>)};
-            constexpr Eigen::IndexPairList<Eigen::type2indexpair<seq::at<0, seqC>, seq::at<1, seqC>>,
-                                           Eigen::type2indexpair<seq::at<2, seqC>, seq::at<3, seqC>>,
-                                           Eigen::type2indexpair<seq::at<4, seqC>, seq::at<5, seqC>>>
-                con;
-            return T1.contract(T2, con);
-        } else if constexpr(Ncon == 4) {
-            // constexpr std::array<Eigen::IndexPair<Indextype >, Ncon> con = {
-            //         Eigen::IndexPair<Indextype >(seq::at<0, seqC>, seq::at<1, seqC>),
-            //         Eigen::IndexPair<Indextype >(seq::at<2, seqC>, seq::at<3, seqC>),
-            //         Eigen::IndexPair<Indextype >(seq::at<4, seqC>, seq::at<5, seqC>),
-            //         Eigen::IndexPair<Indextype >(seq::at<6, seqC>, seq::at<7, seqC>)
-            // };
-            constexpr Eigen::IndexPairList<Eigen::type2indexpair<seq::at<0, seqC>, seq::at<1, seqC>>,
-                                           Eigen::type2indexpair<seq::at<2, seqC>, seq::at<3, seqC>>,
-                                           Eigen::type2indexpair<seq::at<4, seqC>, seq::at<5, seqC>>,
-                                           Eigen::type2indexpair<seq::at<6, seqC>, seq::at<7, seqC>>>
-                con;
-            return T1.contract(T2, con);
-        }
+    using seqC = seq::iseq<Indextype, Is...>;
+    if constexpr(Ncon == 0) {
+        constexpr std::array<Eigen::IndexPair<Indextype>, Ncon> con{};
+        return T1.contract(T2, con);
+    } else if constexpr(Ncon == 1) {
+        // constexpr std::array<Eigen::IndexPair<Indextype >, Ncon> con = {Eigen::IndexPair<Indextype >(seq::at<0, seqC>, seq::at<1, seqC>)};
+        constexpr Eigen::IndexPairList<Eigen::type2indexpair<seq::at<0, seqC>, seq::at<1, seqC>>> con;
+        return T1.contract(T2, con);
+    } else if constexpr(Ncon == 2) {
+        // constexpr std::array<Eigen::IndexPair<Indextype >, Ncon> con = {Eigen::IndexPair<Indextype >(seq::at<0, seqC>, seq::at<1, seqC>),
+        //                                                                               Eigen::IndexPair<Indextype >(seq::at<2, seqC>, seq::at<3,
+        //                                                                               seqC>)};
+        constexpr Eigen::IndexPairList<Eigen::type2indexpair<seq::at<0, seqC>, seq::at<1, seqC>>,
+                                       Eigen::type2indexpair<seq::at<2, seqC>, seq::at<3, seqC>>>
+            con;
+        return T1.contract(T2, con);
+    } else if constexpr(Ncon == 3) {
+        // constexpr std::array<Eigen::IndexPair<Indextype >, Ncon> con = {Eigen::IndexPair<Indextype >(seq::at<0, seqC>, seq::at<1, seqC>),
+        //                                                                               Eigen::IndexPair<Indextype >(seq::at<2, seqC>, seq::at<3,
+        //                                                                               seqC>), Eigen::IndexPair<Indextype >(seq::at<4, seqC>,
+        //                                                                               seq::at<5, seqC>)};
+        constexpr Eigen::IndexPairList<Eigen::type2indexpair<seq::at<0, seqC>, seq::at<1, seqC>>,
+                                       Eigen::type2indexpair<seq::at<2, seqC>, seq::at<3, seqC>>,
+                                       Eigen::type2indexpair<seq::at<4, seqC>, seq::at<5, seqC>>>
+            con;
+        return T1.contract(T2, con);
+    } else if constexpr(Ncon == 4) {
+        // constexpr std::array<Eigen::IndexPair<Indextype >, Ncon> con = {
+        //         Eigen::IndexPair<Indextype >(seq::at<0, seqC>, seq::at<1, seqC>),
+        //         Eigen::IndexPair<Indextype >(seq::at<2, seqC>, seq::at<3, seqC>),
+        //         Eigen::IndexPair<Indextype >(seq::at<4, seqC>, seq::at<5, seqC>),
+        //         Eigen::IndexPair<Indextype >(seq::at<6, seqC>, seq::at<7, seqC>)
+        // };
+        constexpr Eigen::IndexPairList<Eigen::type2indexpair<seq::at<0, seqC>, seq::at<1, seqC>>,
+                                       Eigen::type2indexpair<seq::at<2, seqC>, seq::at<3, seqC>>,
+                                       Eigen::type2indexpair<seq::at<4, seqC>, seq::at<5, seqC>>,
+                                       Eigen::type2indexpair<seq::at<6, seqC>, seq::at<7, seqC>>>
+            con;
+        return T1.contract(T2, con);
+    } else /*if constexpr(Ncon == 5)*/ {
+        constexpr Eigen::IndexPairList<Eigen::type2indexpair<seq::at<0, seqC>, seq::at<1, seqC>>,
+                                       Eigen::type2indexpair<seq::at<2, seqC>, seq::at<3, seqC>>,
+                                       Eigen::type2indexpair<seq::at<4, seqC>, seq::at<5, seqC>>,
+                                       Eigen::type2indexpair<seq::at<6, seqC>, seq::at<7, seqC>>,
+                                       Eigen::type2indexpair<seq::at<8, seqC>, seq::at<9, seqC>>>
+            con;
+        return T1.contract(T2, con);
     }
+}
 
-    template <typename Scalar, std::size_t Rank, Indextype... p>
-    TType<Scalar, Rank> TensorInterface::shuffle(const TType<Scalar, Rank>& T)
-    {
-        static_assert(Rank == sizeof...(p));
-        std::array<Indextype, Rank> dims = {p...};
-        return TType<Scalar, Rank>(T.shuffle(dims));
-    }
+template <typename Scalar, std::size_t Rank, Indextype... p>
+TType<Scalar, Rank> TensorInterface::shuffle(const TType<Scalar, Rank>& T)
+{
+    static_assert(Rank == sizeof...(p));
+    std::array<Indextype, Rank> dims = {p...};
+    return TType<Scalar, Rank>(T.shuffle(dims));
+}
 
-    template <typename Scalar, std::size_t Rank, Indextype... p>
-    TType<Scalar, Rank> TensorInterface::shuffle(const TType<Scalar, Rank>& T, seq::iseq<Indextype, p...> s)
-    {
-        static_assert(Rank == sizeof...(p));
-        std::array<Indextype, Rank> dims = {p...};
-        return TType<Scalar, Rank>(T.shuffle(dims));
-    }
+template <typename Scalar, std::size_t Rank, Indextype... p>
+TType<Scalar, Rank> TensorInterface::shuffle(const TType<Scalar, Rank>& T, seq::iseq<Indextype, p...> s)
+{
+    static_assert(Rank == sizeof...(p));
+    std::array<Indextype, Rank> dims = {p...};
+    return TType<Scalar, Rank>(T.shuffle(dims));
+}
 
-    template <typename Expr, Indextype... p>
-    const Eigen::TensorShufflingOp<const std::array<Indextype, Eigen::internal::traits<Expr>::NumDimensions>, const Expr>
-    TensorInterface::shuffle_view(const Expr& T)
-    {
-        constexpr Indextype Rank = Eigen::internal::traits<Expr>::NumDimensions;
-        static_assert(Rank == sizeof...(p));
-        std::array<Indextype, Rank> dims = {p...};
-        return T.shuffle(dims);
-    }
+template <typename Expr, Indextype... p>
+const Eigen::TensorShufflingOp<const std::array<Indextype, Eigen::internal::traits<Expr>::NumDimensions>, const Expr>
+TensorInterface::shuffle_view(const Expr& T)
+{
+    constexpr Indextype Rank = Eigen::internal::traits<Expr>::NumDimensions;
+    static_assert(Rank == sizeof...(p));
+    std::array<Indextype, Rank> dims = {p...};
+    return T.shuffle(dims);
+}
 
-    // template<typename Scalar, std::size_t Rank, Indextype... p>
-    //  auto shuffle_view(const cMapTType<Scalar,Rank>& T)
-    // {
-    //         static_assert(Rank == sizeof...(p));
-    //         std::array<Indextype, Rank> dims = {p...};
-    //         return T.shuffle(dims);
-    // }
+// template<typename Scalar, std::size_t Rank, Indextype... p>
+//  auto shuffle_view(const cMapTType<Scalar,Rank>& T)
+// {
+//         static_assert(Rank == sizeof...(p));
+//         std::array<Indextype, Rank> dims = {p...};
+//         return T.shuffle(dims);
+// }
 
-    template <typename Scalar, int Rank1, std::size_t Rank2>
-    TType<Scalar, Rank2> TensorInterface::reshape(const TType<Scalar, Rank1>& T, const std::array<Indextype, Rank2>& dims)
-    {
-        return T.reshape(dims);
-    }
+template <typename Scalar, int Rank1, std::size_t Rank2>
+TType<Scalar, Rank2> TensorInterface::reshape(const TType<Scalar, Rank1>& T, const std::array<Indextype, Rank2>& dims)
+{
+    return T.reshape(dims);
+}
 
-    // methods lvalue
-    template <typename Scalar, std::size_t Rank1, std::size_t Rank2>
-    void TensorInterface::setSubTensor(TType<Scalar, Rank1> & T,
-                                       const std::array<Indextype, Rank2>& offsets,
-                                       const std::array<Indextype, Rank2>& extents,
-                                       const TType<Scalar, Rank1>& S)
-    {
-        T.slice(offsets, extents) = S;
-    }
+// methods lvalue
+template <typename Scalar, std::size_t Rank1, std::size_t Rank2>
+void TensorInterface::setSubTensor(TType<Scalar, Rank1>& T,
+                                   const std::array<Indextype, Rank2>& offsets,
+                                   const std::array<Indextype, Rank2>& extents,
+                                   const TType<Scalar, Rank1>& S)
+{
+    T.slice(offsets, extents) = S;
+}
 
-    template <typename Scalar, int Rank1, std::size_t Rank2>
-    const Eigen::TensorSlicingOp<const std::array<Indextype, Rank2>, const std::array<Indextype, Rank2>, const TType<Scalar, Rank1>>
-    TensorInterface::slice(TType<Scalar, Rank1> & T, const std::array<Indextype, Rank2>& offsets, const std::array<Indextype, Rank2>& extents)
-    {
-        return T.slice(offsets, extents);
-    }
+template <typename Scalar, int Rank1, std::size_t Rank2>
+const Eigen::TensorSlicingOp<const std::array<Indextype, Rank2>, const std::array<Indextype, Rank2>, const TType<Scalar, Rank1>>
+TensorInterface::slice(TType<Scalar, Rank1>& T, const std::array<Indextype, Rank2>& offsets, const std::array<Indextype, Rank2>& extents)
+{
+    return T.slice(offsets, extents);
+}
 
-    template <typename Scalar, int Rank1, std::size_t Rank2>
-    const Eigen::TensorReshapingOp<const std::array<Indextype, Rank2>, const TType<Scalar, Rank1>> TensorInterface::reshape(
-        TType<Scalar, Rank1> & T, const std::array<Indextype, Rank2>& dims)
-    {
-        return T.reshape(dims);
-    }
+template <typename Scalar, int Rank1, std::size_t Rank2>
+const Eigen::TensorReshapingOp<const std::array<Indextype, Rank2>, const TType<Scalar, Rank1>>
+TensorInterface::reshape(TType<Scalar, Rank1>& T, const std::array<Indextype, Rank2>& dims)
+{
+    return T.reshape(dims);
+}
 
-    template <typename Scalar, int Rank>
-    std::string TensorInterface::print(const TType<Scalar, Rank>& T)
-    {
-        std::stringstream ss;
-        ss << T;
-        return ss.str();
-    }
+template <typename Scalar, int Rank>
+std::string TensorInterface::print(const TType<Scalar, Rank>& T)
+{
+    std::stringstream ss;
+    ss << T;
+    return ss.str();
+}
 
 } // namespace Xped

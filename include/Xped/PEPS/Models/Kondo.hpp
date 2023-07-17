@@ -18,14 +18,14 @@
 
 namespace Xped {
 
-template <typename Symmetry>
-class Kondo : public TwoSiteObservable<double, Symmetry>
+template <typename Symmetry, typename Scalar = double>
+class Kondo : public TwoSiteObservable<Scalar, Symmetry>
 {
     using Op = SiteOperator<double, Symmetry>;
 
 public:
     Kondo(std::map<std::string, Param>& params_in, const Pattern& pat_in, Opts::Bond bond = Opts::Bond::H | Opts::Bond::V)
-        : TwoSiteObservable<double, Symmetry>(pat_in, bond)
+        : TwoSiteObservable<Scalar, Symmetry>(pat_in, bond)
         , params(params_in)
         , pat(pat_in)
     {

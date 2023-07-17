@@ -17,12 +17,12 @@
 
 namespace Xped {
 
-template <typename Symmetry>
-class KondoNecklace : public TwoSiteObservable<double, Symmetry>
+template <typename Symmetry, typename Scalar = double>
+class KondoNecklace : public TwoSiteObservable<Scalar, Symmetry>
 {
 public:
     KondoNecklace(std::map<std::string, Param>& params_in, const Pattern& pat_in, Opts::Bond bond = Opts::Bond::H | Opts::Bond::V)
-        : TwoSiteObservable<double, Symmetry>(pat_in, bond)
+        : TwoSiteObservable<Scalar, Symmetry>(pat_in, bond)
         , params(params_in)
         , pat(pat_in)
     {

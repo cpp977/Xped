@@ -20,44 +20,48 @@ namespace Xped {
    triang: E/N = −0.5445
      j1j2: E/N =
 */
-template <typename Symmetry>
-class Heisenberg : public TwoSiteObservable<double, Symmetry>
+template <typename Symmetry, typename Scalar = double>
+class Heisenberg : public TwoSiteObservable<Scalar, Symmetry>
 {
 public:
     Heisenberg(std::map<std::string, Param>& params_in, const Pattern& pat_in, Opts::Bond bond = Opts::Bond::H | Opts::Bond::V)
-        : TwoSiteObservable<double, Symmetry>(pat_in, bond)
+        : TwoSiteObservable<Scalar, Symmetry>(pat_in, bond)
         , params(params_in)
         , pat(pat_in)
     {
         if constexpr(std::is_same_v<Symmetry, Sym::SU2<Sym::SpinSU2>>) {
             used_params = {"J"};
         } else {
-            used_params = {"Jxy", "Jz"};
+            used_params = {"Jxy", "Jz", "Bz"};
         }
         if((bond & Opts::Bond::D1) == Opts::Bond::D1 or (bond & Opts::Bond::D2) == Opts::Bond::D2) { used_params.push_back("J2"); }
 
         B = SpinBase<Symmetry>(1, 2);
-        Tensor<double, 2, 2, Symmetry> gate;
+
+        Tensor<double, 2, 2, Symmetry> gate_nn, gate_d;
         if constexpr(std::is_same_v<Symmetry, Sym::SU2<Sym::SpinSU2>>) {
-            gate = params["J"].get<double>() * (std::sqrt(3.) * tprod(B.Sdag(0), B.S(0))).eval();
+            gate_nn = params["J"].get<double>() * (std::sqrt(3.) * tprod(B.Sdag(0), B.S(0))).eval();
+            gate_d = params["J2"].get<double>() * (std::sqrt(3.) * tprod(B.Sdag(0), B.S(0))).eval();
         } else if constexpr(Symmetry::ALL_ABELIAN) {
-            gate = params["Jz"].get<double>() * tprod(B.Sz(), B.Sz()) +
-                   0.5 * params["Jxy"].get<double>() * (tprod(B.Sp(), B.Sm()) + tprod(B.Sm(), B.Sp()));
+            gate_d = params["J2"].get<double>() * tprod(B.Sz(), B.Sz()) +
+                     0.5 * params["J2"].get<double>() * (tprod(B.Sp(), B.Sm()) + tprod(B.Sm(), B.Sp()));
+            gate_nn = params["Jz"].get<double>() * tprod(B.Sz(), B.Sz()) +
+                      0.5 * params["Jxy"].get<double>() * (tprod(B.Sp(), B.Sm()) + tprod(B.Sm(), B.Sp()));
         } else {
             assert(false and "Symmetry is not supported in Heisenberg model.");
         }
 
         if((bond & Opts::Bond::H) == Opts::Bond::H) {
-            for(auto& t : this->data_h) { t = gate; }
+            for(auto& t : this->data_h) { t = gate_nn; }
         }
         if((bond & Opts::Bond::V) == Opts::Bond::V) {
-            for(auto& t : this->data_v) { t = gate; }
+            for(auto& t : this->data_v) { t = gate_nn; }
         }
         if((bond & Opts::Bond::D1) == Opts::Bond::D1) {
-            for(auto& t : this->data_d1) { t = params["J2"].get<double>() * gate; }
+            for(auto& t : this->data_d1) { t = gate_d; }
         }
         if((bond & Opts::Bond::D2) == Opts::Bond::D2) {
-            for(auto& t : this->data_d2) { t = params["J2"].get<double>() * gate; }
+            for(auto& t : this->data_d2) { t = gate_d; }
         }
     }
 

@@ -1,0 +1,45 @@
+diff --git a/stan/math/prim/eigen_plugins.h b/stan/math/prim/eigen_plugins.h
+index 98e54c8a..d6a52d4b 100644
+--- a/stan/math/prim/eigen_plugins.h
++++ b/stan/math/prim/eigen_plugins.h
+@@ -44,12 +44,10 @@ using forward_return_t = std::conditional_t<std::is_const<std::remove_reference_
+  * (i.e. A.adj().val()). The other for passing and returning by value, used directly
+  * with matrices of doubles (i.e. A.val(), where A is of type MatrixXd).
+  *
+- * For definitions of EIGEN_EMPTY_STRUCT_CTOR, EIGEN_DEVICE_FUNC, and
++ * For definitions of EIGEN_DEVICE_FUNC, and
+  * EIGEN_STRONG_INLINE; see: https://eigen.tuxfamily.org/dox/XprHelper_8h_source.html
+  */
+ struct val_Op{
+-  EIGEN_EMPTY_STRUCT_CTOR(val_Op);
+-
+   //Returns value from a vari*
+   template<typename T = Scalar>
+   EIGEN_DEVICE_FUNC EIGEN_STRONG_INLINE
+@@ -114,8 +112,6 @@ val() { return CwiseUnaryView<val_Op, Derived>(derived());
+  * Structure to return tangent from an fvar.
+  */
+ struct d_Op {
+-  EIGEN_EMPTY_STRUCT_CTOR(d_Op);
+-
+   //Returns tangent from an fvar
+   template<typename T = Scalar>
+   EIGEN_DEVICE_FUNC EIGEN_STRONG_INLINE
+@@ -145,8 +141,6 @@ d() { return CwiseUnaryView<d_Op, Derived>(derived());
+  * first point to the underlying vari* (in the case of var).
+  */
+ struct adj_Op {
+-  EIGEN_EMPTY_STRUCT_CTOR(adj_Op);
+-
+   //Returns adjoint from a vari*
+   template<typename T = Scalar>
+   EIGEN_DEVICE_FUNC EIGEN_STRONG_INLINE
+@@ -190,8 +184,6 @@ adj() { return CwiseUnaryView<adj_Op, Derived>(derived());
+  * Structure to return vari* from a var.
+  */
+ struct vi_Op {
+-  EIGEN_EMPTY_STRUCT_CTOR(vi_Op);
+-
+   //Returns vari* from a var
+   template<typename T = Scalar>
+   EIGEN_DEVICE_FUNC EIGEN_STRONG_INLINE

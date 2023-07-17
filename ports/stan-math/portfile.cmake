@@ -4,6 +4,8 @@ vcpkg_from_github(
     REF v4.4.0
     SHA512 d841adfe67c59af24e4122fe088858b16fde2ee4fb2565008631af944ac84dd34b0766cffa5908a29d6b4ba991630557f74dc77643fbb5cffc2fa4a5834220ea
     HEAD_REF develop
+    PATCHES
+        0001_fix_eigen_plugins.patch
 )
 
 file(INSTALL "${SOURCE_PATH}/stan" DESTINATION "${CURRENT_PACKAGES_DIR}/include")

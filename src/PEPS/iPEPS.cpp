@@ -338,16 +338,17 @@ void iPEPS<Scalar, Symmetry, ENABLE_AD>::normalize()
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>
 std::size_t iPEPS<Scalar, Symmetry, ENABLE_AD>::plainSize() const
 {
+    std::size_t res = 0;
     switch(sym()) {
     case Opts::DiscreteSym::None: {
-        std::size_t res = 0;
         for(auto it = As.cbegin(); it != As.cend(); ++it) { res += it->plainSize(); }
-        return res;
+        break;
     }
     case Opts::DiscreteSym::C4v: {
-        return sym_map.first;
+        res = sym_map.first;
     }
     }
+    return res;
 }
 
 template <typename Scalar, typename Symmetry, bool ENABLE_AD>

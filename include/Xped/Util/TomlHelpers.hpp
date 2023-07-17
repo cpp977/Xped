@@ -2,6 +2,7 @@
 #define XPED_TOML_HELPERS_HPP_
 
 #include <any>
+#include <cassert>
 #include <exception>
 #include <map>
 #include <string>
@@ -9,6 +10,7 @@
 #include "toml.hpp"
 
 #include "Xped/PEPS/Bonds.hpp"
+#include "Xped/PEPS/Unitcell.hpp"
 #include "Xped/Util/Param.hpp"
 
 namespace Xped::util {
@@ -22,7 +24,7 @@ T enum_from_toml(const toml::value& t)
     return out;
 }
 
-std::map<std::string, Param> params_from_toml(const toml::value& t)
+std::map<std::string, Param> params_from_toml(const toml::value& t, const UnitCell& cell)
 {
     std::map<std::string, Param> params;
     for(const auto& [k, v] : t.as_table()) {
@@ -32,7 +34,14 @@ std::map<std::string, Param> params_from_toml(const toml::value& t)
             if(v.at(0).is_floating()) {
                 params[k] = Param{.value = toml::get<std::vector<double>>(v)};
             } else if(v.at(0).is_array()) {
-                params[k] = Param{.value = toml::get<std::vector<std::vector<double>>>(v)};
+                TMatrix<double> p(cell.pattern);
+                auto p_vec = toml::get<std::vector<std::vector<double>>>(v);
+                assert(v.size() == cell.Lx);
+                assert(v[0].size() == cell.Ly);
+                for(int x = 0; x < v.size(); ++x) {
+                    for(int x = 0; x < v.size(); ++x) { p(x, y) = p_vec[x][y]; }
+                }
+                params[k] = Param{.value = p_vec};
             }
         } else {
             throw std::invalid_argument("Bad model parameters.");

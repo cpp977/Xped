@@ -117,7 +117,8 @@ std::conditional_t<ENABLE_AD, stan::math::var, Scalar> fourByfour(iPEPS<Scalar, 
     return res;
 }
 
-consteval std::array<int, 16> get_array1_h(std::size_t pos)
+template <std::size_t pos>
+consteval std::array<int, 16> get_array1_h()
 {
     std::array<int, 16> res{};
     std::iota(res.begin(), res.begin() + pos, 1);
@@ -127,7 +128,8 @@ consteval std::array<int, 16> get_array1_h(std::size_t pos)
     return res;
 }
 
-consteval std::array<int, 16> get_array2_h(std::size_t pos)
+template <std::size_t pos>
+consteval std::array<int, 16> get_array2_h()
 {
     std::array<int, 16> res{};
     std::iota(res.begin(), res.begin() + pos, 1);
@@ -140,8 +142,8 @@ consteval std::array<int, 16> get_array2_h(std::size_t pos)
 template <std::size_t pos, typename Scalar, typename Symmetry, bool ENABLE_AD, typename OpScalar, bool HERMITIAN>
 auto calcE_h(const Tensor<Scalar, 0, 16, Symmetry, ENABLE_AD>& psi, TwoSiteObservable<OpScalar, Symmetry, HERMITIAN>& op)
 {
-    constexpr auto a1 = get_array1_h(pos);
-    constexpr auto a2 = get_array2_h(pos);
+    constexpr auto a1 = get_array1_h<pos>();
+    constexpr auto a2 = get_array2_h<pos>();
     auto rhoA = psi.template contract<a1, a2, 2>(psi.adjoint().eval());
     auto Id2A = Tensor<Scalar, 2, 2, Symmetry, false>::Identity(rhoA.uncoupledCodomain(), rhoA.uncoupledDomain(), rhoA.world());
     auto normA = rhoA.template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0>(Id2A.twist(0).twist(1)).trace();
@@ -156,7 +158,8 @@ auto calcE_h(const Tensor<Scalar, 0, 16, Symmetry, ENABLE_AD>& psi, TwoSiteObser
     return resA;
 }
 
-consteval std::array<int, 16> get_array1_h2(std::size_t pos)
+template <std::size_t pos>
+consteval std::array<int, 16> get_array1_h2()
 {
     std::array<int, 16> res{};
     std::iota(res.begin(), res.begin() + pos, 1);
@@ -167,7 +170,8 @@ consteval std::array<int, 16> get_array1_h2(std::size_t pos)
     return res;
 }
 
-consteval std::array<int, 16> get_array2_h2(std::size_t pos)
+template <std::size_t pos>
+consteval std::array<int, 16> get_array2_h2()
 {
     std::array<int, 16> res{};
     std::iota(res.begin(), res.begin() + pos, 1);
@@ -181,8 +185,8 @@ consteval std::array<int, 16> get_array2_h2(std::size_t pos)
 template <std::size_t pos, typename Scalar, typename Symmetry, bool ENABLE_AD, typename OpScalar, bool HERMITIAN>
 auto calcE_h2(const Tensor<Scalar, 0, 16, Symmetry, ENABLE_AD>& psi, TwoSiteObservable<OpScalar, Symmetry, HERMITIAN>& op)
 {
-    constexpr auto a1 = get_array1_h2(pos);
-    constexpr auto a2 = get_array2_h2(pos);
+    constexpr auto a1 = get_array1_h2<pos>();
+    constexpr auto a2 = get_array2_h2<pos>();
     auto rhoA = psi.template contract<a1, a2, 2>(psi.adjoint().eval());
     auto Id2A = Tensor<Scalar, 2, 2, Symmetry, false>::Identity(rhoA.uncoupledCodomain(), rhoA.uncoupledDomain(), rhoA.world());
     auto normA = rhoA.template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0>(Id2A.twist(0).twist(1)).trace();
@@ -197,7 +201,8 @@ auto calcE_h2(const Tensor<Scalar, 0, 16, Symmetry, ENABLE_AD>& psi, TwoSiteObse
     return resA;
 }
 
-consteval std::array<int, 16> get_array1_hp(std::size_t pos)
+template <std::size_t pos>
+consteval std::array<int, 16> get_array1_hp()
 {
     std::array<int, 16> res{};
     std::iota(res.begin(), res.begin() + pos - 9, 1);
@@ -208,7 +213,8 @@ consteval std::array<int, 16> get_array1_hp(std::size_t pos)
     return res;
 }
 
-consteval std::array<int, 16> get_array2_hp(std::size_t pos)
+template <std::size_t pos>
+consteval std::array<int, 16> get_array2_hp()
 {
     std::array<int, 16> res{};
     std::iota(res.begin(), res.begin() + pos - 9, 1);
@@ -222,8 +228,8 @@ consteval std::array<int, 16> get_array2_hp(std::size_t pos)
 template <std::size_t pos, typename Scalar, typename Symmetry, bool ENABLE_AD, typename OpScalar, bool HERMITIAN>
 auto calcE_hp(const Tensor<Scalar, 0, 16, Symmetry, ENABLE_AD>& psi, TwoSiteObservable<OpScalar, Symmetry, HERMITIAN>& op)
 {
-    constexpr auto a1 = get_array1_hp(pos);
-    constexpr auto a2 = get_array2_hp(pos);
+    constexpr auto a1 = get_array1_hp<pos>();
+    constexpr auto a2 = get_array2_hp<pos>();
     auto rhoA = psi.template contract<a1, a2, 2>(psi.adjoint().eval());
     auto Id2A = Tensor<Scalar, 2, 2, Symmetry, false>::Identity(rhoA.uncoupledCodomain(), rhoA.uncoupledDomain(), rhoA.world());
     auto normA = rhoA.template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0>(Id2A.twist(0).twist(1)).trace();
@@ -238,7 +244,8 @@ auto calcE_hp(const Tensor<Scalar, 0, 16, Symmetry, ENABLE_AD>& psi, TwoSiteObse
     return resA;
 }
 
-consteval std::array<int, 16> get_array1_v(std::size_t pos)
+template <std::size_t pos>
+consteval std::array<int, 16> get_array1_v()
 {
     std::array<int, 16> res{};
     std::iota(res.begin(), res.begin() + pos, 1);
@@ -249,7 +256,8 @@ consteval std::array<int, 16> get_array1_v(std::size_t pos)
     return res;
 }
 
-consteval std::array<int, 16> get_array2_v(std::size_t pos)
+template <std::size_t pos>
+consteval std::array<int, 16> get_array2_v()
 {
     std::array<int, 16> res{};
     std::iota(res.begin(), res.begin() + pos, 1);
@@ -263,8 +271,8 @@ consteval std::array<int, 16> get_array2_v(std::size_t pos)
 template <std::size_t pos, typename Scalar, typename Symmetry, bool ENABLE_AD, typename OpScalar, bool HERMITIAN>
 auto calcE_v(const Tensor<Scalar, 0, 16, Symmetry, ENABLE_AD>& psi, TwoSiteObservable<OpScalar, Symmetry, HERMITIAN>& op)
 {
-    constexpr auto a1 = get_array1_v(pos);
-    constexpr auto a2 = get_array2_v(pos);
+    constexpr auto a1 = get_array1_v<pos>();
+    constexpr auto a2 = get_array2_v<pos>();
     auto rhoA = psi.template contract<a1, a2, 2>(psi.adjoint().eval());
     auto Id2A = Tensor<Scalar, 2, 2, Symmetry, false>::Identity(rhoA.uncoupledCodomain(), rhoA.uncoupledDomain(), rhoA.world());
     auto normA = rhoA.template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0>(Id2A.twist(0).twist(1)).trace();
@@ -279,7 +287,8 @@ auto calcE_v(const Tensor<Scalar, 0, 16, Symmetry, ENABLE_AD>& psi, TwoSiteObser
     return resA;
 }
 
-consteval std::array<int, 16> get_array1_vp(std::size_t pos)
+template <std::size_t pos>
+consteval std::array<int, 16> get_array1_vp()
 {
     std::array<int, 16> res{};
     std::iota(res.begin(), res.begin() + pos - 6, 1);
@@ -294,7 +303,8 @@ consteval std::array<int, 16> get_array1_vp(std::size_t pos)
     return res;
 }
 
-consteval std::array<int, 16> get_array2_vp(std::size_t pos)
+template <std::size_t pos>
+consteval std::array<int, 16> get_array2_vp()
 {
     std::array<int, 16> res{};
     std::iota(res.begin(), res.begin() + pos - 6, 1);
@@ -312,8 +322,8 @@ consteval std::array<int, 16> get_array2_vp(std::size_t pos)
 template <std::size_t pos, typename Scalar, typename Symmetry, bool ENABLE_AD, typename OpScalar, bool HERMITIAN>
 auto calcE_vp(const Tensor<Scalar, 0, 16, Symmetry, ENABLE_AD>& psi, TwoSiteObservable<OpScalar, Symmetry, HERMITIAN>& op)
 {
-    constexpr auto a1 = get_array1_vp(pos);
-    constexpr auto a2 = get_array2_vp(pos);
+    constexpr auto a1 = get_array1_vp<pos>();
+    constexpr auto a2 = get_array2_vp<pos>();
     auto rhoA = psi.template contract<a1, a2, 2>(psi.adjoint().eval());
     auto Id2A = Tensor<Scalar, 2, 2, Symmetry, false>::Identity(rhoA.uncoupledCodomain(), rhoA.uncoupledDomain(), rhoA.world());
     auto normA = rhoA.template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0>(Id2A.twist(0).twist(1)).trace();

@@ -13,7 +13,12 @@
 
 namespace Xped {
 
-template <typename Scalar_, typename Symmetry_, typename HamScalar_, Opts::CTMCheckpoint CPOpts = Opts::CTMCheckpoint{}, std::size_t TRank = 2>
+template <typename Scalar_,
+          typename Symmetry_,
+          typename HamScalar_,
+          bool ALL_OUT_LEGS = false,
+          Opts::CTMCheckpoint CPOpts = Opts::CTMCheckpoint{},
+          std::size_t TRank = 2>
 class CTMSolver
 {
 public:
@@ -28,7 +33,7 @@ public:
     explicit CTMSolver(Opts::CTM opts)
         : opts(opts)
     {
-        Jack = CTM<Scalar, Symmetry, TRank, false>(opts.chi, opts.init); //, opts.cell);
+        Jack = CTM<Scalar, Symmetry, TRank, ALL_OUT_LEGS, false>(opts.chi, opts.init); //, opts.cell);
         if(opts.load != "") {
             Jack.loadFromMatlab(std::filesystem::path(opts.load), "cpp", opts.qn_scale);
             REINIT_ENV = false;
@@ -37,11 +42,11 @@ public:
     }
 
     template <bool AD>
-    typename ScalarTraits<Scalar>::Real solve(std::shared_ptr<iPEPS<Scalar, Symmetry>> Psi, Scalar* gradient, Hamiltonian<Symmetry>& H);
+    typename ScalarTraits<Scalar>::Real solve(std::shared_ptr<iPEPS<Scalar, Symmetry, ALL_OUT_LEGS>> Psi, Scalar* gradient, Hamiltonian<Symmetry>& H);
 
-    XPED_CONST CTM<Scalar, Symmetry, TRank, false>& getCTM() XPED_CONST { return Jack; }
+    XPED_CONST CTM<Scalar, Symmetry, TRank, ALL_OUT_LEGS, false>& getCTM() XPED_CONST { return Jack; }
 
-    void setCTM(XPED_CONST CTM<Scalar, Symmetry, TRank, false>& in) { Jack = in; }
+    void setCTM(XPED_CONST CTM<Scalar, Symmetry, TRank, ALL_OUT_LEGS, false>& in) { Jack = in; }
 
     template <typename Ar>
     void serialize(Ar& ar)
@@ -52,7 +57,7 @@ public:
     Opts::CTM opts{};
 
 private:
-    CTM<Scalar, Symmetry, TRank> Jack;
+    CTM<Scalar, Symmetry, TRank, ALL_OUT_LEGS> Jack;
     bool REINIT_ENV = true;
     typename ScalarTraits<Scalar>::Real grad_norm = 1000.;
 };

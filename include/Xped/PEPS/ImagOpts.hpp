@@ -46,7 +46,7 @@ struct Imag
     bool resume = false;
 
     std::string load = "";
-    LoadFormat load_format = LoadFormat::NATIVE;
+    LoadFormat load_format = LoadFormat::Native;
     int qn_scale = 1;
 
     std::size_t seed = 0ul;

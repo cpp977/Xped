@@ -1,5 +1,6 @@
 #include <cstddef>
 #include <cstdio>
+#include <fstream>
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -10,6 +11,8 @@
 #include "spdlog/fmt/ostr.h"
 #include "spdlog/sinks/basic_file_sink.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
+
+#include "nlohmann/json.hpp"
 
 #ifdef _OPENMP
 #    include "omp.h"
@@ -39,18 +42,20 @@ XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100)
 
 #include "Xped/Core/AdjointOp.hpp"
 #include "Xped/Core/Tensor.hpp"
-#include "Xped/MPS/Mps.hpp"
-#include "Xped/MPS/MpsAlgebra.hpp"
+// #include "Xped/MPS/Mps.hpp"
+// #include "Xped/MPS/MpsAlgebra.hpp"
 
-// #include "Xped/PEPS/Models/KondoNecklace.hpp"
-// #include "Xped/PEPS/iPEPS.hpp"
-
+#include "Xped/PEPS/CTM.hpp"
+#include "Xped/PEPS/ExactContractions.hpp"
+#include "Xped/PEPS/Models/Heisenberg.hpp"
+#include "Xped/PEPS/iPEPS.hpp"
 // #include "Xped/Physics/FermionBase.hpp"
 // #include "Xped/Physics/SpinBase.hpp"
 // #include "Xped/Physics/SpinlessFermionBase.hpp"
 
 #include "Xped/Util/Stopwatch.hpp"
 
+#include "Xped/IO/Json.hpp"
 #include "Xped/IO/Matlab.hpp"
 
 int main(int argc, char* argv[])
@@ -110,10 +115,67 @@ int main(int argc, char* argv[])
 
     SPDLOG_INFO("Number of MPI processes: {}", world.np);
 
+    std::string config_file = argc > 1 ? argv[1] : "config.toml";
+    toml::value data;
+    try {
+        data = toml::parse(config_file);
+        // std::cout << data << "\n";
+    } catch(const toml::syntax_error& err) {
+        std::cerr << "Parsing failed:\n" << err.what() << "\n";
+        return 1;
+    }
+
+    std::filesystem::path p2json;
+
+    if(data["json"].contains("load")) {
+        std::filesystem::path tmp_of(static_cast<std::string>(data["json"].at("load").as_string()));
+        if(tmp_of.is_relative()) {
+            p2json = std::filesystem::current_path() / tmp_of;
+        } else {
+            p2json = tmp_of;
+        }
+    }
+
     using Symmetry = Xped::Sym::U0<>;
-    Xped::Qbasis<Symmetry, 1> B;
-    B.setRandom(10);
-    Xped::Tensor<double, 1, 1, Symmetry> T({{B}}, {{B}});
+    using Scalar = double;
+    Xped::UnitCell c(1, 1);
+    Xped::TMatrix<Symmetry::qType> charges(c.pattern);
+    charges.setConstant(Symmetry::qvacuum());
+    std::map<std::string, Xped::Param> params = {
+        {"Jxy", Xped::Param{1.}}, {"Jz", Xped::Param{1.}}, {"J", Xped::Param{1.}}, {"Bz", Xped::Param{0.}}, {"J2", Xped::Param{0.}}};
+    Xped::Opts::Bond bonds = Xped::Opts::Bond::V | Xped::Opts::Bond::H;
+    std::unique_ptr<Xped::TwoSiteObservable<double, Symmetry>> ham;
+    ham = std::make_unique<Xped::Heisenberg<Symmetry>>(params, c.pattern, bonds);
+    Xped::TMatrix<Xped::Qbasis<Symmetry, 1>> phys_basis(c.pattern);
+    phys_basis.setConstant(ham->data_h[0].uncoupledDomain()[0]);
+
+    std::size_t D = 2;
+    if(data["random"].contains("D")) { D = static_cast<std::size_t>(data["random"].at("D").as_integer()); }
+    Xped::TMatrix<Xped::Qbasis<Symmetry, 1>> left_aux(c.pattern), top_aux(c.pattern);
+    Xped::iPEPS<Scalar, Symmetry, false> Psi(c, D, left_aux, top_aux, phys_basis, charges, Xped::Opts::DiscreteSym::C4v);
+    std::size_t seed = 1;
+    if(data["random"].contains("seed")) { seed = static_cast<std::size_t>(data["random"].at("seed").as_integer()); }
+    bool C4_SYM = true;
+    if(data["random"].contains("c4")) { C4_SYM = data["random"].at("c4").as_boolean(); }
+    Psi.setRandom(seed);
+    Psi.normalize();
+    // Psi.As[0].print(std::cout, true);
+    // std::cout << std::endl;
+    // auto norm1 = fourByfour(Psi);
+    auto energy1 = fourByfour(Psi, *ham);
+    auto energy2 = fourByfour3(Psi, *ham);
+    fmt::print("E1={}, E2={}\n", energy1, energy2);
+    // Psi.As[0] = Psi.As[0] * 2.;
+    // Psi.Adags[0] = Psi.As[0].adjoint().eval().template permute<0, 3, 4, 2, 0, 1>();
+    // auto energy2 = fourByfour(Psi, *ham);
+    // fmt::print("energy1={}, energy2={}\n", energy1, energy2);
+    // using Symmetry1 = Xped::Sym::ZN<Xped::Sym::SpinU1, 36>;
+    // auto A1 = Xped::IO::loadSU2JsonTensor<Symmetry1>(p2json);
+    // using Symmetry2 = Xped::Sym::U0<>;
+    // auto A2 = Xped::IO::loadSU2JsonTensor<Symmetry2>(p2json);
+    // using Symmetry3 = Xped::Sym::SU2<Xped::Sym::SpinSU2>;
+    // auto A3 = Xped::IO::loadSU2JsonTensor<Symmetry3>(p2json);
+
     // static thread_local std::mt19937 engine(std::random_device{}());
     // T.setRandom(engine);
     // HighFive::File file("/home/user/matlab-tmp/math5.mat", HighFive::File::ReadOnly);

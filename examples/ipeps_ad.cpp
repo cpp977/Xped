@@ -179,13 +179,13 @@ int main(int argc, char* argv[])
 
         Xped::TMatrix<Xped::Qbasis<Symmetry, 1>> phys_basis(c.pattern);
         phys_basis.setConstant(ham->data_h[0].uncoupledDomain()[0]);
-        auto Psi = std::make_shared<Xped::iPEPS<Scalar, Symmetry, false>>(c, D, left_aux, top_aux, phys_basis, charges);
+        auto Psi = std::make_shared<Xped::iPEPS<Scalar, Symmetry, false, false>>(c, D, left_aux, top_aux, phys_basis, charges);
         Psi->setRandom();
 
         constexpr Xped::Opts::CTMCheckpoint cp_opts{
             .GROW_ALL = true, .MOVE = true, .CORNER = true, .PROJECTORS = true, .RENORMALIZE = true, .RDM = true};
         constexpr std::size_t TRank = 2;
-        Xped::iPEPSSolverAD<Scalar, HamScalar, Symmetry, cp_opts, TRank> Jack(o_opts, c_opts, Psi, *ham);
+        Xped::iPEPSSolverAD<Scalar, HamScalar, Symmetry, false, cp_opts, TRank> Jack(o_opts, c_opts, Psi, *ham);
 
         Jack.solve();
 

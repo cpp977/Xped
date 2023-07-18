@@ -13,7 +13,7 @@
 
 namespace Xped {
 
-template <typename, typename, std::size_t, bool, Opts::CTMCheckpoint>
+template <typename, typename, std::size_t, bool, bool, Opts::CTMCheckpoint>
 class CTM;
 
 template <typename Scalar, typename Symmetry, bool HERMITIAN = true>

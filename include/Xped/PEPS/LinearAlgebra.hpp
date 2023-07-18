@@ -16,13 +16,27 @@
 
 namespace Xped {
 
-template <typename Scalar, typename Symmetry, std::size_t TRank, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts, typename OpScalar, bool HERMITIAN>
+template <typename Scalar,
+          typename Symmetry,
+          std::size_t TRank,
+          bool ALL_OUT_LEGS,
+          bool ENABLE_AD,
+          Opts::CTMCheckpoint CPOpts,
+          typename OpScalar,
+          bool HERMITIAN>
 TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, typename OneSiteObservable<OpScalar, Symmetry, HERMITIAN>::ObsScalar>>
-avg(XPED_CONST CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>& env, OneSiteObservable<OpScalar, Symmetry, HERMITIAN>& op);
+avg(XPED_CONST CTM<Scalar, Symmetry, TRank, ALL_OUT_LEGS, ENABLE_AD, CPOpts>& env, OneSiteObservable<OpScalar, Symmetry, HERMITIAN>& op);
 
-template <typename Scalar, typename Symmetry, std::size_t TRank, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts, typename OpScalar, bool HERMITIAN>
+template <typename Scalar,
+          typename Symmetry,
+          std::size_t TRank,
+          bool ALL_OUT_LEGS,
+          bool ENABLE_AD,
+          Opts::CTMCheckpoint CPOpts,
+          typename OpScalar,
+          bool HERMITIAN>
 std::array<TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, typename TwoSiteObservable<OpScalar, Symmetry, HERMITIAN>::ObsScalar>>, 4>
-avg(XPED_CONST CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>& env, TwoSiteObservable<OpScalar, Symmetry, HERMITIAN>& op);
+avg(XPED_CONST CTM<Scalar, Symmetry, TRank, ALL_OUT_LEGS, ENABLE_AD, CPOpts>& env, TwoSiteObservable<OpScalar, Symmetry, HERMITIAN>& op);
 
 } // namespace Xped
 

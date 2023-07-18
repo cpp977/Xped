@@ -6,9 +6,16 @@
 
 namespace Xped {
 
-template <typename Scalar, typename Symmetry, std::size_t TRank, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts, typename OpScalar, bool HERMITIAN>
+template <typename Scalar,
+          typename Symmetry,
+          std::size_t TRank,
+          bool ALL_OUT_LEGS,
+          bool ENABLE_AD,
+          Opts::CTMCheckpoint CPOpts,
+          typename OpScalar,
+          bool HERMITIAN>
 TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, typename OneSiteObservable<OpScalar, Symmetry, HERMITIAN>::ObsScalar>>
-avg(XPED_CONST CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>& env, OneSiteObservable<OpScalar, Symmetry, HERMITIAN>& op)
+avg(XPED_CONST CTM<Scalar, Symmetry, TRank, ALL_OUT_LEGS, ENABLE_AD, CPOpts>& env, OneSiteObservable<OpScalar, Symmetry, HERMITIAN>& op)
 {
     using ObsScalar = typename OneSiteObservable<OpScalar, Symmetry, HERMITIAN>::ObsScalar;
     assert(env.RDM_COMPUTED());
@@ -62,9 +69,16 @@ avg(XPED_CONST CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>& env, OneSiteObse
     return o;
 }
 
-template <typename Scalar, typename Symmetry, std::size_t TRank, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts, typename OpScalar, bool HERMITIAN>
+template <typename Scalar,
+          typename Symmetry,
+          std::size_t TRank,
+          bool ALL_OUT_LEGS,
+          bool ENABLE_AD,
+          Opts::CTMCheckpoint CPOpts,
+          typename OpScalar,
+          bool HERMITIAN>
 std::array<TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, typename TwoSiteObservable<OpScalar, Symmetry, HERMITIAN>::ObsScalar>>, 4>
-avg(XPED_CONST CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>& env, TwoSiteObservable<OpScalar, Symmetry, HERMITIAN>& op)
+avg(XPED_CONST CTM<Scalar, Symmetry, TRank, ALL_OUT_LEGS, ENABLE_AD, CPOpts>& env, TwoSiteObservable<OpScalar, Symmetry, HERMITIAN>& op)
 {
     assert(env.RDM_COMPUTED());
 
@@ -139,20 +153,20 @@ avg(XPED_CONST CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>& env, TwoSiteObse
                         Hvdag = Hs.diag_sqrt().eval() * Hvdag;
 
                         auto C1T1 =
-                            env.C1s(x - 1, y - 1).template contract<std::array{-1, 1}, std::array{1, -2, -3, -4}, 1, ENABLE_AD>(env.T1s(x, y - 1));
+                            env.CA1s(x - 1, y - 1).template contract<std::array{-1, 1}, std::array{1, -2, -3, -4}, 1, ENABLE_AD>(env.TA1s(x, y - 1));
                         auto T4C1T1 =
-                            env.T4s(x - 1, y).template contract<std::array{1, -1, -2, -3}, std::array{1, -4, -5, -6}, 3, ENABLE_AD>(C1T1.twist(0));
+                            env.TA4s(x - 1, y).template contract<std::array{1, -1, -2, -3}, std::array{1, -4, -5, -6}, 3, ENABLE_AD>(C1T1.twist(0));
                         auto T4C1T1A =
                             T4C1T1.template contract<std::array{-1, 1, -2, -3, 2, -4}, std::array{1, 2, -5, -6, -7}, 4, ENABLE_AD>(env.A->As(x, y));
                         auto T4C1T1AH = T4C1T1A.template contract<std::array{-1, -2, -3, -4, -5, -6, 1}, std::array{1, -7, -8}, 6, ENABLE_AD>(Hu);
                         auto Q1H = T4C1T1AH.template contract<std::array{-1, 1, -4, 2, -5, -2, 3, -7}, std::array{1, 2, 3, -6, -3}, 3, ENABLE_AD>(
                             env.A->Adags(x, y).twist(3).twist(4));
 
-                        auto C3T3 = env.C3s(x + 2, y + 2)
+                        auto C3T3 = env.CA3s(x + 2, y + 2)
                                         .twist(1)
-                                        .template contract<std::array{-1, 1}, std::array{-2, -3, -4, 1}, 1, ENABLE_AD>(env.T3s(x + 1, y + 2));
+                                        .template contract<std::array{-1, 1}, std::array{-2, -3, -4, 1}, 1, ENABLE_AD>(env.TA3s(x + 1, y + 2));
                         auto T2C3T3 =
-                            env.T2s(x + 2, y + 1).template contract<std::array{-1, -2, -3, 1}, std::array{1, -4, -5, -6}, 3, ENABLE_AD>(C3T3);
+                            env.TA2s(x + 2, y + 1).template contract<std::array{-1, -2, -3, 1}, std::array{1, -4, -5, -6}, 3, ENABLE_AD>(C3T3);
                         auto T2C3T3A = T2C3T3.template contract<std::array{1, -1, -2, 2, -3, -4}, std::array{-5, -6, 1, 2, -7}, 4, ENABLE_AD>(
                             env.A->As(x + 1, y + 1).twist(2).twist(3));
                         auto T2C3T3AH = T2C3T3A.template contract<std::array{-1, -2, -3, -4, -5, -6, 1}, std::array{-7, 1, -8}, 6, ENABLE_AD>(Hvdag);
@@ -191,9 +205,9 @@ avg(XPED_CONST CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>& env, TwoSiteObse
                         Hu = Hu * Hs.diag_sqrt().eval();
                         Hvdag = Hs.diag_sqrt().eval() * Hvdag;
 
-                        auto T1C2 = env.T1s(x + 1, y - 1)
-                                        .template contract<std::array{-1, 1, -2, -3}, std::array{1, -4}, 3, ENABLE_AD>(env.C2s(x + 2, y - 1));
-                        auto T1C2T2 = T1C2.template contract<std::array{-1, -2, -3, 1}, std::array{-4, -5, 1, -6}, 3, ENABLE_AD>(env.T2s(x + 2, y));
+                        auto T1C2 = env.TA1s(x + 1, y - 1)
+                                        .template contract<std::array{-1, 1, -2, -3}, std::array{1, -4}, 3, ENABLE_AD>(env.CA2s(x + 2, y - 1));
+                        auto T1C2T2 = T1C2.template contract<std::array{-1, -2, -3, 1}, std::array{-4, -5, 1, -6}, 3, ENABLE_AD>(env.TA2s(x + 2, y));
                         auto T1C2T2A = T1C2T2.template contract<std::array{-1, 1, -2, 2, -3, -4}, std::array{-5, 1, 2, -6, -7}, 4, ENABLE_AD>(
                             env.A->As(x + 1, y).twist(2));
                         auto T1C2T2AH = T1C2T2A.template contract<std::array{-1, -2, -3, -4, -5, -6, 1}, std::array{1, -8, -7}, 6, ENABLE_AD>(Hu);
@@ -201,9 +215,9 @@ avg(XPED_CONST CTM<Scalar, Symmetry, TRank, ENABLE_AD, CPOpts>& env, TwoSiteObse
                             env.A->Adags(x + 1, y).twist(4));
 
                         auto C4T3 =
-                            env.C4s(x - 1, y + 2).template contract<std::array{-1, 1}, std::array{-2, -3, 1, -4}, 1, ENABLE_AD>(env.T3s(x, y + 2));
+                            env.CA4s(x - 1, y + 2).template contract<std::array{-1, 1}, std::array{-2, -3, 1, -4}, 1, ENABLE_AD>(env.TA3s(x, y + 2));
                         auto T4C4T3 =
-                            env.T4s(x - 1, y + 1).template contract<std::array{-1, 1, -2, -3}, std::array{1, -4, -5, -6}, 3, ENABLE_AD>(C4T3);
+                            env.TA4s(x - 1, y + 1).template contract<std::array{-1, 1, -2, -3}, std::array{1, -4, -5, -6}, 3, ENABLE_AD>(C4T3);
                         auto T4C4T3A = T4C4T3.template contract<std::array{-1, 1, -2, 2, -3, -4}, std::array{1, -5, -6, 2, -7}, 4, ENABLE_AD>(
                             env.A->As(x, y + 1).twist(3));
                         auto T4C4T3AH = T4C4T3A.template contract<std::array{-1, -2, -3, -4, -5, -6, 1}, std::array{-8, 1, -7}, 6, ENABLE_AD>(Hvdag);

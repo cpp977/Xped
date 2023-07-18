@@ -6,10 +6,12 @@
 
 namespace Xped {
 
-template <typename Scalar, typename Symmetry, typename HamScalar, Opts::CTMCheckpoint CPOpts, std::size_t TRank>
+template <typename Scalar, typename Symmetry, typename HamScalar, bool ALL_OUT_LEGS, Opts::CTMCheckpoint CPOpts, std::size_t TRank>
 template <bool AD>
 typename ScalarTraits<Scalar>::Real
-CTMSolver<Scalar, Symmetry, HamScalar, CPOpts, TRank>::solve(std::shared_ptr<iPEPS<Scalar, Symmetry>> Psi, Scalar* gradient, Hamiltonian<Symmetry>& H)
+CTMSolver<Scalar, Symmetry, HamScalar, ALL_OUT_LEGS, CPOpts, TRank>::solve(std::shared_ptr<iPEPS<Scalar, Symmetry, ALL_OUT_LEGS>> Psi,
+                                                                           Scalar* gradient,
+                                                                           Hamiltonian<Symmetry>& H)
 {
     util::Stopwatch<> total_t;
     Jack.set_A(Psi);
@@ -37,7 +39,7 @@ CTMSolver<Scalar, Symmetry, HamScalar, CPOpts, TRank>::solve(std::shared_ptr<iPE
     }
     Log::on_entry(opts.verbosity, "   Environment for {}", Psi->info());
     if(REINIT_ENV) {
-        Jack = CTM<Scalar, Symmetry, TRank, false>(Psi, opts.chi, opts.init);
+        Jack = CTM<Scalar, Symmetry, TRank, ALL_OUT_LEGS, false>(Psi, opts.chi, opts.init);
         Jack.init();
     }
 
@@ -78,7 +80,7 @@ CTMSolver<Scalar, Symmetry, HamScalar, CPOpts, TRank>::solve(std::shared_ptr<iPE
         return E;
     } else {
         stan::math::nested_rev_autodiff nested;
-        Xped::CTM<Scalar, Symmetry, TRank, true, CPOpts> Jim(Jack);
+        Xped::CTM<Scalar, Symmetry, TRank, ALL_OUT_LEGS, true, CPOpts> Jim(Jack);
         util::Stopwatch<> forward_t;
         Jim.solve(opts.track_steps);
         auto forward_time = forward_t.time_string();
@@ -90,8 +92,10 @@ CTMSolver<Scalar, Symmetry, HamScalar, CPOpts, TRank>::solve(std::shared_ptr<iPE
         stan::math::grad(res.vi_);
         auto backward_time = backward_t.time_string();
         Log::per_iteration(opts.verbosity, "  {: >3} backward pass: {}", "•", backward_time);
-        std::size_t count = 0;
-        for(auto it = Jim.Psi()->gradbegin(); it != Jim.Psi()->gradend(); ++it) { gradient[count++] = *it; }
+        auto grad = Jim.Psi()->graddata();
+        for(std::size_t i = 0; i < grad.size(); ++i) { gradient[i] = grad[i]; }
+        // std::size_t count = 0;
+        // for(auto it = Jim.Psi()->gradbegin(); it != Jim.Psi()->gradend(); ++it) { gradient[count++] = *it; }
         // grad_norm = std::abs(*std::max_element(gradient, gradient + Psi->plainSize(), [](Scalar a, Scalar b) { return std::abs(a) < std::abs(b);
         // }));
         if constexpr(ScalarTraits<Scalar>::IS_COMPLEX()) {

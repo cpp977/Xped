@@ -19,8 +19,9 @@ struct OneSiteObservable;
 template <typename, typename, bool>
 struct TwoSiteObservable;
 
-template <typename, typename, std::size_t, bool, Opts::CTMCheckpoint>
+template <typename, typename, std::size_t, bool, bool, Opts::CTMCheckpoint>
 class CTM;
+
 /**                   p(4)
  *             u(1)   /
  *              |    /
@@ -34,22 +35,30 @@ class CTM;
  *              v
  *             d(3)
  */
-template <typename Scalar_, typename Symmetry_, bool ENABLE_AD_ = false>
+template <typename Scalar_, typename Symmetry_, bool ALL_OUT_LEGS_ = false, bool ENABLE_AD_ = false>
 class iPEPS
 {
+    static constexpr auto getRankA() { return ALL_OUT_LEGS_ ? 4ul : 2ul; }
+    static constexpr auto getRankB() { return ALL_OUT_LEGS_ ? 0ul : 2ul; }
+    static constexpr auto getCoRankA() { return ALL_OUT_LEGS_ ? 1ul : 3ul; }
+    static constexpr auto getCoRankB() { return ALL_OUT_LEGS_ ? 5ul : 3ul; }
+
     template <typename Scalar__,
               typename Symmetry__,
               std::size_t TRank__,
+              bool ALL_OUT_LEGS__,
               bool ENABLE_AD__,
               Opts::CTMCheckpoint CPOpts__,
               typename OpScalar__,
               bool HERMITIAN__>
     friend TMatrix<std::conditional_t<ENABLE_AD__, stan::math::var, typename OneSiteObservable<OpScalar__, Symmetry__, HERMITIAN__>::ObsScalar>>
-    avg(XPED_CONST CTM<Scalar__, Symmetry__, TRank__, ENABLE_AD__, CPOpts__>& env, OneSiteObservable<OpScalar__, Symmetry__, HERMITIAN__>& op);
+    avg(XPED_CONST CTM<Scalar__, Symmetry__, TRank__, ALL_OUT_LEGS__, ENABLE_AD__, CPOpts__>& env,
+        OneSiteObservable<OpScalar__, Symmetry__, HERMITIAN__>& op);
 
     template <typename Scalar__,
               typename Symmetry__,
               std::size_t TRank__,
+              bool ALL_OUT_LEGS__,
               bool ENABLE_AD__,
               Opts::CTMCheckpoint CPOpts__,
               typename OpScalar__,
@@ -57,20 +66,22 @@ class iPEPS
     friend std::array<
         TMatrix<std::conditional_t<ENABLE_AD__, stan::math::var, typename TwoSiteObservable<OpScalar__, Symmetry__, HERMITIAN__>::ObsScalar>>,
         4>
-    avg(XPED_CONST CTM<Scalar__, Symmetry__, TRank__, ENABLE_AD__, CPOpts__>& env, TwoSiteObservable<OpScalar__, Symmetry__, HERMITIAN__>& op);
+    avg(XPED_CONST CTM<Scalar__, Symmetry__, TRank__, ALL_OUT_LEGS__, ENABLE_AD__, CPOpts__>& env,
+        TwoSiteObservable<OpScalar__, Symmetry__, HERMITIAN__>& op);
 
-    template <typename, typename, std::size_t, bool, Opts::CTMCheckpoint>
+    template <typename, typename, std::size_t, bool, bool, Opts::CTMCheckpoint>
     friend class CTM;
 
     template <typename, typename, typename, typename>
     friend class TimePropagator;
 
-    friend class iPEPS<Scalar_, Symmetry_, true>;
+    friend class iPEPS<Scalar_, Symmetry_, ALL_OUT_LEGS_, true>;
 
 public:
     typedef Symmetry_ Symmetry;
     typedef Scalar_ Scalar;
     static constexpr bool ENABLE_AD = ENABLE_AD_;
+    static constexpr bool ALL_OUT_LEGS = ALL_OUT_LEGS_;
     typedef typename ScalarTraits<Scalar>::Real RealScalar;
     typedef typename Symmetry::qType qType;
 
@@ -97,20 +108,20 @@ public:
           const TMatrix<qType>& charges,
           Opts::DiscreteSym sym = Opts::DiscreteSym::None);
 
-    iPEPS(const iPEPS<Scalar, Symmetry, false>& other);
+    iPEPS(const iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, false>& other);
 
     void setRandom(std::size_t seed = 0ul);
     void setZero();
     void normalize();
 
-    void set_As(const std::vector<Tensor<Scalar, 2, 3, Symmetry, ENABLE_AD>>& As_in)
-    {
-        As.fill(As_in);
-        for(auto i = 0ul; i < As.size(); ++i) { Adags[i] = As[i].adjoint().eval().template permute<0, 3, 4, 2, 0, 1>(); }
-    }
+    // void set_As(const std::vector<Tensor<Scalar, getRankA(), getCoRankA(), Symmetry, ENABLE_AD>>& As_in)
+    // {
+    //     As.fill(As_in);
+    //     for(auto i = 0ul; i < As.size(); ++i) { Adags[i] = As[i].adjoint().eval().template permute<0, 3, 4, 2, 0, 1>(); }
+    // }
 
-    Qbasis<Symmetry, 1> ketBasis(const int x, const int y, const Opts::LEG leg) const;
-    Qbasis<Symmetry, 1> braBasis(const int x, const int y, const Opts::LEG leg) const;
+    Qbasis<Symmetry, 1> ketBasis(const int x, const int y, const Opts::Leg leg) const;
+    Qbasis<Symmetry, 1> braBasis(const int x, const int y, const Opts::Leg leg) const;
 
     std::string info() const;
     void debug_info() const;
@@ -123,25 +134,47 @@ public:
 
     std::size_t plainSize() const;
 
-    iPEPSIterator<2, 3, Scalar, Symmetry, ENABLE_AD> begin()
+    auto beginA()
     {
-        iPEPSIterator<2, 3, Scalar, Symmetry, ENABLE_AD> out(&As, /*ITER_GRAD=*/false);
+        iPEPSIterator<getRankA(), getCoRankA(), Scalar, Symmetry, ENABLE_AD> out(&As, /*ITER_GRAD=*/false);
         return out;
     }
-    iPEPSIterator<2, 3, Scalar, Symmetry, ENABLE_AD> end()
+    auto endA()
     {
-        iPEPSIterator<2, 3, Scalar, Symmetry, ENABLE_AD> out(&As, /*ITER_GRAD=*/false, As.size());
+        iPEPSIterator<getRankA(), getCoRankA(), Scalar, Symmetry, ENABLE_AD> out(&As, /*ITER_GRAD=*/false, As.size());
         return out;
     }
 
-    iPEPSIterator<2, 3, Scalar, Symmetry, ENABLE_AD> gradbegin()
+    auto gradbeginA()
     {
-        iPEPSIterator<2, 3, Scalar, Symmetry, ENABLE_AD> out(&As, /*ITER_GRAD=*/true);
+        iPEPSIterator<getRankA(), getCoRankA(), Scalar, Symmetry, ENABLE_AD> out(&As, /*ITER_GRAD=*/true);
         return out;
     }
-    iPEPSIterator<2, 3, Scalar, Symmetry, ENABLE_AD> gradend()
+    auto gradendA()
     {
-        iPEPSIterator<2, 3, Scalar, Symmetry, ENABLE_AD> out(&As, /*ITER_GRAD=*/true, As.size());
+        iPEPSIterator<getRankA(), getCoRankA(), Scalar, Symmetry, ENABLE_AD> out(&As, /*ITER_GRAD=*/true, As.size());
+        return out;
+    }
+
+    auto beginB()
+    {
+        iPEPSIterator<getRankB(), getCoRankB(), Scalar, Symmetry, ENABLE_AD> out(&Bs, /*ITER_GRAD=*/false);
+        return out;
+    }
+    auto endB()
+    {
+        iPEPSIterator<getRankB(), getCoRankB(), Scalar, Symmetry, ENABLE_AD> out(&Bs, /*ITER_GRAD=*/false, Bs.size());
+        return out;
+    }
+
+    auto gradbeginB()
+    {
+        iPEPSIterator<getRankB(), getCoRankB(), Scalar, Symmetry, ENABLE_AD> out(&Bs, /*ITER_GRAD=*/true);
+        return out;
+    }
+    auto gradendB()
+    {
+        iPEPSIterator<getRankB(), getCoRankB(), Scalar, Symmetry, ENABLE_AD> out(&Bs, /*ITER_GRAD=*/true, Bs.size());
         return out;
     }
 
@@ -154,7 +187,7 @@ public:
     template <typename Ar>
     void serialize(Ar& ar)
     {
-        ar& YAS_OBJECT_NVP("iPEPS", ("D", D), ("cell", cell_), ("As", As), ("Adags", Adags), ("charges", charges_));
+        ar& YAS_OBJECT_NVP("iPEPS", ("D", D), ("cell", cell_), ("As", As), ("Adags", Adags), ("Bs", Bs), ("Bdags", Bdags), ("charges", charges_));
     }
 
     void loadFromMatlab(const std::filesystem::path& p, const std::string& root_name, int qn_scale = 1);
@@ -182,19 +215,26 @@ public:
 
     void initSymMap();
 
+    void updateAdags();
+
     UnitCell cell_;
-    TMatrix<Tensor<Scalar, 2, 3, Symmetry, ENABLE_AD>> As;
-    TMatrix<Tensor<Scalar, 2, 3, Symmetry, ENABLE_AD>> Gs;
+    TMatrix<Tensor<Scalar, getRankA(), getCoRankA(), Symmetry, ENABLE_AD>> As;
+    TMatrix<Tensor<Scalar, getRankB(), getCoRankB(), Symmetry, ENABLE_AD>> Bs;
+    TMatrix<Tensor<Scalar, getRankA(), getCoRankA(), Symmetry, ENABLE_AD>> Ms;
+    TMatrix<Tensor<Scalar, getRankB(), getCoRankB(), Symmetry, ENABLE_AD>> Ns;
+    TMatrix<Tensor<Scalar, getRankA(), getCoRankA(), Symmetry, ENABLE_AD>> Gs;
+    TMatrix<Tensor<Scalar, getRankB(), getCoRankB(), Symmetry, ENABLE_AD>> Hs;
     TMatrix<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>> whs;
     TMatrix<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>> wvs;
-    TMatrix<Tensor<Scalar, 2, 2, Symmetry, ENABLE_AD>> Ms;
 
-    TMatrix<Tensor<Scalar, 3, 2, Symmetry, ENABLE_AD>> Adags;
+    TMatrix<Tensor<Scalar, getRankA() + 1ul, getCoRankA() - 1ul, Symmetry, ENABLE_AD>> Adags;
+    TMatrix<Tensor<Scalar, getRankB() + 1ul, getCoRankB() - 1ul, Symmetry, ENABLE_AD>> Bdags;
     TMatrix<qType> charges_;
 
     Opts::DiscreteSym sym_ = Opts::DiscreteSym::None;
 
-    std::pair<std::size_t, std::vector<std::size_t>> sym_map;
+    std::pair<std::size_t, std::vector<std::size_t>> sym_map_A;
+    std::pair<std::size_t, std::vector<std::size_t>> sym_map_B;
 };
 
 } // namespace Xped

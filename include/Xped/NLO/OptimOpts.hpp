@@ -39,7 +39,7 @@ struct Optim
 
     bool resume = false;
 
-    LoadFormat load_format = LoadFormat::NATIVE;
+    LoadFormat load_format = LoadFormat::Native;
     std::string load = "";
     int qn_scale = 1;
 

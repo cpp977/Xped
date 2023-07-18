@@ -7,8 +7,8 @@ target_link_libraries (ipeps_ad Xped)
 #########################
 #       fpeps_ad        #
 #########################
-# add_executable(fpeps_ad fpeps_ad.cpp)
-# target_link_libraries (fpeps_ad Xped)
+add_executable(fpeps_ad fpeps_ad.cpp)
+target_link_libraries (fpeps_ad Xped)
 
 #########################
 #    simple_update      #

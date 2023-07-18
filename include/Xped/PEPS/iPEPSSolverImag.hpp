@@ -202,7 +202,16 @@ struct iPEPSSolverImag
                 Psi->loadFromMatlab(load_p, "cpp", imag_opts.qn_scale);
                 break;
             }
-            case Opts::LoadFormat::NATIVE: {
+            case Opts::LoadFormat::JSON: {
+                if constexpr(not Symmetry::ANY_IS_FERMIONIC) {
+                    Psi->loadFromJson(load_p);
+                    Psi->debug_info();
+                } else {
+                    std::terminate();
+                }
+                break;
+            }
+            case Opts::LoadFormat::Native: {
                 Log::on_entry(imag_opts.verbosity, "Load initial iPEPS from native file {}.", load_p.string());
                 constexpr std::size_t flags = yas::file /*IO type*/ | yas::binary; /*IO format*/
                 iPEPS<Scalar, Symmetry> tmp_Psi;

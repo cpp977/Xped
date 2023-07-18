@@ -57,22 +57,30 @@ struct TwoSiteObservable;
  * Checkpoint get_projectors.
  * Checkpoint renormalize (l,r,t,b)
  */
-template <typename Scalar_, typename Symmetry_, std::size_t TRank = 2, bool ENABLE_AD = false, Opts::CTMCheckpoint CPOpts = Opts::CTMCheckpoint{}>
+template <typename Scalar_,
+          typename Symmetry_,
+          std::size_t TRank = 2,
+          bool ALL_OUT_LEGS = false,
+          bool ENABLE_AD = false,
+          Opts::CTMCheckpoint CPOpts = Opts::CTMCheckpoint{}>
 class CTM
 {
     template <typename Scalar__,
               typename Symmetry__,
               std::size_t TRank__,
+              bool ALL_OUT_LEGS__,
               bool ENABLE_AD__,
               Opts::CTMCheckpoint CPOpts__,
               typename OpScalar__,
               bool HERMITIAN__>
     friend TMatrix<std::conditional_t<ENABLE_AD__, stan::math::var, typename OneSiteObservable<OpScalar__, Symmetry__, HERMITIAN__>::ObsScalar>>
-    avg(XPED_CONST CTM<Scalar__, Symmetry__, TRank__, ENABLE_AD__, CPOpts__>& env, OneSiteObservable<OpScalar__, Symmetry__, HERMITIAN__>& op);
+    avg(XPED_CONST CTM<Scalar__, Symmetry__, TRank__, ALL_OUT_LEGS__, ENABLE_AD__, CPOpts__>& env,
+        OneSiteObservable<OpScalar__, Symmetry__, HERMITIAN__>& op);
 
     template <typename Scalar__,
               typename Symmetry__,
               std::size_t TRank__,
+              bool ALL_OUT_LEGS__,
               bool ENABLE_AD__,
               Opts::CTMCheckpoint CPOpts__,
               typename OpScalar__,
@@ -80,9 +88,10 @@ class CTM
     friend std::array<
         TMatrix<std::conditional_t<ENABLE_AD__, stan::math::var, typename TwoSiteObservable<OpScalar__, Symmetry__, HERMITIAN__>::ObsScalar>>,
         4>
-    avg(XPED_CONST CTM<Scalar__, Symmetry__, TRank__, ENABLE_AD__, CPOpts__>& env, TwoSiteObservable<OpScalar__, Symmetry__, HERMITIAN__>& op);
+    avg(XPED_CONST CTM<Scalar__, Symmetry__, TRank__, ALL_OUT_LEGS__, ENABLE_AD__, CPOpts__>& env,
+        TwoSiteObservable<OpScalar__, Symmetry__, HERMITIAN__>& op);
 
-    template <typename, typename, std::size_t, bool, Opts::CTMCheckpoint>
+    template <typename, typename, std::size_t, bool, bool, Opts::CTMCheckpoint>
     friend class CTM;
 
 public:
@@ -105,7 +114,7 @@ public:
         , init_m(init)
     {}
 
-    CTM(std::shared_ptr<iPEPS<Scalar, Symmetry, ENABLE_AD>> A, std::size_t chi, const Opts::CTM_INIT init = Opts::CTM_INIT::FROM_A)
+    CTM(std::shared_ptr<iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>> A, std::size_t chi, const Opts::CTM_INIT init = Opts::CTM_INIT::FROM_A)
         : A(A)
         , cell_(A->cell())
         , chi_(chi)
@@ -114,9 +123,9 @@ public:
 
     // This is a copy constructor for non-AD CTM (CTM<Scalar, Symmetry, TRank, false>) so it prohibits implicitly declared move operations in this
     // case...
-    CTM(const CTM<Scalar, Symmetry, TRank, false>& other);
+    CTM(const CTM<Scalar, Symmetry, TRank, ALL_OUT_LEGS, false>& other);
 
-    void set_A(std::shared_ptr<iPEPS<Scalar, Symmetry, ENABLE_AD>> A_in)
+    void set_A(std::shared_ptr<iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>> A_in)
     {
         A = A_in;
         cell_ = A_in->cell();
@@ -126,7 +135,7 @@ public:
         }
     }
 
-    std::size_t fullChi() const { return C1s[0].uncoupledCodomain()[0].fullDim(); }
+    std::size_t fullChi() const { return CA1s[0].uncoupledCodomain()[0].fullDim(); }
 
     template <bool TRACK = ENABLE_AD>
     void solve(std::size_t max_steps);
@@ -157,7 +166,7 @@ public:
     auto info() const;
 
     const UnitCell& cell() const { return cell_; }
-    const std::shared_ptr<iPEPS<Scalar, Symmetry, ENABLE_AD>>& Psi() const { return A; }
+    const std::shared_ptr<iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>>& Psi() const { return A; }
 
     template <typename Ar>
     void serialize(Ar& ar)
@@ -166,14 +175,16 @@ public:
                            ("cell", cell_),
                            ("chi", chi_),
                            ("HAS_RDM", HAS_RDM),
-                           ("C1s", C1s),
-                           ("C2s", C2s),
-                           ("C3s", C3s),
-                           ("C4s", C4s),
-                           ("T1s", T1s),
-                           ("T2s", T2s),
-                           ("T3s", T3s),
-                           ("T4s", T4s),
+                           ("CA1s", CA1s),
+                           ("CA2s", CA2s),
+                           ("CA3s", CA3s),
+                           ("CA4s", CA4s),
+                           ("CBs", CBs),
+                           ("TA1s", TA1s),
+                           ("TA2s", TA2s),
+                           ("TA3s", TA3s),
+                           ("TA4s", TA4s),
+                           ("TBs", TBs),
                            // ("Ms", Ms),
                            ("rho_h", rho_h),
                            ("rho_v", rho_v),
@@ -186,21 +197,48 @@ public:
     Opts::CTM_INIT const init_mode() { return init_m; }
 
 private:
-    std::shared_ptr<iPEPS<Scalar, Symmetry, ENABLE_AD>> A;
+    std::shared_ptr<iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>> A;
     UnitCell cell_;
     std::size_t chi_;
     Opts::CTM_INIT init_m = Opts::CTM_INIT::FROM_A;
     Opts::PROJECTION proj_m = Opts::PROJECTION::CORNER;
     bool HAS_RDM = false;
 
-    TMatrix<Tensor<Scalar, 0, 2, Symmetry, ENABLE_AD>> C1s;
-    TMatrix<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>> C2s;
-    TMatrix<Tensor<Scalar, 2, 0, Symmetry, ENABLE_AD>> C3s;
-    TMatrix<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>> C4s;
-    TMatrix<Tensor<Scalar, 1, TRank + 1, Symmetry, ENABLE_AD>> T1s;
-    TMatrix<Tensor<Scalar, TRank + 1, 1, Symmetry, ENABLE_AD>> T2s;
-    TMatrix<Tensor<Scalar, TRank + 1, 1, Symmetry, ENABLE_AD>> T3s;
-    TMatrix<Tensor<Scalar, 1, TRank + 1, Symmetry, ENABLE_AD>> T4s;
+    static constexpr auto getRankCA1() { return ALL_OUT_LEGS ? 2 : 0; }
+    static constexpr auto getRankCA2() { return ALL_OUT_LEGS ? 2 : 1; }
+    static constexpr auto getRankCA3() { return ALL_OUT_LEGS ? 2 : 2; }
+    static constexpr auto getRankCA4() { return ALL_OUT_LEGS ? 2 : 1; }
+    static constexpr auto getRankCB() { return ALL_OUT_LEGS ? 0 : 1; }
+
+    static constexpr auto getCoRankCA1() { return ALL_OUT_LEGS ? 0 : 2; }
+    static constexpr auto getCoRankCA2() { return ALL_OUT_LEGS ? 0 : 1; }
+    static constexpr auto getCoRankCA3() { return ALL_OUT_LEGS ? 0 : 0; }
+    static constexpr auto getCoRankCA4() { return ALL_OUT_LEGS ? 0 : 1; }
+    static constexpr auto getCoRankCB() { return ALL_OUT_LEGS ? 2 : 1; }
+
+    static constexpr auto getRankTA1() { return ALL_OUT_LEGS ? TRank + 2 : 1; }
+    static constexpr auto getRankTA2() { return ALL_OUT_LEGS ? TRank + 2 : TRank + 1; }
+    static constexpr auto getRankTA3() { return ALL_OUT_LEGS ? TRank + 2 : TRank + 1; }
+    static constexpr auto getRankTA4() { return ALL_OUT_LEGS ? TRank + 2 : 1; }
+    static constexpr auto getRankTB() { return ALL_OUT_LEGS ? 0 : 1; }
+
+    static constexpr auto getCoRankTA1() { return ALL_OUT_LEGS ? 0 : TRank + 1; }
+    static constexpr auto getCoRankTA2() { return ALL_OUT_LEGS ? 0 : 1; }
+    static constexpr auto getCoRankTA3() { return ALL_OUT_LEGS ? 0 : 1; }
+    static constexpr auto getCoRankTA4() { return ALL_OUT_LEGS ? 0 : TRank + 1; }
+    static constexpr auto getCoRankTB() { return ALL_OUT_LEGS ? TRank + 2 : TRank + 1; }
+
+    TMatrix<Tensor<Scalar, getRankCA1(), getCoRankCA1(), Symmetry, ENABLE_AD>> CA1s;
+    TMatrix<Tensor<Scalar, getRankCA2(), getCoRankCA2(), Symmetry, ENABLE_AD>> CA2s;
+    TMatrix<Tensor<Scalar, getRankCA3(), getCoRankCA3(), Symmetry, ENABLE_AD>> CA3s;
+    TMatrix<Tensor<Scalar, getRankCA4(), getCoRankCA4(), Symmetry, ENABLE_AD>> CA4s;
+    TMatrix<Tensor<Scalar, getRankCB(), getCoRankCB(), Symmetry, ENABLE_AD>> CBs;
+
+    TMatrix<Tensor<Scalar, getRankTA1(), getCoRankTA1(), Symmetry, ENABLE_AD>> TA1s;
+    TMatrix<Tensor<Scalar, getRankTA2(), getCoRankTA2(), Symmetry, ENABLE_AD>> TA2s;
+    TMatrix<Tensor<Scalar, getRankTA3(), getCoRankTA3(), Symmetry, ENABLE_AD>> TA3s;
+    TMatrix<Tensor<Scalar, getRankTA4(), getCoRankTA4(), Symmetry, ENABLE_AD>> TA4s;
+    TMatrix<Tensor<Scalar, getRankTB(), getCoRankTB(), Symmetry, ENABLE_AD>> TBs;
 
     TMatrix<Tensor<Scalar, 2, 2, Symmetry, ENABLE_AD>> Ms;
 

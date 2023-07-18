@@ -173,7 +173,7 @@ public:
         return internal::format_params(fmt::format("Kondo[sym={}]", Symmetry::name()), params, used_params);
     }
 
-    virtual void computeObs(XPED_CONST CTM<double, Symmetry, 2, false, Opts::CTMCheckpoint{}>& env) override
+    virtual void computeObs(XPED_CONST CTM<double, Symmetry, 2, false, false, Opts::CTMCheckpoint{}>& env) override
     {
         for(auto& ob : obs) {
             if(auto* one = dynamic_cast<OneSiteObservable<double, Symmetry>*>(ob.get()); one != nullptr) { avg(env, *one); }
@@ -181,7 +181,7 @@ public:
         }
     }
 
-    virtual void computeObs(XPED_CONST CTM<std::complex<double>, Symmetry, 2, false, Opts::CTMCheckpoint{}>& env) override
+    virtual void computeObs(XPED_CONST CTM<std::complex<double>, Symmetry, 2, false, false, Opts::CTMCheckpoint{}>& env) override
     {
         for(auto& ob : obs) {
             if(auto* one = dynamic_cast<OneSiteObservable<double, Symmetry>*>(ob.get()); one != nullptr) { avg(env, *one); }
@@ -189,7 +189,7 @@ public:
         }
     }
 
-    virtual void computeObs(XPED_CONST CTM<double, Symmetry, 1, false, Opts::CTMCheckpoint{}>& env) override
+    virtual void computeObs(XPED_CONST CTM<double, Symmetry, 1, false, false, Opts::CTMCheckpoint{}>& env) override
     {
         for(auto& ob : obs) {
             if(auto* one = dynamic_cast<OneSiteObservable<double, Symmetry>*>(ob.get()); one != nullptr) { avg(env, *one); }

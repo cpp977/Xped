@@ -20,10 +20,15 @@
 #include "Xped/Util/Macros.hpp"
 
 #include "Xped/Util/Logging.hpp"
+#include "Xped/Util/Permutations.hpp"
+
+#include "Xped/Util/Mpi.hpp"
+#include "Xped/Util/TomlHelpers.hpp"
+#include "Xped/Util/YasHelpers.hpp"
 
 #ifdef XPED_CACHE_PERMUTE_OUTPUT
 #    include "lru/lru.hpp"
-XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 1000000)
+XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100000)
 #endif
 
 #include "Xped/Interfaces/PlainInterface.hpp"
@@ -35,18 +40,24 @@ XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 1000000)
 #include "Xped/Symmetry/ZN.hpp"
 #include "Xped/Symmetry/kind_dummies.hpp"
 
-#include "Xped/PEPS/CTMSolver.hpp"
-#include "Xped/PEPS/LinearAlgebra.hpp"
-#include "Xped/PEPS/SimpleUpdate.hpp"
-#include "Xped/PEPS/TimePropagator.hpp"
-#include "Xped/PEPS/iPEPS.hpp"
-#include "Xped/PEPS/iPEPSSolverAD.hpp"
-#include "Xped/PEPS/iPEPSSolverImag.hpp"
+#include "Xped/Core/AdjointOp.hpp"
+#include "Xped/Core/Tensor.hpp"
+#include "Xped/MPS/Mps.hpp"
+#include "Xped/MPS/MpsAlgebra.hpp"
 
+// #include "Xped/PEPS/CTM.hpp"
+// #include "Xped/PEPS/CorrelationLength.hpp"
 #include "Xped/PEPS/Models/Heisenberg.hpp"
 #include "Xped/PEPS/Models/Hubbard.hpp"
 #include "Xped/PEPS/Models/Kondo.hpp"
 #include "Xped/PEPS/Models/KondoNecklace.hpp"
+#include "Xped/PEPS/iPEPS.hpp"
+
+#include "Xped/AD/ADTensor.hpp"
+
+#include "Xped/Util/Stopwatch.hpp"
+
+#include "Xped/PEPS/fPEPSSolverAD.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -59,29 +70,26 @@ int main(int argc, char* argv[])
 #endif
         // std::ios::sync_with_stdio(true);
 
+        // SPDLOG_INFO("Number of MPI processes: {}", world.np);
+        // SPDLOG_INFO("I am process number #={}", world.rank);
+        // SPDLOG_INFO("Number of MPI processes: {}", world.np);
+
         // using Scalar = std::complex<double>;
         using Scalar = double;
-
-        using HamScalar = double;
         // using Symmetry = Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>;
         // using Symmetry = Xped::Sym::ZN<Xped::Sym::FChargeU1, 36>;
         // using Symmetry = Xped::Sym::ZN<Xped::Sym::SpinU1, 36>;
-        // using Symmetry = Xped::Sym::SU2<Xped::Sym::SpinSU2>;
-        using Symmetry = Xped::Sym::Combined<Xped::Sym::ZN<Xped::Sym::SpinU1, 36>, Xped::Sym::ZN<Xped::Sym::FChargeU1, 36>>;
-        // using Symmetry = Xped::Sym::Combined<Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::ZN<Xped::Sym::FChargeU1, 36>>;
-
+        using Symmetry = Xped::Sym::SU2<Xped::Sym::SpinSU2>;
+        // using Symmetry = Xped::Sym::U1<Xped::Sym::SpinU1>;
+        // using Symmetry = Xped::Sym::U0<double>;
         // using Symmetry =
-        // Xped::Sym::Combined<Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>>;
-        // using Symmetry = Xped::Sym::Combined<Xped::Sym::U1<Xped::Sym::SpinU1>, Xped::Sym::ZN<Xped::Sym::FChargeU1, 36>>;
-        // using Symmetry = Xped::Sym::Combined<Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>>;
-        // using Symmetry = Xped::Sym::Combined<Xped::Sym::ZN<Xped::Sym::SpinU1, 36>, Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>>;
-
+        //     Xped::Sym::Combined<Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>>;
         // typedef Xped::Sym::SU2<Xped::Sym::SpinSU2> Symmetry;
         // typedef Xped::Sym::U1<Xped::Sym::SpinU1> Symmetry;
         // typedef Xped::Sym::ZN<Xped::Sym::SpinU1, 36, double> Symmetry;
-        // using Symmetry = Xped::Sym::U0<double>;
-
-        std::unique_ptr<Xped::TwoSiteObservable<HamScalar, Symmetry>> ham;
+        // typedef Xped::Sym::U0<double> Symmetry;
+        // using Symmetry = Xped::Sym::Combined<Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>>;
+        // using Symmetry = Xped::Sym::Combined<Xped::Sym::U1<Xped::Sym::SpinU1>, Xped::Sym::U1<Xped::Sym::FChargeU1>>;
 
         std::string config_file = argc > 1 ? argv[1] : "config.toml";
 
@@ -113,6 +121,9 @@ int main(int argc, char* argv[])
             }
         }
 
+        auto sym = Xped::Opts::DiscreteSym::None;
+        if(data.at("ipeps").contains("sym")) { sym = Xped::util::enum_from_toml<Xped::Opts::DiscreteSym>(data.at("ipeps").at("sym")); }
+
         std::size_t D = toml::get_or<std::size_t>(toml::find(data.at("ipeps"), "D"), 2ul);
 
         Xped::TMatrix<Xped::Qbasis<Symmetry, 1>> left_aux(c.pattern), top_aux(c.pattern);
@@ -123,7 +134,7 @@ int main(int argc, char* argv[])
                 for(const auto& [q, dim_q] : left[i]) { left_aux[i].push_back(q, dim_q); }
                 left_aux[i].sort();
             }
-
+            fmt::print("left_aux={}\n", left_aux[0].print());
             auto top =
                 toml::get<std::vector<std::vector<std::pair<std::vector<int>, int>>>>(toml::find(data.at("ipeps").at("aux_bases"), "top_basis"));
             for(std::size_t i = 0; i < c.uniqueSize(); ++i) {
@@ -147,52 +158,41 @@ int main(int argc, char* argv[])
             for(std::size_t i = 1; i < bs.size(); ++i) { bonds = bonds | bs[i]; }
         }
 
+        std::unique_ptr<Xped::TwoSiteObservable<double, Symmetry>> ham;
         if(toml::find(data.at("model"), "name").as_string() == "Heisenberg") {
-            ham = std::make_unique<Xped::Heisenberg<Symmetry, HamScalar>>(params, c.pattern, bonds);
+            ham = std::make_unique<Xped::Heisenberg<Symmetry>>(params, c.pattern, bonds);
         } else if(toml::find(data.at("model"), "name").as_string() == "KondoNecklace") {
-            ham = std::make_unique<Xped::KondoNecklace<Symmetry, HamScalar>>(params, c.pattern, bonds);
+            ham = std::make_unique<Xped::KondoNecklace<Symmetry>>(params, c.pattern, bonds);
         } else if(toml::find(data.at("model"), "name").as_string() == "Hubbard") {
-            ham = std::make_unique<Xped::Hubbard<Symmetry, HamScalar>>(params, c.pattern, bonds);
-        } else if(toml::find(data.at("model"), "name").as_string() == "Kondo") {
-            ham = std::make_unique<Xped::Kondo<Symmetry, HamScalar>>(params, c.pattern, bonds);
-        } else {
+            ham = std::make_unique<Xped::Hubbard<Symmetry>>(params, c.pattern, bonds);
+        } // else if(toml::find(data.at("model"), "name").as_string() == "Kondo") {
+        //     ham = std::make_unique<Xped::Kondo<Symmetry>>(params, c.pattern, bonds);
+        // }
+        else {
             throw std::invalid_argument("Specified model is not implemented.");
         }
         ham->setDefaultObs();
 
-        Xped::Opts::CTM ctm_opts = Xped::Opts::ctm_from_toml(data.at("ctm"));
-        Xped::Opts::Imag imag_opts = Xped::Opts::imag_from_toml(data.at("imag"));
         Xped::Opts::Optim o_opts = Xped::Opts::optim_from_toml(data.at("optim"));
+        Xped::Opts::CTM c_opts = Xped::Opts::ctm_from_toml(data.at("ctm"));
 
         Xped::Log::init_logging(world, (o_opts.working_directory / o_opts.logging_directory).string() + "/" + ham->file_name() + ".txt");
 
         Xped::TMatrix<Xped::Qbasis<Symmetry, 1>> phys_basis(c.pattern);
         phys_basis.setConstant(ham->data_h[0].uncoupledDomain()[0]);
-        auto Psi = std::make_shared<Xped::iPEPS<Scalar, Symmetry, false, false>>(c, D, left_aux, top_aux, phys_basis, charges);
+        auto Psi = std::make_shared<Xped::iPEPS<Scalar, Symmetry, true, false>>(c, D, left_aux, top_aux, phys_basis, charges, sym);
         Psi->setRandom();
-
-        auto Ds = imag_opts.Ds;
-        auto chis = imag_opts.chis;
+        Psi->As[0].print(std::cout, true);
+        std::cout << std::endl;
+        Psi->Bs[0].print(std::cout, true);
+        std::cout << std::endl;
 
         constexpr Xped::Opts::CTMCheckpoint cp_opts{
             .GROW_ALL = true, .MOVE = true, .CORNER = true, .PROJECTORS = true, .RENORMALIZE = true, .RDM = true};
         constexpr std::size_t TRank = 2;
+        Xped::fPEPSSolverAD<Scalar, Symmetry, TRank> Jack(o_opts, c_opts, Psi, *ham);
 
-        for(auto iD = 0ul; auto D : Ds) {
-            ctm_opts.chi = chis[iD][0];
-            imag_opts.Ds = std::vector(1, D);
-            imag_opts.chis = std::vector(1, std::vector(1, chis[iD][0]));
-            if(iD > 0) {
-                imag_opts.load = o_opts.working_directory.string() + "/" + ham->file_name() +
-                                 fmt::format("_D={}_chi={}_seed={}_id={}.psi", Ds[iD - 1], chis[iD - 1][0], o_opts.seed, o_opts.id);
-            }
-            Xped::iPEPSSolverImag<Scalar, Symmetry, HamScalar> Lucy(imag_opts, ctm_opts, Psi, *ham);
-            Lucy.solve();
-            o_opts.load = (imag_opts.working_directory.string() + "/" + ham->file_name() + fmt::format("_D={}_id={}.psi", D, imag_opts.id));
-            Xped::iPEPSSolverAD<Scalar, HamScalar, Symmetry, false, cp_opts, TRank> Jack(o_opts, ctm_opts, Psi, *ham);
-            Jack.solve();
-            ++iD;
-        }
+        Jack.solve<double>();
 
 #ifdef XPED_CACHE_PERMUTE_OUTPUT
         std::cout << "total hits=" << tree_cache</*shift*/ 0, /*Rank*/ 4, /*CoRank*/ 3, Symmetry>.cache.stats().total_hits()
@@ -200,9 +200,9 @@ int main(int argc, char* argv[])
         std::cout << "total misses=" << tree_cache<0, 4, 3, Symmetry>.cache.stats().total_misses() << endl; // Misses for any key
         std::cout << "hit rate=" << tree_cache<0, 4, 3, Symmetry>.cache.stats().hit_rate() << endl; // Hit rate in [0, 1]
 #endif
-    }
 
 #ifdef XPED_USE_MPI
-    MPI_Finalize();
+        MPI_Finalize();
 #endif
+    }
 }

@@ -56,9 +56,10 @@ public:
 
     Opts::CTM opts{};
 
+    bool REINIT_ENV = true;
+
 private:
     CTM<Scalar, Symmetry, TRank, ALL_OUT_LEGS> Jack;
-    bool REINIT_ENV = true;
     typename ScalarTraits<Scalar>::Real grad_norm = 1000.;
 };
 

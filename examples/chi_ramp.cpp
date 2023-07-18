@@ -47,6 +47,9 @@ int main(int argc, char* argv[])
 
         // using Scalar = std::complex<double>;
         using Scalar = double;
+
+        using HamScalar = double;
+
         // using Symmetry = Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>;
         using Symmetry = Xped::Sym::ZN<Xped::Sym::FChargeU1, 36>;
         // using Symmetry = Xped::Sym::ZN<Xped::Sym::SpinU1, 36>;
@@ -65,7 +68,7 @@ int main(int argc, char* argv[])
         // typedef Xped::Sym::ZN<Xped::Sym::SpinU1, 36, double> Symmetry;
         // using Symmetry = Xped::Sym::U0<double>;
 
-        std::unique_ptr<Xped::TwoSiteObservable<double, Symmetry>> ham;
+        std::unique_ptr<Xped::TwoSiteObservable<HamScalar, Symmetry>> ham;
 
         std::string config_file = argc > 1 ? argv[1] : "config.toml";
 
@@ -116,7 +119,7 @@ int main(int argc, char* argv[])
         //     }
         // }
 
-        std::map<std::string, Xped::Param> params = Xped::util::params_from_toml(data.at("model").at("params"));
+        std::map<std::string, Xped::Param> params = Xped::util::params_from_toml(data.at("model").at("params"), c);
 
         std::vector<Xped::Opts::Bond> bs;
         for(const auto& elem : data.at("model").at("bonds").as_array()) {
@@ -132,13 +135,13 @@ int main(int argc, char* argv[])
         }
 
         if(toml::find(data.at("model"), "name").as_string() == "Heisenberg") {
-            ham = std::make_unique<Xped::Heisenberg<Symmetry>>(params, c.pattern, bonds);
+            ham = std::make_unique<Xped::Heisenberg<Symmetry, HamScalar>>(params, c.pattern, bonds);
         } else if(toml::find(data.at("model"), "name").as_string() == "KondoNecklace") {
-            ham = std::make_unique<Xped::KondoNecklace<Symmetry>>(params, c.pattern, bonds);
+            ham = std::make_unique<Xped::KondoNecklace<Symmetry, HamScalar>>(params, c.pattern, bonds);
         } else if(toml::find(data.at("model"), "name").as_string() == "Hubbard") {
-            ham = std::make_unique<Xped::Hubbard<Symmetry>>(params, c.pattern, bonds);
+            ham = std::make_unique<Xped::Hubbard<Symmetry, HamScalar>>(params, c.pattern, bonds);
         } else if(toml::find(data.at("model"), "name").as_string() == "Kondo") {
-            ham = std::make_unique<Xped::Kondo<Symmetry>>(params, c.pattern, bonds);
+            ham = std::make_unique<Xped::Kondo<Symmetry, HamScalar>>(params, c.pattern, bonds);
         } else {
             throw std::invalid_argument("Specified model is not implemented.");
         }
@@ -147,7 +150,7 @@ int main(int argc, char* argv[])
         Xped::Log::init_logging(world, "./" + ham->file_name() + "_chi_ramp.txt");
 
         Xped::Opts::CTM ctm_opts = Xped::Opts::ctm_from_toml(data.at("ctm"));
-        Xped::CTMSolver<Scalar, Symmetry> Jack(ctm_opts);
+        Xped::CTMSolver<Scalar, Symmetry, HamScalar> Jack(ctm_opts);
 
         // Xped::TMatrix<Xped::Qbasis<Symmetry, 1>> phys_basis(c.pattern);
         // phys_basis.setConstant(ham->data_h[0].uncoupledDomain()[0]);
@@ -180,7 +183,7 @@ int main(int argc, char* argv[])
         std::vector<double> Es(chis.size(), 0.);
         for(auto ichi = 0ul; auto chi : chis) {
             Jack.opts.chi = chi;
-            Es[ichi] = Jack.template solve<double, false>(Psi, nullptr, *ham);
+            Es[ichi] = Jack.template solve<false>(Psi, nullptr, *ham);
             Jack.REINIT_ENV = false;
         }
         for(auto j = 0; j < chis.size(); ++j) { Xped::Log::on_exit(ctm_opts.verbosity, "{} χ={:^3d}: E={:.8f}", "↳", chis[j], Es[j]); }

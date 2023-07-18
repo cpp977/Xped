@@ -155,16 +155,11 @@ int main(int argc, char* argv[])
     Xped::iPEPS<Scalar, Symmetry, false> Psi(c, D, left_aux, top_aux, phys_basis, charges, Xped::Opts::DiscreteSym::C4v);
     std::size_t seed = 1;
     if(data["random"].contains("seed")) { seed = static_cast<std::size_t>(data["random"].at("seed").as_integer()); }
-    bool C4_SYM = true;
-    if(data["random"].contains("c4")) { C4_SYM = data["random"].at("c4").as_boolean(); }
     Psi.setRandom(seed);
     Psi.normalize();
     // Psi.As[0].print(std::cout, true);
     // std::cout << std::endl;
     // auto norm1 = fourByfour(Psi);
-    auto energy1 = fourByfour(Psi, *ham);
-    auto energy2 = fourByfour3(Psi, *ham);
-    fmt::print("E1={}, E2={}\n", energy1, energy2);
     // Psi.As[0] = Psi.As[0] * 2.;
     // Psi.Adags[0] = Psi.As[0].adjoint().eval().template permute<0, 3, 4, 2, 0, 1>();
     // auto energy2 = fourByfour(Psi, *ham);

@@ -69,7 +69,7 @@ int main(int argc, char* argv[])
         // typedef Xped::Sym::ZN<Xped::Sym::SpinU1, 36, double> Symmetry;
         // using Symmetry = Xped::Sym::U0<double>;
 
-        std::unique_ptr<Xped::TwoSiteObservable<HamScalar, Symmetry>> ham;
+        std::unique_ptr<Xped::Hamiltonian<HamScalar, Symmetry>> ham;
 
         std::string config_file = argc > 1 ? argv[1] : "config.toml";
 

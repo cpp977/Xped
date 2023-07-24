@@ -11,12 +11,9 @@ namespace Xped {
 template <typename Scalar, typename Symmetry, typename HamScalar = double>
 struct iPEPSSolverImag
 {
-    template <typename Sym>
-    using Hamiltonian = TwoSiteObservable<HamScalar, Sym, true>;
-
     iPEPSSolverImag() = delete;
 
-    iPEPSSolverImag(Opts::Imag imag_opts, Opts::CTM ctm_opts, std::shared_ptr<iPEPS<Scalar, Symmetry>> Psi_in, Hamiltonian<Symmetry>& H_in)
+    iPEPSSolverImag(Opts::Imag imag_opts, Opts::CTM ctm_opts, std::shared_ptr<iPEPS<Scalar, Symmetry>> Psi_in, Hamiltonian<HamScalar, Symmetry>& H_in)
         : imag_opts(imag_opts)
         , Psi(Psi_in)
         , H(H_in)
@@ -142,7 +139,18 @@ struct iPEPSSolverImag
                 Jack.opts.chi = chi;
                 Es[iD][ichi] = Jack.template solve<false>(Psi, nullptr, H);
 
-                if(imag_opts.display_obs or not imag_opts.obs_directory.empty()) { H.computeObs(Jack.getCTM()); }
+                if(imag_opts.display_obs or not imag_opts.obs_directory.empty()) {
+                    for(auto& ob : H.obs) {
+                        if(auto* one = dynamic_cast<OneSiteObservable<double, Symmetry>*>(ob.get()); one != nullptr) { avg(Jack.getCTM(), *one); }
+                        if(auto* one_c = dynamic_cast<OneSiteObservable<std::complex<double>, Symmetry>*>(ob.get()); one_c != nullptr) {
+                            avg(Jack.getCTM(), *one_c);
+                        }
+                        if(auto* two = dynamic_cast<TwoSiteObservable<double, Symmetry>*>(ob.get()); two != nullptr) { avg(Jack.getCTM(), *two); }
+                        if(auto* two_c = dynamic_cast<TwoSiteObservable<std::complex<double>, Symmetry>*>(ob.get()); two_c != nullptr) {
+                            avg(Jack.getCTM(), *two_c);
+                        }
+                    }
+                }
                 if(imag_opts.display_obs) { Log::per_iteration(imag_opts.verbosity, "  Observables:\n{}", H.getObsString("    ")); }
                 if(not imag_opts.obs_directory.empty()) {
                     std::string e_name = fmt::format("/{}/{}/energy", D, chi);
@@ -292,7 +300,7 @@ struct iPEPSSolverImag
     CTMSolver<Scalar, Symmetry, HamScalar> Jack;
     Opts::Imag imag_opts;
     std::shared_ptr<iPEPS<Scalar, Symmetry>> Psi;
-    Hamiltonian<Symmetry>& H;
+    Hamiltonian<Scalar, Symmetry>& H;
 };
 
 } // namespace Xped

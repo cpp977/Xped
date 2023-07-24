@@ -12,7 +12,8 @@
 #include "highfive/H5File.hpp"
 
 #include "Xped/NLO/OptimOpts.hpp"
-// #include "Xped/PEPS/CTMOpts.hpp"
+#include "Xped/PEPS/LinearAlgebra.hpp"
+#include "Xped/PEPS/Models/Hamiltonian.hpp"
 
 #include "Xped/PEPS/ExactSolver.hpp"
 
@@ -21,17 +22,9 @@ namespace Xped {
 template <typename Scalar, typename Symmetry, std::size_t TRank = 2>
 class Energy final : public ceres::FirstOrderFunction
 {
-    template <typename Sym>
-    using Hamiltonian = TwoSiteObservable<double, Sym, true>;
-    /*,
-               const Tensor<Scalar, 2, 1, Symmetry, false>& fuse_2,
-               const Tensor<Scalar, 2, 1, Symmetry, false>& fuse_4,
-               const Tensor<Scalar, 2, 1, Symmetry, false>& fuse_8,
-               const Tensor<Scalar, 2, 1, Symmetry, false>& fuse_12,
-               const Tensor<Scalar, 2, 1, Symmetry, false>& fuse_14*/
 public:
     Energy(std::unique_ptr<ExactSolver<Scalar, Symmetry, TRank>> solver,
-           Hamiltonian<Symmetry>& op,
+           Hamiltonian<double, Symmetry>& op,
            std::shared_ptr<iPEPS<Scalar, Symmetry, true, false>> Psi)
         : impl(std::move(solver))
         , op(op)
@@ -54,7 +47,7 @@ public:
         return true;
     }
     std::unique_ptr<ExactSolver<Scalar, Symmetry, TRank>> impl;
-    Hamiltonian<Symmetry>& op;
+    Hamiltonian<double, Symmetry>& op;
     std::shared_ptr<iPEPS<Scalar, Symmetry, true, false>> Psi;
     // Tensor<Scalar, 2, 1, Symmetry, false> fuse_2;
     // Tensor<Scalar, 2, 1, Symmetry, false> fuse_4;
@@ -67,13 +60,14 @@ public:
 template <typename Scalar, typename Symmetry, std::size_t TRank = 2>
 struct fPEPSSolverAD
 {
-    template <typename Sym>
-    using Hamiltonian = TwoSiteObservable<double, Sym, true>;
     using EnergyFunctor = Energy<Scalar, Symmetry, TRank>;
 
     fPEPSSolverAD() = delete;
 
-    fPEPSSolverAD(Opts::Optim optim_opts, Opts::CTM ctm_opts, std::shared_ptr<iPEPS<Scalar, Symmetry, true>> Psi_in, Hamiltonian<Symmetry>& H_in)
+    fPEPSSolverAD(Opts::Optim optim_opts,
+                  Opts::CTM ctm_opts,
+                  std::shared_ptr<iPEPS<Scalar, Symmetry, true>> Psi_in,
+                  Hamiltonian<double, Symmetry>& H_in)
         : optim_opts(optim_opts)
         , H(H_in)
         , Psi(Psi_in)
@@ -95,61 +89,50 @@ struct fPEPSSolverAD
             // }
         } else {
             if(optim_opts.load != "") {
-                // std::filesystem::path load_p(optim_opts.load);
-                // if(load_p.is_relative()) { load_p = optim_opts.working_directory / load_p; }
-                // switch(optim_opts.load_format) {
-                // case Opts::LoadFormat::MATLAB: {
-                //     Psi->loadFromMatlab(load_p, "cpp", optim_opts.qn_scale);
-                //     break;
-                // }
-                // case Opts::LoadFormat::JSON: {
-                //     Psi->loadFromJson(load_p);
-                //     auto perm1 = Psi->As[0].template permute<0, 1, 2, 3, 0, 4>();
-                //     fmt::print("check1={}\n", (Psi->As[0] - perm1).norm());
-                //     auto perm2 = Psi->As[0].template permute<0, 0, 3, 2, 1, 4>();
-                //     fmt::print("check2={}\n", (Psi->As[0] - perm2).norm());
-                //     break;
-                // }
+                std::filesystem::path load_p(optim_opts.load);
+                if(load_p.is_relative()) { load_p = optim_opts.working_directory / load_p; }
+                switch(optim_opts.load_format) {
+                case Opts::LoadFormat::MATLAB: {
+                    // Psi->loadFromMatlab(load_p, "cpp", optim_opts.qn_scale);
+                    break;
+                }
+                case Opts::LoadFormat::JSON: {
+                    // Psi->loadFromJson(load_p);
+                    // auto perm1 = Psi->As[0].template permute<0, 1, 2, 3, 0, 4>();
+                    // fmt::print("check1={}\n", (Psi->As[0] - perm1).norm());
+                    // auto perm2 = Psi->As[0].template permute<0, 0, 3, 2, 1, 4>();
+                    // fmt::print("check2={}\n", (Psi->As[0] - perm2).norm());
+                    break;
+                }
 
-                // case Opts::LoadFormat::NATIVE: {
-                //     constexpr std::size_t flags = yas::file /*IO type*/ | yas::binary; /*IO format*/
-                //     iPEPS<Scalar, Symmetry, true> tmp_Psi;
-                //     try {
-                //         yas::load<flags>(load_p.string().c_str(), tmp_Psi);
-                //     } catch(const yas::serialization_exception& se) {
-                //         fmt::print(
-                //             "Error while deserializing file ({}) with initial wavefunction.\nThis might be because of incompatible symmetries
-                //             between this simulation and the loaded wavefunction.", load_p.string());
-                //         std::cout << std::flush;
-                //         throw;
-                //     } catch(const yas::io_exception& ie) {
-                //         fmt::print("Error while loading file ({}) with initial wavefunction.\n", load_p.string());
-                //         std::cout << std::flush;
-                //         throw;
-                //     } catch(const std::exception& e) {
-                //         fmt::print("Unknown error while loading file ({}) with initial wavefunction.\n", load_p.string());
-                //         std::cout << std::flush;
-                //         throw;
-                //     }
-                //     Psi = std::make_shared<iPEPS<Scalar, Symmetry, true>>(std::move(tmp_Psi));
-                //     break;
-                // }
-                // }
-                // assert(Psi->cell().pattern == H.data_h.pat);
+                case Opts::LoadFormat::Native: {
+                    constexpr std::size_t flags = yas::file /*IO type*/ | yas::binary; /*IO format*/
+                    iPEPS<Scalar, Symmetry, true> tmp_Psi;
+                    try {
+                        yas::load<flags>(load_p.string().c_str(), tmp_Psi);
+                    } catch(const yas::serialization_exception& se) {
+                        fmt::print(
+                            "Error while deserializing file ({}) with initial wavefunction.\nThis might be because of incompatible symmetries between this simulation and the loaded wavefunction.",
+                            load_p.string());
+                        std::cout << std::flush;
+                        throw;
+                    } catch(const yas::io_exception& ie) {
+                        fmt::print("Error while loading file ({}) with initial wavefunction.\n", load_p.string());
+                        std::cout << std::flush;
+                        throw;
+                    } catch(const std::exception& e) {
+                        fmt::print("Unknown error while loading file ({}) with initial wavefunction.\n", load_p.string());
+                        std::cout << std::flush;
+                        throw;
+                    }
+                    Psi = std::make_shared<iPEPS<Scalar, Symmetry, true>>(std::move(tmp_Psi));
+                    break;
+                }
+                }
+                assert(Psi->cell().pattern == H.data_h.pat);
             } else {
                 Psi->setRandom(optim_opts.seed);
             }
-            // auto l = Psi->As[0].uncoupledCodomain()[2];
-            // auto l2 = l.combine(l).forgetHistory();
-            // auto l4 = l2.combine(l2).forgetHistory();
-            // auto l8 = l4.combine(l4).forgetHistory();
-            // auto l12 = l8.combine(l4).forgetHistory();
-            // auto l14 = l12.combine(l2).forgetHistory();
-            // auto fuse_2 = Tensor<Scalar, 2, 1, Symmetry, false>::Identity({{l, l}}, {{l2}}, Psi->As[0].world());
-            // auto fuse_4 = Tensor<Scalar, 2, 1, Symmetry, false>::Identity({{l2, l2}}, {{l4}}, Psi->As[0].world());
-            // auto fuse_8 = Tensor<Scalar, 2, 1, Symmetry, false>::Identity({{l4, l4}}, {{l8}}, Psi->As[0].world());
-            // auto fuse_12 = Tensor<Scalar, 2, 1, Symmetry, false>::Identity({{l8, l4}}, {{l12}}, Psi->As[0].world());
-            // auto fuse_14 = Tensor<Scalar, 2, 1, Symmetry, false>::Identity({{l12, l2}}, {{l14}}, Psi->As[0].world());
 
             problem = std::make_unique<ceres::GradientProblem>(new EnergyFunctor(
                 std::move(std::make_unique<ExactSolver<Scalar, Symmetry, TRank>>()), H, Psi)); //, fuse_2, fuse_4, fuse_8, fuse_12, fuse_14));
@@ -157,7 +140,7 @@ struct fPEPSSolverAD
             if(optim_opts.log_format == ".h5") {
                 try {
                     HighFive::File file((optim_opts.working_directory / optim_opts.logging_directory).string() + "/" + this->H.file_name() +
-                                            fmt::format("_D={}_chi={}_seed={}_id={}.h5", Psi->D, ctm_opts.chi, optim_opts.seed, optim_opts.id),
+                                            fmt::format("_D={}_seed={}_id={}.h5", Psi->D, optim_opts.seed, optim_opts.id),
                                         optim_opts.resume ? HighFive::File::ReadWrite : HighFive::File::Excl);
                     HighFive::DataSpace dataspace = HighFive::DataSpace({0}, {HighFive::DataSpace::UNLIMITED});
 
@@ -179,7 +162,7 @@ struct fPEPSSolverAD
                     fmt::print(fg(fmt::color::red),
                                "There already exists a log file for this simulation:{}.\n",
                                (optim_opts.working_directory / optim_opts.logging_directory).string() + "/" + this->H.file_name() +
-                                   fmt::format("_D={}_chi={}_seed={}_id={}.h5", Psi->D, ctm_opts.chi, optim_opts.seed, optim_opts.id));
+                                   fmt::format("_D={}_seed={}_id={}.h5", Psi->D, optim_opts.seed, optim_opts.id));
                     std::cout << std::flush;
                     throw;
                 }
@@ -192,11 +175,10 @@ struct fPEPSSolverAD
                     HighFive::File file((optim_opts.working_directory / optim_opts.obs_directory).string() + "/" + this->H.file_name() +
                                             fmt::format("_seed={}_id={}.h5", optim_opts.seed, optim_opts.id),
                                         optim_opts.resume ? HighFive::File::ReadWrite : HighFive::File::ReadOnly);
-                    if(file.exist(fmt::format("/{}/{}", Psi->D, ctm_opts.chi))) {
+                    if(file.exist(fmt::format("/{}", Psi->D))) {
                         fmt::print(fg(fmt::color::red),
-                                   "There already exists data in observable file for D={}, chi={}.\n Filename:{}.\n",
+                                   "There already exists data in observable file for D={}.\n Filename:{}.\n",
                                    Psi->D,
-                                   ctm_opts.chi,
                                    (optim_opts.working_directory / optim_opts.obs_directory).string() + "/" + this->H.file_name() +
                                        fmt::format("_seed={}_id={}.h5", optim_opts.seed, optim_opts.id));
                         std::cout << std::flush;
@@ -263,8 +245,8 @@ struct fPEPSSolverAD
         options.callbacks.push_back(&get_state_c);
         LoggingCallback logging_c(*this);
         options.callbacks.push_back(&logging_c);
-        // ObsCallback obs_c(*this);
-        // options.callbacks.push_back(&obs_c);
+        ObsCallback obs_c(*this);
+        options.callbacks.push_back(&obs_c);
         // CustomCallback custom_c(*this, getCTMSolver()->getCTM());
         // options.callbacks.push_back(&custom_c);
         // SaveCallback save_c(*this);
@@ -303,7 +285,7 @@ struct fPEPSSolverAD
     SolverState state;
 
     ceres::GradientProblemSolver::Options options;
-    Hamiltonian<Symmetry>& H;
+    Hamiltonian<double, Symmetry>& H;
     std::shared_ptr<iPEPS<Scalar, Symmetry, true>> Psi;
     std::unique_ptr<ceres::GradientProblem> problem;
 
@@ -392,12 +374,86 @@ struct fPEPSSolverAD
                         fmt::format(
                             "_D={}_seed={}_id={}{}", solver.Psi->D, solver.optim_opts.seed, solver.optim_opts.id, solver.optim_opts.log_format),
                     std::ios::app);
-                ofs << summary.iteration << '\t' << summary.cost << '\t' << summary.gradient_norm << std::endl;
+                ofs << summary.iteration << '\t' << std::setprecision(12) << summary.cost << '\t' << summary.gradient_norm << std::endl;
                 ofs.close();
             }
             return ceres::SOLVER_CONTINUE;
         }
         const fPEPSSolverAD& solver;
+    };
+
+    struct ObsCallback : public ceres::IterationCallback
+    {
+        ObsCallback(fPEPSSolverAD& solver_in)
+            : solver(solver_in)
+        {}
+
+        ceres::CallbackReturnType operator()(const ceres::IterationSummary& summary)
+        {
+            if(solver.optim_opts.display_obs or not solver.optim_opts.obs_directory.empty()) {
+                auto rho = solver.getSolver()->rho;
+                auto rho1 = solver.getSolver()->rho1;
+                for(auto& ob : solver.H.obs) {
+                    if(auto* one = dynamic_cast<OneSiteObservable<double, Symmetry>*>(ob.get()); one != nullptr) { avg(rho1, *one); }
+                    if(auto* one_c = dynamic_cast<OneSiteObservable<std::complex<double>, Symmetry>*>(ob.get()); one_c != nullptr) {
+                        avg(rho1, *one_c);
+                    }
+                    if(auto* two = dynamic_cast<TwoSiteObservable<double, Symmetry>*>(ob.get()); two != nullptr) { avg(rho, *two, Opts::Bond::H); }
+                    if(auto* two_c = dynamic_cast<TwoSiteObservable<std::complex<double>, Symmetry>*>(ob.get()); two_c != nullptr) {
+                        avg(rho, *two_c, Opts::Bond::H);
+                    }
+                }
+            }
+            if(solver.optim_opts.display_obs) {
+                Log::per_iteration(solver.optim_opts.verbosity, "  Observables:\n{}", solver.H.getObsString("    "));
+            }
+            if(not solver.optim_opts.obs_directory.empty()) {
+                HighFive::File file((solver.optim_opts.working_directory / solver.optim_opts.obs_directory).string() + "/" + solver.H.file_name() +
+                                        fmt::format("_seed={}_id={}.h5", solver.optim_opts.seed, solver.optim_opts.id),
+                                    HighFive::File::OpenOrCreate);
+                std::string e_name = fmt::format("/{}/energy", solver.Psi->D);
+                if(not file.exist(e_name)) {
+                    HighFive::DataSpace dataspace = HighFive::DataSpace({0, 0}, {HighFive::DataSpace::UNLIMITED, HighFive::DataSpace::UNLIMITED});
+
+                    // Use chunking
+                    HighFive::DataSetCreateProps props;
+                    props.add(HighFive::Chunking(std::vector<hsize_t>{2, 2}));
+
+                    // Create the dataset
+                    HighFive::DataSet dataset = file.createDataSet(e_name, dataspace, HighFive::create_datatype<double>(), props);
+                }
+                {
+                    auto d = file.getDataSet(e_name);
+                    std::vector<std::vector<double>> data;
+                    data.push_back(std::vector<double>(1, summary.cost));
+                    std::size_t curr_size = d.getDimensions()[0];
+                    d.resize({curr_size + 1, data[0].size()});
+                    d.select({curr_size, 0}, {1, data[0].size()}).write(data);
+                }
+                std::string g_name = fmt::format("/{}/grad", solver.Psi->D);
+                if(not file.exist(g_name)) {
+                    HighFive::DataSpace dataspace = HighFive::DataSpace({0, 0}, {HighFive::DataSpace::UNLIMITED, HighFive::DataSpace::UNLIMITED});
+
+                    // Use chunking
+                    HighFive::DataSetCreateProps props;
+                    props.add(HighFive::Chunking(std::vector<hsize_t>{2, 2}));
+
+                    // Create the dataset
+                    HighFive::DataSet dataset = file.createDataSet(g_name, dataspace, HighFive::create_datatype<double>(), props);
+                }
+                {
+                    auto d = file.getDataSet(g_name);
+                    std::vector<std::vector<double>> data;
+                    data.push_back(std::vector<double>(1, summary.gradient_norm));
+                    std::size_t curr_size = d.getDimensions()[0];
+                    d.resize({curr_size + 1, data[0].size()});
+                    d.select({curr_size, 0}, {1, data[0].size()}).write(data);
+                }
+                solver.H.obsToFile(file, fmt::format("/{}/", solver.Psi->D));
+            }
+            return ceres::SOLVER_CONTINUE;
+        }
+        fPEPSSolverAD& solver;
     };
 
     // struct SaveCallback : public ceres::IterationCallback

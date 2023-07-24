@@ -38,6 +38,14 @@ template <typename Scalar,
 std::array<TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, typename TwoSiteObservable<OpScalar, Symmetry, HERMITIAN>::ObsScalar>>, 4>
 avg(XPED_CONST CTM<Scalar, Symmetry, TRank, ALL_OUT_LEGS, ENABLE_AD, CPOpts>& env, TwoSiteObservable<OpScalar, Symmetry, HERMITIAN>& op);
 
+template <typename Scalar, typename Symmetry, bool ENABLE_AD, typename OpScalar, bool HERMITIAN>
+TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, typename OneSiteObservable<OpScalar, Symmetry, HERMITIAN>::ObsScalar>>
+avg(XPED_CONST Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>& rho1, OneSiteObservable<OpScalar, Symmetry, HERMITIAN>& op);
+
+template <typename Scalar, typename Symmetry, bool ENABLE_AD, typename OpScalar, bool HERMITIAN>
+std::array<TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, typename TwoSiteObservable<OpScalar, Symmetry, HERMITIAN>::ObsScalar>>, 4>
+avg(XPED_CONST Tensor<Scalar, 2, 2, Symmetry, ENABLE_AD>& rho, TwoSiteObservable<OpScalar, Symmetry, HERMITIAN>& op, Opts::Bond bond);
+
 } // namespace Xped
 
 #ifndef XPED_COMPILED_LIB

@@ -4,6 +4,7 @@
 #include <memory>
 
 #include "Xped/PEPS/ImagOpts.hpp"
+#include "Xped/PEPS/Models/Hamiltonian.hpp"
 #include "Xped/PEPS/SimpleUpdate.hpp"
 #include "Xped/PEPS/TwoSiteObservable.hpp"
 #include "Xped/PEPS/iPEPS.hpp"
@@ -31,7 +32,7 @@ public:
 
     TimePropagator() = delete;
 
-    explicit TimePropagator(const TwoSiteObservable<HamScalar, Symmetry>& H_in,
+    explicit TimePropagator(const Hamiltonian<HamScalar, Symmetry>& H_in,
                             TimeScalar dt_in,
                             const Opts::Update& update_in,
                             const TMatrix<typename Symmetry::qType>& charges_in)
@@ -52,7 +53,7 @@ public:
     TMatrix<Tensor<Scalar, 1, 1, Symmetry>> spectrum_v;
 
 private:
-    const TwoSiteObservable<HamScalar, Symmetry>& H;
+    const Hamiltonian<HamScalar, Symmetry>& H;
     UnitCell cell_;
     TimeScalar dt;
     Opts::Update update;

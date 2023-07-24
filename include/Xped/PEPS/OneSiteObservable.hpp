@@ -6,15 +6,11 @@
 #include <highfive/H5DataSpace.hpp>
 
 #include "Xped/Core/Tensor.hpp"
-#include "Xped/PEPS/CTMOpts.hpp"
 #include "Xped/PEPS/ObservableBase.hpp"
 #include "Xped/PEPS/TMatrix.hpp"
 #include "Xped/Util/FmtHelpers.hpp"
 
 namespace Xped {
-
-template <typename, typename, std::size_t, bool, bool, Opts::CTMCheckpoint>
-class CTM;
 
 template <typename Scalar, typename Symmetry, bool HERMITIAN = true>
 struct OneSiteObservable : public ObservableBase

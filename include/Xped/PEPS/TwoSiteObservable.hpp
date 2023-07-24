@@ -7,15 +7,12 @@
 
 #include "Xped/Core/Tensor.hpp"
 #include "Xped/PEPS/Bonds.hpp"
-#include "Xped/PEPS/CTMOpts.hpp"
-#include "Xped/PEPS/LinearAlgebra.hpp"
 #include "Xped/PEPS/ObservableBase.hpp"
 #include "Xped/PEPS/TMatrix.hpp"
 
-namespace Xped {
+#include "Xped/IO/Matlab.hpp"
 
-template <typename, typename, std::size_t, bool, bool, Opts::CTMCheckpoint>
-class CTM;
+namespace Xped {
 
 template <typename Scalar, typename Symmetry, bool HERMITIAN = true>
 struct TwoSiteObservable : public ObservableBase
@@ -258,16 +255,6 @@ struct TwoSiteObservable : public ObservableBase
         if((bond & Opts::Bond::D1) == Opts::Bond::D1) { write_component(this->name + "_d1", obs_d1); }
         if((bond & Opts::Bond::D2) == Opts::Bond::D2) { write_component(this->name + "_d2", obs_d2); }
     }
-
-    virtual void setDefaultObs() {}
-
-    virtual void computeObs(XPED_CONST CTM<double, Symmetry, 2, false, false, Opts::CTMCheckpoint{}>& env) {}
-    virtual void computeObs(XPED_CONST CTM<std::complex<double>, Symmetry, 2, false, false, Opts::CTMCheckpoint{}>& env) {}
-    virtual void computeObs(XPED_CONST CTM<double, Symmetry, 1, false, false, Opts::CTMCheckpoint{}>& env) {}
-
-    virtual std::string getObsString(const std::string&) const { return ""; }
-
-    virtual void obsToFile(HighFive::File&, const std::string& = "/") const {}
 
     template <typename Ar>
     void serialize(Ar& ar)

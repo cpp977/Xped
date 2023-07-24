@@ -10,6 +10,7 @@
 
 #include "Xped/PEPS/CTM.hpp"
 #include "Xped/PEPS/CTMOpts.hpp"
+#include "Xped/PEPS/Models/Hamiltonian.hpp"
 
 namespace Xped {
 
@@ -25,8 +26,6 @@ public:
     using Scalar = Scalar_;
     using HamScalar = HamScalar_;
     using Symmetry = Symmetry_;
-    template <typename Sym>
-    using Hamiltonian = TwoSiteObservable<HamScalar, Sym, true>;
 
     CTMSolver() = default;
 
@@ -42,7 +41,8 @@ public:
     }
 
     template <bool AD>
-    typename ScalarTraits<Scalar>::Real solve(std::shared_ptr<iPEPS<Scalar, Symmetry, ALL_OUT_LEGS>> Psi, Scalar* gradient, Hamiltonian<Symmetry>& H);
+    typename ScalarTraits<Scalar>::Real
+    solve(std::shared_ptr<iPEPS<Scalar, Symmetry, ALL_OUT_LEGS>> Psi, Scalar* gradient, Hamiltonian<HamScalar, Symmetry>& H);
 
     XPED_CONST CTM<Scalar, Symmetry, TRank, ALL_OUT_LEGS, false>& getCTM() XPED_CONST { return Jack; }
 

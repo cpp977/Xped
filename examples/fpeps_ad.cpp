@@ -47,6 +47,7 @@ XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100000)
 
 // #include "Xped/PEPS/CTM.hpp"
 // #include "Xped/PEPS/CorrelationLength.hpp"
+#include "Xped/PEPS/Models/Hamiltonian.hpp"
 #include "Xped/PEPS/Models/Heisenberg.hpp"
 #include "Xped/PEPS/Models/Hubbard.hpp"
 #include "Xped/PEPS/Models/Kondo.hpp"
@@ -158,14 +159,15 @@ int main(int argc, char* argv[])
             for(std::size_t i = 1; i < bs.size(); ++i) { bonds = bonds | bs[i]; }
         }
 
-        std::unique_ptr<Xped::TwoSiteObservable<double, Symmetry>> ham;
+        std::unique_ptr<Xped::Hamiltonian<double, Symmetry>> ham;
         if(toml::find(data.at("model"), "name").as_string() == "Heisenberg") {
             ham = std::make_unique<Xped::Heisenberg<Symmetry>>(params, c.pattern, bonds);
         } else if(toml::find(data.at("model"), "name").as_string() == "KondoNecklace") {
             ham = std::make_unique<Xped::KondoNecklace<Symmetry>>(params, c.pattern, bonds);
         } else if(toml::find(data.at("model"), "name").as_string() == "Hubbard") {
             ham = std::make_unique<Xped::Hubbard<Symmetry>>(params, c.pattern, bonds);
-        } // else if(toml::find(data.at("model"), "name").as_string() == "Kondo") {
+        }
+        // else if(toml::find(data.at("model"), "name").as_string() == "Kondo") {
         //     ham = std::make_unique<Xped::Kondo<Symmetry>>(params, c.pattern, bonds);
         // }
         else {
@@ -182,10 +184,6 @@ int main(int argc, char* argv[])
         phys_basis.setConstant(ham->data_h[0].uncoupledDomain()[0]);
         auto Psi = std::make_shared<Xped::iPEPS<Scalar, Symmetry, true, false>>(c, D, left_aux, top_aux, phys_basis, charges, sym);
         Psi->setRandom();
-        Psi->As[0].print(std::cout, true);
-        std::cout << std::endl;
-        Psi->Bs[0].print(std::cout, true);
-        std::cout << std::endl;
 
         constexpr Xped::Opts::CTMCheckpoint cp_opts{
             .GROW_ALL = true, .MOVE = true, .CORNER = true, .PROJECTORS = true, .RENORMALIZE = true, .RDM = true};
@@ -193,6 +191,11 @@ int main(int argc, char* argv[])
         Xped::fPEPSSolverAD<Scalar, Symmetry, TRank> Jack(o_opts, c_opts, Psi, *ham);
 
         Jack.solve<double>();
+
+        Psi->As[0].print(std::cout, true);
+        std::cout << std::endl;
+        Psi->Bs[0].print(std::cout, true);
+        std::cout << std::endl;
 
 #ifdef XPED_CACHE_PERMUTE_OUTPUT
         std::cout << "total hits=" << tree_cache</*shift*/ 0, /*Rank*/ 4, /*CoRank*/ 3, Symmetry>.cache.stats().total_hits()

@@ -6,6 +6,109 @@
 
 namespace Xped {
 
+template <typename Scalar, typename Symmetry, bool ENABLE_AD, typename OpScalar, bool HERMITIAN>
+TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, typename OneSiteObservable<OpScalar, Symmetry, HERMITIAN>::ObsScalar>>
+avg(XPED_CONST Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>& rho1, OneSiteObservable<OpScalar, Symmetry, HERMITIAN>& op)
+{
+    using ObsScalar = typename OneSiteObservable<OpScalar, Symmetry, HERMITIAN>::ObsScalar;
+    TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, ObsScalar>> o(op.data.pat);
+    o.setConstant(0.);
+    if(not op.MEASURE) { return o; }
+
+    for(int x = 0; x < op.data.pat.Lx; ++x) {
+        for(int y = 0; y < op.data.pat.Ly; ++y) {
+            if(not op.data.pat.isUnique(x, y)) { continue; }
+            if constexpr(ScalarTraits<ObsScalar>::IS_COMPLEX()) {
+                o(x, y) = rho1.twist(0).template contract<std::array{1, 2}, std::array{2, 1}, 0, ENABLE_AD>(op.data(x, y)).trace();
+            } else {
+                o(x, y) = std::real(rho1.twist(0).template contract<std::array{1, 2}, std::array{2, 1}, 0, ENABLE_AD>(op.data(x, y)).trace());
+            }
+            if constexpr(ENABLE_AD) {
+                op.obs(x, y) = o(x, y).val();
+            } else {
+                op.obs(x, y) = o(x, y);
+            }
+        }
+    }
+    return o;
+}
+
+template <typename Scalar, typename Symmetry, bool ENABLE_AD, typename OpScalar, bool HERMITIAN>
+std::array<TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, typename TwoSiteObservable<OpScalar, Symmetry, HERMITIAN>::ObsScalar>>, 4>
+avg(XPED_CONST Tensor<Scalar, 2, 2, Symmetry, ENABLE_AD>& rho, TwoSiteObservable<OpScalar, Symmetry, HERMITIAN>& op, Opts::Bond bond)
+{
+    using ObsScalar = typename TwoSiteObservable<OpScalar, Symmetry, HERMITIAN>::ObsScalar;
+
+    TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, ObsScalar>> o_h(op.data_h.pat);
+    o_h.setConstant(0.);
+    TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, ObsScalar>> o_v(op.data_v.pat);
+    o_v.setConstant(0.);
+    TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, ObsScalar>> o_d1(op.data_d1.pat);
+    o_d1.setConstant(0.);
+    TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, ObsScalar>> o_d2(op.data_d2.pat);
+    o_d2.setConstant(0.);
+    if(not op.MEASURE) { return std::array{o_h, o_v, o_d1, o_d2}; }
+
+    for(int x = 0; x < op.data_h.pat.Lx; ++x) {
+        for(int y = 0; y < op.data_h.pat.Ly; ++y) {
+            if(not op.data_h.pat.isUnique(x, y)) { continue; }
+            if((bond & Opts::Bond::H) == Opts::Bond::H) {
+                if constexpr(ScalarTraits<ObsScalar>::IS_COMPLEX()) {
+                    o_h(x, y) = rho.twist(0).twist(1).template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0>(op.data_h(x, y)).trace();
+                } else {
+                    o_h(x, y) = std::real(
+                        rho.twist(0).twist(1).template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0>(op.data_h(x, y)).trace());
+                }
+                if constexpr(ENABLE_AD) {
+                    op.obs_h(x, y) = o_h(x, y).val();
+                } else {
+                    op.obs_h(x, y) = o_h(x, y);
+                }
+            }
+            if((bond & Opts::Bond::V) == Opts::Bond::V) {
+                if constexpr(ScalarTraits<ObsScalar>::IS_COMPLEX()) {
+                    o_v(x, y) = rho.twist(0).twist(1).template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0>(op.data_v(x, y)).trace();
+                } else {
+                    o_v(x, y) = std::real(
+                        rho.twist(0).twist(1).template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0>(op.data_v(x, y)).trace());
+                }
+                if constexpr(ENABLE_AD) {
+                    op.obs_v(x, y) = o_v(x, y).val();
+                } else {
+                    op.obs_v(x, y) = o_v(x, y);
+                }
+            }
+            if((bond & Opts::Bond::D1) == Opts::Bond::D1) {
+                if constexpr(ScalarTraits<ObsScalar>::IS_COMPLEX()) {
+                    o_d1(x, y) = rho.twist(0).twist(1).template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0>(op.data_d1(x, y)).trace();
+                } else {
+                    o_d1(x, y) = std::real(
+                        rho.twist(0).twist(1).template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0>(op.data_d1(x, y)).trace());
+                }
+                if constexpr(ENABLE_AD) {
+                    op.obs_d1(x, y) = o_d1(x, y).val();
+                } else {
+                    op.obs_d1(x, y) = o_d1(x, y);
+                }
+            }
+            if((bond & Opts::Bond::D2) == Opts::Bond::D2) {
+                if constexpr(ScalarTraits<ObsScalar>::IS_COMPLEX()) {
+                    o_d2(x, y) = rho.twist(0).twist(1).template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0>(op.data_d2(x, y)).trace();
+                } else {
+                    o_d2(x, y) = std::real(
+                        rho.twist(0).twist(1).template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0>(op.data_d2(x, y)).trace());
+                }
+                if constexpr(ENABLE_AD) {
+                    op.obs_d2(x, y) = o_d2(x, y).val();
+                } else {
+                    op.obs_d2(x, y) = o_d2(x, y);
+                }
+            }
+        }
+    }
+    return std::array{o_h, o_v, o_d1, o_d2};
+}
+
 template <typename Scalar,
           typename Symmetry,
           std::size_t TRank,
@@ -28,18 +131,19 @@ avg(XPED_CONST CTM<Scalar, Symmetry, TRank, ALL_OUT_LEGS, ENABLE_AD, CPOpts>& en
     for(int x = 0; x < env.cell().rows(); ++x) {
         for(int y = 0; y < env.cell().cols(); ++y) {
             if(not env.cell().pattern.isUnique(x, y)) { continue; }
-            // auto C1T1 = env.C1s(x - 1, y - 1).template contract<std::array{-1, 1}, std::array{1, -2, -3, -4}, 1, ENABLE_AD>(env.T1s(x, y - 1));
-            // auto T4C1T1 = env.T4s(x - 1, y).template contract<std::array{1, -1, -2, -3}, std::array{1, -4, -5, -6}, 3, ENABLE_AD>(C1T1);
-            // auto T4C1T1A = T4C1T1.template contract<std::array{-1, 1, -2, -3, 2, -4}, std::array{1, 2, -5, -6, -7}, 4, ENABLE_AD>(env.A->As(x, y));
-            // auto T4C1T1AH = T4C1T1A.template contract<std::array{-1, -2, -3, -4, -5, -6, 1}, std::array{1, -7}, 6, ENABLE_AD>(op.data(x, y));
-            // auto Q1H = T4C1T1AH.template contract<std::array{-1, 1, -4, 2, -5, -2, 3}, std::array{1, 2, 3, -6, -3}, 3, ENABLE_AD>(env.A->Adags(x,
-            // y));
+            // auto C1T1 = env.C1s(x - 1, y - 1).template contract<std::array{-1, 1}, std::array{1, -2, -3, -4}, 1,
+            // ENABLE_AD>(env.T1s(x, y - 1)); auto T4C1T1 = env.T4s(x - 1, y).template contract<std::array{1, -1, -2, -3},
+            // std::array{1, -4, -5, -6}, 3, ENABLE_AD>(C1T1); auto T4C1T1A = T4C1T1.template contract<std::array{-1, 1, -2, -3, 2,
+            // -4}, std::array{1, 2, -5, -6, -7}, 4, ENABLE_AD>(env.A->As(x, y)); auto T4C1T1AH = T4C1T1A.template
+            // contract<std::array{-1, -2, -3, -4, -5, -6, 1}, std::array{1, -7}, 6, ENABLE_AD>(op.data(x, y)); auto Q1H =
+            // T4C1T1AH.template contract<std::array{-1, 1, -4, 2, -5, -2, 3}, std::array{1, 2, 3, -6, -3}, 3,
+            // ENABLE_AD>(env.A->Adags(x, y));
 
-            // auto C2T2 = env.C2s(x + 1, y - 1).template contract<std::array{-1, 1}, std::array{-2, -3, 1, -4}, 3>(env.T2s(x + 1, y));
-            // auto C2T2C3 = C2T2.template contract<std::array{-1, -2, -3, 1}, std::array{1, -1}, 3>(env.C3s(x + 1, y + 1));
-            // auto C2T2C3T3 = C2T2C3.template contract<std::array{-1, -2, -3, 1}, std::array{-4, -5, -6, 1}, 3>(env.T3s(x, y + 1));
-            // auto C2T2C3T3C4 = C2T2C3T3.template contract<std::array{-1, -2, -3, -5, -6, 1}, std::array{-4, 1}, 3>(env.C4s(x - 1, y + 1));
-            // auto Q1 = env.contractCorner(x, y, Opts::CORNER::UPPER_LEFT);
+            // auto C2T2 = env.C2s(x + 1, y - 1).template contract<std::array{-1, 1}, std::array{-2, -3, 1, -4}, 3>(env.T2s(x + 1,
+            // y)); auto C2T2C3 = C2T2.template contract<std::array{-1, -2, -3, 1}, std::array{1, -1}, 3>(env.C3s(x + 1, y + 1)); auto
+            // C2T2C3T3 = C2T2C3.template contract<std::array{-1, -2, -3, 1}, std::array{-4, -5, -6, 1}, 3>(env.T3s(x, y + 1)); auto
+            // C2T2C3T3C4 = C2T2C3T3.template contract<std::array{-1, -2, -3, -5, -6, 1}, std::array{-4, 1}, 3>(env.C4s(x - 1, y +
+            // 1)); auto Q1 = env.contractCorner(x, y, Opts::CORNER::UPPER_LEFT);
             // // auto norm = (C2T2C3T3C4 * Q1).trace();
             // // o(x, y) = (C2T2C3T3C4 * Q1H).trace() / norm;
             // auto norm = (Q1 * C2T2C3T3C4).trace();
@@ -82,7 +186,7 @@ avg(XPED_CONST CTM<Scalar, Symmetry, TRank, ALL_OUT_LEGS, ENABLE_AD, CPOpts>& en
 {
     assert(env.RDM_COMPUTED());
 
-    using ObsScalar = typename OneSiteObservable<OpScalar, Symmetry, HERMITIAN>::ObsScalar;
+    using ObsScalar = typename TwoSiteObservable<OpScalar, Symmetry, HERMITIAN>::ObsScalar;
 
     TMatrix<std::conditional_t<ENABLE_AD, stan::math::var, ObsScalar>> o_h(env.cell().pattern);
     o_h.setConstant(0.);
@@ -238,7 +342,8 @@ avg(XPED_CONST CTM<Scalar, Symmetry, TRank, ALL_OUT_LEGS, ENABLE_AD, CPOpts>& en
                         o_d2(x, y) = 0.;
                     }
                     // o_d2(x, y) =
-                    //     Q2H.template contract<std::array{1, 2, 3, 4, 5, 6, 7}, std::array{1, 2, 3, 4, 5, 6, 7}, 0, ENABLE_AD>(Q4H).trace() / norm;
+                    //     Q2H.template contract<std::array{1, 2, 3, 4, 5, 6, 7}, std::array{1, 2, 3, 4, 5, 6, 7}, 0,
+                    //     ENABLE_AD>(Q4H).trace() / norm;
                     if constexpr(ENABLE_AD) {
                         op.obs_d2(x, y) = o_d2(x, y).val();
                     } else {

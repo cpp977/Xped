@@ -315,7 +315,6 @@ void TimePropagator<Scalar, TimeScalar, HamScalar, Symmetry>::t_step_d2(iPEPS<Sc
     bond_bl = bond_bl * tmp_bl;
     auto tmp = bond_bl.twist(0).template contract<std::array{1, -1, -2}, std::array{-3, -4, -5, 1, -6}, 2>(tl_full);
     auto bond = tmp.template contract<std::array{-1, -2, -3, -4, 1, -5}, std::array{1, -6, -7}, 5>(bond_tr);
-    auto shifted_ham = H.shiftQN(Psi.charges());
     Tensor<Scalar, 2, 5, Symmetry> enlarged_bond;
     switch(gate_order) {
     case Opts::GATE_ORDER::HDV: {
@@ -453,7 +452,7 @@ TimePropagator<Scalar, TimeScalar, HamScalar, Symmetry>::renormalize_d1(const Te
 template <typename Scalar, typename TimeScalar, typename HamScalar, typename Symmetry>
 void TimePropagator<Scalar, TimeScalar, HamScalar, Symmetry>::initU()
 {
-    auto shifted_ham = H.shiftQN(charges);
+    auto shifted_ham = H.asObservable().shiftQN(charges);
     U = TwoSiteObservable<HamScalar, Symmetry>(H.data_h.pat, H.bond);
     Usqrt = TwoSiteObservable<HamScalar, Symmetry>(H.data_h.pat, H.bond);
     Usq = TwoSiteObservable<HamScalar, Symmetry>(H.data_h.pat, H.bond);

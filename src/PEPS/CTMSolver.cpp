@@ -11,7 +11,7 @@ template <bool AD>
 typename ScalarTraits<Scalar>::Real
 CTMSolver<Scalar, Symmetry, HamScalar, ALL_OUT_LEGS, CPOpts, TRank>::solve(std::shared_ptr<iPEPS<Scalar, Symmetry, ALL_OUT_LEGS>> Psi,
                                                                            Scalar* gradient,
-                                                                           Hamiltonian<Symmetry>& H)
+                                                                           Hamiltonian<HamScalar, Symmetry>& H)
 {
     util::Stopwatch<> total_t;
     Jack.set_A(Psi);
@@ -52,7 +52,8 @@ CTMSolver<Scalar, Symmetry, HamScalar, ALL_OUT_LEGS, CPOpts, TRank>::solve(std::
         util::Stopwatch<> move_t;
         Jack.grow_all();
         Jack.computeRDM();
-        auto [E_h, E_v, E_d1, E_d2] = avg(Jack, H);
+        auto Hobs = H.asObservable();
+        auto [E_h, E_v, E_d1, E_d2] = avg(Jack, Hobs);
         E = (E_h.sum() + E_v.sum() + E_d1.sum() + E_d2.sum()) / Jack.cell().uniqueSize();
         step == 0 ? Log::per_iteration(opts.verbosity, "  {: >3} {:2d}: E={:2.8f}, t={}", "▷", step, E, move_t.time_string())
                   : Log::per_iteration(
@@ -85,7 +86,8 @@ CTMSolver<Scalar, Symmetry, HamScalar, ALL_OUT_LEGS, CPOpts, TRank>::solve(std::
         Jim.solve(opts.track_steps);
         auto forward_time = forward_t.time_string();
         Log::per_iteration(opts.verbosity, "  {: >3} forward pass: {}", "•", forward_time);
-        auto [E_h, E_v, E_d1, E_d2] = avg(Jim, H);
+        auto Hobs = H.asObservable();
+        auto [E_h, E_v, E_d1, E_d2] = avg(Jim, Hobs);
         auto res = (E_h.sum() + E_v.sum() + E_d1.sum() + E_d2.sum()) / Jim.cell().uniqueSize();
         E = res.val();
         util::Stopwatch<> backward_t;

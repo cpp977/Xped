@@ -15,18 +15,16 @@
 #include "Xped/PEPS/CTMOpts.hpp"
 
 #include "Xped/PEPS/CTMSolver.hpp"
+#include "Xped/PEPS/LinearAlgebra.hpp"
 
 namespace Xped {
 
 template <typename Scalar, typename HamScalar, typename Symmetry, bool ALL_OUT_LEGS, Opts::CTMCheckpoint CPOpts, std::size_t TRank = 2>
 class Energy final : public ceres::FirstOrderFunction
 {
-    template <typename Sym>
-    using Hamiltonian = TwoSiteObservable<HamScalar, Sym, true>;
-
 public:
     Energy(std::unique_ptr<CTMSolver<Scalar, Symmetry, HamScalar, ALL_OUT_LEGS, CPOpts, TRank>> solver,
-           Hamiltonian<Symmetry>& op,
+           Hamiltonian<HamScalar, Symmetry>& op,
            std::shared_ptr<iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, false>> Psi)
         : impl(std::move(solver))
         , op(op)
@@ -50,7 +48,7 @@ public:
         return true;
     }
     std::unique_ptr<CTMSolver<Scalar, Symmetry, HamScalar, ALL_OUT_LEGS, CPOpts, TRank>> impl;
-    Hamiltonian<Symmetry>& op;
+    Hamiltonian<HamScalar, Symmetry>& op;
     std::shared_ptr<iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, false>> Psi;
     int NumParameters() const override { return ScalarTraits<Scalar>::IS_COMPLEX() ? 2 * Psi->plainSize() : Psi->plainSize(); }
 };
@@ -63,8 +61,6 @@ template <typename Scalar,
           std::size_t TRank = 2>
 struct iPEPSSolverAD
 {
-    template <typename Sym>
-    using Hamiltonian = TwoSiteObservable<HamScalar, Sym, true>;
     using EnergyFunctor = Energy<Scalar, HamScalar, Symmetry, ALL_OUT_LEGS, CPOpts, TRank>;
 
     iPEPSSolverAD() = delete;
@@ -72,7 +68,7 @@ struct iPEPSSolverAD
     iPEPSSolverAD(Opts::Optim optim_opts,
                   Opts::CTM ctm_opts,
                   std::shared_ptr<iPEPS<Scalar, Symmetry, ALL_OUT_LEGS>> Psi_in,
-                  Hamiltonian<Symmetry>& H_in)
+                  Hamiltonian<HamScalar, Symmetry>& H_in)
         : optim_opts(optim_opts)
         , H(H_in)
         , Psi(Psi_in)
@@ -297,7 +293,7 @@ struct iPEPSSolverAD
     SolverState state;
 
     ceres::GradientProblemSolver::Options options;
-    Hamiltonian<Symmetry>& H;
+    Hamiltonian<HamScalar, Symmetry>& H;
     std::shared_ptr<iPEPS<Scalar, Symmetry, ALL_OUT_LEGS>> Psi;
     std::unique_ptr<ceres::GradientProblem> problem;
 
@@ -418,7 +414,22 @@ struct iPEPSSolverAD
 
         ceres::CallbackReturnType operator()(const ceres::IterationSummary& summary)
         {
-            if(solver.optim_opts.display_obs or not solver.optim_opts.obs_directory.empty()) { solver.H.computeObs(solver.getCTMSolver()->getCTM()); }
+            if(solver.optim_opts.display_obs or not solver.optim_opts.obs_directory.empty()) {
+                for(auto& ob : solver.H.obs) {
+                    if(auto* one = dynamic_cast<OneSiteObservable<double, Symmetry>*>(ob.get()); one != nullptr) {
+                        avg(solver.getCTMSolver()->getCTM(), *one);
+                    }
+                    if(auto* one_c = dynamic_cast<OneSiteObservable<std::complex<double>, Symmetry>*>(ob.get()); one_c != nullptr) {
+                        avg(solver.getCTMSolver()->getCTM(), *one_c);
+                    }
+                    if(auto* two = dynamic_cast<TwoSiteObservable<double, Symmetry>*>(ob.get()); two != nullptr) {
+                        avg(solver.getCTMSolver()->getCTM(), *two);
+                    }
+                    if(auto* two_c = dynamic_cast<TwoSiteObservable<std::complex<double>, Symmetry>*>(ob.get()); two_c != nullptr) {
+                        avg(solver.getCTMSolver()->getCTM(), *two_c);
+                    }
+                }
+            }
             if(solver.optim_opts.display_obs) {
                 Log::per_iteration(solver.optim_opts.verbosity, "  Observables:\n{}", solver.H.getObsString("    "));
             }

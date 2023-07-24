@@ -54,8 +54,7 @@ std::conditional_t<ENABLE_AD, stan::math::var, Scalar> fourByfour(iPEPS<Scalar, 
 }
 
 template <typename Scalar, typename Symmetry, bool ENABLE_AD, typename OpScalar, bool HERMITIAN>
-std::conditional_t<ENABLE_AD, stan::math::var, Scalar> fourByfour(iPEPS<Scalar, Symmetry, true, ENABLE_AD>& Psi,
-                                                                  TwoSiteObservable<OpScalar, Symmetry, HERMITIAN>& op)
+auto fourByfour(iPEPS<Scalar, Symmetry, true, ENABLE_AD>& Psi, TwoSiteObservable<OpScalar, Symmetry, HERMITIAN>& op)
 {
     // SpinBase<Symmetry> B(1);
     // OneSiteObservable<Scalar, Symmetry> obs(Psi.cell().pattern, "Sz");
@@ -74,8 +73,8 @@ std::conditional_t<ENABLE_AD, stan::math::var, Scalar> fourByfour(iPEPS<Scalar, 
                                           std::array{2, 1, 4, 3, 6, 5, 8, 7, -9, -10, -11, -12, -13, -14, -15, -16},
                                           0>(ABBAABBA);
     Log::debug("Contracted psi");
-    auto resh0 = calcE_h<0>(psi, op);
-    auto resh2 = calcE_h<2>(psi, op);
+    auto [resh0, rho_hA] = calcE_h<0>(psi, op);
+    [[maybe_unused]] auto [resh2, rho_hB] = calcE_h<2>(psi, op);
     // auto resh4 = calcE_h<4>(psi, op);
     // auto resh6 = calcE_h<6>(psi, op);
     // auto resh8 = calcE_h<8>(psi, op);
@@ -91,8 +90,8 @@ std::conditional_t<ENABLE_AD, stan::math::var, Scalar> fourByfour(iPEPS<Scalar, 
     // auto resh13 = calcE_hp<13>(psi, op);
     // auto resh15 = calcE_hp<15>(psi, op);
 
-    auto resv0 = calcE_v<0>(psi, op);
-    auto resv1 = calcE_v<1>(psi, op);
+    [[maybe_unused]] auto [resv0, rho_vA] = calcE_v<0>(psi, op);
+    [[maybe_unused]] auto [resv1, rho_vB] = calcE_v<1>(psi, op);
     // auto resv2 = calcE_v<2>(psi, op);
     // auto resv3 = calcE_v<3>(psi, op);
     // auto resv4 = calcE_v<4>(psi, op);
@@ -113,8 +112,12 @@ std::conditional_t<ENABLE_AD, stan::math::var, Scalar> fourByfour(iPEPS<Scalar, 
     // auto resh = 1. / 16. *
     //             (resh0 + resh1 + resh2 + resh3 + resh4 + resh5 + resh6 + resh7 + resh8 + resh9 + resh10 + resh11 + resh12 + resh13 + resh14 +
     //             resh15);
+    auto Id = Tensor<Scalar, 1, 1, Symmetry, false>::Identity({{rho_hA.uncoupledCodomain()[1]}}, {{rho_hA.uncoupledDomain()[1]}}, rho_hA.world());
+    auto rho1 = rho_hA.template contract<std::array{-1, 1, -2, 2}, std::array{2, 1}, 1>(Id.twist(0));
+    rho1 = operator*<false>(rho1, (1. / rho1.twist(0).trace()));
+
     auto res = 0.25 * (resh0 + resh2 + resv0 + resv1);
-    return res;
+    return std::make_tuple(res, rho_hA, rho1);
 }
 
 template <std::size_t pos>
@@ -155,7 +158,7 @@ auto calcE_h(const Tensor<Scalar, 0, 16, Symmetry, ENABLE_AD>& psi, TwoSiteObser
     // } else {
     //     fmt::print("E({}, {}) = {}\n", pos, pos + 2, resA.val());
     // }
-    return resA;
+    return std::make_pair(resA, rhoA.detach());
 }
 
 template <std::size_t pos>
@@ -284,7 +287,7 @@ auto calcE_v(const Tensor<Scalar, 0, 16, Symmetry, ENABLE_AD>& psi, TwoSiteObser
     // } else {
     //     fmt::print("E({}, {}) = {}\n", pos, pos + 2, resA.val());
     // }
-    return resA;
+    return std::make_pair(resA, rhoA.detach());
 }
 
 template <std::size_t pos>

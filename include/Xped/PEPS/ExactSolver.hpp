@@ -18,13 +18,14 @@ struct ExactSolver
 {
     using Scalar = Scalar_;
     using Symmetry = Symmetry_;
-    template <typename Sym>
-    using Hamiltonian = TwoSiteObservable<double, Sym, true>;
+
+    Tensor<Scalar, 2, 2, Symmetry> rho;
+    Tensor<Scalar, 1, 1, Symmetry> rho1;
 
     ExactSolver() = default;
 
     template <typename HamScalar, bool AD>
-    typename ScalarTraits<Scalar>::Real solve(std::shared_ptr<iPEPS<Scalar, Symmetry, true>> Psi, Scalar* gradient, Hamiltonian<Symmetry>& H)
+    typename ScalarTraits<Scalar>::Real solve(std::shared_ptr<iPEPS<Scalar, Symmetry, true>> Psi, Scalar* gradient, Hamiltonian<double, Symmetry>& H)
     {
         Log::on_entry(Verbosity::PER_ITERATION, "  ExactSolver({}): UnitCell=({}x{})", Symmetry::name(), Psi->cell().Lx, Psi->cell().Ly);
 
@@ -33,7 +34,10 @@ struct ExactSolver
         iPEPS<Scalar, Symmetry, true, true> ad_Psi = *Psi;
 
         util::Stopwatch<> forward_t;
-        auto res = fourByfour(ad_Psi, H);
+        auto Hobs = H.asObservable();
+        auto [res, rho_, rho1_] = fourByfour(ad_Psi, Hobs);
+        rho = rho_;
+        rho1 = rho1_;
 
         auto forward_time = forward_t.time_string();
         Log::per_iteration(Verbosity::PER_ITERATION, "  {: >3} forward pass: {}", "•", forward_time);

@@ -178,6 +178,11 @@ int main(int argc, char* argv[])
         Xped::Opts::Optim o_opts = Xped::Opts::optim_from_toml(data.at("optim"));
         Xped::Opts::CTM c_opts = Xped::Opts::ctm_from_toml(data.at("ctm"));
 
+        if(data.contains("global")) {
+            if(data.at("global").contains("logLevel")) {
+                Xped::Log::globalLevel = Xped::util::enum_from_toml<Xped::Verbosity>(data.at("global").at("logLevel"));
+            }
+        }
         Xped::Log::init_logging(world, (o_opts.working_directory / o_opts.logging_directory).string() + "/" + ham->file_name() + ".txt");
 
         Xped::TMatrix<Xped::Qbasis<Symmetry, 1>> phys_basis(c.pattern);

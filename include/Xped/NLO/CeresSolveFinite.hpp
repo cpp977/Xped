@@ -39,21 +39,16 @@ public:
             const std::complex<double>* params_compl = reinterpret_cast<const std::complex<double>*>(parameters);
             Psi->set_data(params_compl);
             std::complex<double>* gradient_compl = reinterpret_cast<std::complex<double>*>(gradient);
-            cost[0] = impl->template solve<Scalar, true>(Psi, gradient_compl, op); //, fuse_2, fuse_4, fuse_8, fuse_12, fuse_14);
+            cost[0] = impl->template solve<Scalar, true>(Psi, gradient_compl, op);
         } else {
             Psi->set_data(parameters);
-            cost[0] = impl->template solve<Scalar, true>(Psi, gradient, op); //, fuse_2, fuse_4, fuse_8, fuse_12, fuse_14);
+            cost[0] = impl->template solve<Scalar, true>(Psi, gradient, op);
         }
         return true;
     }
     std::unique_ptr<ExactSolver<Scalar, Symmetry, TRank>> impl;
     Hamiltonian<double, Symmetry>& op;
     std::shared_ptr<iPEPS<Scalar, Symmetry, true, false>> Psi;
-    // Tensor<Scalar, 2, 1, Symmetry, false> fuse_2;
-    // Tensor<Scalar, 2, 1, Symmetry, false> fuse_4;
-    // Tensor<Scalar, 2, 1, Symmetry, false> fuse_8;
-    // Tensor<Scalar, 2, 1, Symmetry, false> fuse_12;
-    // Tensor<Scalar, 2, 1, Symmetry, false> fuse_14;
     int NumParameters() const override { return ScalarTraits<Scalar>::IS_COMPLEX() ? 2 * Psi->plainSize() : Psi->plainSize(); }
 };
 
@@ -134,8 +129,8 @@ struct fPEPSSolverAD
                 Psi->setRandom(optim_opts.seed);
             }
 
-            problem = std::make_unique<ceres::GradientProblem>(new EnergyFunctor(
-                std::move(std::make_unique<ExactSolver<Scalar, Symmetry, TRank>>()), H, Psi)); //, fuse_2, fuse_4, fuse_8, fuse_12, fuse_14));
+            problem = std::make_unique<ceres::GradientProblem>(
+                new EnergyFunctor(std::move(std::make_unique<ExactSolver<Scalar, Symmetry, TRank>>(ctm_opts.verbosity)), H, Psi));
             std::filesystem::create_directories(optim_opts.working_directory / optim_opts.logging_directory);
             if(optim_opts.log_format == ".h5") {
                 try {
@@ -259,7 +254,7 @@ struct fPEPSSolverAD
             ceres::Solve(options, *problem, parameters.data(), &summary);
         }
         // custom_c((summary.iterations.size() > 0) ? summary.iterations.back() : ceres::IterationSummary{});
-        // obs_c((summary.iterations.size() > 0) ? summary.iterations.back() : ceres::IterationSummary{});
+        obs_c((summary.iterations.size() > 0) ? summary.iterations.back() : ceres::IterationSummary{});
         Log::on_exit(optim_opts.verbosity, "{}", summary.FullReport());
     }
 

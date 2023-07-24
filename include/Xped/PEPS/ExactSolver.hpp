@@ -6,6 +6,8 @@
 #include "yas/serialize.hpp"
 #include "yas/std_types.hpp"
 
+#include "Xped/Util/Logging.hpp"
+
 #include "Xped/Core/ScalarTraits.hpp"
 
 #include "Xped/PEPS/ExactContractions.hpp"
@@ -22,12 +24,15 @@ struct ExactSolver
     Tensor<Scalar, 2, 2, Symmetry> rho;
     Tensor<Scalar, 1, 1, Symmetry> rho1;
 
-    ExactSolver() = default;
+    Verbosity verbosity = Verbosity::ON_ENTRY;
+
+    ExactSolver(Verbosity verbosity_)
+        : verbosity(verbosity_){};
 
     template <typename HamScalar, bool AD>
     typename ScalarTraits<Scalar>::Real solve(std::shared_ptr<iPEPS<Scalar, Symmetry, true>> Psi, Scalar* gradient, Hamiltonian<double, Symmetry>& H)
     {
-        Log::on_entry(Verbosity::PER_ITERATION, "  ExactSolver({}): UnitCell=({}x{})", Symmetry::name(), Psi->cell().Lx, Psi->cell().Ly);
+        Log::on_entry(verbosity, "  ExactSolver({}): UnitCell=({}x{})", Symmetry::name(), Psi->cell().Lx, Psi->cell().Ly);
 
         // Psi->normalize();
         stan::math::nested_rev_autodiff nested;
@@ -40,11 +45,11 @@ struct ExactSolver
         rho1 = rho1_;
 
         auto forward_time = forward_t.time_string();
-        Log::per_iteration(Verbosity::PER_ITERATION, "  {: >3} forward pass: {}", "•", forward_time);
+        Log::per_iteration(verbosity, "  {: >3} forward pass: {}", "•", forward_time);
         util::Stopwatch<> backward_t;
         stan::math::grad(res.vi_);
         auto backward_time = backward_t.time_string();
-        Log::per_iteration(Verbosity::PER_ITERATION, "  {: >3} backward pass: {}", "•", backward_time);
+        Log::per_iteration(verbosity, "  {: >3} backward pass: {}", "•", backward_time);
         auto grad = ad_Psi.graddata();
         for(std::size_t i = 0; i < grad.size(); ++i) { gradient[i] = grad[i]; }
         double grad_norm = 0.;
@@ -59,7 +64,7 @@ struct ExactSolver
         } else {
             grad_norm = std::sqrt(std::inner_product(gradient, gradient + Psi->plainSize(), gradient, 0.));
         }
-        Log::per_iteration(Verbosity::PER_ITERATION, "  {: >3} E={:.8f}, |∇|={:.1e}", "•", res.val(), grad_norm);
+        Log::per_iteration(verbosity, "  {: >3} E={:.8f}, |∇|={:.1e}", "•", res.val(), grad_norm);
         return res.val();
     }
 };

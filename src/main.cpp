@@ -144,7 +144,7 @@ int main(int argc, char* argv[])
     std::map<std::string, Xped::Param> params = {
         {"Jxy", Xped::Param{1.}}, {"Jz", Xped::Param{1.}}, {"J", Xped::Param{1.}}, {"Bz", Xped::Param{0.}}, {"J2", Xped::Param{0.}}};
     Xped::Opts::Bond bonds = Xped::Opts::Bond::V | Xped::Opts::Bond::H;
-    std::unique_ptr<Xped::TwoSiteObservable<double, Symmetry>> ham;
+    std::unique_ptr<Xped::Hamiltonian<double, Symmetry>> ham;
     ham = std::make_unique<Xped::Heisenberg<Symmetry>>(params, c.pattern, bonds);
     Xped::TMatrix<Xped::Qbasis<Symmetry, 1>> phys_basis(c.pattern);
     phys_basis.setConstant(ham->data_h[0].uncoupledDomain()[0]);

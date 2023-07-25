@@ -151,7 +151,9 @@ int main(int argc, char* argv[])
         Xped::Opts::CTM ctm_opts = Xped::Opts::ctm_from_toml(data.at("ctm"));
         Xped::Opts::Imag imag_opts = Xped::Opts::imag_from_toml(data.at("imag"));
 
-        Xped::Log::init_logging(world, (imag_opts.working_directory / imag_opts.logging_directory).string() + "/" + ham->file_name() + ".txt");
+        Xped::Log::init_logging(world,
+                                (o_opts.working_directory / o_opts.logging_directory).string() + "/" + ham->file_name() +
+                                    fmt::format("_D={}_seed={}_id={}", D, imag_opts.seed, imag_opts.id) + ".txt");
 
         Xped::TMatrix<Xped::Qbasis<Symmetry, 1>> phys_basis(c.pattern);
         phys_basis.setConstant(ham->data_h[0].uncoupledDomain()[0]);

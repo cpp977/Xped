@@ -175,7 +175,9 @@ int main(int argc, char* argv[])
         Xped::Opts::Optim o_opts = Xped::Opts::optim_from_toml(data.at("optim"));
         Xped::Opts::CTM c_opts = Xped::Opts::ctm_from_toml(data.at("ctm"));
 
-        Xped::Log::init_logging(world, (o_opts.working_directory / o_opts.logging_directory).string() + "/" + ham->file_name() + ".txt");
+        Xped::Log::init_logging(world,
+                                (o_opts.working_directory / o_opts.logging_directory).string() + "/" + ham->file_name() +
+                                    fmt::format("_D={}_chi={}_seed={}_id={}", D, c_opts.chi, o_opts.seed, o_opts.id) + ".txt");
 
         Xped::TMatrix<Xped::Qbasis<Symmetry, 1>> phys_basis(c.pattern);
         phys_basis.setConstant(ham->data_h[0].uncoupledDomain()[0]);

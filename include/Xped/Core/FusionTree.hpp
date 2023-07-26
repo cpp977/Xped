@@ -37,6 +37,15 @@ struct FusionTree
     template <typename Ar>
     inline void serialize(Ar& ar)
     {
+        ar& YAS_OBJECT_NVP("FusionTree",
+                           ("q_uncoupled", q_uncoupled),
+                           ("q_coupled", q_coupled),
+                           ("dim", dim),
+                           ("dims", dims),
+                           ("q_intermediates", q_intermediates),
+                           ("multiplicities", multiplicities),
+                           ("IS_DUAL", IS_DUAL));
+        /* This code silences several warnings. It can be used after a major version change.
         if constexpr(Rank == 0) {
             ar& YAS_OBJECT_NVP("FusionTree", ("q_coupled", q_coupled), ("dim", dim));
         } else if constexpr(Rank == 1) {
@@ -60,6 +69,7 @@ struct FusionTree
                                ("multiplicities", multiplicities),
                                ("IS_DUAL", IS_DUAL));
         }
+        */
     }
 
     inline void computeDim() { dim = std::accumulate(dims.begin(), dims.end(), 1ul, std::multiplies<std::size_t>()); }

@@ -45,11 +45,11 @@ int main(int argc, char* argv[])
 #endif
         // std::ios::sync_with_stdio(true);
 
-        using Scalar = std::complex<double>;
-        // using Scalar = double;
+        // using Scalar = std::complex<double>;
+        using Scalar = double;
 
-        // using HamScalar = double;
-        using HamScalar = std::complex<double>;
+        using HamScalar = double;
+        // using HamScalar = std::complex<double>;
 
         // using Symmetry = Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>;
         using Symmetry = Xped::Sym::ZN<Xped::Sym::FChargeU1, 36>;
@@ -152,7 +152,7 @@ int main(int argc, char* argv[])
         Xped::Opts::Imag imag_opts = Xped::Opts::imag_from_toml(data.at("imag"));
 
         Xped::Log::init_logging(world,
-                                (o_opts.working_directory / o_opts.logging_directory).string() + "/" + ham->file_name() +
+                                (imag_opts.working_directory / imag_opts.logging_directory).string() + "/" + ham->file_name() +
                                     fmt::format("_D={}_seed={}_id={}", D, imag_opts.seed, imag_opts.id) + ".txt");
 
         Xped::TMatrix<Xped::Qbasis<Symmetry, 1>> phys_basis(c.pattern);

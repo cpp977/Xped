@@ -12,10 +12,6 @@ template <typename Scalar, typename Symmetry, bool ENABLE_AD, typename OpScalar,
 std::conditional_t<ENABLE_AD, stan::math::var, Scalar> fourByfour(iPEPS<Scalar, Symmetry, false, ENABLE_AD>& Psi,
                                                                   TwoSiteObservable<OpScalar, Symmetry, HERMITIAN>& op)
 {
-    // SpinBase<Symmetry> B(1);
-    // OneSiteObservable<Scalar, Symmetry> obs(Psi.cell().pattern, "Sz");
-    // obs.data[0] = B.Sz().data.template trim<2>();
-
     auto AA = Psi.As[0].template contract<std::array{-1, -2, 1, -3, -7}, std::array{1, -4, -5, -6, -8}, 6>(Psi.As[0]);
 
     auto AAAA = AA.template contract<std::array{-1, -2, 1, -3, -4, 2, -9, -10}, std::array{-5, 1, -6, 2, -7, -8, -11, -12}, 8>(AA);
@@ -56,10 +52,6 @@ std::conditional_t<ENABLE_AD, stan::math::var, Scalar> fourByfour(iPEPS<Scalar, 
 template <typename Scalar, typename Symmetry, bool ENABLE_AD, typename OpScalar, bool HERMITIAN>
 auto fourByfour(iPEPS<Scalar, Symmetry, true, ENABLE_AD>& Psi, TwoSiteObservable<OpScalar, Symmetry, HERMITIAN>& op)
 {
-    // SpinBase<Symmetry> B(1);
-    // OneSiteObservable<Scalar, Symmetry> obs(Psi.cell().pattern, "Sz");
-    // obs.data[0] = B.Sz().data.template trim<2>();
-
     auto AB = Psi.As[0].template contract<std::array{-1, -2, 1, -3, -7}, std::array{1, -4, -5, -6, -8}, 6>(Psi.Bs[0]);
     auto BA = Psi.Bs[0].template contract<std::array{-1, -2, 1, -3, -7}, std::array{1, -4, -5, -6, -8}, 6>(Psi.As[0]);
     Log::debug("Contracted AB and BA");

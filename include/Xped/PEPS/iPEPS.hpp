@@ -123,6 +123,9 @@ public:
     Qbasis<Symmetry, 1> ketBasis(const int x, const int y, const Opts::Leg leg) const;
     Qbasis<Symmetry, 1> braBasis(const int x, const int y, const Opts::Leg leg) const;
 
+    Qbasis<Symmetry, 1> ketBasisB(const int x, const int y, const Opts::Leg leg) const;
+    Qbasis<Symmetry, 1> braBasisB(const int x, const int y, const Opts::Leg leg) const;
+
     std::string info() const;
     void debug_info() const;
 
@@ -187,7 +190,21 @@ public:
     template <typename Ar>
     void serialize(Ar& ar)
     {
-        ar& YAS_OBJECT_NVP("iPEPS", ("D", D), ("cell", cell_), ("As", As), ("Adags", Adags), ("Bs", Bs), ("Bdags", Bdags), ("charges", charges_));
+        if constexpr(ALL_OUT_LEGS) {
+            ar& YAS_OBJECT_NVP("iPEPS",
+                               ("D", D),
+                               ("cell", cell_),
+                               ("As", As),
+                               ("Adags", Adags),
+                               ("Bs", Bs),
+                               ("Bdags", Bdags),
+                               ("charges", charges_),
+                               ("sym_map_A", sym_map_A),
+                               ("sym_map_B", sym_map_B),
+                               ("sym", sym_));
+        } else {
+            ar& YAS_OBJECT_NVP("iPEPS", ("D", D), ("cell", cell_), ("As", As), ("Adags", Adags), ("charges", charges_));
+        }
     }
 
     void loadFromMatlab(const std::filesystem::path& p, const std::string& root_name, int qn_scale = 1);

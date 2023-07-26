@@ -592,6 +592,44 @@ Qbasis<Symmetry, 1> iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>::braBasis(c
 }
 
 template <typename Scalar, typename Symmetry, bool ALL_OUT_LEGS, bool ENABLE_AD>
+Qbasis<Symmetry, 1> iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>::ketBasisB(const int x, const int y, const Opts::Leg leg) const
+{
+    if constexpr(ALL_OUT_LEGS) {
+        switch(leg) {
+        case Opts::Leg::Left: return Bs(x, y).uncoupledDomain()[0]; break;
+        case Opts::Leg::Top: return Bs(x, y).uncoupledDomain()[1]; break;
+        case Opts::Leg::Right: return Bs(x, y).uncoupledDomain()[2]; break;
+        case Opts::Leg::Bottom: return Bs(x, y).uncoupledDomain()[3]; break;
+        case Opts::Leg::Phys: return Bs(x, y).uncoupledCodomain()[0]; break;
+        default: std::terminate();
+        }
+    } else {
+        switch(leg) {
+        default: std::terminate();
+        }
+    }
+}
+
+template <typename Scalar, typename Symmetry, bool ALL_OUT_LEGS, bool ENABLE_AD>
+Qbasis<Symmetry, 1> iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>::braBasisB(const int x, const int y, const Opts::Leg leg) const
+{
+    if constexpr(ALL_OUT_LEGS) {
+        switch(leg) {
+        case Opts::Leg::Left: return Bdags(x, y).uncoupledDomain()[0]; break;
+        case Opts::Leg::Top: return Bdags(x, y).uncoupledDomain()[1]; break;
+        case Opts::Leg::Right: return Bdags(x, y).uncoupledDomain()[2]; break;
+        case Opts::Leg::Bottom: return Bdags(x, y).uncoupledDomain()[3]; break;
+        case Opts::Leg::Phys: return Bdags(x, y).uncoupledDomain()[4]; break;
+        default: std::terminate();
+        }
+    } else {
+        switch(leg) {
+        default: std::terminate();
+        }
+    }
+}
+
+template <typename Scalar, typename Symmetry, bool ALL_OUT_LEGS, bool ENABLE_AD>
 void iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>::computeMs()
 {
     for(int x = 0; x < cell().Lx; x++) {

@@ -5,6 +5,9 @@
 #include "fmt/color.h"
 #include "fmt/core.h"
 
+#include "yas/serialize.hpp"
+#include "yas/std_types.hpp"
+
 #include "ceres/first_order_function.h"
 #include "ceres/gradient_problem.h"
 #include "ceres/gradient_problem_solver.h"
@@ -69,19 +72,19 @@ struct fPEPSSolverAD
     {
         std::filesystem::create_directories(optim_opts.working_directory);
         if(optim_opts.resume) {
-            // constexpr std::size_t flags = yas::file /*IO type*/ | yas::binary; /*IO format*/
-            // try {
-            //     yas::load<flags>((optim_opts.working_directory.string() + "/" + this->H.file_name() +
-            //                       fmt::format("_D={}_chi={}_seed={}_id={}.ad", Psi->D, ctm_opts.chi, optim_opts.seed, optim_opts.id))
-            //                          .c_str(),
-            //                      *this);
-            // } catch(const std::exception& e) {
-            //     fmt::print("Error while loading file ({}) for resuming simulation.\n",
-            //                optim_opts.working_directory.string() + "/" + this->H.file_name() +
-            //                    fmt::format("_D={}_chi={}_seed={}_id={}.ad", Psi->D, ctm_opts.chi, optim_opts.seed, optim_opts.id));
-            //     std::cout << std::flush;
-            //     throw;
-            // }
+            constexpr std::size_t flags = yas::file /*IO type*/ | yas::binary; /*IO format*/
+            try {
+                yas::load<flags>((optim_opts.working_directory.string() + "/" + this->H.file_name() +
+                                  fmt::format("_D={}_seed={}_id={}.ad", Psi->D, optim_opts.seed, optim_opts.id))
+                                     .c_str(),
+                                 *this);
+            } catch(const std::exception& e) {
+                fmt::print("Error while loading file ({}) for resuming simulation.\n",
+                           optim_opts.working_directory.string() + "/" + this->H.file_name() +
+                               fmt::format("_D={}_seed={}_id={}.ad", Psi->D, optim_opts.seed, optim_opts.id));
+                std::cout << std::flush;
+                throw;
+            }
         } else {
             if(optim_opts.load != "") {
                 std::filesystem::path load_p(optim_opts.load);
@@ -230,6 +233,7 @@ struct fPEPSSolverAD
         options.logging_type = ceres::SILENT;
         options.minimizer_progress_to_stdout = true;
         options.use_approximate_eigenvalue_bfgs_scaling = optim_opts.bfgs_scaling;
+        // options.max_lbfs_rank = 40;
         // options.line_search_interpolation_type = ceres::BISECTION;
         options.max_num_iterations = optim_opts.max_steps;
         options.function_tolerance = optim_opts.cost_tol;
@@ -244,8 +248,8 @@ struct fPEPSSolverAD
         options.callbacks.push_back(&obs_c);
         // CustomCallback custom_c(*this, getCTMSolver()->getCTM());
         // options.callbacks.push_back(&custom_c);
-        // SaveCallback save_c(*this);
-        // if(optim_opts.save_period > 0) { options.callbacks.push_back(&save_c); }
+        SaveCallback save_c(*this);
+        if(optim_opts.save_period > 0) { options.callbacks.push_back(&save_c); }
         ceres::GradientProblemSolver::Summary summary;
         if constexpr(ScalarTraits<Scalar>::IS_COMPLEX()) {
             typename ScalarTraits<Scalar>::Real* params_real = reinterpret_cast<double*>(parameters.data());
@@ -290,29 +294,16 @@ struct fPEPSSolverAD
         ar& YAS_OBJECT_NVP("fPEPSSolverAD", ("Psi", *Psi), ("optim_opts", optim_opts), ("state", state));
     }
 
-    // template <typename Ar>
-    // void serialize(Ar& ar)
-    // {
-    //     iPEPS<Scalar, Symmetry, true> tmp_Psi;
-    //     ar& YAS_OBJECT_NVP("fPEPSSolverAD", ("Psi", tmp_Psi), ("optim_opts", optim_opts), ("state", state));
-    //     // optim_opts.max_steps = optim_opts.max_steps > state.current_iter ? optim_opts.max_steps - state.current_iter : 1;
-    //     Psi = std::make_shared<iPEPS<Scalar, Symmetry, true>>(std::move(tmp_Psi));
-    //     // auto l = Psi->As[0].uncoupledCodomain()[2];
-    //     // auto l2 = l.combine(l).forgetHistory();
-    //     // auto l4 = l2.combine(l2).forgetHistory();
-    //     // auto l8 = l4.combine(l4).forgetHistory();
-    //     // auto l12 = l8.combine(l4).forgetHistory();
-    //     // auto l14 = l12.combine(l2).forgetHistory();
-    //     // auto fuse_2 = Tensor<Scalar, 2, 1, Symmetry, false>::Identity({{l, l}}, {{l2}}, Psi->As[0].world());
-    //     // auto fuse_4 = Tensor<Scalar, 2, 1, Symmetry, false>::Identity({{l2, l2}}, {{l4}}, Psi->As[0].world());
-    //     // auto fuse_8 = Tensor<Scalar, 2, 1, Symmetry, false>::Identity({{l4, l4}}, {{l8}}, Psi->As[0].world());
-    //     // auto fuse_12 = Tensor<Scalar, 2, 1, Symmetry, false>::Identity({{l8, l4}}, {{l12}}, Psi->As[0].world());
-    //     // auto fuse_14 = Tensor<Scalar, 2, 1, Symmetry, false>::Identity({{l12, l2}}, {{l14}}, Psi->As[0].world());
+    template <typename Ar>
+    void serialize(Ar& ar)
+    {
+        iPEPS<Scalar, Symmetry, true> tmp_Psi;
+        ar& YAS_OBJECT_NVP("fPEPSSolverAD", ("Psi", tmp_Psi), ("optim_opts", optim_opts), ("state", state));
+        Psi = std::make_shared<iPEPS<Scalar, Symmetry, true>>(std::move(tmp_Psi));
 
-    //     auto Dwain = std::make_unique<ExactSolver<Scalar, Symmetry, TRank>>();
-    //     problem =
-    //         std::make_unique<ceres::GradientProblem>(new EnergyFunctor(std::move(Dwain), H, Psi)); //, fuse_2, fuse_4, fuse_8, fuse_12, fuse_14));
-    // }
+        auto Dwain = std::make_unique<ExactSolver<Scalar, Symmetry, TRank>>(optim_opts.verbosity);
+        problem = std::make_unique<ceres::GradientProblem>(new EnergyFunctor(std::move(Dwain), H, Psi));
+    }
 
     struct GetStateCallback : public ceres::IterationCallback
     {
@@ -451,33 +442,33 @@ struct fPEPSSolverAD
         fPEPSSolverAD& solver;
     };
 
-    // struct SaveCallback : public ceres::IterationCallback
-    // {
-    //     SaveCallback(const fPEPSSolverAD& solver_in)
-    //         : solver(solver_in)
-    //     {}
+    struct SaveCallback : public ceres::IterationCallback
+    {
+        SaveCallback(const fPEPSSolverAD& solver_in)
+            : solver(solver_in)
+        {}
 
-    //     ceres::CallbackReturnType operator()(const ceres::IterationSummary& summary)
-    //     {
-    //         assert(solver.optim_opts.save_period > 0);
-    //         if(summary.iteration == 0) { return ceres::SOLVER_CONTINUE; }
-    //         if(summary.iteration % solver.optim_opts.save_period == 0) {
-    //             constexpr std::size_t flags = yas::file /*IO type*/ | yas::binary; /*IO format*/
-    //             yas::file_ostream ofs_ad((solver.optim_opts.working_directory.string() + "/" + solver.H.file_name() +
-    //                                       fmt::format("_D={}_seed={}_id={}.ad", solver.Psi->D, solver.optim_opts.seed, solver.optim_opts.id))
-    //                                          .c_str(),
-    //                                      /*trunc*/ 1);
-    //             yas::save<flags>(ofs_ad, solver);
-    //             yas::file_ostream ofs_psi((solver.optim_opts.working_directory.string() + "/" + solver.H.file_name() +
-    //                                        fmt::format("_D={}_seed={}_id={}.psi", solver.Psi->D, solver.optim_opts.seed, solver.optim_opts.id))
-    //                                           .c_str(),
-    //                                       /*trunc*/ 1);
-    //             yas::save<flags>(ofs_psi, *solver.Psi);
-    //         }
-    //         return ceres::SOLVER_CONTINUE;
-    //     }
-    //     const fPEPSSolverAD& solver;
-    // };
+        ceres::CallbackReturnType operator()(const ceres::IterationSummary& summary)
+        {
+            assert(solver.optim_opts.save_period > 0);
+            if(summary.iteration == 0) { return ceres::SOLVER_CONTINUE; }
+            if(summary.iteration % solver.optim_opts.save_period == 0) {
+                constexpr std::size_t flags = yas::file /*IO type*/ | yas::binary; /*IO format*/
+                yas::file_ostream ofs_ad((solver.optim_opts.working_directory.string() + "/" + solver.H.file_name() +
+                                          fmt::format("_D={}_seed={}_id={}.ad", solver.Psi->D, solver.optim_opts.seed, solver.optim_opts.id))
+                                             .c_str(),
+                                         /*trunc*/ 1);
+                yas::save<flags>(ofs_ad, solver);
+                yas::file_ostream ofs_psi((solver.optim_opts.working_directory.string() + "/" + solver.H.file_name() +
+                                           fmt::format("_D={}_seed={}_id={}.psi", solver.Psi->D, solver.optim_opts.seed, solver.optim_opts.id))
+                                              .c_str(),
+                                          /*trunc*/ 1);
+                yas::save<flags>(ofs_psi, *solver.Psi);
+            }
+            return ceres::SOLVER_CONTINUE;
+        }
+        const fPEPSSolverAD& solver;
+    };
 };
 
 } // namespace Xped

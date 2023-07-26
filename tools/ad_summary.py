@@ -19,10 +19,14 @@ def deduce_Ls(filename):
 
 parser = argparse.ArgumentParser(description="Plot hdf5 file.")
 parser.add_argument(nargs="+", type=str, dest="filenames", help="file names")
-parser.add_argument("-q", type=str, dest="quantity", choices=["grad", "energy", "both"], default="both", help="quantity (either energy or grad)")
+parser.add_argument("-q", type=str, dest="quantity", choices=["grad", "energy", "energy-rel", "both"], default="both", help="quantity (either energy or grad)")
+parser.add_argument("-exact", type=float, dest="E_exact", default=None, help="Exact energy")
 parser.add_argument('-s', action='store_true')
 
 args = parser.parse_args()
+
+if args.quantity == "energy-rel" and args.E_exact is None:
+    raise ValueError("Specify the exact energy with `-exact <val>` if you want to plot the relative energy.")
 
 for filename in args.filenames:
     f = h5py.File(filename, 'r')
@@ -42,6 +46,10 @@ for filename in args.filenames:
     elif args.quantity == "energy":
         plt.plot(cost, '+-', label=label)
         plt.ylabel("E")
+    elif args.quantity == "energy-rel":
+        plt.plot((cost-args.E_exact)/np.abs((cost+args.E_exact)), '+-', label=label)
+        plt.ylabel("E")
+        plt.yscale("log")
     else:
         fig, (ax1, ax2) = plt.subplots(nrows=2, sharex=True)
         ax1.plot(cost, 'r+-', label="energy")
@@ -53,6 +61,9 @@ for filename in args.filenames:
         ax2.grid()
     plt.xlabel("iter")
 
+if args.quantity == 'energy' and args.E_exact is not None:
+    plt.axhline(y=args.E_exact, color='r', linestyle='-', label='exact')
+    
 plt.legend()
 plt.grid()
 if args.s:

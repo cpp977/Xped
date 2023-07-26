@@ -80,9 +80,9 @@ int main(int argc, char* argv[])
         // using Symmetry = Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>;
         // using Symmetry = Xped::Sym::ZN<Xped::Sym::FChargeU1, 36>;
         // using Symmetry = Xped::Sym::ZN<Xped::Sym::SpinU1, 36>;
-        using Symmetry = Xped::Sym::SU2<Xped::Sym::SpinSU2>;
+        // using Symmetry = Xped::Sym::SU2<Xped::Sym::SpinSU2>;
         // using Symmetry = Xped::Sym::U1<Xped::Sym::SpinU1>;
-        // using Symmetry = Xped::Sym::U0<double>;
+        using Symmetry = Xped::Sym::U0<double>;
         // using Symmetry =
         //     Xped::Sym::Combined<Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>>;
         // typedef Xped::Sym::SU2<Xped::Sym::SpinSU2> Symmetry;
@@ -183,7 +183,14 @@ int main(int argc, char* argv[])
                 Xped::Log::globalLevel = Xped::util::enum_from_toml<Xped::Verbosity>(data.at("global").at("logLevel"));
             }
         }
-        Xped::Log::init_logging(world, (o_opts.working_directory / o_opts.logging_directory).string() + "/" + ham->file_name() + ".txt");
+
+        Xped::Log::init_logging(world,
+                                fmt::format("{}/{}_D={}_seed={}_id={}.txt",
+                                            (o_opts.working_directory / o_opts.logging_directory).string(),
+                                            ham->file_name(),
+                                            D,
+                                            o_opts.seed,
+                                            o_opts.id));
 
         Xped::TMatrix<Xped::Qbasis<Symmetry, 1>> phys_basis(c.pattern);
         phys_basis.setConstant(ham->data_h[0].uncoupledDomain()[0]);
@@ -201,7 +208,9 @@ int main(int argc, char* argv[])
         std::cout << std::endl;
         Psi->Bs[0].print(std::cout, true);
         std::cout << std::endl;
-
+        auto Ap = Psi->As[0].template permute<4, 0, 1, 2, 3, 4>();
+        Ap.print(std::cout, true);
+        std::cout << std::endl;
 #ifdef XPED_CACHE_PERMUTE_OUTPUT
         std::cout << "total hits=" << tree_cache</*shift*/ 0, /*Rank*/ 4, /*CoRank*/ 3, Symmetry>.cache.stats().total_hits()
                   << endl; // Hits for any key

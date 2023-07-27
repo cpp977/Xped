@@ -29,6 +29,7 @@ struct Optim
 
     double bfgs_xxx;
     bool bfgs_scaling = true;
+    std::size_t max_lbfgs_rank = 20ul;
 
     double grad_tol = 1.e-6;
     double step_tol = 1.e-12;
@@ -59,6 +60,8 @@ struct Optim
 
     Verbosity verbosity = Verbosity::PER_ITERATION;
 
+    std::size_t restarts = 1ul;
+
     template <typename Ar>
     void serialize(Ar& ar)
     {
@@ -82,7 +85,9 @@ struct Optim
                            ("logging_directory", logging_directory),
                            ("obs_directory", obs_directory),
                            ("verbosity", verbosity),
-                           ("display_obs", display_obs));
+                           ("display_obs", display_obs),
+                           ("restarts", restarts),
+                           ("max_lbfgs_rank", max_lbfgs_rank));
     }
 
     inline auto info()
@@ -96,6 +101,7 @@ struct Optim
         fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• gradient tolerance:", grad_tol);
         fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• cost tolerance:", cost_tol);
         fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• step tolerance:", step_tol);
+        fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• max L-BFGS rank:", max_lbfgs_rank);
         fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• bfgs scaling:", bfgs_scaling);
         fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• resume:", resume);
         fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• log format:", log_format);
@@ -110,6 +116,7 @@ struct Optim
         fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• save period:", save_period);
         fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• verbosity:", fmt::streamed(verbosity));
         fmt::format_to(std::back_inserter(res), "  {:<30} {}", "• display obs to terminal:", display_obs);
+        fmt::format_to(std::back_inserter(res), "  {:<30} {}", "• restarts:", restarts);
         return res;
     }
 };
@@ -125,6 +132,7 @@ inline Optim optim_from_toml(const toml::value& t)
     res.max_steps = t.contains("max_steps") ? t.at("max_steps").as_integer() : res.max_steps;
     res.min_steps = t.contains("min_steps") ? t.at("min_steps").as_integer() : res.min_steps;
     res.bfgs_scaling = t.contains("bfgs_scaling") ? t.at("bfgs_scaling").as_boolean() : res.bfgs_scaling;
+    res.max_lbfgs_rank = t.contains("max_lbfgs_rank") ? t.at("max_lbfgs_rank").as_integer() : res.max_lbfgs_rank;
     res.resume = t.contains("resume") ? t.at("resume").as_boolean() : res.resume;
     res.load = t.contains("load") ? static_cast<std::string>(t.at("load").as_string()) : res.load;
     res.qn_scale = t.contains("qn_scale") ? (t.at("qn_scale").as_integer()) : res.qn_scale;
@@ -147,6 +155,7 @@ inline Optim optim_from_toml(const toml::value& t)
     res.display_obs = t.contains("display_obs") ? t.at("display_obs").as_boolean() : res.display_obs;
     res.seed = t.contains("seed") ? (t.at("seed").as_integer()) : res.seed;
     res.id = t.contains("id") ? (t.at("id").as_integer()) : res.id;
+    res.restarts = t.contains("restarts") ? (t.at("restarts").as_integer()) : res.restarts;
     return res;
 }
 

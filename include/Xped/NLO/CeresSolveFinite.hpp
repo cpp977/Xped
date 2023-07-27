@@ -233,7 +233,7 @@ struct fPEPSSolverAD
         options.logging_type = ceres::SILENT;
         options.minimizer_progress_to_stdout = true;
         options.use_approximate_eigenvalue_bfgs_scaling = optim_opts.bfgs_scaling;
-        // options.max_lbfs_rank = 40;
+        options.max_lbfgs_rank = optim_opts.max_lbfgs_rank;
         // options.line_search_interpolation_type = ceres::BISECTION;
         options.max_num_iterations = optim_opts.max_steps;
         options.function_tolerance = optim_opts.cost_tol;
@@ -250,16 +250,19 @@ struct fPEPSSolverAD
         // options.callbacks.push_back(&custom_c);
         SaveCallback save_c(*this);
         if(optim_opts.save_period > 0) { options.callbacks.push_back(&save_c); }
-        ceres::GradientProblemSolver::Summary summary;
-        if constexpr(ScalarTraits<Scalar>::IS_COMPLEX()) {
-            typename ScalarTraits<Scalar>::Real* params_real = reinterpret_cast<double*>(parameters.data());
-            ceres::Solve(options, *problem, params_real, &summary);
-        } else {
-            ceres::Solve(options, *problem, parameters.data(), &summary);
+        for(auto rep = 0ul; rep < optim_opts.restarts; ++rep) {
+            Log::on_entry(optim_opts.verbosity, "Do L-BFGS optimization (repetition={})", rep);
+            ceres::GradientProblemSolver::Summary summary;
+            if constexpr(ScalarTraits<Scalar>::IS_COMPLEX()) {
+                typename ScalarTraits<Scalar>::Real* params_real = reinterpret_cast<double*>(parameters.data());
+                ceres::Solve(options, *problem, params_real, &summary);
+            } else {
+                ceres::Solve(options, *problem, parameters.data(), &summary);
+            }
+            // custom_c((summary.iterations.size() > 0) ? summary.iterations.back() : ceres::IterationSummary{});
+            obs_c((summary.iterations.size() > 0) ? summary.iterations.back() : ceres::IterationSummary{});
+            Log::on_exit(optim_opts.verbosity, "{}", summary.FullReport());
         }
-        // custom_c((summary.iterations.size() > 0) ? summary.iterations.back() : ceres::IterationSummary{});
-        obs_c((summary.iterations.size() > 0) ? summary.iterations.back() : ceres::IterationSummary{});
-        Log::on_exit(optim_opts.verbosity, "{}", summary.FullReport());
     }
 
     struct SolverState
@@ -395,9 +398,9 @@ struct fPEPSSolverAD
             }
             if(not solver.optim_opts.obs_directory.empty()) {
                 HighFive::File file((solver.optim_opts.working_directory / solver.optim_opts.obs_directory).string() + "/" + solver.H.file_name() +
-                                        fmt::format("_seed={}_id={}.h5", solver.optim_opts.seed, solver.optim_opts.id),
+                                        fmt::format("_D={}_seed={}_id={}.ad", solver.Psi->D, solver.optim_opts.seed, solver.optim_opts.id),
                                     HighFive::File::OpenOrCreate);
-                std::string e_name = fmt::format("/{}/energy", solver.Psi->D);
+                std::string e_name = fmt::format("/energy");
                 if(not file.exist(e_name)) {
                     HighFive::DataSpace dataspace = HighFive::DataSpace({0, 0}, {HighFive::DataSpace::UNLIMITED, HighFive::DataSpace::UNLIMITED});
 
@@ -416,7 +419,7 @@ struct fPEPSSolverAD
                     d.resize({curr_size + 1, data[0].size()});
                     d.select({curr_size, 0}, {1, data[0].size()}).write(data);
                 }
-                std::string g_name = fmt::format("/{}/grad", solver.Psi->D);
+                std::string g_name = fmt::format("/grad");
                 if(not file.exist(g_name)) {
                     HighFive::DataSpace dataspace = HighFive::DataSpace({0, 0}, {HighFive::DataSpace::UNLIMITED, HighFive::DataSpace::UNLIMITED});
 
@@ -435,7 +438,7 @@ struct fPEPSSolverAD
                     d.resize({curr_size + 1, data[0].size()});
                     d.select({curr_size, 0}, {1, data[0].size()}).write(data);
                 }
-                solver.H.obsToFile(file, fmt::format("/{}/", solver.Psi->D));
+                solver.H.obsToFile(file, fmt::format("/"));
             }
             return ceres::SOLVER_CONTINUE;
         }

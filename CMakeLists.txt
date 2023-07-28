@@ -58,7 +58,7 @@ if(NOT (${XPED_MATRIX_LIB} IN_LIST XPED_SUPPORTED_LINA_LIBS))
 endif()
 add_feature_info("Build uses the ${XPED_MATRIX_LIB} library for matrix operations." XPED_MATRIX_LIB "")
 
-set(XPED_VECTOR_LIB "Eigen" CACHE STRING "Used matrix library for plain tensor operations.")
+set(XPED_VECTOR_LIB "Eigen" CACHE STRING "Used vector library for plain tensor operations.")
 set_property(CACHE XPED_VECTOR_LIB PROPERTY STRINGS ${XPED_SUPPORTED_LINA_LIBS})
 if(NOT (${XPED_VECTOR_LIB} IN_LIST XPED_SUPPORTED_LINA_LIBS))
   message( STATUS "Build wanted to use the ${XPED_VECTOR_LIB} library for vector operations.")

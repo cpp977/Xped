@@ -30,8 +30,8 @@ The build directory is specified in the presets: `/path/to/source/Xped/../<prese
 `ctest --preset=<preset>`
 
 To control the build, it is recomennded to choose a CMake preset so that several options are already set automatically.
-The following follow the scheme `<compiler>-<backend>-<build-type>`. E.g. `gcc-eigen-release` uses the gnu c++ compiler and the Eigen backend and performs a release build.
-Supported compilers are gcc, clang and msvc.
+The available presets follow the scheme `<compiler>-<backend>-<build-type>`. E.g. `gcc-eigen-release` uses the gnu c++ compiler and the Eigen backend and performs a release build.
+Supported compilers are gcc (version >= 10), clang (version >= 12), msvc (version >= 19.30) and intel icpx (version >= 2021.04).
 
 All build options can be seen in the following table.
 

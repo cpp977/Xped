@@ -167,34 +167,17 @@ struct fPEPSSolverAD
             }
             if(not optim_opts.obs_directory.empty()) {
                 std::filesystem::create_directories(optim_opts.working_directory / optim_opts.obs_directory);
-                if(std::filesystem::exists(
-                       optim_opts.working_directory / optim_opts.obs_directory /
-                       std::filesystem::path(this->H.file_name() + fmt::format("_seed={}_id={}.h5", optim_opts.seed, optim_opts.id)))) {
+                try {
                     HighFive::File file((optim_opts.working_directory / optim_opts.obs_directory).string() + "/" + this->H.file_name() +
-                                            fmt::format("_seed={}_id={}.h5", optim_opts.seed, optim_opts.id),
-                                        optim_opts.resume ? HighFive::File::ReadWrite : HighFive::File::ReadOnly);
-                    if(file.exist(fmt::format("/{}", Psi->D))) {
-                        fmt::print(fg(fmt::color::red),
-                                   "There already exists data in observable file for D={}.\n Filename:{}.\n",
-                                   Psi->D,
-                                   (optim_opts.working_directory / optim_opts.obs_directory).string() + "/" + this->H.file_name() +
-                                       fmt::format("_seed={}_id={}.h5", optim_opts.seed, optim_opts.id));
-                        std::cout << std::flush;
-                        throw;
-                    }
-                } else {
-                    try {
-                        HighFive::File file((optim_opts.working_directory / optim_opts.obs_directory).string() + "/" + this->H.file_name() +
-                                                fmt::format("_seed={}_id={}.h5", optim_opts.seed, optim_opts.id),
-                                            optim_opts.resume ? HighFive::File::ReadWrite : HighFive::File::Excl);
-                    } catch(const std::exception& e) {
-                        fmt::print(fg(fmt::color::red),
-                                   "Error while creating the observable file for this simulation:{}.\n",
-                                   (optim_opts.working_directory / optim_opts.obs_directory).string() + "/" + this->H.file_name() +
-                                       fmt::format("_seed={}_id={}.h5", optim_opts.seed, optim_opts.id));
-                        std::cout << std::flush;
-                        throw;
-                    }
+                                            fmt::format("_D={}_seed={}_id={}.h5", Psi->D, optim_opts.seed, optim_opts.id),
+                                        optim_opts.resume ? HighFive::File::ReadWrite : HighFive::File::Excl);
+                } catch(const std::exception& e) {
+                    fmt::print(fg(fmt::color::red),
+                               "Error while creating the observable file for this simulation:{}.\n",
+                               (optim_opts.working_directory / optim_opts.obs_directory).string() + "/" + this->H.file_name() +
+                                   fmt::format("_D={}_seed={}_id={}.h5", Psi->D, optim_opts.seed, optim_opts.id));
+                    std::cout << std::flush;
+                    throw;
                 }
             }
         }
@@ -398,7 +381,7 @@ struct fPEPSSolverAD
             }
             if(not solver.optim_opts.obs_directory.empty()) {
                 HighFive::File file((solver.optim_opts.working_directory / solver.optim_opts.obs_directory).string() + "/" + solver.H.file_name() +
-                                        fmt::format("_D={}_seed={}_id={}.ad", solver.Psi->D, solver.optim_opts.seed, solver.optim_opts.id),
+                                        fmt::format("_D={}_seed={}_id={}.h5", solver.Psi->D, solver.optim_opts.seed, solver.optim_opts.id),
                                     HighFive::File::OpenOrCreate);
                 std::string e_name = fmt::format("/energy");
                 if(not file.exist(e_name)) {

@@ -22,6 +22,7 @@ struct ExactSolver
     using Symmetry = Symmetry_;
 
     Tensor<Scalar, 2, 2, Symmetry> rho;
+    Tensor<Scalar, 2, 2, Symmetry> rho_d;
     Tensor<Scalar, 1, 1, Symmetry> rho1;
 
     Verbosity verbosity = Verbosity::ON_ENTRY;
@@ -40,10 +41,10 @@ struct ExactSolver
 
         util::Stopwatch<> forward_t;
         auto Hobs = H.asObservable();
-        auto [res, rho_, rho1_] = fourByfour(ad_Psi, Hobs);
+        auto [res, rho_, rho1_, rho_d_] = fourByfour(ad_Psi, Hobs);
         rho = rho_;
         rho1 = rho1_;
-
+        rho_d = rho_d_;
         auto forward_time = forward_t.time_string();
         Log::per_iteration(verbosity, "  {: >3} forward pass: {}", "•", forward_time);
         util::Stopwatch<> backward_t;

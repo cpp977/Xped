@@ -365,14 +365,19 @@ struct fPEPSSolverAD
             if(solver.optim_opts.display_obs or not solver.optim_opts.obs_directory.empty()) {
                 auto rho = solver.getSolver()->rho;
                 auto rho1 = solver.getSolver()->rho1;
+                auto rho_d = solver.getSolver()->rho_d;
                 for(auto& ob : solver.H.obs) {
                     if(auto* one = dynamic_cast<OneSiteObservable<double, Symmetry>*>(ob.get()); one != nullptr) { avg(rho1, *one); }
                     if(auto* one_c = dynamic_cast<OneSiteObservable<std::complex<double>, Symmetry>*>(ob.get()); one_c != nullptr) {
                         avg(rho1, *one_c);
                     }
-                    if(auto* two = dynamic_cast<TwoSiteObservable<double, Symmetry>*>(ob.get()); two != nullptr) { avg(rho, *two, Opts::Bond::H); }
+                    if(auto* two = dynamic_cast<TwoSiteObservable<double, Symmetry>*>(ob.get()); two != nullptr) {
+                        avg(rho, *two, Opts::Bond::H);
+                        avg(rho_d, *two, Opts::Bond::D1);
+                    }
                     if(auto* two_c = dynamic_cast<TwoSiteObservable<std::complex<double>, Symmetry>*>(ob.get()); two_c != nullptr) {
                         avg(rho, *two_c, Opts::Bond::H);
+                        avg(rho_d, *two_c, Opts::Bond::D1);
                     }
                 }
             }

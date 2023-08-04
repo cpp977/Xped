@@ -77,7 +77,7 @@ All build options can be seen in the following table.
 | `XPED_USE_NLO` | `ON` | Use nonlinear optimization algorithms. |
 | `XPED_USE_OPENMP` | `ON` | Enable openmp parallelization |
 | `XPED_USE_SCALAPACK` | `OFF` | Enable scalapack linking (only useful for MPI programs). |
-| `XPED_VECTOR_LIB` | `Eigen` | Used matrix library for plain tensor operations. |
+| `XPED_VECTOR_LIB` | `Eigen` | Used vector library for plain tensor operations. |
 
 # Documentation
 

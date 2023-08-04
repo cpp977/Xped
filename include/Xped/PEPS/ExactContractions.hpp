@@ -52,8 +52,12 @@ std::conditional_t<ENABLE_AD, stan::math::var, Scalar> fourByfour(iPEPS<Scalar, 
 template <typename Scalar, typename Symmetry, bool ENABLE_AD, typename OpScalar, bool HERMITIAN>
 auto fourByfour(iPEPS<Scalar, Symmetry, true, ENABLE_AD>& Psi, TwoSiteObservable<OpScalar, Symmetry, HERMITIAN>& op)
 {
-    auto AB = Psi.As[0].template contract<std::array{-1, -2, 1, -3, -7}, std::array{1, -4, -5, -6, -8}, 6>(Psi.Bs[0]);
-    auto BA = Psi.Bs[0].template contract<std::array{-1, -2, 1, -3, -7}, std::array{1, -4, -5, -6, -8}, 6>(Psi.As[0]);
+    // auto B = Psi.Bs[0]; // 0,5
+    auto B = Psi.As[0].adjoint().eval(); // 1,4
+    // auto AB = Psi.As[0].template contract<std::array{-1, -2, 1, -3, -7}, std::array{1, -4, -5, -6, -8}, 6>(B);
+    auto AB = Psi.As[0].template contract<std::array{-1, -2, 1, -3, -7}, std::array{-8, 1, -4, -5, -6}, 6>(B);
+    // auto BA = B.template contract<std::array{-1, -2, 1, -3, -7}, std::array{1, -4, -5, -6, -8}, 6>(Psi.As[0]);
+    auto BA = B.template contract<std::array{-7, -1, -2, 1, -3}, std::array{1, -4, -5, -6, -8}, 6>(Psi.As[0]);
     Log::debug("Contracted AB and BA");
     auto ABBA = AB.template contract<std::array{-1, -2, 1, -3, -4, 2, -9, -10}, std::array{-5, 1, -6, 2, -7, -8, -11, -12}, 8>(BA);
     Log::debug("Contracted ABBA");
@@ -98,11 +102,11 @@ auto fourByfour(iPEPS<Scalar, Symmetry, true, ENABLE_AD>& Psi, TwoSiteObservable
     // auto resv13 = calcE_v<13>(psi, op);
     // auto resv14 = calcE_vp<14>(psi, op);
     // auto resv15 = calcE_vp<15>(psi, op);
-    [[maybe_unused]] auto [resd1A, rho_d1A] = calcE_d1<0>(psi, op);
-    [[maybe_unused]] auto [resd1B, rho_d1B] = calcE_d1<1>(psi, op);
+    // [[maybe_unused]] auto [resd1A, rho_d1A] = calcE_d1<0>(psi, op);
+    // [[maybe_unused]] auto [resd1B, rho_d1B] = calcE_d1<1>(psi, op);
 
-    [[maybe_unused]] auto [resd2A, rho_d2A] = calcE_d2<0>(psi, op);
-    [[maybe_unused]] auto [resd2B, rho_d2B] = calcE_d2<1>(psi, op);
+    // [[maybe_unused]] auto [resd2A, rho_d2A] = calcE_d2<0>(psi, op);
+    // [[maybe_unused]] auto [resd2B, rho_d2B] = calcE_d2<1>(psi, op);
     // auto resv = 1. / 16. *
     //             (resv0 + resv1 + resv2 + resv3 + resv4 + resv5 + resv6 + resv7 + resv8 + resv9 + resv10 + resv11 + resv12 + resv13 + resv14 +
     //             resv15);
@@ -113,21 +117,28 @@ auto fourByfour(iPEPS<Scalar, Symmetry, true, ENABLE_AD>& Psi, TwoSiteObservable
     auto rho1 = rho_hA.template contract<std::array{-1, 1, -2, 2}, std::array{2, 1}, 1>(Id.twist(0));
     rho1 = operator*<false>(rho1, (1. / rho1.twist(0).trace()));
 
-    auto res = 0.5 * (reshA + reshB + resvA + resvB + resd1A + resd1B + resd2A + resd2B);
-    return std::make_tuple(res, rho_hA, rho1, rho_d1A);
+    auto res = 0.5 * (reshA + reshB + resvA + resvB); // + resd1A + resd1B + resd2A + resd2B);
+    return std::make_tuple(res, rho_hA, rho1, rho_hA);
+}
+
+template <std::size_t pos>
+consteval std::array<std::size_t, 4> neighbors()
+{
+    static_assert(pos < 2);
+    if constexpr(pos == 0) { return std::array<std::size_t, 4>{1, 2, 3, 11}; }
 }
 
 template <std::size_t pos>
 consteval std::array<int, 16> get_array1_d2()
 {
-    if constexpr(pos == 0) { return std::array<int, 16>{-1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, -2}; }
+    if constexpr(pos == 0) { return std::array<int, 16>{-1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, -2, 11, 12, 13, 14}; }
     return std::array<int, 16>{1, -1, -2, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14};
 }
 
 template <std::size_t pos>
 consteval std::array<int, 16> get_array2_d2()
 {
-    if constexpr(pos == 0) { return std::array<int, 16>{-3, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, -4}; }
+    if constexpr(pos == 0) { return std::array<int, 16>{-3, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, -4, 11, 12, 13, 14}; }
     return std::array<int, 16>{1, -3, -4, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14};
 }
 
@@ -142,11 +153,11 @@ auto calcE_d2(const Tensor<Scalar, 0, 16, Symmetry, ENABLE_AD>& psi, TwoSiteObse
     if(std::real(normA) < 0.) { Log::warning(Log::globalLevel, "rhoA: Negative norm detected."); }
     rhoA = (rhoA * (1. / normA)).eval();
     auto resA = rhoA.twist(0).twist(1).template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0>(op.data_d2(0, 0)).trace();
-    // if constexpr(not ENABLE_AD) {
-    //     fmt::print("E({}, {}) = {}\n", pos, pos + 2, resA);
-    // } else {
-    //     fmt::print("E({}, {}) = {}\n", pos, pos + 2, resA.val());
-    // }
+    if constexpr(not ENABLE_AD) {
+        fmt::print("Ed2({}, {}) = {}\n", pos, pos + 2, resA);
+    } else {
+        fmt::print("Ed2({}, {}) = {}\n", pos, pos + 2, resA.val());
+    }
     return std::make_pair(resA, rhoA.detach());
 }
 
@@ -175,11 +186,11 @@ auto calcE_d1(const Tensor<Scalar, 0, 16, Symmetry, ENABLE_AD>& psi, TwoSiteObse
     if(std::real(normA) < 0.) { Log::warning(Log::globalLevel, "rhoA: Negative norm detected."); }
     rhoA = (rhoA * (1. / normA)).eval();
     auto resA = rhoA.twist(0).twist(1).template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0>(op.data_d1(0, 0)).trace();
-    // if constexpr(not ENABLE_AD) {
-    //     fmt::print("E({}, {}) = {}\n", pos, pos + 2, resA);
-    // } else {
-    //     fmt::print("E({}, {}) = {}\n", pos, pos + 2, resA.val());
-    // }
+    if constexpr(not ENABLE_AD) {
+        fmt::print("Ed1({}, {}) = {}\n", pos, pos + 2, resA);
+    } else {
+        fmt::print("Ed1({}, {}) = {}\n", pos, pos + 2, resA.val());
+    }
     return std::make_pair(resA, rhoA.detach());
 }
 
@@ -215,13 +226,23 @@ auto calcE_h(const Tensor<Scalar, 0, 16, Symmetry, ENABLE_AD>& psi, TwoSiteObser
     auto normA = rhoA.template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0>(Id2A.twist(0).twist(1)).trace();
     if(std::real(normA) < 0.) { Log::warning(Log::globalLevel, "rhoA: Negative norm detected."); }
     rhoA = (rhoA * (1. / normA)).eval();
-    auto resA = rhoA.twist(0).twist(1).template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0>(op.data_h(0, 0)).trace();
-    // if constexpr(not ENABLE_AD) {
-    //     fmt::print("E({}, {}) = {}\n", pos, pos + 2, resA);
-    // } else {
-    //     fmt::print("E({}, {}) = {}\n", pos, pos + 2, resA.val());
-    // }
-    return std::make_pair(resA, rhoA.detach());
+    if(pos == 0) {
+        auto resA = rhoA.twist(0).twist(1).template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0>(op.data_h(0, 0)).trace();
+        if constexpr(not ENABLE_AD) {
+            fmt::print("EhA({}, {}) = {}\n", pos, pos + 2, resA);
+        } else {
+            fmt::print("EhA({}, {}) = {}\n", pos, pos + 2, resA.val());
+        }
+        return std::make_pair(resA, rhoA.detach());
+    } else {
+        auto resA = rhoA.twist(0).twist(1).template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0>(op.data_v(0, 0)).trace();
+        if constexpr(not ENABLE_AD) {
+            fmt::print("EhB({}, {}) = {}\n", pos, pos + 2, resA);
+        } else {
+            fmt::print("EhB({}, {}) = {}\n", pos, pos + 2, resA.val());
+        }
+        return std::make_pair(resA, rhoA.detach());
+    }
 }
 
 template <std::size_t pos>
@@ -259,11 +280,11 @@ auto calcE_h2(const Tensor<Scalar, 0, 16, Symmetry, ENABLE_AD>& psi, TwoSiteObse
     if(std::real(normA) < 0.) { Log::warning(Log::globalLevel, "rhoA: Negative norm detected."); }
     rhoA = (rhoA * (1. / normA)).eval();
     auto resA = rhoA.twist(0).twist(1).template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0>(op.data_h(0, 0)).trace();
-    // if constexpr(not ENABLE_AD) {
-    //     fmt::print("E({}, {}) = {}\n", pos, pos + 2, resA);
-    // } else {
-    //     fmt::print("E({}, {}) = {}\n", pos, pos + 2, resA.val());
-    // }
+    if constexpr(not ENABLE_AD) {
+        fmt::print("Eh({}, {}) = {}\n", pos, pos + 2, resA);
+    } else {
+        fmt::print("Eh({}, {}) = {}\n", pos, pos + 2, resA.val());
+    }
     return resA;
 }
 
@@ -302,11 +323,11 @@ auto calcE_hp(const Tensor<Scalar, 0, 16, Symmetry, ENABLE_AD>& psi, TwoSiteObse
     if(std::real(normA) < 0.) { Log::warning(Log::globalLevel, "rhoA: Negative norm detected."); }
     rhoA = (rhoA * (1. / normA)).eval();
     auto resA = rhoA.twist(0).twist(1).template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0>(op.data_h(0, 0)).trace();
-    // if constexpr(not ENABLE_AD) {
-    //     fmt::print("E({}, {}) = {}\n", pos, pos + 2, resA);
-    // } else {
-    //     fmt::print("E({}, {}) = {}\n", pos, pos + 2, resA.val());
-    // }
+    if constexpr(not ENABLE_AD) {
+        fmt::print("E({}, {}) = {}\n", pos, pos + 2, resA);
+    } else {
+        fmt::print("E({}, {}) = {}\n", pos, pos + 2, resA.val());
+    }
     return resA;
 }
 
@@ -344,13 +365,24 @@ auto calcE_v(const Tensor<Scalar, 0, 16, Symmetry, ENABLE_AD>& psi, TwoSiteObser
     auto normA = rhoA.template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0>(Id2A.twist(0).twist(1)).trace();
     if(std::real(normA) < 0.) { Log::warning(Log::globalLevel, "rhoA: Negative norm detected."); }
     rhoA = (rhoA * (1. / normA)).eval();
-    auto resA = rhoA.twist(0).twist(1).template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0>(op.data_h(0, 0)).trace();
-    // if constexpr(not ENABLE_AD) {
-    //     fmt::print("E({}, {}) = {}\n", pos, pos + 2, resA);
-    // } else {
-    //     fmt::print("E({}, {}) = {}\n", pos, pos + 2, resA.val());
-    // }
-    return std::make_pair(resA, rhoA.detach());
+    if(pos == 0) {
+        auto resA = rhoA.twist(0).twist(1).template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0>(op.data_h(0, 0)).trace();
+        if constexpr(not ENABLE_AD) {
+            fmt::print("EvA({}, {}) = {}\n", pos, pos + 2, resA);
+        } else {
+            fmt::print("EvA({}, {}) = {}\n", pos, pos + 2, resA.val());
+        }
+        return std::make_pair(resA, rhoA.detach());
+    } else {
+        auto resA = rhoA.twist(0).twist(1).template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0>(op.data_v(0, 0)).trace();
+        if constexpr(not ENABLE_AD) {
+            fmt::print("EvB({}, {}) = {}\n", pos, pos + 2, resA);
+        } else {
+            fmt::print("EvB({}, {}) = {}\n", pos, pos + 2, resA.val());
+        }
+
+        return std::make_pair(resA, rhoA.detach());
+    }
 }
 
 template <std::size_t pos>
@@ -396,11 +428,11 @@ auto calcE_vp(const Tensor<Scalar, 0, 16, Symmetry, ENABLE_AD>& psi, TwoSiteObse
     if(std::real(normA) < 0.) { Log::warning(Log::globalLevel, "rhoA: Negative norm detected."); }
     rhoA = (rhoA * (1. / normA)).eval();
     auto resA = rhoA.twist(0).twist(1).template contract<std::array{1, 2, 3, 4}, std::array{3, 4, 1, 2}, 0>(op.data_h(0, 0)).trace();
-    // if constexpr(not ENABLE_AD) {
-    //     fmt::print("E({}, {}) = {}\n", pos, pos + 2, resA);
-    // } else {
-    //     fmt::print("E({}, {}) = {}\n", pos, pos + 2, resA.val());
-    // }
+    if constexpr(not ENABLE_AD) {
+        fmt::print("Ev({}, {}) = {}\n", pos, pos + 2, resA);
+    } else {
+        fmt::print("Ev({}, {}) = {}\n", pos, pos + 2, resA.val());
+    }
     return resA;
 }
 

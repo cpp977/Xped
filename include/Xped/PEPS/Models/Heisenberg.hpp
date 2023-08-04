@@ -36,15 +36,19 @@ public:
 
         B = SpinBase<Symmetry>(1, 2);
 
-        Tensor<double, 2, 2, Symmetry> gate_nn, gate_d;
+        Tensor<double, 2, 2, Symmetry> gate_nn, gate_d, gate_nnv;
         if constexpr(std::is_same_v<Symmetry, Sym::SU2<Sym::SpinSU2>>) {
-            gate_nn = this->params["J"].template get<double>() * (std::sqrt(3.) * tprod(B.Sdag(0), B.S(0))).eval();
+            gate_nn = this->params["J"].template get<double>() * (std::sqrt(3.) * tprod(B.Sdag(0), B.S(0, false))).eval();
+            gate_nnv = this->params["J"].template get<double>() * (std::sqrt(3.) * tprod(B.Sdag(0, false), B.S(0))).eval();
             gate_d = this->params["J2"].template get<double>() * (std::sqrt(3.) * tprod(B.Sdag(0), B.S(0))).eval();
         } else if constexpr(Symmetry::ALL_ABELIAN) {
             gate_d = this->params["J2"].template get<double>() * tprod(B.Sz(), B.Sz()) +
                      0.5 * this->params["J2"].template get<double>() * (tprod(B.Sp(), B.Sm()) + tprod(B.Sm(), B.Sp()));
-            gate_nn = this->params["Jz"].template get<double>() * tprod(B.Sz(), B.Sz()) +
-                      0.5 * this->params["Jxy"].template get<double>() * (tprod(B.Sp(), B.Sm()) + tprod(B.Sm(), B.Sp()));
+            bool SUBL = false;
+            gate_nn = this->params["Jz"].template get<double>() * tprod(B.Sz(), B.Sz(0, SUBL)) +
+                      0.5 * this->params["Jxy"].template get<double>() * (tprod(B.Sp(), B.Sm(0, SUBL)) + tprod(B.Sm(), B.Sp(0, SUBL)));
+            gate_nnv = this->params["Jz"].template get<double>() * tprod(B.Sz(0, SUBL), B.Sz()) +
+                       0.5 * this->params["Jxy"].template get<double>() * (tprod(B.Sp(0, SUBL), B.Sm()) + tprod(B.Sm(0, SUBL), B.Sp()));
         } else {
             assert(false and "Symmetry is not supported in Heisenberg model.");
         }
@@ -53,7 +57,7 @@ public:
             for(auto& t : this->data_h) { t = gate_nn; }
         }
         if((this->bond & Opts::Bond::V) == Opts::Bond::V) {
-            for(auto& t : this->data_v) { t = gate_nn; }
+            for(auto& t : this->data_v) { t = gate_nnv; }
         }
         if((this->bond & Opts::Bond::D1) == Opts::Bond::D1) {
             for(auto& t : this->data_d1) { t = gate_d; }

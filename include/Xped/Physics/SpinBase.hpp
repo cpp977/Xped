@@ -66,14 +66,14 @@ public:
      * \param orbital : orbital index
      */
     template <class Dummy = Symmetry>
-    typename std::enable_if<Dummy::IS_SPIN_SU2(), OperatorType>::type S(std::size_t orbital = 0) const;
+    typename std::enable_if<Dummy::IS_SPIN_SU2(), OperatorType>::type S(std::size_t orbital = 0, bool SUB_LATTCE = true) const;
 
     /**
      * Orbital spin†
      * \param orbital : orbital index
      */
     template <class Dummy = Symmetry>
-    typename std::enable_if<Dummy::IS_SPIN_SU2(), OperatorType>::type Sdag(std::size_t orbital = 0) const;
+    typename std::enable_if<Dummy::IS_SPIN_SU2(), OperatorType>::type Sdag(std::size_t orbital = 0, bool SUB_LATTCE = true) const;
 
     template <class Dummy = Symmetry>
     typename std::enable_if<Dummy::IS_SPIN_SU2(), OperatorType>::type Q(std::size_t orbital = 0) const;
@@ -97,13 +97,13 @@ public:
     typename std::enable_if<!Dummy::IS_SPIN_SU2(), OperatorType>::type Qmz(std::size_t orbital = 0) const;
 
     template <class Dummy = Symmetry>
-    typename std::enable_if<!Dummy::IS_SPIN_SU2(), OperatorType>::type Sz(std::size_t orbital = 0) const;
+    typename std::enable_if<!Dummy::IS_SPIN_SU2(), OperatorType>::type Sz(std::size_t orbital = 0, bool SUB_LATTICE = true) const;
 
     template <class Dummy = Symmetry>
-    typename std::enable_if<!Dummy::IS_SPIN_SU2(), OperatorType>::type Sp(std::size_t orbital = 0) const;
+    typename std::enable_if<!Dummy::IS_SPIN_SU2(), OperatorType>::type Sp(std::size_t orbital = 0, bool SUB_LATTICE = true) const;
 
     template <class Dummy = Symmetry>
-    typename std::enable_if<!Dummy::IS_SPIN_SU2(), OperatorType>::type Sm(std::size_t orbital = 0) const;
+    typename std::enable_if<!Dummy::IS_SPIN_SU2(), OperatorType>::type Sm(std::size_t orbital = 0, bool SUB_LATTICE = true) const;
 
     template <class Dummy = Symmetry>
     typename std::enable_if<Dummy::NO_SPIN_SYM(), OperatorType>::type Sx(std::size_t orbital = 0) const;
@@ -384,16 +384,18 @@ typename std::enable_if<!Dummy::IS_SPIN_SU2(), SiteOperator<double, Symmetry_>>:
 
 template <typename Symmetry_, std::size_t order>
 template <typename Dummy>
-typename std::enable_if<Dummy::IS_SPIN_SU2(), SiteOperator<double, Symmetry_>>::type SpinBase<Symmetry_, order>::S(std::size_t orbital) const
+typename std::enable_if<Dummy::IS_SPIN_SU2(), SiteOperator<double, Symmetry_>>::type SpinBase<Symmetry_, order>::S(std::size_t orbital,
+                                                                                                                   bool SUB_LATTICE) const
 {
-    return make_operator(this->S_1s(), orbital, "S");
+    return SUB_LATTICE ? make_operator(this->S_1s(), orbital, "S") : this->Sp_1s();
 }
 
 template <typename Symmetry_, std::size_t order>
 template <typename Dummy>
-typename std::enable_if<Dummy::IS_SPIN_SU2(), SiteOperator<double, Symmetry_>>::type SpinBase<Symmetry_, order>::Sdag(std::size_t orbital) const
+typename std::enable_if<Dummy::IS_SPIN_SU2(), SiteOperator<double, Symmetry_>>::type SpinBase<Symmetry_, order>::Sdag(std::size_t orbital,
+                                                                                                                      bool SUB_LATTICE) const
 {
-    return S(orbital).adjoint();
+    return S(orbital, SUB_LATTICE).adjoint();
 }
 
 template <typename Symmetry_, std::size_t order>
@@ -447,23 +449,26 @@ typename std::enable_if<!Dummy::IS_SPIN_SU2(), SiteOperator<double, Symmetry_>>:
 
 template <typename Symmetry_, std::size_t order>
 template <typename Dummy>
-typename std::enable_if<!Dummy::IS_SPIN_SU2(), SiteOperator<double, Symmetry_>>::type SpinBase<Symmetry_, order>::Sz(std::size_t orbital) const
+typename std::enable_if<!Dummy::IS_SPIN_SU2(), SiteOperator<double, Symmetry_>>::type SpinBase<Symmetry_, order>::Sz(std::size_t orbital,
+                                                                                                                     bool SUB_LATTICE) const
 {
-    return make_operator(this->Sz_1s(), orbital, "Sz");
+    return SUB_LATTICE ? make_operator(this->Sz_1s(), orbital, "Sz") : -1. * make_operator(this->Sz_1s(), orbital, "Sz");
 }
 
 template <typename Symmetry_, std::size_t order>
 template <typename Dummy>
-typename std::enable_if<!Dummy::IS_SPIN_SU2(), SiteOperator<double, Symmetry_>>::type SpinBase<Symmetry_, order>::Sp(std::size_t orbital) const
+typename std::enable_if<!Dummy::IS_SPIN_SU2(), SiteOperator<double, Symmetry_>>::type SpinBase<Symmetry_, order>::Sp(std::size_t orbital,
+                                                                                                                     bool SUB_LATTICE) const
 {
-    return make_operator(this->Sp_1s(), orbital, "Sp");
+    return SUB_LATTICE ? make_operator(this->Sp_1s(), orbital, "Sp") : -1. * make_operator(this->Sm_1s(), orbital, "Sm");
 }
 
 template <typename Symmetry_, std::size_t order>
 template <typename Dummy>
-typename std::enable_if<!Dummy::IS_SPIN_SU2(), SiteOperator<double, Symmetry_>>::type SpinBase<Symmetry_, order>::Sm(std::size_t orbital) const
+typename std::enable_if<!Dummy::IS_SPIN_SU2(), SiteOperator<double, Symmetry_>>::type SpinBase<Symmetry_, order>::Sm(std::size_t orbital,
+                                                                                                                     bool SUB_LATTICE) const
 {
-    return make_operator(this->Sm_1s(), orbital, "Sm");
+    return SUB_LATTICE ? make_operator(this->Sm_1s(), orbital, "Sm") : -1. * make_operator(this->Sp_1s(), orbital, "Sp");
 }
 
 template <typename Symmetry_, std::size_t order>

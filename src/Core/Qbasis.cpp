@@ -42,7 +42,7 @@ void Qbasis<Symmetry, depth, AllocationPolicy>::push_back(const qType& q, const 
             FusionTree<1, Symmetry> trivial;
             trivial.q_uncoupled[0] = q;
             trivial.q_coupled = q;
-            trivial.IS_DUAL[0] = false;
+            trivial.IS_DUAL[0] = CONJ;
             trivial.dims[0] = inner_dim;
             trivial.dim = inner_dim;
             TreeVector<1> tree(1, trivial);

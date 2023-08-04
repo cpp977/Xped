@@ -234,7 +234,7 @@ struct fPEPSSolverAD
         SaveCallback save_c(*this);
         if(optim_opts.save_period > 0) { options.callbacks.push_back(&save_c); }
         for(auto rep = 0ul; rep < optim_opts.restarts; ++rep) {
-            Log::on_entry(optim_opts.verbosity, "Do L-BFGS optimization (repetition={})", rep);
+            Log::on_entry(optim_opts.verbosity, "Do {} optimization (repetition={})", optim_opts.alg, rep);
             ceres::GradientProblemSolver::Summary summary;
             if constexpr(ScalarTraits<Scalar>::IS_COMPLEX()) {
                 typename ScalarTraits<Scalar>::Real* params_real = reinterpret_cast<double*>(parameters.data());

@@ -179,12 +179,10 @@ public:
                            ("CA2s", CA2s),
                            ("CA3s", CA3s),
                            ("CA4s", CA4s),
-                           ("CBs", CBs),
                            ("TA1s", TA1s),
                            ("TA2s", TA2s),
                            ("TA3s", TA3s),
                            ("TA4s", TA4s),
-                           ("TBs", TBs),
                            // ("Ms", Ms),
                            ("rho_h", rho_h),
                            ("rho_v", rho_v),
@@ -193,6 +191,7 @@ public:
     }
 
     std::size_t chi() const { return chi_; }
+    std::size_t updateChi(std::size_t chi) { return chi_ = chi; }
 
     Opts::CTM_INIT const init_mode() { return init_m; }
 
@@ -208,37 +207,31 @@ private:
     static constexpr auto getRankCA2() { return ALL_OUT_LEGS ? 2 : 1; }
     static constexpr auto getRankCA3() { return ALL_OUT_LEGS ? 2 : 2; }
     static constexpr auto getRankCA4() { return ALL_OUT_LEGS ? 2 : 1; }
-    static constexpr auto getRankCB() { return ALL_OUT_LEGS ? 0 : 1; }
 
     static constexpr auto getCoRankCA1() { return ALL_OUT_LEGS ? 0 : 2; }
     static constexpr auto getCoRankCA2() { return ALL_OUT_LEGS ? 0 : 1; }
     static constexpr auto getCoRankCA3() { return ALL_OUT_LEGS ? 0 : 0; }
     static constexpr auto getCoRankCA4() { return ALL_OUT_LEGS ? 0 : 1; }
-    static constexpr auto getCoRankCB() { return ALL_OUT_LEGS ? 2 : 1; }
 
     static constexpr auto getRankTA1() { return ALL_OUT_LEGS ? TRank + 2 : 1; }
     static constexpr auto getRankTA2() { return ALL_OUT_LEGS ? TRank + 2 : TRank + 1; }
     static constexpr auto getRankTA3() { return ALL_OUT_LEGS ? TRank + 2 : TRank + 1; }
     static constexpr auto getRankTA4() { return ALL_OUT_LEGS ? TRank + 2 : 1; }
-    static constexpr auto getRankTB() { return ALL_OUT_LEGS ? 0 : 1; }
 
     static constexpr auto getCoRankTA1() { return ALL_OUT_LEGS ? 0 : TRank + 1; }
     static constexpr auto getCoRankTA2() { return ALL_OUT_LEGS ? 0 : 1; }
     static constexpr auto getCoRankTA3() { return ALL_OUT_LEGS ? 0 : 1; }
     static constexpr auto getCoRankTA4() { return ALL_OUT_LEGS ? 0 : TRank + 1; }
-    static constexpr auto getCoRankTB() { return ALL_OUT_LEGS ? TRank + 2 : TRank + 1; }
 
     TMatrix<Tensor<Scalar, getRankCA1(), getCoRankCA1(), Symmetry, ENABLE_AD>> CA1s;
     TMatrix<Tensor<Scalar, getRankCA2(), getCoRankCA2(), Symmetry, ENABLE_AD>> CA2s;
     TMatrix<Tensor<Scalar, getRankCA3(), getCoRankCA3(), Symmetry, ENABLE_AD>> CA3s;
     TMatrix<Tensor<Scalar, getRankCA4(), getCoRankCA4(), Symmetry, ENABLE_AD>> CA4s;
-    TMatrix<Tensor<Scalar, getRankCB(), getCoRankCB(), Symmetry, ENABLE_AD>> CBs;
 
     TMatrix<Tensor<Scalar, getRankTA1(), getCoRankTA1(), Symmetry, ENABLE_AD>> TA1s;
     TMatrix<Tensor<Scalar, getRankTA2(), getCoRankTA2(), Symmetry, ENABLE_AD>> TA2s;
     TMatrix<Tensor<Scalar, getRankTA3(), getCoRankTA3(), Symmetry, ENABLE_AD>> TA3s;
     TMatrix<Tensor<Scalar, getRankTA4(), getCoRankTA4(), Symmetry, ENABLE_AD>> TA4s;
-    TMatrix<Tensor<Scalar, getRankTB(), getCoRankTB(), Symmetry, ENABLE_AD>> TBs;
 
     TMatrix<Tensor<Scalar, 2, 2, Symmetry, ENABLE_AD>> Ms;
 

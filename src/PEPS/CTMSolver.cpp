@@ -41,6 +41,8 @@ CTMSolver<Scalar, Symmetry, HamScalar, ALL_OUT_LEGS, CPOpts, TRank>::solve(std::
     if(REINIT_ENV) {
         Jack = CTM<Scalar, Symmetry, TRank, ALL_OUT_LEGS, false>(Psi, opts.chi, opts.init);
         Jack.init();
+    } else {
+        Jack.updateChi(opts.chi);
     }
 
     double E = std::numeric_limits<typename ScalarTraits<Scalar>::Real>::quiet_NaN();

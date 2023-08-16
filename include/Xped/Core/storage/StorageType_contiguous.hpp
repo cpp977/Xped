@@ -87,7 +87,12 @@ public:
                 curr += m_domain.inner_dim(q) * m_codomain.inner_dim(q);
             }
         }
-        m_data.resize(curr);
+        try {
+            m_data.resize(curr);
+        } catch(std::bad_alloc& e) {
+            fmt::print(stderr, "Failure during allocation of tensor data. Requested elems: {} (mem={}).\n", curr, curr * sizeof(Scalar));
+            throw std::bad_alloc();
+        }
     }
 
     void set_data(const Scalar* data, std::size_t size)
@@ -95,7 +100,12 @@ public:
         assert(m_sector.size() > 0 and "Block data needs to already set. Use initialized_resize() instead.");
         assert(m_offsets.size() == m_sector.size() and "Corrupted storage.");
         assert(m_dict.size() == m_sector.size() and "Corrupted storage.");
-        m_data.assign(data, data + size);
+        try {
+            m_data.assign(data, data + size);
+        } catch(std::bad_alloc& e) {
+            fmt::print(stderr, "Failure during allocation of tensor data. Requested elems: {} (mem={}).\n", size, size * sizeof(Scalar));
+            throw std::bad_alloc();
+        }
     }
 
     cMapMatrixType block(std::size_t i) const
@@ -159,7 +169,15 @@ public:
         m_data.insert(m_data.end(), M.data(), M.data() + M.size());
     }
 
-    void reserve(std::size_t size) { m_data.reserve(size); }
+    void reserve(std::size_t size)
+    {
+        try {
+            m_data.reserve(size);
+        } catch(std::bad_alloc& e) {
+            fmt::print(stderr, "Failure during allocation of tensor data. Requested elems: {} (mem={}).\n", size, size * sizeof(Scalar));
+            throw std::bad_alloc();
+        }
+    }
 
     void clear()
     {
@@ -203,7 +221,12 @@ private:
 
     void initialized_resize(const Scalar* data, std::size_t size)
     {
-        m_data.assign(data, data + size);
+        try {
+            m_data.assign(data, data + size);
+        } catch(std::bad_alloc& e) {
+            fmt::print(stderr, "Failure during allocation of tensor data. Requested elems: {} (mem={}).\n", size, size * sizeof(Scalar));
+            throw std::bad_alloc();
+        }
 
         std::size_t curr = 0;
         for(const auto& [q, dim, plain] : m_domain) {

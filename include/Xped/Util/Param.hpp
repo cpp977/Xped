@@ -11,6 +11,13 @@ struct Param
     template <typename Scalar>
     Scalar get() const
     {
+        Scalar res;
+        try {
+            res = std::any_cast<Scalar>(value);
+        } catch(const std::bad_any_cast& e) {
+            fmt::print(stderr, "Conversion failed for value type={}\nError: {}\n", value.type().name(), e.what());
+            std::terminate();
+        }
         return std::any_cast<Scalar>(value);
     }
 };

@@ -1,7 +1,7 @@
 #ifndef XPED_CORRELATION_LENGTH_HPP_
 #define XPED_CORRELATION_LENGTH_HPP_
 
-#include "ALGS/ArnoldiSolver.h"
+#include "Xped/Util/ArnoldiSolver.h"
 
 #include "Xped/PEPS/CTM.hpp"
 #include "Xped/PEPS/iPEPS.hpp"

@@ -238,7 +238,11 @@ struct MatrixInterface
                           const Eigen::MatrixBase<Derived>& M2);
 
     template <typename Derived>
-    static std::pair<MType<typename Derived::Scalar>, MType<typename Derived::Scalar>> eigh(const Eigen::MatrixBase<Derived>& M);
+    static auto eigh(const Eigen::MatrixBase<Derived>& M)
+    {
+        Eigen::SelfAdjointEigenSolver<MType<typename Derived::Scalar>> Jack(M, Eigen::ComputeEigenvectors);
+        return std::make_pair(MType<typename Derived::RealScalar>(Jack.eigenvalues().asDiagonal()), Jack.eigenvectors());
+    }
 
     template <typename Derived>
     static std::pair<MType<typename Derived::Scalar>, MType<typename Derived::Scalar>> qr(const Eigen::MatrixBase<Derived>& M);

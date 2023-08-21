@@ -135,7 +135,7 @@ public:
         }
     }
 
-    std::size_t fullChi() const { return CA1s[0].uncoupledCodomain()[0].fullDim(); }
+    std::size_t fullChi() const { return C1s[0].uncoupledCodomain()[0].fullDim(); }
 
     template <bool TRACK = ENABLE_AD>
     void solve(std::size_t max_steps);
@@ -162,6 +162,7 @@ public:
     bool RDM_COMPUTED() const { return HAS_RDM; }
 
     void checkHermiticity() const;
+    bool checkSym() const;
 
     auto info() const;
 
@@ -175,14 +176,14 @@ public:
                            ("cell", cell_),
                            ("chi", chi_),
                            ("HAS_RDM", HAS_RDM),
-                           ("CA1s", CA1s),
-                           ("CA2s", CA2s),
-                           ("CA3s", CA3s),
-                           ("CA4s", CA4s),
-                           ("TA1s", TA1s),
-                           ("TA2s", TA2s),
-                           ("TA3s", TA3s),
-                           ("TA4s", TA4s),
+                           ("C1s", C1s),
+                           ("C2s", C2s),
+                           ("C3s", C3s),
+                           ("C4s", C4s),
+                           ("T1s", T1s),
+                           ("T2s", T2s),
+                           ("T3s", T3s),
+                           ("T4s", T4s),
                            // ("Ms", Ms),
                            ("rho_h", rho_h),
                            ("rho_v", rho_v),
@@ -195,7 +196,7 @@ public:
 
     Opts::CTM_INIT const init_mode() { return init_m; }
 
-private:
+    // private:
     std::shared_ptr<iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>> A;
     UnitCell cell_;
     std::size_t chi_;
@@ -203,35 +204,35 @@ private:
     Opts::PROJECTION proj_m = Opts::PROJECTION::CORNER;
     bool HAS_RDM = false;
 
-    static constexpr auto getRankCA1() { return ALL_OUT_LEGS ? 2 : 0; }
-    static constexpr auto getRankCA2() { return ALL_OUT_LEGS ? 2 : 1; }
-    static constexpr auto getRankCA3() { return ALL_OUT_LEGS ? 2 : 2; }
-    static constexpr auto getRankCA4() { return ALL_OUT_LEGS ? 2 : 1; }
+    static constexpr auto getRankC1() { return ALL_OUT_LEGS ? 2 : 0; }
+    static constexpr auto getRankC2() { return ALL_OUT_LEGS ? 2 : 1; }
+    static constexpr auto getRankC3() { return ALL_OUT_LEGS ? 2 : 2; }
+    static constexpr auto getRankC4() { return ALL_OUT_LEGS ? 2 : 1; }
 
-    static constexpr auto getCoRankCA1() { return ALL_OUT_LEGS ? 0 : 2; }
-    static constexpr auto getCoRankCA2() { return ALL_OUT_LEGS ? 0 : 1; }
-    static constexpr auto getCoRankCA3() { return ALL_OUT_LEGS ? 0 : 0; }
-    static constexpr auto getCoRankCA4() { return ALL_OUT_LEGS ? 0 : 1; }
+    static constexpr auto getCoRankC1() { return ALL_OUT_LEGS ? 0 : 2; }
+    static constexpr auto getCoRankC2() { return ALL_OUT_LEGS ? 0 : 1; }
+    static constexpr auto getCoRankC3() { return ALL_OUT_LEGS ? 0 : 0; }
+    static constexpr auto getCoRankC4() { return ALL_OUT_LEGS ? 0 : 1; }
 
-    static constexpr auto getRankTA1() { return ALL_OUT_LEGS ? TRank + 2 : 1; }
-    static constexpr auto getRankTA2() { return ALL_OUT_LEGS ? TRank + 2 : TRank + 1; }
-    static constexpr auto getRankTA3() { return ALL_OUT_LEGS ? TRank + 2 : TRank + 1; }
-    static constexpr auto getRankTA4() { return ALL_OUT_LEGS ? TRank + 2 : 1; }
+    static constexpr auto getRankT1() { return ALL_OUT_LEGS ? TRank + 2 : 1; }
+    static constexpr auto getRankT2() { return ALL_OUT_LEGS ? TRank + 2 : TRank + 1; }
+    static constexpr auto getRankT3() { return ALL_OUT_LEGS ? TRank + 2 : TRank + 1; }
+    static constexpr auto getRankT4() { return ALL_OUT_LEGS ? TRank + 2 : 1; }
 
-    static constexpr auto getCoRankTA1() { return ALL_OUT_LEGS ? 0 : TRank + 1; }
-    static constexpr auto getCoRankTA2() { return ALL_OUT_LEGS ? 0 : 1; }
-    static constexpr auto getCoRankTA3() { return ALL_OUT_LEGS ? 0 : 1; }
-    static constexpr auto getCoRankTA4() { return ALL_OUT_LEGS ? 0 : TRank + 1; }
+    static constexpr auto getCoRankT1() { return ALL_OUT_LEGS ? 0 : TRank + 1; }
+    static constexpr auto getCoRankT2() { return ALL_OUT_LEGS ? 0 : 1; }
+    static constexpr auto getCoRankT3() { return ALL_OUT_LEGS ? 0 : 1; }
+    static constexpr auto getCoRankT4() { return ALL_OUT_LEGS ? 0 : TRank + 1; }
 
-    TMatrix<Tensor<Scalar, getRankCA1(), getCoRankCA1(), Symmetry, ENABLE_AD>> CA1s;
-    TMatrix<Tensor<Scalar, getRankCA2(), getCoRankCA2(), Symmetry, ENABLE_AD>> CA2s;
-    TMatrix<Tensor<Scalar, getRankCA3(), getCoRankCA3(), Symmetry, ENABLE_AD>> CA3s;
-    TMatrix<Tensor<Scalar, getRankCA4(), getCoRankCA4(), Symmetry, ENABLE_AD>> CA4s;
+    TMatrix<Tensor<Scalar, getRankC1(), getCoRankC1(), Symmetry, ENABLE_AD>> C1s;
+    TMatrix<Tensor<Scalar, getRankC2(), getCoRankC2(), Symmetry, ENABLE_AD>> C2s;
+    TMatrix<Tensor<Scalar, getRankC3(), getCoRankC3(), Symmetry, ENABLE_AD>> C3s;
+    TMatrix<Tensor<Scalar, getRankC4(), getCoRankC4(), Symmetry, ENABLE_AD>> C4s;
 
-    TMatrix<Tensor<Scalar, getRankTA1(), getCoRankTA1(), Symmetry, ENABLE_AD>> TA1s;
-    TMatrix<Tensor<Scalar, getRankTA2(), getCoRankTA2(), Symmetry, ENABLE_AD>> TA2s;
-    TMatrix<Tensor<Scalar, getRankTA3(), getCoRankTA3(), Symmetry, ENABLE_AD>> TA3s;
-    TMatrix<Tensor<Scalar, getRankTA4(), getCoRankTA4(), Symmetry, ENABLE_AD>> TA4s;
+    TMatrix<Tensor<Scalar, getRankT1(), getCoRankT1(), Symmetry, ENABLE_AD>> T1s;
+    TMatrix<Tensor<Scalar, getRankT2(), getCoRankT2(), Symmetry, ENABLE_AD>> T2s;
+    TMatrix<Tensor<Scalar, getRankT3(), getCoRankT3(), Symmetry, ENABLE_AD>> T3s;
+    TMatrix<Tensor<Scalar, getRankT4(), getCoRankT4(), Symmetry, ENABLE_AD>> T4s;
 
     TMatrix<Tensor<Scalar, 2, 2, Symmetry, ENABLE_AD>> Ms;
 

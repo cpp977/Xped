@@ -83,6 +83,12 @@ struct PlainInterface : public MatrixInterface, public TensorInterface, public V
                                                                           const Indextype& cols,
                                                                           const std::array<Indextype, Rank>& dims);
 
+    template <typename Scalar>
+    static MType<Scalar> asDiagonal(const VType<Scalar>& vec)
+    {
+        return vec.matrix().asDiagonal();
+    }
+
     template <typename Derived>
     static void diagonal_head_matrix_to_vector(VType<typename Derived::Scalar>& V, const Eigen::MatrixBase<Derived>& M, const Indextype& n_elems);
 

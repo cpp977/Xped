@@ -80,11 +80,11 @@ void HxV(const TransferMatrix2<Scalar, Symmetry>& H,
 }
 
 template <typename Scalar, typename Symmetry>
-Scalar correlation_length(const CTM<Scalar, Symmetry>& env,
-                          Opts::Orientation orientation = Opts::Orientation::H,
-                          int x = 0,
-                          int y = 0,
-                          const std::vector<typename Symmetry::qType>& Qlist = {})
+auto correlation_length(const CTM<Scalar, Symmetry>& env,
+                        Opts::Orientation orientation = Opts::Orientation::H,
+                        int x = 0,
+                        int y = 0,
+                        const std::vector<typename Symmetry::qType>& Qlist = {})
 {
     const std::size_t Neig = 16;
     auto size = (orientation == Opts::Orientation::H) ? env.cell().Lx : env.cell().Ly;
@@ -131,10 +131,10 @@ Scalar correlation_length(const CTM<Scalar, Symmetry>& env,
     }
     std::sort(eigs.begin(), eigs.end(), [](auto eig1, auto eig2) { return std::abs(eig1.second) > std::abs(eig2.second); });
     Log::on_exit("All eigs:");
-    for(auto [Q, eig] : eigs) { Log::on_exit("Q={}:{}, ", Sym::format<Symmetry>(Q), eig / std::abs(eigs[0].second)); }
+    // for(auto [Q, eig] : eigs) { Log::on_exit("Q={}:{}, ", Sym::format<Symmetry>(Q), eig / std::abs(eigs[0].second)); }
     for(auto [Q, eig] : eigs) { Log::on_exit("Q={}:{}, ", Sym::format<Symmetry>(Q), std::abs(eig / std::abs(eigs[0].second))); }
     Log::on_exit("corr length={}", size * (-1. / std::log(std::abs(eigs[1].second) / std::abs(eigs[0].second))));
-    return size * (-1. / std::log(std::abs(eigs[1].second) / std::abs(eigs[0].second)));
+    return std::make_pair(size * (-1. / std::log(std::abs(eigs[1].second) / std::abs(eigs[0].second))), eigs);
 }
 
 template <typename Scalar, typename Symmetry>

@@ -31,5 +31,5 @@ target_link_libraries (chi_ramp Xped)
 #########################
 #    calc_corrLength    #
 #########################
-# add_executable(calc_corrLength calc_corrLength.cpp)
-# target_link_libraries (calc_corrLength Xped)
+add_executable(calc_corrLength calc_corrLength.cpp)
+target_link_libraries (calc_corrLength Xped)

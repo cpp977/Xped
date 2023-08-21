@@ -68,7 +68,7 @@ int main(int argc, char* argv[])
         // typedef Xped::Sym::ZN<Xped::Sym::SpinU1, 36, double> Symmetry;
         // using Symmetry = Xped::Sym::U0<double>;
 
-        std::unique_ptr<Xped::TwoSiteObservable<HamScalar, Symmetry>> ham;
+        std::unique_ptr<Xped::Hamiltonian<HamScalar, Symmetry>> ham;
 
         std::string config_file = argc > 1 ? argv[1] : "config.toml";
 
@@ -179,14 +179,41 @@ int main(int argc, char* argv[])
         }
         auto Psi = std::make_shared<Xped::iPEPS<Scalar, Symmetry>>(std::move(tmp_Psi));
 
+        auto save_p = std::filesystem::current_path();
+        if(data.at("global").contains("working_directory")) {
+            std::filesystem::path tmp_wd(static_cast<std::string>(data.at("global").at("working_directory").as_string()));
+            if(tmp_wd.is_relative()) {
+                save_p = std::filesystem::current_path() / tmp_wd;
+            } else {
+                save_p = tmp_wd;
+            }
+        }
+
         std::vector<std::size_t> chis = toml::get<std::vector<std::size_t>>(toml::find(data.at("global"), "chis"));
         std::vector<double> Es(chis.size(), 0.);
         for(auto ichi = 0ul; auto chi : chis) {
             Jack.opts.chi = chi;
-            Es[ichi] = Jack.template solve<false>(Psi, nullptr, *ham);
+            Es[ichi++] = Jack.template solve<false>(Psi, nullptr, *ham);
             Jack.REINIT_ENV = false;
+            constexpr std::size_t flags = yas::file /*IO type*/ | yas::binary; /*IO format*/
+            yas::file_ostream ofs_ctm((save_p.string() + "/" + ham->file_name() + fmt::format("_D={}_chi={}.ctm", Psi->D, chi)).c_str(),
+                                      /*trunc*/ 1);
+            yas::save<flags>(ofs_ctm, Jack);
+            for(auto& ob : ham->obs) {
+                if(auto* one = dynamic_cast<Xped::OneSiteObservable<double, Symmetry>*>(ob.get()); one != nullptr) { avg(Jack.getCTM(), *one); }
+                if(auto* one_c = dynamic_cast<Xped::OneSiteObservable<std::complex<double>, Symmetry>*>(ob.get()); one_c != nullptr) {
+                    avg(Jack.getCTM(), *one_c);
+                }
+                if(auto* two = dynamic_cast<Xped::TwoSiteObservable<double, Symmetry>*>(ob.get()); two != nullptr) { avg(Jack.getCTM(), *two); }
+                if(auto* two_c = dynamic_cast<Xped::TwoSiteObservable<std::complex<double>, Symmetry>*>(ob.get()); two_c != nullptr) {
+                    avg(Jack.getCTM(), *two_c);
+                }
+            }
+            Xped::Log::per_iteration("  Observables:\n{}", ham->getObsString("    "));
+            HighFive::File file((save_p).string() + "/" + ham->file_name() + fmt::format("_chi_ramp.h5"), HighFive::File::OpenOrCreate);
+            ham->obsToFile(file, fmt::format("/{}/{}/", Psi->D, Jack.getCTM().chi()));
         }
-        for(auto j = 0; j < chis.size(); ++j) { Xped::Log::on_exit(ctm_opts.verbosity, "{} χ={:^3d}: E={:.8f}", "↳", chis[j], Es[j]); }
+        for(auto j = 0ul; j < chis.size(); ++j) { Xped::Log::on_exit(ctm_opts.verbosity, "{} χ={:^3d}: E={:.8f}", "↳", chis[j], Es[j]); }
 #ifdef XPED_CACHE_PERMUTE_OUTPUT
         std::cout << "total hits=" << tree_cache</*shift*/ 0, /*Rank*/ 4, /*CoRank*/ 3, Symmetry>.cache.stats().total_hits()
                   << endl; // Hits for any key

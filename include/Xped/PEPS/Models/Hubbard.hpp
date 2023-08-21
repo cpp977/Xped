@@ -89,9 +89,6 @@ public:
                 for(auto& t : this->data_d2) { t = -this->params["tprime"].template get<double>() * hopping; }
             }
         } else if constexpr(Symmetry::ALL_ABELIAN) {
-            this->used_params.push_back("Bx");
-            this->used_params.push_back("By");
-            this->used_params.push_back("Bz");
             hopping = (tprod(F.cdag(SPIN_INDEX::UP), F.c(SPIN_INDEX::UP)) + tprod(F.cdag(SPIN_INDEX::DN), F.c(SPIN_INDEX::DN)) -
                        tprod(F.c(SPIN_INDEX::UP), F.cdag(SPIN_INDEX::UP)) - tprod(F.c(SPIN_INDEX::DN), F.cdag(SPIN_INDEX::DN)))
                           .eval();
@@ -102,15 +99,18 @@ public:
             // std::exit(0);
             // Es.print(std::cout, true);
             // std::cout << std::endl;
-            auto Bx = this->params["Bx"].template get<TMatrix<double>>();
-            auto By = this->params["By"].template get<TMatrix<double>>();
-            auto Bz = this->params["Bz"].template get<TMatrix<double>>();
             if((this->bond & Opts::Bond::H) == Opts::Bond::H) {
                 for(auto pos = 0ul; pos < this->data_h.size(); ++pos) {
                     auto [x, y] = this->pat.coords(pos);
                     this->data_h(x, y) = -this->params["t"].template get<double>() * hopping + this->params["U"].template get<double>() * hubbard -
                                          this->params["mu"].template get<double>() * occ;
                     if constexpr(std::is_same_v<Scalar, std::complex<double>>) {
+                        this->used_params.push_back("Bx");
+                        this->used_params.push_back("By");
+                        this->used_params.push_back("Bz");
+                        auto Bx = this->params["Bx"].template get<TMatrix<double>>();
+                        auto By = this->params["By"].template get<TMatrix<double>>();
+                        auto Bz = this->params["Bz"].template get<TMatrix<double>>();
                         this->data_h(x, y) = this->data_h(x, y) - Bx(x, y) * 0.25 * (tprod(F.Sx(), F.Id()) + tprod(F.Id(), F.Sx())).eval() -
                                              By(x, y) * 0.25 * (tprod(F.Sy(), F.Id()) + tprod(F.Id(), F.Sy())).eval() -
                                              Bz(x, y) * 0.25 * (tprod(F.Sz(), F.Id()) + tprod(F.Id(), F.Sz())).eval();
@@ -124,6 +124,12 @@ public:
                     this->data_v(x, y) = -this->params["t"].template get<double>() * hopping + this->params["U"].template get<double>() * hubbard -
                                          this->params["mu"].template get<double>() * occ;
                     if constexpr(std::is_same_v<Scalar, std::complex<double>>) {
+                        this->used_params.push_back("Bx");
+                        this->used_params.push_back("By");
+                        this->used_params.push_back("Bz");
+                        auto Bx = this->params["Bx"].template get<TMatrix<double>>();
+                        auto By = this->params["By"].template get<TMatrix<double>>();
+                        auto Bz = this->params["Bz"].template get<TMatrix<double>>();
                         this->data_v(x, y) = this->data_v(x, y) - Bx(x, y) * 0.25 * (tprod(F.Sx(), F.Id()) + tprod(F.Id(), F.Sx())).eval() -
                                              By(x, y) * 0.25 * (tprod(F.Sy(), F.Id()) + tprod(F.Id(), F.Sy())).eval() -
                                              Bz(x, y) * 0.25 * (tprod(F.Sz(), F.Id()) + tprod(F.Id(), F.Sz())).eval();

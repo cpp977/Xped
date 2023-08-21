@@ -124,21 +124,95 @@ int main(int argc, char* argv[])
         throw;
     }
     auto Psi = std::make_shared<Xped::iPEPS<Scalar, Symmetry>>(std::move(tmp_Psi));
-
     Xped::CTM<Scalar, Symmetry> Jack(Psi, ctm_opts.chi, ctm_opts.init);
-    Jack.init();
-    Xped::Log::on_entry("Performing CTM with χ={}", ctm_opts.chi);
-    for(std::size_t step = 0; step < ctm_opts.max_presteps; ++step) {
-        Xped::util::Stopwatch<> move_t;
-        Jack.grow_all();
-        Jack.computeRDM();
-        auto hamobs = ham->asObservable();
-        auto [E_h, E_v, E_d1, E_d2] = avg(Jack, hamobs);
-        auto E = (E_h.sum() + E_v.sum() + E_d1.sum() + E_d2.sum()) / Jack.cell().uniqueSize();
-        fmt::print("{: >3} {:2d}: E={:2.8f}, t={}\n", "▷", step, E, move_t.time_string());
+    if(data.at("global").contains("load_ctm")) {
+        std::string load_ctm = toml::get<std::string>(toml::find(data.at("global"), "load_ctm"));
+        yas::load<flags>(load_ctm.c_str(), Jack);
+    } else {
+        Jack.init();
+        Xped::Log::on_entry("Performing CTM with χ={}", ctm_opts.chi);
+        for(std::size_t step = 0; step < ctm_opts.max_presteps; ++step) {
+            Xped::util::Stopwatch<> move_t;
+            Jack.grow_all();
+            Jack.computeRDM();
+            auto hamobs = ham->asObservable();
+            auto [E_h, E_v, E_d1, E_d2] = avg(Jack, hamobs);
+            auto E = (E_h.sum() + E_v.sum() + E_d1.sum() + E_d2.sum()) / Jack.cell().uniqueSize();
+            fmt::print("{: >3} {:2d}: E={:2.8f}, t={}\n", "▷", step, E, move_t.time_string());
+        }
     }
     using qType = typename Symmetry::qType;
-    Xped::correlation_length(Jack, Xped::Opts::Orientation::H, 0, 0);
+    auto [xi, eigs] = Xped::correlation_length(Jack, Xped::Opts::Orientation::H, 0, 0);
+
+    auto save_p = std::filesystem::current_path();
+    if(data.at("global").contains("working_directory")) {
+        std::filesystem::path tmp_wd(static_cast<std::string>(data.at("global").at("working_directory").as_string()));
+        if(tmp_wd.is_relative()) {
+            save_p = std::filesystem::current_path() / tmp_wd;
+        } else {
+            save_p = tmp_wd;
+        }
+    }
+    HighFive::File file(save_p.string() + "/" + ham->file_name() + fmt::format("_correlation_length.h5"), HighFive::File::OpenOrCreate);
+    std::string xi_name = fmt::format("/{}/{}/xi", Psi->D, ctm_opts.chi);
+    if(not file.exist(xi_name)) {
+        HighFive::DataSpace dataspace = HighFive::DataSpace({0, 0}, {HighFive::DataSpace::UNLIMITED, HighFive::DataSpace::UNLIMITED});
+
+        // Use chunking
+        HighFive::DataSetCreateProps props;
+        props.add(HighFive::Chunking(std::vector<hsize_t>{2, 2}));
+
+        // Create the dataset
+        HighFive::DataSet dataset = file.createDataSet(xi_name, dataspace, HighFive::create_datatype<double>(), props);
+    }
+    {
+        auto d = file.getDataSet(xi_name);
+        std::vector<std::vector<double>> data;
+        data.push_back(std::vector<double>(1, xi));
+        std::size_t curr_size = d.getDimensions()[0];
+        d.resize({curr_size + 1, data[0].size()});
+        d.select({curr_size, 0}, {1, data[0].size()}).write(data);
+    }
+
+    std::string eigs_name = fmt::format("/{}/{}/eigs", Psi->D, ctm_opts.chi);
+    if(not file.exist(eigs_name)) {
+        HighFive::DataSpace dataspace = HighFive::DataSpace({0, 0}, {HighFive::DataSpace::UNLIMITED, HighFive::DataSpace::UNLIMITED});
+
+        // Use chunking
+        HighFive::DataSetCreateProps props;
+        props.add(HighFive::Chunking(std::vector<hsize_t>{2, 2}));
+
+        // Create the dataset
+        HighFive::DataSet dataset = file.createDataSet(eigs_name, dataspace, HighFive::create_datatype<std::complex<double>>(), props);
+    }
+    {
+        auto d = file.getDataSet(eigs_name);
+        std::vector<std::vector<std::complex<double>>> data(1);
+        for(const auto& [q, eig] : eigs) { data[0].push_back(eig); }
+        std::size_t curr_size = d.getDimensions()[0];
+        d.resize({curr_size + 1, data[0].size()});
+        d.select({curr_size, 0}, {1, data[0].size()}).write(data);
+    }
+    std::string secs_name = fmt::format("/{}/{}/secs", Psi->D, ctm_opts.chi);
+    if(not file.exist(secs_name)) {
+        HighFive::DataSpace dataspace = HighFive::DataSpace({0, 0}, {HighFive::DataSpace::UNLIMITED, HighFive::DataSpace::UNLIMITED});
+
+        // Use chunking
+        HighFive::DataSetCreateProps props;
+        props.add(HighFive::Chunking(std::vector<hsize_t>{2, 2}));
+
+        // Create the dataset
+        HighFive::DataSet dataset = file.createDataSet(secs_name, dataspace, HighFive::create_datatype<int>(), props);
+    }
+    {
+        auto d = file.getDataSet(secs_name);
+        std::vector<std::vector<int>> data(1);
+        for(const auto& [q, eig] : eigs) { data[0].push_back(q[0]); }
+        std::size_t curr_size = d.getDimensions()[0];
+        d.resize({curr_size + 1, data[0].size()});
+        d.select({curr_size, 0}, {1, data[0].size()}).write(data);
+    }
+
     // Xped::correlation_length(Jack, Xped::Opts::Orientation::H, 0, 1);
     // Xped::correlation_length(Jack, Xped::Opts::Orientation::H, 1, 0);
     // Xped::correlation_length(Jack, Xped::Opts::Orientation::H, 1, 1);

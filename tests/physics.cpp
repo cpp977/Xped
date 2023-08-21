@@ -75,7 +75,7 @@ TEST_CASE("Testing SpinBase.")
                 H = H + Js(i, j) * (B.Sz(i) * B.Sz(j) + 0.5 * (B.Sp(i) * B.Sm(j) + B.Sm(i) * B.Sp(j)));
             }
         }
-        auto [Es, Us] = H.data.trim<2>().eigh();
+        auto [Es, Us] = H.data.trim<2>().teigh();
         CHECK(Es.block(0)(0, 0) == doctest::Approx(-2.43062856688879));
     }
 
@@ -102,7 +102,7 @@ TEST_CASE("Testing SpinBase.")
                 H = H + Js(i, j) * (B.Sz(i) * B.Sz(j) + 0.5 * (B.Sp(i) * B.Sm(j) + B.Sm(i) * B.Sp(j)));
             }
         }
-        auto [Es, Us] = H.data.trim<2>().eigh();
+        auto [Es, Us] = H.data.trim<2>().teigh();
         CHECK(Es.block(3)(0, 0) == doctest::Approx(-2.43062856688879));
     }
 
@@ -129,7 +129,7 @@ TEST_CASE("Testing SpinBase.")
                 H = H + Js(i, j) * (B.Sz(i) * B.Sz(j) + 0.5 * (B.Sp(i) * B.Sm(j) + B.Sm(i) * B.Sp(j)));
             }
         }
-        auto [Es, Us] = H.data.trim<2>().eigh();
+        auto [Es, Us] = H.data.trim<2>().teigh();
         CHECK(Es.block(0)(0, 0) == doctest::Approx(-2.43062856688879));
     }
 
@@ -154,7 +154,7 @@ TEST_CASE("Testing SpinBase.")
                 H = H + Js(i, j) * std::sqrt(3.) * Xped::SiteOperator<double, Symmetry>::prod(B.Sdag(i), B.S(j), Symmetry::qvacuum());
             }
         }
-        auto [Es, Us] = H.data.trim<2>().eigh();
+        auto [Es, Us] = H.data.trim<2>().teigh();
         CHECK(Es.block(0)(0, 0) == doctest::Approx(-2.43062856688881));
     }
 }
@@ -192,7 +192,7 @@ TEST_CASE("Testing FermionBase.")
                                     F.cdag(Xped::SPIN_INDEX::DN, i) * F.c(Xped::SPIN_INDEX::DN, j));
             }
         }
-        auto [Es, Us] = H.data.trim<2>().eigh();
+        auto [Es, Us] = H.data.trim<2>().teigh();
         CHECK(Es.block(0)(0, 0) == doctest::Approx(-13.4172994604531));
     }
 
@@ -223,7 +223,7 @@ TEST_CASE("Testing FermionBase.")
                                     F.cdag(Xped::SPIN_INDEX::DN, i) * F.c(Xped::SPIN_INDEX::DN, j));
             }
         }
-        auto [Es, Us] = H.data.trim<2>().eigh();
+        auto [Es, Us] = H.data.trim<2>().teigh();
         CHECK(Es.block(4)(0, 0) == doctest::Approx(-13.4172994604531));
     }
 
@@ -254,7 +254,7 @@ TEST_CASE("Testing FermionBase.")
                                     F.cdag(Xped::SPIN_INDEX::DN, i) * F.c(Xped::SPIN_INDEX::DN, j));
             }
         }
-        auto [Es, Us] = H.data.trim<2>().eigh();
+        auto [Es, Us] = H.data.trim<2>().teigh();
         CHECK(Es.block(4)(0, 0) == doctest::Approx(-13.4172994604531));
     }
 
@@ -284,7 +284,7 @@ TEST_CASE("Testing FermionBase.")
                                     F.cdag(Xped::SPIN_INDEX::DN, i) * F.c(Xped::SPIN_INDEX::DN, j));
             }
         }
-        auto [Es, Us] = H.data.trim<2>().eigh();
+        auto [Es, Us] = H.data.trim<2>().teigh();
         CHECK(Es.block(13)(0, 0) == doctest::Approx(-13.378782979745));
     }
 
@@ -312,7 +312,7 @@ TEST_CASE("Testing FermionBase.")
                 H = H + ts(i, j) * std::sqrt(2.) * Xped::SiteOperator<double, Symmetry>::prod(F.cdag(i), F.c(j), Symmetry::qvacuum());
             }
         }
-        auto [Es, Us] = H.data.trim<2>().eigh();
+        auto [Es, Us] = H.data.trim<2>().teigh();
         CHECK(Es.block(0)(0, 0) == doctest::Approx(-13.1853931833403));
     }
 
@@ -340,7 +340,7 @@ TEST_CASE("Testing FermionBase.")
                 H = H + ts(i, j) * std::sqrt(2.) * Xped::SiteOperator<double, Symmetry>::prod(F.cdag(i), F.c(j), Symmetry::qvacuum());
             }
         }
-        auto [Es, Us] = H.data.trim<2>().eigh();
+        auto [Es, Us] = H.data.trim<2>().teigh();
         CHECK(Es.block(2)(0, 0) == doctest::Approx(-13.1853931833403));
     }
 
@@ -368,7 +368,7 @@ TEST_CASE("Testing FermionBase.")
                 H = H + ts(i, j) * std::sqrt(2.) * Xped::SiteOperator<double, Symmetry>::prod(F.cdag(i), F.c(j), Symmetry::qvacuum());
             }
         }
-        auto [Es, Us] = H.data.trim<2>().eigh();
+        auto [Es, Us] = H.data.trim<2>().teigh();
         CHECK(Es.block(2)(0, 0) == doctest::Approx(-13.1853931833403));
     }
 
@@ -397,7 +397,7 @@ TEST_CASE("Testing FermionBase.")
                 H = H + ts(i, j) * std::sqrt(2.) * std::sqrt(2.) * Xped::SiteOperator<double, Symmetry>::prod(F.cdag(i), F.c(j), Symmetry::qvacuum());
             }
         }
-        auto [Es, Us] = H.data.trim<2>().eigh();
+        auto [Es, Us] = H.data.trim<2>().teigh();
         CHECK(Es.block(0)(0, 0) == doctest::Approx(-7.47877505967545));
     }
 }

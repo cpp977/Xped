@@ -10,6 +10,7 @@
 #include "fmt/ranges.h"
 
 #include "Xped/Util/Constfct.hpp"
+#include "Xped/Util/Logging.hpp"
 #include "Xped/Util/Macros.hpp"
 #include "Xped/Util/Random.hpp"
 
@@ -502,6 +503,129 @@ Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::tSVD(size_t max
 }
 
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
+std::pair<Tensor<typename ScalarTraits<Scalar>::Real, 1, 1, Symmetry, false, AllocationPolicy>,
+          Tensor<Scalar, Rank, 1, Symmetry, false, AllocationPolicy>>
+Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::tSVD_C4v(std::size_t maxKeep,
+                                                                          RealScalar eps_svd,
+                                                                          RealScalar& truncWeight,
+                                                                          RealScalar& entropy,
+                                                                          std::map<qarray<Symmetry::Nq>, VectorType>& SVspec,
+                                                                          bool PRESERVE_MULTIPLETS,
+                                                                          bool RETURN_SPEC) XPED_CONST
+{
+    static_assert(Rank == CoRank, "Eigenvalue decomposition only possible for tensors with Rank==CoRank");
+    // assert(coupledDomain() == coupledCodomain() and "Eigenvalue decomposition only possible for square matrices.");
+    // assert(*this == this->adjoint().eval() and "Input for eigh() needs to be Hermitian.");
+    entropy = 0.;
+    truncWeight = 0;
+    Qbasis<Symmetry, 1> middle;
+    for(size_t i = 0; i < sector().size(); ++i) {
+        middle.push_back(sector(i), std::min(PlainInterface::rows(block(i)), PlainInterface::cols(block(i))));
+    }
+    Tensor<Scalar, Rank, 1, Symmetry, false, AllocationPolicy> U(uncoupledDomain(), {{middle}});
+    Tensor<RealScalar, 1, 1, Symmetry, false, AllocationPolicy> Sigma({{middle}}, {{middle}});
+
+    std::vector<std::tuple<typename Symmetry::qType, std::size_t, RealScalar>> allSV;
+    for(size_t i = 0; i < sector().size(); ++i) {
+        using namespace std::complex_literals;
+        bool HERMITIAN = (block(i) - block(i).adjoint()).norm() < 1.e-10;
+        bool SKEW_HERMITIAN = ((1i * block(i)) - (1i * block(i)).adjoint()).norm() < 1.e-10;
+        std::cout << block(i) << std::endl;
+        fmt::print("HERMITIAN: {}, SKEWHERMITIAN: {}\n", HERMITIAN, SKEW_HERMITIAN);
+        std::cout << std::flush;
+        assert(HERMITIAN or SKEW_HERMITIAN);
+        PlainInterface::VType<RealScalar> svs;
+        PlainInterface::MType<Scalar> Ublock;
+        if(HERMITIAN) {
+            PlainInterface::MType<Scalar> eigvals;
+            std::tie(eigvals, Ublock) = PlainInterface::eigh(block(i));
+            svs = eigvals.diagonal().array().abs();
+        } else {
+            PlainInterface::MType<Scalar> eigvals;
+            std::tie(eigvals, Ublock) = PlainInterface::eigh(1i * block(i));
+            svs = eigvals.diagonal().array().abs();
+        }
+        for(std::size_t row = 0; row < svs.size(); ++row) { allSV.push_back(std::make_tuple(sector(i), row, svs(row))); }
+        Sigma.push_back(sector(i), PlainInterface::asDiagonal(svs));
+        U.push_back(sector(i), Ublock);
+    }
+    Log::debug("allSV: ");
+    for(const auto& [q, i, sq] : allSV) { Log::debug("{}:{}:{}, ", Sym::format<Symmetry>(q), i, sq); }
+
+    size_t numberOfStates = allSV.size();
+    assert(numberOfStates > 0);
+    auto first_entry = allSV[0];
+    SPDLOG_INFO("numberOfStates={}", numberOfStates);
+    SPDLOG_INFO("allSV={}\n", allSV);
+    std::sort(allSV.begin(), allSV.end(), [](const auto& sv1, const auto& sv2) { return (std::get<2>(sv1) > std::get<2>(sv2)); });
+    SPDLOG_INFO("numberOfStates after sort {}", allSV.size());
+    for(size_t i = maxKeep; i < allSV.size(); ++i) {
+        truncWeight += Symmetry::degeneracy(std::get<0>(allSV[i])) * std::pow(std::abs(std::get<2>(allSV[i])), 2.);
+    }
+    allSV.resize(std::min(maxKeep, numberOfStates));
+    SPDLOG_INFO("numberOfStates after resize {}", allSV.size());
+    std::erase_if(allSV, [eps_svd](const auto& sv) { return (std::get<2>(sv) < eps_svd); }); // c++-20 version
+    SPDLOG_INFO("numberOfStates after erase {}", allSV.size());
+
+    if(PRESERVE_MULTIPLETS) {
+        // cutLastMultiplet(allSV);
+        int endOfMultiplet = -1;
+        for(int i = allSV.size() - 1; i > 0; i--) {
+            RealScalar rel_diff = 2 * (std::get<2>(allSV[i - 1]) - std::get<2>(allSV[i])) / (std::get<2>(allSV[i - 1]) + std::get<2>(allSV[i]));
+            if(rel_diff > 0.1) {
+                endOfMultiplet = i;
+                break;
+            }
+        }
+        if(endOfMultiplet != -1) {
+            // std::cout << termcolor::red << "Cutting of the last " << allSV.size()-endOfMultiplet << " singular values to preserve the
+            // multiplet" << termcolor::reset << std::endl;
+            allSV.resize(endOfMultiplet);
+        }
+    }
+    Log::debug("Adding {} states from {} states", allSV.size(), numberOfStates);
+    if(allSV.size() == 0) {
+        SPDLOG_CRITICAL("All singular values are 0.");
+        assert(std::get<2>(first_entry) > 1.e-12 and "All singular values are exactly 0.");
+        allSV.push_back(first_entry);
+    }
+
+    std::map<typename Symmetry::qType, std::vector<std::pair<std::size_t, RealScalar>>> qn_orderedSV;
+    Qbasis<Symmetry, 1> truncBasis;
+    for(const auto& [q, i, s] : allSV) {
+        // truncBasis.push_back(q, 1ul);
+        Log::debug("Element q={}, i={}, sv={}", Sym::format<Symmetry>(q), i, s);
+        qn_orderedSV[q].push_back(std::make_pair(i, s));
+        entropy += -Symmetry::degeneracy(q) * s * s * std::log(s * s);
+    }
+    for(const auto& [q, vec_sv] : qn_orderedSV) { truncBasis.push_back(q, vec_sv.size()); }
+
+    Tensor<Scalar, Rank, 1, Symmetry, false, AllocationPolicy> trunc_U(uncoupledDomain(), {{truncBasis}});
+    Tensor<RealScalar, 1, 1, Symmetry, false, AllocationPolicy> trunc_Sigma({{truncBasis}}, {{truncBasis}});
+    for(const auto& [q, vec_sv] : qn_orderedSV) {
+        size_t Nret = vec_sv.size();
+        // cout << "q=" << q << ", Nret=" << Nret << endl;
+        Log::debug("Consider block q={}", Sym::format<Symmetry>(q));
+        Log::debug("vec_sv: {}", vec_sv);
+        std::vector<int> ind(vec_sv.size());
+        PlainInterface::VType<RealScalar> svs(vec_sv.size());
+        for(auto row = 0ul; auto [i, sv] : vec_sv) {
+            svs(row) = sv;
+            ind[row] = i;
+            ++row;
+        }
+        Log::debug("Take following rows of U: {}", ind);
+        auto sigma_mat = PlainInterface::asDiagonal(svs);
+        trunc_Sigma.push_back(q, sigma_mat);
+        if(RETURN_SPEC) { SVspec.insert(std::make_pair(q, sigma_mat.diagonal())); }
+        auto itU = U.dict().find({q});
+        trunc_U.push_back(q, static_cast<PlainInterface::MType<Scalar>>(U.block(itU->second)(Eigen::placeholders::all, ind)));
+    }
+
+    return std::make_pair(trunc_Sigma, trunc_U);
+}
+
+template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
 std::pair<Tensor<Scalar, Rank, 1, Symmetry, false, AllocationPolicy>, Tensor<Scalar, 1, CoRank, Symmetry, false, AllocationPolicy>>
 Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::tQR(bool RETURN_LQ) XPED_CONST
 {
@@ -529,7 +653,7 @@ Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::tQR(bool RETURN
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
 std::pair<Tensor<typename ScalarTraits<Scalar>::Real, 1, 1, Symmetry, false, AllocationPolicy>,
           Tensor<typename ScalarTraits<Scalar>::Real, Rank, 1, Symmetry, false, AllocationPolicy>>
-Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::eigh() XPED_CONST
+Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::teigh() XPED_CONST
 {
     static_assert(Rank == CoRank, "Eigenvalue decomposition only possible for tensors with Rank==CoRank");
     assert(coupledDomain() == coupledCodomain() and "Eigenvalue decomposition only possible for square matrices.");

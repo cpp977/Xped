@@ -341,11 +341,27 @@ public:
         return tSVD(maxKeep, eps_svd, truncWeight, S_dumb, SVspec_dumb, PRESERVE_MULTIPLETS, false); // false: Dont return singular value spectrum
     }
 
+    std::pair<Tensor<RealScalar, 1, 1, Symmetry, false, AllocationPolicy>, Tensor<Scalar, Rank, 1, Symmetry, false, AllocationPolicy>>
+    tSVD_C4v(std::size_t maxKeep,
+             RealScalar eps_svd,
+             RealScalar& truncWeight,
+             RealScalar& entropy,
+             std::map<qarray<Symmetry::Nq>, VectorType>& SVspec,
+             bool PRESERVE_MULTIPLETS = true,
+             bool RETURN_SPEC = true) XPED_CONST;
+
+    auto tSVD_C4v(std::size_t maxKeep, RealScalar eps_svd, RealScalar& truncWeight, bool PRESERVE_MULTIPLETS = true) XPED_CONST
+    {
+        RealScalar S_dumb;
+        std::map<qarray<Symmetry::Nq>, VectorType> SVspec_dumb;
+        return tSVD_C4v(maxKeep, eps_svd, truncWeight, S_dumb, SVspec_dumb, PRESERVE_MULTIPLETS, false); // false: Dont return singular value spectrum
+    }
+
     std::pair<Tensor<Scalar, Rank, 1, Symmetry, false, AllocationPolicy>, Tensor<Scalar, 1, CoRank, Symmetry, false, AllocationPolicy>>
     tQR(bool RETURN_LQ = false) XPED_CONST;
 
     std::pair<Tensor<RealScalar, 1, 1, Symmetry, false, AllocationPolicy>, Tensor<RealScalar, Rank, 1, Symmetry, false, AllocationPolicy>>
-    eigh() XPED_CONST;
+    teigh() XPED_CONST;
 
     const auto& domainTrees(const qType& q) const { return coupledDomain().tree(q); }
     const auto& codomainTrees(const qType& q) const { return coupledCodomain().tree(q); }

@@ -86,7 +86,7 @@ auto correlation_length(const CTM<Scalar, Symmetry>& env,
                         int y = 0,
                         const std::vector<typename Symmetry::qType>& Qlist = {})
 {
-    const std::size_t Neig = 16;
+    const std::size_t Neig = 4;
     auto size = (orientation == Opts::Orientation::H) ? env.cell().Lx : env.cell().Ly;
     std::vector<Tensor<Scalar, 1, 3, Symmetry>> T_top(size);
     if(orientation == Opts::Orientation::H) {

@@ -224,24 +224,29 @@ void iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>::updateAdags()
 template <typename Scalar, typename Symmetry, bool ALL_OUT_LEGS, bool ENABLE_AD>
 void iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>::loadFromMatlab(const std::filesystem::path& p, const std::string& root_name, int qn_scale)
 {
-    HighFive::File file(p.string(), HighFive::File::ReadOnly);
-    auto root = file.getGroup(root_name);
+    if constexpr(ALL_OUT_LEGS) {
+        return;
+    } else {
+        HighFive::File file(p.string(), HighFive::File::ReadOnly);
+        auto root = file.getGroup(root_name);
 
-    cell_.loadFromMatlab(p, root_name);
+        cell_.loadFromMatlab(p, root_name);
 
-    As.resize(cell().pattern);
-    Adags.resize(cell().pattern);
+        As.resize(cell().pattern);
+        Adags.resize(cell().pattern);
 
-    for(std::size_t i = 0; i < cell_.pattern.uniqueSize(); ++i) {
-        auto A_ref = root.getDataSet("A");
-        std::vector<HighFive::Reference> A;
-        A_ref.read(A);
-        auto g_A = A[i].template dereference<HighFive::Group>(root);
-        As[i] = Xped::IO::loadMatlabTensor<double, 5, 0, Symmetry, Xped::HeapPolicy>(g_A, root, std::array{true, true, false, false, true}, qn_scale)
+        for(std::size_t i = 0; i < cell_.pattern.uniqueSize(); ++i) {
+            auto A_ref = root.getDataSet("A");
+            std::vector<HighFive::Reference> A;
+            A_ref.read(A);
+            auto g_A = A[i].template dereference<HighFive::Group>(root);
+            As[i] =
+                Xped::IO::loadMatlabTensor<double, 5, 0, Symmetry, Xped::HeapPolicy>(g_A, root, std::array{true, true, false, false, true}, qn_scale)
                     .twist(4)
                     .template permute<3, 3, 2, 1, 4, 0>();
+        }
+        updateAdags();
     }
-    updateAdags();
     // for(int x = 0; x < cell().Lx; ++x) {
     //     for(int y = 0; y < cell().Ly; ++y) {
     //         fmt::print("Site: {},{}: \n", x, y);
@@ -257,14 +262,17 @@ void iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>::loadFromMatlab(const std:
 template <typename Scalar, typename Symmetry, bool ALL_OUT_LEGS, bool ENABLE_AD>
 void iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>::loadFromJson(const std::filesystem::path& p)
 {
-    VERIFY(ALL_OUT_LEGS);
-    cell_ = UnitCell(1, 1);
-    As.resize(cell().pattern);
-    Adags.resize(cell().pattern);
-    Bs.resize(cell().pattern);
-    Bdags.resize(cell().pattern);
-    As[0] = Xped::IO::loadSU2JsonTensor<Symmetry>(p);
-    updateAdags();
+    if constexpr(ALL_OUT_LEGS) {
+        return;
+    } else {
+        cell_ = UnitCell(1, 1);
+        As.resize(cell().pattern);
+        Adags.resize(cell().pattern);
+        Bs.resize(cell().pattern);
+        Bdags.resize(cell().pattern);
+        As[0] = Xped::IO::loadSU2JsonTensor<Symmetry>(p);
+        updateAdags();
+    }
 }
 
 template <typename Scalar, typename Symmetry, bool ALL_OUT_LEGS, bool ENABLE_AD>

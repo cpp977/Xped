@@ -44,7 +44,7 @@ public:
         } else if constexpr(Symmetry::ALL_ABELIAN) {
             gate_d = this->params["J2"].template get<double>() * tprod(B.Sz(), B.Sz()) +
                      0.5 * this->params["J2"].template get<double>() * (tprod(B.Sp(), B.Sm()) + tprod(B.Sm(), B.Sp()));
-            bool SUBL = false;
+            bool SUBL = true;
             gate_nn = this->params["Jz"].template get<double>() * tprod(B.Sz(), B.Sz(0, SUBL)) +
                       0.5 * this->params["Jxy"].template get<double>() * (tprod(B.Sp(), B.Sm(0, SUBL)) + tprod(B.Sm(), B.Sp(0, SUBL)));
             gate_nnv = this->params["Jz"].template get<double>() * tprod(B.Sz(0, SUBL), B.Sz()) +
@@ -70,13 +70,18 @@ public:
     virtual void setDefaultObs() override
     {
         if constexpr(std::is_same_v<Symmetry, Sym::SU2<Sym::SpinSU2>>) {
-            auto SS = std::make_unique<Xped::TwoSiteObservable<double, Symmetry>>(
-                this->pat, Xped::Opts::Bond::H | Xped::Opts::Bond::V | Xped::Opts::Bond::D1 | Xped::Opts::Bond::D2, "SS");
+            auto SS = std::make_unique<Xped::TwoSiteObservable<double, Symmetry>>(this->pat, Xped::Opts::Bond::H, "SS");
             for(auto& t : SS->data_h) { t = std::sqrt(3.) * Xped::tprod(B.Sdag(), B.S()); }
-            for(auto& t : SS->data_v) { t = std::sqrt(3.) * Xped::tprod(B.Sdag(), B.S()); }
-            for(auto& t : SS->data_d1) { t = std::sqrt(3.) * Xped::tprod(B.Sdag(), B.S()); }
-            for(auto& t : SS->data_d2) { t = std::sqrt(3.) * Xped::tprod(B.Sdag(), B.S()); }
             this->obs.push_back(std::move(SS));
+            return;
+
+            // auto SS = std::make_unique<Xped::TwoSiteObservable<double, Symmetry>>(
+            //     this->pat, Xped::Opts::Bond::H | Xped::Opts::Bond::V | Xped::Opts::Bond::D1 | Xped::Opts::Bond::D2, "SS");
+            // for(auto& t : SS->data_h) { t = std::sqrt(3.) * Xped::tprod(B.Sdag(), B.S()); }
+            // for(auto& t : SS->data_v) { t = std::sqrt(3.) * Xped::tprod(B.Sdag(), B.S()); }
+            // for(auto& t : SS->data_d1) { t = std::sqrt(3.) * Xped::tprod(B.Sdag(), B.S()); }
+            // for(auto& t : SS->data_d2) { t = std::sqrt(3.) * Xped::tprod(B.Sdag(), B.S()); }
+            // this->obs.push_back(std::move(SS));
 
         } else if constexpr(Symmetry::ALL_ABELIAN) {
             auto Sz = std::make_unique<Xped::OneSiteObservable<double, Symmetry>>(this->pat, "Sz");

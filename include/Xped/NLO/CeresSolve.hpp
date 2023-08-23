@@ -108,7 +108,7 @@ struct iPEPSSolverAD
                 }
                 case Opts::LoadFormat::Native: {
                     constexpr std::size_t flags = yas::file /*IO type*/ | yas::binary; /*IO format*/
-                    iPEPS<Scalar, Symmetry> tmp_Psi;
+                    iPEPS<Scalar, Symmetry, ALL_OUT_LEGS> tmp_Psi;
                     try {
                         yas::load<flags>(load_p.string().c_str(), tmp_Psi);
                     } catch(const yas::serialization_exception& se) {
@@ -126,7 +126,7 @@ struct iPEPSSolverAD
                         std::cout << std::flush;
                         throw;
                     }
-                    Psi = std::make_shared<iPEPS<Scalar, Symmetry>>(std::move(tmp_Psi));
+                    Psi = std::make_shared<iPEPS<Scalar, Symmetry, ALL_OUT_LEGS>>(std::move(tmp_Psi));
                     break;
                 }
                 }

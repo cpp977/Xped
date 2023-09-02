@@ -39,9 +39,7 @@ template <typename Scalar_, typename Symmetry_, bool ALL_OUT_LEGS_ = false, bool
 class iPEPS
 {
     static constexpr auto getRankA() { return ALL_OUT_LEGS_ ? 4ul : 2ul; }
-    static constexpr auto getRankB() { return ALL_OUT_LEGS_ ? 0ul : 2ul; }
     static constexpr auto getCoRankA() { return ALL_OUT_LEGS_ ? 1ul : 3ul; }
-    static constexpr auto getCoRankB() { return ALL_OUT_LEGS_ ? 5ul : 3ul; }
 
     template <typename Scalar__,
               typename Symmetry__,
@@ -159,28 +157,6 @@ public:
         return out;
     }
 
-    auto beginB()
-    {
-        iPEPSIterator<getRankB(), getCoRankB(), Scalar, Symmetry, ENABLE_AD> out(&Bs, /*ITER_GRAD=*/false);
-        return out;
-    }
-    auto endB()
-    {
-        iPEPSIterator<getRankB(), getCoRankB(), Scalar, Symmetry, ENABLE_AD> out(&Bs, /*ITER_GRAD=*/false, Bs.size());
-        return out;
-    }
-
-    auto gradbeginB()
-    {
-        iPEPSIterator<getRankB(), getCoRankB(), Scalar, Symmetry, ENABLE_AD> out(&Bs, /*ITER_GRAD=*/true);
-        return out;
-    }
-    auto gradendB()
-    {
-        iPEPSIterator<getRankB(), getCoRankB(), Scalar, Symmetry, ENABLE_AD> out(&Bs, /*ITER_GRAD=*/true, Bs.size());
-        return out;
-    }
-
     const UnitCell& cell() const { return cell_; }
 
     const TMatrix<qType>& charges() const { return charges_; }
@@ -196,11 +172,8 @@ public:
                                ("cell", cell_),
                                ("As", As),
                                ("Adags", Adags),
-                               ("Bs", Bs),
-                               ("Bdags", Bdags),
                                ("charges", charges_),
                                ("sym_map_A", sym_map_A),
-                               ("sym_map_B", sym_map_B),
                                ("sym", sym_));
         } else {
             ar& YAS_OBJECT_NVP("iPEPS", ("D", D), ("cell", cell_), ("As", As), ("Adags", Adags), ("charges", charges_));
@@ -236,22 +209,17 @@ public:
 
     UnitCell cell_;
     TMatrix<Tensor<Scalar, getRankA(), getCoRankA(), Symmetry, ENABLE_AD>> As;
-    TMatrix<Tensor<Scalar, getRankB(), getCoRankB(), Symmetry, ENABLE_AD>> Bs;
     TMatrix<Tensor<Scalar, getRankA(), getCoRankA(), Symmetry, ENABLE_AD>> Ms;
-    TMatrix<Tensor<Scalar, getRankB(), getCoRankB(), Symmetry, ENABLE_AD>> Ns;
     TMatrix<Tensor<Scalar, getRankA(), getCoRankA(), Symmetry, ENABLE_AD>> Gs;
-    TMatrix<Tensor<Scalar, getRankB(), getCoRankB(), Symmetry, ENABLE_AD>> Hs;
     TMatrix<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>> whs;
     TMatrix<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>> wvs;
 
     TMatrix<Tensor<Scalar, getRankA() + 1ul, getCoRankA() - 1ul, Symmetry, ENABLE_AD>> Adags;
-    TMatrix<Tensor<Scalar, getRankB() + 1ul, getCoRankB() - 1ul, Symmetry, ENABLE_AD>> Bdags;
     TMatrix<qType> charges_;
 
     Opts::DiscreteSym sym_ = Opts::DiscreteSym::None;
 
     std::pair<std::size_t, std::vector<std::size_t>> sym_map_A;
-    std::pair<std::size_t, std::vector<std::size_t>> sym_map_B;
 };
 
 } // namespace Xped

@@ -114,10 +114,6 @@ void iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>::init(const TMatrix<Qbasis
 
     As.resize(cell().pattern);
     Adags.resize(cell().pattern);
-    if constexpr(ALL_OUT_LEGS) {
-        Bs.resize(cell().pattern);
-        Bdags.resize(cell().pattern);
-    }
 
     Ms.resize(cell().pattern);
 
@@ -139,8 +135,6 @@ void iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>::init(const TMatrix<Qbasis
             if constexpr(ALL_OUT_LEGS) {
                 As(x, y) = Tensor<Scalar, 4, 1, Symmetry, ENABLE_AD>({{left_basis_xy, top_basis_xy, left_basis_xp1y, top_basis_xyp1}},
                                                                      {{shifted_physBasis_xy}});
-                Bs(x, y) = Tensor<Scalar, 0, 5, Symmetry, ENABLE_AD>(
-                    {{}}, {{left_basis_xy, top_basis_xy, left_basis_xp1y, top_basis_xyp1, shifted_physBasis_xy}});
             } else {
                 As(x, y) = Tensor<Scalar, 2, 3, Symmetry, ENABLE_AD>({{left_basis_xy, top_basis_xy}},
                                                                      {{left_basis_xp1y, top_basis_xyp1, shifted_physBasis_xy}});
@@ -198,7 +192,6 @@ void iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>::initSymMap()
             return res_map;
         };
         sym_map_A = computeMap(As[0]);
-        sym_map_B = computeMap(Bs[0]);
         return;
     }
     }
@@ -213,7 +206,6 @@ void iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>::updateAdags()
             auto pos = cell_.pattern.uniqueIndex(x, y);
             if constexpr(ALL_OUT_LEGS) {
                 Adags[pos] = As[pos].adjoint().eval().template permute<-4, 1, 2, 3, 4, 0>(Bool<ENABLE_AD>{});
-                Bdags[pos] = Bs[pos].adjoint().eval().template permute<4, 4, 0, 1, 2, 3>(Bool<ENABLE_AD>{});
             } else {
                 Adags[pos] = As[pos].adjoint().eval().template permute<0, 3, 4, 2, 0, 1>(Bool<ENABLE_AD>{});
             }
@@ -268,8 +260,6 @@ void iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>::loadFromJson(const std::f
         cell_ = UnitCell(1, 1);
         As.resize(cell().pattern);
         Adags.resize(cell().pattern);
-        Bs.resize(cell().pattern);
-        Bdags.resize(cell().pattern);
         As[0] = Xped::IO::loadSU2JsonTensor<Symmetry>(p);
         updateAdags();
     }
@@ -284,11 +274,8 @@ iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>::iPEPS(const iPEPS<Scalar, Symm
     charges_ = other.charges();
     As = other.As;
     Adags = other.Adags;
-    Bs = other.Bs;
-    Bdags = other.Bdags;
     Ms = other.Ms;
     sym_map_A = other.sym_map_A;
-    sym_map_B = other.sym_map_B;
 }
 
 template <typename Scalar, typename Symmetry, bool ALL_OUT_LEGS, bool ENABLE_AD>
@@ -326,7 +313,6 @@ void iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>::setZero()
             if(not cell_.pattern.isUnique(x, y)) { continue; }
             auto pos = cell_.pattern.uniqueIndex(x, y);
             As[pos].setZero();
-            if constexpr(ALL_OUT_LEGS) { Bs[pos].setZero(); }
             // Adags[pos] = As[pos].adjoint().eval().template permute<0, 3, 4, 2, 0, 1>();
         }
     }
@@ -348,15 +334,6 @@ void iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>::setRandom(std::size_t see
                 As[pos] = 0.5 * (As[pos] + As[pos].template permute<0, 1, 2, 3, 0, 4>()); // 90deg CCW rotation
                 As[pos] = 0.5 * (As[pos] + As[pos].template permute<0, 3, 0, 1, 2, 4>()); // 90deg CW rotation
             }
-            if constexpr(ALL_OUT_LEGS) {
-                Bs[pos].setRandom(engine);
-                if(sym() == Opts::DiscreteSym::C4v) {
-                    Bs[pos] = 0.5 * (Bs[pos] + Bs[pos].template permute<0, 0, 3, 2, 1, 4>()); // U-D reflection
-                    Bs[pos] = 0.5 * (Bs[pos] + Bs[pos].template permute<0, 2, 1, 0, 3, 4>()); // L-R reflection
-                    Bs[pos] = 0.5 * (Bs[pos] + Bs[pos].template permute<0, 1, 2, 3, 0, 4>()); // 90deg CCW rotation
-                    Bs[pos] = 0.5 * (Bs[pos] + Bs[pos].template permute<0, 3, 0, 1, 2, 4>()); // 90deg CW rotation
-                }
-            }
         }
     }
     updateAdags();
@@ -376,12 +353,6 @@ bool iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>::checkSym() const
         if((As[0] - As[0].template permute<0, 2, 1, 0, 3, 4>()).norm() > 1.e-10) { return false; } // L-R reflection
         if((As[0] - As[0].template permute<0, 1, 2, 3, 0, 4>()).norm() > 1.e-10) { return false; } // 90deg CCW rotation
         if((As[0] - As[0].template permute<0, 3, 0, 1, 2, 4>()).norm() > 1.e-10) { return false; } // 90deg CW rotation
-        if constexpr(ALL_OUT_LEGS) {
-            if((Bs[0] - Bs[0].template permute<0, 0, 3, 2, 1, 4>()).norm() > 1.e-10) { return false; } // U-D reflection
-            if((Bs[0] - Bs[0].template permute<0, 2, 1, 0, 3, 4>()).norm() > 1.e-10) { return false; } // L-R reflection
-            if((Bs[0] - Bs[0].template permute<0, 1, 2, 3, 0, 4>()).norm() > 1.e-10) { return false; } // 90deg CCW rotation
-            if((Bs[0] - Bs[0].template permute<0, 3, 0, 1, 2, 4>()).norm() > 1.e-10) { return false; } // 90deg CW rotation
-        }
     }
     }
     return true;
@@ -394,12 +365,6 @@ void iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>::normalize()
         auto tmp = (A * (1. / A.maxNorm())).eval();
         A = tmp;
     }
-    if constexpr(ALL_OUT_LEGS) {
-        for(auto& B : Bs) {
-            auto tmp = (B * (1. / B.maxNorm())).eval();
-            B = tmp;
-        }
-    }
     updateAdags();
 }
 
@@ -410,17 +375,10 @@ std::size_t iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>::plainSize() const
     switch(sym()) {
     case Opts::DiscreteSym::None: {
         for(auto it = As.cbegin(); it != As.cend(); ++it) { res += it->plainSize(); }
-        if constexpr(ALL_OUT_LEGS) {
-            for(auto it = Bs.cbegin(); it != Bs.cend(); ++it) { res += it->plainSize(); }
-        }
         break;
     }
     case Opts::DiscreteSym::C4v: {
-        if constexpr(ALL_OUT_LEGS) {
-            res = sym_map_A.first + sym_map_B.first;
-        } else {
-            res = sym_map_A.first;
-        }
+        res = sym_map_A.first;
     }
     }
     return res;
@@ -434,21 +392,12 @@ std::vector<Scalar> iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>::data()
     switch(sym()) {
     case Opts::DiscreteSym::None: {
         for(auto it = beginA(); it != endA(); ++it) { out[count++] = *it; }
-        if constexpr(ALL_OUT_LEGS) {
-            for(auto it = beginB(); it != endB(); ++it) { out[count++] = *it; }
-        }
         break;
     }
     case Opts::DiscreteSym::C4v: {
         std::vector<Scalar> full_data_A(sym_map_A.second.size());
         for(auto it = beginA(); it != endA(); ++it) { full_data_A[count++] = *it; }
         for(auto i = 0ul; i < full_data_A.size(); ++i) { out[sym_map_A.second[i]] = full_data_A[i]; }
-        if constexpr(ALL_OUT_LEGS) {
-            count = 0;
-            std::vector<Scalar> full_data_B(sym_map_A.second.size());
-            for(auto it = beginB(); it != endB(); ++it) { full_data_B[count++] = *it; }
-            for(auto i = 0ul; i < full_data_B.size(); ++i) { out[sym_map_A.first + sym_map_B.second[i]] = full_data_B[i]; }
-        }
         break;
     }
     }
@@ -463,22 +412,13 @@ std::vector<Scalar> iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>::graddata()
     std::size_t count = 0;
     switch(sym()) {
     case Opts::DiscreteSym::None: {
-        for(auto it = gradbeginA(); it != gradendA(); ++it) { out[count++] = *it; }
-        if constexpr(ALL_OUT_LEGS) {
-            for(auto it = gradbeginB(); it != gradendB(); ++it) { out[count++] = *it; }
-        }
+            for(auto it = gradbeginA(); it != gradendA(); ++it) { out[count++] = *it; }
         break;
     }
     case Opts::DiscreteSym::C4v: {
         std::vector<Scalar> full_data_A(sym_map_A.second.size());
         for(auto it = gradbeginA(); it != gradendA(); ++it) { full_data_A[count++] = *it; }
         for(auto i = 0ul; i < full_data_A.size(); ++i) { out[sym_map_A.second[i]] = full_data_A[i]; }
-        if constexpr(ALL_OUT_LEGS) {
-            count = 0;
-            std::vector<Scalar> full_data_B(sym_map_B.second.size());
-            for(auto it = gradbeginB(); it != gradendB(); ++it) { full_data_B[count++] = *it; }
-            for(auto i = 0ul; i < full_data_B.size(); ++i) { out[sym_map_A.first + sym_map_B.second[i]] = full_data_B[i]; }
-        }
         break;
     }
     }
@@ -498,15 +438,6 @@ void iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>::set_data(const Scalar* da
                 count += As(x, y).plainSize();
             }
         }
-        if constexpr(ALL_OUT_LEGS) {
-            for(int x = 0; x < cell_.Lx; x++) {
-                for(int y = 0; y < cell_.Ly; y++) {
-                    if(not cell_.pattern.isUnique(x, y)) { continue; }
-                    Bs(x, y).set_data(data + count, Bs(x, y).plainSize());
-                    count += Bs(x, y).plainSize();
-                }
-            }
-        }
         break;
     }
     case Opts::DiscreteSym::C4v: {
@@ -514,11 +445,6 @@ void iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>::set_data(const Scalar* da
         for(auto i = 0ul; i < full_data_A.size(); ++i) { full_data_A[i] = data[count + sym_map_A.second[i]]; }
         As[0].set_data(full_data_A.data(), As[0].plainSize());
         count += sym_map_A.first;
-        if constexpr(ALL_OUT_LEGS) {
-            std::vector<Scalar> full_data_B(sym_map_B.second.size());
-            for(auto i = 0ul; i < full_data_B.size(); ++i) { full_data_B[i] = data[count + sym_map_B.second[i]]; }
-            Bs[0].set_data(full_data_B.data(), Bs[0].plainSize());
-        }
         break;
     }
     }
@@ -594,44 +520,6 @@ Qbasis<Symmetry, 1> iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>::braBasis(c
         case Opts::Leg::Right: return Adags(x, y).uncoupledCodomain()[0]; break;
         case Opts::Leg::Bottom: return Adags(x, y).uncoupledCodomain()[1]; break;
         case Opts::Leg::Phys: return Adags(x, y).uncoupledDomain()[2]; break;
-        default: std::terminate();
-        }
-    }
-}
-
-template <typename Scalar, typename Symmetry, bool ALL_OUT_LEGS, bool ENABLE_AD>
-Qbasis<Symmetry, 1> iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>::ketBasisB(const int x, const int y, const Opts::Leg leg) const
-{
-    if constexpr(ALL_OUT_LEGS) {
-        switch(leg) {
-        case Opts::Leg::Left: return Bs(x, y).uncoupledDomain()[0]; break;
-        case Opts::Leg::Top: return Bs(x, y).uncoupledDomain()[1]; break;
-        case Opts::Leg::Right: return Bs(x, y).uncoupledDomain()[2]; break;
-        case Opts::Leg::Bottom: return Bs(x, y).uncoupledDomain()[3]; break;
-        case Opts::Leg::Phys: return Bs(x, y).uncoupledCodomain()[0]; break;
-        default: std::terminate();
-        }
-    } else {
-        switch(leg) {
-        default: std::terminate();
-        }
-    }
-}
-
-template <typename Scalar, typename Symmetry, bool ALL_OUT_LEGS, bool ENABLE_AD>
-Qbasis<Symmetry, 1> iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>::braBasisB(const int x, const int y, const Opts::Leg leg) const
-{
-    if constexpr(ALL_OUT_LEGS) {
-        switch(leg) {
-        case Opts::Leg::Left: return Bdags(x, y).uncoupledDomain()[0]; break;
-        case Opts::Leg::Top: return Bdags(x, y).uncoupledDomain()[1]; break;
-        case Opts::Leg::Right: return Bdags(x, y).uncoupledDomain()[2]; break;
-        case Opts::Leg::Bottom: return Bdags(x, y).uncoupledDomain()[3]; break;
-        case Opts::Leg::Phys: return Bdags(x, y).uncoupledDomain()[4]; break;
-        default: std::terminate();
-        }
-    } else {
-        switch(leg) {
         default: std::terminate();
         }
     }
@@ -721,7 +609,6 @@ void iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>::debug_info() const
                 continue;
             }
             std::cout << "Cell site: (" << x << "," << y << "), A:" << std::endl << As(x, y) << std::endl;
-            if constexpr(ALL_OUT_LEGS) { std::cout << "Cell site: (" << x << "," << y << "), B:" << std::endl << Bs(x, y) << std::endl << std::endl; }
         }
     }
 }

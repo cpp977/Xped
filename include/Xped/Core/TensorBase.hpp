@@ -123,6 +123,8 @@ public:
     typename ScalarTraits<Scalar>::Real
     maxCoeff(std::size_t& max_block, PlainInterface::MIndextype& max_row, PlainInterface::MIndextype& max_col) XPED_CONST;
 
+    Scalar coeff(std::size_t q, Indextype row, Indextype col) const { return derived().block(q)(row, col); }
+
     inline Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy> eval() const
     {
         return Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>(derived());

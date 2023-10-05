@@ -255,13 +255,18 @@ template <typename Scalar, typename Symmetry, bool ALL_OUT_LEGS, bool ENABLE_AD>
 void iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>::loadFromJson(const std::filesystem::path& p)
 {
     if constexpr(ALL_OUT_LEGS) {
-        return;
-    } else {
         cell_ = UnitCell(1, 1);
         As.resize(cell().pattern);
         Adags.resize(cell().pattern);
-        As[0] = Xped::IO::loadSU2JsonTensor<Symmetry>(p);
+        // As[0] = Xped::IO::loadSU2JsonTensor<Symmetry>(p);
+        As[0] = Xped::IO::loadU0JsonTensor<Symmetry>(p);
         updateAdags();
+        auto check = checkSym();
+        Log::debug("Symmetry check after loadFromJson(): {}", check);
+        debug_info();
+        return;
+    } else {
+        return;
     }
 }
 
@@ -428,9 +433,9 @@ std::vector<Scalar> iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>::graddata()
 template <typename Scalar, typename Symmetry, bool ALL_OUT_LEGS, bool ENABLE_AD>
 void iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>::set_data(const Scalar* data, bool NORMALIZE)
 {
-    std::size_t count = 0;
     switch(sym()) {
     case Opts::DiscreteSym::None: {
+        std::size_t count = 0;
         for(int x = 0; x < cell_.Lx; x++) {
             for(int y = 0; y < cell_.Ly; y++) {
                 if(not cell_.pattern.isUnique(x, y)) { continue; }
@@ -442,13 +447,11 @@ void iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>::set_data(const Scalar* da
     }
     case Opts::DiscreteSym::C4v: {
         std::vector<Scalar> full_data_A(sym_map_A.second.size());
-        for(auto i = 0ul; i < full_data_A.size(); ++i) { full_data_A[i] = data[count + sym_map_A.second[i]]; }
+        for(auto i = 0ul; i < full_data_A.size(); ++i) { full_data_A[i] = data[sym_map_A.second[i]]; }
         As[0].set_data(full_data_A.data(), As[0].plainSize());
-        count += sym_map_A.first;
         break;
     }
     }
-    if(NORMALIZE) { normalize(); }
     updateAdags();
 }
 

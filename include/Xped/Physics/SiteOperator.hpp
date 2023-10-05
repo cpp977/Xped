@@ -22,19 +22,21 @@ struct SiteOperator
                  const std::unordered_map<std::string, std::pair<qType, std::size_t>>& labels,
                  const mpi::XpedWorld& world = mpi::getUniverse());
 
-    const auto operator()(const qType& bra, const qType& ket) const
+    const auto operator()(const qType& bra, const qType& ket, bool DUAL = false) const
     {
-        FusionTree<2, Symmetry> k{.q_uncoupled = {ket, Q}, .q_coupled = bra, .dims = {data.uncoupledCodomain()[0].inner_dim(ket), 1}};
+        FusionTree<2, Symmetry> k{
+            .q_uncoupled = {ket, Q}, .q_coupled = bra, .dims = {data.uncoupledCodomain()[0].inner_dim(ket), 1}, .IS_DUAL = {DUAL, false}};
         k.computeDim();
-        FusionTree<1, Symmetry> b{.q_uncoupled = {bra}, .q_coupled = bra, .dims = {data.coupledDomain().inner_dim(bra)}};
+        FusionTree<1, Symmetry> b{.q_uncoupled = {bra}, .q_coupled = bra, .dims = {data.coupledDomain().inner_dim(bra)}, .IS_DUAL = {DUAL}};
         b.computeDim();
         return data.subMatrix(b, k);
     }
-    auto operator()(const qType& bra, const qType& ket)
+    auto operator()(const qType& bra, const qType& ket, bool DUAL = false)
     {
-        FusionTree<2, Symmetry> k{.q_uncoupled = {ket, Q}, .q_coupled = bra, .dims = {data.uncoupledCodomain()[0].inner_dim(ket), 1}};
+        FusionTree<2, Symmetry> k{
+            .q_uncoupled = {ket, Q}, .q_coupled = bra, .dims = {data.uncoupledCodomain()[0].inner_dim(ket), 1}, .IS_DUAL = {DUAL, false}};
         k.computeDim();
-        FusionTree<1, Symmetry> b{.q_uncoupled = {bra}, .q_coupled = bra, .dims = {data.coupledDomain().inner_dim(bra)}};
+        FusionTree<1, Symmetry> b{.q_uncoupled = {bra}, .q_coupled = bra, .dims = {data.coupledDomain().inner_dim(bra)}, .IS_DUAL = {DUAL}};
         b.computeDim();
         return data.subMatrix(b, k);
     }

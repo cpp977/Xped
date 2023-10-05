@@ -73,9 +73,9 @@ Spin<Sym::SU2<Sym::SpinSU2>, 0ul>::Spin(std::size_t D_input)
     S_1s_(Q, Q) = tmp;
     Sdag_1s_ = S_1s_.adjoint();
 
-    auto tmpp = Sp_1s_(Q, Q);
+    auto tmpp = Sp_1s_(Q, Q, true);
     PlainInterface::setVal(tmpp, 0, 0, std::sqrt(locS * (locS + 1.)));
-    Sp_1s_(Q, Q) = tmpp;
+    Sp_1s_(Q, Q, true) = tmpp;
     Sdagp_1s_ = Sp_1s_.adjoint();
 
     Q_1s_ = std::sqrt(2.) * OperatorType::prod(S_1s_, S_1s_, {5});

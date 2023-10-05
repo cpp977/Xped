@@ -47,6 +47,8 @@ public:
     using value_type = Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>; // type in vari_value -->ArenaTensor or Tensor.
     using vari_type = stan::math::vari_value<value_type>;
 
+    static constexpr bool IS_AD = true;
+
     vari_type* vi_;
 
     inline bool is_uninitialized() noexcept { return (vi_ == nullptr); }
@@ -55,8 +57,13 @@ public:
         : vi_(nullptr)
     {}
 
-    Tensor(const Xped::Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>& x)
-        : vi_(new vari_type(x, false))
+    // Tensor(const Xped::Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>& x)
+    //     : vi_(new vari_type(x, false))
+    // {}
+
+    template <typename Derived>
+    Tensor(const Xped::TensorBase<Derived>& x)
+        : vi_(new vari_type(x.derived(), false))
     {}
 
     Tensor(vari_type* vi)
@@ -69,7 +76,12 @@ public:
         : vi_(new vari_type(basis_domain, basis_codomain, world))
     {}
 
-    void setRandom() { val_op().setRandom(); }
+    void setRandom()
+    {
+        static thread_local std::mt19937 engine(std::random_device{}());
+        engine.seed(0);
+        val_op().setRandom(engine);
+    }
     void setIdentity() { val_op().setIdentity(); }
     void setZero() { val_op().setZero(); }
     void setConstant(Scalar c) { val_op().setConstant(c); }
@@ -134,6 +146,25 @@ public:
             return out;
         } else {
             return val().adjoint().eval();
+        }
+    }
+
+    template <bool TRACK = true>
+    XScalar<TRACK, Scalar> coeff(std::size_t q, Indextype row, Indextype col) const
+    {
+        if constexpr(TRACK) {
+            Scalar tmp = val().block(q)(row, col);
+            stan::math::var_value<Scalar> res(tmp);
+            stan::math::reverse_pass_callback([curr = *this, res, q, row, col]() mutable {
+                Tensor<Scalar, Rank, CoRank, Symmetry, false> Zero(curr.uncoupledDomain(), curr.uncoupledCodomain(), curr.adj().world());
+                Zero.setZero();
+                Zero.block(q)(row, col) = 1.;
+                curr.adj() += (res.adj() * Zero).eval();
+                SPDLOG_WARN("coeff norm of {}, input adj norm={}, output adj norm={}", curr.name(), res.adj(), curr.adj().norm());
+            });
+            return res;
+        } else {
+            return val().block(q)(row, col);
         }
     }
 
@@ -202,10 +233,21 @@ public:
          bool PRESERVE_MULTIPLETS = true,
          bool RETURN_SPEC = true) XPED_CONST
     {
-        auto [Uval, Sval_real, Vdagval] = val().tSVD(maxKeep, eps_svd, truncWeight, entropy, SVspec, PRESERVE_MULTIPLETS, RETURN_SPEC);
+        auto [U, Sigma, Vdag, allSV] = full_svd_impl();
+        return cutoff_matrices(U, Sigma, Vdag, allSV, maxKeep, eps_svd, truncWeight, entropy, SVspec, PRESERVE_MULTIPLETS, RETURN_SPEC);
+    }
+
+    template <bool TRACK = true>
+    std::tuple<XTensor<TRACK, Scalar, Rank, 1, Symmetry, AllocationPolicy>,
+               XTensor<TRACK, Scalar, 1, 1, Symmetry, AllocationPolicy>,
+               XTensor<TRACK, Scalar, 1, CoRank, Symmetry, AllocationPolicy>,
+               std::vector<std::pair<typename Symmetry::qType, typename ScalarTraits<Scalar>::Real>>>
+    full_svd_impl() XPED_CONST
+    {
+        auto [Uval, Sval_real, Vdagval, allSV] = val().full_svd_impl();
         XTensor<TRACK, Scalar, 1, 1, Symmetry, AllocationPolicy> Sval = Sval_real.template cast<Scalar>().eval();
         if constexpr(not TRACK) {
-            return std::make_tuple(Uval, Sval, Vdagval);
+            return std::make_tuple(Uval, Sval, Vdagval, allSV);
         } else {
             Tensor<Scalar, Rank, 1, Symmetry, true, AllocationPolicy> U(Uval);
             Tensor<Scalar, 1, 1, Symmetry, true, AllocationPolicy> S(Sval);
@@ -224,18 +266,18 @@ public:
                     // fmt::print("max dU={}\n", U.adj().block(j).array().abs().matrix().maxCoeff());
                     // fmt::print("max dVdag={}\n", Vdag.adj().block(j).array().abs().matrix().maxCoeff());
                     // fmt::print("dS={}\n", S.adj().block(j).imag().norm());
-                    SPDLOG_INFO("i={}:\tU.val: {}x{}, U.adj: {}x{}, Vdag.val: {}x{}, Vdag.adj: {}x{}, S.val: {}x{}",
-                                i,
-                                U_b.rows(),
-                                U_b.cols(),
-                                U.adj().block(i).rows(),
-                                U.adj().block(i).cols(),
-                                Vdag_b.rows(),
-                                Vdag_b.cols(),
-                                Vdag.adj().block(i).rows(),
-                                Vdag.adj().block(i).cols(),
-                                S_b.rows(),
-                                S_b.cols());
+                    // fmt::print("i={}:\tU.val: {}x{}, U.adj: {}x{}, Vdag.val: {}x{}, Vdag.adj: {}x{}, S.val: {}x{}\n",
+                    //            i,
+                    //            U_b.rows(),
+                    //            U_b.cols(),
+                    //            U.adj().block(i).rows(),
+                    //            U.adj().block(i).cols(),
+                    //            Vdag_b.rows(),
+                    //            Vdag_b.cols(),
+                    //            Vdag.adj().block(i).rows(),
+                    //            Vdag.adj().block(i).cols(),
+                    //            S_b.rows(),
+                    //            S_b.cols());
 
                     auto F_inv = PlainInterface::construct<RealScalar>(PlainInterface::rows(S_b), PlainInterface::cols(S_b), S.val().world());
                     PlainInterface::vec_diff(S_b_real.array().square().matrix().diagonal().eval(), F_inv);
@@ -257,16 +299,25 @@ public:
                     } else {
                         curr.adj().block(i) += U_b * (S.adj().block(j) + (J + J.adjoint()) * S_b + S_b * (K + K.adjoint())) * Vdag_b;
                     }
-                    if(U_b.rows() > S_b.rows()) {
-                        curr.adj().block(i) += (PlainInterface::Identity<Scalar>(U_b.rows(), U_b.rows(), U.val().world()) - U_b * U_b.adjoint()) *
-                                               U.adj().block(j) * S_b.diagonal().asDiagonal().inverse() * Vdag_b;
-                    }
-                    if(Vdag_b.cols() > S_b.rows()) {
-                        curr.adj().block(i) +=
-                            U_b * S_b.diagonal().asDiagonal().inverse() * Vdag.adj().block(j) *
-                            (PlainInterface::Identity<Scalar>(Vdag_b.cols(), Vdag_b.cols(), Vdag.val().world()) - Vdag_b.adjoint() * Vdag_b);
-                    }
-                    // fmt::print("dA=\n{}\n", fmt::streamed(curr.adj().block(i)));
+                    // if(U_b.rows() > S_b.rows()) { fmt::print("Correction rectangular U={}x{}.\n", U_b.rows(), U_b.cols()); }
+                    curr.adj().block(i) += (PlainInterface::Identity<Scalar>(U_b.rows(), U_b.rows(), U.val().world()) - U_b * U_b.adjoint()) *
+                                           U.adj().block(j) * S_b.diagonal().asDiagonal().inverse() * Vdag_b;
+                    // Eigen::MatrixXd corrU = (PlainInterface::Identity<Scalar>(U_b.rows(), U_b.rows(), U.val().world()) - U_b * U_b.adjoint()) *
+                    //                         U.adj().block(j) * S_b.diagonal().asDiagonal().inverse() * Vdag_b;
+                    // std::cout << "corrU:\n" << corrU << std::endl;
+                    // }
+                    // if(Vdag_b.cols() > S_b.rows()) { fmt::print("Correction rectangular Vdag={}x{}.\n", Vdag_b.rows(), Vdag_b.cols()); }
+                    curr.adj().block(i) +=
+                        U_b * S_b.diagonal().asDiagonal().inverse() * Vdag.adj().block(j) *
+                        (PlainInterface::Identity<Scalar>(Vdag_b.cols(), Vdag_b.cols(), Vdag.val().world()) - Vdag_b.adjoint() * Vdag_b);
+                    // Eigen::MatrixXd corrV1 = U_b * S_b.diagonal().asDiagonal().inverse() * Vdag.adj().block(j);
+                    // Eigen::MatrixXd corrV2 =
+                    //     (PlainInterface::Identity<Scalar>(Vdag_b.cols(), Vdag_b.cols(), Vdag.val().world()) - Vdag_b.adjoint() * Vdag_b);
+                    // std::cout << "corrV1:\n" << corrV1 << std::endl;
+                    // std::cout << "corrV2:\n" << corrV2 << std::endl;
+                    // std::cout << "IdV1:\n" << Vdag_b.adjoint() * Vdag_b << std::endl;
+                    // }
+                    // fmt::print("dVdag=\n{}\n", fmt::streamed(Vdag.adj().block(j)));
                     // fmt::print("max dA={}\n", curr.adj().block(i).array().abs().matrix().maxCoeff());
                 }
                 SPDLOG_WARN("reverse svd. U.adj.norm()={}, S.adj.norm()={}, Vdag.adj.norm()={}, output adj norm={}",
@@ -276,9 +327,153 @@ public:
                             curr.adj().norm());
             });
 
-            return std::make_tuple(U, S, Vdag);
+            return std::make_tuple(U, S, Vdag, allSV);
         }
     }
+
+    template <bool TRACK = true>
+    std::tuple<XTensor<TRACK, Scalar, Rank, 1, Symmetry, AllocationPolicy>,
+               XTensor<TRACK, Scalar, 1, 1, Symmetry, AllocationPolicy>,
+               XTensor<TRACK, Scalar, 1, CoRank, Symmetry, AllocationPolicy>>
+    cutoff_matrices(const XTensor<TRACK, Scalar, Rank, 1, Symmetry, AllocationPolicy>& U,
+                    const XTensor<TRACK, typename ScalarTraits<Scalar>::Real, 1, 1, Symmetry, AllocationPolicy>& Sigma,
+                    const XTensor<TRACK, Scalar, 1, CoRank, Symmetry, AllocationPolicy>& Vdag,
+                    std::vector<std::pair<typename Symmetry::qType, RealScalar>>& allSV,
+                    size_t maxKeep,
+                    RealScalar eps_svd,
+                    RealScalar& truncWeight,
+                    RealScalar& entropy,
+                    std::map<qarray<Symmetry::Nq>, VectorType>& SVspec,
+                    bool PRESERVE_MULTIPLETS,
+                    bool RETURN_SPEC) XPED_CONST
+    {
+        auto [truncUval, truncSval_real, truncVdagval] = val().cutoff_matrices(
+            U.val(), Sigma.val(), Vdag.val(), allSV, maxKeep, eps_svd, truncWeight, entropy, SVspec, PRESERVE_MULTIPLETS, RETURN_SPEC);
+        XTensor<TRACK, Scalar, 1, 1, Symmetry, AllocationPolicy> truncSval = truncSval_real.template cast<Scalar>().eval();
+        if constexpr(not TRACK) {
+            return std::make_tuple(truncUval, truncSval, truncVdagval);
+        } else {
+            Tensor<Scalar, Rank, 1, Symmetry, true, AllocationPolicy> truncU(truncUval);
+            Tensor<Scalar, 1, 1, Symmetry, true, AllocationPolicy> truncS(truncSval);
+            Tensor<Scalar, 1, CoRank, Symmetry, true, AllocationPolicy> truncVdag(truncVdagval);
+            stan::math::reverse_pass_callback([U, Sigma, Vdag, truncU, truncS, truncVdag]() mutable {
+                for(std::size_t i = 0; i < truncU.sector().size(); ++i) {
+                    auto it_S = Sigma.adj().dict().find(truncU.adj().sector(i));
+                    auto it_truncS = truncS.adj().dict().find(truncU.adj().sector(i));
+                    auto it_Vdag = Vdag.adj().dict().find(truncU.adj().sector(i));
+                    auto it_truncVdag = truncVdag.adj().dict().find(truncU.adj().sector(i));
+                    auto it_U = U.adj().dict().find(truncU.adj().sector(i));
+                    U.adj().block(it_U->second).leftCols(truncU.adj().block(i).cols()) += truncU.adj().block(i);
+                    Sigma.adj()
+                        .block(it_S->second)
+                        .topLeftCorner(truncS.adj().block(it_truncS->second).rows(), truncS.adj().block(it_truncS->second).cols()) +=
+                        truncS.adj().block(it_truncS->second);
+                    Vdag.adj().block(it_Vdag->second).topRows(truncVdag.adj().block(it_truncVdag->second).rows()) +=
+                        truncVdag.adj().block(it_truncVdag->second);
+                }
+            });
+            return std::make_tuple(truncU, truncS, truncVdag);
+        }
+    }
+
+    // template <bool TRACK = true>
+    // std::tuple<XTensor<TRACK, Scalar, Rank, 1, Symmetry, AllocationPolicy>,
+    //            XTensor<TRACK, Scalar, 1, 1, Symmetry, AllocationPolicy>,
+    //            XTensor<TRACK, Scalar, 1, CoRank, Symmetry, AllocationPolicy>>
+    // tSVD(std::size_t maxKeep,
+    //      RealScalar eps_svd,
+    //      RealScalar& truncWeight,
+    //      RealScalar& entropy,
+    //      std::map<qarray<Symmetry::Nq>, VectorType>& SVspec,
+    //      bool PRESERVE_MULTIPLETS = true,
+    //      bool RETURN_SPEC = true) XPED_CONST
+    // {
+    //     auto [Uval, Sval_real, Vdagval] = val().tSVD(maxKeep, eps_svd, truncWeight, entropy, SVspec, PRESERVE_MULTIPLETS, RETURN_SPEC);
+    //     XTensor<TRACK, Scalar, 1, 1, Symmetry, AllocationPolicy> Sval = Sval_real.template cast<Scalar>().eval();
+    //     if constexpr(not TRACK) {
+    //         return std::make_tuple(Uval, Sval, Vdagval);
+    //     } else {
+    //         Tensor<Scalar, Rank, 1, Symmetry, true, AllocationPolicy> U(Uval);
+    //         Tensor<Scalar, 1, 1, Symmetry, true, AllocationPolicy> S(Sval);
+    //         Tensor<Scalar, 1, CoRank, Symmetry, true, AllocationPolicy> Vdag(Vdagval);
+
+    //         stan::math::reverse_pass_callback([curr = *this, U, S, Vdag]() mutable {
+    //             for(std::size_t i = 0; i < curr.sector().size(); ++i) {
+    //                 SPDLOG_INFO("i={}", i);
+    //                 auto it = S.val().dict().find(curr.val().sector(i));
+    //                 if(it == S.val().dict().end()) { continue; }
+    //                 auto j = it->second;
+    //                 auto U_b = U.val().block(j);
+    //                 auto S_b = S.val().block(j);
+    //                 auto S_b_real = S_b.real().eval();
+    //                 auto Vdag_b = Vdag.val().block(j);
+    //                 // fmt::print("max dU={}\n", U.adj().block(j).array().abs().matrix().maxCoeff());
+    //                 // fmt::print("max dVdag={}\n", Vdag.adj().block(j).array().abs().matrix().maxCoeff());
+    //                 // fmt::print("dS={}\n", S.adj().block(j).imag().norm());
+    //                 fmt::print("i={}:\tU.val: {}x{}, U.adj: {}x{}, Vdag.val: {}x{}, Vdag.adj: {}x{}, S.val: {}x{}\n",
+    //                            i,
+    //                            U_b.rows(),
+    //                            U_b.cols(),
+    //                            U.adj().block(i).rows(),
+    //                            U.adj().block(i).cols(),
+    //                            Vdag_b.rows(),
+    //                            Vdag_b.cols(),
+    //                            Vdag.adj().block(i).rows(),
+    //                            Vdag.adj().block(i).cols(),
+    //                            S_b.rows(),
+    //                            S_b.cols());
+
+    //                 auto F_inv = PlainInterface::construct<RealScalar>(PlainInterface::rows(S_b), PlainInterface::cols(S_b), S.val().world());
+    //                 PlainInterface::vec_diff(S_b_real.array().square().matrix().diagonal().eval(), F_inv);
+    //                 auto F = PlainInterface::unaryFunc<RealScalar>(
+    //                     F_inv, [](RealScalar d) { return (std::abs(d) < 1.e-12) ? d / (d * d + 1.e-12) : 1. / d; });
+
+    //                 // auto Udag_dU = U_b.adjoint() * U.adj().block(j);
+    //                 auto Vdag_dV = (Vdag_b * Vdag.adj().block(j).adjoint()).eval();
+
+    //                 auto J = (F.array() * (U_b.adjoint() * U.adj().block(j)).array()).matrix().eval();
+    //                 auto K = (F.array() * Vdag_dV.array()).matrix().eval();
+    //                 if constexpr(ScalarTraits<Scalar>::IS_COMPLEX()) {
+    //                     using namespace std::complex_literals;
+    //                     auto L = (1i * Eigen::MatrixXcd(Vdag_dV.diagonal().imag().asDiagonal())).eval();
+    //                     // fmt::print("imag term={}\n", L.norm());
+    //                     curr.adj().block(i) +=
+    //                         U_b * (S.adj().block(j) + (J + J.adjoint()) * S_b + S_b * (K + K.adjoint()) - S_b.diagonal().asDiagonal().inverse() *
+    //                         L) * Vdag_b;
+    //                 } else {
+    //                     curr.adj().block(i) += U_b * (S.adj().block(j) + (J + J.adjoint()) * S_b + S_b * (K + K.adjoint())) * Vdag_b;
+    //                 }
+    //                 if(U_b.rows() > S_b.rows()) { fmt::print("Correction rectangular U={}x{}.\n", U_b.rows(), U_b.cols()); }
+    //                 curr.adj().block(i) += (PlainInterface::Identity<Scalar>(U_b.rows(), U_b.rows(), U.val().world()) - U_b * U_b.adjoint()) *
+    //                                        U.adj().block(j) * S_b.diagonal().asDiagonal().inverse() * Vdag_b;
+    //                 Eigen::MatrixXd corrU = (PlainInterface::Identity<Scalar>(U_b.rows(), U_b.rows(), U.val().world()) - U_b * U_b.adjoint()) *
+    //                                         U.adj().block(j) * S_b.diagonal().asDiagonal().inverse() * Vdag_b;
+    //                 std::cout << "corrU:\n" << corrU << std::endl;
+    //                 // }
+    //                 if(Vdag_b.cols() > S_b.rows()) { fmt::print("Correction rectangular Vdag={}x{}.\n", Vdag_b.rows(), Vdag_b.cols()); }
+    //                 curr.adj().block(i) +=
+    //                     U_b * S_b.diagonal().asDiagonal().inverse() * Vdag.adj().block(j) *
+    //                     (PlainInterface::Identity<Scalar>(Vdag_b.cols(), Vdag_b.cols(), Vdag.val().world()) - Vdag_b.adjoint() * Vdag_b);
+    //                 Eigen::MatrixXd corrV1 = U_b * S_b.diagonal().asDiagonal().inverse() * Vdag.adj().block(j);
+    //                 Eigen::MatrixXd corrV2 =
+    //                     (PlainInterface::Identity<Scalar>(Vdag_b.cols(), Vdag_b.cols(), Vdag.val().world()) - Vdag_b.adjoint() * Vdag_b);
+    //                 std::cout << "corrV1:\n" << corrV1 << std::endl;
+    //                 std::cout << "corrV2:\n" << corrV2 << std::endl;
+    //                 std::cout << "IdV1:\n" << Vdag_b.adjoint() * Vdag_b << std::endl;
+    //                 // }
+    //                 // fmt::print("dVdag=\n{}\n", fmt::streamed(Vdag.adj().block(j)));
+    //                 // fmt::print("max dA={}\n", curr.adj().block(i).array().abs().matrix().maxCoeff());
+    //             }
+    //             SPDLOG_WARN("reverse svd. U.adj.norm()={}, S.adj.norm()={}, Vdag.adj.norm()={}, output adj norm={}",
+    //                         U.adj().norm(),
+    //                         S.adj().norm(),
+    //                         Vdag.adj().norm(),
+    //                         curr.adj().norm());
+    //         });
+
+    //         return std::make_tuple(U, S, Vdag);
+    //     }
+    // }
 
     template <bool TRACK = true>
     std::tuple<XTensor<TRACK, Scalar, Rank, 1, Symmetry, AllocationPolicy>,
@@ -288,8 +483,13 @@ public:
     {
         RealScalar S_dumb;
         std::map<qarray<Symmetry::Nq>, VectorType> SVspec_dumb;
-        return tSVD<TRACK>(
-            maxKeep, eps_svd, truncWeight, S_dumb, SVspec_dumb, PRESERVE_MULTIPLETS, false); // false: Dont return singular value spectrum
+        return tSVD<TRACK>(maxKeep,
+                           eps_svd,
+                           truncWeight,
+                           S_dumb,
+                           SVspec_dumb,
+                           PRESERVE_MULTIPLETS,
+                           false); // false: Dont return singular value spectrum
     }
 
     template <bool TRACK = true>
@@ -344,8 +544,8 @@ public:
             Scalar tmp = val().trace();
             stan::math::var_value<Scalar> res(tmp);
             stan::math::reverse_pass_callback([curr = *this, res]() mutable {
-                auto Id =
-                    Tensor<Scalar, Rank, CoRank, Symmetry, false>::Identity(curr.uncoupledDomain(), curr.uncoupledCodomain(), curr.adj().world());
+                auto Id = Tensor<Scalar, Rank, CoRank, Symmetry, false>::WeightedIdentity(
+                    curr.uncoupledDomain(), curr.uncoupledCodomain(), curr.adj().world());
                 curr.adj() += Id * res.adj();
                 SPDLOG_WARN("reverse trace of {}, input adj norm={}, output adj norm={}", curr.name(), res.adj(), curr.adj().norm());
             });
@@ -449,6 +649,29 @@ XTensor<TRACK, Scalar, Rank, CoRank, Symmetry> operator+(const Tensor<Scalar, Ra
 }
 
 template <bool TRACK = true, typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry>
+XTensor<TRACK, Scalar, Rank, CoRank, Symmetry> operator+(const Tensor<Scalar, Rank, CoRank, Symmetry, true>& t1,
+                                                         const Tensor<Scalar, Rank, CoRank, Symmetry, true>& t2)
+{
+    if constexpr(TRACK) {
+        Tensor<Scalar, Rank, CoRank, Symmetry, true> out(t1.val() + t2.val());
+        stan::math::reverse_pass_callback([out, t1, t2]() mutable {
+            t1.adj() += out.adj();
+            t2.adj() += out.adj();
+            SPDLOG_WARN("reverse t1+t2 with t1={}, t2={}, input adj norm={}, output adj norm: t1={}, t2={}",
+                        t1.name(),
+                        t2.name(),
+                        out.adj().norm(),
+                        t1.adj().norm(),
+                        t2.adj().norm());
+        });
+
+        return out;
+    } else {
+        return (t1.val() + t2.val()).eval();
+    }
+}
+
+template <bool TRACK = true, typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry>
 XTensor<TRACK, Scalar, Rank, CoRank, Symmetry> operator*(const Tensor<Scalar, Rank, CoRank, Symmetry, true>& t, Scalar s)
 {
     if constexpr(TRACK) {
@@ -461,6 +684,12 @@ XTensor<TRACK, Scalar, Rank, CoRank, Symmetry> operator*(const Tensor<Scalar, Ra
     } else {
         return (t.val() * s).eval();
     }
+}
+
+template <bool TRACK = true, typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry>
+XTensor<TRACK, Scalar, Rank, CoRank, Symmetry> operator*(Scalar s, const Tensor<Scalar, Rank, CoRank, Symmetry, true>& t)
+{
+    return t * s;
 }
 
 template <bool TRACK = true, typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry>

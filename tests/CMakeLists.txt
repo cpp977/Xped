@@ -65,6 +65,15 @@ add_executable(mps_test mps.cpp $<TARGET_OBJECTS:test_suite>)
 target_link_libraries (mps_test test_suite)
 
 doctest_discover_tests(mps_test TEST_PREFIX mps__)#ADD_LABELS "1")
+
+#########################
+#        ad_test       #
+#########################
+add_executable(ad_test ad.cpp $<TARGET_OBJECTS:test_suite>)
+target_link_libraries (ad_test test_suite)
+
+doctest_discover_tests(ad_test TEST_PREFIX ad__)#ADD_LABELS "1")
+
 # if(XPED_USE_MPI)
 #   add_test(NAME MPS COMMAND ${MPIEXEC_EXECUTABLE} --mca opal_warn_on_missing_libcuda 0 ${MPIEXEC_NUMPROC_FLAG} 2 ${MPIEXEC_PREFLAGS} ./mps_test ${MPIEXEC_POSTFLAGS})
 # else()

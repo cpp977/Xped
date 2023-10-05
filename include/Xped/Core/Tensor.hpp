@@ -77,6 +77,8 @@ public:
     using TensorMapType = PlainInterface::MapTType<Scalar, Rank + CoRank>;
     using TensorcMapType = PlainInterface::cMapTType<Scalar, Rank + CoRank>;
 
+    static constexpr bool IS_AD = false;
+
 private:
     using Storage = StorageType<Scalar, Rank, CoRank, Symmetry, AllocationPolicy>;
 
@@ -197,7 +199,6 @@ public:
     auto subMatrix(const FusionTree<Rank, Symmetry>& f1, const FusionTree<CoRank, Symmetry>& f2)
     {
         assert(f1.q_coupled == f2.q_coupled and "FusionTrees needs to have the same coupled qn.");
-
         const auto left_offset_domain = coupledDomain().leftOffset(f1);
         const auto left_offset_codomain = coupledCodomain().leftOffset(f2);
         const auto it = dict().find(f1.q_coupled);
@@ -225,6 +226,16 @@ public:
     {
         Self out(basis_domain, basis_codomain, world);
         out.setIdentity();
+        return out;
+    }
+
+    static Self WeightedIdentity(const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, Rank>& basis_domain,
+                                 const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, CoRank>& basis_codomain,
+                                 const mpi::XpedWorld& world = mpi::getUniverse())
+    {
+        Self out(basis_domain, basis_codomain, world);
+        out.setIdentity();
+        for(std::size_t q = 0; q < out.sector().size(); ++q) { out.block(q) *= Symmetry::degeneracy(out.sector(q)); }
         return out;
     }
 
@@ -388,6 +399,27 @@ private:
 
     template <int shift, std::size_t... ps>
     Tensor<Scalar, Rank - shift, CoRank + shift, Symmetry, false, AllocationPolicy> permute_impl(seq::iseq<std::size_t, ps...> per) const;
+
+    std::tuple<Tensor<Scalar, Rank, 1, Symmetry, false, AllocationPolicy>,
+               Tensor<typename ScalarTraits<Scalar>::Real, 1, 1, Symmetry, false, AllocationPolicy>,
+               Tensor<Scalar, 1, CoRank, Symmetry, false, AllocationPolicy>,
+               std::vector<std::pair<typename Symmetry::qType, typename ScalarTraits<Scalar>::Real>>>
+    full_svd_impl() XPED_CONST;
+
+    std::tuple<Tensor<Scalar, Rank, 1, Symmetry, false, AllocationPolicy>,
+               Tensor<typename ScalarTraits<Scalar>::Real, 1, 1, Symmetry, false, AllocationPolicy>,
+               Tensor<Scalar, 1, CoRank, Symmetry, false, AllocationPolicy>>
+    cutoff_matrices(const Tensor<Scalar, Rank, 1, Symmetry, false, AllocationPolicy>& U,
+                    const Tensor<typename ScalarTraits<Scalar>::Real, 1, 1, Symmetry, false, AllocationPolicy>& S,
+                    const Tensor<Scalar, 1, CoRank, Symmetry, false, AllocationPolicy>& Vdag,
+                    std::vector<std::pair<typename Symmetry::qType, RealScalar>>& allSV,
+                    size_t maxKeep,
+                    RealScalar eps_svd,
+                    RealScalar& truncWeight,
+                    RealScalar& entropy,
+                    std::map<qarray<Symmetry::Nq>, VectorType>& SVspec,
+                    bool PRESERVE_MULTIPLETS,
+                    bool RETURN_SPEC) XPED_CONST;
 };
 
 template <typename Scalar_, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>

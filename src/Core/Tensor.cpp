@@ -365,10 +365,17 @@ Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::tSVD(size_t max
                                                                       bool PRESERVE_MULTIPLETS,
                                                                       bool RETURN_SPEC) XPED_CONST
 {
-    SPDLOG_INFO("Entering Xped::tSVD()");
-    SPDLOG_INFO("Input param eps_svd={}", eps_svd);
-    entropy = 0.;
-    truncWeight = 0;
+    auto [U, Sigma, Vdag, allSV] = full_svd_impl();
+    return cutoff_matrices(U, Sigma, Vdag, allSV, maxKeep, eps_svd, truncWeight, entropy, SVspec, PRESERVE_MULTIPLETS, RETURN_SPEC);
+}
+
+template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
+std::tuple<Tensor<Scalar, Rank, 1, Symmetry, false, AllocationPolicy>,
+           Tensor<typename ScalarTraits<Scalar>::Real, 1, 1, Symmetry, false, AllocationPolicy>,
+           Tensor<Scalar, 1, CoRank, Symmetry, false, AllocationPolicy>,
+           std::vector<std::pair<typename Symmetry::qType, typename ScalarTraits<Scalar>::Real>>>
+Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::full_svd_impl() XPED_CONST
+{
     Qbasis<Symmetry, 1> middle;
     for(size_t i = 0; i < sector().size(); ++i) {
         middle.push_back(sector(i), std::min(PlainInterface::rows(block(i)), PlainInterface::cols(block(i))));
@@ -378,39 +385,46 @@ Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::tSVD(size_t max
     Tensor<Scalar, 1, CoRank, Symmetry, false, AllocationPolicy> Vdag({{middle}}, uncoupledCodomain());
 
     std::vector<std::pair<typename Symmetry::qType, RealScalar>> allSV;
-    SPDLOG_INFO("Performing the svd loop (size={})", sector().size());
     for(size_t i = 0; i < sector().size(); ++i) {
-        SPDLOG_INFO("Step i={} for mat with dim=({},{})", i, PlainInterface::rows<Scalar>(block(i)), PlainInterface::rows<Scalar>(block(i)));
         auto [Umat, Sigmavec, Vmatdag] = PlainInterface::svd(block(i));
-        SPDLOG_INFO("Performed svd for step i={}", i);
         std::vector<RealScalar> svs;
         PlainInterface::vec_to_stdvec<RealScalar>(Sigmavec, svs);
-
-        for(const auto& sv : svs) {
-            SPDLOG_INFO("Move the element {} from sigma to allSV", sv);
-            allSV.push_back(std::make_pair(sector(i), sv));
-        }
-        SPDLOG_INFO("Extracted singular values for step i={}", i);
+        for(const auto& sv : svs) { allSV.push_back(std::make_pair(sector(i), sv)); }
         auto Sigmamat = PlainInterface::vec_to_diagmat<RealScalar>(Sigmavec);
         U.push_back(sector(i), Umat);
         Sigma.push_back(sector(i), Sigmamat);
         Vdag.push_back(sector(i), Vmatdag);
     }
+    return std::make_tuple(U, Sigma, Vdag, allSV);
+}
+
+template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
+std::tuple<Tensor<Scalar, Rank, 1, Symmetry, false, AllocationPolicy>,
+           Tensor<typename ScalarTraits<Scalar>::Real, 1, 1, Symmetry, false, AllocationPolicy>,
+           Tensor<Scalar, 1, CoRank, Symmetry, false, AllocationPolicy>>
+Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::cutoff_matrices(
+    const Tensor<Scalar, Rank, 1, Symmetry, false, AllocationPolicy>& U,
+    const Tensor<typename ScalarTraits<Scalar>::Real, 1, 1, Symmetry, false, AllocationPolicy>& Sigma,
+    const Tensor<Scalar, 1, CoRank, Symmetry, false, AllocationPolicy>& Vdag,
+    std::vector<std::pair<typename Symmetry::qType, RealScalar>>& allSV,
+    size_t maxKeep,
+    RealScalar eps_svd,
+    RealScalar& truncWeight,
+    RealScalar& entropy,
+    std::map<qarray<Symmetry::Nq>, VectorType>& SVspec,
+    bool PRESERVE_MULTIPLETS,
+    bool RETURN_SPEC) XPED_CONST
+{
     size_t numberOfStates = allSV.size();
     assert(numberOfStates > 0);
     auto first_entry = allSV[0];
-    SPDLOG_INFO("numberOfStates={}", numberOfStates);
-    SPDLOG_INFO("allSV={}\n", allSV);
     std::sort(allSV.begin(),
               allSV.end(),
               [](const std::pair<typename Symmetry::qType, double>& sv1, const std::pair<typename Symmetry::qType, double>& sv2) {
                   return sv1.second > sv2.second;
               });
-    SPDLOG_INFO("numberOfStates after sort {}", allSV.size());
     for(size_t i = maxKeep; i < allSV.size(); ++i) { truncWeight += Symmetry::degeneracy(allSV[i].first) * std::pow(std::abs(allSV[i].second), 2.); }
     allSV.resize(std::min(maxKeep, numberOfStates));
-    // Log::debug("allSV: ");
-    // for(const auto& [q, sq] : allSV) { Log::debug("{}:{}, ", q[0], sq); }
     SPDLOG_INFO("numberOfStates after resize {}", allSV.size());
     // std::erase_if(allSV, [eps_svd](const pair<typename Symmetry::qType, Scalar> &sv) { return (sv < eps_svd); }); c++-20 version
     if(eps_svd > 0.) {
@@ -420,10 +434,6 @@ Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::tSVD(size_t max
                     allSV.end());
     }
     SPDLOG_INFO("numberOfStates after erase {}", allSV.size());
-    // Log::critical("allSV: ");
-    // for(const auto& [q, sq] : allSV) { fmt::print("{}:{}, ", q[0], sq); }
-    // std::cout << std::endl;
-
     // cout << "saving sv for expansion to file, #sv=" << allSV.size() << endl;
     // ofstream Filer("sv_expand");
     // size_t index=0;
@@ -451,7 +461,6 @@ Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::tSVD(size_t max
         }
     }
     SPDLOG_INFO("Adding {} states from {} states", allSV.size(), numberOfStates);
-    // std::cout << "Adding " << allSV.size() << " states from " << numberOfStates << " states" << std::endl;
     if(allSV.size() == 0) {
         SPDLOG_CRITICAL("All singular values are 0.");
         assert(first_entry.second > 1.e-12 and "All singular values are exactly 0.");
@@ -461,7 +470,6 @@ Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::tSVD(size_t max
     std::map<typename Symmetry::qType, std::vector<Scalar>> qn_orderedSV;
     Qbasis<Symmetry, 1> truncBasis;
     for(const auto& [q, s] : allSV) {
-        // truncBasis.push_back(q, 1ul);
         qn_orderedSV[q].push_back(s);
         entropy += -Symmetry::degeneracy(q) * s * s * std::log(s * s);
     }

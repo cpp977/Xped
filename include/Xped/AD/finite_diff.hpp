@@ -1,10 +1,12 @@
 #ifndef XPED_FINITE_DIFF_HPP_
 #define XPED_FINITE_DIFF_HPP_
 
+#include "Xped/PEPS/iPEPS.hpp"
+
 namespace Xped::internal {
 
 template <typename F, typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry>
-Xped::Tensor<Scalar, Rank, CoRank, Symmetry, false> finite_diff_gradient(const F& f, Tensor<Scalar, Rank, CoRank, Symmetry, false>& t)
+Tensor<Scalar, Rank, CoRank, Symmetry, false> finite_diff_gradient(const F& f, Tensor<Scalar, Rank, CoRank, Symmetry, false>& t)
 {
     auto t_copy = t;
     auto f_plain = [&f, &t_copy](const Eigen::VectorXd& xs) {

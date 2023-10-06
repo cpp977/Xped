@@ -135,6 +135,16 @@ public:
         }
     }
 
+    void set_A(const iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>& A_in)
+    {
+        A = std::make_shared<iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>>(A_in);
+        cell_ = A_in.cell();
+        if constexpr(TRank == 1) {
+            Ms.resize(cell_.pattern);
+            computeMs();
+        }
+    }
+
     std::size_t fullChi() const { return ALL_OUT_LEGS ? C1s[0].uncoupledDomain()[0].fullDim() : C1s[0].uncoupledCodomain()[0].fullDim(); }
 
     template <bool TRACK = ENABLE_AD>

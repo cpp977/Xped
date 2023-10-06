@@ -126,6 +126,7 @@ public:
 
     std::string info() const;
     void debug_info() const;
+    void grad_info() const;
 
     std::vector<Scalar> data();
 

@@ -417,7 +417,7 @@ std::vector<Scalar> iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>::graddata()
     std::size_t count = 0;
     switch(sym()) {
     case Opts::DiscreteSym::None: {
-            for(auto it = gradbeginA(); it != gradendA(); ++it) { out[count++] = *it; }
+        for(auto it = gradbeginA(); it != gradendA(); ++it) { out[count++] = *it; }
         break;
     }
     case Opts::DiscreteSym::C4v: {
@@ -611,7 +611,45 @@ void iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>::debug_info() const
                 std::cout << "Cell site: (" << x << "," << y << "): not unique." << std::endl;
                 continue;
             }
-            std::cout << "Cell site: (" << x << "," << y << "), A:" << std::endl << As(x, y) << std::endl;
+            std::cout << "Cell site: (" << x << "," << y << "), A:" << std::endl;
+            if constexpr(ENABLE_AD) {
+                As(x, y).val().print(std::cout, true);
+            } else {
+                As(x, y).print(std::cout, true);
+            }
+            std::cout << std::endl;
+        }
+    }
+
+    // std::cout << "Tensors:" << std::endl;
+    // for(int x = 0; x < cell_.Lx; x++) {
+    //     for(int y = 0; y < cell_.Ly; y++) {
+    //         if(not cell_.pattern.isUnique(x, y)) {
+    //             std::cout << "Cell site: (" << x << "," << y << "): not unique." << std::endl;
+    //             continue;
+    //         }
+    //         std::cout << "Cell site: (" << x << "," << y << "), A:" << std::endl << As(x, y) << std::endl;
+    //     }
+    // }
+}
+
+template <typename Scalar, typename Symmetry, bool ALL_OUT_LEGS, bool ENABLE_AD>
+void iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>::grad_info() const
+{
+    std::cout << "Tensors:" << std::endl;
+    for(int x = 0; x < cell_.Lx; x++) {
+        for(int y = 0; y < cell_.Ly; y++) {
+            if(not cell_.pattern.isUnique(x, y)) {
+                std::cout << "Cell site: (" << x << "," << y << "): not unique." << std::endl;
+                continue;
+            }
+            std::cout << "Cell site: (" << x << "," << y << "), A:" << std::endl;
+            if constexpr(ENABLE_AD) {
+                As(x, y).adj().print(std::cout, true);
+            } else {
+                std::cout << "No gradient data.";
+            }
+            std::cout << std::endl;
         }
     }
 }

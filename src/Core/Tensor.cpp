@@ -611,8 +611,7 @@ Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::tSVD_C4v(std::s
     Tensor<Scalar, Rank, 1, Symmetry, false, AllocationPolicy> trunc_U(uncoupledDomain(), {{truncBasis}});
     Tensor<RealScalar, 1, 1, Symmetry, false, AllocationPolicy> trunc_Sigma({{truncBasis}}, {{truncBasis}});
     for(const auto& [q, vec_sv] : qn_orderedSV) {
-        size_t Nret = vec_sv.size();
-        // cout << "q=" << q << ", Nret=" << Nret << endl;
+        // cout << "q=" << q << ", Nret=" << vec_sv.size() << endl;
         Log::debug("Consider block q={}", Sym::format<Symmetry>(q));
         Log::debug("vec_sv: {}", vec_sv);
         std::vector<int> ind(vec_sv.size());

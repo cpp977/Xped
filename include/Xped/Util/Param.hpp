@@ -18,7 +18,7 @@ struct Param
             fmt::print(stderr, "Conversion failed for value type={}\nError: {}\n", value.type().name(), e.what());
             std::terminate();
         }
-        return std::any_cast<Scalar>(value);
+        return res;
     }
 };
 

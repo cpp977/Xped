@@ -300,7 +300,7 @@ struct iPEPSSolverImag
     CTMSolver<Scalar, Symmetry, HamScalar> Jack;
     Opts::Imag imag_opts;
     std::shared_ptr<iPEPS<Scalar, Symmetry>> Psi;
-    Hamiltonian<Scalar, Symmetry>& H;
+    Hamiltonian<HamScalar, Symmetry>& H;
 };
 
 } // namespace Xped

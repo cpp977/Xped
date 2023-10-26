@@ -32,6 +32,7 @@ XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 1000000)
 #include "Xped/PEPS/Models/Heisenberg.hpp"
 #include "Xped/PEPS/Models/Hubbard.hpp"
 #include "Xped/PEPS/Models/Kondo.hpp"
+#include "Xped/PEPS/Models/SpinlessFermions.hpp"
 #include "Xped/PEPS/Models/KondoNecklace.hpp"
 
 int main(int argc, char* argv[])
@@ -45,11 +46,11 @@ int main(int argc, char* argv[])
 #endif
         // std::ios::sync_with_stdio(true);
 
-        // using Scalar = std::complex<double>;
-        using Scalar = double;
+        using Scalar = std::complex<double>;
+        // using Scalar = double;
 
-        using HamScalar = double;
-        // using HamScalar = std::complex<double>;
+        // using HamScalar = double;
+        using HamScalar = std::complex<double>;
 
         // using Symmetry = Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>;
         using Symmetry = Xped::Sym::ZN<Xped::Sym::FChargeU1, 36>;
@@ -72,7 +73,6 @@ int main(int argc, char* argv[])
         std::unique_ptr<Xped::Hamiltonian<HamScalar, Symmetry>> ham;
 
         std::string config_file = argc > 1 ? argv[1] : "config.toml";
-
         toml::value data;
         try {
             data = toml::parse(config_file);
@@ -143,6 +143,8 @@ int main(int argc, char* argv[])
             ham = std::make_unique<Xped::Hubbard<Symmetry, HamScalar>>(params, c.pattern, bonds);
         } else if(toml::find(data.at("model"), "name").as_string() == "Kondo") {
             ham = std::make_unique<Xped::Kondo<Symmetry, HamScalar>>(params, c.pattern, bonds);
+        } else if(toml::find(data.at("model"), "name").as_string() == "SpinlessFermion") {
+            ham = std::make_unique<Xped::SpinlessFermions<Symmetry, HamScalar>>(params, c.pattern, bonds);
         } else {
             throw std::invalid_argument("Specified model is not implemented.");
         }

@@ -33,6 +33,7 @@ XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 1000000)
 #include "Xped/PEPS/Models/Hubbard.hpp"
 #include "Xped/PEPS/Models/Kondo.hpp"
 #include "Xped/PEPS/Models/KondoNecklace.hpp"
+#include "Xped/PEPS/Models/SpinlessFermions.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -142,6 +143,8 @@ int main(int argc, char* argv[])
             ham = std::make_unique<Xped::Hubbard<Symmetry, HamScalar>>(params, c.pattern, bonds);
         } else if(toml::find(data.at("model"), "name").as_string() == "Kondo") {
             ham = std::make_unique<Xped::Kondo<Symmetry, HamScalar>>(params, c.pattern, bonds);
+        } else if(toml::find(data.at("model"), "name").as_string() == "SpinlessFermion") {
+            ham = std::make_unique<Xped::SpinlessFermions<Symmetry, HamScalar>>(params, c.pattern, bonds);
         } else {
             throw std::invalid_argument("Specified model is not implemented.");
         }

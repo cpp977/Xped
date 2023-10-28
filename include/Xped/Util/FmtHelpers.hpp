@@ -49,25 +49,25 @@ struct fmt::formatter<std::complex<T>, Char> : public fmt::formatter<T, Char>
     template <typename FormatCtx>
     auto format(const std::complex<T>& x, FormatCtx& ctx) const -> decltype(ctx.out())
     {
-        format_to(ctx.out(), "(");
+		fmt::format_to(ctx.out(), "(");
         if(style_ == style::pair) {
             base::format(x.real(), ctx);
-            format_to(ctx.out(), ",");
+            fmt::format_to(ctx.out(), ",");
             base::format(x.imag(), ctx);
-            return format_to(ctx.out(), ")");
+            return fmt::format_to(ctx.out(), ")");
         }
         if(x.real() || !x.imag()) base::format(x.real(), ctx);
         if(x.imag()) {
-            if(x.real() && x.imag() >= 0 && specs_.sign != sign::plus) format_to(ctx.out(), "+");
+            if(x.real() && x.imag() >= 0 && specs_.sign != sign::plus) fmt::format_to(ctx.out(), "+");
             base::format(x.imag(), ctx);
             if(style_ == style::star)
-                format_to(ctx.out(), "*i");
+				fmt::format_to(ctx.out(), "*i");
             else
-                format_to(ctx.out(), "i");
-            if(std::is_same<typename std::decay<T>::type, float>::value) format_to(ctx.out(), "f");
-            if(std::is_same<typename std::decay<T>::type, long double>::value) format_to(ctx.out(), "l");
+				fmt::format_to(ctx.out(), "i");
+            if(std::is_same<typename std::decay<T>::type, float>::value) fmt::format_to(ctx.out(), "f");
+            if(std::is_same<typename std::decay<T>::type, long double>::value) fmt::format_to(ctx.out(), "l");
         }
-        return format_to(ctx.out(), ")");
+        return fmt::format_to(ctx.out(), ")");
     }
 };
 

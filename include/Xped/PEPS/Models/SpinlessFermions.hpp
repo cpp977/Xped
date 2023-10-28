@@ -25,35 +25,48 @@ public:
         : Hamiltonian<Scalar, Symmetry>(params_in, pat_in, bond_in, "SpinlessFermions")
     {
         F = SpinlessFermionBase<Symmetry>(1);
-        this->used_params = {"V", /*"μ"*/ "mu", "tprime", "Vprime", "t"};
+        this->used_params = {"V", /*"μ"*/ "mu", "tprime1", "tprime2", "Vprime", "th", "tv"};
         Tensor<double, 2, 2, Symmetry> hopping, v_int, occ;
 
         if constexpr(Symmetry::ALL_ABELIAN) {
             hopping = (tprod(F.cdag(), F.c()) - tprod(F.c(), F.cdag())).eval();
             v_int = (tprod(F.n(), F.n())).eval();
             occ = 0.25 * (tprod(F.n(), F.Id()) + tprod(F.Id(), F.n())).eval();
-            if((this->bond & Opts::Bond::H) == Opts::Bond::H) {
-                for(auto& t : this->data_h) {
-                    t = -this->params["t"].template get<double>() * hopping + this->params["V"].template get<double>() * v_int -
-                        this->params["mu"].template get<double>() * occ;
-                }
+			auto th = this->params["th"].template get<TMatrix<Scalar>>();
+			auto tv = this->params["tv"].template get<TMatrix<Scalar>>();
+			auto tprime1 = this->params["tprime1"].template get<TMatrix<Scalar>>();
+			auto tprime2 = this->params["tprime2"].template get<TMatrix<Scalar>>();
+			
+			if((this->bond & Opts::Bond::H) == Opts::Bond::H) {
+				for(auto pos = 0ul; pos < this->data_h.size(); ++pos) {
+					auto [x, y] = this->pat.coords(pos);
+					fmt::print("th({},{})={}\n", x,y,th(x,y));
+					this->data_h(x,y) = -th(x,y) * hopping + this->params["V"].template get<double>() * v_int -
+						this->params["mu"].template get<double>() * occ;
+				}
             }
             if((this->bond & Opts::Bond::V) == Opts::Bond::V) {
-                for(auto& t : this->data_v) {
-                    t = -this->params["t"].template get<double>() * hopping + this->params["V"].template get<double>() * v_int -
+				for(auto pos = 0ul; pos < this->data_v.size(); ++pos) {
+					auto [x, y] = this->pat.coords(pos);
+					fmt::print("tv({},{})={}\n", x,y,tv(x,y));
+                    this->data_v(x,y) = -tv(x,y) * hopping + this->params["V"].template get<double>() * v_int -
                         this->params["mu"].template get<double>() * occ;
                 }
             }
             if((this->bond & Opts::Bond::D1) == Opts::Bond::D1) {
-                for(auto& t : this->data_d1) {
+				for(auto pos = 0ul; pos < this->data_d1.size(); ++pos) {
+					auto [x, y] = this->pat.coords(pos);
+					fmt::print("td1({},{})={}\n", x,y,tprime1(x,y));
                     // strange sign here but the code works fine
-                    t = +this->params["tprime"].template get<double>() * hopping + this->params["Vprime"].template get<double>() * v_int;
+                    this->data_d1(x,y) = +tprime1(x,y) * hopping + this->params["Vprime"].template get<double>() * v_int;
                 }
             }
             if((this->bond & Opts::Bond::D2) == Opts::Bond::D2) {
-                for(auto& t : this->data_d2) {
+				for(auto pos = 0ul; pos < this->data_d2.size(); ++pos) {
+					auto [x, y] = this->pat.coords(pos);
+					fmt::print("td2({},{})={}\n", x,y,tprime2(x,y));
                     // strange sign here but the code works fine
-                    t = +this->params["tprime"].template get<double>() * hopping + this->params["Vprime"].template get<double>() * v_int;
+                    this->data_d2(x,y) = +tprime2(x,y) * hopping + this->params["Vprime"].template get<double>() * v_int;
                 }
             }
         } else {

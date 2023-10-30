@@ -712,7 +712,6 @@ void CTM<Scalar, Symmetry, TRank, ALL_OUT_LEGS, ENABLE_AD, CPOpts>::computeRDM_v
         auto T4C1T1 = T1s[0].adjoint().eval().template contract<std::array{-1, 1, -2, -3}, std::array{1, -4, -5, -6}, 3, TRACK_INNER>(
             C1T1.template twist<TRACK_INNER>(0));
         auto T4C1T1A = T4C1T1.template contract<std::array{-1, 1, -2, -3, 2, -4}, std::array{1, 2, -5, -6, -7}, 4, TRACK_INNER>(A->As[0]);
-        auto C2T2 = C1s[0].template contract<std::array{-1, 1}, std::array{1, -2, -3, -4}, 1, TRACK_INNER>(T1s[0].adjoint().eval());
         auto AdC2T2 = A->Adags[0]
                           .template twist<TRACK_INNER>(3)
                           .template twist<TRACK_INNER>(4)

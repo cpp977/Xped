@@ -423,7 +423,8 @@ std::vector<Scalar> iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>::graddata()
     case Opts::DiscreteSym::C4v: {
         std::vector<Scalar> full_data_A(sym_map_A.second.size());
         for(auto it = gradbeginA(); it != gradendA(); ++it) { full_data_A[count++] = *it; }
-        for(auto i = 0ul; i < full_data_A.size(); ++i) { out[sym_map_A.second[i]] = full_data_A[i]; }
+		std::fill(out.begin(), out.end(), 0.);
+        for(auto i = 0ul; i < full_data_A.size(); ++i) { out[sym_map_A.second[i]] += full_data_A[i]; }
         break;
     }
     }

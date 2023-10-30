@@ -84,22 +84,11 @@ CTMSolver<Scalar, Symmetry, HamScalar, ALL_OUT_LEGS, CPOpts, TRank>::solve(std::
             opts.verbosity, "  CTMSolver(χ={}({}), runtime={}[{} steps]): E={:.8f}", opts.chi, Jack.fullChi(), total_t.time_string(), used_steps, E);
         return E;
     } else {
-        auto do_tracked_steps = [this, &H](const auto& Psi_ad) {
+        auto do_tracked_steps = [this, &H](auto Psi_ad) {
             constexpr bool ENABLE_AD = std::decay_t<decltype(Psi_ad)>::ENABLE_AD;
             CTM<Scalar, Symmetry, TRank, ALL_OUT_LEGS, ENABLE_AD, CPOpts> Jim(Jack);
             Jim.set_A(Psi_ad);
-            if constexpr(ALL_OUT_LEGS) {
-                Jim.Psi()->As[0] =
-                    0.5 * (Jim.Psi()->As[0] + Jim.Psi()->As[0].template permute<0, 0, 3, 2, 1, 4>(Bool<ENABLE_AD>{})); // U-D reflection
-                Jim.Psi()->As[0] =
-                    0.5 * (Jim.Psi()->As[0] + Jim.Psi()->As[0].template permute<0, 2, 1, 0, 3, 4>(Bool<ENABLE_AD>{})); // L-R reflection
-                Jim.Psi()->As[0] =
-                    0.5 * (Jim.Psi()->As[0] + Jim.Psi()->As[0].template permute<0, 1, 2, 3, 0, 4>(Bool<ENABLE_AD>{})); // 90deg CCW rotation
-                Jim.Psi()->As[0] =
-                    0.5 * (Jim.Psi()->As[0] + Jim.Psi()->As[0].template permute<0, 3, 0, 1, 2, 4>(Bool<ENABLE_AD>{})); // 90deg CW rotation
-                Jim.Psi()->updateAdags();
-            }
-
+			Jim.Psi()->updateAdags();
             Jim.solve(opts.track_steps);
             auto Hobs = H.asObservable();
             auto [E_h, E_v, E_d1, E_d2] = avg(Jim, Hobs);
@@ -119,13 +108,15 @@ CTMSolver<Scalar, Symmetry, HamScalar, ALL_OUT_LEGS, CPOpts, TRank>::solve(std::
         auto backward_time = backward_t.time_string();
         Log::per_iteration(opts.verbosity, "  {: >3} backward pass: {}", "•", backward_time);
 
-        // auto grad_ad = A.adj();
         // auto grad_fd = internal::finite_diff_gradient(do_tracked_steps, *Psi);
 
-        // Psi_ad.grad_info();
+        auto grad = Psi_ad.graddata();
+		// auto grad_ad = *Psi;
+		// grad_ad.set_data(grad.data());
+
+		// grad_ad.debug_info();
         // grad_fd.debug_info();
 
-        auto grad = Psi_ad.graddata();
         for(std::size_t i = 0; i < grad.size(); ++i) { gradient[i] = grad[i]; }
         if constexpr(ScalarTraits<Scalar>::IS_COMPLEX()) {
             grad_norm = std::sqrt(

@@ -336,7 +336,7 @@ public:
                XTensor<TRACK, Scalar, 1, 1, Symmetry, AllocationPolicy>,
                XTensor<TRACK, Scalar, 1, CoRank, Symmetry, AllocationPolicy>>
     cutoff_matrices(const XTensor<TRACK, Scalar, Rank, 1, Symmetry, AllocationPolicy>& U,
-                    const XTensor<TRACK, typename ScalarTraits<Scalar>::Real, 1, 1, Symmetry, AllocationPolicy>& Sigma,
+                    const XTensor<TRACK, Scalar, 1, 1, Symmetry, AllocationPolicy>& Sigma,
                     const XTensor<TRACK, Scalar, 1, CoRank, Symmetry, AllocationPolicy>& Vdag,
                     std::vector<std::pair<typename Symmetry::qType, RealScalar>>& allSV,
                     size_t maxKeep,
@@ -348,7 +348,7 @@ public:
                     bool RETURN_SPEC) XPED_CONST
     {
         auto [truncUval, truncSval_real, truncVdagval] = val().cutoff_matrices(
-            U.val(), Sigma.val(), Vdag.val(), allSV, maxKeep, eps_svd, truncWeight, entropy, SVspec, PRESERVE_MULTIPLETS, RETURN_SPEC);
+            U.val(), Sigma.val().real(), Vdag.val(), allSV, maxKeep, eps_svd, truncWeight, entropy, SVspec, PRESERVE_MULTIPLETS, RETURN_SPEC);
         XTensor<TRACK, Scalar, 1, 1, Symmetry, AllocationPolicy> truncSval = truncSval_real.template cast<Scalar>().eval();
         if constexpr(not TRACK) {
             return std::make_tuple(truncUval, truncSval, truncVdagval);

@@ -58,6 +58,8 @@ public:
     XPED_CONST CoeffUnaryOp<Derived, typename ScalarTraits<Scalar>::Real> abs() XPED_CONST;
     template <typename OtherScalar>
     XPED_CONST CoeffUnaryOp<Derived, OtherScalar> cast() XPED_CONST;
+    XPED_CONST CoeffUnaryOp<Derived, typename ScalarTraits<Scalar>::Real> real() XPED_CONST;
+    XPED_CONST CoeffUnaryOp<Derived, typename ScalarTraits<Scalar>::Real> imag() XPED_CONST;
 
     XPED_CONST BlockUnaryOp<Derived> msqrt() XPED_CONST;
     XPED_CONST BlockUnaryOp<Derived> mexp(Scalar factor) XPED_CONST;

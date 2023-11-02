@@ -139,6 +139,19 @@ XPED_CONST CoeffUnaryOp<Derived, typename ScalarTraits<typename TensorTraits<Der
 }
 
 template <typename Derived>
+XPED_CONST CoeffUnaryOp<Derived, typename ScalarTraits<typename TensorTraits<Derived>::Scalar>::Real> TensorBase<Derived>::real() XPED_CONST
+{
+    return unaryExpr<typename ScalarTraits<typename TensorTraits<Derived>::Scalar>::Real>([](const Scalar s) { return std::real(s); });
+}
+
+template <typename Derived>
+XPED_CONST CoeffUnaryOp<Derived, typename ScalarTraits<typename TensorTraits<Derived>::Scalar>::Real> TensorBase<Derived>::imag() XPED_CONST
+{
+    return unaryExpr<typename ScalarTraits<typename TensorTraits<Derived>::Scalar>::Real>([](const Scalar s) { return std::imag(s); });
+}
+
+    
+template <typename Derived>
 template <typename OtherScalar>
 XPED_CONST CoeffUnaryOp<Derived, OtherScalar> TensorBase<Derived>::cast() XPED_CONST
 {

@@ -38,7 +38,8 @@ public:
 
         Tensor<double, 2, 2, Symmetry> gate_nnh, gate_nnv, local;
         if constexpr(std::is_same_v<Symmetry, Sym::SU2<Sym::SpinSU2>>) {
-            local = 0.25 * this->params["J"].template get<double>() * std::sqrt(3.) * (B.Sdag(0) * B.S(1) + B.Sdag(1) * B.S(2));
+            auto local_op = this->params["J"].template get<double>() * std::sqrt(3.) * (B.Sdag(0) * B.S(1) + B.Sdag(1) * B.S(2));
+            local = 0.25 * (tprod(local_op, B.Id()) + tprod(B.Id(), local_op));
             gate_nnh = this->params["J"].template get<double>() * std::sqrt(3.) * (tprod(B.Sdag(2), B.S(0)) + tprod(B.Sdag(2), B.S(1)));
             gate_nnv = this->params["J"].template get<double>() * std::sqrt(3.) * (tprod(B.Sdag(1), B.S(0)) + tprod(B.Sdag(2), B.S(0)));
         } else if constexpr(Symmetry::ALL_ABELIAN) {

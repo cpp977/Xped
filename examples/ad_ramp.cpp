@@ -45,6 +45,7 @@ XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 1000000)
 
 #include "Xped/PEPS/Models/Heisenberg.hpp"
 #include "Xped/PEPS/Models/Hubbard.hpp"
+#include "Xped/PEPS/Models/Kagome.hpp"
 #include "Xped/PEPS/Models/Kondo.hpp"
 #include "Xped/PEPS/Models/KondoNecklace.hpp"
 #include "Xped/PEPS/Models/SpinlessFermions.hpp"
@@ -60,15 +61,17 @@ int main(int argc, char* argv[])
 #endif
         // std::ios::sync_with_stdio(true);
 
-        // using Scalar = std::complex<double>;
-        using Scalar = double;
+        using Scalar = std::complex<double>;
+        // using Scalar = double;
 
-        using HamScalar = double;
+        using HamScalar = std::complex<double>;
+        // using HamScalar = double;
+
         // using Symmetry = Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>;
-        // using Symmetry = Xped::Sym::ZN<Xped::Sym::FChargeU1, 36>;
+        using Symmetry = Xped::Sym::ZN<Xped::Sym::FChargeU1, 36>;
         // using Symmetry = Xped::Sym::ZN<Xped::Sym::SpinU1, 36>;
         // using Symmetry = Xped::Sym::SU2<Xped::Sym::SpinSU2>;
-        using Symmetry = Xped::Sym::Combined<Xped::Sym::ZN<Xped::Sym::SpinU1, 36>, Xped::Sym::ZN<Xped::Sym::FChargeU1, 36>>;
+        // using Symmetry = Xped::Sym::Combined<Xped::Sym::ZN<Xped::Sym::SpinU1, 36>, Xped::Sym::ZN<Xped::Sym::FChargeU1, 36>>;
         // using Symmetry = Xped::Sym::Combined<Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::ZN<Xped::Sym::FChargeU1, 36>>;
 
         // using Symmetry =
@@ -150,6 +153,8 @@ int main(int argc, char* argv[])
 
         if(toml::find(data.at("model"), "name").as_string() == "Heisenberg") {
             ham = std::make_unique<Xped::Heisenberg<Symmetry, HamScalar>>(params, c.pattern, bonds);
+        } else if(toml::find(data.at("model"), "name").as_string() == "Kagome") {
+            ham = std::make_unique<Xped::Kagome<Symmetry, HamScalar>>(params, c.pattern, bonds);
         } else if(toml::find(data.at("model"), "name").as_string() == "KondoNecklace") {
             ham = std::make_unique<Xped::KondoNecklace<Symmetry, HamScalar>>(params, c.pattern, bonds);
         } else if(toml::find(data.at("model"), "name").as_string() == "Hubbard") {

@@ -19,7 +19,7 @@ https://github.com/cpp977/Xped/blob/1eab6bf97de1fb84b3992361436996391a4f0292/doc
 ## Build
 
 1. Get the sources using:
-`git clone --recurse-submodules ssh://git@github.com/cpp977/Xped`
+`git clone --recurse-submodules https://github.com/cpp977/Xped`
 3. Configure with cmake:
 `cmake --preset=<preset> /path/to/source/Xped`
 This also installs dependencies via vcpkg so the first run takes several minutes.

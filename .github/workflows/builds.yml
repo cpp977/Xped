@@ -59,8 +59,8 @@ jobs:
         
     - run: g++ --version
 
-    - run: update-alternatives --set clang++ /usr/bin/clang++-15
-    - run: update-alternatives --set clang /usr/bin/clang-15
+    - run: sudo update-alternatives --set clang++ /usr/bin/clang++-15
+    - run: sudo update-alternatives --set clang /usr/bin/clang-15
     
     - run: clang++ --version
         

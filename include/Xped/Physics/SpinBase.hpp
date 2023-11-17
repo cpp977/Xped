@@ -66,14 +66,14 @@ public:
      * \param orbital : orbital index
      */
     template <class Dummy = Symmetry>
-    typename std::enable_if<Dummy::IS_SPIN_SU2(), OperatorType>::type S(std::size_t orbital = 0, bool SUB_LATTCE = true) const;
+    typename std::enable_if<Dummy::IS_SPIN_SU2(), OperatorType>::type S(std::size_t orbital = 0, bool C4v_sym = false) const;
 
     /**
      * Orbital spin†
      * \param orbital : orbital index
      */
     template <class Dummy = Symmetry>
-    typename std::enable_if<Dummy::IS_SPIN_SU2(), OperatorType>::type Sdag(std::size_t orbital = 0, bool SUB_LATTCE = true) const;
+    typename std::enable_if<Dummy::IS_SPIN_SU2(), OperatorType>::type Sdag(std::size_t orbital = 0, bool C4v_sym = false) const;
 
     template <class Dummy = Symmetry>
     typename std::enable_if<Dummy::IS_SPIN_SU2(), OperatorType>::type Q(std::size_t orbital = 0) const;
@@ -97,22 +97,22 @@ public:
     typename std::enable_if<!Dummy::IS_SPIN_SU2(), OperatorType>::type Qmz(std::size_t orbital = 0) const;
 
     template <class Dummy = Symmetry>
-    typename std::enable_if<!Dummy::IS_SPIN_SU2(), OperatorType>::type Sz(std::size_t orbital = 0, bool SUB_LATTICE = true) const;
+    typename std::enable_if<!Dummy::IS_SPIN_SU2(), OperatorType>::type Sz(std::size_t orbital = 0, bool C4v_sym = false) const;
 
     template <class Dummy = Symmetry>
-    typename std::enable_if<!Dummy::IS_SPIN_SU2(), OperatorType>::type Sp(std::size_t orbital = 0, bool SUB_LATTICE = true) const;
+    typename std::enable_if<!Dummy::IS_SPIN_SU2(), OperatorType>::type Sp(std::size_t orbital = 0, bool C4v_sym = false) const;
 
     template <class Dummy = Symmetry>
-    typename std::enable_if<!Dummy::IS_SPIN_SU2(), OperatorType>::type Sm(std::size_t orbital = 0, bool SUB_LATTICE = true) const;
+    typename std::enable_if<!Dummy::IS_SPIN_SU2(), OperatorType>::type Sm(std::size_t orbital = 0, bool C4v_sym = false) const;
 
     template <class Dummy = Symmetry>
-    typename std::enable_if<Dummy::NO_SPIN_SYM(), OperatorType>::type Sx(std::size_t orbital = 0) const;
+    typename std::enable_if<Dummy::NO_SPIN_SYM(), OperatorType>::type Sx(std::size_t orbital = 0, bool C4v_sym = false) const;
 
     template <class Dummy = Symmetry>
-    typename std::enable_if<Dummy::NO_SPIN_SYM(), OperatorTypeC>::type Sy(std::size_t orbital = 0) const;
+    typename std::enable_if<Dummy::NO_SPIN_SYM(), OperatorTypeC>::type Sy(std::size_t orbital = 0, bool C4v_sym = false) const;
 
     template <class Dummy = Symmetry>
-    typename std::enable_if<Dummy::NO_SPIN_SYM(), OperatorType>::type iSy(std::size_t orbital = 0) const;
+    typename std::enable_if<Dummy::NO_SPIN_SYM(), OperatorType>::type iSy(std::size_t orbital = 0, bool C4v_sym = false) const;
 
     template <class Dummy = Symmetry>
     typename std::enable_if<!Dummy::IS_SPIN_SU2(), OperatorType>::type Scomp(SPINOP_LABEL Sa, int orbital = 0) const
@@ -385,17 +385,17 @@ typename std::enable_if<!Dummy::IS_SPIN_SU2(), SiteOperator<double, Symmetry_>>:
 template <typename Symmetry_, std::size_t order>
 template <typename Dummy>
 typename std::enable_if<Dummy::IS_SPIN_SU2(), SiteOperator<double, Symmetry_>>::type SpinBase<Symmetry_, order>::S(std::size_t orbital,
-                                                                                                                   bool SUB_LATTICE) const
+                                                                                                                   bool C4v_sym) const
 {
-    return SUB_LATTICE ? make_operator(this->S_1s(), orbital, "S") : this->Sp_1s();
+    return C4v_sym ? this->Sp_1s() : make_operator(this->S_1s(), orbital, "S");
 }
 
 template <typename Symmetry_, std::size_t order>
 template <typename Dummy>
 typename std::enable_if<Dummy::IS_SPIN_SU2(), SiteOperator<double, Symmetry_>>::type SpinBase<Symmetry_, order>::Sdag(std::size_t orbital,
-                                                                                                                      bool SUB_LATTICE) const
+                                                                                                                      bool C4v_sym) const
 {
-    return S(orbital, SUB_LATTICE).adjoint();
+    return S(orbital, C4v_sym).adjoint();
 }
 
 template <typename Symmetry_, std::size_t order>
@@ -450,52 +450,54 @@ typename std::enable_if<!Dummy::IS_SPIN_SU2(), SiteOperator<double, Symmetry_>>:
 template <typename Symmetry_, std::size_t order>
 template <typename Dummy>
 typename std::enable_if<!Dummy::IS_SPIN_SU2(), SiteOperator<double, Symmetry_>>::type SpinBase<Symmetry_, order>::Sz(std::size_t orbital,
-                                                                                                                     bool SUB_LATTICE) const
+                                                                                                                     bool C4v_sym) const
 {
-    return SUB_LATTICE ? make_operator(this->Sz_1s(), orbital, "Sz") : -1. * make_operator(this->Sz_1s(), orbital, "Sz");
+    return C4v_sym ? -1. * make_operator(this->Sz_1s(), orbital, "Sz") : make_operator(this->Sz_1s(), orbital, "Sz");
 }
 
 template <typename Symmetry_, std::size_t order>
 template <typename Dummy>
 typename std::enable_if<!Dummy::IS_SPIN_SU2(), SiteOperator<double, Symmetry_>>::type SpinBase<Symmetry_, order>::Sp(std::size_t orbital,
-                                                                                                                     bool SUB_LATTICE) const
+                                                                                                                     bool C4v_sym) const
 {
-    return SUB_LATTICE ? make_operator(this->Sp_1s(), orbital, "Sp") : -1. * make_operator(this->Sm_1s(), orbital, "Sm");
+    return C4v_sym ? -1. * make_operator(this->Sm_1s(), orbital, "Sm") : make_operator(this->Sp_1s(), orbital, "Sp");
 }
 
 template <typename Symmetry_, std::size_t order>
 template <typename Dummy>
 typename std::enable_if<!Dummy::IS_SPIN_SU2(), SiteOperator<double, Symmetry_>>::type SpinBase<Symmetry_, order>::Sm(std::size_t orbital,
-                                                                                                                     bool SUB_LATTICE) const
+                                                                                                                     bool C4v_sym) const
 {
-    return SUB_LATTICE ? make_operator(this->Sm_1s(), orbital, "Sm") : -1. * make_operator(this->Sp_1s(), orbital, "Sp");
+    return C4v_sym ? -1. * make_operator(this->Sp_1s(), orbital, "Sp") : make_operator(this->Sm_1s(), orbital, "Sm");
 }
 
 template <typename Symmetry_, std::size_t order>
 template <typename Dummy>
-typename std::enable_if<Dummy::NO_SPIN_SYM(), SiteOperator<double, Symmetry_>>::type SpinBase<Symmetry_, order>::Sx(std::size_t orbital) const
+typename std::enable_if<Dummy::NO_SPIN_SYM(), SiteOperator<double, Symmetry_>>::type SpinBase<Symmetry_, order>::Sx(std::size_t orbital,
+                                                                                                                    bool C4v_sym) const
 {
-    OperatorType out = 0.5 * (Sp(orbital) + Sm(orbital));
+    OperatorType out = 0.5 * (Sp(orbital, C4v_sym) + Sm(orbital, C4v_sym));
     out.label() = "Sx";
     return out;
 }
 
 template <typename Symmetry, std::size_t order>
 template <typename Dummy>
-typename std::enable_if<Dummy::NO_SPIN_SYM(), SiteOperator<std::complex<double>, Symmetry>>::type
-SpinBase<Symmetry, order>::Sy(std::size_t orbital) const
+typename std::enable_if<Dummy::NO_SPIN_SYM(), SiteOperator<std::complex<double>, Symmetry>>::type SpinBase<Symmetry, order>::Sy(std::size_t orbital,
+                                                                                                                                bool C4v_sym) const
 {
     using namespace std::complex_literals;
-    OperatorTypeC out = -1i * 0.5 * (Sp(orbital) - Sm(orbital));
+    OperatorTypeC out = -1i * 0.5 * (Sp(orbital, C4v_sym) - Sm(orbital, C4v_sym));
     out.label() = "Sy";
     return out;
 }
 
 template <typename Symmetry_, std::size_t order>
 template <typename Dummy>
-typename std::enable_if<Dummy::NO_SPIN_SYM(), SiteOperator<double, Symmetry_>>::type SpinBase<Symmetry_, order>::iSy(std::size_t orbital) const
+typename std::enable_if<Dummy::NO_SPIN_SYM(), SiteOperator<double, Symmetry_>>::type SpinBase<Symmetry_, order>::iSy(std::size_t orbital,
+                                                                                                                     bool C4v_sym) const
 {
-    OperatorType out = 0.5 * (Sp(orbital) - Sm(orbital));
+    OperatorType out = 0.5 * (Sp(orbital, C4v_sym) - Sm(orbital, C4v_sym));
     out.label() = "iSy";
     return out;
 }

@@ -122,7 +122,7 @@ public:
 
     typename ScalarTraits<Scalar>::Real squaredNorm() XPED_CONST;
 
-    inline typename ScalarTraits<Scalar>::Real norm() XPED_CONST { return std::sqrt((*this * this->adjoint()).trace()); }
+    inline typename ScalarTraits<Scalar>::Real norm() XPED_CONST { return std::sqrt(squaredNorm()); }
 
     typename ScalarTraits<Scalar>::Real
     maxCoeff(std::size_t& max_block, PlainInterface::MIndextype& max_row, PlainInterface::MIndextype& max_col) XPED_CONST;

@@ -30,14 +30,13 @@ struct iPEPSSolverImag
                 for(auto iD = 0ul; auto D : imag_opts.Ds) {
                     for(auto chi : imag_opts.chis[iD]) {
                         if(file.exist(fmt::format("/{}/{}", D, chi))) {
-                            fmt::print(fg(fmt::color::red),
-                                       "There already exists data in observable file for D={}, chi={}.\n Filename:{}.\n",
-                                       D,
-                                       chi,
-                                       (imag_opts.working_directory / imag_opts.obs_directory).string() + "/" + this->H.file_name() +
-                                           fmt::format("_seed={}_id={}.h5", imag_opts.seed, imag_opts.id));
-                            std::cout << std::flush;
-                            throw;
+                            throw std::runtime_error(fmt::format(fg(fmt::color::red),
+                                                                 "There already exists data in observable file for D={}, chi={}.\n Filename:{}.\n",
+                                                                 D,
+                                                                 chi,
+                                                                 (imag_opts.working_directory / imag_opts.obs_directory).string() + "/" +
+                                                                     this->H.file_name() +
+                                                                     fmt::format("_seed={}_id={}.h5", imag_opts.seed, imag_opts.id)));
                         }
                         ++iD;
                     }
@@ -48,12 +47,10 @@ struct iPEPSSolverImag
                                             fmt::format("_seed={}_id={}.h5", imag_opts.seed, imag_opts.id),
                                         imag_opts.resume ? HighFive::File::ReadWrite : HighFive::File::Excl);
                 } catch(const std::exception& e) {
-                    fmt::print(fg(fmt::color::red),
-                               "Error while creating the observable file for this simulation:{}.\n",
-                               (imag_opts.working_directory / imag_opts.obs_directory).string() + "/" + this->H.file_name() +
-                                   fmt::format("_seed={}_id={}.h5", imag_opts.seed, imag_opts.id));
-                    std::cout << std::flush;
-                    throw;
+                    throw std::runtime_error(fmt::format(fg(fmt::color::red),
+                                                         "Error while creating the observable file for this simulation:{}.\n",
+                                                         (imag_opts.working_directory / imag_opts.obs_directory).string() + "/" +
+                                                             this->H.file_name() + fmt::format("_seed={}_id={}.h5", imag_opts.seed, imag_opts.id)));
                 }
             }
         }
@@ -215,7 +212,16 @@ struct iPEPSSolverImag
                     Psi->loadFromJson(load_p);
                     Psi->debug_info();
                 } else {
-                    std::terminate();
+                    throw std::invalid_argument("Cannot load from JSON format for fermionic symmetries.");
+                }
+                break;
+            }
+            case Opts::LoadFormat::JSON_SU2: {
+                if constexpr(not Symmetry::ANY_IS_FERMIONIC) {
+                    Psi->loadFromJsonSU2(load_p);
+                    Psi->debug_info();
+                } else {
+                    throw std::invalid_argument("Cannot load from JSON format for fermionic symmetries.");
                 }
                 break;
             }
@@ -226,19 +232,13 @@ struct iPEPSSolverImag
                 try {
                     yas::load<flags>(load_p.string().c_str(), tmp_Psi);
                 } catch(const yas::serialization_exception& se) {
-                    fmt::print(
+                    throw std::runtime_error(fmt::format(
                         "Error while deserializing file ({}) with initial wavefunction.\nThis might be because of incompatible symmetries between this simulation and the loaded wavefunction.",
-                        load_p.string());
-                    std::cout << std::flush;
-                    throw;
+                        load_p.string()));
                 } catch(const yas::io_exception& ie) {
-                    fmt::print("Error while loading file ({}) with initial wavefunction.\n", load_p.string());
-                    std::cout << std::flush;
-                    throw;
+                    throw std::runtime_error(fmt::format("Error while loading file ({}) with initial wavefunction.\n", load_p.string()));
                 } catch(const std::exception& e) {
-                    fmt::print("Unknown error while loading file ({}) with initial wavefunction.\n", load_p.string());
-                    std::cout << std::flush;
-                    throw;
+                    throw std::runtime_error(fmt::format("Unknown error while loading file ({}) with initial wavefunction.\n", load_p.string()));
                 }
                 Psi = std::make_shared<iPEPS<Scalar, Symmetry>>(std::move(tmp_Psi));
                 break;

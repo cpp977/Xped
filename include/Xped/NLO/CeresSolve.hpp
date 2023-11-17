@@ -82,11 +82,10 @@ struct iPEPSSolverAD
                                      .c_str(),
                                  *this);
             } catch(const std::exception& e) {
-                fmt::print("Error while loading file ({}) for resuming simulation.\n",
-                           optim_opts.working_directory.string() + "/" + this->H.file_name() +
-                               fmt::format("_D={}_chi={}_seed={}_id={}.ad", Psi->D, ctm_opts.chi, optim_opts.seed, optim_opts.id));
-                std::cout << std::flush;
-                throw;
+                throw std::runtime_error(
+                    fmt::format("Error while loading file ({}) for resuming simulation.\n",
+                                optim_opts.working_directory.string() + "/" + this->H.file_name() +
+                                    fmt::format("_D={}_chi={}_seed={}_id={}.ad", Psi->D, ctm_opts.chi, optim_opts.seed, optim_opts.id)));
             }
         } else {
             if(optim_opts.load != "") {
@@ -102,7 +101,16 @@ struct iPEPSSolverAD
                         Psi->loadFromJson(load_p);
                         Psi->debug_info();
                     } else {
-                        std::terminate();
+                        throw std::invalid_argument("Cannot load from JSON format for fermionic symmetries.");
+                    }
+                    break;
+                }
+                case Opts::LoadFormat::JSON_SU2: {
+                    if constexpr(not Symmetry::ANY_IS_FERMIONIC) {
+                        Psi->loadFromJsonSU2(load_p);
+                        Psi->debug_info();
+                    } else {
+                        throw std::invalid_argument("Cannot load from JSON format for fermionic symmetries.");
                     }
                     break;
                 }
@@ -112,19 +120,13 @@ struct iPEPSSolverAD
                     try {
                         yas::load<flags>(load_p.string().c_str(), tmp_Psi);
                     } catch(const yas::serialization_exception& se) {
-                        fmt::print(
+                        throw std::runtime_error(fmt::format(
                             "Error while deserializing file ({}) with initial wavefunction.\nThis might be because of incompatible symmetries between this simulation and the loaded wavefunction.",
-                            load_p.string());
-                        std::cout << std::flush;
-                        throw;
+                            load_p.string()));
                     } catch(const yas::io_exception& ie) {
-                        fmt::print("Error while loading file ({}) with initial wavefunction.\n", load_p.string());
-                        std::cout << std::flush;
-                        throw;
+                        throw std::runtime_error(fmt::format("Error while loading file ({}) with initial wavefunction.\n", load_p.string()));
                     } catch(const std::exception& e) {
-                        fmt::print("Unknown error while loading file ({}) with initial wavefunction.\n", load_p.string());
-                        std::cout << std::flush;
-                        throw;
+                        throw std::runtime_error(fmt::format("Unknown error while loading file ({}) with initial wavefunction.\n", load_p.string()));
                     }
                     Psi = std::make_shared<iPEPS<Scalar, Symmetry, ALL_OUT_LEGS>>(std::move(tmp_Psi));
                     break;
@@ -159,12 +161,11 @@ struct iPEPSSolverAD
                         HighFive::DataSet dataset_g = file.createDataSet("/grad_norm", dataspace, HighFive::create_datatype<double>(), props);
                     }
                 } catch(const std::exception& e) {
-                    fmt::print(fg(fmt::color::red),
-                               "There already exists a log file for this simulation:{}.\n",
-                               (optim_opts.working_directory / optim_opts.logging_directory).string() + "/" + this->H.file_name() +
-                                   fmt::format("_D={}_chi={}_seed={}_id={}.h5", Psi->D, ctm_opts.chi, optim_opts.seed, optim_opts.id));
-                    std::cout << std::flush;
-                    throw;
+                    throw std::runtime_error(
+                        fmt::format(fg(fmt::color::red),
+                                    "There already exists a log file for this simulation:{}.\n",
+                                    (optim_opts.working_directory / optim_opts.logging_directory).string() + "/" + this->H.file_name() +
+                                        fmt::format("_D={}_chi={}_seed={}_id={}.h5", Psi->D, ctm_opts.chi, optim_opts.seed, optim_opts.id)));
                 }
             }
             if(not optim_opts.obs_directory.empty()) {
@@ -176,14 +177,13 @@ struct iPEPSSolverAD
                                             fmt::format("_seed={}_id={}.h5", optim_opts.seed, optim_opts.id),
                                         optim_opts.resume ? HighFive::File::ReadWrite : HighFive::File::ReadOnly);
                     if(file.exist(fmt::format("/{}/{}", Psi->D, ctm_opts.chi))) {
-                        fmt::print(fg(fmt::color::red),
-                                   "There already exists data in observable file for D={}, chi={}.\n Filename:{}.\n",
-                                   Psi->D,
-                                   ctm_opts.chi,
-                                   (optim_opts.working_directory / optim_opts.obs_directory).string() + "/" + this->H.file_name() +
-                                       fmt::format("_seed={}_id={}.h5", optim_opts.seed, optim_opts.id));
-                        std::cout << std::flush;
-                        throw;
+                        throw std::runtime_error(fmt::format(fg(fmt::color::red),
+                                                             "There already exists data in observable file for D={}, chi={}.\n Filename:{}.\n",
+                                                             Psi->D,
+                                                             ctm_opts.chi,
+                                                             (optim_opts.working_directory / optim_opts.obs_directory).string() + "/" +
+                                                                 this->H.file_name() +
+                                                                 fmt::format("_seed={}_id={}.h5", optim_opts.seed, optim_opts.id)));
                     }
                 } else {
                     try {
@@ -191,12 +191,11 @@ struct iPEPSSolverAD
                                                 fmt::format("_seed={}_id={}.h5", optim_opts.seed, optim_opts.id),
                                             optim_opts.resume ? HighFive::File::ReadWrite : HighFive::File::Excl);
                     } catch(const std::exception& e) {
-                        fmt::print(fg(fmt::color::red),
-                                   "Error while creating the observable file for this simulation:{}.\n",
-                                   (optim_opts.working_directory / optim_opts.obs_directory).string() + "/" + this->H.file_name() +
-                                       fmt::format("_seed={}_id={}.h5", optim_opts.seed, optim_opts.id));
-                        std::cout << std::flush;
-                        throw;
+                        throw std::runtime_error(fmt::format(fg(fmt::color::red),
+                                                             "Error while creating the observable file for this simulation:{}.\n",
+                                                             (optim_opts.working_directory / optim_opts.obs_directory).string() + "/" +
+                                                                 this->H.file_name() +
+                                                                 fmt::format("_seed={}_id={}.h5", optim_opts.seed, optim_opts.id)));
                     }
                 }
             }

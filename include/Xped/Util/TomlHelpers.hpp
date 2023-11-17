@@ -3,10 +3,10 @@
 
 #include <any>
 #include <cassert>
+#include <complex>
 #include <exception>
 #include <map>
 #include <string>
-#include <complex>
 
 #include "toml.hpp"
 
@@ -31,14 +31,11 @@ std::map<std::string, Param> params_from_toml(const toml::value& t, const UnitCe
     std::map<std::string, Param> params;
     for(const auto& [k, v] : t.as_table()) {
         if(v.is_floating()) {
-			fmt::print("Cast float.\n");
             params[k] = Param{.value = static_cast<double>(v.as_floating())};
         } else if(v.is_array()) {
             if(v.at(0).is_floating()) {
-				fmt::print("Cast vector.\n");
                 params[k] = Param{.value = toml::get<std::vector<double>>(v)};
             } else if(v.at(0).at(0).is_floating()) {
-				fmt::print("Cast matrix.\n");
                 TMatrix<double> p(cell.pattern);
                 auto p_vec = toml::get<std::vector<std::vector<double>>>(v);
                 assert(v.size() == cell.Lx);
@@ -46,19 +43,18 @@ std::map<std::string, Param> params_from_toml(const toml::value& t, const UnitCe
                 for(int x = 0; x < v.size(); ++x) {
                     for(int y = 0; y < v.size(); ++y) { p(x, y) = p_vec[x][y]; }
                 }
-                params[k] = Param{.value = p};	
-			} else if(v.at(0).at(0).is_array()) {
-				fmt::print("Cast complex matrix.\n");
-				TMatrix<std::complex<double>> p(cell.pattern);
-				auto p_vec = toml::get<std::vector<std::vector<std::pair<double,double>>>>(v);
-				assert(v.size() == cell.Lx);
+                params[k] = Param{.value = p};
+            } else if(v.at(0).at(0).is_array()) {
+                TMatrix<std::complex<double>> p(cell.pattern);
+                auto p_vec = toml::get<std::vector<std::vector<std::pair<double, double>>>>(v);
+                assert(v.size() == cell.Lx);
                 assert(v[0].size() == cell.Ly);
-				using namespace std::literals;
+                using namespace std::literals;
                 for(int x = 0; x < v.size(); ++x) {
-                    for(int y = 0; y < v.size(); ++y) { p(x, y) = p_vec[x][y].first + 1i*p_vec[x][y].second; }
+                    for(int y = 0; y < v.size(); ++y) { p(x, y) = p_vec[x][y].first + 1i * p_vec[x][y].second; }
                 }
-                params[k] = Param{.value = p};	
-			}
+                params[k] = Param{.value = p};
+            }
         } else {
             throw std::invalid_argument("Bad model parameters.");
         }

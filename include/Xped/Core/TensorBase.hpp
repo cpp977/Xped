@@ -116,11 +116,13 @@ public:
     template <bool = false>
     Scalar trace() XPED_CONST;
 
+    Scalar unweighted_trace() XPED_CONST;
+
     typename ScalarTraits<Scalar>::Real maxNorm() XPED_CONST;
 
     typename ScalarTraits<Scalar>::Real squaredNorm() XPED_CONST;
 
-    inline typename ScalarTraits<Scalar>::Real norm() XPED_CONST { return std::sqrt(squaredNorm()); }
+    inline typename ScalarTraits<Scalar>::Real norm() XPED_CONST { return std::sqrt((*this * this->adjoint()).trace()); }
 
     typename ScalarTraits<Scalar>::Real
     maxCoeff(std::size_t& max_block, PlainInterface::MIndextype& max_row, PlainInterface::MIndextype& max_col) XPED_CONST;
@@ -163,6 +165,12 @@ template <typename DerivedLeft, typename DerivedRight>
 XPED_CONST CoeffBinaryOp<DerivedLeft, DerivedRight> operator-(XPED_CONST TensorBase<DerivedLeft>& left, XPED_CONST TensorBase<DerivedRight>& right)
 {
     return left.binaryExpr(right, [](const typename DerivedLeft::Scalar s1, const typename DerivedRight::Scalar s2) { return s1 - s2; });
+}
+
+template <typename DerivedLeft, typename DerivedRight>
+XPED_CONST CoeffBinaryOp<DerivedLeft, DerivedRight> operator/(XPED_CONST TensorBase<DerivedLeft>& left, XPED_CONST TensorBase<DerivedRight>& right)
+{
+    return left.binaryExpr(right, [](const typename DerivedLeft::Scalar s1, const typename DerivedRight::Scalar s2) { return s1 / s2; });
 }
 
 template <typename Derived, typename Scalar>

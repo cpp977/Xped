@@ -34,6 +34,15 @@ typename TensorTraits<Derived>::Scalar TensorBase<Derived>::trace() XPED_CONST
 }
 
 template <typename Derived>
+typename TensorTraits<Derived>::Scalar TensorBase<Derived>::unweighted_trace() XPED_CONST
+{
+    DEBUG_ASSERT(derived().coupledDomain() == derived().coupledCodomain());
+    Scalar out = 0.;
+    for(size_t i = 0; i < derived().sector().size(); i++) { out += PlainInterface::trace(derived().block(i)); }
+    return out;
+}
+
+template <typename Derived>
 typename ScalarTraits<typename TensorTraits<Derived>::Scalar>::Real TensorBase<Derived>::maxNorm() XPED_CONST
 {
     typename ScalarTraits<Scalar>::Real out = 0.;

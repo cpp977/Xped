@@ -423,7 +423,7 @@ template <bool TRACK>
 void CTM<Scalar, Symmetry, TRank, ALL_OUT_LEGS, ENABLE_AD, CPOpts>::computeRDM()
 {
     computeRDM_h<TRACK>();
-    computeRDM_v<TRACK>();
+    if constexpr(not ALL_OUT_LEGS) { computeRDM_v<TRACK>(); }
     // computeRDM_1s<TRACK>();
     HAS_RDM = true;
 }

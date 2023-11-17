@@ -57,6 +57,7 @@ public:
     Opts::CTM opts{};
 
     bool REINIT_ENV = true;
+    bool COMPARE_TO_FD = false;
 
 private:
     CTM<Scalar, Symmetry, TRank, ALL_OUT_LEGS> Jack;

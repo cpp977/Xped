@@ -59,6 +59,7 @@ CTMSolver<Scalar, Symmetry, HamScalar, ALL_OUT_LEGS, CPOpts, TRank>::solve(std::
         auto Hobs = H.asObservable();
         auto [E_h, E_v, E_d1, E_d2] = avg(Jack, Hobs);
         E = (E_h.sum() + E_v.sum() + E_d1.sum() + E_d2.sum()) / Jack.cell().uniqueSize();
+        if constexpr(ALL_OUT_LEGS) { E = 2. * E; }
         step == 0 ? Log::per_iteration(opts.verbosity, "  {: >3} {:2d}: E={:2.8f}, t={}", "▷", step, E, move_t.time_string())
                   : Log::per_iteration(
                         opts.verbosity, "  {: >3} {:2d}: E={:2.8f}, conv={:2.10g}, t={}", "▷", step, E, std::abs(E - Eprev), move_t.time_string());
@@ -88,7 +89,7 @@ CTMSolver<Scalar, Symmetry, HamScalar, ALL_OUT_LEGS, CPOpts, TRank>::solve(std::
             constexpr bool ENABLE_AD = std::decay_t<decltype(Psi_ad)>::ENABLE_AD;
             CTM<Scalar, Symmetry, TRank, ALL_OUT_LEGS, ENABLE_AD, CPOpts> Jim(Jack);
             Jim.set_A(Psi_ad);
-			Jim.Psi()->updateAdags();
+            Jim.Psi()->updateAdags();
             Jim.solve(opts.track_steps);
             auto Hobs = H.asObservable();
             auto [E_h, E_v, E_d1, E_d2] = avg(Jim, Hobs);
@@ -106,16 +107,18 @@ CTMSolver<Scalar, Symmetry, HamScalar, ALL_OUT_LEGS, CPOpts, TRank>::solve(std::
         util::Stopwatch<> backward_t;
         stan::math::grad(res.vi_);
         auto backward_time = backward_t.time_string();
+        auto grad = Psi_ad.graddata();
         Log::per_iteration(opts.verbosity, "  {: >3} backward pass: {}", "•", backward_time);
 
-        // auto grad_fd = internal::finite_diff_gradient(do_tracked_steps, *Psi);
+        if(COMPARE_TO_FD) {
+            auto grad_fd = internal::finite_diff_gradient(do_tracked_steps, *Psi);
 
-        auto grad = Psi_ad.graddata();
-		// auto grad_ad = *Psi;
-		// grad_ad.set_data(grad.data());
+            auto grad_ad = *Psi;
+            grad_ad.set_data(grad.data());
 
-		// grad_ad.debug_info();
-        // grad_fd.debug_info();
+            grad_ad.debug_info();
+            grad_fd.debug_info();
+        }
 
         for(std::size_t i = 0; i < grad.size(); ++i) { gradient[i] = grad[i]; }
         if constexpr(ScalarTraits<Scalar>::IS_COMPLEX()) {

@@ -175,8 +175,7 @@ public:
             Xped::Tensor<Scalar, Rank - shift, CoRank + shift, Symmetry, true, AllocationPolicy> out(
                 val().template permute<shift, p...>(Bool<false>{}));
             stan::math::reverse_pass_callback([curr = *this, out]() mutable {
-                using inverse = decltype(Xped::util::constFct::inverse_permutation<seq::iseq<std::size_t, p...>>());
-                curr.adj() += out.adj().template permute<-shift>(inverse{}, Bool<false>{});
+                curr.adj() += out.adj().template permute_adj<shift, p...>();
                 SPDLOG_WARN("reverse permute of {}, input adj norm={}, output adj norm={}", curr.name(), out.adj().norm(), curr.adj().norm());
             });
             return out;
@@ -496,13 +495,7 @@ public:
     XScalar<TRACK, Scalar> norm() const
     {
         if constexpr(TRACK) {
-            Scalar tmp = val().norm();
-            stan::math::var_value<Scalar> res(tmp);
-            stan::math::reverse_pass_callback([curr = *this, res]() mutable {
-                curr.adj() += (curr.val() * (res.adj() / res.val())).eval();
-                SPDLOG_WARN("reverse norm of {}, input adj norm={}, output adj norm={}", curr.name(), res.adj(), curr.adj().norm());
-            });
-            return res;
+            return sqrt((*this * this->adjoint()).trace());
         } else {
             return val().norm();
         }
@@ -699,7 +692,7 @@ XTensor<TRACK, Scalar, Rank, CoRank, Symmetry> operator*(const Tensor<Scalar, Ra
         Tensor<Scalar, Rank, CoRank, Symmetry, true> res((t.val() * s.val()).eval());
         stan::math::reverse_pass_callback([res, t, s]() mutable {
             t.adj() += (res.adj() * s.val()).eval();
-            s.adj() += (res.adj() * t.val().adjoint()).trace();
+            s.adj() += (res.adj() * t.val().adjoint()).unweighted_trace();
             SPDLOG_WARN(
                 "reverse vt*v with vt={}, input adj norm={}, vt adj norm={}, v adj norm={}", t.name(), res.adj().norm(), t.adj().norm(), s.adj());
         });

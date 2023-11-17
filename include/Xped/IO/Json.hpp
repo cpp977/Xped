@@ -23,13 +23,15 @@ auto loadSU2JsonBaseTensor(const std::filesystem::path& p, std::size_t elem)
     constexpr int sfull_rank = static_cast<int>(full_rank);
     auto locdim = data["su2_tensors"][elem]["physDim"].template get<PlainInterface::Indextype>();
     auto auxdim = data["su2_tensors"][elem]["auxDim"].template get<PlainInterface::Indextype>();
+    // fmt::print("locdim={}, auxdim={}\n", locdim, auxdim);
     typename PlainInterface::TType<Scalar, full_rank> T =
         PlainInterface::construct<Scalar>(std::array<PlainInterface::Indextype, full_rank>{locdim, auxdim, auxdim, auxdim, auxdim});
     PlainInterface::setZero(T);
     // std::cout << std::setw(4) << data["su2_tensors"][0] << std::endl;
     auto entries = data["su2_tensors"][elem]["entries"].template get<std::vector<std::string>>();
-    fmt::print("{}\n", entries);
-    std::vector<PlainInterface::Indextype> perm = {1, 2, 0};
+    // fmt::print("{}\n", entries);
+    std::vector<PlainInterface::Indextype> perm(auxdim, 0);
+    for(PlainInterface::Indextype i = 1; i < auxdim; ++i) { perm[i - 1] = i; }
     for(const auto& elem : entries) {
         std::vector<std::string> vals;
         boost::split(vals, elem, [](char c) { return c == ' '; });
@@ -110,31 +112,31 @@ auto loadSU2JsonBaseTensor(const std::filesystem::path& p, std::size_t elem)
     // auto tmp = PlainInterface::contract<Scalar, 5 + 1, 4 + 1, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4>(U, T);
     auto Tmat = PlainInterface::contract<Scalar, 4 + 1, 4 + 1, 1, 0, 2, 1, 3, 2, 4, 3>(tmp, V);
     std::cout << Tmat.dimension(0) << "x" << Tmat.dimension(1) << std::endl;
-    std::cout << "Tmat: " << Tmat.dimension(0) << "x" << Tmat.dimension(1) << "\n" << Tmat << std::endl;
+    // std::cout << "Tmat: " << Tmat.dimension(0) << "x" << Tmat.dimension(1) << "\n" << Tmat << std::endl;
     // Eigen::Tensor<double, 2> Tmatcheck = T.reshape(std::array<int, 2>{locdim, auxdim * auxdim * auxdim * auxdim});
     // std::cout << "Tmatcheck: " << (Tmatcheck - Tmat).sum() << std::endl;
     Eigen::Map<Eigen::MatrixXd> M(Tmat.data(), Tmat.dimension(0), Tmat.dimension(1));
 
     for(auto i = 0ul; i < res.sector().size(); ++i) {
-        fmt::print("q={}\n", Sym::format<Symmetry>(res.sector(i)));
-        fmt::print("Take block at ({},{}) with size={}x{}\n",
-                   res.coupledDomain().full_outer_num(res.sector(i)),
-                   res.coupledCodomain().full_outer_num(res.sector(i)),
-                   Symmetry::degeneracy(res.sector(i)) * PlainInterface::rows(res.block(i)),
-                   Symmetry::degeneracy(res.sector(i)) * PlainInterface::cols(res.block(i)));
+        // fmt::print("q={}\n", Sym::format<Symmetry>(res.sector(i)));
+        // fmt::print("Take block at ({},{}) with size={}x{}\n",
+        //            res.coupledDomain().full_outer_num(res.sector(i)),
+        //            res.coupledCodomain().full_outer_num(res.sector(i)),
+        //            Symmetry::degeneracy(res.sector(i)) * PlainInterface::rows(res.block(i)),
+        //            Symmetry::degeneracy(res.sector(i)) * PlainInterface::cols(res.block(i)));
         Eigen::MatrixXd sub = M.block(res.coupledDomain().full_outer_num(res.sector(i)),
                                       res.coupledCodomain().full_outer_num(res.sector(i)),
                                       Symmetry::degeneracy(res.sector(i)) * PlainInterface::rows(res.block(i)),
                                       Symmetry::degeneracy(res.sector(i)) * PlainInterface::cols(res.block(i)));
-        std::cout << std::setprecision(2) << sub << std::endl;
+        // std::cout << std::setprecision(2) << sub << std::endl;
         for(auto row = 0; row < PlainInterface::rows(res.block(i)); ++row) {
             for(auto col = 0; col < PlainInterface::cols(res.block(i)); ++col) {
                 res.block(i)(row, col) = sub(row * Symmetry::degeneracy(res.sector(i)), col * Symmetry::degeneracy(res.sector(i)));
             }
         }
     }
-    res.print(std::cout, true);
-    std::cout << std::endl;
+    // res.print(std::cout, true);
+    // std::cout << std::endl;
     std::cout << "T-T_constructed: " << (T - res.plainTensor()).sum() << std::endl;
     return res;
 }

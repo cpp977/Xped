@@ -111,8 +111,10 @@ CTMSolver<Scalar, Symmetry, HamScalar, ALL_OUT_LEGS, CPOpts, TRank>::solve(std::
         Log::per_iteration(opts.verbosity, "  {: >3} backward pass: {}", "•", backward_time);
 
         if(COMPARE_TO_FD) {
+            util::Stopwatch<> fd_t;
             auto grad_fd = internal::finite_diff_gradient(do_tracked_steps, *Psi);
-
+            auto fd_time = fd_t.time_string();
+            Log::per_iteration(opts.verbosity, "  {: >3} finite-difference gradient: {}", "•", fd_time);
             auto grad_ad = *Psi;
             grad_ad.set_data(grad.data());
 

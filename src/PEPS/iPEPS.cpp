@@ -258,8 +258,25 @@ void iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>::loadFromJson(const std::f
         cell_ = UnitCell(1, 1);
         As.resize(cell().pattern);
         Adags.resize(cell().pattern);
-        // As[0] = Xped::IO::loadSU2JsonTensor<Symmetry>(p);
         As[0] = Xped::IO::loadU0JsonTensor<Symmetry>(p);
+        updateAdags();
+        auto check = checkSym();
+        Log::debug("Symmetry check after loadFromJson(): {}", check);
+        debug_info();
+        return;
+    } else {
+        return;
+    }
+}
+
+template <typename Scalar, typename Symmetry, bool ALL_OUT_LEGS, bool ENABLE_AD>
+void iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>::loadFromJsonSU2(const std::filesystem::path& p)
+{
+    if constexpr(ALL_OUT_LEGS) {
+        cell_ = UnitCell(1, 1);
+        As.resize(cell().pattern);
+        Adags.resize(cell().pattern);
+        As[0] = Xped::IO::loadSU2JsonTensor<Symmetry>(p);
         updateAdags();
         auto check = checkSym();
         Log::debug("Symmetry check after loadFromJson(): {}", check);

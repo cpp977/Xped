@@ -5,6 +5,7 @@
 
 #include "Xped/PEPS/ObservableBase.hpp"
 #include "Xped/PEPS/TwoSiteObservable.hpp"
+#include "Xped/PEPS/iPEPSOpts.hpp"
 #include "Xped/Util/Param.hpp"
 
 namespace Xped {
@@ -14,11 +15,16 @@ struct Hamiltonian
 {
     Hamiltonian() = default;
 
-    Hamiltonian(std::map<std::string, Param>& params_in, const Pattern& pat_in, Opts::Bond bond_in, const std::string& name_in = "H")
+    Hamiltonian(std::map<std::string, Param>& params_in,
+                const Pattern& pat_in,
+                Opts::Bond bond_in,
+                const std::string& name_in = "H",
+                Opts::DiscreteSym sym = Opts::DiscreteSym::None)
         : params(params_in)
         , pat(pat_in)
         , bond(bond_in)
         , name(name_in)
+        , sym(sym)
     {
         if((bond & Opts::Bond::H) == Opts::Bond::H) { data_h = TMatrix<Tensor<Scalar, 2, 2, Symmetry, false>>(pat); }
         if((bond & Opts::Bond::V) == Opts::Bond::V) { data_v = TMatrix<Tensor<Scalar, 2, 2, Symmetry, false>>(pat); }
@@ -110,7 +116,7 @@ struct Hamiltonian
     std::string name;
     std::vector<std::string> used_params;
     std::vector<std::unique_ptr<ObservableBase>> obs;
-    Opts::DiscreteSym sym_ = Opts::DiscreteSym::None;
+    Opts::DiscreteSym sym = Opts::DiscreteSym::None;
 };
 
 } // namespace Xped

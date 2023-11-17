@@ -24,7 +24,10 @@ template <typename Symmetry, typename Scalar = double>
 class Heisenberg : public Hamiltonian<Scalar, Symmetry>
 {
 public:
-    Heisenberg(std::map<std::string, Param>& params_in, const Pattern& pat_in, Opts::Bond bond_in = Opts::Bond::H | Opts::Bond::V)
+    Heisenberg(std::map<std::string, Param>& params_in,
+               const Pattern& pat_in,
+               Opts::Bond bond_in = Opts::Bond::H | Opts::Bond::V,
+               Opts::DiscreteSym sym = Opts::DiscreteSym::None)
         : Hamiltonian<Scalar, Symmetry>(params_in, pat_in, bond_in, "Heisenberg")
     {
         if constexpr(std::is_same_v<Symmetry, Sym::SU2<Sym::SpinSU2>>) {

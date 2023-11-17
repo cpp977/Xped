@@ -110,6 +110,7 @@ struct Hamiltonian
     std::string name;
     std::vector<std::string> used_params;
     std::vector<std::unique_ptr<ObservableBase>> obs;
+    Opts::DiscreteSym sym_ = Opts::DiscreteSym::None;
 };
 
 } // namespace Xped

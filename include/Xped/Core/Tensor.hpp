@@ -274,6 +274,15 @@ public:
     // }
 
     template <int shift, std::size_t... p>
+    Tensor<Scalar, Rank + shift, CoRank - shift, Symmetry, false, AllocationPolicy> permute_adj() const;
+
+    template <int shift, std::size_t... p>
+    Tensor<Scalar, Rank + shift, CoRank - shift, Symmetry, false, AllocationPolicy> permute_adj(seq::iseq<std::size_t, p...>) const
+    {
+        return permute_adj<shift, p...>();
+    }
+
+    template <int shift, std::size_t... p>
     Tensor<Scalar, Rank - shift, CoRank + shift, Symmetry, false, AllocationPolicy> permute() const;
 
     template <int shift, std::size_t... p>

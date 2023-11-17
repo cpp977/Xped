@@ -211,6 +211,83 @@ Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::permute_impl(se
 }
 
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
+template <int shift, std::size_t... ps>
+Tensor<Scalar, Rank + shift, CoRank - shift, Symmetry, false, AllocationPolicy>
+Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::permute_adj() const
+{
+    using s = seq::iseq<std::size_t, ps...>;
+    if constexpr(shift == 0 and std::is_same_v<s, seq::make<std::size_t, Rank + CoRank>>) { return *this; }
+    using inverse = decltype(Xped::util::constFct::inverse_permutation<seq::iseq<long, ps...>>());
+    std::array<std::size_t, Rank + CoRank> p_ = {ps...};
+    util::Permutation p(p_);
+    constexpr std::size_t newRank = Rank + shift;
+    constexpr std::size_t newCoRank = CoRank - shift;
+    // fmt::print("Rank={}, CoRank={}, newRank={}, newCoRank={}, shift={}\n", Rank, CoRank, newRank, newCoRank, shift);
+    std::array<Qbasis<Symmetry, 1, AllocationPolicy>, newRank> new_domain;
+    std::array<Qbasis<Symmetry, 1, AllocationPolicy>, newCoRank> new_codomain;
+
+    for(std::size_t i = 0; i < newRank; ++i) {
+        if(p.pi_inv[i] > Rank - 1 or Rank == 0) {
+            new_domain[i] = uncoupledCodomain()[p.pi_inv[i] - Rank].conj();
+        } else {
+            new_domain[i] = uncoupledDomain()[p.pi_inv[i]];
+        }
+    }
+
+    for(std::size_t i = 0; i < newCoRank; ++i) {
+        if(p.pi_inv[i + newRank] > Rank - 1 or Rank == 0) {
+            new_codomain[i] = uncoupledCodomain()[p.pi_inv[i + newRank] - Rank];
+        } else {
+            new_codomain[i] = uncoupledDomain()[p.pi_inv[i + newRank]].conj();
+        }
+    }
+
+    Tensor<Scalar, newRank, newCoRank, Symmetry, false, AllocationPolicy> out(new_domain, new_codomain, this->world());
+    out.setZero();
+
+    for(size_t i = 0; i < out.sector().size(); ++i) {
+        auto domain_trees = out.coupledDomain().tree(out.sector(i));
+        auto codomain_trees = out.coupledCodomain().tree(out.sector(i));
+        for(const auto& domain_tree : domain_trees)
+            for(const auto& codomain_tree : codomain_trees) {
+                // #ifdef XPED_MEMORY_EFFICIENT
+                auto tensor = out.view(domain_tree, codomain_tree);
+                // auto Tshuffle = PlainInterface::shuffle_view<decltype(tensor), ps...>(tensor);
+                // #elif defined(XPED_TIME_EFFICIENT)
+                //                 auto tensor = out.subBlock(domain_tree, codomain_tree);
+                //                 auto Tshuffle = PlainInterface::shuffle<Scalar, Rank + CoRank, ps...>(tensor);
+                // #endif
+
+                for(const auto& [permuted_trees, coeff] : treepair::permute<shift>(domain_tree, codomain_tree, p)) {
+                    if(std::abs(coeff) < 1.e-10) { continue; }
+
+                    auto [permuted_domain_tree, permuted_codomain_tree] = permuted_trees;
+                    assert(permuted_domain_tree.q_coupled == permuted_codomain_tree.q_coupled);
+
+                    auto it = this->dict().find(permuted_domain_tree.q_coupled);
+                    assert(it != this->dict().end());
+                    // #ifdef XPED_MEMORY_EFFICIENT
+                    // auto t = this->view(permuted_domain_tree, permuted_codomain_tree, it->second);
+                    auto t = this->subBlock(permuted_domain_tree, permuted_codomain_tree, it->second);
+                    // std::cout << t << std::endl;
+                    auto Tshuffle = PlainInterface::shuffle<Scalar, Rank + CoRank>(t, inverse{});
+
+                    PlainInterface::addScale<Scalar, Rank + CoRank>(Tshuffle, tensor, coeff);
+                    // #elif defined(XPED_TIME_EFFICIENT)
+                    //                     IndexType row = out.coupledDomain().leftOffset(domain_tree);
+                    //                     IndexType col = out.coupledCodomain().leftOffset(codomain_tree);
+                    //                     IndexType rows = domain_tree.dim;
+                    //                     IndexType cols = codomain_tree.dim;
+                    //                     PlainInterface::add_to_block_from_tensor<Rank + CoRank>(out.block(i), row, col, rows, cols, coeff,
+                    //                     Tshuffle);
+                    // #endif
+                }
+            }
+    }
+    return out;
+}
+
+template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
 template <int shift, std::size_t... p>
 Tensor<Scalar, Rank - shift, CoRank + shift, Symmetry, false, AllocationPolicy>
 Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::permute() const

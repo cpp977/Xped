@@ -185,6 +185,8 @@ public:
 
     void loadFromJson(const std::filesystem::path& p);
 
+    void loadFromJsonSU2(const std::filesystem::path& p);
+
     bool checkConsistency() const;
     bool checkSym() const;
 

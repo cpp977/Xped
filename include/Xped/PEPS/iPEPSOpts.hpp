@@ -7,7 +7,7 @@ namespace Xped::Opts {
 
 BOOST_DEFINE_ENUM_CLASS(Leg, Left, Top, Right, Bottom, Phys)
 
-BOOST_DEFINE_ENUM_CLASS(LoadFormat, MATLAB, Native, JSON)
+BOOST_DEFINE_ENUM_CLASS(LoadFormat, MATLAB, Native, JSON, JSON_SU2)
 
 BOOST_DEFINE_ENUM_CLASS(Orientation, H, V)
 

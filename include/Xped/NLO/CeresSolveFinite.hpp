@@ -102,7 +102,14 @@ struct fPEPSSolverAD
                     // fmt::print("check2={}\n", (Psi->As[0] - perm2).norm());
                     break;
                 }
-
+                case Opts::LoadFormat::JSON_SU2: {
+                    // Psi->loadFromJson(load_p);
+                    // auto perm1 = Psi->As[0].template permute<0, 1, 2, 3, 0, 4>();
+                    // fmt::print("check1={}\n", (Psi->As[0] - perm1).norm());
+                    // auto perm2 = Psi->As[0].template permute<0, 0, 3, 2, 1, 4>();
+                    // fmt::print("check2={}\n", (Psi->As[0] - perm2).norm());
+                    break;
+                }
                 case Opts::LoadFormat::Native: {
                     constexpr std::size_t flags = yas::file /*IO type*/ | yas::binary; /*IO format*/
                     iPEPS<Scalar, Symmetry, true> tmp_Psi;

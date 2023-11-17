@@ -206,8 +206,6 @@ int main(int argc, char* argv[])
 
         Psi->As[0].print(std::cout, true);
         std::cout << std::endl;
-        Psi->Bs[0].print(std::cout, true);
-        std::cout << std::endl;
         auto Ap = Psi->As[0].template permute<4, 0, 1, 2, 3, 4>();
         Ap.print(std::cout, true);
         std::cout << std::endl;

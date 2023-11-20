@@ -41,7 +41,7 @@ public:
 
         Tensor<double, 2, 2, Symmetry> gate_nn, gate_d;
 
-        bool C4v_sym = not(this->sym == Opts::DiscreteSym::C4v);
+        bool C4v_sym = this->sym == Opts::DiscreteSym::C4v;
 
         if constexpr(std::is_same_v<Symmetry, Sym::SU2<Sym::SpinSU2>>) {
             gate_nn = this->params["J"].template get<double>() * (std::sqrt(3.) * tprod(B.Sdag(0), B.S(0, C4v_sym))).eval();
@@ -71,7 +71,7 @@ public:
 
     virtual void setDefaultObs() override
     {
-        bool C4v_sym = not(this->sym == Opts::DiscreteSym::C4v);
+        bool C4v_sym = this->sym == Opts::DiscreteSym::C4v;
 
         if constexpr(std::is_same_v<Symmetry, Sym::SU2<Sym::SpinSU2>>) {
             if(C4v_sym) {

@@ -277,6 +277,11 @@ avg(XPED_CONST CTM<Scalar, Symmetry, TRank, ALL_OUT_LEGS, ENABLE_AD, CPOpts>& en
                                 .trace() /
                             norm);
                     }
+                    if constexpr(ENABLE_AD) {
+                        op.obs_d1(x, y) = o_d1(x, y).val();
+                    } else {
+                        op.obs_d1(x, y) = o_d1(x, y);
+                    }
                 } else {
                     auto Q1 = env.contractCorner(x, y, Opts::CORNER::UPPER_LEFT);
                     auto Q2 = env.contractCorner(x + 1, y, Opts::CORNER::UPPER_RIGHT);

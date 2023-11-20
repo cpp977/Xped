@@ -28,7 +28,7 @@ public:
                const Pattern& pat_in,
                Opts::Bond bond_in = Opts::Bond::H | Opts::Bond::V,
                Opts::DiscreteSym sym = Opts::DiscreteSym::None)
-        : Hamiltonian<Scalar, Symmetry>(params_in, pat_in, bond_in, "Heisenberg")
+        : Hamiltonian<Scalar, Symmetry>(params_in, pat_in, bond_in, "Heisenberg", sym)
     {
         if constexpr(std::is_same_v<Symmetry, Sym::SU2<Sym::SpinSU2>>) {
             this->used_params = {"J"};

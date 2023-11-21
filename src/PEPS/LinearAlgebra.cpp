@@ -148,20 +148,34 @@ avg(XPED_CONST CTM<Scalar, Symmetry, TRank, ALL_OUT_LEGS, ENABLE_AD, CPOpts>& en
             // // o(x, y) = (C2T2C3T3C4 * Q1H).trace() / norm;
             // auto norm = (Q1 * C2T2C3T3C4).trace();
             // o(x, y) = (Q1H * C2T2C3T3C4).trace() / norm;
-            if constexpr(ScalarTraits<ObsScalar>::IS_COMPLEX()) {
-                o(x, y) =
-                    0.5 *
-                    (env.rho1_h(x, y).twist(0).template contract<std::array{1, 2}, std::array{2, 1}, 0, ENABLE_AD>(shifted_op.data(x, y)).trace() +
-                     env.rho1_v(x, y).twist(0).template contract<std::array{1, 2}, std::array{2, 1}, 0, ENABLE_AD>(shifted_op.data(x, y)).trace());
+            if constexpr(ALL_OUT_LEGS) {
+                if constexpr(ScalarTraits<ObsScalar>::IS_COMPLEX()) {
+                    o(x, y) =
+                        env.rho1_h(x, y).twist(0).template contract<std::array{1, 2}, std::array{2, 1}, 0, ENABLE_AD>(shifted_op.data(x, y)).trace();
+                } else {
+                    o(x, y) = std::real(
+                        env.rho1_h(x, y).twist(0).template contract<std::array{1, 2}, std::array{2, 1}, 0, ENABLE_AD>(shifted_op.data(x, y)).trace());
+                }
             } else {
-                o(x, y) =
-                    0.5 *
-                    std::real((
-                        env.rho1_h(x, y).twist(0).template contract<std::array{1, 2}, std::array{2, 1}, 0, ENABLE_AD>(shifted_op.data(x, y)).trace() +
-                        env.rho1_v(x, y)
-                            .twist(0)
-                            .template contract<std::array{1, 2}, std::array{2, 1}, 0, ENABLE_AD>(shifted_op.data(x, y))
-                            .trace()));
+                if constexpr(ScalarTraits<ObsScalar>::IS_COMPLEX()) {
+                    o(x, y) = 0.5 * (env.rho1_h(x, y)
+                                         .twist(0)
+                                         .template contract<std::array{1, 2}, std::array{2, 1}, 0, ENABLE_AD>(shifted_op.data(x, y))
+                                         .trace() +
+                                     env.rho1_v(x, y)
+                                         .twist(0)
+                                         .template contract<std::array{1, 2}, std::array{2, 1}, 0, ENABLE_AD>(shifted_op.data(x, y))
+                                         .trace());
+                } else {
+                    o(x, y) = 0.5 * std::real((env.rho1_h(x, y)
+                                                   .twist(0)
+                                                   .template contract<std::array{1, 2}, std::array{2, 1}, 0, ENABLE_AD>(shifted_op.data(x, y))
+                                                   .trace() +
+                                               env.rho1_v(x, y)
+                                                   .twist(0)
+                                                   .template contract<std::array{1, 2}, std::array{2, 1}, 0, ENABLE_AD>(shifted_op.data(x, y))
+                                                   .trace()));
+                }
             }
             if constexpr(ENABLE_AD) {
                 op.obs(x, y) = o(x, y).val();

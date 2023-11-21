@@ -246,7 +246,7 @@ public:
 
     TMatrix<Tensor<Scalar, 2, 2, Symmetry, ENABLE_AD>> Ms;
 
-    TMatrix<Tensor<Scalar, 1, 1, Symmetry, ENABLE_AD>> Svs;
+    TMatrix<Tensor<Scalar, 1, 1, Symmetry, false>> Svs;
 
     TMatrix<Tensor<Scalar, 2, 2, Symmetry, ENABLE_AD>> rho_h;
     TMatrix<Tensor<Scalar, 2, 2, Symmetry, ENABLE_AD>> rho_v;

@@ -885,6 +885,7 @@ void CTM<Scalar, Symmetry, TRank, ALL_OUT_LEGS, ENABLE_AD, CPOpts>::symmetric_mo
     // std::tie(P, Q) = get_projectorsA(C_enlarge);
     [[maybe_unused]] double t_weight;
     [[maybe_unused]] auto [U, S, Vdag] = C_enlarge.tSVD(chi_, 1.e-10, t_weight, false);
+    if constexpr(not ENABLE_AD) { Svs[0] = S / S.maxNorm(); }
     // S.print(std::cout, true);
     // std::cout << std::endl;
     auto tmp = C_enlarge.template contract<std::array{-1, -2, -3, 1, 2, 3}, std::array{1, 2, 3, -4}, 3, TRACK_INNER>(Vdag.adjoint().eval());

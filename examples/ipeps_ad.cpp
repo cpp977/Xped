@@ -75,17 +75,17 @@ int main(int argc, char* argv[])
         // SPDLOG_INFO("I am process number #={}", world.rank);
         // SPDLOG_INFO("Number of MPI processes: {}", world.np);
 
-        using Scalar = std::complex<double>;
-        // using Scalar = double;
+        // using Scalar = std::complex<double>;
+        using Scalar = double;
 
-        using HamScalar = std::complex<double>;
-        // using HamScalar = double;
+        // using HamScalar = std::complex<double>;
+        using HamScalar = double;
         // using Symmetry = Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>;
-        using Symmetry = Xped::Sym::ZN<Xped::Sym::FChargeU1, 36>;
+        // using Symmetry = Xped::Sym::ZN<Xped::Sym::FChargeU1, 36>;
         // using Symmetry = Xped::Sym::ZN<Xped::Sym::SpinU1, 36>;
         // using Symmetry = Xped::Sym::SU2<Xped::Sym::SpinSU2>;
         // using Symmetry = Xped::Sym::U1<Xped::Sym::SpinU1>;
-        // using Symmetry = Xped::Sym::U0<double>;
+        using Symmetry = Xped::Sym::U0<double>;
         // using Symmetry =
         //     Xped::Sym::Combined<Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::ZN<Xped::Sym::FChargeU1, 2>>;
         // typedef Xped::Sym::SU2<Xped::Sym::SpinSU2> Symmetry;
@@ -164,7 +164,7 @@ int main(int argc, char* argv[])
 
         std::unique_ptr<Xped::Hamiltonian<HamScalar, Symmetry>> ham;
         if(toml::find(data.at("model"), "name").as_string() == "Heisenberg") {
-            ham = std::make_unique<Xped::Heisenberg<Symmetry, HamScalar>>(params, c.pattern, bonds);
+            ham = std::make_unique<Xped::Heisenberg<Symmetry, HamScalar>>(params, c.pattern, bonds, sym);
         } else if(toml::find(data.at("model"), "name").as_string() == "Kagome") {
             ham = std::make_unique<Xped::Kagome<Symmetry, HamScalar>>(params, c.pattern, bonds);
         } else if(toml::find(data.at("model"), "name").as_string() == "KondoNecklace") {
@@ -190,14 +190,14 @@ int main(int argc, char* argv[])
 
         Xped::TMatrix<Xped::Qbasis<Symmetry, 1>> phys_basis(c.pattern);
         phys_basis.setConstant(ham->data_h[0].uncoupledDomain()[0]);
-        constexpr bool ALL_OUT_LEGS = false;
+        constexpr bool ALL_OUT_LEGS = true;
         auto Psi = std::make_shared<Xped::iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, false>>(c, D, left_aux, top_aux, phys_basis, charges, sym);
         Psi->setRandom();
 
-        // constexpr Xped::Opts::CTMCheckpoint cp_opts{
-        //     .GROW_ALL = true, .MOVE = true, .CORNER = true, .PROJECTORS = true, .RENORMALIZE = true, .RDM = true};
         constexpr Xped::Opts::CTMCheckpoint cp_opts{
-            .GROW_ALL = false, .MOVE = false, .CORNER = false, .PROJECTORS = false, .RENORMALIZE = false, .RDM = false};
+            .GROW_ALL = true, .MOVE = true, .CORNER = true, .PROJECTORS = true, .RENORMALIZE = true, .RDM = true};
+        // constexpr Xped::Opts::CTMCheckpoint cp_opts{
+        //     .GROW_ALL = false, .MOVE = false, .CORNER = false, .PROJECTORS = false, .RENORMALIZE = false, .RDM = false};
         constexpr std::size_t TRank = 2;
         Xped::iPEPSSolverAD<Scalar, HamScalar, Symmetry, ALL_OUT_LEGS, cp_opts, TRank> Jack(o_opts, c_opts, Psi, *ham);
 

@@ -135,7 +135,7 @@ struct iPEPSSolverImag
             for(auto ichi = 0; auto chi : imag_opts.chis[iD]) {
                 Jack.opts.chi = chi;
                 Es[iD][ichi] = Jack.template solve<false>(Psi, nullptr, H);
-
+                Jack.REINIT_ENV = false;
                 if(imag_opts.display_obs or not imag_opts.obs_directory.empty()) {
                     for(auto& ob : H.obs) {
                         if(auto* one = dynamic_cast<OneSiteObservable<double, Symmetry>*>(ob.get()); one != nullptr) { avg(Jack.getCTM(), *one); }

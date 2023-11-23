@@ -34,6 +34,7 @@ CTM<Scalar, Symmetry, TRank, ALL_OUT_LEGS, ENABLE_AD, CPOpts>::CTM(const CTM<Sca
     T2s = other.T2s;
     T3s = other.T3s;
     T4s = other.T4s;
+    Svs = other.Svs;
 
     if constexpr(TRank == 1) {
         Ms.resize(cell_.pattern);
@@ -490,11 +491,11 @@ bool CTM<Scalar, Symmetry, TRank, ALL_OUT_LEGS, ENABLE_AD, CPOpts>::checkSym() c
     case Opts::DiscreteSym::C4v: {
         if((C1s[0] - C1s[0].template permute<0, 1, 0>()).norm() > 1.e-10) {
             res = false;
-            Log::debug("C is not symmetric.");
+            Log::warning("C is not symmetric.");
         }
         if((T1s[0] - T1s[0].template permute<0, 1, 0, 2, 3>()).norm() > 1.e-10) {
             res = false;
-            Log::debug("T is not symmetric.");
+            Log::warning("T is not symmetric.");
         }
     }
     }

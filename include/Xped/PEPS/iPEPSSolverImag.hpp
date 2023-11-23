@@ -174,6 +174,11 @@ struct iPEPSSolverImag
                     }
                     H.obsToFile(file, fmt::format("/{}/{}/", D, chi));
                 }
+                if(Jack.opts.EXPORT_CTM_SPECTRA) {
+                    Jack.getCTM().save_spectrum((imag_opts.working_directory / imag_opts.obs_directory).string() + "/" + H.file_name() +
+                                                fmt::format("_seed={}_id={}.h5", imag_opts.seed, imag_opts.id));
+                }
+
                 ++ichi;
             }
 

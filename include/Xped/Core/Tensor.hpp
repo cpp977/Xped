@@ -12,6 +12,8 @@
 #include "yas/serialize.hpp"
 #include "yas/std_types.hpp"
 
+#include "highfive/H5File.hpp"
+
 #include "Xped/Util/Macros.hpp"
 
 #include "Xped/Util/Bool.hpp"

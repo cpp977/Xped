@@ -90,13 +90,6 @@ CTMSolver<Scalar, Symmetry, HamScalar, ALL_OUT_LEGS, CPOpts, TRank>::solve(std::
     } else {
         auto do_tracked_steps = [this, &H](auto Psi_ad) {
             constexpr bool ENABLE_AD = std::decay_t<decltype(Psi_ad)>::ENABLE_AD;
-            if(Psi_ad.sym() == Opts::DiscreteSym::C4v) {
-                std::size_t pos = 0;
-                Psi_ad.As[pos] = 0.5 * (Psi_ad.As[pos] + Psi_ad.As[pos].template permute<0, 0, 3, 2, 1, 4>(Bool<ENABLE_AD>{})); // U-D reflection
-                Psi_ad.As[pos] = 0.5 * (Psi_ad.As[pos] + Psi_ad.As[pos].template permute<0, 2, 1, 0, 3, 4>(Bool<ENABLE_AD>{})); // L-R reflection
-                Psi_ad.As[pos] = 0.5 * (Psi_ad.As[pos] + Psi_ad.As[pos].template permute<0, 1, 2, 3, 0, 4>(Bool<ENABLE_AD>{})); // 90deg CCW rotation
-                Psi_ad.As[pos] = 0.5 * (Psi_ad.As[pos] + Psi_ad.As[pos].template permute<0, 3, 0, 1, 2, 4>(Bool<ENABLE_AD>{})); // 90deg CW rotation
-            }
             CTM<Scalar, Symmetry, TRank, ALL_OUT_LEGS, ENABLE_AD, CPOpts> Jim(Jack);
             Jim.set_A(Psi_ad);
             Jim.Psi()->updateAdags();

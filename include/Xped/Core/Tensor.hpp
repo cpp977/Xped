@@ -394,6 +394,8 @@ public:
     const auto cbegin() const { return storage_.cbegin(); }
     const auto cend() const { return storage_.cend(); }
 
+    void save(HighFive::File& file, const std::string& group_name) const;
+
     template <typename Ar>
     void serialize(Ar& ar)
     {

@@ -937,6 +937,24 @@ Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::subBlock(const 
 //! [Showcase use of leftOffset]
 
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
+void Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::save(HighFive::File& file, const std::string& group_name) const
+{
+    std::vector<std::vector<std::vector<Scalar>>> data(sector().size());
+    std::vector<std::vector<int>> qs(sector().size(), std::vector<int>(Symmetry::Nq));
+    for(auto q = 0ul; q < sector().size(); ++q) {
+        data[q].resize(PlainInterface::rows(block(q)));
+        for(auto row = 0; row < data[q].size(); ++row) {
+            data[q][row].resize(PlainInterface::cols(block(q)));
+            for(auto col = 0; col < data[q][row].size(); ++col) { data[q][row][col] = block(q)(row, col); }
+        }
+        auto qval = sector(q).data;
+        std::copy(qval.begin(), qval.end(), qs[q].begin());
+    }
+    file.createDataSet(fmt::format("{}/data", group_name), data);
+    file.createDataSet(fmt::format("{}/qs", group_name), qs);
+}
+
+template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
 typename PlainInterface::TType<Scalar, Rank + 1> Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::unitaryDomain() const
 {
     auto sorted_domain = coupledDomain();

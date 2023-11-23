@@ -874,6 +874,16 @@ void CTM<Scalar, Symmetry, TRank, ALL_OUT_LEGS, ENABLE_AD, CPOpts>::computeRDM_v
 }
 
 template <typename Scalar, typename Symmetry, std::size_t TRank, bool ALL_OUT_LEGS, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
+void CTM<Scalar, Symmetry, TRank, ALL_OUT_LEGS, ENABLE_AD, CPOpts>::save_spectrum(const std::string& filename) const
+{
+    HighFive::File file(filename, HighFive::File::OpenOrCreate);
+
+    for(int x = 0; x < cell().Lx; ++x) {
+        for(int y = 0; y < cell().Ly; ++y) { Svs(x, y).save(file, fmt::format("/{}/{}/spectrum/{}/{}", Psi()->D, chi(), x, y)); }
+    }
+}
+
+template <typename Scalar, typename Symmetry, std::size_t TRank, bool ALL_OUT_LEGS, bool ENABLE_AD, Opts::CTMCheckpoint CPOpts>
 template <bool TRACK, bool CP>
 void CTM<Scalar, Symmetry, TRank, ALL_OUT_LEGS, ENABLE_AD, CPOpts>::symmetric_move()
 {

@@ -45,6 +45,8 @@ struct CTM
 
     bool COMPARE_TO_FD = false;
 
+    bool EXPORT_CTM_SPECTRA = false;
+
     template <typename Ar>
     void serialize(Ar& ar)
     {
@@ -59,7 +61,8 @@ struct CTM
                            ("verbosity", verbosity),
                            ("load", load),
                            ("qn_scale", qn_scale),
-                           ("COMPARE_TO_FD", COMPARE_TO_FD));
+                           ("COMPARE_TO_FD", COMPARE_TO_FD),
+                           ("EXPORT_CTM_SPECTRA", EXPORT_CTM_SPECTRA));
     }
 
     inline auto info()
@@ -73,6 +76,7 @@ struct CTM
         fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• energy tolerance:", tol_E);
         fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• norm tolerance:", tol_N);
         fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• compare ad to fd:", COMPARE_TO_FD);
+        fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• export spectra if corner matrix:", EXPORT_CTM_SPECTRA);
         fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• reinit_env_tol:", reinit_env_tol);
         if(load.size() > 0) { fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• load from:", load); }
         if(load.size() > 0) { fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• scale loaded qn by:", qn_scale); }
@@ -94,6 +98,7 @@ inline CTM ctm_from_toml(const toml::value& t)
     res.load = t.contains("load") ? static_cast<std::string>(t.at("load").as_string()) : res.load;
     res.qn_scale = t.contains("qn_scale") ? (t.at("qn_scale").as_integer()) : res.qn_scale;
     res.COMPARE_TO_FD = t.contains("COMPARE_TO_FD") ? t.at("COMPARE_TO_FD").as_boolean() : res.COMPARE_TO_FD;
+    res.EXPORT_CTM_SPECTRA = t.contains("EXPORT_CTM_SPECTRA") ? t.at("EXPORT_CTM_SPECTRA").as_boolean() : res.EXPORT_CTM_SPECTRA;
     return res;
 }
 

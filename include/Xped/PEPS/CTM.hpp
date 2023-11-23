@@ -174,6 +174,8 @@ public:
     void checkHermiticity() const;
     bool checkSym() const;
 
+    void save_spectrum(const std::string& filename) const;
+
     auto info() const;
 
     const UnitCell& cell() const { return cell_; }

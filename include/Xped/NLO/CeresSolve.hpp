@@ -261,6 +261,11 @@ struct iPEPSSolverAD
         }
         custom_c((summary.iterations.size() > 0) ? summary.iterations.back() : ceres::IterationSummary{});
         obs_c((summary.iterations.size() > 0) ? summary.iterations.back() : ceres::IterationSummary{});
+        if(getCTMSolver()->opts.EXPORT_CTM_SPECTRA) {
+            getCTMSolver()->getCTM().save_spectrum((optim_opts.working_directory / optim_opts.obs_directory).string() + "/" + H.file_name() +
+                                                   fmt::format("_seed={}_id={}.h5", optim_opts.seed, optim_opts.id));
+        }
+
         Log::on_exit(optim_opts.verbosity, "{}", summary.FullReport());
     }
 

@@ -25,10 +25,12 @@ class Energy final : public ceres::FirstOrderFunction
 public:
     Energy(std::unique_ptr<CTMSolver<Scalar, Symmetry, HamScalar, ALL_OUT_LEGS, CPOpts, TRank>> solver,
            Hamiltonian<HamScalar, Symmetry>& op,
-           std::shared_ptr<iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, false>> Psi)
+           std::shared_ptr<iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, false>> Psi,
+           const std::vector<std::size_t>& chis)
         : impl(std::move(solver))
         , op(op)
         , Psi(Psi)
+        , chis(chis)
 
     {}
 
@@ -39,10 +41,25 @@ public:
         if constexpr(ScalarTraits<Scalar>::IS_COMPLEX()) {
             const std::complex<double>* params_compl = reinterpret_cast<const std::complex<double>*>(parameters);
             Psi->set_data(params_compl);
+            auto main_chi = impl->opts.chi;
+            for(auto chi : chis) {
+                impl->opts.chi = chi;
+                auto E = impl->template solve<false>(Psi, nullptr, op);
+                impl->REINIT_ENV = false;
+            }
+            impl->opts.chi = main_chi;
             std::complex<double>* gradient_compl = reinterpret_cast<std::complex<double>*>(gradient);
             cost[0] = impl->template solve<true>(Psi, gradient_compl, op);
         } else {
             Psi->set_data(parameters);
+            auto main_chi = impl->opts.chi;
+            for(auto chi : chis) {
+                Log::on_entry(impl->opts.verbosity, "  Warmup CTM steps at chi={}", chi);
+                impl->opts.chi = chi;
+                auto E = impl->template solve<false>(Psi, nullptr, op);
+                impl->REINIT_ENV = false;
+            }
+            impl->opts.chi = main_chi;
             cost[0] = impl->template solve<true>(Psi, gradient, op);
         }
         return true;
@@ -50,6 +67,7 @@ public:
     std::unique_ptr<CTMSolver<Scalar, Symmetry, HamScalar, ALL_OUT_LEGS, CPOpts, TRank>> impl;
     Hamiltonian<HamScalar, Symmetry>& op;
     std::shared_ptr<iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, false>> Psi;
+    std::vector<std::size_t> chis;
     int NumParameters() const override { return ScalarTraits<Scalar>::IS_COMPLEX() ? 2 * Psi->plainSize() : Psi->plainSize(); }
 };
 
@@ -136,8 +154,11 @@ struct iPEPSSolverAD
             } else {
                 Psi->setRandom(optim_opts.seed);
             }
-            problem = std::make_unique<ceres::GradientProblem>(new EnergyFunctor(
-                std::move(std::make_unique<CTMSolver<Scalar, Symmetry, HamScalar, ALL_OUT_LEGS, CPOpts, TRank>>(ctm_opts)), H, Psi));
+            problem = std::make_unique<ceres::GradientProblem>(
+                new EnergyFunctor(std::move(std::make_unique<CTMSolver<Scalar, Symmetry, HamScalar, ALL_OUT_LEGS, CPOpts, TRank>>(ctm_opts)),
+                                  H,
+                                  Psi,
+                                  optim_opts.warmup_chis));
             std::filesystem::create_directories(optim_opts.working_directory / optim_opts.logging_directory);
             if(optim_opts.log_format == ".h5") {
                 try {
@@ -320,7 +341,7 @@ struct iPEPSSolverAD
         // optim_opts.max_steps = optim_opts.max_steps > state.current_iter ? optim_opts.max_steps - state.current_iter : 1;
         Psi = std::make_shared<iPEPS<Scalar, Symmetry, ALL_OUT_LEGS>>(std::move(tmp_Psi));
         auto Dwain = std::make_unique<CTMSolver<Scalar, Symmetry, HamScalar, ALL_OUT_LEGS, CPOpts, TRank>>(std::move(tmp_CTMSolver));
-        problem = std::make_unique<ceres::GradientProblem>(new EnergyFunctor(std::move(Dwain), H, Psi));
+        problem = std::make_unique<ceres::GradientProblem>(new EnergyFunctor(std::move(Dwain), H, Psi, optim_opts.warmup_chis));
     }
 
     struct CustomCallback : public ceres::IterationCallback

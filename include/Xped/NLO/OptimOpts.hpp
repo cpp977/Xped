@@ -62,6 +62,8 @@ struct Optim
 
     std::size_t restarts = 1ul;
 
+    std::vector<std::size_t> warmup_chis = {};
+
     template <typename Ar>
     void serialize(Ar& ar)
     {
@@ -87,7 +89,8 @@ struct Optim
                            ("verbosity", verbosity),
                            ("display_obs", display_obs),
                            ("restarts", restarts),
-                           ("max_lbfgs_rank", max_lbfgs_rank));
+                           ("max_lbfgs_rank", max_lbfgs_rank),
+                           ("warmup_chis", warmup_chis));
     }
 
     inline auto info()
@@ -117,6 +120,7 @@ struct Optim
         fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• verbosity:", fmt::streamed(verbosity));
         fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• display obs to terminal:", display_obs);
         fmt::format_to(std::back_inserter(res), "  {:<30} {}", "• restarts:", restarts);
+        fmt::format_to(std::back_inserter(res), "  {:<30} {}", "• warmup_chis:", restarts);
         return res;
     }
 };
@@ -156,6 +160,7 @@ inline Optim optim_from_toml(const toml::value& t)
     res.seed = t.contains("seed") ? (t.at("seed").as_integer()) : res.seed;
     res.id = t.contains("id") ? (t.at("id").as_integer()) : res.id;
     res.restarts = t.contains("restarts") ? (t.at("restarts").as_integer()) : res.restarts;
+    res.warmup_chis = t.contains("warmup_chis") ? toml::find<std::vector<std::size_t>>(t, "warmup_chis") : res.warmup_chis;
     return res;
 }
 

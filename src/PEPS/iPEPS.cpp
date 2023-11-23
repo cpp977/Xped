@@ -371,7 +371,7 @@ bool iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>::checkSym() const
         return true;
     }
     case Opts::DiscreteSym::C4v: {
-        bool result = truel;
+        bool res = true;
         if((As[0] - As[0].template permute<0, 0, 3, 2, 1, 4>()).norm() > 1.e-10) {
             Log::warning("U-D not symmetric");
             res = false;

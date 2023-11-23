@@ -16,6 +16,7 @@ CTMSolver<Scalar, Symmetry, HamScalar, ALL_OUT_LEGS, CPOpts, TRank>::solve(std::
 {
     util::Stopwatch<> total_t;
     Jack.set_A(Psi);
+    if(not Psi->checkSym()) { Log::warning("CTMSolver: iPEPS is not C4v symmetric"); }
 
     if constexpr(AD) {
         Log::on_entry(opts.verbosity,
@@ -76,7 +77,9 @@ CTMSolver<Scalar, Symmetry, HamScalar, ALL_OUT_LEGS, CPOpts, TRank>::solve(std::
         Eprev = E;
     }
     Jack.checkHermiticity();
+    if(not Jack.checkSym()) { Log::warning("CTMSolver: CTM environment is not C4v symmetric"); }
     if(used_steps == 0) { used_steps = opts.max_presteps; }
+
     auto pre_time = pre_t.time_string();
     Log::per_iteration(opts.verbosity, "  {: >3} pre steps: {}", "•", pre_time);
     if constexpr(not AD) {
@@ -87,6 +90,13 @@ CTMSolver<Scalar, Symmetry, HamScalar, ALL_OUT_LEGS, CPOpts, TRank>::solve(std::
     } else {
         auto do_tracked_steps = [this, &H](auto Psi_ad) {
             constexpr bool ENABLE_AD = std::decay_t<decltype(Psi_ad)>::ENABLE_AD;
+            if(Psi_ad.sym() == Opts::DiscreteSym::C4v) {
+                std::size_t pos = 0;
+                Psi_ad.As[pos] = 0.5 * (Psi_ad.As[pos] + Psi_ad.As[pos].template permute<0, 0, 3, 2, 1, 4>(Bool<ENABLE_AD>{})); // U-D reflection
+                Psi_ad.As[pos] = 0.5 * (Psi_ad.As[pos] + Psi_ad.As[pos].template permute<0, 2, 1, 0, 3, 4>(Bool<ENABLE_AD>{})); // L-R reflection
+                Psi_ad.As[pos] = 0.5 * (Psi_ad.As[pos] + Psi_ad.As[pos].template permute<0, 1, 2, 3, 0, 4>(Bool<ENABLE_AD>{})); // 90deg CCW rotation
+                Psi_ad.As[pos] = 0.5 * (Psi_ad.As[pos] + Psi_ad.As[pos].template permute<0, 3, 0, 1, 2, 4>(Bool<ENABLE_AD>{})); // 90deg CW rotation
+            }
             CTM<Scalar, Symmetry, TRank, ALL_OUT_LEGS, ENABLE_AD, CPOpts> Jim(Jack);
             Jim.set_A(Psi_ad);
             Jim.Psi()->updateAdags();
@@ -108,18 +118,27 @@ CTMSolver<Scalar, Symmetry, HamScalar, ALL_OUT_LEGS, CPOpts, TRank>::solve(std::
         stan::math::grad(res.vi_);
         auto backward_time = backward_t.time_string();
         auto grad = Psi_ad.graddata();
+        // auto grad_ad = *Psi;
+        // grad_ad.set_data(grad.data());
+        // if(not grad_ad.checkSym()) { Log::warning("CTMSolver: gradient of iPEPS is not C4v symmetric"); }
+        // grad_ad.debug_info();
         Log::per_iteration(opts.verbosity, "  {: >3} backward pass: {}", "•", backward_time);
 
-        if(COMPARE_TO_FD) {
+        if(opts.COMPARE_TO_FD) {
             util::Stopwatch<> fd_t;
-            auto grad_fd = internal::finite_diff_gradient(do_tracked_steps, *Psi);
+            auto grad_A_fd = internal::finite_diff_gradient(do_tracked_steps, *Psi);
             auto fd_time = fd_t.time_string();
-            Log::per_iteration(opts.verbosity, "  {: >3} finite-difference gradient: {}", "•", fd_time);
-            auto grad_ad = *Psi;
-            grad_ad.set_data(grad.data());
-
-            grad_ad.debug_info();
-            grad_fd.debug_info();
+            auto grad_fd = grad_A_fd.data();
+            auto diff = std::transform_reduce(
+                grad_fd.begin(),
+                grad_fd.end(),
+                grad.begin(),
+                0.,
+                [](auto sum, auto d) { return sum + d; },
+                [](auto d1, auto d2) { return std::abs(d1 - d2); });
+            Log::per_iteration(opts.verbosity, "  {: >3} finite-difference gradient check: {} ({})", "•", diff, fd_time);
+            Log::debug(opts.verbosity, "  {: >3} fd gradient:{}", "•", grad_fd);
+            Log::debug(opts.verbosity, "  {: >3} ad gradient:{}", "•", grad);
         }
 
         for(std::size_t i = 0; i < grad.size(); ++i) { gradient[i] = grad[i]; }

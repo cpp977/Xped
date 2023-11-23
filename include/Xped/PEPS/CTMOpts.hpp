@@ -43,6 +43,8 @@ struct CTM
     std::string load = "";
     int qn_scale = 1;
 
+    bool COMPARE_TO_FD = false;
+
     template <typename Ar>
     void serialize(Ar& ar)
     {
@@ -56,7 +58,8 @@ struct CTM
                            ("init", init),
                            ("verbosity", verbosity),
                            ("load", load),
-                           ("qn_scale", qn_scale));
+                           ("qn_scale", qn_scale),
+                           ("COMPARE_TO_FD", COMPARE_TO_FD));
     }
 
     inline auto info()
@@ -69,6 +72,7 @@ struct CTM
         fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• tracked steps:", track_steps);
         fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• energy tolerance:", tol_E);
         fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• norm tolerance:", tol_N);
+        fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• compare ad to fd:", COMPARE_TO_FD);
         fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• reinit_env_tol:", reinit_env_tol);
         if(load.size() > 0) { fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• load from:", load); }
         if(load.size() > 0) { fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• scale loaded qn by:", qn_scale); }
@@ -89,6 +93,7 @@ inline CTM ctm_from_toml(const toml::value& t)
     if(t.contains("verbosity")) { res.verbosity = util::enum_from_toml<Verbosity>(t.at("verbosity")); }
     res.load = t.contains("load") ? static_cast<std::string>(t.at("load").as_string()) : res.load;
     res.qn_scale = t.contains("qn_scale") ? (t.at("qn_scale").as_integer()) : res.qn_scale;
+    res.COMPARE_TO_FD = t.contains("COMPARE_TO_FD") ? t.at("COMPARE_TO_FD").as_boolean() : res.COMPARE_TO_FD;
     return res;
 }
 

@@ -371,10 +371,24 @@ bool iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>::checkSym() const
         return true;
     }
     case Opts::DiscreteSym::C4v: {
-        if((As[0] - As[0].template permute<0, 0, 3, 2, 1, 4>()).norm() > 1.e-10) { return false; } // U-D reflection
-        if((As[0] - As[0].template permute<0, 2, 1, 0, 3, 4>()).norm() > 1.e-10) { return false; } // L-R reflection
-        if((As[0] - As[0].template permute<0, 1, 2, 3, 0, 4>()).norm() > 1.e-10) { return false; } // 90deg CCW rotation
-        if((As[0] - As[0].template permute<0, 3, 0, 1, 2, 4>()).norm() > 1.e-10) { return false; } // 90deg CW rotation
+        bool result = truel;
+        if((As[0] - As[0].template permute<0, 0, 3, 2, 1, 4>()).norm() > 1.e-10) {
+            Log::warning("U-D not symmetric");
+            res = false;
+        } // U-D reflection
+        if((As[0] - As[0].template permute<0, 2, 1, 0, 3, 4>()).norm() > 1.e-10) {
+            Log::warning("L-R not symmetric");
+            res = false;
+        } // L-R reflection
+        if((As[0] - As[0].template permute<0, 1, 2, 3, 0, 4>()).norm() > 1.e-10) {
+            Log::warning("90deg CCW not symmetric");
+            res = false;
+        } // 90deg CCW rotation
+        if((As[0] - As[0].template permute<0, 3, 0, 1, 2, 4>()).norm() > 1.e-10) {
+            Log::warning("90deg CW not symmetric");
+            res = false;
+        } // 90deg CW rotation
+        return res;
     }
     }
     return true;

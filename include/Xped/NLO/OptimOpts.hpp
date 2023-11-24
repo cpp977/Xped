@@ -119,7 +119,7 @@ struct Optim
         fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• save period:", save_period);
         fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• verbosity:", fmt::streamed(verbosity));
         fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• display obs to terminal:", display_obs);
-        fmt::format_to(std::back_inserter(res), "  {:<30} {}", "• restarts:", restarts);
+        fmt::format_to(std::back_inserter(res), "  {:<30} {}\n", "• restarts:", restarts);
         fmt::format_to(std::back_inserter(res), "  {:<30} {}", "• warmup_chis:", restarts);
         return res;
     }

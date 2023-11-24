@@ -213,7 +213,7 @@ int main(int argc, char* argv[])
                 }
             }
             if(Jack.opts.EXPORT_CTM_SPECTRA) {
-                Jack.getCTM().save_spectrum(save_p.string() + "/" + H.file_name() + fmt::format("_D={}_chi={}.h5", Psi->D, chi));
+                Jack.getCTM().save_spectrum(save_p.string() + "/" + ham->file_name() + fmt::format("_D={}_chi={}.h5", Psi->D, chi));
             }
             Xped::Log::per_iteration("  Observables:\n{}", ham->getObsString("    "));
             HighFive::File file((save_p).string() + "/" + ham->file_name() + fmt::format("_chi_ramp.h5"), HighFive::File::OpenOrCreate);

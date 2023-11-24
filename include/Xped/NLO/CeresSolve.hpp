@@ -43,8 +43,9 @@ public:
             Psi->set_data(params_compl);
             auto main_chi = impl->opts.chi;
             for(auto chi : chis) {
+                Log::on_entry(impl->opts.verbosity, "  Warmup CTM steps at chi={}", chi);
                 impl->opts.chi = chi;
-                auto E = impl->template solve<false>(Psi, nullptr, op);
+                impl->template solve<false>(Psi, nullptr, op);
                 impl->REINIT_ENV = false;
             }
             impl->opts.chi = main_chi;
@@ -56,7 +57,7 @@ public:
             for(auto chi : chis) {
                 Log::on_entry(impl->opts.verbosity, "  Warmup CTM steps at chi={}", chi);
                 impl->opts.chi = chi;
-                auto E = impl->template solve<false>(Psi, nullptr, op);
+                impl->template solve<false>(Psi, nullptr, op);
                 impl->REINIT_ENV = false;
             }
             impl->opts.chi = main_chi;

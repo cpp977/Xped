@@ -275,6 +275,9 @@ public:
     //     return permute<false, shift, p...>();
     // }
 
+    template <std::size_t... pds>
+    Tensor<Scalar, Rank, Rank, Symmetry, false, AllocationPolicy> getRotOperator() const;
+
     template <int shift, std::size_t... p>
     Tensor<Scalar, Rank + shift, CoRank - shift, Symmetry, false, AllocationPolicy> permute_adj() const;
 

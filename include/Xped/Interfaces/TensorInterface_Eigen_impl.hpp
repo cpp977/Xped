@@ -34,6 +34,10 @@ struct TensorInterface
     template <typename Scalar, int Rank>
     static cTType<Scalar, Rank> construct(const cMapTType<Scalar, Rank>& map);
 
+    template <typename Scalar, std::size_t Rank>
+    static TType<Scalar, Rank>
+    construct_permutation(const std::array<Indextype, Rank / 2>& dims, const util::Permutation& p, const mpi::XpedWorld& = mpi::getUniverse());
+
     // map constructors
     template <typename Scalar, std::size_t Rank>
     static cMapTType<Scalar, Rank> cMap(const Scalar* data, const std::array<Indextype, Rank>& dims);

@@ -35,6 +35,54 @@ cTType<Scalar, Rank> TensorInterface::construct(const cMapTType<Scalar, Rank>& m
     return cTType<Scalar, Rank>(map);
 }
 
+template <typename Scalar, std::size_t Rank>
+TType<Scalar, Rank>
+TensorInterface::construct_permutation(const std::array<Indextype, Rank / 2>& dims, const util::Permutation& p, const mpi::XpedWorld&)
+{
+    assert(Rank == 2 * p.N and "Bad size of permutation.");
+    std::array<TType<Scalar, 2ul>, Rank> deltas{};
+    std::array<Indextype, Rank> shuffle_dims;
+    for(std::size_t i = 0; i < Rank; ++i) {
+        if(i < p.N) {
+            shuffle_dims[i] = 2 * p.pi[i];
+        } else {
+            shuffle_dims[i] = 2 * (i - p.N + 1) - 1;
+        }
+    }
+    fmt::print("shuffle={}\n", shuffle_dims);
+    for(std::size_t i = 0; i < p.N; ++i) {
+        deltas[i] = construct<Scalar>(std::array{dims[i], dims[i]});
+        setZero(deltas[i]);
+        for(auto j = 0; j < dims[i]; ++j) { deltas[i](j, j) = 1.; }
+    }
+    if constexpr(Rank == 2) {
+        return deltas[0];
+    } else if constexpr(Rank == 4) {
+        fmt::print("Rank=4\n");
+        auto tmp1 = contract<Scalar, 2, 2>(deltas[0], deltas[1]);
+        std::cout << tmp1.reshape(std::array{9, 9}) << std::endl << std::endl;
+        auto res = tmp1.shuffle(shuffle_dims);
+        // auto res2 = tmp1.shuffle(std::array{2, 0, 1, 3});
+        std::cout << res.reshape(std::array{9, 9}) << std::endl << std::endl;
+        // std::cout << res2.reshape(std::array{9, 9}) << std::endl;
+        fmt::print("return\n");
+        return res;
+    } else if constexpr(Rank == 6) {
+        auto tmp1 = contract<Scalar, 2, 2>(deltas[0], deltas[1]);
+        auto tmp2 = contract<Scalar, 4, 2>(tmp1, deltas[2]);
+        auto res = tmp2.shuffle(shuffle_dims);
+        return res;
+    } else if constexpr(Rank == 8) {
+        auto tmp1 = contract<Scalar, 2, 2>(deltas[0], deltas[1]);
+        auto tmp2 = contract<Scalar, 4, 2>(tmp1, deltas[2]);
+        auto tmp3 = contract<Scalar, 6, 2>(tmp2, deltas[3]);
+        auto res = tmp3.shuffle(shuffle_dims);
+        return res;
+    } else {
+        assert(false and "construct_permutation is not implementd for Rank>8");
+    }
+}
+
 // map constructors
 template <typename Scalar, std::size_t Rank>
 cMapTType<Scalar, Rank> TensorInterface::cMap(const Scalar* data, const std::array<Indextype, Rank>& dims)

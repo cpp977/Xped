@@ -211,6 +211,47 @@ Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::permute_impl(se
 }
 
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
+template <std::size_t... pds>
+Tensor<Scalar, Rank, Rank, Symmetry, false, AllocationPolicy> Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::getRotOperator() const
+{
+    std::array<std::size_t, Rank> arr_domain = {pds...};
+    util::Permutation p_domain(arr_domain);
+
+    std::array<IndexType, Rank + CoRank> arr_total;
+    std::iota(arr_total.begin(), arr_total.end(), 0);
+    std::copy(p_domain.pi.begin(), p_domain.pi.end(), arr_total.begin());
+
+    auto new_domain = uncoupledDomain();
+    p_domain.apply(new_domain);
+
+    Tensor<Scalar, Rank, Rank, Symmetry, false, AllocationPolicy> out(new_domain, new_domain, this->world());
+    out.setZero();
+
+    for(size_t i = 0; i < sector().size(); ++i) {
+        auto domain_trees = coupledDomain().tree(sector(i));
+        for(const auto& domain_tree : domain_trees) {
+            auto permuted_domain_trees = domain_tree.permute(p_domain);
+
+            for(const auto& [permuted_domain_tree, coeff_domain] : permuted_domain_trees) {
+                if(std::abs(coeff_domain) < 1.e-10) { continue; }
+
+                auto it = out.dict().find(sector(i));
+                assert(it != out.dict().end());
+                std::array<Indextype, Rank> ddims{};
+                std::copy(domain_tree.dims.begin(), domain_tree.dims.end(), ddims.begin());
+                auto T = PlainInterface::construct_permutation<Scalar, 2 * Rank>(ddims, p_domain, world());
+                IndexType row = out.coupledDomain().leftOffset(domain_tree);
+                IndexType col = out.coupledCodomain().leftOffset(permuted_domain_tree);
+                IndexType rows = domain_tree.dim;
+                IndexType cols = permuted_domain_tree.dim;
+                PlainInterface::add_to_block_from_tensor<Rank + Rank>(out.block(it->second), row, col, rows, cols, coeff_domain, T);
+            }
+        }
+    }
+    return out;
+}
+
+template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
 template <int shift, std::size_t... ps>
 Tensor<Scalar, Rank + shift, CoRank - shift, Symmetry, false, AllocationPolicy>
 Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::permute_adj() const

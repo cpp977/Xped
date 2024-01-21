@@ -115,48 +115,113 @@ int main(int argc, char* argv[])
 
     SPDLOG_INFO("Number of MPI processes: {}", world.np);
 
-    std::string config_file = argc > 1 ? argv[1] : "config.toml";
-    toml::value data;
-    try {
-        data = toml::parse(config_file);
-        // std::cout << data << "\n";
-    } catch(const toml::syntax_error& err) {
-        std::cerr << "Parsing failed:\n" << err.what() << "\n";
-        return 1;
-    }
-
-    std::filesystem::path p2json;
-
-    if(data["json"].contains("load")) {
-        std::filesystem::path tmp_of(static_cast<std::string>(data["json"].at("load").as_string()));
-        if(tmp_of.is_relative()) {
-            p2json = std::filesystem::current_path() / tmp_of;
-        } else {
-            p2json = tmp_of;
-        }
-    }
-
     using Symmetry = Xped::Sym::U0<>;
+    // using Symmetry = Xped::Sym::SU2<Xped::Sym::SpinSU2>;
     using Scalar = double;
-    Xped::UnitCell c(1, 1);
-    Xped::TMatrix<Symmetry::qType> charges(c.pattern);
-    charges.setConstant(Symmetry::qvacuum());
-    std::map<std::string, Xped::Param> params = {
-        {"Jxy", Xped::Param{1.}}, {"Jz", Xped::Param{1.}}, {"J", Xped::Param{1.}}, {"Bz", Xped::Param{0.}}, {"J2", Xped::Param{0.}}};
-    Xped::Opts::Bond bonds = Xped::Opts::Bond::V | Xped::Opts::Bond::H;
-    std::unique_ptr<Xped::Hamiltonian<double, Symmetry>> ham;
-    ham = std::make_unique<Xped::Heisenberg<Symmetry>>(params, c.pattern, bonds);
-    Xped::TMatrix<Xped::Qbasis<Symmetry, 1>> phys_basis(c.pattern);
-    phys_basis.setConstant(ham->data_h[0].uncoupledDomain()[0]);
+    static thread_local std::mt19937 engine(std::random_device{}());
+    engine.seed(0);
 
-    std::size_t D = 2;
-    if(data["random"].contains("D")) { D = static_cast<std::size_t>(data["random"].at("D").as_integer()); }
-    Xped::TMatrix<Xped::Qbasis<Symmetry, 1>> left_aux(c.pattern), top_aux(c.pattern);
-    Xped::iPEPS<Scalar, Symmetry, false> Psi(c, D, left_aux, top_aux, phys_basis, charges, Xped::Opts::DiscreteSym::C4v);
-    std::size_t seed = 1;
-    if(data["random"].contains("seed")) { seed = static_cast<std::size_t>(data["random"].at("seed").as_integer()); }
-    Psi.setRandom(seed);
-    Psi.normalize();
+    Xped::Qbasis<Symmetry> B;
+    // B.push_back({2}, 4);
+    B.push_back({}, 2);
+    Xped::Qbasis<Symmetry> loc;
+    loc.push_back({}, 1);
+
+    Xped::Tensor<Scalar, 4, 0, Symmetry> T1({{B, B, B, B}}, {{}});
+
+    T1.setRandom(engine);
+
+    fmt::print("Identity: 0, 1, 3, 4:\n");
+    T1.print(std::cout, true);
+    std::cout << std::endl;
+
+    auto rot = T1.getRotOperator<2, 3, 1, 0>();
+    // fmt::print("Rot Op: 1,0:\n");
+    // rot.print(std::cout, true);
+    // std::cout << std::endl;
+
+    auto T2 = rot * T1;
+    fmt::print("Swap: 2, 3, 1, 0:\n");
+    T2.print(std::cout, true);
+    std::cout << std::endl;
+
+    auto T2p = T1.template permute<0, 2, 3, 1, 0>();
+    fmt::print("Swap2: 2, 3, 1, 0:\n");
+    T2p.print(std::cout, true);
+    std::cout << std::endl;
+
+    auto res = (T2 - T2p).norm();
+    fmt::print("check={}\n", res);
+    // fmt::print("U-D: 2,1,0,3:\n");
+    // auto T2 = T1.template permute<0, 2, 1, 0, 3, 4>();
+    // T2.print(std::cout, true);
+    // std::cout << std::endl;
+
+    // fmt::print("L-R: 0,3,2,1:\n");
+    // auto T3 = T1.template permute<0, 0, 3, 2, 1, 4>();
+    // T3.print(std::cout, true);
+    // std::cout << std::endl;
+
+    // fmt::print("90deg CWR: 3,0,1,2:\n");
+    // auto T4 = T1.template permute<0, 3, 0, 1, 2, 4>();
+    // T4.print(std::cout, true);
+    // std::cout << std::endl;
+
+    // fmt::print("90deg CCWR: 1,2,3,0:\n");
+    // auto T5 = T1.template permute<0, 1, 2, 3, 0, 4>();
+    // T5.print(std::cout, true);
+    // std::cout << std::endl;
+
+    // fmt::print("180deg R: 2,3,0,1:\n");
+    // auto T6 = T1.template permute<0, 2, 3, 0, 1, 4>();
+    // T6.print(std::cout, true);
+    // std::cout << std::endl;
+
+    // fmt::print("Diag1 Refl: 1,0,3,2:\n");
+    // auto T7 = T1.template permute<0, 1, 0, 3, 2, 4>();
+    // T7.print(std::cout, true);
+    // std::cout << std::endl;
+
+    // fmt::print("Diag1 Refl: 3,2,1,0:\n");
+    // auto T8 = T1.template permute<0, 3, 2, 1, 0, 4>();
+    // T8.print(std::cout, true);
+    // std::cout << std::endl;
+
+    // auto Tsym = (0.125 * (T1 + T2 + T3 + T4 + T5 + T6 + T7 + T8)).eval();
+    // fmt::print("Symmetric:\n");
+    // Tsym.print(std::cout, true);
+    // std::cout << std::endl;
+
+    // // fmt::print("Trees:\n{}\n", Tsym.coupledDomain().printTrees());
+
+    // auto computeMap = [](auto A) {
+    //     auto comp = [](Scalar s1, Scalar s2) {
+    //         if(std::abs(s1 - s2) < 1.e-12) { return false; }
+    //         return s1 < s2;
+    //     };
+    //     std::map<Scalar, std::size_t, decltype(comp)> unique(comp);
+    //     // std::unordered_map<Scalar, std::size_t> unique;
+    //     std::size_t count_tot = 0ul;
+    //     std::size_t count_unique = 0ul;
+    //     std::pair<std::size_t, std::vector<std::size_t>> res_map;
+    //     res_map.second.resize(A.plainSize());
+    //     for(auto it = A.begin(); it != A.end(); ++it) {
+    //         if(auto it_unique = unique.find(*it); it_unique == unique.end()) {
+    //             res_map.second[count_tot] = count_unique;
+    //             unique.insert(std::make_pair(*it, count_unique));
+    //             ++count_unique;
+    //         } else {
+    //             res_map.second[count_tot] = it_unique->second;
+    //         }
+    //         ++count_tot;
+    //     }
+    //     res_map.first = count_unique;
+    //     fmt::print("#unique elements={}, res_map:\n{}\n", res_map.first, res_map.second);
+    //     return res_map;
+    // };
+
+    // auto res = computeMap(Tsym);
+    // fmt::print("res={}\n", res);
     // Psi.As[0].print(std::cout, true);
     // std::cout << std::endl;
     // auto norm1 = fourByfour(Psi);

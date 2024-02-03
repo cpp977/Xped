@@ -115,84 +115,103 @@ int main(int argc, char* argv[])
 
     SPDLOG_INFO("Number of MPI processes: {}", world.np);
 
-    using Symmetry = Xped::Sym::U0<>;
-    // using Symmetry = Xped::Sym::SU2<Xped::Sym::SpinSU2>;
+    // using Symmetry = Xped::Sym::U0<>;
+    using Symmetry = Xped::Sym::SU2<Xped::Sym::SpinSU2>;
     using Scalar = double;
     static thread_local std::mt19937 engine(std::random_device{}());
     engine.seed(0);
-
+    std::size_t doublets = atoi(argv[1]);
     Xped::Qbasis<Symmetry> B;
-    // B.push_back({2}, 4);
-    B.push_back({}, 2);
+    B.push_back({1}, 1);
+    B.push_back({2}, doublets);
+    // B.push_back({3}, 1);
+    // B.push_back({4}, 1);
+    B.sort();
+    // B.push_back({}, doublets);
     Xped::Qbasis<Symmetry> loc;
-    loc.push_back({}, 1);
+    loc.push_back({2}, 1);
 
-    Xped::Tensor<Scalar, 4, 0, Symmetry> T1({{B, B, B, B}}, {{}});
-
-    T1.setRandom(engine);
-
-    fmt::print("Identity: 0, 1, 3, 4:\n");
-    T1.print(std::cout, true);
-    std::cout << std::endl;
-
-    auto rot = T1.getRotOperator<2, 3, 1, 0>();
-    // fmt::print("Rot Op: 1,0:\n");
-    // rot.print(std::cout, true);
+    using PEPSTensor = Xped::Tensor<Scalar, 4, 1, Symmetry>;
+    // Xped::Tensor<Scalar, 4, 1, Symmetry> T1({{B,B,B,B}}, {{loc}});
+    // T1.setRandom(engine);
+    // fmt::print("Identity: 0, 1, 3, 4:\n");
+    // T1.print(std::cout, true);
     // std::cout << std::endl;
 
-    auto T2 = rot * T1;
-    fmt::print("Swap: 2, 3, 1, 0:\n");
-    T2.print(std::cout, true);
-    std::cout << std::endl;
 
-    auto T2p = T1.template permute<0, 2, 3, 1, 0>();
-    fmt::print("Swap2: 2, 3, 1, 0:\n");
-    T2p.print(std::cout, true);
-    std::cout << std::endl;
+    // fmt::print("Z2 discrete sym svs:\n");
+    // S.print(std::cout, true);
+    // std::cout << std::endl;
 
-    auto res = (T2 - T2p).norm();
-    fmt::print("check={}\n", res);
-    // fmt::print("U-D: 2,1,0,3:\n");
-    // auto T2 = T1.template permute<0, 2, 1, 0, 3, 4>();
+    // auto sym = (rot01*T1 + rot10 * T1).eval();
+
+    // fmt::print("Symmetric\n");
+    // sym.print(std::cout, true);
+    // std::cout << std::endl;
+    // auto T2 = rot * T1;
+    // fmt::print("Swap: 2, 3, 1, 0:\n");
     // T2.print(std::cout, true);
     // std::cout << std::endl;
 
-    // fmt::print("L-R: 0,3,2,1:\n");
-    // auto T3 = T1.template permute<0, 0, 3, 2, 1, 4>();
-    // T3.print(std::cout, true);
+    // auto R1 = T1.getRotOperator<0, 2, 3, 1>();
+    // fmt::print("Swap2: 2, 3, 1, 0:\n");
+    // T2p.print(std::cout, true);
     // std::cout << std::endl;
+
+    // auto res = (T2 - T2p).norm();
+    // fmt::print("check={}\n", res);
+    // fmt::print("U-D: 2,1,0,3:\n");
+    // auto R1 = T1.getRotOperator<2, 1, 0, 3>();
+
+    // // fmt::print("L-R: 0,3,2,1:\n");
+    // auto R2 = T1.getRotOperator<0, 3, 2, 1>();
+
+    // // fmt::print("90deg CWR: 3,0,1,2:\n");
+    // auto R3 = T1.getRotOperator<3, 0, 1, 2>();
+
+    // // fmt::print("90deg CCWR: 1,2,3,0:\n");
+    // auto R4 = T1.getRotOperator<1, 2, 3, 0>();
+
+    // // fmt::print("180deg R: 2,3,0,1:\n");
+    // auto R5 = T1.getRotOperator<2, 3, 0, 1>();
+
+    // // fmt::print("Diag1 Refl: 1,0,3,2:\n");
+    // auto R6 = T1.getRotOperator<1, 0, 3, 2>();
+
+    // // fmt::print("Diag1 Refl: 3,2,1,0:\n");
+    // auto R7 = T1.getRotOperator<3, 2, 1, 0>();
+    // auto R8 = T1.getRotOperator<0, 1, 2, 3>();
+    // auto res = (0.125 * (R1 + R2 + R3 + R4 + R5 + R6 + R7 + R8)).eval();
+    // double trunc = 0;
+    // auto [U,S,Vdag] = res.tSVD(10000ul, 1.e-12, trunc);
+    // std::map<int, int> ref{{1,2}, {2,10}, {3,30}, {4,68}, {5, -1}};
+
+    auto R1 = PEPSTensor::RotOperator<2, 1, 0, 3>({{B, B, B, B}}, {{loc}});
+
+    // fmt::print("L-R: 0,3,2,1:\n");
+    auto R2 = PEPSTensor::RotOperator<0, 3, 2, 1>({{B, B, B, B}}, {{loc}});
 
     // fmt::print("90deg CWR: 3,0,1,2:\n");
-    // auto T4 = T1.template permute<0, 3, 0, 1, 2, 4>();
-    // T4.print(std::cout, true);
-    // std::cout << std::endl;
+    auto R3 = PEPSTensor::RotOperator<3, 0, 1, 2>({{B, B, B, B}}, {{loc}});
 
     // fmt::print("90deg CCWR: 1,2,3,0:\n");
-    // auto T5 = T1.template permute<0, 1, 2, 3, 0, 4>();
-    // T5.print(std::cout, true);
-    // std::cout << std::endl;
+    auto R4 = PEPSTensor::RotOperator<1, 2, 3, 0>({{B, B, B, B}}, {{loc}});
 
     // fmt::print("180deg R: 2,3,0,1:\n");
-    // auto T6 = T1.template permute<0, 2, 3, 0, 1, 4>();
-    // T6.print(std::cout, true);
-    // std::cout << std::endl;
+    auto R5 = PEPSTensor::RotOperator<2, 3, 0, 1>({{B, B, B, B}}, {{loc}});
 
     // fmt::print("Diag1 Refl: 1,0,3,2:\n");
-    // auto T7 = T1.template permute<0, 1, 0, 3, 2, 4>();
-    // T7.print(std::cout, true);
-    // std::cout << std::endl;
+    auto R6 = PEPSTensor::RotOperator<1, 0, 3, 2>({{B, B, B, B}}, {{loc}});
 
     // fmt::print("Diag1 Refl: 3,2,1,0:\n");
-    // auto T8 = T1.template permute<0, 3, 2, 1, 0, 4>();
-    // T8.print(std::cout, true);
-    // std::cout << std::endl;
-
-    // auto Tsym = (0.125 * (T1 + T2 + T3 + T4 + T5 + T6 + T7 + T8)).eval();
-    // fmt::print("Symmetric:\n");
-    // Tsym.print(std::cout, true);
-    // std::cout << std::endl;
-
-    // // fmt::print("Trees:\n{}\n", Tsym.coupledDomain().printTrees());
+    auto R7 = PEPSTensor::RotOperator<3, 2, 1, 0>({{B, B, B, B}}, {{loc}});
+    auto R8 = PEPSTensor::RotOperator<0, 1, 2, 3>({{B, B, B, B}}, {{loc}});
+    auto res = (0.125 * (R1 + R2 + R3 + R4 + R5 + R6 + R7 + R8)).eval();
+    double trunc = 0;
+    auto [U,S,Vdag] = res.tSVD(10000ul, 1.e-12, trunc);
+    std::map<int, int> ref{{1,2}, {2,10}, {3,30}, {4,68}, {5, -1}};
+    fmt::print("# svs={} vs ref={}\n", S.block(0).rows(), ref[doublets]);
+    // // // fmt::print("Trees:\n{}\n", Tsym.coupledDomain().printTrees());
 
     // auto computeMap = [](auto A) {
     //     auto comp = [](Scalar s1, Scalar s2) {

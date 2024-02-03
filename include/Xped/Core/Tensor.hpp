@@ -276,7 +276,10 @@ public:
     // }
 
     template <std::size_t... pds>
-    Tensor<Scalar, Rank, Rank, Symmetry, false, AllocationPolicy> getRotOperator() const;
+    static Tensor<Scalar, Rank, Rank, Symmetry, false, AllocationPolicy>
+    RotOperator(const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, Rank>& basis_domain,
+                const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, CoRank>& basis_codomain,
+                const mpi::XpedWorld& world = mpi::getUniverse());
 
     template <int shift, std::size_t... p>
     Tensor<Scalar, Rank + shift, CoRank - shift, Symmetry, false, AllocationPolicy> permute_adj() const;

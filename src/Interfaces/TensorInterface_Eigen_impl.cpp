@@ -49,7 +49,6 @@ TensorInterface::construct_permutation(const std::array<Indextype, Rank / 2>& di
             shuffle_dims[i] = 2 * (i - p.N + 1) - 1;
         }
     }
-    fmt::print("shuffle={}\n", shuffle_dims);
     for(std::size_t i = 0; i < p.N; ++i) {
         deltas[i] = construct<Scalar>(std::array{dims[i], dims[i]});
         setZero(deltas[i]);
@@ -58,14 +57,14 @@ TensorInterface::construct_permutation(const std::array<Indextype, Rank / 2>& di
     if constexpr(Rank == 2) {
         return deltas[0];
     } else if constexpr(Rank == 4) {
-        fmt::print("Rank=4\n");
+        // fmt::print("Rank=4\n");
         auto tmp1 = contract<Scalar, 2, 2>(deltas[0], deltas[1]);
-        std::cout << tmp1.reshape(std::array{9, 9}) << std::endl << std::endl;
+        // std::cout << tmp1.reshape(std::array{9, 9}) << std::endl << std::endl;
         auto res = tmp1.shuffle(shuffle_dims);
         // auto res2 = tmp1.shuffle(std::array{2, 0, 1, 3});
-        std::cout << res.reshape(std::array{9, 9}) << std::endl << std::endl;
+        // std::cout << res.reshape(std::array{9, 9}) << std::endl << std::endl;
         // std::cout << res2.reshape(std::array{9, 9}) << std::endl;
-        fmt::print("return\n");
+	// fmt::print("return\n");
         return res;
     } else if constexpr(Rank == 6) {
         auto tmp1 = contract<Scalar, 2, 2>(deltas[0], deltas[1]);

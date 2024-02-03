@@ -73,6 +73,10 @@ const std::string XPED_BLAS_STR = "None";
 #    endif
 #endif
 
+#ifndef XPED_HAS_NTTP
+#    error "Compiler has no non-type-template-parameter support"
+#endif
+
 #if __has_include("boost/functional/hash.hpp")
 #    define XPED_HAS_BOOST_HASH_COMBINE 1
 #endif

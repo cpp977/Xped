@@ -321,7 +321,6 @@ public:
     template <std::size_t... legs>
     Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy> shiftQN(std::array<qType, sizeof...(legs)> charges) const;
 
-#if XPED_HAS_NTTP
     template <auto a1,
               auto a2,
               std::size_t ResRank,
@@ -346,7 +345,6 @@ public:
                                 other.template permute<shift2>(util::constFct::as_sequence<p2>(), Bool<TRACK>{}))
             .template permute<shiftres>(util::constFct::as_sequence<pres>(), Bool<TRACK>{});
     }
-#endif
 
     std::tuple<Tensor<Scalar, Rank, 1, Symmetry, false, AllocationPolicy>,
                Tensor<RealScalar, 1, 1, Symmetry, false, AllocationPolicy>,

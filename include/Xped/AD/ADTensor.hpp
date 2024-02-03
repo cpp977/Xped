@@ -190,7 +190,6 @@ public:
         return permute<shift, p...>(Bool<TRACK>{});
     }
 
-#if XPED_HAS_NTTP
     template <auto a1,
               auto a2,
               std::size_t ResRank,
@@ -218,7 +217,6 @@ public:
                                 other.template permute<shift2>(util::constFct::as_sequence<p2>(), Bool<TRACK>{}))
             .template permute<shiftres>(util::constFct::as_sequence<pres>(), Bool<TRACK>{});
     }
-#endif
 
     template <bool TRACK = true>
     std::tuple<XTensor<TRACK, Scalar, Rank, 1, Symmetry, AllocationPolicy>,

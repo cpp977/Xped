@@ -1,6 +1,8 @@
 #ifndef XPED_TMATRIX_H_
 #define XPED_TMATRIX_H_
 
+#include <numeric>
+
 #include "yas/serialize.hpp"
 #include "yas/std_types.hpp"
 

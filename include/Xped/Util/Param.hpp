@@ -3,6 +3,8 @@
 
 #include <any>
 
+#include "fmt/core.h"
+
 namespace Xped {
 
 struct Param

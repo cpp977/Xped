@@ -8,11 +8,11 @@
 #include <utility>
 /// \endcond
 
-#include "Xped/Symmetry/qarray.hpp"
-
 #include "Xped/Util/JoinArray.hpp"
 
+#include "Xped/Symmetry/qarray.hpp"
 #include "Xped/Symmetry/SymBase.hpp"
+#include "Xped/Symmetry/kind_dummies.hpp"
 
 namespace Xped::Sym {
 

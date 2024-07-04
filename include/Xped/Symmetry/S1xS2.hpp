@@ -12,6 +12,8 @@
 
 #include "Xped/Util/JoinArray.hpp"
 
+#include "Xped/Symmetry/SymBase.hpp"
+
 namespace Xped::Sym {
 
 template <typename S1, typename S2>

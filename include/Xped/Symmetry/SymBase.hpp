@@ -4,6 +4,7 @@
 #include <cmath>
 #include <set>
 #include <unordered_set>
+#include <vector>
 
 namespace Xped::Sym {
 template <typename Derived>

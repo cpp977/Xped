@@ -238,7 +238,7 @@ Tensor<Scalar, Rank, Rank, Symmetry, false, AllocationPolicy> Tensor<Scalar, Ran
 
                 auto it = out.dict().find(tmp.sector(i));
                 assert(it != out.dict().end());
-                std::array<Indextype, Rank> ddims{};
+                std::array<IndexType, Rank> ddims{};
                 std::copy(domain_tree.dims.begin(), domain_tree.dims.end(), ddims.begin());
                 auto T = PlainInterface::construct_permutation<Scalar, 2 * Rank>(ddims, p_domain, world);
                 IndexType row = out.coupledDomain().leftOffset(permuted_domain_tree);

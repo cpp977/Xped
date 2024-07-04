@@ -1,4 +1,5 @@
 #include <assert.hpp>
+#include <numeric>
 
 #include "Xped/PEPS/Pattern.hpp"
 

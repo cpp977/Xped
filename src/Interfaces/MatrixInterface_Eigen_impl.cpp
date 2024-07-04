@@ -3,7 +3,7 @@
 #include "unsupported/Eigen/KroneckerProduct"
 
 #include "Xped/Util/Mpi.hpp"
-#include "Xped/Util/Random.hpp"
+#include "Xped/Core/ScalarTraits.hpp"
 
 #include "Xped/Interfaces/MatrixMultiplication.hpp"
 

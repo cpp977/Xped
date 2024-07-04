@@ -1,10 +1,14 @@
 #ifndef TENSOR_INTERFACE_EIGEN_IMPL_H_
 #define TENSOR_INTERFACE_EIGEN_IMPL_H_
 
+#include "yas/serialize.hpp"
+
 #include <Eigen/Dense>
+#include <seq/seq.h>
 #include <unsupported/Eigen/CXX11/Tensor>
 
 #include "Xped/Util/Mpi.hpp"
+#include "Xped/Util/Permutations.hpp"
 
 namespace Xped {
 

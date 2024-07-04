@@ -3,7 +3,9 @@
 
 #include "Xped/Core/Qbasis.hpp"
 
-#include "TensorBase.hpp"
+
+#include "Xped/Core/TensorBase.hpp"
+#include "Xped/Core/CoeffUnaryOp.hpp"
 
 namespace Xped {
 

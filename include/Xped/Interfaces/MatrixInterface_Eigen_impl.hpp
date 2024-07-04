@@ -3,6 +3,8 @@
 
 #include <random>
 
+#include "yas/serialize.hpp"
+
 #include "Eigen/Core"
 #include "Eigen/Dense"
 #include <unsupported/Eigen/MatrixFunctions>

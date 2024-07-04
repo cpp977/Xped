@@ -4,7 +4,6 @@
 #include <algorithm>
 #include <array>
 #include <cassert>
-#include <complex>
 #include <fstream>
 #include <iostream>
 #include <numeric>
@@ -12,6 +11,7 @@
 #include <vector>
 
 #include <boost/algorithm/string.hpp>
+#include <boost/functional/hash.hpp>
 
 namespace Xped::util {
 

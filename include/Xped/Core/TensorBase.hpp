@@ -110,7 +110,7 @@ public:
     operator*(TensorBase<OtherDerived>&& other) XPED_CONST
     {
         TensorBase<OtherDerived>& tmp = other;
-        return this->operator*<TRACK>(tmp);
+        return this->operator* <TRACK>(tmp);
     }
 
     template <bool = false>
@@ -127,7 +127,7 @@ public:
     typename ScalarTraits<Scalar>::Real
     maxCoeff(std::size_t& max_block, PlainInterface::MIndextype& max_row, PlainInterface::MIndextype& max_col) XPED_CONST;
 
-    Scalar coeff(std::size_t q, Indextype row, Indextype col) const { return derived().block(q)(row, col); }
+    Scalar coeff(std::size_t q, PlainInterface::MIndextype row, PlainInterface::MIndextype col) const { return derived().block(q)(row, col); }
 
     inline Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy> eval() const
     {

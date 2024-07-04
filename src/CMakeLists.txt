@@ -108,6 +108,12 @@ else()
     tabulate::tabulate
     spdlog::spdlog
     seq::seq
+    assert::assert
+    HighFive
+    HighFive_libdeps
+    HighFive_HighFive
+    WignerSUN::wignersun
+    libdeps
     )
 
   if(${XPED_TENSOR_LIB} STREQUAL "Cyclops")

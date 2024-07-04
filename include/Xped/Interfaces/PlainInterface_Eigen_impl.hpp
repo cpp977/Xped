@@ -4,6 +4,10 @@
 #include <Eigen/Core>
 #include <unsupported/Eigen/CXX11/Tensor>
 
+#include "Xped/Interfaces/MatrixInterface.hpp"
+#include "Xped/Interfaces/TensorInterface.hpp"
+#include "Xped/Interfaces/VectorInterface.hpp"
+
 namespace Xped {
 
 struct PlainInterface : public MatrixInterface, public TensorInterface, public VectorInterface

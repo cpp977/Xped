@@ -1,6 +1,5 @@
 #include <array>
 #include <iostream>
-#include <string>
 #include <unordered_map>
 
 using std::cout;
@@ -13,6 +12,7 @@ using std::size_t;
 
 #include "Xped/Core/FusionTree.hpp"
 #include "Xped/Core/treepair.hpp"
+#include "Xped/Core/ScalarTraits.hpp"
 #include "Xped/Symmetry/SU2.hpp"
 #include "Xped/Symmetry/U0.hpp"
 #include "Xped/Symmetry/U1.hpp"

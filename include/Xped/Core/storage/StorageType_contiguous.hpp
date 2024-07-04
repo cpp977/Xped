@@ -4,6 +4,7 @@
 #include "yas/serialize.hpp"
 #include "yas/std_types.hpp"
 
+#include "Xped/Interfaces/PlainInterface.hpp"
 #include "Xped/Core/Qbasis.hpp"
 #include "Xped/Core/TensorHelper.hpp"
 

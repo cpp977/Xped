@@ -41,6 +41,7 @@ XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100)
 #include "Xped/Symmetry/kind_dummies.hpp"
 
 #include "Xped/Core/AdjointOp.hpp"
+#include "Xped/Core/CoeffBinaryOp.hpp"
 #include "Xped/Core/Tensor.hpp"
 // #include "Xped/MPS/Mps.hpp"
 // #include "Xped/MPS/MpsAlgebra.hpp"

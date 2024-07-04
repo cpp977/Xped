@@ -150,7 +150,7 @@ public:
     }
 
     template <bool TRACK = true>
-    XScalar<TRACK, Scalar> coeff(std::size_t q, Indextype row, Indextype col) const
+    XScalar<TRACK, Scalar> coeff(std::size_t q, IndexType row, IndexType col) const
     {
         if constexpr(TRACK) {
             Scalar tmp = val().block(q)(row, col);

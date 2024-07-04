@@ -5,7 +5,10 @@
 
 #include <nlohmann/json.hpp>
 
+#include "fmt/ranges.h"
+
 #include "Xped/Core/Tensor.hpp"
+#include "Xped/Symmetry/functions.hpp"
 
 namespace Xped::IO {
 

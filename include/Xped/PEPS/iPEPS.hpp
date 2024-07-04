@@ -4,6 +4,8 @@
 #include "yas/serialize.hpp"
 #include "yas/std_types.hpp"
 
+#include "stan/math.hpp"
+
 #include "Xped/Core/Qbasis.hpp"
 #include "Xped/Core/Tensor.hpp"
 #include "Xped/PEPS/CTMOpts.hpp"

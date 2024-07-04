@@ -34,6 +34,10 @@
 #endif
 
 #include "Xped/Core/TensorBase.hpp"
+#include "Xped/Core/CoeffUnaryOp.hpp"
+#include "Xped/Core/CoeffBinaryOp.hpp"
+#include "Xped/Core/DiagCoeffUnaryOp.hpp"
+#include "Xped/Core/DiagCoeffBinaryOp.hpp"
 #include "Xped/Core/TensorHelper.hpp"
 
 namespace Xped {

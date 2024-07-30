@@ -10,7 +10,7 @@
 #include "Xped/Util/Bool.hpp"
 
 #include "Xped/Core/Tensor.hpp"
-
+#include "Xped/Core/AdjointOp.hpp"
 #include "Xped/AD/reverse_pass_callback_alloc.hpp"
 #include "Xped/AD/vari_value.hpp"
 

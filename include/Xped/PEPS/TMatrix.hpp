@@ -39,12 +39,8 @@ struct TMatrix
 
     inline std::size_t size() const { return tensors.size(); }
 
-    inline Ttype& operator()(const int row, const int col)
-    {
-        is_changed[pat.uniqueIndex(row, col)] = true;
-        return tensors[pat.uniqueIndex(row, col)];
-    }
-    inline const Ttype& operator()(const int row, const int col) const { return tensors[pat.uniqueIndex(row, col)]; }
+    Ttype& operator()(int row, int col);
+    const Ttype& operator()(int row, int col) const;
 
     inline Ttype& operator[](const std::size_t index)
     {
@@ -99,6 +95,10 @@ private:
     std::vector<bool> is_changed;
     std::string name = "";
 };
+
+#ifndef XPED_COMPILED_LIB
+#    include "PEPS/TMatrix.cpp"
+#endif
 
 } // namespace Xped
 #endif

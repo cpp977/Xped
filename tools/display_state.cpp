@@ -36,9 +36,9 @@ int main(int argc, char* argv[])
     {
 #ifdef XPED_USE_MPI
         MPI_Init(&argc, &argv);
-        Xped::mpi::XpedWorld world(argc, argv);
+        [[maybe_unused]] Xped::mpi::XpedWorld world(argc, argv);
 #else
-        Xped::mpi::XpedWorld world;
+        [[maybe_unused]] Xped::mpi::XpedWorld world;
 #endif
         // std::ios::sync_with_stdio(true);
 

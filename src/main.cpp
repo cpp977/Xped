@@ -46,18 +46,18 @@ XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100)
 // #include "Xped/MPS/Mps.hpp"
 // #include "Xped/MPS/MpsAlgebra.hpp"
 
-#include "Xped/PEPS/CTM.hpp"
-#include "Xped/PEPS/ExactContractions.hpp"
-#include "Xped/PEPS/Models/Heisenberg.hpp"
-#include "Xped/PEPS/iPEPS.hpp"
+// #include "Xped/PEPS/CTM.hpp"
+// #include "Xped/PEPS/ExactContractions.hpp"
+// #include "Xped/PEPS/Models/Heisenberg.hpp"
+// #include "Xped/PEPS/iPEPS.hpp"
 // #include "Xped/Physics/FermionBase.hpp"
 // #include "Xped/Physics/SpinBase.hpp"
 // #include "Xped/Physics/SpinlessFermionBase.hpp"
 
 #include "Xped/Util/Stopwatch.hpp"
 
-#include "Xped/IO/Json.hpp"
-#include "Xped/IO/Matlab.hpp"
+// #include "Xped/IO/Json.hpp"
+// #include "Xped/IO/Matlab.hpp"
 
 int main(int argc, char* argv[])
 {

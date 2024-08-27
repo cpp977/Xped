@@ -3,6 +3,9 @@
 
 #include <vector>
 
+#include "fmt/core.h"
+#include "fmt/ranges.h"
+
 #include "Xped/PEPS/ObservableBase.hpp"
 #include "Xped/PEPS/TwoSiteObservable.hpp"
 #include "Xped/PEPS/iPEPSOpts.hpp"

@@ -1,12 +1,15 @@
 #ifndef XPED_TWO_SITE_OBSERVABLE_HPP_
 #define XPED_TWO_SITE_OBSERVABLE_HPP_
 
+#include <filesystem>
+
 #include "fmt/core.h"
 
 #include <highfive/H5DataSpace.hpp>
 
 #include "Xped/Core/Tensor.hpp"
 #include "Xped/PEPS/Bonds.hpp"
+#include "Xped/PEPS/UnitCell.hpp"
 #include "Xped/PEPS/ObservableBase.hpp"
 #include "Xped/PEPS/TMatrix.hpp"
 

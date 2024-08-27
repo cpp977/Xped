@@ -1,10 +1,8 @@
 #ifndef XPED_TOML_HELPERS_HPP_
 #define XPED_TOML_HELPERS_HPP_
 
-#include <any>
 #include <cassert>
 #include <complex>
-#include <exception>
 #include <map>
 #include <string>
 
@@ -26,7 +24,7 @@ T enum_from_toml(const toml::value& t)
     return out;
 }
 
-std::map<std::string, Param> params_from_toml(const toml::value& t, const UnitCell& cell)
+inline std::map<std::string, Param> params_from_toml(const toml::value& t, const UnitCell& cell)
 {
     std::map<std::string, Param> params;
     for(const auto& [k, v] : t.as_table()) {

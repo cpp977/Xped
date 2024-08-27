@@ -1,4 +1,5 @@
 #include "Xped/Physics/SiteOperator.hpp"
+#include "Xped/Symmetry/functions.hpp"
 
 namespace Xped {
 

@@ -1,13 +1,13 @@
 #ifndef XPED_IMAG_OPTS_H_
 #define XPED_IMAG_OPTS_H_
 
-#include "toml.hpp"
-
 #include "yas/serialize.hpp"
 #include "yas/std_types.hpp"
 
 #include "fmt/color.h"
 #include "fmt/core.h"
+#include "fmt/ranges.h"
+#include <fmt/ostream.h>
 
 #include <boost/describe.hpp>
 
@@ -15,6 +15,7 @@
 
 #include "Xped/Util/Logging.hpp"
 #include "Xped/Util/TomlHelpers.hpp"
+#include "Xped/PEPS/iPEPSOpts.hpp"
 
 namespace Xped {
 

@@ -14,3 +14,7 @@ SimpleUpdate<Scalar, Symmetry>::renormalize(const Tensor<Scalar, 2, 2, Symmetry>
 }
 
 } // namespace Xped
+
+#if __has_include("SimpleUpdate.gen.cpp")
+#    include "SimpleUpdate.gen.cpp"
+#endif

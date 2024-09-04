@@ -119,3 +119,7 @@ bool SU2<Kind, Scalar_>::triangle(const qType& q1, const qType& q2, const qType&
 }
 
 } // namespace Xped::Sym
+
+#if __has_include("SU2.gen.cpp")
+#    include "SU2.gen.cpp"
+#endif

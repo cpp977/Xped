@@ -16,3 +16,7 @@ const Ttype& TMatrix<Ttype>::operator()(int row, int col) const
 }
 
 } // namespace Xped
+
+#if __has_include("TMatrix.gen.cpp")
+#    include "TMatrix.gen.cpp"
+#endif

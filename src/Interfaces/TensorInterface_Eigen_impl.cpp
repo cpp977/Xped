@@ -343,3 +343,7 @@ std::string TensorInterface::print(const TType<Scalar, Rank>& T)
 }
 
 } // namespace Xped
+
+#if __has_include("TensorInterface_Eigen_impl.gen.cpp")
+#    include "TensorInterface_Eigen_impl.gen.cpp"
+#endif

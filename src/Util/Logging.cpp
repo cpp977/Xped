@@ -23,3 +23,7 @@ inline void init_logging(const mpi::XpedWorld& world, const std::string& name)
 }
 
 } // namespace Xped::Log
+
+#if __has_include("Logging.gen.cpp")
+#    include "Logging.gen.cpp"
+#endif

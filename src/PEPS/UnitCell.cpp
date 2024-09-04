@@ -39,3 +39,7 @@ void UnitCell::loadFromMatlab(const std::filesystem::path& p, const std::string&
     pattern = Pattern(pat_vec, true);
 }
 } // namespace Xped
+
+#if __has_include("UnitCell.gen.cpp")
+#    include "UnitCell.gen.cpp"
+#endif

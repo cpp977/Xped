@@ -105,3 +105,7 @@ void VectorInterface::vec_to_stdvec(VT&& V, std::vector<Scalar>& vec)
 }
 
 } // namespace Xped
+
+#if __has_include("VectorInterface_Cyclops_impl.gen.cpp")
+#    include "VectorInterface_Cyclops_impl.gen.cpp"
+#endif

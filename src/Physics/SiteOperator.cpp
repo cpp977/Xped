@@ -117,3 +117,7 @@ std::string SiteOperator<Scalar, Symmetry>::print() const
 }
 
 } // namespace Xped
+
+#if __has_include("SiteOperator.gen.cpp")
+#    include "SiteOperator.gen.cpp"
+#endif

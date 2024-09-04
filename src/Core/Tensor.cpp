@@ -1345,3 +1345,7 @@ std::ostream& operator<<(std::ostream& os, XPED_CONST Tensor<Scalar, Rank, CoRan
 }
 
 } // namespace Xped
+
+#if __has_include("Tensor.gen.cpp")
+#    include "Tensor.gen.cpp"
+#endif

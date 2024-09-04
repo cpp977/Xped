@@ -106,3 +106,7 @@ void contract_R(XPED_CONST Tensor<Scalar, 1, 1, Symmetry, false, AllocationPolic
 }
 
 } // namespace Xped
+
+#if __has_include("MpsContractions.gen.cpp")
+#    include "MpsContractions.gen.cpp"
+#endif

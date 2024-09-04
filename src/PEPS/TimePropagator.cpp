@@ -487,3 +487,7 @@ void TimePropagator<Scalar, TimeScalar, HamScalar, Symmetry>::initU()
 }
 
 } // namespace Xped
+
+#if __has_include("TimePropagator.gen.cpp")
+#    include "TimePropagator.gen.cpp"
+#endif

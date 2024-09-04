@@ -131,3 +131,7 @@ bool SUN<N, Kind, Scalar_>::triangle(const qType& q1, const qType& q2, const qTy
 }
 
 } // namespace Xped::Sym
+
+#if __has_include("SUN.gen.cpp")
+#    include "SUN.gen.cpp"
+#endif

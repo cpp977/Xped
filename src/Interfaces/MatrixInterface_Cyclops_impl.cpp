@@ -346,3 +346,7 @@ void MatrixInterface::print(MT&& M)
 }
 
 } // namespace Xped
+
+#if __has_include("MatrixInterface_Cyclops_impl.gen.cpp")
+#    include "MatrixInterface_Cyclops_impl.gen.cpp"
+#endif

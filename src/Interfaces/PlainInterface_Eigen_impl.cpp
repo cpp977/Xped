@@ -133,3 +133,7 @@ MType<Scalar> PlainInterface::vec_to_diagmat(const VType<Scalar>& V)
 }
 
 } // namespace Xped
+
+#if __has_include("PlainInterface_Eigen_impl.gen.cpp")
+#    include "PlainInterface_Eigen_impl.gen.cpp"
+#endif

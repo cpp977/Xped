@@ -43,3 +43,7 @@ Qbasis<Symmetry, Rank, AllocationPolicy> build_FusionTree(const std::array<Qbasi
 } // namespace internal
 
 } // namespace Xped
+
+#if __has_include("TensorHelper.gen.cpp")
+#    include "TensorHelper.gen.cpp"
+#endif

@@ -77,3 +77,7 @@ std::ostream& operator<<(std::ostream& os, const Basis& basis)
 }
 
 } // namespace Xped
+
+#if __has_include("Basis.gen.cpp")
+#    include "Basis.gen.cpp"
+#endif

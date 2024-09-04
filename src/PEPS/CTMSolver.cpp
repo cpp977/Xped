@@ -163,3 +163,7 @@ CTMSolver<Scalar, Symmetry, HamScalar, ALL_OUT_LEGS, CPOpts, TRank>::solve(std::
 }
 
 } // namespace Xped
+
+#if __has_include("CTMSolver.gen.cpp")
+#    include "CTMSolver.gen.cpp"
+#endif

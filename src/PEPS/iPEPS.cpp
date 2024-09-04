@@ -687,3 +687,7 @@ void iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>::grad_info() const
 }
 
 } // namespace Xped
+
+#if __has_include("iPEPS.gen.cpp")
+#    include "iPEPS.gen.cpp"
+#endif

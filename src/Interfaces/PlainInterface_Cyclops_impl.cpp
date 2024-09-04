@@ -170,3 +170,7 @@ MType<Scalar> PlainInterface::vec_to_diagmat(VT&& V)
 }
 
 } // namespace Xped
+
+#if __has_include("PlainInterface_Cyclops_impl.gen.cpp")
+#    include "PlainInterface_Cyclops_impl.gen.cpp"
+#endif

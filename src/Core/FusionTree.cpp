@@ -544,3 +544,7 @@ std::string FusionTree<Rank, Symmetry>::printTree(const std::array<std::string, 
 }
 
 } // namespace Xped
+
+#if __has_include("FusionTree.gen.cpp")
+#    include "FusionTree.gen.cpp"
+#endif

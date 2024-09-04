@@ -229,3 +229,7 @@ void Mps<Scalar_, Symmetry_>::rightSweepStep(const std::size_t loc, const DMRG::
 }
 
 } // namespace Xped
+
+#if __has_include("Mps.gen.cpp")
+#    include "Mps.gen.cpp"
+#endif

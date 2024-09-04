@@ -285,3 +285,7 @@ TensorBase<Derived>::operator*(XPED_CONST TensorBase<OtherDerived>& other) XPED_
 }
 
 } // namespace Xped
+
+#if __has_include("TensorBase.gen.cpp")
+#    include "TensorBase.gen.cpp"
+#endif

@@ -420,3 +420,7 @@ avg(XPED_CONST CTM<Scalar, Symmetry, TRank, ALL_OUT_LEGS, ENABLE_AD, CPOpts>& en
 }
 
 } // namespace Xped
+
+#if __has_include("LinearAlgebra.gen.cpp")
+#    include "LinearAlgebra.gen.cpp"
+#endif

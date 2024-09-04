@@ -129,3 +129,7 @@ Tensor<Scalar, 2, 2, Symmetry, ENABLE_AD> contractAAdag(const Tensor<Scalar, 2, 
 }
 
 } // namespace Xped
+
+#if __has_include("PEPSContractions.gen.cpp")
+#    include "PEPSContractions.gen.cpp"
+#endif

@@ -31,3 +31,4 @@ Makefile
 *.9j
 *.synctex.gz
 *.ast
+*.gen.cpp

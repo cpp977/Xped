@@ -11,11 +11,15 @@ using std::size_t;
 #endif
 
 #include "Xped/Core/FusionTree.hpp"
-#include "Xped/Core/treepair.hpp"
 #include "Xped/Core/ScalarTraits.hpp"
+#include "Xped/Core/treepair.hpp"
+
+#include "Xped/Symmetry/CombSym.hpp"
+#include "Xped/Symmetry/S1xS2.hpp"
 #include "Xped/Symmetry/SU2.hpp"
 #include "Xped/Symmetry/U0.hpp"
 #include "Xped/Symmetry/U1.hpp"
+#include "Xped/Symmetry/ZN.hpp"
 
 namespace Xped {
 

@@ -2,6 +2,7 @@
 #define XPED_COMPLEX_VAR_HPP_
 
 #include "Xped/AD/complex_vari.hpp"
+#include "stan/math/rev/core/callback_vari.hpp"
 #include "stan/math/rev/core/var.hpp"
 
 namespace stan::math {
@@ -260,7 +261,7 @@ inline var_value<std::complex<double>> operator/(const var_value<std::complex<do
 
 namespace std {
 
-stan::math::var_value<double> real(const stan::math::var_value<std::complex<double>>& z)
+inline stan::math::var_value<double> real(const stan::math::var_value<std::complex<double>>& z)
 {
     return stan::math::make_callback_var(z.val().real(), [z](auto&& vi) { z.adj() += vi.adj(); });
 }

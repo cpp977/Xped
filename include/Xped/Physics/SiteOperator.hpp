@@ -1,6 +1,7 @@
 #ifndef XPED_SITEOPERATOR_HPP_
 #define XPED_SITEOPERATOR_HPP_
 
+#include "Xped/AD/ADTensor.hpp"
 #include "Xped/Core/Tensor.hpp"
 
 namespace Xped {

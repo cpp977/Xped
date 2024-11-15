@@ -6,9 +6,14 @@
 #include "Xped/Core/ScalarTraits.hpp"
 #include "Xped/Hash/hash.hpp"
 #include "Xped/Interfaces/PlainInterface.hpp"
+
+#include "Xped/Symmetry/CombSym.hpp"
+#include "Xped/Symmetry/S1xS2.hpp"
 #include "Xped/Symmetry/SU2.hpp"
 #include "Xped/Symmetry/U0.hpp"
 #include "Xped/Symmetry/U1.hpp"
+#include "Xped/Symmetry/ZN.hpp"
+
 #include "Xped/Symmetry/functions.hpp"
 #include "Xped/Util/Macros.hpp"
 

@@ -794,7 +794,7 @@ operator*(const Tensor<Scalar, Rank, MiddleRank, Symmetry, true>& left, const Te
 
 namespace std {
 
-stan::math::var_value<double> real(const stan::math::var_value<double>& z) { return z; }
+inline stan::math::var_value<double> real(const stan::math::var_value<double>& z) { return z; }
 
 } // namespace std
 

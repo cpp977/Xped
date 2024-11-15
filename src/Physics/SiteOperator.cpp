@@ -1,5 +1,11 @@
 #include "Xped/Physics/SiteOperator.hpp"
 #include "Xped/Symmetry/functions.hpp"
+#include "Xped/Symmetry/SU2.hpp"
+#include "Xped/Symmetry/U1.hpp"
+#include "Xped/Symmetry/U0.hpp"
+#include "Xped/Symmetry/ZN.hpp"
+#include "Xped/Symmetry/S1xS2.hpp"
+#include "Xped/Symmetry/CombSym.hpp"
 
 namespace Xped {
 

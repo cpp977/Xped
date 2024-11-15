@@ -188,7 +188,6 @@ struct ZN : public SymBase<ZN<Kind, N, Scalar_>>
         if constexpr(IS_FERMIONIC[0]) {
             bool parity = (ql[0] % 2 != 0) and (qr[0] % 2 != 0);
             sign = parity ? -1. : 1.;
-            SPDLOG_INFO("ql,pl={},{}; qr,pr={},{}; sign={}\n", ql[0], ql[0] % 2 != 0, qr[0], qr[0] % 2 != 0, sign);
         }
         return triangle(ql, qr, qf) ? sign * Scalar(1.) : Scalar(0.);
     };

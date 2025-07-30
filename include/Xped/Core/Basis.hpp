@@ -24,10 +24,10 @@ class Basis
 
 public:
     /**Does nothing.*/
-    Basis(){};
+    Basis() {};
 
     Basis(std::size_t dim_in)
-        : dim_(dim_in){};
+        : dim_(dim_in) {};
 
     inline const std::size_t dim() const { return dim_; }
 

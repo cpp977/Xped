@@ -4,6 +4,7 @@
 #include <boost/describe.hpp>
 
 #include "fmt/color.h"
+#include <fmt/ostream.h>
 
 #include "yas/serialize.hpp"
 #include "yas/std_types.hpp"

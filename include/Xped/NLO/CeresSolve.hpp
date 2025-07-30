@@ -13,9 +13,9 @@
 
 #include "Xped/NLO/OptimOpts.hpp"
 #include "Xped/PEPS/CTMOpts.hpp"
-
 #include "Xped/PEPS/CTMSolver.hpp"
 #include "Xped/PEPS/LinearAlgebra.hpp"
+#include "Xped/Util/Stopwatch.hpp"
 
 namespace Xped {
 

@@ -10,7 +10,7 @@
 #include "Xped/Core/CoeffUnaryOp.hpp"
 #include "Xped/IO/Matlab.hpp"
 #include "Xped/PEPS/PEPSContractions.hpp"
-
+#include "Xped/Symmetry/Symmetries.hpp"
 #include "Xped/AD/reverse_pass_callback_alloc.hpp"
 
 namespace Xped {

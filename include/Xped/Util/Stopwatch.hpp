@@ -22,7 +22,7 @@ enum class TimeUnit
     NATURAL
 };
 
-std::string format_secs(std::chrono::duration<double, std::ratio<1, 1>> dts)
+inline std::string format_secs(std::chrono::duration<double, std::ratio<1, 1>> dts)
 {
     if(dts.count() < 60.) {
         return fmt::format("{:.2}", dts);

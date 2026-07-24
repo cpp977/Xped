@@ -1,0 +1,45 @@
+# Sample configuration for examples/ipeps_ad (as compiled: Sym::U0, ALL_OUT_LEGS=true).
+# ALL_OUT_LEGS is the C4v single-tensor ansatz: the environment has only C1/T1,
+# so use a 1x1 cell, bonds = ["H"] (the energy is doubled internally), and sym = "C4v".
+# Verified: D=2, chi=8 converges to E = -0.660231, the known D=2 C4v benchmark
+# for the square-lattice Heisenberg antiferromagnet.
+# Note: obs_directory = "" disables HDF5 observable output.
+
+[model]
+name = "Heisenberg"
+bonds = ["H"]
+[model.params]
+Jz = 1.0
+Jxy = 1.0
+J2 = 0.0
+Bz = 0.0
+
+[ipeps]
+D = 2
+sym = "C4v"
+cell = [1, 1]
+
+[ctm]
+chi = 8
+max_presteps = 20
+track_steps = 3
+tol_E = 1e-10
+reinit_env_tol = 1e-3
+init = "FROM_A"
+verbosity = "PER_ITERATION"
+
+[optim]
+algorithm = "L_BFGS"
+linesearch = "WOLFE"
+bfgs_scaling = true
+grad_tol = 1.0e-6
+cost_tol = 1.0e-12
+step_tol = 1.0e-12
+max_steps = 30
+log_format = ".log"
+working_directory = "wd_smoke"
+obs_directory = ""
+logging_directory = "log"
+seed = 1
+id = 1
+verbosity = "PER_ITERATION"

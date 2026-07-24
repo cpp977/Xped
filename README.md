@@ -69,6 +69,9 @@ All build options can be seen in the following table.
 | `XPED_STORAGE` | `Contiguous` | Used storage for Xped::Tensor. |
 | `XPED_TENSOR_LIB` | `Eigen` | Used tensor library for plain tensor operations. |
 | `XPED_USE_AD` | `ON` | Use automatic differentiation (AD) with Xped Tensors. |
+| `XPED_USE_EXTERNAL_STAN` | `OFF` | Use the external stan-math library for AD instead of the bundled self-contained engine. |
+| `XPED_USE_EXTERNAL_CERES` | `OFF` | Use the external ceres-solver instead of the bundled self-contained L-BFGS engine. |
+| `XPED_USE_GSL_COEFFS` | `OFF` | Use GSL for SU(2) coupling coefficients instead of the bundled self-contained implementation. |
 | `XPED_USE_BLAS` | `ON` | Enable blas linking. |
 | `XPED_USE_LAPACK` | `ON` | Enable lapack linking. |
 | `XPED_USE_LIBCXX` | `OFF` | Use libc++ from llvm. |

@@ -7,7 +7,6 @@
         "spdlog",
         "tabulate",
         "yas",
-        "gsl",
         "highfive",
         "lru-cache",
         "boost-rational",
@@ -26,27 +25,37 @@
     "default-features": [ "eigen" ],
     "features": {
         "eigen": {
-            "description": "Tensor operations with Eigen backend.",
-            "dependencies": [
-                "stan-math",
-                "ceres"
-            ]
+            "description": "Tensor operations with Eigen backend."
         },
         "ctf": {
             "description": "Tensor operations with cyclops backend.",
             "dependencies": [
-                "stan-math",
                 "ctf",
-                "ceres",
                 "scalapack"
             ]
         },
         "array": {
             "description": "Tensor operations with array backend.",
             "dependencies": [
-                "stan-math",
-                "array",
+                "array"
+            ]
+        },
+        "external-stan": {
+            "description": "Use the external stan-math library for AD instead of the bundled self-contained engine (requires -DXPED_USE_EXTERNAL_STAN=ON).",
+            "dependencies": [
+                "stan-math"
+            ]
+        },
+        "external-ceres": {
+            "description": "Use the external ceres-solver instead of the bundled self-contained L-BFGS engine (requires -DXPED_USE_EXTERNAL_CERES=ON).",
+            "dependencies": [
                 "ceres"
+            ]
+        },
+        "gsl-coeffs": {
+            "description": "Use GSL for SU(2) coupling coefficients instead of the bundled self-contained implementation (requires -DXPED_USE_GSL_COEFFS=ON).",
+            "dependencies": [
+                "gsl"
             ]
         }
     }

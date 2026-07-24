@@ -157,7 +157,16 @@ if(NOT CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
 endif()
 
 option(XPED_USE_AD "Use automatic differentiation (AD) with Xped Tensors." ON)
-add_feature_info("Build uses the stan math library for automatic differentitation of algorithms performed with Xped::Tensor." XPED_USE_AD "")
+add_feature_info("Build uses automatic differentitation of algorithms performed with Xped::Tensor." XPED_USE_AD "")
+
+option(XPED_USE_EXTERNAL_STAN "Use the external stan-math library for AD instead of the bundled self-contained engine." OFF)
+add_feature_info("Build uses the external stan math library instead of the bundled self-contained AD engine." XPED_USE_EXTERNAL_STAN "")
+
+option(XPED_USE_EXTERNAL_CERES "Use the external ceres-solver for nonlinear optimization instead of the bundled self-contained L-BFGS engine." OFF)
+add_feature_info("Build uses the external ceres-solver instead of the bundled self-contained L-BFGS engine." XPED_USE_EXTERNAL_CERES "")
+
+option(XPED_USE_GSL_COEFFS "Use the GNU scientific library for SU(2) coupling coefficients instead of the bundled self-contained implementation." OFF)
+add_feature_info("Build uses GSL for SU(2) coupling coefficients instead of the bundled self-contained implementation." XPED_USE_GSL_COEFFS "")
 
 option(XPED_USE_NLO "Use nonlinear optimization algorithms." OFF)
 add_feature_info("Build uses nonlinear optimization algorithms." XPED_USE_NLO "")
@@ -291,7 +300,11 @@ if(XPED_USE_MKL)
   endif()
 endif()
 
-find_package(GSL 1.16 REQUIRED)
+# SU(2) coupling coefficients: the bundled self-contained implementation
+# (Xped/Symmetry/WignerSelf.hpp) needs no external package.
+if(XPED_USE_GSL_COEFFS)
+  find_package(GSL 1.16 REQUIRED)
+endif()
 find_package(Boost 1.78 REQUIRED)
 
 # Link this 'library' to set the c++ standard / compile-time options requested
@@ -326,14 +339,21 @@ if(${XPED_TENSOR_LIB} STREQUAL "Array")
 endif()
 if(XPED_USE_NLO)
   if(${XPED_OPTIM_LIB} STREQUAL "ceres")
-  find_package(Ceres CONFIG REQUIRED)
+    # the bundled self-contained L-BFGS engine (include/selfnlo) provides the
+    # ceres API subset Xped uses; only the external backend needs the package
+    if(XPED_USE_EXTERNAL_CERES)
+      find_package(Ceres CONFIG REQUIRED)
+    endif()
   endif()
 endif()
-# if(XPED_USE_AD)
-find_path(STAN-MATH_INCLUDE_DIRS "stan/math.hpp")
-find_package(SUNDIALS CONFIG REQUIRED)
-find_package(TBB CONFIG REQUIRED)
-# endif()
+# AD: the bundled self-contained engine (include/selfad) needs no external
+# packages. Only the optional external stan-math backend pulls in stan-math,
+# SUNDIALS and TBB.
+if(XPED_USE_EXTERNAL_STAN)
+  find_path(STAN-MATH_INCLUDE_DIRS "stan/math.hpp")
+  find_package(SUNDIALS CONFIG REQUIRED)
+  find_package(TBB CONFIG REQUIRED)
+endif()
 # include(cmake/CPM.cmake)
 
 # set(CMAKE_POLICY_DEFAULT_CMP0075 NEW)

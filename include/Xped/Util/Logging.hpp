@@ -147,4 +147,8 @@ constexpr void debug(Args&&... args)
 } // namespace Log
 } // namespace Xped
 
+#ifndef XPED_COMPILED_LIB
+#    include "Util/Logging.cpp"
+#endif
+
 #endif

@@ -166,8 +166,15 @@ function(set_project_options project_name)
 
   if(XPED_USE_AD)
     target_compile_definitions(${project_name} INTERFACE XPED_USE_AD=1)
-    target_compile_definitions(${project_name} INTERFACE _REENTRANT=1)
-    target_compile_definitions(${project_name} INTERFACE TBB_INTERFACE_NEW)
+    if(XPED_USE_EXTERNAL_STAN)
+      # only the external stan-math backend needs the TBB-related definitions
+      target_compile_definitions(${project_name} INTERFACE _REENTRANT=1)
+      target_compile_definitions(${project_name} INTERFACE TBB_INTERFACE_NEW)
+    endif()
+  endif()
+
+  if(XPED_USE_GSL_COEFFS)
+    target_compile_definitions(${project_name} INTERFACE XPED_USE_GSL_SU2_COEFFS=1)
   endif()
 
   if(${XPED_STORAGE} STREQUAL "Contiguous")

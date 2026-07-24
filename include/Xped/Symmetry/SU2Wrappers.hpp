@@ -1,12 +1,18 @@
 #ifndef SU2WRAPPERS_H_
 #define SU2WRAPPERS_H_
 
-// As the default libraries for the 3nj-symbols, we use the GSL (Gnu scientific library):
-#if !defined XPED_USE_WIG_SU2_COEFFS && !defined XPED_USE_WIG_SU2_COEFFS && !defined XPED_USE_FAST_WIG_SU2_COEFFS
-#    define XPED_USE_GSL_SU2_COEFFS 1
+// The default backend for the 3nj-symbols is the bundled self-contained
+// implementation (Xped/Symmetry/WignerSelf.hpp, no external dependency).
+// GSL, WIGXJPF or FASTWIGXJ can be selected with the respective macros.
+#if !defined XPED_USE_GSL_SU2_COEFFS && !defined XPED_USE_WIG_SU2_COEFFS && !defined XPED_USE_FAST_WIG_SU2_COEFFS
+#    define XPED_USE_SELF_SU2_COEFFS 1
 #endif
 
 /// \cond
+#ifdef XPED_USE_SELF_SU2_COEFFS
+#    include "Xped/Symmetry/WignerSelf.hpp"
+#endif
+
 #ifdef XPED_USE_GSL_SU2_COEFFS
 #    include <gsl/gsl_sf_coupling.h>
 #endif
@@ -62,6 +68,24 @@
  * Note that this implmentation is not thread-safe!
  * This is turned off per default but can be used by defining OWN_HASH_CGC.
  */
+
+#ifdef XPED_USE_SELF_SU2_COEFFS
+inline double
+coupl_9j_base(const int q1, const int q2, const int q3, const int q4, const int q5, const int q6, const int q7, const int q8, const int q9)
+{
+    return Xped::wigner::coupling_9j(q1 - 1, q2 - 1, q3 - 1, q4 - 1, q5 - 1, q6 - 1, q7 - 1, q8 - 1, q9 - 1);
+}
+
+inline double coupl_6j_base(const int q1, const int q2, const int q3, const int q4, const int q5, const int q6)
+{
+    return Xped::wigner::coupling_6j(q1 - 1, q2 - 1, q3 - 1, q4 - 1, q5 - 1, q6 - 1);
+}
+
+inline double coupl_3j_base(const int q1, const int q2, const int q3, const int q1_z, const int q2_z, const int q3_z)
+{
+    return Xped::wigner::coupling_3j(q1 - 1, q2 - 1, q3 - 1, q1_z, q2_z, q3_z);
+}
+#endif // XPED_USE_SELF_SU2_COEFFS
 
 #ifdef XPED_USE_GSL_SU2_COEFFS
 inline double

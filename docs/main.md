@@ -396,7 +396,8 @@ The `Tensor` class supports build in automatic differentiation (AD), i.e. for al
 To declare a tensor with AD support, one needs to set the respective template argument to `true`.
 The source code for the AD support for `Tensor` can be found in `include/Xped/AD/ADTensor.hpp` (and not in `Tensor.hpp` itself).
 It is an explicit specialization and of the `Tensor` class template. 
-In order to obtain the AD functionality, core features of the third-party library [stan/math](https://github.com/stan-dev/math "ad library") are used.
+The underlying reverse-mode tape engine is self-contained and ships with Xped (`include/selfad`); it implements the small subset of the [stan/math](https://github.com/stan-dev/math "ad library") reverse-mode API that Xped uses (same `stan::math` namespace and include paths) without any external dependency.
+The original external stan-math backend can still be selected with `-DXPED_USE_EXTERNAL_STAN=ON` (plus the `external-stan` vcpkg feature), which additionally requires stan-math, TBB and SUNDIALS.
 
 Let's look at an example usage of the AD functionality:
 \include ad.cpp

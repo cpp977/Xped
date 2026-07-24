@@ -3,12 +3,13 @@ if(NOT XPED_COMPILED_LIB)
   target_include_directories(Xped BEFORE INTERFACE ${XPED_DIR}/src)
   target_include_directories(Xped BEFORE INTERFACE ${XPED_DIR}/include)
   target_include_directories(Xped BEFORE INTERFACE ${YAS_INCLUDE_DIRS})
+  if(XPED_USE_GSL_COEFFS)
+    target_link_libraries(Xped INTERFACE GSL::gsl GSL::gslcblas)
+  endif()
   target_link_libraries(
     Xped
     INTERFACE project_options
               project_warnings
-              GSL::gsl
-              GSL::gslcblas
               Boost::boost
               Eigen3::Eigen
               tabulate::tabulate
@@ -28,14 +29,25 @@ if(NOT XPED_COMPILED_LIB)
   endif()
 
   # if(XPED_USE_AD)
-  target_link_libraries(Xped INTERFACE SUNDIALS::kinsol)
-  target_link_libraries(Xped INTERFACE TBB::tbb)
-  target_include_directories(Xped BEFORE INTERFACE ${STAN_MATH_INCLUDE_DIRS})
-  # target_compile_definitions(Xped INTERFACE STAN_THREADS) endif()
+  if(XPED_USE_EXTERNAL_STAN)
+    target_link_libraries(Xped INTERFACE SUNDIALS::kinsol)
+    target_link_libraries(Xped INTERFACE TBB::tbb)
+    target_include_directories(Xped BEFORE INTERFACE ${STAN_MATH_INCLUDE_DIRS})
+    # target_compile_definitions(Xped INTERFACE STAN_THREADS)
+  else()
+    # bundled self-contained AD engine: drop-in stan-math API subset, no deps
+    target_include_directories(Xped BEFORE INTERFACE ${XPED_DIR}/include/selfad)
+  endif()
+  # endif()
 
   if(XPED_USE_NLO)
     if(${XPED_OPTIM_LIB} STREQUAL "ceres")
-      target_link_libraries(Xped INTERFACE Ceres::ceres)
+      if(XPED_USE_EXTERNAL_CERES)
+        target_link_libraries(Xped INTERFACE Ceres::ceres)
+      else()
+        # bundled self-contained optimizer: drop-in ceres API subset, no deps
+        target_include_directories(Xped BEFORE INTERFACE ${XPED_DIR}/include/selfnlo)
+      endif()
     endif()
   endif()
 
@@ -103,16 +115,32 @@ else()
 
   target_include_directories(Xped BEFORE PUBLIC ${XPED_DIR}/include)
   target_include_directories(Xped BEFORE PUBLIC ${YAS_INCLUDE_DIRS})
-  target_link_libraries(Xped INTERFACE SUNDIALS::kinsol)
-  target_link_libraries(Xped INTERFACE TBB::tbb)
-  target_include_directories(Xped BEFORE INTERFACE ${STAN_MATH_INCLUDE_DIRS})
+  if(XPED_USE_EXTERNAL_STAN)
+    target_link_libraries(Xped INTERFACE SUNDIALS::kinsol)
+    target_link_libraries(Xped INTERFACE TBB::tbb)
+    target_include_directories(Xped BEFORE INTERFACE ${STAN_MATH_INCLUDE_DIRS})
+  else()
+    # bundled self-contained AD engine: drop-in stan-math API subset, no deps
+    target_include_directories(Xped BEFORE PUBLIC ${XPED_DIR}/include/selfad)
+  endif()
 
+  if(XPED_USE_GSL_COEFFS)
+    target_link_libraries(Xped PUBLIC GSL::gsl GSL::gslcblas)
+  endif()
+  if(XPED_USE_NLO)
+    if(${XPED_OPTIM_LIB} STREQUAL "ceres")
+      if(XPED_USE_EXTERNAL_CERES)
+        target_link_libraries(Xped PUBLIC Ceres::ceres)
+      else()
+        # bundled self-contained optimizer: drop-in ceres API subset, no deps
+        target_include_directories(Xped BEFORE PUBLIC ${XPED_DIR}/include/selfnlo)
+      endif()
+    endif()
+  endif()
   target_link_libraries(
     Xped
     PUBLIC project_options
            project_warnings
-           GSL::gsl
-           GSL::gslcblas
            Boost::boost
            Eigen3::Eigen
            tabulate::tabulate

@@ -15,6 +15,7 @@ vcpkg_list(SET OPTIONS)
 
 vcpkg_list(APPEND OPTIONS "CXX=mpicxx")
 vcpkg_list(APPEND OPTIONS "--with-lapack")
+vcpkg_list(APPEND OPTIONS "--with-scalapack")
 vcpkg_list(APPEND OPTIONS "--no-dynamic")
 vcpkg_list(APPEND OPTIONS "LD_LIBS=-lopenblas -llapack")
 vcpkg_list(APPEND OPTIONS "LIBS=-lopenblas -llapack")

@@ -1,27 +1,23 @@
 diff --git a/include/spdlog/tweakme.h b/include/spdlog/tweakme.h
-index 8fa60e4c..cc1735b8 100644
+index d6092987..7c7092f7 100644
 --- a/include/spdlog/tweakme.h
 +++ b/include/spdlog/tweakme.h
-@@ -96,14 +96,20 @@
+@@ -102,8 +102,7 @@
  ///////////////////////////////////////////////////////////////////////////////
  // Uncomment to customize level names (e.g. "MY TRACE")
  //
--// #define SPDLOG_LEVEL_NAMES { "MY TRACE", "MY DEBUG", "MY INFO", "MY WARNING", "MY ERROR", "MY CRITICAL", "OFF" }
-+#define SPDLOG_LEVEL_NAMES                                                                                                                 \
-+    {                                                                                                                                      \
-+        " debug  ", "per-iter", "on-entry", "on-exit ", "warning ", "critical", " silent "                                                 \
-+    }
- ///////////////////////////////////////////////////////////////////////////////
- 
- ///////////////////////////////////////////////////////////////////////////////
+-// #define SPDLOG_LEVEL_NAMES { "MY TRACE", "MY DEBUG", "MY INFO", "MY WARNING", "MY ERROR", "MY
+-// CRITICAL", "OFF" }
++#define SPDLOG_LEVEL_NAMES { " debug  ", "per-iter", "on-entry", "on-exit ", "warning ", "critical", " silent " } 
+ //
+ // For C++17 use string_view_literals:
+ //
+@@ -117,7 +116,7 @@
  // Uncomment to customize short level names (e.g. "MT")
  // These can be longer than one character.
  //
 -// #define SPDLOG_SHORT_LEVEL_NAMES { "T", "D", "I", "W", "E", "C", "O" }
-+#define SPDLOG_SHORT_LEVEL_NAMES                                                                                                           \
-+    {                                                                                                                                      \
-+        "D", "I", "B", "E", "W", "C", "S"                                                                                                  \
-+    }
++#define SPDLOG_SHORT_LEVEL_NAMES { "D", "I", "EN", "EX", "W", "C", "S" }
  ///////////////////////////////////////////////////////////////////////////////
  
  ///////////////////////////////////////////////////////////////////////////////

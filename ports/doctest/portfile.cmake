@@ -2,11 +2,9 @@
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO doctest/doctest
-    REF "v${VERSION}"
-    SHA512 04425686057079d3f1a6f767c487f1953050f553dbff9fc42b42dde1358fe26e46bf6219881bbfce625f15cb9c229474d82688120eb2cb2b1d8138db0cc91b3c
-    HEAD_REF master
-    PATCHES
-        0001_fix_add_tests.patch
+    REF 1fd763bcc903fb55447cd4c78435dd4dec281ba2
+    SHA512 300d1804a9fdecbba9d2b3183cab95170f834e61519539a1691b0aeff14a49c210c3b2e686cd5612b39411eb51a01b3336d16866ce8585caed922a3c4b9a7ff0
+    HEAD_REF dev
 )
 
 vcpkg_cmake_configure(

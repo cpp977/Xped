@@ -1,8 +1,8 @@
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO gabime/spdlog
-    REF 31cf79a70dfa61a4b2b7509eecca6a3b269bfc4a
-    SHA512 4fa17d1144c3f72a20789f4e1cafa4067d98ced28bc62242f9cb173ba69150bbb8360cd6fe29aa1ab19652bb2ff50582785cddba1c3c0a6bb2d7f388bb8e391c
+    REF v1.15.3
+    SHA512 21c35f4091850ea3a0cd6a24867e06e943df70d76cd5a7ec0b15a33e0e9e0cc3584ed7930e1ac6f347e7e06f0e002d0e759884eaf05310014e24ea0e0419fcc4
     HEAD_REF v1.x
     PATCHES adjust_log_level_names
 )
@@ -17,12 +17,8 @@ vcpkg_check_features(OUT_FEATURE_OPTIONS FEATURE_OPTIONS
 if(NOT DEFINED SPDLOG_WCHAR_FILENAMES)
     set(SPDLOG_WCHAR_FILENAMES OFF)
 endif()
-if(NOT VCPKG_TARGET_IS_WINDOWS)
-    if("wchar" IN_LIST FEATURES)
-        message(WARNING "Feature 'wchar' is only supported for Windows and has no effect on other platforms.")
-    elseif(SPDLOG_WCHAR_FILENAMES)
-        message(FATAL_ERROR "Build option 'SPDLOG_WCHAR_FILENAMES' is for Windows.")
-    endif()
+if(NOT VCPKG_TARGET_IS_WINDOWS AND SPDLOG_WCHAR_FILENAMES)
+    message(FATAL_ERROR "Build option 'SPDLOG_WCHAR_FILENAMES' is for Windows.")
 endif()
 
 string(COMPARE EQUAL "${VCPKG_LIBRARY_LINKAGE}" "dynamic" SPDLOG_BUILD_SHARED)

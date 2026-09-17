@@ -1,8 +1,8 @@
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO Reference-ScaLAPACK/scalapack
-    REF v2.2.1
-    SHA512 de356e69e9d91437d2563ea02d5f18a99bac815644bd5cbb0f5fc8737febf379ce8cd2574f4137876ca5da6723d5452c15d760f82b222b39f0d5e61580094a95
+    REF 1f505f7
+    SHA512 4f151ff081cd92e732c911c7e5f53676d5edd6f16f1b716a9a24d1b8271d47dcad272d94e951a3ccb3082576027aaf4804d7d9731f11a0a337df2916e9f76dbd
     HEAD_REF master
 )
 
@@ -15,7 +15,7 @@ vcpkg_cmake_configure(
 
 vcpkg_install_cmake()
 
-vcpkg_fixup_cmake_targets(CONFIG_PATH lib/cmake/scalapack-2.2.1)
+vcpkg_fixup_cmake_targets(CONFIG_PATH lib/cmake/scalapack-2.2.2)
 # vcpkg_cmake_config_fixup(CONFIG_PATH "lib/cmake/scalapack-2.2.1")
 
 # vcpkg_copy_pdbs()

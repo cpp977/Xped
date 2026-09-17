@@ -1,6 +1,6 @@
 {
   "name": "scalapack",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "description": "Distributed linear algebra framework",
   "homepage": "http://www.netlib.org/scalapack/",
   "license": "bsd",

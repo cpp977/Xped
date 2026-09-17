@@ -2,7 +2,7 @@
 
 #include <highfive/H5File.hpp>
 
-#include <assert.hpp>
+#include <libassert/assert.hpp>
 
 #include "Xped/PEPS/iPEPS.hpp"
 
@@ -107,7 +107,7 @@ void iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>::init(const TMatrix<Qbasis
             inserted_states += dim_per_charge;
             if(inserted_states == D) { break; }
         }
-        VERIFY(inserted_states == D, "Failed to initialize quantum numbers for iPEPS A-tensor.");
+        ASSERT(inserted_states == D, "Failed to initialize quantum numbers for iPEPS A-tensor.");
 
         out.sort();
         return out;
@@ -145,11 +145,11 @@ void iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>::init(const TMatrix<Qbasis
             // std::cout << std::endl;
             // std::cout << fmt::format("A({},{}): ", x, y) << As(x, y).coupledDomain() << std::endl << As(x, y).coupledCodomain() << std::endl;
             // fmt::print("{}\n{}\n", As(x, y).coupledDomain().printTrees(), As(x, y).coupledCodomain().printTrees());
-            VERIFY(As(x, y).coupledDomain().forgetHistory().intersection(As(x, y).coupledCodomain().forgetHistory()).dim() > 0 and
+            ASSERT(As(x, y).coupledDomain().forgetHistory().intersection(As(x, y).coupledCodomain().forgetHistory()).dim() > 0 and
                    "Bases of the A tensor have no fused blocks.");
         }
     }
-    if(sym() == Opts::DiscreteSym::C4v) { VERIFY(cell().Lx == 1 and cell().Ly == 1); }
+    if(sym() == Opts::DiscreteSym::C4v) { ASSERT(cell().Lx == 1 and cell().Ly == 1); }
 }
 
 template <typename Scalar, typename Symmetry, bool ALL_OUT_LEGS, bool ENABLE_AD>
@@ -160,9 +160,9 @@ void iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>::initSymMap()
         return;
     }
     case Opts::DiscreteSym::C4v: {
-        VERIFY(cell().Lx == 1 and cell().Ly == 1);
-        VERIFY(checkSym());
-        VERIFY(ALL_OUT_LEGS);
+        ASSERT(cell().Lx == 1 and cell().Ly == 1);
+        ASSERT(checkSym());
+        ASSERT(ALL_OUT_LEGS);
         auto computeMap = [](auto A) {
             auto comp = [](Scalar s1, Scalar s2) {
                 if(std::abs(s1 - s2) < 1.e-12) { return false; }
@@ -444,7 +444,7 @@ std::vector<Scalar> iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>::data()
 template <typename Scalar, typename Symmetry, bool ALL_OUT_LEGS, bool ENABLE_AD>
 std::vector<Scalar> iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>::graddata()
 {
-    VERIFY(ENABLE_AD);
+    ASSERT(ENABLE_AD);
     std::vector<Scalar> out(plainSize());
     std::size_t count = 0;
     switch(sym()) {

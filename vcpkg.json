@@ -19,7 +19,7 @@
         "wignersun",
         "doctest",
         "toml11",
-        "assert",
+        "libassert",
         "nlohmann-json"
     ],
     "default-features": [ "eigen" ],

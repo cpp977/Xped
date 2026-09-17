@@ -26,7 +26,7 @@ Basis Basis::combine(const Basis& other) const
 auto Basis::print() const
 {
     tabulate::Table t;
-    using Row_t = const std::vector<std::variant<std::string, const char*, tabulate::Table>>;
+    using Row_t = const std::vector<std::variant<std::string, const char*, std::string_view, tabulate::Table>>;
     // TextTable t('-', '|', '+');
     t.add_row(Row_t({"num"}));
     // t.add("num");
@@ -51,7 +51,7 @@ auto Basis::print() const
 auto Basis::printHistory() const
 {
     tabulate::Table t;
-    using Row_t = const std::vector<std::variant<std::string, const char*, tabulate::Table>>;
+    using Row_t = const std::vector<std::variant<std::string, const char*, std::string_view, tabulate::Table>>;
     t.add_row(Row_t({"num", "source"}));
     for(std::size_t i = 0; i < dim_; i++) {
         std::stringstream ss, tt;

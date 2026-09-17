@@ -1,7 +1,8 @@
+diff --git a/cmake/macros/SundialsAddLibrary.cmake b/cmake/macros/SundialsAddLibrary.cmake
+index ba50284..b7da543 100644
 --- a/cmake/macros/SundialsAddLibrary.cmake
 +++ b/cmake/macros/SundialsAddLibrary.cmake
-@@ -323,7 +323,7 @@
-         set_target_properties(${_actual_target_name} PROPERTIES ${_properties})
+@@ -335,7 +335,7 @@ macro(sundials_add_library target)
        endif()
  
        # install phase
@@ -9,3 +10,4 @@
 +      install(TARGETS ${_actual_target_name} EXPORT sundials-targets)
  
      endif()
+ 

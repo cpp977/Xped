@@ -1,4 +1,4 @@
-#include <assert.hpp>
+#include <libassert/assert.hpp>
 #include <numeric>
 
 #include "Xped/PEPS/Pattern.hpp"
@@ -79,7 +79,7 @@ tabulate::Table Pattern::print() const
     tabulate::Table outer;
     outer.add_row({"Pattern"});
     tabulate::Table pat_table;
-    using Row_t = std::vector<std::variant<std::string, const char*, tabulate::Table>>;
+    using Row_t = std::vector<std::variant<std::string, const char*, std::string_view, tabulate::Table>>;
     for(const auto& row : data) {
         Row_t t_row(row.size());
         for(auto i = 0; i < row.size(); i++) { t_row[i] = std::to_string(row[i]); }

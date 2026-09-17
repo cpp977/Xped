@@ -1,13 +1,11 @@
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO LLNL/sundials
-    REF v6.0.0
-    # SHA512 a009bc77f31ad426cf02670f06363058ef83dfd6fd84c868e4c8713ccb453ceff481f98266b46c7a6de0ef4d4ecca74a8c8e78150b88cecc7cce41ed8f056dbb
-    SHA512 14e1b42aa6a1bb1c54a13bf2b1a9c5a6ab92bf8017878ee67e0d4ef22d58d9d41fd6fd439877216ebe86b7f1d98c6f27049b60b87741e9127d46eafb238eedda
+    REF v6.1.1
+    SHA512 bbb692afdb32e8833279398dd59d4d80e02823bb91de3badcc89605f6546fd0a760a7f7d436046a65abd0a29b9de03d761c159a760d0f897d3d0812270bbe9de
     HEAD_REF main
     PATCHES
     install-dlls-in-bin.patch
-    cmake_config.patch
 )
 
 string(COMPARE EQUAL "${VCPKG_LIBRARY_LINKAGE}" "static" SUN_BUILD_STATIC)

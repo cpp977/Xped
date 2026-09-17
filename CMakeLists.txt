@@ -259,17 +259,31 @@ if(XPED_USE_LAPACK)
     TYPE REQUIRED
     PURPOSE "The Eigen and cyclops backend can export matrix decompositions (SVD, QR, ...) to external LAPACK implementations."
     )
-  set(test_prog_for_lapacke "\#include <lapacke.h> \\nint main() {lapack_int m, n, lda, info\; double *a, *tau\; info = LAPACKE_dgeqrf( LAPACK_COL_MAJOR, m, n, a, lda, tau )\;}")
+  set(test_prog_for_lapacke [=[
+    #include <lapacke.h>
+    int main() {
+      lapack_int m, n, lda, info;
+      double *a, *tau;
+      info = LAPACKE_dgeqrf(LAPACK_COL_MAJOR, m, n, a, lda, tau);
+    }
+  ]=])
   set(CMAKE_REQUIRED_LIBRARIES LAPACK::LAPACK;BLAS::BLAS)
   include(CheckCXXSourceCompiles)
-  check_cxx_source_compiles(${test_prog_for_lapacke} XPED_COMPILES_LAPACKE)
+  check_cxx_source_compiles("${test_prog_for_lapacke}" XPED_COMPILES_LAPACKE)
   if (NOT XPED_COMPILES_LAPACKE)    
     find_library(XPED_LAPACKE NAMES lapacke REQUIRED)
     add_library(LAPACKE::LAPACKE UNKNOWN IMPORTED)
     set_target_properties(LAPACKE::LAPACKE PROPERTIES IMPORTED_LOCATION "${XPED_LAPACKE}")
-    set(test_prog_for_lapacke2 "\#include <lapacke.h> \\nint main() {lapack_int m, n, lda, info\; double *a, *tau\; info = LAPACKE_dgeqrf( LAPACK_COL_MAJOR, m, n, a, lda, tau )\;}")
+    set(test_prog_for_lapacke2 [=[
+      #include <lapacke.h>
+      int main() {
+        lapack_int m, n, lda, info;
+        double *a, *tau;
+        info = LAPACKE_dgeqrf(LAPACK_COL_MAJOR, m, n, a, lda, tau);
+      }
+    ]=])
     set(CMAKE_REQUIRED_LIBRARIES LAPACKE::LAPACKE)
-    check_cxx_source_compiles(${test_prog_for_lapacke2} XPED_COMPILES_LAPACKE2)
+    check_cxx_source_compiles("${test_prog_for_lapacke2}" XPED_COMPILES_LAPACKE2)
     set(XPED_USE_LAPACKE ON)
     if (NOT XPED_COMPILES_LAPACKE2)
       message(FATAL_ERROR "Lapacke support is missing.")
@@ -332,7 +346,7 @@ find_package(tabulate CONFIG REQUIRED)
 find_package(seq CONFIG REQUIRED)
 find_package(wignersun CONFIG REQUIRED)
 find_package(HighFive CONFIG REQUIRED)
-find_package(assert CONFIG REQUIRED)
+find_package(libassert CONFIG REQUIRED)
 find_path(YAS_INCLUDE_DIRS "yas/abseil_types.hpp")
 if(${XPED_TENSOR_LIB} STREQUAL "Array")
   find_path(ARRAY_INCLUDE_DIRS "array.h")

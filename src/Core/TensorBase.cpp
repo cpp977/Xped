@@ -1,6 +1,6 @@
 #include <unordered_set>
 
-#include <assert.hpp>
+#include <libassert/assert.hpp>
 
 #include "Xped/Util/Macros.hpp"
 

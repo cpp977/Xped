@@ -17,7 +17,7 @@ if(NOT XPED_COMPILED_LIB)
               seq::seq
               WignerSUN::wignersun
               HighFive::HighFive
-              assert::assert)
+              libassert::assert)
   if(${XPED_TENSOR_LIB} STREQUAL "Cyclops")
     target_link_libraries(Xped INTERFACE ${CYCLOPS_LIB})
     target_include_directories(Xped BEFORE INTERFACE ${CYCLOPS_INCLUDE_DIR})
@@ -143,10 +143,10 @@ else()
            tabulate::tabulate
            spdlog::spdlog
            seq::seq
-           assert::assert
+           libassert::assert
            HighFive::HighFive
            WignerSUN::wignersun
-           assert::assert)
+           libassert::assert)
 
   if(XPED_USE_NLO)
     if(${XPED_OPTIM_LIB} STREQUAL "ceres")

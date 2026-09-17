@@ -212,7 +212,7 @@ int main(int argc, char* argv[])
               << std::to_string(norm_times.minCoeff()) << "," << std::to_string(norm_times.maxCoeff()) << "\n";
             f.close();
 
-            using Row_t = std::vector<variant<std::string, const char*, tabulate::Table>>;
+            using Row_t = std::vector<variant<std::string, const char*, std::string_view, tabulate::Table>>;
             tabulate::Table t;
             t.add_row({"Compiler",
                        "BLAS",

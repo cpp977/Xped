@@ -98,9 +98,8 @@ private:
 
 } // namespace Xped
 
-// outside the namespace: TMatrix.cpp opens namespace Xped itself (an include
-// inside the namespace would nest it as Xped::Xped and fail to compile on gcc)
 #ifndef XPED_COMPILED_LIB
 #    include "PEPS/TMatrix.cpp"
 #endif
+
 #endif

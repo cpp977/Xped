@@ -65,6 +65,10 @@ struct TensorInterface
     template <typename Scalar, int Rank>
     static Scalar getVal(const TType<Scalar, Rank>& T, const std::array<Indextype, Rank>& index);
 
+    template <typename NewScalar, typename OldScalar, std::size_t Rank>
+    static TType<NewScalar, Rank> cast(TType<OldScalar, Rank>& T)
+    { return T.template cast<NewScalar>(); }
+
     // raw data
     template <typename Scalar, int Rank>
     static const Scalar* get_raw_data(const TType<Scalar, Rank>& T);
@@ -81,7 +85,7 @@ struct TensorInterface
     static TType<Scalar, Rank> tensorProd(const TType<Scalar, Rank>& T1, const TType<Scalar, Rank>& T2);
 
     template <typename Scalar, std::size_t Rank, typename Expr1, typename Expr2>
-    static void addScale(const Expr1& src, Expr2& dst, const Scalar& scale);
+    static void addScale(const Expr1& src, Expr2 dst, const Scalar& scale);
 
     // methods rvalue
     template <typename Scalar, std::size_t Rank1, std::size_t Rank2, Indextype... Is>
@@ -122,6 +126,10 @@ struct TensorInterface
     template <typename Scalar, int Rank1, std::size_t Rank2>
     static const Eigen::TensorReshapingOp<const std::array<Indextype, Rank2>, const TType<Scalar, Rank1>>
     reshape(TType<Scalar, Rank1>& T, const std::array<Indextype, Rank2>& dims);
+
+    template <typename Scalar, std::size_t Rank>
+    static TType<Scalar, Rank> conjugate(const TType<Scalar, Rank>& T)
+    { return T.conjugate(); }
 
     template <typename Scalar, int Rank>
     static std::string print(const TType<Scalar, Rank>& T);

@@ -3,6 +3,9 @@
 
 #include <ctf.hpp>
 
+#include "Xped/Util/Mpi.hpp"
+#include "Xped/Util/Permutations.hpp"
+
 namespace Xped {
 
 struct TensorInterface
@@ -54,6 +57,10 @@ struct TensorInterface
 
     template <typename Scalar, int Rank>
     static TType<Scalar, Rank> construct(const MapTType<Scalar, Rank>& map);
+
+    template <typename Scalar, std::size_t Rank>
+    static TType<Scalar, Rank>
+    construct_permutation(const std::array<Indextype, Rank / 2>& dims, const util::Permutation& p, const mpi::XpedWorld& = mpi::getUniverse());
 
     // template <typename Scalar, int Rank>
     // static cTType<Scalar, Rank> construct(const cMapTType<Scalar, Rank>& map)
@@ -121,7 +128,7 @@ struct TensorInterface
     static TType<Scalar, Rank> tensorProd(TType<Scalar, Rank>& T1, TType<Scalar, Rank>& T2);
 
     template <typename Scalar, std::size_t Rank, typename Expr1, typename Expr2>
-    static void addScale(const Expr1& src, Expr2& dst, const Scalar& scale);
+    static void addScale(Expr1& src, Expr2& dst, const Scalar& scale);
 
     // methods rvalue
 
@@ -135,11 +142,41 @@ struct TensorInterface
     template <typename Scalar, std::size_t Rank1, std::size_t Rank2, Indextype... Is>
     static TType<Scalar, Rank1 + Rank2 - sizeof...(Is)> contract(TType<Scalar, Rank1>& T1, TType<Scalar, Rank2>& T2);
 
+    template <typename NewScalar, typename OldScalar, std::size_t Rank>
+    static TType<NewScalar, Rank> cast(TType<OldScalar, Rank>& T)
+    {
+        TType<NewScalar, Rank> res(Rank, T.lens, *T.wrld);
+        auto id_idx = get_idx<Rank>();
+        res[id_idx.data()] = T[id_idx.data()];
+        return res;
+    }
+
+    template <typename Scalar, std::size_t Rank>
+    static TType<Scalar, Rank> conjugate(const TType<Scalar, Rank>& T)
+    {
+        return T;
+    }
+
     template <typename Scalar, std::size_t Rank, Indextype... p>
     static TType<Scalar, Rank> shuffle(TType<Scalar, Rank>& T);
 
     template <typename Scalar, std::size_t Rank, Indextype... p>
     static TType<Scalar, Rank> shuffle(TType<Scalar, Rank>& T, seq::iseq<Indextype, p...> s);
+
+    template <typename Scalar, std::size_t Rank>
+    static TType<Scalar, Rank> shuffle(TType<Scalar, Rank>& T, std::array<Indextype, Rank> shuffle_dims)
+    {
+        std::array<Indextype, Rank> out_dims;
+        for(std::size_t i = 0; i < Rank; i++) { out_dims[i] = T.lens[shuffle_dims[i]]; }
+
+        char perm_idx[Rank];
+        for(auto i = 0ul; i < Rank; ++i) { perm_idx[i] = idx(shuffle_dims[i]); }
+        auto id_idx = get_idx<Rank>();
+
+        TType<Scalar, Rank> out(Rank, out_dims.data(), *T.wrld);
+        out[perm_idx] = T[id_idx.data()];
+        return out;
+    }
 
     template <typename Expr, Indextype... p>
     static Expr shuffle_view(const Expr& T);
@@ -159,7 +196,7 @@ struct TensorInterface
     slice(TType<Scalar, Rank1>& T, const std::array<Indextype, Rank2>& offsets, const std::array<Indextype, Rank2>& extents);
 
     template <typename Scalar, std::size_t Rank>
-    static std::string print(const TType<Scalar, Rank>& T);
+    static void print(const TType<Scalar, Rank>& T);
 };
 
 } // namespace Xped

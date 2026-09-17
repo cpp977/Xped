@@ -154,6 +154,20 @@ XPED_CONST CoeffBinaryOp<DerivedLeft, DerivedRight> operator+(XPED_CONST TensorB
 }
 
 template <typename DerivedLeft, typename DerivedRight>
+XPED_CONST CoeffBinaryOp<DerivedLeft, DerivedRight> operator+(TensorBase<DerivedLeft>&& left, XPED_CONST TensorBase<DerivedRight>& right)
+{
+    TensorBase<DerivedLeft>& tmp_left = left;
+    return tmp_left.binaryExpr(right, [](const typename DerivedLeft::Scalar s1, const typename DerivedRight::Scalar s2) { return s1 + s2; });
+}
+
+template <typename DerivedLeft, typename DerivedRight>
+XPED_CONST CoeffBinaryOp<DerivedLeft, DerivedRight> operator+(XPED_CONST TensorBase<DerivedLeft>& left, TensorBase<DerivedRight>&& right)
+{
+    TensorBase<DerivedLeft>& tmp_right = right;
+    return left.binaryExpr(tmp_right, [](const typename DerivedLeft::Scalar s1, const typename DerivedRight::Scalar s2) { return s1 + s2; });
+}
+
+template <typename DerivedLeft, typename DerivedRight>
 XPED_CONST CoeffBinaryOp<DerivedLeft, DerivedRight> operator+(TensorBase<DerivedLeft>&& left, TensorBase<DerivedRight>&& right)
 {
     TensorBase<DerivedLeft>& tmp_left = left;

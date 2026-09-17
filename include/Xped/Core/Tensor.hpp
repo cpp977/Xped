@@ -33,11 +33,11 @@
 #    include "Xped/Core/allocators/StanArenaPolicy.hpp"
 #endif
 
-#include "Xped/Core/TensorBase.hpp"
-#include "Xped/Core/CoeffUnaryOp.hpp"
 #include "Xped/Core/CoeffBinaryOp.hpp"
-#include "Xped/Core/DiagCoeffUnaryOp.hpp"
+#include "Xped/Core/CoeffUnaryOp.hpp"
 #include "Xped/Core/DiagCoeffBinaryOp.hpp"
+#include "Xped/Core/DiagCoeffUnaryOp.hpp"
+#include "Xped/Core/TensorBase.hpp"
 #include "Xped/Core/TensorHelper.hpp"
 
 namespace Xped {
@@ -159,6 +159,9 @@ public:
     Storage& storage() { return storage_; }
 
     const mpi::XpedWorld& world() const { return storage_.world(); }
+#ifndef XPED_CONST
+    mpi::XpedWorld& world() { return storage_.world(); }
+#endif
 
     const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, Rank>& uncoupledDomain() const { return storage_.uncoupledDomain(); }
     const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, CoRank>& uncoupledCodomain() const { return storage_.uncoupledCodomain(); }
@@ -217,7 +220,7 @@ public:
 
     // MatrixType& operator() (const FusionTree<Rank,Symmetry>& f1, const FusionTree<CoRank,Symmetry>& f2);
 
-    void print(std::ostream& o, bool PRINT_MATRICES = false) const;
+    void print(std::ostream& o, bool PRINT_MATRICES = false) XPED_CONST;
 
     void setRandom(std::mt19937& engine);
     void setZero();
@@ -246,7 +249,7 @@ public:
     }
 
     // Apply the basis transformation of domain and codomain to the block matrices to get a plain array/tensor
-    TensorType plainTensor() const;
+    TensorType plainTensor() XPED_CONST;
 
     typename PlainInterface::TType<Scalar, Rank + 1> unitaryDomain() const;
     typename PlainInterface::TType<Scalar, CoRank + 1> unitaryCodomain() const;
@@ -290,30 +293,22 @@ public:
 
     template <int shift, std::size_t... p>
     Tensor<Scalar, Rank + shift, CoRank - shift, Symmetry, false, AllocationPolicy> permute_adj(seq::iseq<std::size_t, p...>) const
-    {
-        return permute_adj<shift, p...>();
-    }
+    { return permute_adj<shift, p...>(); }
 
     template <int shift, std::size_t... p>
     Tensor<Scalar, Rank - shift, CoRank + shift, Symmetry, false, AllocationPolicy> permute() const;
 
     template <int shift, std::size_t... p>
     Tensor<Scalar, Rank - shift, CoRank + shift, Symmetry, false, AllocationPolicy> permute(seq::iseq<std::size_t, p...>) const
-    {
-        return permute<shift, p...>();
-    }
+    { return permute<shift, p...>(); }
 
     template <int shift, std::size_t... p, bool b>
     Tensor<Scalar, Rank - shift, CoRank + shift, Symmetry, false, AllocationPolicy> permute(Bool<b>) const
-    {
-        return permute<shift, p...>();
-    }
+    { return permute<shift, p...>(); }
 
     template <int shift, std::size_t... p, bool TRACK>
     Tensor<Scalar, Rank - shift, CoRank + shift, Symmetry, false, AllocationPolicy> permute(seq::iseq<std::size_t, p...>, Bool<TRACK>) const
-    {
-        return permute<shift, p...>(Bool<TRACK>{});
-    }
+    { return permute<shift, p...>(Bool<TRACK>{}); }
 
     template <std::size_t leg>
     Tensor<Scalar, util::constFct::trimDim<Rank>(leg), Rank + CoRank - 1 - util::constFct::trimDim<Rank>(leg), Symmetry, false, AllocationPolicy>
@@ -345,8 +340,8 @@ public:
         constexpr auto pres = std::get<4>(perms);
         constexpr auto shiftres = std::get<5>(perms);
         SPDLOG_INFO("shiftres={}, pres={}", shiftres, pres);
-        return operator*<TRACK>(this->template permute<shift1>(util::constFct::as_sequence<p1>(), Bool<TRACK>{}),
-                                other.template permute<shift2>(util::constFct::as_sequence<p2>(), Bool<TRACK>{}))
+        return operator* <TRACK>(this->template permute<shift1>(util::constFct::as_sequence<p1>(), Bool<TRACK>{}),
+                                 other.template permute<shift2>(util::constFct::as_sequence<p2>(), Bool<TRACK>{}))
             .template permute<shiftres>(util::constFct::as_sequence<pres>(), Bool<TRACK>{});
     }
 
@@ -408,9 +403,7 @@ public:
 
     template <typename Ar>
     void serialize(Ar& ar)
-    {
-        ar& YAS_OBJECT_NVP("Tensor", ("storage", storage_));
-    }
+    { ar& YAS_OBJECT_NVP("Tensor", ("storage", storage_)); }
 
 private:
     Storage storage_;
@@ -430,9 +423,9 @@ private:
     std::tuple<Tensor<Scalar, Rank, 1, Symmetry, false, AllocationPolicy>,
                Tensor<typename ScalarTraits<Scalar>::Real, 1, 1, Symmetry, false, AllocationPolicy>,
                Tensor<Scalar, 1, CoRank, Symmetry, false, AllocationPolicy>>
-    cutoff_matrices(const Tensor<Scalar, Rank, 1, Symmetry, false, AllocationPolicy>& U,
-                    const Tensor<typename ScalarTraits<Scalar>::Real, 1, 1, Symmetry, false, AllocationPolicy>& S,
-                    const Tensor<Scalar, 1, CoRank, Symmetry, false, AllocationPolicy>& Vdag,
+    cutoff_matrices(XPED_CONST Tensor<Scalar, Rank, 1, Symmetry, false, AllocationPolicy>& U,
+                    XPED_CONST Tensor<typename ScalarTraits<Scalar>::Real, 1, 1, Symmetry, false, AllocationPolicy>& S,
+                    XPED_CONST Tensor<Scalar, 1, CoRank, Symmetry, false, AllocationPolicy>& Vdag,
                     std::vector<std::pair<typename Symmetry::qType, RealScalar>>& allSV,
                     size_t maxKeep,
                     RealScalar eps_svd,
@@ -456,16 +449,12 @@ template <bool TRACK = false, typename Scalar, typename OtherScalar, std::size_t
 Tensor<std::common_type_t<Scalar, OtherScalar>, Rank, CoRank, Symmetry, false>
 operator*(XPED_CONST Tensor<Scalar, Rank, MiddleRank, Symmetry, false>& left,
           XPED_CONST Tensor<OtherScalar, MiddleRank, CoRank, Symmetry, false>& right)
-{
-    return left.template operator*<TRACK>(right);
-}
+{ return left.template operator* <TRACK>(right); }
 
 template <bool TRACK = false, typename Scalar, typename OtherScalar, std::size_t Rank, std::size_t MiddleRank, std::size_t CoRank, typename Symmetry>
 Tensor<std::common_type_t<Scalar, OtherScalar>, Rank, CoRank, Symmetry, false>
 operator*(Tensor<Scalar, Rank, MiddleRank, Symmetry, false>&& left, Tensor<OtherScalar, MiddleRank, CoRank, Symmetry, false>&& right)
-{
-    return left.template operator*<TRACK>(right);
-}
+{ return left.template operator* <TRACK>(right); }
 
 #ifdef XPED_USE_AD
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, bool ENABLE_AD = false>

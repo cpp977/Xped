@@ -9,10 +9,10 @@
 
 #include "Xped/Util/Bool.hpp"
 
-#include "Xped/Core/Tensor.hpp"
-#include "Xped/Core/AdjointOp.hpp"
 #include "Xped/AD/reverse_pass_callback_alloc.hpp"
 #include "Xped/AD/vari_value.hpp"
+#include "Xped/Core/AdjointOp.hpp"
+#include "Xped/Core/Tensor.hpp"
 
 namespace Xped {
 
@@ -156,7 +156,8 @@ public:
             Scalar tmp = val().block(q)(row, col);
             stan::math::var_value<Scalar> res(tmp);
             stan::math::reverse_pass_callback([curr = *this, res, q, row, col]() mutable {
-                Tensor<Scalar, Rank, CoRank, Symmetry, false> Zero(curr.uncoupledDomain(), curr.uncoupledCodomain(), curr.adj().world());
+                Tensor<Scalar, Rank, CoRank, Symmetry, false> Zero(
+                    curr.uncoupledDomain(), curr.uncoupledCodomain(), curr.adj().world());
                 Zero.setZero();
                 Zero.block(q)(row, col) = 1.;
                 curr.adj() += (res.adj() * Zero).eval();
@@ -186,9 +187,7 @@ public:
 
     template <int shift, std::size_t... p, bool TRACK>
     Tensor<Scalar, Rank - shift, CoRank + shift, Symmetry, true, AllocationPolicy> permute(seq::iseq<std::size_t, p...>, Bool<TRACK>) const
-    {
-        return permute<shift, p...>(Bool<TRACK>{});
-    }
+    { return permute<shift, p...>(Bool<TRACK>{}); }
 
     template <auto a1,
               auto a2,
@@ -213,8 +212,8 @@ public:
         // auto left_p = this->template permute<shift1>(util::constFct::as_sequence<p1>(), Bool<TRACK>{});
         // auto right_p = other.template permute<shift2>(util::constFct::as_sequence<p2>(), Bool<TRACK>{});
         // return operator*<TRACK>(left_p, right_p).template permute<shiftres>(util::constFct::as_sequence<pres>(), Bool<TRACK>{});
-        return operator*<TRACK>(this->template permute<shift1>(util::constFct::as_sequence<p1>(), Bool<TRACK>{}),
-                                other.template permute<shift2>(util::constFct::as_sequence<p2>(), Bool<TRACK>{}))
+        return operator* <TRACK>(this->template permute<shift1>(util::constFct::as_sequence<p1>(), Bool<TRACK>{}),
+                                 other.template permute<shift2>(util::constFct::as_sequence<p2>(), Bool<TRACK>{}))
             .template permute<shiftres>(util::constFct::as_sequence<pres>(), Bool<TRACK>{});
     }
 
@@ -509,7 +508,8 @@ public:
             Scalar tmp = val().abs().maxCoeff(max_block, max_row, max_col);
             stan::math::var_value<Scalar> res(tmp);
             stan::math::reverse_pass_callback([curr = *this, res, max_block, max_row, max_col]() mutable {
-                Tensor<Scalar, Rank, CoRank, Symmetry, false> Zero(curr.uncoupledDomain(), curr.uncoupledCodomain(), curr.adj().world());
+                Tensor<Scalar, Rank, CoRank, Symmetry, false> Zero(
+                    curr.uncoupledDomain(), curr.uncoupledCodomain(), curr.adj().world());
                 Zero.setZero();
                 if constexpr(not ScalarTraits<Scalar>::IS_COMPLEX()) {
                     Zero.block(max_block)(max_row, max_col) = std::signbit(curr.val().block(max_block)(max_row, max_col)) ? -1. : 1.;
@@ -679,9 +679,7 @@ XTensor<TRACK, Scalar, Rank, CoRank, Symmetry> operator*(const Tensor<Scalar, Ra
 
 template <bool TRACK = true, typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry>
 XTensor<TRACK, Scalar, Rank, CoRank, Symmetry> operator*(Scalar s, const Tensor<Scalar, Rank, CoRank, Symmetry, true>& t)
-{
-    return t * s;
-}
+{ return t * s; }
 
 template <bool TRACK = true, typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry>
 XTensor<TRACK, Scalar, Rank, CoRank, Symmetry> operator*(const Tensor<Scalar, Rank, CoRank, Symmetry, true>& t, stan::math::var_value<Scalar> s)

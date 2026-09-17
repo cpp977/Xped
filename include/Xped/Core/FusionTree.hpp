@@ -7,6 +7,7 @@
 #include "yas/std_types.hpp"
 
 #include "Xped/Hash/hash.hpp"
+#include "Xped/Util/Macros.hpp"
 #include "Xped/Util/Mpi.hpp"
 #include "Xped/Util/Permutations.hpp"
 
@@ -105,7 +106,7 @@ struct FusionTree
     std::string print() const;
 
     template <typename PlainLib>
-    typename PlainLib::template TType<Scalar, Rank + 1> asTensor(const mpi::XpedWorld& world = mpi::getUniverse()) const;
+    typename PlainLib::template TType<Scalar, Rank + 1> asTensor(XPED_CONST mpi::XpedWorld& world = mpi::getUniverse()) const;
 
     FusionTree<Rank + 1, Symmetry> enlarge(const FusionTree<1, Symmetry>& other) const;
 

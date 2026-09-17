@@ -10,6 +10,7 @@ struct PlainInterface : public MatrixInterface, public TensorInterface, public V
     // typedefs
     using Indextype = int;
     using MatrixInterface::add;
+    using MatrixInterface::cast;
     using MatrixInterface::construct;
     using MatrixInterface::construct_with_zero;
     using MatrixInterface::difference;
@@ -21,6 +22,7 @@ struct PlainInterface : public MatrixInterface, public TensorInterface, public V
     using MatrixInterface::setVal;
     using MatrixInterface::setZero;
 
+    using TensorInterface::cast;
     using TensorInterface::construct;
     using TensorInterface::getVal;
     using TensorInterface::print;
@@ -31,7 +33,7 @@ struct PlainInterface : public MatrixInterface, public TensorInterface, public V
 
     using VectorInterface::construct;
     using VectorInterface::construct_with_zero;
-    using VectorInterface::print;
+    // using VectorInterface::print;
     using VectorInterface::scale;
     using VectorInterface::setConstant;
     using VectorInterface::setRandom;
@@ -62,6 +64,12 @@ struct PlainInterface : public MatrixInterface, public TensorInterface, public V
                                                         const Indextype& rows,
                                                         const Indextype& cols,
                                                         const std::array<Indextype, Rank>& dims);
+
+    template <typename Scalar>
+    static MType<Scalar> asDiagonal(const VType<Scalar>& vec);
+    // {
+    //     return vec.matrix().asDiagonal();
+    // }
 
     template <typename MT>
     static void diagonal_head_matrix_to_vector(VType<typename ctf_traits<MT>::Scalar>& V, MT&& M, const Indextype& n_elems);

@@ -160,6 +160,7 @@ public:
     }
 
     const mpi::XpedWorld& world() const { return m_world; }
+    mpi::XpedWorld& world() { return m_world; }
 
 private:
     std::vector<MatrixType, typename AllocationPolicy::template Allocator<MatrixType>> m_data;

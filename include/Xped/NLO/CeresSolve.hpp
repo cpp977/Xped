@@ -156,7 +156,7 @@ struct iPEPSSolverAD
                 Psi->setRandom(optim_opts.seed);
             }
             problem = std::make_unique<ceres::GradientProblem>(
-                new EnergyFunctor(std::move(std::make_unique<CTMSolver<Scalar, Symmetry, HamScalar, ALL_OUT_LEGS, CPOpts, TRank>>(ctm_opts)),
+                new EnergyFunctor(std::make_unique<CTMSolver<Scalar, Symmetry, HamScalar, ALL_OUT_LEGS, CPOpts, TRank>>(ctm_opts),
                                   H,
                                   Psi,
                                   optim_opts.warmup_chis));

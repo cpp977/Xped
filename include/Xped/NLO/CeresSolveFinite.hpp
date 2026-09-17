@@ -140,7 +140,7 @@ struct fPEPSSolverAD
             }
 
             problem = std::make_unique<ceres::GradientProblem>(
-                new EnergyFunctor(std::move(std::make_unique<ExactSolver<Scalar, Symmetry, TRank>>(ctm_opts.verbosity)), H, Psi));
+                new EnergyFunctor(std::make_unique<ExactSolver<Scalar, Symmetry, TRank>>(ctm_opts.verbosity), H, Psi));
             std::filesystem::create_directories(optim_opts.working_directory / optim_opts.logging_directory);
             if(optim_opts.log_format == ".h5") {
                 try {

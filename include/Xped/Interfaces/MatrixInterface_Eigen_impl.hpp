@@ -81,15 +81,11 @@ struct MatrixInterface
     // raw data
     template <typename Scalar>
     static const Scalar* get_raw_data(const Eigen::Matrix<Scalar, -1, -1>& M)
-    {
-        return M.data();
-    }
+    { return M.data(); }
 
     template <typename Scalar>
     static Scalar* get_raw_data(Eigen::Matrix<Scalar, -1, -1>& M)
-    {
-        return M.data();
-    }
+    { return M.data(); }
 
     // reduction
     template <typename Derived>
@@ -121,41 +117,31 @@ struct MatrixInterface
     //                                   const Eigen::PlainObjectBase<Derived>,
     //                                   const Eigen::PlainObjectBase<Derived>>
     static auto add(const Eigen::MatrixBase<DerivedL>& M1, const Eigen::MatrixBase<DerivedR>& M2)
-    {
-        return (M1 + M2);
-    }
+    { return (M1 + M2); }
 
     template <typename DerivedL, typename DerivedR>
     // static const Eigen::CwiseBinaryOp<Eigen::internal::scalar_difference_op<typename Derived::Scalar, typename Derived::Scalar>,
     //                                   const Eigen::PlainObjectBase<Derived>,
     //                                   const Eigen::PlainObjectBase<Derived>>
     static auto difference(const Eigen::MatrixBase<DerivedL>& M1, const Eigen::MatrixBase<DerivedR>& M2)
-    {
-        return (M1 - M2);
-    }
+    { return (M1 - M2); }
 
     template <typename Derived>
     static void scale(Eigen::MatrixBase<Derived>& M, const typename Derived::Scalar& val);
 
     template <typename Scalar, typename Derived>
     static auto diagUnaryFunc(const Eigen::MatrixBase<Derived>& M, const std::function<Scalar(Scalar)>& func)
-    {
-        return M.diagonal().unaryExpr(func).asDiagonal();
-    }
+    { return M.diagonal().unaryExpr(func).asDiagonal(); }
 
     template <typename Scalar, typename Derived>
     static auto unaryFunc(const Eigen::MatrixBase<Derived>& M, const std::function<Scalar(typename Derived::Scalar)>& func)
-    {
-        return M.unaryExpr(func);
-    }
+    { return M.unaryExpr(func); }
 
     template <typename Scalar, typename Derived, typename OtherDerived>
     static auto diagBinaryFunc(const Eigen::MatrixBase<Derived>& M_left,
                                const Eigen::MatrixBase<OtherDerived>& M_right,
                                const std::function<Scalar(Scalar, Scalar)>& func)
-    {
-        return M_left.diagonal().binaryExpr(M_right.diagonal(), func).asDiagonal();
-    }
+    { return M_left.diagonal().binaryExpr(M_right.diagonal(), func).asDiagonal(); }
 
     template <typename Derived, typename OtherDerived>
     static auto
@@ -163,49 +149,35 @@ struct MatrixInterface
                const Eigen::MatrixBase<OtherDerived>& M_right,
                const std::function<std::common_type_t<typename Derived::Scalar, typename OtherDerived::Scalar>(typename Derived::Scalar,
                                                                                                                typename OtherDerived::Scalar)>& func)
-    {
-        return M_left.binaryExpr(M_right, func);
-    }
+    { return M_left.binaryExpr(M_right, func); }
 
     template <typename Scalar, typename Derived>
     static auto msqrt(const Eigen::MatrixBase<Derived>& M)
-    {
-        return M.sqrt();
-    }
+    { return M.sqrt(); }
 
     template <typename Derived, typename Scalar>
     static auto mexp(const Eigen::MatrixBase<Derived>& M, Scalar factor)
-    {
-        return (factor * M).exp();
-    }
+    { return (factor * M).exp(); }
 
     template <typename Derived>
     static auto adjoint(const Eigen::MatrixBase<Derived>& M)
-    {
-        return M.adjoint();
-    }
+    { return M.adjoint(); }
 
     // block
     template <typename Derived>
     static auto
     block(const Eigen::MatrixBase<Derived>& M, const MIndextype& row_off, const MIndextype& col_off, const MIndextype& rows, const MIndextype& cols)
-    {
-        return M.block(row_off, col_off, rows, cols);
-    }
+    { return M.block(row_off, col_off, rows, cols); }
 
     template <typename Derived>
     static auto
     block(Eigen::MatrixBase<Derived>&& M, const MIndextype& row_off, const MIndextype& col_off, const MIndextype& rows, const MIndextype& cols)
-    {
-        return M.block(row_off, col_off, rows, cols);
-    }
+    { return M.block(row_off, col_off, rows, cols); }
 
     template <typename Derived>
     static auto
     block(Eigen::MatrixBase<Derived>& M, const MIndextype& row_off, const MIndextype& col_off, const MIndextype& rows, const MIndextype& cols)
-    {
-        return M.block(row_off, col_off, rows, cols);
-    }
+    { return M.block(row_off, col_off, rows, cols); }
 
     template <typename Derived>
     static void add_to_block(Eigen::MatrixBase<Derived>& M1,

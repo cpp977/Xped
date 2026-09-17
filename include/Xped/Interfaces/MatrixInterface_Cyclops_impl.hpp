@@ -22,6 +22,12 @@ struct ctf_traits<CTF::Matrix<Scalar_>>
 };
 
 template <typename Scalar_>
+struct ctf_traits<const CTF::Matrix<Scalar_>&>
+{
+    using Scalar = Scalar_;
+};
+
+template <typename Scalar_>
 struct ctf_traits<CTF::Tensor<Scalar_>&>
 {
     using Scalar = Scalar_;
@@ -64,6 +70,9 @@ struct MatrixInterface
 
     template <typename Scalar>
     static void setRandom(MType<Scalar>& M);
+
+    template <typename Scalar>
+    static void setRandom(MType<Scalar>& M, std::mt19937& engine);
 
     template <typename Scalar>
     static void setIdentity(MType<Scalar>& M);
@@ -115,6 +124,9 @@ struct MatrixInterface
     template <typename MT>
     static MType<typename ctf_traits<MT>::Scalar> mexp(MT&& M);
 
+    template <typename NewScalar, typename OldScalar>
+    static MType<NewScalar> cast(MType<OldScalar>& M);
+
     template <typename MT1, typename MT2>
     static MType<typename ctf_traits<MT1>::Scalar> add(MT1&& M1, MT2&& M2);
 
@@ -134,7 +146,16 @@ struct MatrixInterface
     static MType<Scalar> diagBinaryFunc(MTL&& M_left, MTR&& M_right, const std::function<Scalar(Scalar, Scalar)>& func);
 
     template <typename Scalar, typename MTL, typename MTR>
-    static MType<Scalar> binaryFunc(MTL&& M_left, MTR&& M_right, const std::function<Scalar(Scalar, Scalar)>& func);
+    static MType<Scalar> binaryFunc(MTL&& M_left, MTR&& M_right, const std::function<Scalar(Scalar, Scalar)>& func)
+    {
+        CTF::Function<Scalar> func_(func);
+        MType<typename ctf_traits<MTL>::Scalar> res(M_left.ncol, M_left.nrow, *M_left.wrld);
+        res["ij"] = func_(M_left["ij"], M_right["ij"]);
+        return res;
+    }
+
+    // template <typename Scalar>
+    // static MType<Scalar> binaryFunc(MTtype<Scalar>& M_left, MType<Scalar>& M_right, const std::function<Scalar(Scalar, Scalar)>& func);
 
     template <typename MT>
     static MType<typename ctf_traits<MT>::Scalar> adjoint(MT&& M);
@@ -165,8 +186,8 @@ struct MatrixInterface
                              const MIndextype& cols,
                              const MType<Scalar>& M2);
 
-    template <typename MT>
-    static void print(MT&& M);
+    template <typename Scalar>
+    static void print(MType<Scalar>& M);
 };
 
 } // namespace Xped

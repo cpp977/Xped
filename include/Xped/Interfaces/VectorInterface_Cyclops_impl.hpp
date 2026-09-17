@@ -60,8 +60,8 @@ struct VectorInterface
     template <typename Scalar>
     static VType<Scalar> sub(const VType<Scalar>& V, const VIndextype& off, const VIndextype& elems);
 
-    template <typename Scalar>
-    static std::string print(const VType<Scalar>& V);
+    // template <typename Scalar>
+    // static void print(VType<Scalar>&& V);
 
     template <typename Scalar, typename VT>
     static void vec_to_stdvec(VT&& V, std::vector<Scalar>& vec);

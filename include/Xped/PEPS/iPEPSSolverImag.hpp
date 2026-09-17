@@ -181,7 +181,7 @@ struct iPEPSSolverImag
 
                 ++ichi;
             }
-
+            Jack.REINIT_ENV = true;
             ctm_time += ctm_t.time();
             ++iD;
         }

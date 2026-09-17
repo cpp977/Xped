@@ -1,3 +1,4 @@
+#include "spdlog/spdlog.h"
 template <typename Symmetry, typename Scalar, int shift, std::size_t... per>
 void perform_tensor_permute(const std::size_t& size, mpi::XpedWorld& world)
 {
@@ -112,8 +113,8 @@ template <typename Symmetry, typename Scalar, std::size_t... per>
 void perform_tensor_permute_intern(const std::size_t size, mpi::XpedWorld& world = mpi::getUniverse())
 {
     // CTF::World world(comm);
-    SPDLOG_WARN("Permute intern: Number of processes in tensor-test #={}", world.np);
-    SPDLOG_WARN("Permute intern: I am process number #={}", world.rank);
+    SPDLOG_CRITICAL("Permute intern: Number of processes in tensor-test #={}", world.np);
+    SPDLOG_CRITICAL("Permute intern: I am process number #={}", world.rank);
     // SPDLOG_WARN("Permute intern: World #={}", world.comm);
     Qbasis<Symmetry, 1> B, C, D, E;
     if(world.rank == 0) {
@@ -160,22 +161,22 @@ void perform_tensor_permute_intern(const std::size_t size, mpi::XpedWorld& world
     XPED_MPI_BARRIER(world.comm)
     static thread_local std::mt19937 engine(std::random_device{}());
     Tensor<Scalar, 4, 0, Symmetry> t({{B, B, B, B}}, {{}}, world);
-    // if(world.rank == 0) { std::cout << t << std::endl; }
+    if(world.rank == 0) { std::cout << t << std::endl; }
     t.setRandom(engine);
-    SPDLOG_WARN("Tensor t set to Random.");
-    XPED_MPI_BARRIER(world.comm)
-    auto tplain = t.plainTensor();
-    SPDLOG_WARN("Computed plain tensor.");
+    SPDLOG_CRITICAL("Tensor t set to Random.");
     XPED_MPI_BARRIER(world.comm)
     auto tp = t.template permute<0, per...>();
-    SPDLOG_WARN("Computed permutation of tensor.");
+    SPDLOG_CRITICAL("Computed permutation of tensor.");
+    XPED_MPI_BARRIER(world.comm)
+    auto tplain = t.plainTensor();
+    SPDLOG_CRITICAL("Computed plain tensor.");
     XPED_MPI_BARRIER(world.comm)
 
     PlainInterface::TType<Scalar, 4> tplainshuffle = PlainInterface::shuffle<Scalar, 4, per...>(tplain);
-    SPDLOG_WARN("Computed plain shuffle of tensor.");
+    SPDLOG_CRITICAL("Computed plain shuffle of tensor.");
     XPED_MPI_BARRIER(world.comm)
     auto tplainp = tp.plainTensor();
-    SPDLOG_WARN("Computed plain tensor of permuted tensor.");
+    SPDLOG_CRITICAL("Computed plain tensor of permuted tensor.");
     XPED_MPI_BARRIER(world.comm)
 #ifdef XPED_USE_ARRAY_TENSOR_LIB
     auto check = nda::make_ein_sum<Scalar, 0, 1, 2, 3>(nda::ein<0, 1, 2, 3>(tplainp) - nda::ein<0, 1, 2, 3>(tplainshuffle));
@@ -314,6 +315,7 @@ void test_tensor_transformation_to_plain(const Qbasis<Symmetry, 1>& B, const Qba
     // for(const auto& [q, pos, plain] : C.data_) { SPDLOG_INFO("QN: {}, deg={}", q.data[0], plain.dim()); }
 
     static thread_local std::mt19937 engine(std::random_device{}());
+    engine.seed(1);
     Tensor<Scalar, 2, 2, Symmetry> t({{B, C}}, {{B, C}}, world);
     t.setRandom(engine);
 
@@ -326,8 +328,13 @@ void test_tensor_transformation_to_plain(const Qbasis<Symmetry, 1>& B, const Qba
     // std::cout << tplain << std::endl;
     // tplain.print(std::cout, true);
     // std::cout << std::endl;
-    auto norm_ = PlainInterface::contract<Scalar, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3>(tplain, tplain.conjugate());
+    auto tconj = PlainInterface::conjugate<Scalar, 4>(tplain);
+    auto norm_ = PlainInterface::contract<Scalar, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3>(tplain, tconj);
     // auto norm_ = PlainInterface::contract<Scalar, 2, 2, 0, 1, 1, 0>(tplain, tplain.conjugate());
     Scalar norm = PlainInterface::getVal<Scalar, 0>(norm_, {{}});
-    CHECK(t.squaredNorm() == doctest::Approx(norm.real()));
+    if constexpr(Xped::ScalarTraits<Scalar>::IS_COMPLEX()) {
+        CHECK(t.squaredNorm() == doctest::Approx(norm.real()));
+    } else {
+        CHECK(t.squaredNorm() == doctest::Approx(norm));
+    }
 }

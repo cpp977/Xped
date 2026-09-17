@@ -5,7 +5,7 @@
 
 namespace Xped::Log {
 
-inline void init_logging(const mpi::XpedWorld& world, const std::string& name)
+void init_logging(const mpi::XpedWorld& world, const std::string& name)
 {
     auto my_logger = world.np > 1 ? spdlog::basic_logger_mt("xlog", "logs/" + name + "_" + std::to_string(world.rank) + ".txt")
                                   : spdlog::basic_logger_mt("xlog", "logs/" + name + ".txt");
@@ -24,6 +24,6 @@ inline void init_logging(const mpi::XpedWorld& world, const std::string& name)
 
 } // namespace Xped::Log
 
-#if __has_include("Logging.gen.cpp")
+#if __has_include("Logging.gen.cpp") && XPED_COMPILED_LIB
 #    include "Logging.gen.cpp"
 #endif

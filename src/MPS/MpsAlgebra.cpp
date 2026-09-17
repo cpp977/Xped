@@ -52,6 +52,6 @@ typename Symmetry::Scalar dot(XPED_CONST Mps<Scalar, Symmetry>& Bra, XPED_CONST 
 
 } // namespace Xped
 
-#if __has_include("MpsAlgebra.gen.cpp")
+#if __has_include("MpsAlgebra.gen.cpp") && XPED_COMPILED_LIB
 #    include "MpsAlgebra.gen.cpp"
 #endif

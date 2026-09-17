@@ -5,6 +5,7 @@
 #include "spdlog/spdlog.h"
 
 #include "Xped/Interfaces/MatrixMultiplication.hpp"
+#include <fmt/base.h>
 
 namespace Xped {
 
@@ -31,8 +32,8 @@ MType<Scalar> MatrixInterface::construct(const MIndextype& rows, const MIndextyp
 template <typename Scalar>
 MType<Scalar> MatrixInterface::construct_with_zero(const MIndextype& rows, const MIndextype& cols, CTF::World& world)
 {
-    SPDLOG_INFO("Entering construct with zero");
-    SPDLOG_INFO("rows={}, cols={}", rows, cols);
+    SPDLOG_CRITICAL("Entering construct with zero");
+    SPDLOG_CRITICAL("rows={}, cols={}", rows, cols);
     return MType<Scalar>(rows, cols, world);
 }
 
@@ -53,6 +54,22 @@ template <typename Scalar>
 void MatrixInterface::setRandom(MType<Scalar>& M)
 {
     M.fill_random(-1., 1.);
+}
+
+template <typename Scalar>
+void MatrixInterface::setRandom(MType<Scalar>& M, std::mt19937& engine)
+{
+    fmt::print("setRandom with engine for M:{}.\n", M.name);
+    M.fill_random(-1., 1.);
+    // std::uniform_real_distribution<typename ScalarTraits<Scalar>::Real> distribution(-1., 1.);
+    // M = unaryFunc<Scalar>(M, [&engine, &distribution]([[maybe_unused]] Scalar s) {
+    //     if constexpr(ScalarTraits<Scalar>::IS_COMPLEX()) {
+    //         return std::complex(distribution(engine), distribution(engine));
+    //     } else {
+    //         return distribution(engine);
+    //     }
+    // });
+    fmt::print("setRandom with engine finished.\n");
 }
 
 template <typename Scalar>
@@ -96,7 +113,7 @@ MIndextype MatrixInterface::cols(const MType<Scalar>& M)
 template <typename MT>
 typename ctf_traits<MT>::Scalar MatrixInterface::trace(MT&& M)
 {
-    typename ctf_traits<MT>::Scalar out = M["ii"];
+    auto out = static_cast<typename ctf_traits<MT>::Scalar>(M["ii"]);
     return out;
 }
 
@@ -145,12 +162,27 @@ Scalar MatrixInterface::getVal(const MType<Scalar>& M, const MIndextype& row, co
     return out;
 }
 
+template <typename NewScalar, typename OldScalar>
+static MType<NewScalar> cast(MType<OldScalar>& M)
+{
+    MType<NewScalar> res(M.nrow, M.ncol, *M.wrld);
+    res["ij"] = M["ij"];
+    return res;
+}
+
 template <typename MT1, typename MT2>
 MType<typename ctf_traits<MT1>::Scalar> MatrixInterface::kronecker_prod(MT1&& M1, MT2&& M2)
 {
-    assert(*M1.wrld == *M2.wrld and "Tensors needs to live on the same world for kroneckerProd().");
+    // assert(*M1.wrld == *M2.wrld and "Tensors needs to live on the same world for kroneckerProd().");
     std::array<int64_t, 4> dims = {M2.nrow, M1.nrow, M2.ncol, M1.ncol};
     CTF::Tensor<typename ctf_traits<MT1>::Scalar> tmp(4, dims.data(), *M1.wrld);
+    tmp["ijkl"] = 1.;
+    fmt::print("M1\n");
+    M1.print_matrix();
+    fmt::print("M2\n");
+    M2.print_matrix();
+    fmt::print("tmp: ({}, {}, {}, {})\n", tmp.lens[0], tmp.lens[1], tmp.lens[2], tmp.lens[3]);
+    tmp.print();
     tmp["kilj"] = M1["ij"] * M2["kl"];
     MType<typename ctf_traits<MT1>::Scalar> res(M1.nrow * M2.nrow, M1.ncol * M2.ncol, *M1.wrld);
     int64_t nvals;
@@ -166,7 +198,7 @@ MType<typename ctf_traits<MT1>::Scalar> MatrixInterface::kronecker_prod(MT1&& M1
 template <typename MT1, typename MT2>
 MType<typename ctf_traits<MT1>::Scalar> MatrixInterface::prod(MT1&& M1, MT2&& M2)
 {
-    assert(*M1.wrld == *M2.wrld and "Tensors needs to live on the same world for prod().");
+    // assert(*M1.wrld == *M2.wrld and "Tensors needs to live on the same world for prod().");
     MType<typename ctf_traits<MT1>::Scalar> res(M1.nrow, M2.ncol, *M1.wrld);
     res["ik"] = M1["ij"] * M2["jk"];
     return res;
@@ -209,7 +241,7 @@ void MatrixInterface::optimal_prod_add(const Scalar& scale, MatrixExpr1&& M1, Ma
 template <typename MT1, typename MT2>
 MType<typename ctf_traits<MT1>::Scalar> MatrixInterface::add(MT1&& M1, MT2&& M2)
 {
-    assert(*M1.wrld == *M2.wrld and "Tensors needs to live on the same world for add().");
+    // assert(*M1.wrld == *M2.wrld and "Tensors needs to live on the same world for add().");
     MType<typename ctf_traits<MT1>::Scalar> res(M1.nrow, M2.ncol, *M1.wrld);
     res["ij"] = M1["ij"] + M2["ij"];
     return res;
@@ -218,7 +250,7 @@ MType<typename ctf_traits<MT1>::Scalar> MatrixInterface::add(MT1&& M1, MT2&& M2)
 template <typename MT1, typename MT2>
 MType<typename ctf_traits<MT1>::Scalar> MatrixInterface::difference(MT1&& M1, MT2&& M2)
 {
-    assert(*M1.wrld == *M2.wrld and "Tensors needs to live on the same world for difference().");
+    // assert(*M1.wrld == *M2.wrld and "Tensors needs to live on the same world for difference().");
     MType<typename ctf_traits<MT1>::Scalar> res(M1.nrow, M2.ncol, *M1.wrld);
     res["ij"] = M1["ij"] - M2["ij"];
     return res;
@@ -249,7 +281,7 @@ MType<Scalar> MatrixInterface::diagUnaryFunc(MT&& M, const std::function<Scalar(
 }
 
 template <typename Scalar, typename MTL, typename MTR>
-MType<Scalar> diagBinaryFunc(MTL&& M_left, const MTR&& M_right, const std::function<Scalar(Scalar, Scalar)>& func)
+MType<Scalar> diagBinaryFunc(MTL&& M_left, MTR&& M_right, const std::function<Scalar(Scalar, Scalar)>& func)
 {
     CTF::Function<Scalar> func_(func);
     MType<typename ctf_traits<MTL>::Scalar> res(M_left.ncol, M_left.nrow, *M_left.wrld);
@@ -257,14 +289,23 @@ MType<Scalar> diagBinaryFunc(MTL&& M_left, const MTR&& M_right, const std::funct
     return res;
 }
 
-template <typename Scalar, typename MTL, typename MTR>
-MType<Scalar> binaryFunc(MTL&& M_left, const MTR&& M_right, const std::function<Scalar(Scalar, Scalar)>& func)
-{
-    CTF::Function<Scalar> func_(func);
-    MType<typename ctf_traits<MTL>::Scalar> res(M_left.ncol, M_left.nrow, *M_left.wrld);
-    res["ij"] = func_(M_left["ij"], M_right["ij"]);
-    return res;
-}
+// template <typename Scalar, typename MTL, typename MTR>
+// MType<Scalar> binaryFunc(MTL&& M_left, MTR&& M_right, const std::function<Scalar(Scalar, Scalar)>& func)
+// {
+//     CTF::Function<Scalar> func_(func);
+//     MType<typename ctf_traits<MTL>::Scalar> res(M_left.ncol, M_left.nrow, *M_left.wrld);
+//     res["ij"] = func_(M_left["ij"], M_right["ij"]);
+//     return res;
+// }
+
+// template <typename Scalar>
+// MType<Scalar> binaryFunc(MType<Scalar>& M_left, MType<Scalar>& M_right, const std::function<Scalar(Scalar, Scalar)>& func)
+// {
+//     CTF::Function<Scalar> func_(func);
+//     MType<Scalar> res(M_left.ncol, M_left.nrow, *M_left.wrld);
+//     res["ij"] = func_(M_left["ij"], M_right["ij"]);
+//     return res;
+// }
 
 template <typename MT>
 MType<typename ctf_traits<MT>::Scalar> MatrixInterface::adjoint(MT&& M)
@@ -339,14 +380,14 @@ void MatrixInterface::add_to_block(MType<Scalar>& M1,
     SPDLOG_INFO("Leaving MatrixInterface::add_to_block().");
 }
 
-template <typename MT>
-void MatrixInterface::print(MT&& M)
+template <typename Scalar>
+void MatrixInterface::print(MType<Scalar>& M)
 {
     M.print_matrix();
 }
 
 } // namespace Xped
 
-#if __has_include("MatrixInterface_Cyclops_impl.gen.cpp")
+#if __has_include("MatrixInterface_Cyclops_impl.gen.cpp") && XPED_COMPILED_LIB
 #    include "MatrixInterface_Cyclops_impl.gen.cpp"
 #endif

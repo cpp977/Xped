@@ -9,6 +9,7 @@
 #include "Xped/Util/Bool.hpp"
 
 #include "Xped/Core/AdjointOp.hpp"
+#include "Xped/AD/ADTensor.hpp"
 
 #include "Xped/IO/Json.hpp"
 #include "Xped/IO/Matlab.hpp"
@@ -688,6 +689,6 @@ void iPEPS<Scalar, Symmetry, ALL_OUT_LEGS, ENABLE_AD>::grad_info() const
 
 } // namespace Xped
 
-#if __has_include("iPEPS.gen.cpp")
+#if __has_include("iPEPS.gen.cpp") && XPED_COMPILED_LIB
 #    include "iPEPS.gen.cpp"
 #endif

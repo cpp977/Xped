@@ -557,6 +557,6 @@ std::string Qbasis<Symmetry, depth, AllocationPolicy>::printTrees() const
 
 } // namespace Xped
 
-#if __has_include("Qbasis.gen.cpp")
+#if __has_include("Qbasis.gen.cpp") && XPED_COMPILED_LIB
 #    include "Qbasis.gen.cpp"
 #endif

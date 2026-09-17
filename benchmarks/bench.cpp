@@ -6,8 +6,6 @@
 #include <string>
 #include <vector>
 
-#include "Eigen/Core"
-
 #include "tabulate/table.hpp"
 #include "tabulate/tabulate.hpp"
 
@@ -35,13 +33,13 @@ using std::string;
 #include "spdlog/sinks/stdout_color_sinks.h"
 
 #include "Xped/Util/Mpi.hpp"
+#include "Xped/Util/Bool.hpp"
 
 #ifdef XPED_CACHE_PERMUTE_OUTPUT
 #    include "lru/lru.hpp"
 XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100)
 #endif
 
-#include "Xped/Interfaces/PlainInterface.hpp"
 
 #include "Xped/Core/Qbasis.hpp"
 #include "Xped/Symmetry/SU2.hpp"

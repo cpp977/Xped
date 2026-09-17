@@ -141,7 +141,6 @@ int main(int argc, char* argv[])
             fmt::print("{: >3} {:2d}: E={:2.8f}, t={}\n", "▷", step, E, move_t.time_string());
         }
     }
-    using qType = typename Symmetry::qType;
     auto [xi, eigs] = Xped::correlation_length(Jack, Xped::Opts::Orientation::H, 0, 0);
 
     auto save_p = std::filesystem::current_path();

@@ -3,6 +3,7 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <toml11/find.hpp>
 #include <vector>
 
 #include "toml.hpp"
@@ -128,7 +129,7 @@ int main(int argc, char* argv[])
         auto sym = Xped::Opts::DiscreteSym::None;
         if(data.at("ipeps").contains("sym")) { sym = Xped::util::enum_from_toml<Xped::Opts::DiscreteSym>(data.at("ipeps").at("sym")); }
 
-        std::size_t D = toml::get_or<std::size_t>(toml::find(data.at("ipeps"), "D"), 2ul);
+        std::size_t D = toml::find_or_default<std::size_t>(data.at("ipeps"), "D", 2ul);
 
         Xped::TMatrix<Xped::Qbasis<Symmetry, 1>> left_aux(c.pattern), top_aux(c.pattern);
         if(data.at("ipeps").contains("aux_bases")) {

@@ -99,6 +99,6 @@ void VectorInterface::vec_to_stdvec(const VType<Scalar>& V, std::vector<Scalar>&
 
 } // namespace Xped
 
-#if __has_include("VectorInterface_Eigen_impl.gen.cpp")
+#if __has_include("VectorInterface_Eigen_impl.gen.cpp") && XPED_COMPILED_LIB
 #    include "VectorInterface_Eigen_impl.gen.cpp"
 #endif

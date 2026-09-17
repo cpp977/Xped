@@ -206,7 +206,7 @@ TType<Scalar, Rank> TensorInterface::tensorProd(const TType<Scalar, Rank>& T1, c
 }
 
 template <typename Scalar, std::size_t Rank, typename Expr1, typename Expr2>
-void TensorInterface::addScale(const Expr1& src, Expr2& dst, const Scalar& scale)
+void TensorInterface::addScale(const Expr1& src, Expr2 dst, const Scalar& scale)
 {
     dst += scale * src;
 }
@@ -344,6 +344,6 @@ std::string TensorInterface::print(const TType<Scalar, Rank>& T)
 
 } // namespace Xped
 
-#if __has_include("TensorInterface_Eigen_impl.gen.cpp")
+#if __has_include("TensorInterface_Eigen_impl.gen.cpp") && XPED_COMPILED_LIB
 #    include "TensorInterface_Eigen_impl.gen.cpp"
 #endif

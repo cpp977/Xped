@@ -124,6 +124,6 @@ std::string SiteOperator<Scalar, Symmetry>::print() const
 
 } // namespace Xped
 
-#if __has_include("SiteOperator.gen.cpp")
+#if __has_include("SiteOperator.gen.cpp") && XPED_COMPILED_LIB
 #    include "SiteOperator.gen.cpp"
 #endif

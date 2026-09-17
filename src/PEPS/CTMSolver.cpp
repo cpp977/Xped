@@ -5,6 +5,13 @@
 #include "Xped/Util/Logging.hpp"
 #include "Xped/Util/Stopwatch.hpp"
 
+#include "Xped/Symmetry/SU2.hpp"
+#include "Xped/Symmetry/U0.hpp"
+#include "Xped/Symmetry/U1.hpp"
+#include "Xped/Symmetry/ZN.hpp"
+#include "Xped/Symmetry/S1xS2.hpp"
+#include "Xped/Symmetry/CombSym.hpp"
+
 namespace Xped {
 
 template <typename Scalar, typename Symmetry, typename HamScalar, bool ALL_OUT_LEGS, Opts::CTMCheckpoint CPOpts, std::size_t TRank>
@@ -164,6 +171,6 @@ CTMSolver<Scalar, Symmetry, HamScalar, ALL_OUT_LEGS, CPOpts, TRank>::solve(std::
 
 } // namespace Xped
 
-#if __has_include("CTMSolver.gen.cpp")
+#if __has_include("CTMSolver.gen.cpp") && XPED_COMPILED_LIB
 #    include "CTMSolver.gen.cpp"
 #endif

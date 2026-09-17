@@ -26,7 +26,8 @@ int main(int argc, char** argv)
 {
     std::ios::sync_with_stdio(true);
 #ifdef XPED_USE_MPI
-    MPI_Init(&argc, &argv);
+    doctest::mpi_init_thread(argc, argv, MPI_THREAD_MULTIPLE); // Or any MPI thread level
+    // MPI_Init(&argc, &argv);
     CTF::World world(MPI_COMM_WORLD, argc, argv);
 
     auto my_logger = spdlog::basic_logger_mt("info", "logs/log_" + to_string(world.rank) + ".txt");
@@ -61,8 +62,8 @@ int main(int argc, char** argv)
     int test_result = ctx.run();
 
 #ifdef XPED_USE_MPI
-    MPI_Finalize();
+    doctest::mpi_finalize();
+    // MPI_Finalize();
 #endif
-
     return test_result;
 }

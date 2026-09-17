@@ -99,6 +99,6 @@ std::ostream& operator<<(std::ostream& os, const Pattern& pat)
 
 } // namespace Xped
 
-#if __has_include("Pattern.gen.cpp")
+#if __has_include("Pattern.gen.cpp") && XPED_COMPILED_LIB
 #    include "Pattern.gen.cpp"
 #endif

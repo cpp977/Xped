@@ -78,6 +78,6 @@ std::ostream& operator<<(std::ostream& os, const Basis& basis)
 
 } // namespace Xped
 
-#if __has_include("Basis.gen.cpp")
+#if __has_include("Basis.gen.cpp") && XPED_COMPILED_LIB
 #    include "Basis.gen.cpp"
 #endif

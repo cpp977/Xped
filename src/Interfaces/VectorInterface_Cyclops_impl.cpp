@@ -88,11 +88,11 @@ VType<Scalar> VectorInterface::sub(const VType<Scalar>& V, const VIndextype& off
     return V.slice(offs.data(), ends.data());
 }
 
-template <typename Scalar>
-std::string VectorInterface::print(const VType<Scalar>& V)
-{
-    return V.print();
-}
+// template <typename Scalar>
+// void VectorInterface::print(VType<Scalar>&& V)
+// {
+//     V.print();
+// }
 
 template <typename Scalar, typename VT>
 void VectorInterface::vec_to_stdvec(VT&& V, std::vector<Scalar>& vec)
@@ -106,6 +106,6 @@ void VectorInterface::vec_to_stdvec(VT&& V, std::vector<Scalar>& vec)
 
 } // namespace Xped
 
-#if __has_include("VectorInterface_Cyclops_impl.gen.cpp")
+#if __has_include("VectorInterface_Cyclops_impl.gen.cpp") && XPED_COMPILED_LIB
 #    include "VectorInterface_Cyclops_impl.gen.cpp"
 #endif

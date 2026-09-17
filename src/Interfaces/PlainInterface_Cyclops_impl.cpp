@@ -3,6 +3,7 @@
 #include "Xped/Interfaces/PlainInterface_Cyclops_impl.hpp"
 
 #include "spdlog/spdlog.h"
+#include <ostream>
 
 namespace Xped {
 
@@ -92,6 +93,7 @@ TType<Scalar, Rank> PlainInterface::tensor_from_matrix_block(const MType<Scalar>
 {
     std::array<Indextype, 2> offsets = {row_off, col_off};
     std::array<Indextype, 2> ends = {row_off + rows, col_off + cols};
+    fmt::print("Call slice with offsets={}, ends={} on Matrix({},{})\n", offsets, ends, M.nrow, M.ncol);
     MType<Scalar> submatrix = M.slice(offsets.data(), ends.data());
     TType<Scalar, Rank> T(Rank, dims.data(), *M.wrld);
     int64_t nvals;
@@ -171,6 +173,6 @@ MType<Scalar> PlainInterface::vec_to_diagmat(VT&& V)
 
 } // namespace Xped
 
-#if __has_include("PlainInterface_Cyclops_impl.gen.cpp")
+#if __has_include("PlainInterface_Cyclops_impl.gen.cpp") && XPED_COMPILED_LIB
 #    include "PlainInterface_Cyclops_impl.gen.cpp"
 #endif

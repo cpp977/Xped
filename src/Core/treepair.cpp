@@ -220,6 +220,6 @@ permute(const FusionTree<Rank, Symmetry>& t1, const FusionTree<CoRank, Symmetry>
 
 } // namespace Xped
 
-#if __has_include("treepair.gen.cpp")
+#if __has_include("treepair.gen.cpp") && XPED_COMPILED_LIB
 #    include "treepair.gen.cpp"
 #endif

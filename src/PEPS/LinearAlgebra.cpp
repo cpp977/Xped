@@ -1,5 +1,12 @@
 #include "Xped/PEPS/LinearAlgebra.hpp"
 
+#include "Xped/Symmetry/SU2.hpp"
+#include "Xped/Symmetry/U0.hpp"
+#include "Xped/Symmetry/U1.hpp"
+#include "Xped/Symmetry/ZN.hpp"
+#include "Xped/Symmetry/S1xS2.hpp"
+#include "Xped/Symmetry/CombSym.hpp"
+
 #include <limits>
 
 #include "spdlog/spdlog.h"
@@ -421,6 +428,6 @@ avg(XPED_CONST CTM<Scalar, Symmetry, TRank, ALL_OUT_LEGS, ENABLE_AD, CPOpts>& en
 
 } // namespace Xped
 
-#if __has_include("LinearAlgebra.gen.cpp")
+#if __has_include("LinearAlgebra.gen.cpp") && XPED_COMPILED_LIB
 #    include "LinearAlgebra.gen.cpp"
 #endif

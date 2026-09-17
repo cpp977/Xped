@@ -76,6 +76,6 @@ inline void broadcast(T&&, int, int, XpedWorld&)
 } // namespace Xped::mpi
 #endif
 
-#if __has_include("Mpi.gen.cpp")
+#if __has_include("Mpi.gen.cpp") && XPED_COMPILED_LIB
 #    include "Mpi.gen.cpp"
 #endif

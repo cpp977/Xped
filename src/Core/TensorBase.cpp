@@ -4,12 +4,12 @@
 
 #include "Xped/Util/Macros.hpp"
 
+#include "Xped/Symmetry/CombSym.hpp"
+#include "Xped/Symmetry/S1xS2.hpp"
 #include "Xped/Symmetry/SU2.hpp"
 #include "Xped/Symmetry/U0.hpp"
 #include "Xped/Symmetry/U1.hpp"
 #include "Xped/Symmetry/ZN.hpp"
-#include "Xped/Symmetry/S1xS2.hpp"
-#include "Xped/Symmetry/CombSym.hpp"
 
 #include "Xped/Core/AdjointOp.hpp"
 #include "Xped/Core/BlockUnaryOp.hpp"
@@ -162,7 +162,6 @@ XPED_CONST CoeffUnaryOp<Derived, typename ScalarTraits<typename TensorTraits<Der
     return unaryExpr<typename ScalarTraits<typename TensorTraits<Derived>::Scalar>::Real>([](const Scalar s) { return std::imag(s); });
 }
 
-    
 template <typename Derived>
 template <typename OtherScalar>
 XPED_CONST CoeffUnaryOp<Derived, OtherScalar> TensorBase<Derived>::cast() XPED_CONST
@@ -272,7 +271,9 @@ TensorBase<Derived>::operator*(XPED_CONST TensorBase<OtherDerived>& other) XPED_
         //                 other_derived_ref.block(it->second).rows(),
         //                 other_derived_ref.block(it->second).cols());
         // } else {
-        Tout.block(it_out->second) += PlainInterface::prod(derived_ref.block(i), other_derived_ref.block(it->second));
+        auto tmp = PlainInterface::prod(derived_ref.block(i), other_derived_ref.block(it->second));
+        PlainInterface::addScale<ResScalar, Rank + TensorTraits<OtherDerived_>::CoRank>(tmp, Tout.block(it_out->second), 1.);
+        // Tout.block(it_out->second) += PlainInterface::prod(derived_ref.block(i), other_derived_ref.block(it->second));
         // }
         // Tout.push_back(derived_ref.sector(i), PlainInterface::prod<Scalar>(derived_ref.block(i), other_derived_ref.block(it->second)));
         // Tout.block_[i] = T1.block_[i] * T2.block_[it->second];
@@ -289,6 +290,6 @@ TensorBase<Derived>::operator*(XPED_CONST TensorBase<OtherDerived>& other) XPED_
 
 } // namespace Xped
 
-#if __has_include("TensorBase.gen.cpp")
+#if __has_include("TensorBase.gen.cpp") && XPED_COMPILED_LIB
 #    include "TensorBase.gen.cpp"
 #endif

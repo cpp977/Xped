@@ -57,7 +57,7 @@ int main(int argc, char* argv[])
         // using Symmetry = Xped::Sym::ZN<Xped::Sym::FChargeU1, 36>;
         // using Symmetry = Xped::Sym::ZN<Xped::Sym::SpinU1, 36>;
         // using Symmetry = Xped::Sym::SU2<Xped::Sym::SpinSU2>;
-        // using Symmetry = Xped::Sym::Combined<Xped::Sym::ZN<Xped::Sym::SpinU1, 36>, Xped::Sym::ZN<Xped::Sym::FChargeU1, 36>>;
+        using Symmetry = Xped::Sym::Combined<Xped::Sym::ZN<Xped::Sym::SpinU1, 36>, Xped::Sym::ZN<Xped::Sym::FChargeU1, 36>>;
         // using Symmetry = Xped::Sym::Combined<Xped::Sym::SU2<Xped::Sym::SpinSU2>, Xped::Sym::ZN<Xped::Sym::FChargeU1, 36>>;
 
         // using Symmetry =
@@ -69,7 +69,7 @@ int main(int argc, char* argv[])
         // typedef Xped::Sym::SU2<Xped::Sym::SpinSU2> Symmetry;
         // typedef Xped::Sym::U1<Xped::Sym::SpinU1> Symmetry;
         // typedef Xped::Sym::ZN<Xped::Sym::SpinU1, 36, double> Symmetry;
-        using Symmetry = Xped::Sym::U0<double>;
+        // using Symmetry = Xped::Sym::U0<double>;
 
         std::unique_ptr<Xped::Hamiltonian<HamScalar, Symmetry>> ham;
 
@@ -77,7 +77,7 @@ int main(int argc, char* argv[])
         toml::value data;
         try {
             data = toml::parse(config_file);
-            // std::cout << data << "\n";
+            // std::cout << "raw data=" << data << "\n";
         } catch(const toml::syntax_error& err) {
             std::cerr << "Parsing failed:\n" << err.what() << "\n";
             return 1;
@@ -102,8 +102,7 @@ int main(int argc, char* argv[])
             }
         }
 
-        std::size_t D = toml::get_or<std::size_t>(toml::find(data.at("ipeps"), "D"), 2ul);
-
+        std::size_t D = toml::find_or<std::size_t>(data.at("ipeps"), "D", 2ul);
         Xped::TMatrix<Xped::Qbasis<Symmetry, 1>> left_aux(c.pattern), top_aux(c.pattern);
         if(data.at("ipeps").contains("aux_bases")) {
             auto left =

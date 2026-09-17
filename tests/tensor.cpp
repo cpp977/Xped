@@ -42,6 +42,7 @@ XPED_INIT_TREE_CACHE_VARIABLE(tree_cache, 100)
 
 #include "Xped/Core/AdjointOp.hpp"
 #include "Xped/Core/FusionTree.hpp"
+#include "Xped/Core/ScalarTraits.hpp"
 #include "Xped/Core/Tensor.hpp"
 
 #include "doctest/doctest.h"
@@ -56,7 +57,7 @@ using namespace Xped;
 #ifdef XPED_USE_MPI
 constexpr std::size_t SU2_TENSOR_SIZE = 4;
 constexpr std::size_t U1_TENSOR_SIZE = 3;
-constexpr std::size_t U0_TENSOR_SIZE = 3;
+constexpr std::size_t U0_TENSOR_SIZE = 2;
 #else
 constexpr std::size_t SU2_TENSOR_SIZE = 7;
 constexpr std::size_t U1_TENSOR_SIZE = 5;
@@ -67,7 +68,8 @@ constexpr std::size_t U0_TENSOR_SIZE = 4;
 constexpr int MPI_NUM_PROC = 2;
 #endif
 
-using Scalar = std::complex<double>;
+// using Scalar = std::complex<double>;
+using Scalar = double;
 
 TEST_SUITE_BEGIN("Tensor");
 
@@ -283,7 +285,10 @@ TEST_CASE("Testing operations with SU(2)-spin matrices.")
         s1.setConstant(std::sqrt(S1 * (S1 + 1.)));
 
         // transform to plain tensor and check against pauli_vec1
-        auto tplain = s1.adjoint().eval().plainTensor();
+        auto tmp = s1.adjoint().eval();
+        tmp.print(std::cout, true);
+        std::cout << std::endl;
+        auto tplain = tmp.plainTensor();
         for(Eigen::Index k = 0; k < PlainInterface::dimensions<double, 3>(tplain)[2]; k++) {
             Eigen::Matrix<double, -1, -1> pauli(twoS1 + 1, twoS1 + 1);
             for(Eigen::Index j = 0; j < PlainInterface::dimensions<double, 3>(tplain)[1]; j++)

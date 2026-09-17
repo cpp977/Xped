@@ -72,6 +72,54 @@ TType<Scalar, Rank> TensorInterface::construct(const MapTType<Scalar, Rank>& map
 //     return out;
 // }
 
+template <typename Scalar, std::size_t Rank>
+TType<Scalar, Rank>
+TensorInterface::construct_permutation(const std::array<Indextype, Rank / 2>& dims, const util::Permutation& p, const mpi::XpedWorld&)
+{
+    assert(Rank == 2 * p.N and "Bad size of permutation.");
+    std::array<TType<Scalar, 2ul>, Rank> deltas{};
+    std::array<Indextype, Rank> shuffle_dims;
+    for(std::size_t i = 0; i < Rank; ++i) {
+        if(i < p.N) {
+            shuffle_dims[i] = 2 * p.pi[i];
+        } else {
+            shuffle_dims[i] = 2 * (i - p.N + 1) - 1;
+        }
+    }
+    for(std::size_t i = 0; i < p.N; ++i) {
+        deltas[i] = construct<Scalar>(std::array{dims[i], dims[i]}, mpi::getUniverse());
+        setZero<Scalar, 2>(deltas[i]);
+        for(auto j = 0; j < dims[i]; ++j) { setVal<Scalar, 2>(deltas[i], {j, j}, 1.); }
+    }
+    if constexpr(Rank == 2) {
+        return deltas[0];
+    } else if constexpr(Rank == 4) {
+        // fmt::print("Rank=4\n");
+        auto tmp1 = contract<Scalar, 2, 2>(deltas[0], deltas[1]);
+
+        // std::cout << tmp1.reshape(std::array{9, 9}) << std::endl << std::endl;
+        auto res = shuffle(tmp1, shuffle_dims);
+        // auto res2 = tmp1.shuffle(std::array{2, 0, 1, 3});
+        // std::cout << res.reshape(std::array{9, 9}) << std::endl << std::endl;
+        // std::cout << res2.reshape(std::array{9, 9}) << std::endl;
+        // fmt::print("return\n");
+        return res;
+    } else if constexpr(Rank == 6) {
+        auto tmp1 = contract<Scalar, 2, 2>(deltas[0], deltas[1]);
+        auto tmp2 = contract<Scalar, 4, 2>(tmp1, deltas[2]);
+        auto res = shuffle(tmp2, shuffle_dims);
+        return res;
+    } else if constexpr(Rank == 8) {
+        auto tmp1 = contract<Scalar, 2, 2>(deltas[0], deltas[1]);
+        auto tmp2 = contract<Scalar, 4, 2>(tmp1, deltas[2]);
+        auto tmp3 = contract<Scalar, 6, 2>(tmp2, deltas[3]);
+        auto res = shuffle(tmp3, shuffle_dims);
+        return res;
+    } else {
+        assert(false and "construct_permutation is not implementd for Rank>8");
+    }
+}
+
 // initialization
 template <typename Scalar, int Rank>
 void TensorInterface::setZero(TType<Scalar, Rank>& T)
@@ -220,9 +268,10 @@ TType<Scalar, Rank> TensorInterface::tensorProd(TType<Scalar, Rank>& T1, TType<S
 }
 
 template <typename Scalar, std::size_t Rank, typename Expr1, typename Expr2>
-void TensorInterface::addScale(const Expr1& src, Expr2& dst, const Scalar& scale)
+void TensorInterface::addScale(Expr1& src, Expr2& dst, const Scalar& scale)
 {
-    dst[get_idx<Rank>().data()] += src.scale(scale, get_idx<Rank>().data());
+    dst.sum(scale, src, get_idx<Rank>().data(), 1., get_idx<Rank>().data());
+    //  dst[get_idx<Rank>().data()] += src.scale(scale, get_idx<Rank>().data());
 }
 
 // methods rvalue
@@ -234,7 +283,7 @@ TType<Scalar, sizeof...(Ist)> TensorInterface::contract_helper(TType<Scalar, Ran
                                                                seq::iseq<Indextype, Is2...> S2,
                                                                seq::iseq<Indextype, Ist...> St)
 {
-    assert(*T1.wrld == *T2.wrld and "Tensors should live on the same world for contraction");
+    // assert(*T1.wrld == *T2.wrld and "Tensors should live on the same world for contraction");
 
     SPDLOG_INFO("Entering TensorInterface::contract_helper().");
     // SPDLOG_INFO("T1.world={}, T2.world={}", T1.wrld->comm, T2.wrld->comm);
@@ -349,6 +398,21 @@ TType<Scalar, Rank> TensorInterface::shuffle(TType<Scalar, Rank>& T, seq::iseq<I
     return out;
 }
 
+// template <typename Scalar, std::size_t Rank>
+// TType<Scalar, Rank> shuffle(TType<Scalar, Rank>& T, std::array<Indextype, Rank> shuffle_dims)
+// {
+//     std::array<Indextype, Rank> out_dims;
+//     for(std::size_t i = 0; i < Rank; i++) { out_dims[i] = T.lens[shuffle_dims[i]]; }
+
+//     char perm_idx[Rank];
+//     for(auto i = 0ul; i < Rank; ++i) { perm_idx[i] = idx(shuffle_dims[i]); }
+//     auto id_idx = get_idx<Rank>();
+
+//     TType<Scalar, Rank> out(Rank, out_dims.data(), *T.wrld);
+//     out[perm_idx] = T[id_idx.data()];
+//     return out;
+// }
+
 template <typename Expr, Indextype... p>
 Expr TensorInterface::shuffle_view(const Expr& T)
 {
@@ -399,13 +463,13 @@ TensorInterface::slice(TType<Scalar, Rank1>& T, const std::array<Indextype, Rank
 }
 
 template <typename Scalar, std::size_t Rank>
-std::string TensorInterface::print(const TType<Scalar, Rank>& T)
+void TensorInterface::print(const TType<Scalar, Rank>& T)
 {
-    return T.print();
+    T.print();
 }
 
 } // namespace Xped
 
-#if __has_include("TensorInterface_Cyclops_impl.gen.cpp")
+#if __has_include("TensorInterface_Cyclops_impl.gen.cpp") && XPED_COMPILED_LIB
 #    include "TensorInterface_Cyclops_impl.gen.cpp"
 #endif

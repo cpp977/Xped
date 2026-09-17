@@ -1,5 +1,5 @@
 if(NOT XPED_COMPILED_LIB)
-  add_library(Xped INTERFACE)
+  add_library(Xped INTERFACE ${XPED_DIR}/src/Util/Logging.cpp)
   target_include_directories(Xped BEFORE INTERFACE ${XPED_DIR}/src)
   target_include_directories(Xped BEFORE INTERFACE ${XPED_DIR}/include)
   target_include_directories(Xped BEFORE INTERFACE ${YAS_INCLUDE_DIRS})
@@ -16,10 +16,7 @@ if(NOT XPED_COMPILED_LIB)
               spdlog::spdlog
               seq::seq
               WignerSUN::wignersun
-              libdeps
-              HighFive
-              HighFive_libdeps
-              HighFive_HighFive
+              HighFive::HighFive
               assert::assert)
   if(${XPED_TENSOR_LIB} STREQUAL "Cyclops")
     target_link_libraries(Xped INTERFACE ${CYCLOPS_LIB})
@@ -147,12 +144,15 @@ else()
            spdlog::spdlog
            seq::seq
            assert::assert
-           HighFive
-           HighFive_libdeps
-           HighFive_HighFive
+           HighFive::HighFive
            WignerSUN::wignersun
-           libdeps
            assert::assert)
+
+  if(XPED_USE_NLO)
+    if(${XPED_OPTIM_LIB} STREQUAL "ceres")
+      target_link_libraries(Xped INTERFACE Ceres::ceres)
+    endif()
+  endif()
 
   if(${XPED_TENSOR_LIB} STREQUAL "Cyclops")
     target_link_libraries(Xped PUBLIC cyclops_lib::all)

@@ -264,6 +264,6 @@ std::string MatrixInterface::print(const Eigen::DenseBase<Derived>& M)
 
 } // namespace Xped
 
-#if __has_include("MatrixInterface_Eigen_impl.gen.cpp")
+#if __has_include("MatrixInterface_Eigen_impl.gen.cpp") && XPED_COMPILED_LIB
 #    include "MatrixInterface_Eigen_impl.gen.cpp"
 #endif

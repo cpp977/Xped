@@ -1,3 +1,4 @@
+#include <fmt/color.h>
 #include <iostream>
 #include <sstream>
 #include <unordered_set>
@@ -14,12 +15,12 @@
 #include "Xped/Util/Macros.hpp"
 #include "Xped/Util/Random.hpp"
 
+#include "Xped/Symmetry/CombSym.hpp"
+#include "Xped/Symmetry/S1xS2.hpp"
 #include "Xped/Symmetry/SU2.hpp"
 #include "Xped/Symmetry/U0.hpp"
 #include "Xped/Symmetry/U1.hpp"
 #include "Xped/Symmetry/ZN.hpp"
-#include "Xped/Symmetry/S1xS2.hpp"
-#include "Xped/Symmetry/CombSym.hpp"
 
 using std::cout;
 using std::endl;
@@ -86,6 +87,7 @@ Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>
 Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::permute_impl(seq::iseq<std::size_t, pds...> pd,
                                                                               seq::iseq<std::size_t, pcs...> pc) const
 {
+    SPDLOG_CRITICAL("Calling permute_impl intern.");
     std::array<std::size_t, Rank> arr_domain = {pds...};
     std::array<std::size_t, CoRank> arr_codomain = {(pcs - Rank)...};
     util::Permutation p_domain(arr_domain);
@@ -118,7 +120,9 @@ Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::permute_impl(se
                 auto tensor = this->view(domain_tree, codomain_tree);
                 auto Tshuffle = PlainInterface::shuffle_view<decltype(tensor), pds..., pcs...>(tensor);
 #elif defined(XPED_TIME_EFFICIENT)
+                fmt::print("Call subBlock");
                 auto tensor = this->subBlock(domain_tree, codomain_tree);
+                fmt::print("Call shuffle");
                 auto Tshuffle = PlainInterface::shuffle<Scalar, Rank + CoRank, pds..., pcs...>(tensor);
 #endif
 
@@ -136,6 +140,7 @@ Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::permute_impl(se
                         IndexType col = out.coupledCodomain().leftOffset(permuted_codomain_tree);
                         IndexType rows = permuted_domain_tree.dim;
                         IndexType cols = permuted_codomain_tree.dim;
+                        fmt::print("Add to block");
                         PlainInterface::add_to_block_from_tensor<Rank + CoRank>(
                             out.block(it->second), row, col, rows, cols, coeff_domain * coeff_codomain, Tshuffle);
 #endif
@@ -215,13 +220,13 @@ Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::permute_impl(se
 
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
 template <std::size_t... pds>
-Tensor<Scalar, Rank, Rank, Symmetry, false, AllocationPolicy> Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::RotOperator(const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, Rank>& basis_domain,
-																	   const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, CoRank>& basis_codomain,
-																	   const mpi::XpedWorld& world)
+Tensor<Scalar, Rank, Rank, Symmetry, false, AllocationPolicy> Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::RotOperator(
+    const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, Rank>& basis_domain,
+    const std::array<Qbasis<Symmetry, 1, AllocationPolicy>, CoRank>& basis_codomain,
+    const mpi::XpedWorld& world)
 {
     std::array<std::size_t, Rank> arr_domain = {pds...};
     util::Permutation p_domain(arr_domain);
-
 
     auto new_domain = basis_domain;
     p_domain.apply(new_domain);
@@ -525,9 +530,9 @@ std::tuple<Tensor<Scalar, Rank, 1, Symmetry, false, AllocationPolicy>,
            Tensor<typename ScalarTraits<Scalar>::Real, 1, 1, Symmetry, false, AllocationPolicy>,
            Tensor<Scalar, 1, CoRank, Symmetry, false, AllocationPolicy>>
 Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::cutoff_matrices(
-    const Tensor<Scalar, Rank, 1, Symmetry, false, AllocationPolicy>& U,
-    const Tensor<typename ScalarTraits<Scalar>::Real, 1, 1, Symmetry, false, AllocationPolicy>& Sigma,
-    const Tensor<Scalar, 1, CoRank, Symmetry, false, AllocationPolicy>& Vdag,
+    XPED_CONST Tensor<Scalar, Rank, 1, Symmetry, false, AllocationPolicy>& U,
+    XPED_CONST Tensor<typename ScalarTraits<Scalar>::Real, 1, 1, Symmetry, false, AllocationPolicy>& Sigma,
+    XPED_CONST Tensor<Scalar, 1, CoRank, Symmetry, false, AllocationPolicy>& Vdag,
     std::vector<std::pair<typename Symmetry::qType, RealScalar>>& allSV,
     size_t maxKeep,
     RealScalar eps_svd,
@@ -1131,7 +1136,7 @@ typename PlainInterface::TType<Scalar, CoRank + 1> Tensor<Scalar, Rank, CoRank, 
 }
 
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
-typename PlainInterface::TType<Scalar, Rank + CoRank> Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::plainTensor() const
+typename PlainInterface::TType<Scalar, Rank + CoRank> Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::plainTensor() XPED_CONST
 {
     SPDLOG_INFO("Entering plainTensor()");
     auto sorted_domain = coupledDomain();
@@ -1158,7 +1163,7 @@ typename PlainInterface::TType<Scalar, Rank + CoRank> Tensor<Scalar, Rank, CoRan
         sorted_block[i] = block(index_sort[i]);
     }
     SPDLOG_INFO("sorted everything");
-
+    fmt::print("inner_mat({},{})", sorted_domain.fullDim(), sorted_codomain.fullDim());
     auto inner_mat = PlainInterface::construct_with_zero<Scalar>(sorted_domain.fullDim(), sorted_codomain.fullDim(), world());
     SPDLOG_INFO("Constructed inner_mat (size={},{}) and perform loop with {} steps.",
                 sorted_domain.fullDim(),
@@ -1167,12 +1172,14 @@ typename PlainInterface::TType<Scalar, Rank + CoRank> Tensor<Scalar, Rank, CoRan
     for(std::size_t i = 0; i < sorted_sector.size(); ++i) {
         SPDLOG_INFO("step #={}", i);
         auto id_cgc = PlainInterface::Identity<Scalar>(Symmetry::degeneracy(sorted_sector[i]), Symmetry::degeneracy(sorted_sector[i]), world());
+        fmt::print("cgc id\n");
+        // id_cgc.print_matrix();
         SPDLOG_INFO("Static identity done");
-        // SPDLOG_INFO("block[{}]", i);
-        // sorted_block[i].print();
+        SPDLOG_INFO("block[{}]", i);
+        fmt::print("block\n");
+        // sorted_block[i].print_matrix();
         auto mat = PlainInterface::kronecker_prod(sorted_block[i], id_cgc);
         SPDLOG_INFO("Kronecker Product done.");
-        // mat.print();
         // fmt::print("Insert block at ({},{}) of size=({}x{})\n",
         //            sorted_domain.full_outer_num(sorted_sector[i]),
         //            sorted_codomain.full_outer_num(sorted_sector[i]),
@@ -1208,7 +1215,6 @@ typename PlainInterface::TType<Scalar, Rank + CoRank> Tensor<Scalar, Rank, CoRan
     SPDLOG_INFO("dims domain: {}", dims_domain);
     typename PlainInterface::TType<Scalar, Rank + 1> unitary_domain = PlainInterface::construct<Scalar>(dims_domain, world());
     PlainInterface::setZero<Scalar, Rank + 1>(unitary_domain);
-
     for(const auto& [q, num, plain] : sorted_domain) {
         for(const auto& tree : sorted_domain.tree(q)) {
             std::size_t uncoupled_dim = 1;
@@ -1230,7 +1236,10 @@ typename PlainInterface::TType<Scalar, Rank + CoRank> Tensor<Scalar, Rank, CoRan
             typename PlainInterface::TType<Scalar, Rank + 1> Tid = PlainInterface::reshape<Scalar, 2>(Tid_mat, dims);
 
             auto T = tree.template asTensor<PlainInterface>(world());
-            typename PlainInterface::TType<Scalar, Rank + 1> Tfull = PlainInterface::tensorProd<Scalar, Rank + 1>(Tid, T.template cast<Scalar>());
+            auto T_cast = PlainInterface::cast<Scalar, double, Rank + 1>(T);
+            typename PlainInterface::TType<Scalar, Rank + 1> Tfull =
+                PlainInterface::tensorProd<Scalar, Rank + 1>(Tid, T_cast); // T.template cast<Scalar>()
+
             std::array<IndexType, Rank + 1> offsets;
             for(std::size_t i = 0; i < Rank; ++i) { offsets[i] = sorted_uncoupled_domain[i].full_outer_num(tree.q_uncoupled[i]); }
             offsets[Rank] = sorted_domain.full_outer_num(q) + sorted_domain.leftOffset(tree) * Symmetry::degeneracy(q);
@@ -1245,7 +1254,7 @@ typename PlainInterface::TType<Scalar, Rank + CoRank> Tensor<Scalar, Rank, CoRan
     }
     SPDLOG_INFO("constructed domain unitary");
     // std::cout << "domain" << std::endl;
-    //    unitary_domain.print();
+    // unitary_domain.print(stdout, 0.);
     // unitary_domain.for_each_value([](double d) { std::cout << d << std::endl; });
 
     std::array<IndexType, CoRank + 1> dims_codomain;
@@ -1281,7 +1290,8 @@ typename PlainInterface::TType<Scalar, Rank + CoRank> Tensor<Scalar, Rank, CoRan
             dims[CoRank] = uncoupled_dim;
             typename PlainInterface::TType<Scalar, CoRank + 1> Tid = PlainInterface::reshape<Scalar, 2>(Tid_mat, dims);
             auto T = tree.template asTensor<PlainInterface>(world());
-            typename PlainInterface::TType<Scalar, CoRank + 1> Tfull = PlainInterface::tensorProd<Scalar, CoRank + 1>(Tid, T.template cast<Scalar>());
+            auto T_cast = PlainInterface::cast<Scalar, double, CoRank + 1>(T);
+            typename PlainInterface::TType<Scalar, CoRank + 1> Tfull = PlainInterface::tensorProd<Scalar, CoRank + 1>(Tid, T_cast);
             std::array<IndexType, CoRank + 1> offsets;
             for(std::size_t i = 0; i < CoRank; ++i) { offsets[i] = sorted_uncoupled_codomain[i].full_outer_num(tree.q_uncoupled[i]); }
             offsets[CoRank] = sorted_codomain.full_outer_num(q) + sorted_codomain.leftOffset(tree) * Symmetry::degeneracy(q);
@@ -1295,7 +1305,9 @@ typename PlainInterface::TType<Scalar, Rank + CoRank> Tensor<Scalar, Rank, CoRan
     }
     SPDLOG_INFO("constructed codomain unitary");
     // std::cout << "codomain" << std::endl;
-    //    unitary_codomain.print();
+    // unitary_codomain.print();
+    // std::cout << "inner_tensor" << std::endl;
+    // inner_tensor.print();
     // unitary_codomain.for_each_value([](double d) { std::cout << d << std::endl; });
     // XPED_MPI_BARRIER(world_->comm);
     std::array<IndexType, Rank + CoRank> dims_result;
@@ -1305,12 +1317,14 @@ typename PlainInterface::TType<Scalar, Rank + CoRank> Tensor<Scalar, Rank, CoRan
     PlainInterface::setZero<Scalar, Rank + CoRank>(out);
 
     auto intermediate = PlainInterface::contract<Scalar, Rank + 1, 2, Rank, 0>(unitary_domain, inner_tensor);
+    // std::cout << "intermediate" << std::endl;
+    // intermediate.print();
     out = PlainInterface::contract<Scalar, Rank + 1, CoRank + 1, Rank, CoRank>(intermediate, unitary_codomain);
     return out;
 }
 
 template <typename Scalar, std::size_t Rank, std::size_t CoRank, typename Symmetry, typename AllocationPolicy>
-void Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::print(std::ostream& o, bool PRINT_MATRICES) const
+void Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::print(std::ostream& o, bool PRINT_MATRICES) XPED_CONST
 {
     // std::stringstream ss;
     fmt::print(o, "Tensor<{},{}>: domain=[", Rank, CoRank);
@@ -1331,9 +1345,11 @@ void Tensor<Scalar, Rank, CoRank, Symmetry, false, AllocationPolicy>::print(std:
         o << std::endl;
         for(std::size_t i = 0; i < sector().size(); ++i) {
             fmt::print(o, "Sector i={} with QN={}\n", i, Sym::format<Symmetry>(sector(i)));
-            o << std::fixed << std::setprecision(12) << block(i) << std::endl;
+            // o << std::fixed << std::setprecision(12) << block(i).norm2() << std::endl;
+            // if(block(i).norm2() > 1.e-8) {
             // storage_.block(i).print_matrix();
-            // PlainInterface::print<Scalar>(storage_.block(i));
+            PlainInterface::print(storage_.block(i));
+            // }
         }
         if(sector().size() == 0) { o << "Empty tensor."; }
     }
@@ -1349,6 +1365,6 @@ std::ostream& operator<<(std::ostream& os, XPED_CONST Tensor<Scalar, Rank, CoRan
 
 } // namespace Xped
 
-#if __has_include("Tensor.gen.cpp")
+#if __has_include("Tensor.gen.cpp") && XPED_COMPILED_LIB
 #    include "Tensor.gen.cpp"
 #endif

@@ -1761,6 +1761,6 @@ CTM<Scalar, Symmetry, TRank, ALL_OUT_LEGS, ENABLE_AD, CPOpts>::contractCorner(co
 
 } // namespace Xped
 
-#if __has_include("CTM.gen.cpp")
+#if __has_include("CTM.gen.cpp") && XPED_COMPILED_LIB
 #    include "CTM.gen.cpp"
 #endif

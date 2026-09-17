@@ -40,6 +40,6 @@ void UnitCell::loadFromMatlab(const std::filesystem::path& p, const std::string&
 }
 } // namespace Xped
 
-#if __has_include("UnitCell.gen.cpp")
+#if __has_include("UnitCell.gen.cpp") && XPED_COMPILED_LIB
 #    include "UnitCell.gen.cpp"
 #endif

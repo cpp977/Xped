@@ -15,7 +15,6 @@
 #include "Xped/Symmetry/ZN.hpp"
 
 #include "Xped/Symmetry/functions.hpp"
-#include "Xped/Util/Macros.hpp"
 
 using std::cout;
 using std::endl;
@@ -153,7 +152,7 @@ void FusionTree<Rank, Symmetry>::computeIntermediates()
 
 template <std::size_t Rank, typename Symmetry>
 template <typename PlainLib>
-typename PlainLib::template TType<typename Symmetry::Scalar, Rank + 1> FusionTree<Rank, Symmetry>::asTensor(const mpi::XpedWorld& world) const
+typename PlainLib::template TType<typename Symmetry::Scalar, Rank + 1> FusionTree<Rank, Symmetry>::asTensor(XPED_CONST mpi::XpedWorld& world) const
 {
     typedef typename Symmetry::Scalar Scalar;
 
@@ -550,6 +549,6 @@ std::string FusionTree<Rank, Symmetry>::printTree(const std::array<std::string, 
 
 } // namespace Xped
 
-#if __has_include("FusionTree.gen.cpp")
+#if __has_include("FusionTree.gen.cpp") && XPED_COMPILED_LIB
 #    include "FusionTree.gen.cpp"
 #endif
